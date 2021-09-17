@@ -1,10 +1,3 @@
-# Create React App Boilerplate
-
-This project is the boilerplate for creating React Apps. Saving you the stress of adding them and setting up.
-This boilerplate includes some dependencies for handling basic operations. You can (un)install them/more as you like.
-
-Created by [shammahk](https://github.com/shammahk)
-
 ## Available Scripts
 
 In the project directory, you can run:
