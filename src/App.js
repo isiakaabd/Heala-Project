@@ -7,7 +7,7 @@ const App = () => {
   const { toggleHelloWorld } = useActions();
   return (
     <div className={styles.container}>
-      <h1>{!toggleText ? "Hello World" : "Goodbye World"}</h1>
+      <h1>{!toggleText ? "Hello World" : "Goodbye World."}</h1>
       <button onClick={toggleHelloWorld} className={styles.button}>
         Toggle Text
       </button>
