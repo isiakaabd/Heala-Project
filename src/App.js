@@ -7,7 +7,7 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 
 const sectionStyles = {
-  marginLeft: "36rem",
+  paddingLeft: "36rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
   height: "100%",
