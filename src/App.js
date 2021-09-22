@@ -9,7 +9,7 @@ import Mail from "./components/Mail";
 import HCPVerification from "components/HCPVerification";
 
 const sectionStyles = {
-  marginLeft: "36rem",
+  paddingLeft: "36rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
   height: "100%",
