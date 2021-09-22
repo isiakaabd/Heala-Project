@@ -5,6 +5,8 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
+import Mail from "./components/Mail";
+import HCPVerification from "components/HCPVerification";
 
 const sectionStyles = {
   paddingLeft: "36rem",
@@ -33,7 +35,7 @@ const App = () => {
                   path="/patients"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Patients</h3>}
                 />
-                <Route path="/hcps" render={() => <h3 style={{ fontSize: "3rem" }}>HCPS</h3>} />
+                <Route path="/hcps" />
                 <Route
                   path="/partners"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
@@ -46,21 +48,20 @@ const App = () => {
                   path="/messages"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}
                 />
-                <Route path="/email" render={() => <h3 style={{ fontSize: "3rem" }}>Email</h3>} />
-                <Route
-                  path="/verification"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>HCP Verification</h3>}
-                />
+                <Route path="/email" component={Mail} />
+                <Route path="/verification" component={HCPVerification} />
                 <Route
                   path="/finance"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Finance</h3>}
                 />
                 <Route
                   path="/referrals"
+                  // component={<Mail />}
                   render={() => <h3 style={{ fontSize: "3rem" }}>Referrals</h3>}
                 />
                 <Route
                   path="/subscription"
+                  // component={Mail}
                   render={() => <h3 style={{ fontSize: "3rem" }}>Subscription Plans</h3>}
                 />
                 <Route
