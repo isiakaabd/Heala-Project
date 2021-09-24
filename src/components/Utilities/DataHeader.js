@@ -254,7 +254,7 @@ export const Subscriptioncolumns = [
     type: "number",
     minWidth: 60,
     sortable: false,
-    checkboxSelection=false
+    checkboxSelection: false,
   },
   {
     field: "amount",
@@ -355,6 +355,72 @@ export const Subscriptioncolumns = [
         </Div2>
       </SubscriptionDelete>
     ),
+  },
+];
+export const FinanceColumns = [
+  {
+    field: "entryDate",
+    headerName: "Entry Date",
+    headerClassName: "financeEntryHeader",
+    headerAlign: "center",
+    flex: 0.1,
+    cellClassName: "entryDate",
+    type: "number",
+    minWidth: 60,
+    sortable: false,
+  },
+  {
+    field: "time",
+    headerName: "Time",
+    headerClassName: "referralTime",
+    headerAlign: "center",
+    flex: 0.1,
+    cellClassName: "referralTime",
+    type: "number",
+    minWidth: 50,
+    sortable: false,
+  },
+  {
+    field: "fullname",
+    headerName: "Patient's Name",
+    headerClassName: "headerPatientName",
+    sortable: false,
+    cellClassName: "PatientName",
+    headerAlign: "left",
+    flex: 0.15,
+    type: "string",
+    minWidth: 150,
+    renderCell: (params) => (
+      <span style={{ display: "flex", alignItems: "center" }}>
+        <Avatar alt="Display avatar" src={displayPhoto} style={{ marginRight: "1rem" }} />
+        {params.getValue(params.id, "firstName") || ""}
+        {params.getValue(params.id, "lastName") || ""}
+      </span>
+    ),
+  },
+  {
+    field: "planName",
+    headerName: "Subscription plan",
+    headerClassName: "planName",
+    headerAlign: "headerPlanName",
+    flex: 0.1,
+    cellClassName: "cellPlanName",
+    type: "number",
+    minWidth: 60,
+    sortable: false,
+    checkboxSelection: false,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    headerClassName: "headerAmount",
+    headerAlign: "center",
+    flex: 0.086,
+    cellClassName: "cellAmount",
+    type: "string",
+    minWidth: 50,
+    sortable: false,
+    selectable: false,
   },
 ];
 
