@@ -114,7 +114,6 @@ const DataTable = ({ rows, columns, rowHeight }) => {
     </div>
   );
 };
-
 DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
