@@ -84,9 +84,6 @@ const DataTable = ({ rows, columns, rowHeight }) => {
       "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft": {
         justifyContent: "center !important",
       },
-      // "& ": {
-      //   justifyContent: "center",
-      // },
       "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall": {
         display: "none",
       },
@@ -117,7 +114,6 @@ const DataTable = ({ rows, columns, rowHeight }) => {
     </div>
   );
 };
-
 DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,

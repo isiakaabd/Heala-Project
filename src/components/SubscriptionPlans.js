@@ -1,6 +1,5 @@
 import React from "react";
 import IconLabelButtons from "./Utilities/Button";
-import FilterBox from "./Utilities/Filter";
 import SearchContainer from "./Utilities/Search";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
