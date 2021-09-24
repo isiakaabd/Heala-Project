@@ -30,7 +30,7 @@ const SearchContainer = ({ width, placeholder, height }) => {
   );
 };
 SearchContainer.propTypes = {
-  width: PropTypes.string.isRequired,
+  width: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
   height: PropTypes.string,
 };

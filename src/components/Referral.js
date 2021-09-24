@@ -4,10 +4,10 @@ import SearchContainer from "./Utilities/Search";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import DataTable from "./Utilities/DataGrid";
-import { columns2, rows } from "./Utilities/DataHeader";
+import { Referralcolumns, rows } from "./Utilities/DataHeader";
 import { AppBar } from "@mui/material";
 
-function HCPVerification() {
+const Referral = () => {
   const option = ["height", "long", "short"];
   return (
     <AppBar
@@ -20,41 +20,40 @@ function HCPVerification() {
         sx={{
           width: "110rem",
           height: "5.7rem",
-          flexGrow: 1,
-          marginLeft: "5.7rem",
-          marginRight: "4.5rem",
+          marginLeft: "2rem",
+          marginRight: "2.5rem",
         }}
       >
         <Grid container>
           <Grid item sx={{ flexGrow: 1 }}>
             <SearchContainer
-              placeholder="Type to search HCPs... "
-              width="83.3rem"
+              placeholder="Type to search referrals... "
+              width="78.9rem"
               maxWidth="100%"
               height="inherit"
               sx={{ flexGrow: 1, marginRight: "5rem" }}
             />
           </Grid>
 
-          <Grid item xs={2}>
+          <Grid item xs={2} sx={{ marginLeft: "1rem" }}>
             <FilterBox
               options={option}
-              width="12.4rem"
-              placeholder="Filter by"
+              width="16.8rem"
+              placeholder="Filter referrals"
               height="5.7rem"
-              type="filter"
-              sx={{ maxWidth: "100%", display: "flex" }}
+              type="referral"
+              sx={{ marginLeft: "2rem", maxWidth: "100%", display: "flex" }}
             />
           </Grid>
 
           {/* </Grid> */}
         </Grid>
       </Box>
-      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem auto" }}>
-        <DataTable columns={columns2} rows={rows} rowHeight="70" />
+      <Grid container sx={{ height: "700px", width: "120rem", margin: "5.6rem 2rem" }}>
+        <DataTable columns={Referralcolumns} rows={rows} rowHeight="70" sx={{ width: "100%" }} />
       </Grid>
     </AppBar>
   );
-}
+};
 
-export default HCPVerification;
+export default Referral;

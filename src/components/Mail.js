@@ -6,11 +6,12 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import DataTable from "./Utilities/DataGrid";
 import { columns, rows } from "./Utilities/DataHeader";
+import Styled from "styled-components";
 
 const Mail = () => {
   const option = ["height", "long", "short"];
   return (
-    <>
+    <Container>
       <Box sx={{ width: "110rem", height: "5.7rem", flexGrow: 1, marginLeft: "2rem" }}>
         <Grid container>
           <Grid item sx={{ flexGrow: 1, marginRight: "2.7rem" }}>
@@ -26,7 +27,7 @@ const Mail = () => {
                 options={option}
                 width="12.4rem"
                 placeholder="Filter by"
-                // height="30px"
+                height="5.7rem"
                 type="filter"
               />
             </Grid>
@@ -36,6 +37,7 @@ const Mail = () => {
                 height="inherit"
                 width="19rem"
                 backgroundColor="#3EA584"
+                type="download"
               />
             </Grid>
           </Grid>
@@ -44,8 +46,14 @@ const Mail = () => {
       <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem auto" }}>
         <DataTable columns={columns} rows={rows} rowHeight="70" />
       </Grid>
-    </>
+    </Container>
   );
 };
+
+const Container = Styled.div`
+{
+  background: #FBFBFB
+}
+`;
 
 export default Mail;
