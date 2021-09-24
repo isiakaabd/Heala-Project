@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
+import DashboardHome from "pages/DashboardHome";
+
+const sectionStyles = {
+  paddingLeft: "37rem",
+}
 import Mail from "./components/Mail";
 import HCPVerification from "components/HCPVerification";
 import ViewHCP from "components/Utilities/ViewHCP";
@@ -15,10 +20,12 @@ const sectionStyles = {
   paddingLeft: "36rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
-  height: "100%",
+  // marginBottom: "5rem",
+  minHeight: "100vh",
   width: "100%",
   backgroundColor: "#fbfbfb",
 };
+
 const App = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   return (
@@ -31,9 +38,11 @@ const App = () => {
             <section style={sectionStyles}>
               <Switch>
                 <Route
-                  path="/dashboard"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Dashboard</h3>}
-                />
+                  path="/"
+                  // render={() => <h3 style={{ fontSize: "3rem" }}>Dashboard</h3>}
+                 >
+                   <DashboardHome />
+                </Route>
                 <Route
                   path="/patients"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Patients</h3>}
