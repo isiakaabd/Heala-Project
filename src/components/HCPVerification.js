@@ -40,7 +40,7 @@ function HCPVerification() {
             <FilterBox
               options={option}
               width="12.4rem"
-              placeholder="Filter by"
+              placeholder="Filter by "
               height="5.7rem"
               type="filter"
               sx={{ maxWidth: "100%", display: "flex" }}
