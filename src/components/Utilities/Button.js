@@ -71,7 +71,6 @@ IconLabelButtons.propTypes = {
   backgroundColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   border: PropTypes.string,
-
 };
 
 export default IconLabelButtons;
