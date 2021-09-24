@@ -117,6 +117,8 @@ const HeaderText = ({ selectedMenu }) => {
       return <CustomHeaderTitle title="Subscription Plans" />;
     case 11:
       return <CustomHeaderTitle title="Settings" />;
+    // case 12:
+    //   return <CustomHeaderTitle title="HCP Verification/ HCP View" />;
     default:
       return (
         <div>

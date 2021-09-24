@@ -7,6 +7,9 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Mail from "./components/Mail";
 import HCPVerification from "components/HCPVerification";
+import ViewHCP from "components/Utilities/ViewHCP";
+import Referral from "components/Referral";
+import SubscriptionPlans from "components/SubscriptionPlans";
 
 const sectionStyles = {
   paddingLeft: "36rem",
@@ -49,21 +52,15 @@ const App = () => {
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}
                 />
                 <Route path="/email" component={Mail} />
+
                 <Route path="/verification" component={HCPVerification} />
                 <Route
                   path="/finance"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Finance</h3>}
                 />
-                <Route
-                  path="/referrals"
-                  // component={<Mail />}
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Referrals</h3>}
-                />
-                <Route
-                  path="/subscription"
-                  // component={Mail}
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Subscription Plans</h3>}
-                />
+                <Route path="/referrals" component={Referral} />
+                <Route path="/subscription" component={SubscriptionPlans} />
+                <Route path="/view" component={ViewHCP} />
                 <Route
                   path="/settings"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>}

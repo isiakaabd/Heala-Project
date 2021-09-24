@@ -32,14 +32,14 @@ const FilterBox = ({ options, width, placeholder, type, height }) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 fontSize: "1.6rem",
-                height,
+                height: "100%",
               }}
             >
-              <span>{placeholder}</span>
+              <span style={{ width: "10.4rem" }}>{placeholder}</span>
               &nbsp;
               <svg
-                width="20"
-                height="18"
+                width="24"
+                height="24"
                 viewBox="0 0 20 18"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -52,12 +52,18 @@ const FilterBox = ({ options, width, placeholder, type, height }) => {
             </Box>
           </InputLabel>
         ) : (
-          <InputLabel id="demo-simple-select-label" sx={{ fontSize: "1.6rem", height: "100%" }}>
+          <InputLabel id="demo-simple-select-label" sx={{ fontSize: "1.6rem" }}>
             {placeholder}
           </InputLabel>
         )}
 
-        <Select id="simple-select" label={placeholder} value={value} onChange={handleChange}>
+        <Select
+          id="simple-select"
+          label={placeholder}
+          sx={{ height }}
+          value={value}
+          onChange={handleChange}
+        >
           {options.map((option, index) => {
             return (
               <MenuItem key={index} value={option}>
