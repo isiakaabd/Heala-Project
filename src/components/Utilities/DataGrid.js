@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@mui/styles";
 
-const DataTable = ({ rows, columns, rowHeight }) => {
+const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
   const useStyles = makeStyles({
     root: {
       "& .MuiDataGrid-root .MuiDataGrid-cell, .MuiDataGrid-root": {
@@ -14,6 +14,7 @@ const DataTable = ({ rows, columns, rowHeight }) => {
       },
       "& .MuiDataGrid-root .MuiDataGrid-columnsContainer": {
         borderBottom: ".5px solid #F8F8F8",
+        justifyContent: "center !important",
       },
       "& .MuiDataGrid-columnHeaderTitleContainer": {
         justifyContent: "center !important",
@@ -41,7 +42,7 @@ const DataTable = ({ rows, columns, rowHeight }) => {
         fontWeight: "400",
         fontSize: "1.6rem",
         lineHeight: 1.5,
-        textAlign: "left !important",
+        textAlign: "center !important",
       },
       "& .cellAmount": {
         color: "#ED3237",
@@ -104,6 +105,7 @@ const DataTable = ({ rows, columns, rowHeight }) => {
         rows={rows}
         columns={columns}
         rowHeight={rowHeight}
+        headerHeight={headerHeight}
         // pageSize={5}
         rowsPerPageOptions={[]}
         checkboxSelection
@@ -118,6 +120,7 @@ DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
   rowHeight: PropTypes.string.isRequired,
+  headerHeight: PropTypes.string,
 };
 
 export default DataTable;

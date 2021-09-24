@@ -38,7 +38,6 @@
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
-
   "scripts": {
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -49,7 +48,6 @@
     "build:css-current": "postcss 'frontend/src/*.css' -d public",
     "build:css-works-for-me": "postcss frontend/src/*.css -d public"
   },
-  
   "eslintConfig": {
     "extends": [
       "react-app",

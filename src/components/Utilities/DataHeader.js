@@ -12,7 +12,7 @@ export const columns = [
     flex: 0.1,
     cellClassName: "entryDate",
     type: "number",
-    minWidth: 110,
+    minWidth: 60,
     sortable: false,
   },
 
@@ -23,9 +23,9 @@ export const columns = [
     description: "This column has a value getter and is not sortable.",
     sortable: false,
     cellClassName: "name",
-    headerAlign: "center",
+    headerAlign: "left",
     flex: 0.13,
-    minWidth: 150,
+    minWidth: 100,
     renderCell: (params) => (
       <span style={{ display: "flex", alignItems: "center" }}>
         <Avatar alt="Display avatar" src={displayPhoto} style={{ marginRight: "1rem" }} />
@@ -40,10 +40,10 @@ export const columns = [
     headerName: "Category",
     headerAlign: "left",
     cellClassName: "category",
-    headerClassName: "entryHeader",
+    // headerClassName: "categoryHeader",
     type: "number",
-    minWidth: 120,
-    flex: 0.08,
+    minWidth: 100,
+    flex: 0.06,
     sortable: false,
   },
 
@@ -96,11 +96,11 @@ export const columns2 = [
     ),
   },
   {
-    field: "category",
+    field: "medical",
     headerName: "Medical ID",
-    headerAlign: "left",
-    cellClassName: "category",
-    headerClassName: "entryHeader",
+    headerAlign: "center",
+    cellClassName: "medical",
+    headerClassName: "medical",
     type: "number",
     minWidth: 120,
     flex: 0.08,
@@ -143,10 +143,11 @@ export const Referralcolumns = [
     headerName: "Entry Date",
     headerClassName: "entryHeader",
     headerAlign: "center",
-    flex: 0.1,
+    flex: 0.09,
     cellClassName: "entryDate",
     type: "number",
     minWidth: 60,
+    maxWidth: 150,
     sortable: false,
   },
   {
@@ -154,7 +155,7 @@ export const Referralcolumns = [
     headerName: "Time",
     headerClassName: "referralTime",
     headerAlign: "center",
-    flex: 0.086,
+    flex: 0.077,
     cellClassName: "referralTime",
     type: "number",
     minWidth: 50,
@@ -169,7 +170,7 @@ export const Referralcolumns = [
     sortable: false,
     cellClassName: "name",
     headerAlign: "center",
-    flex: 0.15,
+    flex: 0.13,
     minWidth: 160,
     renderCell: (params) => (
       <span style={{ display: "flex", alignItems: "center" }}>
@@ -187,8 +188,8 @@ export const Referralcolumns = [
     cellClassName: "CellSpecialization",
     headerClassName: "specialization",
     type: "number",
-    minWidth: 100,
-    flex: 0.1,
+    minWidth: 50,
+    flex: 0.11,
     sortable: false,
   },
   {
@@ -253,6 +254,7 @@ export const Subscriptioncolumns = [
     type: "number",
     minWidth: 60,
     sortable: false,
+    checkboxSelection: false,
   },
   {
     field: "amount",
@@ -264,6 +266,7 @@ export const Subscriptioncolumns = [
     type: "number",
     minWidth: 50,
     sortable: false,
+    selectable: false,
   },
 
   {
@@ -354,6 +357,72 @@ export const Subscriptioncolumns = [
     ),
   },
 ];
+export const FinanceColumns = [
+  {
+    field: "entryDate",
+    headerName: "Entry Date",
+    headerClassName: "financeEntryHeader",
+    headerAlign: "center",
+    flex: 0.1,
+    cellClassName: "entryDate",
+    type: "number",
+    minWidth: 60,
+    sortable: false,
+  },
+  {
+    field: "time",
+    headerName: "Time",
+    headerClassName: "referralTime",
+    headerAlign: "center",
+    flex: 0.1,
+    cellClassName: "referralTime",
+    type: "number",
+    minWidth: 50,
+    sortable: false,
+  },
+  {
+    field: "fullname",
+    headerName: "Patient's Name",
+    headerClassName: "headerPatientName",
+    sortable: false,
+    cellClassName: "PatientName",
+    headerAlign: "left",
+    flex: 0.15,
+    type: "string",
+    minWidth: 150,
+    renderCell: (params) => (
+      <span style={{ display: "flex", alignItems: "center" }}>
+        <Avatar alt="Display avatar" src={displayPhoto} style={{ marginRight: "1rem" }} />
+        {params.getValue(params.id, "firstName") || ""}
+        {params.getValue(params.id, "lastName") || ""}
+      </span>
+    ),
+  },
+  {
+    field: "planName",
+    headerName: "Subscription plan",
+    headerClassName: "planName",
+    headerAlign: "headerPlanName",
+    flex: 0.1,
+    cellClassName: "cellPlanName",
+    type: "number",
+    minWidth: 60,
+    sortable: false,
+    checkboxSelection: false,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    headerClassName: "headerAmount",
+    headerAlign: "center",
+    flex: 0.086,
+    cellClassName: "cellAmount",
+    type: "string",
+    minWidth: 50,
+    sortable: false,
+    selectable: false,
+  },
+];
 
 export const rows = [
   {
@@ -364,6 +433,7 @@ export const rows = [
     category: "HCP",
     email: "sule@gmail.com",
     time: "10:00AM",
+    medical: 123445,
     amount: "₦ 10,000",
     specialization: "Dentistry",
     planName: "Plan 1",
@@ -377,6 +447,7 @@ export const rows = [
     category: "User",
     planName: "Plan 1",
     amount: "₦ 10,000",
+    medical: 123445,
     email: "sule@gmail.com",
     description: "This is the decription regarding this particular plan",
     time: "10:00AM",
@@ -390,6 +461,7 @@ export const rows = [
     planName: "Plan 1",
     category: "HCP",
     amount: "₦ 10,000",
+    medical: 123445,
     email: "sule@gmail.com",
     time: "10:00AM",
     specialization: "Dentistry",
@@ -405,6 +477,7 @@ export const rows = [
     email: "sule@gmail.com",
     time: "10:00AM",
     planName: "Plan 1",
+    medical: 123445,
     specialization: "Dentistry",
     description: "This is the decription regarding this particular plan",
   },
@@ -414,6 +487,7 @@ export const rows = [
     entryDate: "july 17,2021",
     firstName: "Daenerys",
     category: "HSP",
+    medical: 123445,
     amount: "₦ 10,000",
     planName: "Plan 1",
     email: "sule@gmail.com",
@@ -426,6 +500,7 @@ export const rows = [
     lastName: "Melisandre",
     entryDate: "july 17,2021",
     firstName: null,
+    medical: 123445,
     category: "User",
     amount: "₦ 10,000",
     email: "sule@gmail.com",
@@ -438,6 +513,7 @@ export const rows = [
     id: 7,
     lastName: "Clifford",
     entryDate: "july 17,2021",
+    medical: 123445,
     firstName: "Ferrara",
     category: "HCP",
     planName: "Plan 1",
@@ -453,6 +529,7 @@ export const rows = [
     entryDate: "july 17,2021",
     firstName: "Harvey",
     category: "HCP",
+    medical: 123445,
     planName: "Plan 1",
     amount: "₦ 10,000",
     email: "sule@gmail.com",
@@ -492,7 +569,7 @@ const SubscriptionDiv = Styled.div`
   font-size:1.4rem;
   color: #3EA584;
   line-Height:2.1rem;
-  height:2.2rem;
+  // height:2.2rem;
   }
 }
 `;

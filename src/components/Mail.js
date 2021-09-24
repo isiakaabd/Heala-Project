@@ -7,22 +7,37 @@ import Grid from "@mui/material/Grid";
 import DataTable from "./Utilities/DataGrid";
 import { columns, rows } from "./Utilities/DataHeader";
 import Styled from "styled-components";
+import { AppBar } from "@mui/material";
 
 const Mail = () => {
   const option = ["height", "long", "short"];
   return (
-    <Container>
-      <Box sx={{ width: "110rem", height: "5.7rem", flexGrow: 1, marginLeft: "2rem" }}>
+    <AppBar
+      position="static"
+      sx={{
+        background: "#fbfbfb",
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: "100.7rem",
+          height: "5.7rem",
+          flexGrow: 1,
+          marginLeft: "4.1rem",
+          marginRight: "4.5rem",
+        }}
+      >
         <Grid container>
-          <Grid item sx={{ flexGrow: 1, marginRight: "2.7rem" }}>
+          <Grid item sx={{ flexGrow: 1, marginRight: "4.1rem" }}>
             <SearchContainer
               placeholder="Enter your Email Here"
               maxWidth="62.3rem"
+              placeholderWidth="17.3"
               height="inherit"
             />
           </Grid>
-          <Grid sx={{ width: "34.9rem", display: "flex", justifyContent: "space-around" }}>
-            <Grid item xs={2} sx={{ margin: 0 }}>
+          <Grid sx={{ width: "34.9rem", display: "flex", justifyContent: "flex-start" }}>
+            <Grid item xs={2} sx={{ marginRight: "3.5rem", maxWidth: "100% !important" }}>
               <FilterBox
                 options={option}
                 width="12.4rem"
@@ -31,22 +46,30 @@ const Mail = () => {
                 type="filter"
               />
             </Grid>
-            <Grid item xs={3} sx={{ marginRight: "1.5rem" }}>
+            <Grid item xs={3} sx={{ marginRight: "4.5rem" }}>
               <IconLabelButtons
                 placeholder="Download email"
                 height="inherit"
                 width="19rem"
                 backgroundColor="#3EA584"
                 type="download"
+                border="1rem"
               />
             </Grid>
           </Grid>
         </Grid>
       </Box>
-      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem auto" }}>
+      <Grid
+        container
+        sx={{
+          height: "700px",
+          maxWidth: "100.7rem",
+          margin: "5.6rem 4.5rem 0 4.1rem",
+        }}
+      >
         <DataTable columns={columns} rows={rows} rowHeight="70" />
       </Grid>
-    </Container>
+    </AppBar>
   );
 };
 

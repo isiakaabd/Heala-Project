@@ -18,38 +18,37 @@ const Referral = () => {
     >
       <Box
         sx={{
-          width: "110rem",
+          width: "100.7rem",
           height: "5.7rem",
-          marginLeft: "2rem",
-          marginRight: "2.5rem",
+          marginLeft: "4.1rem",
+          marginRight: "4.5rem",
         }}
       >
-        <Grid container>
-          <Grid item sx={{ flexGrow: 1 }}>
-            <SearchContainer
-              placeholder="Type to search referrals... "
-              width="78.9rem"
-              maxWidth="100%"
-              height="inherit"
-              sx={{ flexGrow: 1, marginRight: "5rem" }}
-            />
+        <Grid
+          container
+          sx={{
+            display: "-webkit-box",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid item sx={{ marginRight: "5rem", width: "78.9rem" }}>
+            <SearchContainer placeholder="Type to search referrals... " height="inherit" />
           </Grid>
 
-          <Grid item xs={2} sx={{ marginLeft: "1rem" }}>
+          <Grid item xs={2}>
             <FilterBox
               options={option}
               width="16.8rem"
               placeholder="Filter referrals"
               height="5.7rem"
               type="referral"
-              sx={{ marginLeft: "2rem", maxWidth: "100%", display: "flex" }}
             />
           </Grid>
 
           {/* </Grid> */}
         </Grid>
       </Box>
-      <Grid container sx={{ height: "700px", width: "120rem", margin: "5.6rem 2rem" }}>
+      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem 4.5rem 0 4.1rem" }}>
         <DataTable columns={Referralcolumns} rows={rows} rowHeight="70" sx={{ width: "100%" }} />
       </Grid>
     </AppBar>

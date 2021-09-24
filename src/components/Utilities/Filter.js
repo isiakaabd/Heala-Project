@@ -21,7 +21,7 @@ const FilterBox = ({ options, width, placeholder, type, height }) => {
   </svg>;
 
   return (
-    <Box sx={{ width, fontSize: "1.6rem" }}>
+    <Box sx={{ width, fontSize: "1.6rem", background: "white" }}>
       <FormControl fullWidth>
         {type === "referral" ? (
           <InputLabel id="demo-simple-select-label">

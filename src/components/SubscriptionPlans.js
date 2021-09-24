@@ -6,21 +6,37 @@ import Grid from "@mui/material/Grid";
 import DataTable from "./Utilities/DataGrid";
 import { rows, Subscriptioncolumns } from "./Utilities/DataHeader";
 import Styled from "styled-components";
+import { AppBar } from "@mui/material";
 
 function SubscriptionPlans() {
   return (
-    <Container>
-      <Box sx={{ width: "125rem", height: "5.7rem", flexGrow: 1, marginLeft: "2rem" }}>
-        <Grid container>
-          <Grid item sx={{ flexGrow: 1, marginRight: "5rem" }}>
-            <SearchContainer
-              placeholder="Enter your Email Here"
-              maxWidth="76.7rem"
-              height="inherit"
-            />
+    <AppBar
+      position="static"
+      sx={{
+        background: "#fbfbfb",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100.7rem",
+          height: "5.7rem",
+          flexGrow: 1,
+          marginLeft: "4.1rem",
+          marginRight: "4.5rem",
+        }}
+      >
+        <Grid
+          container
+          sx={{
+            display: "-webkit-box",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid item sx={{ marginRight: "5rem", width: "76.7rem" }}>
+            <SearchContainer placeholder="Enter your Email Here" height="inherit" />
           </Grid>
 
-          <Grid item xs={3} sx={{ marginRight: "1.5rem" }}>
+          <Grid item xs={3}>
             <IconLabelButtons
               placeholder="Create new plan"
               height="inherit"
@@ -32,16 +48,11 @@ function SubscriptionPlans() {
           </Grid>
         </Grid>
       </Box>
-      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem auto" }}>
-        <DataTable columns={Subscriptioncolumns} rows={rows} rowHeight="70" />
+      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "6.5rem 4.5rem 0 4.1rem" }}>
+        <DataTable columns={Subscriptioncolumns} rows={rows} rowHeight="70" headerHeight="6rem" />
       </Grid>
-    </Container>
+    </AppBar>
   );
 }
-const Container = Styled.div`
-{
-  background: #FBFBFB
-}
-`;
 
 export default SubscriptionPlans;
