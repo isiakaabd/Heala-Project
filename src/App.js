@@ -9,6 +9,15 @@ import DashboardHome from "pages/DashboardHome";
 
 const sectionStyles = {
   paddingLeft: "37rem",
+}
+import Mail from "./components/Mail";
+import HCPVerification from "components/HCPVerification";
+import ViewHCP from "components/Utilities/ViewHCP";
+import Referral from "components/Referral";
+import SubscriptionPlans from "components/SubscriptionPlans";
+
+const sectionStyles = {
+  paddingLeft: "36rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
   // marginBottom: "5rem",
@@ -38,7 +47,7 @@ const App = () => {
                   path="/patients"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Patients</h3>}
                 />
-                <Route path="/hcps" render={() => <h3 style={{ fontSize: "3rem" }}>HCPS</h3>} />
+                <Route path="/hcps" />
                 <Route
                   path="/partners"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
@@ -51,23 +60,16 @@ const App = () => {
                   path="/messages"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}
                 />
-                <Route path="/email" render={() => <h3 style={{ fontSize: "3rem" }}>Email</h3>} />
-                <Route
-                  path="/verification"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>HCP Verification</h3>}
-                />
+                <Route path="/email" component={Mail} />
+
+                <Route path="/verification" component={HCPVerification} />
                 <Route
                   path="/finance"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Finance</h3>}
                 />
-                <Route
-                  path="/referrals"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Referrals</h3>}
-                />
-                <Route
-                  path="/subscription"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Subscription Plans</h3>}
-                />
+                <Route path="/referrals" component={Referral} />
+                <Route path="/subscription" component={SubscriptionPlans} />
+                <Route path="/view" component={ViewHCP} />
                 <Route
                   path="/settings"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>}
