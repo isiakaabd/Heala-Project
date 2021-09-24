@@ -18,39 +18,40 @@ function HCPVerification() {
     >
       <Box
         sx={{
-          width: "110rem",
+          width: "100.7rem",
           height: "5.7rem",
           flexGrow: 1,
-          marginLeft: "5.7rem",
+          marginLeft: "4.1rem",
           marginRight: "4.5rem",
         }}
       >
-        <Grid container>
-          <Grid item sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          sx={{
+            display: "-webkit-box",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid item sx={{ marginRight: "5rem", width: "83.3rem" }}>
             <SearchContainer
+              // maxWwidth="83.3rem"
               placeholder="Type to search HCPs... "
-              width="83.3rem"
-              maxWidth="100%"
               height="inherit"
-              sx={{ flexGrow: 1, marginRight: "5rem" }}
             />
           </Grid>
 
           <Grid item xs={2}>
             <FilterBox
               options={option}
-              width="12.4rem"
               placeholder="Filter by "
               height="5.7rem"
               type="filter"
-              sx={{ maxWidth: "100%", display: "flex" }}
+              width="12.4rem"
             />
           </Grid>
-
-          {/* </Grid> */}
         </Grid>
       </Box>
-      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem auto" }}>
+      <Grid container sx={{ height: "700px", width: "100.7rem", margin: "5.6rem 4.5rem 0 4.1rem" }}>
         <DataTable columns={columns2} rows={rows} rowHeight="70" />
       </Grid>
     </AppBar>
