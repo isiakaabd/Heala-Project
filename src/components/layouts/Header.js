@@ -22,7 +22,6 @@ const Header = ({ selectedMenu }) => {
       <AppBar position="fixed" className={classes.appBar} classes={{ root: classes.appBar }}>
         <HeaderContents selectedMenu={selectedMenu} />
       </AppBar>
-      {/* <div className={classes.toolbarMargin} /> */}
     </Fragment>
   );
 };

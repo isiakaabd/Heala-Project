@@ -29,14 +29,12 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "2.4rem",
     color: theme.palette.common.red,
-
     "&.css-le8o0m-MuiTypography-root": {
       marginRight: ".5rem",
     },
   },
   subtitle: {
     color: theme.palette.common.green,
-
     "&.css-10ulodw-MuiTypography-root": {
       fontSize: "1.25rem",
       marginLeft: ".5rem",
@@ -119,6 +117,8 @@ const HeaderText = ({ selectedMenu }) => {
       return <CustomHeaderTitle title="Subscription Plans" />;
     case 11:
       return <CustomHeaderTitle title="Settings" />;
+    // case 12:
+    //   return <CustomHeaderTitle title="HCP Verification/ HCP View" />;
     default:
       return (
         <div>
