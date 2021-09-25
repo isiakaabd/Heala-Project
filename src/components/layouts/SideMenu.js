@@ -21,8 +21,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "5px -5px 7px #eee",
     position: "fixed",
     overflowY: "hidden",
-    overflowX: "hidden",
-    transition: "overflowY 1s ease-in",
     zIndex: theme.zIndex.appBar + 1,
 
     "&:hover": {
@@ -68,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     "& .css-jau5dn-MuiButtonBase-root-MuiListItemButton-root.Mui-selected": {
       backgroundColor: theme.palette.common.lightRed,
       color: theme.palette.common.red,
-      borderRadius: "1rem",
+      borderRadius: ".5rem",
 
       "&:hover": {
         backgroundColor: theme.palette.common.lightRed,
