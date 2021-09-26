@@ -5,7 +5,7 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
-import DashboardHome from "pages/DashboardHome";
+import DashboardHome from "components/pages/DashboardHome";
 import Mail from "./components/pages/Mail";
 import HCPVerification from "components/pages/HCPVerification";
 import ViewHCP from "components/Utilities/ViewHCP";

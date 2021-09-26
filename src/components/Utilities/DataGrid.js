@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { makeStyles } from "@mui/styles";
 
 const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
