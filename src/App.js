@@ -12,6 +12,7 @@ import ViewHCP from "components/Utilities/ViewHCP";
 import Referral from "components/pages/Referral";
 import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Finance";
+import Appointments from "components/pages/Appointments";
 
 const sectionStyles = {
   paddingLeft: "37rem",
@@ -51,10 +52,7 @@ const App = () => {
                   path="/partners"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
                 />
-                <Route
-                  path="/appointments"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Appointments</h3>}
-                />
+                <Route path="/appointments" component={Appointments} />
                 <Route
                   path="/messages"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}
