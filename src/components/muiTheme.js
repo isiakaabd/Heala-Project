@@ -6,6 +6,7 @@ const red = "#ED3237";
 const lightRed = "#FEF8F7";
 const lightGrey = "#CCCCCC";
 const green = "#3EA584";
+const lightGreen = "#ECF6F3";
 
 export const muiTheme = createTheme({
   palette: {
@@ -13,9 +14,10 @@ export const muiTheme = createTheme({
       dark,
       grey,
       red,
+      green,
       lightRed,
       lightGrey,
-      green,
+      lightGreen,
     },
     primary: {
       main: dark,

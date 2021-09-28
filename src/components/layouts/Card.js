@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { H1 } from "components/hooks/Texts";
+import { H1 } from "components/Utilities/Texts";
 
 const CardStyle = styled.div`
   background: ${(props) => props.bg || "#FFFFFF"};

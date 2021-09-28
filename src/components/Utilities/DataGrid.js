@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { makeStyles } from "@mui/styles";
 
 const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
@@ -82,15 +82,21 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
         padding: "0 0  0 1rem",
         textAlign: "left !important",
       },
-      "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft": {
-        justifyContent: "center !important",
-      },
-      "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall": {
-        display: "none",
-      },
+
+      "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft":
+        {
+          justifyContent: "center !important",
+        },
+
+      "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall":
+        {
+          display: "none",
+        },
+
       "& .MuiDataGrid-cell.CellSpecialization.MuiDataGrid-cell--textRight": {
         textAlign: "center !important",
       },
+
       "& .MuiDataGrid-cell.referralTime.MuiDataGrid-cell--textRight": {
         textAlign: "center !important",
         minWidth: "11rem !important",

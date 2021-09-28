@@ -5,16 +5,19 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
-import DashboardHome from "pages/DashboardHome";
-import Mail from "./components/Mail";
-import HCPVerification from "components/HCPVerification";
+import DashboardHome from "components/pages/DashboardHome";
+import Mail from "./components/pages/Mail";
+import HCPVerification from "components/pages/HCPVerification";
 import ViewHCP from "components/Utilities/ViewHCP";
-import Referral from "components/Referral";
-import SubscriptionPlans from "components/SubscriptionPlans";
-import Finance from "components/Finance";
+import Referral from "components/pages/Referral";
+import SubscriptionPlans from "components/pages/SubscriptionPlans";
+import Finance from "components/pages/Finance";
+import Appointments from "components/pages/Appointments";
+import Patients from "components/pages/Patients";
 
 const sectionStyles = {
-  paddingLeft: "36rem",
+  paddingLeft: "39rem",
+  paddingRight: "5rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
   // marginBottom: "5rem",
@@ -34,26 +37,15 @@ const App = () => {
             <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
             <section style={sectionStyles}>
               <Switch>
-                <Route
-                  path={["/", "/dashboard"]}
-                  exact
-                  component={DashboardHome}
-                  // render={() => <h3 style={{ fontSize: "3rem" }}>Dashboard</h3>}
-                />
+                <Route path={["/", "/dashboard"]} exact component={DashboardHome} />
 
-                <Route
-                  path="/patients"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Patients</h3>}
-                />
+                <Route path="/patients" component={Patients} />
                 <Route path="/hcps" />
                 <Route
                   path="/partners"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
                 />
-                <Route
-                  path="/appointments"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Appointments</h3>}
-                />
+                <Route path="/appointments" component={Appointments} />
                 <Route
                   path="/messages"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}

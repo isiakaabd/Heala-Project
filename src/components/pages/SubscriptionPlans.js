@@ -1,11 +1,10 @@
 import React from "react";
-import IconLabelButtons from "./Utilities/Button";
-import SearchContainer from "./Utilities/Search";
+import IconLabelButtons from "components/Utilities/Button";
+import SearchContainer from "components/Utilities/Search";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import DataTable from "./Utilities/DataGrid";
-import { rows, Subscriptioncolumns } from "./Utilities/DataHeader";
-import Styled from "styled-components";
+import DataTable from "../Utilities/DataGrid";
+import { rows, Subscriptioncolumns } from "components/Utilities/DataHeader";
 import { AppBar } from "@mui/material";
 
 function SubscriptionPlans() {

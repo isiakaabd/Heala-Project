@@ -1,12 +1,11 @@
 import React from "react";
-import IconLabelButtons from "./Utilities/Button";
-import FilterBox from "./Utilities/Filter";
-import SearchContainer from "./Utilities/Search";
+import IconLabelButtons from "components/Utilities/Button";
+import FilterBox from "components/Utilities/Filter";
+import SearchContainer from "components/Utilities/Search";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import DataTable from "./Utilities/DataGrid";
-import { columns, rows } from "./Utilities/DataHeader";
-import Styled from "styled-components";
+import DataTable from "components/Utilities/DataGrid";
+import { columns, rows } from "components/Utilities/DataHeader";
 import { AppBar } from "@mui/material";
 
 const Mail = () => {
@@ -72,11 +71,5 @@ const Mail = () => {
     </AppBar>
   );
 };
-
-const Container = Styled.div`
-{
-  background: #FBFBFB
-}
-`;
 
 export default Mail;

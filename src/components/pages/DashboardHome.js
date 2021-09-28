@@ -1,14 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { H1, H3, H4, H5, P } from "components/hooks/Texts";
-import { Card } from "@material-ui/core";
-import peopleIcon from "../assets/images/people.svg";
+import { H1, H3, H5, P } from "components/Utilities/Texts";
+import Card from "@mui/material/Card";
+import peopleIcon from "assets/images/people.svg";
 import graphData from "mocks/graphData";
 import LineGraph from "components/layouts/LineGraph";
 import ArrowUpward from "@mui/icons-material/ArrowUpward";
-import { Icon } from "@mui/material";
-import { CircleRounded } from "@mui/icons-material";
 
 const DashboardHomeStyle = styled.main`
   display: flex;

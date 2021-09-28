@@ -133,6 +133,10 @@ const HeaderText = ({ selectedMenu }) => {
   }
 };
 
+HeaderText.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+};
+
 const HeaderContent = ({ selectedMenu }) => {
   const classes = useStyles();
   return (
@@ -144,10 +148,6 @@ const HeaderContent = ({ selectedMenu }) => {
 };
 
 HeaderContent.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-};
-
-HeaderText.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
 };
 

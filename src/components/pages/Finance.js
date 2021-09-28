@@ -1,9 +1,9 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import DataTable from "./Utilities/DataGrid";
-import { FinanceColumns, rows } from "./Utilities/DataHeader";
+import DataTable from "components/Utilities/DataGrid";
+import { FinanceColumns, rows } from "components/Utilities/DataHeader";
 import { Box } from "@mui/system";
-import { H1 } from "./hooks/Texts";
+import { H1 } from "components/Utilities/Texts";
 
 const Finance = () => {
   return (

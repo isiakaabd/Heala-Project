@@ -4,7 +4,7 @@ import * as Icon from "@mui/icons-material";
 import PropTypes from "prop-types";
 
 import { useHistory } from "react-router";
-import { H1, P } from "components/hooks/Texts";
+import { H1, P } from "components/Utilities/Texts";
 
 const PageHeroStyle = styled.div`
   background: #f8f6fe;
