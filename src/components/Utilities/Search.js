@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { makeStyles } from "@mui/styles";
-const SearchContainer = ({ width, placeholder, height, placeholderWidth }) => {
+const SearchContainer = ({ width, placeholder, height, placeholderWidth, value, onChange }) => {
   const useStyles = makeStyles({
     //   root: {
     //     "& .css-1u99e1o-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -17,6 +17,8 @@ const SearchContainer = ({ width, placeholder, height, placeholderWidth }) => {
     <div className={classes.root}>
       <OutlinedInput
         id="input-with-icon-adornment"
+        value={value}
+        onChange={onChange}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -25,6 +27,7 @@ const SearchContainer = ({ width, placeholder, height, placeholderWidth }) => {
           fontSize: "16px",
           placeholderWidth,
           background: "white",
+          borderRadius: 2,
         }}
         placeholder={placeholder}
         inputProps={{ "aria-label": placeholder }}
@@ -42,6 +45,8 @@ SearchContainer.propTypes = {
   placeholder: PropTypes.string.isRequired,
   height: PropTypes.string,
   placeholderWidth: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default SearchContainer;

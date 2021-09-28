@@ -13,10 +13,11 @@ import Referral from "components/pages/Referral";
 import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Finance";
 import Appointments from "components/pages/Appointments";
+import Patients from "components/pages/Patients";
 
 const sectionStyles = {
-  paddingLeft: "37rem",
-  paddingRight: "3rem",
+  paddingLeft: "39rem",
+  paddingRight: "5rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
   // marginBottom: "5rem",
@@ -36,17 +37,9 @@ const App = () => {
             <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
             <section style={sectionStyles}>
               <Switch>
-                <Route
-                  path={["/", "/dashboard"]}
-                  exact
-                  component={DashboardHome}
-                  // render={() => <h3 style={{ fontSize: "3rem" }}>Dashboard</h3>}
-                />
+                <Route path={["/", "/dashboard"]} exact component={DashboardHome} />
 
-                <Route
-                  path="/patients"
-                  render={() => <h3 style={{ fontSize: "3rem" }}>Patients</h3>}
-                />
+                <Route path="/patients" component={Patients} />
                 <Route path="/hcps" />
                 <Route
                   path="/partners"
