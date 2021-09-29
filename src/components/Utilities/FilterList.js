@@ -46,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FilterList = ({ onClick, open, anchorEl, setAnchorEl }) => {
+const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title }) => {
   const classes = useStyles();
 
   return (
     <Fragment>
       <Button variant="contained" disableRipple onClick={onClick} className={classes.button}>
-        <span>Filter Patients</span>
+        <span>{title}</span>
         <span className={classes.iconWrapper}>
           <IoOptions size={20} className={classes.icon} />
         </span>
@@ -81,6 +81,7 @@ FilterList.propTypes = {
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   setAnchorEl: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default FilterList;

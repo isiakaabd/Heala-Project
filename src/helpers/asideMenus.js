@@ -22,6 +22,6 @@ export const menus = [
   { id: 7, title: "HCP Verification", icon: VerifiedIcon, path: "/verification" },
   { id: 8, title: "Finance", icon: PaymentsIcon, path: "/finance" },
   { id: 9, title: "Referrals", icon: LoopIcon, path: "/referrals" },
-  { id: 10, title: "Subscription", icon: SubscriptionsIcon, path: "/subscription" },
+  { id: 10, title: "Subscription", icon: SubscriptionsIcon, path: "/plans" },
   { id: 11, title: "Settings", icon: SettingsIcon, path: "/settings" },
 ];
