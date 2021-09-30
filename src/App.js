@@ -14,6 +14,7 @@ import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Finance";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
+import Hcps from "components/pages/Hcps";
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -40,7 +41,7 @@ const App = () => {
                 <Route path={["/", "/dashboard"]} exact component={DashboardHome} />
 
                 <Route exact path="/patients" component={Patients} />
-                <Route path="/hcps" />
+                <Route exact path="/hcps" component={Hcps} />
                 <Route
                   path="/partners"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
