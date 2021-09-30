@@ -1,73 +1,258 @@
-import { AppBar, Grid, Typography } from "@mui/material";
+import { AppBar, Avatar, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { H1 } from "components/Utilities/Texts";
+import { H1, H6 } from "components/Utilities/Texts";
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import clock from "assets/images/clock.svg";
+import date from "assets/images/date.svg";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import displayPhoto from "assets/images/avatar.png";
+import imageUpload from "assets/images/imageUpload.svg";
+import threeDot from "assets/images/threeDot.svg";
+
+const Item = styled(Paper)(({ theme }) => ({
+  boxShadow: "none",
+  textAlign: "center",
+  height: "8.6rem",
+  display: "flex",
+  alignItems: "center",
+  paddingLeft: "6.3rem",
+  color: theme.palette.text.secondary,
+}));
+const gender = "Female";
 // import ResponsiveDatePickers from "components/Utilities/DateComponent";
 const useStyles = makeStyles((theme) => ({
   containerGrid: {
-    background: "#fbfbfb",
+    background: "#fbfbfb !important ",
+    color: "black !important",
+  },
+  lightGreen: {
+    paddingLeft: "1.6rem",
+    color: theme.palette.common.green,
+  },
+
+  lightRed: {
+    paddingLeft: "1.6rem",
+    color: theme.palette.common.red,
   },
   firstGrid: {
     height: "8.6rem",
-    background: "green",
     display: "flex",
-    // justifyContent: "flex-start",
     marginRight: "6.3rem",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    fontSize: "1.6rem",
+    lineHeight: "2.4rem",
+    paddingLeft: "6.3rem",
+    borderBottom: ".5px solid #F8F8F8",
     width: "100%",
+  },
+  imageGrid: {
+    width: "2.4rem",
+    height: "2.4rem",
+    background: " #FEF8F7",
+    borderRadius: ".5rem",
+    display: "grid",
+    placeContent: "center",
+  },
+  center: {
     alignItems: "center",
   },
+  fileUpload: {
+    borderBottom: "none !important",
+  },
+  "img .MuiAvatar-img.css-1pqm26d-MuiAvatar-img": {
+    width: "1rem",
+    "& img": {
+      objectFit: "contain",
+      width: "30%",
+    },
+    ".css-1pqm26d-MuiAvatar-img": {
+      objectFit: "contain",
+      width: "30%",
+      height: "30%",
+    },
+  },
+  date: {
+    background: "#FEF8F7",
+    // width: "2.4rem",
+  },
+  spacing: {
+    borderBottom: ".5px solid #F8F8F8",
+    margin: "0 !important",
+    width: "100% !important",
+    "& > *": {
+      padding: "0 !important",
+    },
+  },
+  header: { display: "flex", alignItems: "center", marginBottom: "4.6rem" },
   parentGrid: {
     marginTop: "4.6rem",
     borderRadius: "2rem",
     maxWidth: "94.6rem",
-    paddingLeft: "6.3rem",
     height: "55rem",
-    background: "red",
+    background: "white",
   },
 }));
 const ViewHCP = () => {
+  const imageuploadContainer = [
+    {
+      value: "74.89KB, ",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+    {
+      value: "74.89KB, ",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+    {
+      value: "74.89KB",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+    {
+      value: "74.89KB, ",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+    {
+      value: "74.89KB, ",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+    {
+      value: "74.89KB",
+      time: "Oct 17",
+      text: "X-ray Scan Result",
+    },
+  ];
   const classes = useStyles();
   return (
     <AppBar position="static" className={classes.containerGrid}>
-      <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
+      <Box component="span" className={classes.header}>
         <H1 fontSize="3.2rem" color="#4F4F4F">
           HCP view
         </H1>
       </Box>
-      <Grid container className={classes.parentGrid}>
-        <Grid item className={classes.firstGrid}>
-          <Typography variant="h6">
-            Date:
-            <svg
-              width="10"
-              height="12"
-              viewBox="0 0 10 12"
-              fill="none"
-              style={{ marginLeft: "5.5rem", marginRight: "1.9rem" }}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7.02759 0.444459C7.26345 0.443905 7.44994 0.627147 7.45049 0.871469L7.45104 1.28793C8.9814 1.40787 9.99232 2.45068 9.99396 4.04988L10 8.73087C10.0022 10.4744 8.9068 11.5472 7.151 11.55L2.86216 11.5556C1.11733 11.5578 0.00823511 10.4594 0.00604105 8.71088L3.68189e-06 4.08486C-0.00218669 2.47511 0.973074 1.43508 2.50343 1.29459L2.50288 0.878132C2.50234 0.63381 2.68335 0.450013 2.92469 0.450013C3.16604 0.449458 3.34705 0.6327 3.3476 0.877022L3.34815 1.26572L6.60633 1.26127L6.60578 0.872579C6.60523 0.628257 6.78624 0.445016 7.02759 0.444459ZM7.25138 8.32885H7.2459C6.99358 8.33495 6.79118 8.54651 6.79666 8.80194C6.79721 9.05737 7.00071 9.26782 7.25303 9.27337C7.51028 9.27282 7.71872 9.06126 7.71817 8.80028C7.71817 8.5393 7.50918 8.32885 7.25138 8.32885ZM2.73161 8.3294C2.4793 8.34051 2.28183 8.55207 2.28238 8.80749C2.2939 9.06292 2.50234 9.26282 2.75465 9.25116C3.00203 9.24006 3.19895 9.02849 3.18743 8.77307C3.18195 8.52319 2.97845 8.32885 2.73161 8.3294ZM4.9915 8.32662C4.73918 8.33829 4.54226 8.54929 4.54226 8.80472C4.55378 9.06015 4.76222 9.25949 5.01454 9.24839C5.26137 9.23672 5.45883 9.02572 5.44731 8.76974C5.44183 8.52042 5.23833 8.32607 4.9915 8.32662ZM2.72887 6.3304C2.47656 6.34151 2.27964 6.55307 2.28019 6.8085C2.29116 7.06392 2.50014 7.26382 2.75246 7.25216C2.99929 7.24106 3.19621 7.0295 3.18469 6.77407C3.1792 6.52419 2.97625 6.32985 2.72887 6.3304ZM4.9893 6.31097C4.73699 6.32207 4.53952 6.53363 4.54007 6.78906C4.55104 7.04449 4.76003 7.24383 5.01234 7.23273C5.25917 7.22107 5.45609 7.01006 5.44512 6.75463C5.43909 6.50476 5.23614 6.31041 4.9893 6.31097ZM7.24919 6.31374C6.99687 6.3193 6.79941 6.52475 6.79995 6.78018V6.78628C6.80544 7.04171 7.01388 7.2355 7.26674 7.22995C7.51357 7.22384 7.71049 7.01228 7.705 6.75686C7.69349 6.51253 7.49547 6.31319 7.24919 6.31374ZM6.60743 2.1164L3.34924 2.12084L3.34979 2.57006C3.34979 2.80939 3.16933 2.99818 2.92798 2.99818C2.68664 2.99874 2.50508 2.8105 2.50508 2.57117L2.50453 2.14361C1.43492 2.25078 0.843076 2.87935 0.844718 4.08375L0.84527 4.25644L9.14979 4.24533V4.05099C9.12621 2.85714 8.52723 2.23079 7.45214 2.1375L7.45269 2.56507C7.45269 2.80383 7.26674 2.99318 7.03088 2.99318C6.78953 2.99374 6.60797 2.80494 6.60797 2.56618L6.60743 2.1164Z"
-                fill="#ED3237"
-              />
-            </svg>
-            <span>7,July 2021</span>
-            <svg
-              width="12"
-              style={{ marginLeft: "5.1rem", marginRight: "1.2rem" }}
-              height="15"
-              viewBox="0 0 12 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 0.666626L4 0.666626V1.99996L8 1.99996V0.666626ZM5.33333 9.33329H6.66667L6.66667 5.33329H5.33333L5.33333 9.33329ZM10.6867 4.92663L11.6333 3.97996C11.3467 3.63996 11.0333 3.31996 10.6933 3.03996L9.74667 3.98663C8.71333 3.15996 7.41333 2.66663 6 2.66663C2.68667 2.66663 0 5.35329 0 8.66663C0 11.98 2.68 14.6666 6 14.6666C9.32 14.6666 12 11.98 12 8.66663C12 7.25329 11.5067 5.95329 10.6867 4.92663ZM6 13.3333C3.42 13.3333 1.33333 11.2466 1.33333 8.66663C1.33333 6.08663 3.42 3.99996 6 3.99996C8.58 3.99996 10.6667 6.08663 10.6667 8.66663C10.6667 11.2466 8.58 13.3333 6 13.3333Z"
-                fill="#ED3237"
-              />
-            </svg>
-          </Typography>
+      <Grid item className={classes.parentGrid}>
+        <Grid className={classes.firstGrid}>
+          <Grid item sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h6" sx={{ color: "#757886", fontSize: "1.6rem" }}>
+              Date:
+            </Typography>
+            <Grid sx={{ marginLeft: "4.8rem " }}>
+              <Grid className={classes.imageGrid}>
+                <img src={date} alt="A clock icon" />
+              </Grid>
+            </Grid>
+            <Box component="span" sx={{ marginLeft: "1.2rem" }}>
+              7,July 2021
+            </Box>
+          </Grid>
+
+          <Grid item sx={{ display: "flex", alignItems: "center", padding: " 0 5.1rem 0  1.8rem" }}>
+            <Grid className={classes.imageGrid}>
+              <img src={clock} className={classes.date} alt="A time icon " />
+            </Grid>
+            <Box component="span" sx={{ marginLeft: "1.2rem" }}>
+              3:30PM
+            </Box>
+          </Grid>
         </Grid>
+
+        {/* second grid */}
+        <Grid container spacing={2} className={classes.spacing}>
+          <Grid item xs={5}>
+            <Item>
+              <Typography variant="h6" sx={{ color: "#757886", fontSize: "1.6rem" }}>
+                Patient:
+              </Typography>
+
+              <Avatar sx={{ marginLeft: "2rem" }} src={displayPhoto} />
+              {/* <Box component="span">Sule muntari</Box> */}
+              <Typography
+                variant="h3"
+                sx={{ color: "#2D2F39", fontSize: "1.6rem", marginLeft: "1.2rem" }}
+              >
+                Sule Muntari
+              </Typography>
+            </Item>
+          </Grid>
+          <Grid item xs={3}>
+            <Item>
+              <Typography variant="h6" sx={{ color: "#757886", fontSize: "1.6rem" }}>
+                Medical ID:
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ color: "#2D2F39", fontSize: "1.6rem", marginLeft: ".8rem" }}
+              >
+                217878
+              </Typography>
+            </Item>
+          </Grid>
+          <Grid item xs={4}>
+            <Item>
+              <Typography variant="h6">Gender:</Typography>
+              <Typography
+                variant="h6"
+                className={gender === "Female" ? classes.lightRed : classes.lightGreen}
+              >
+                {gender}
+              </Typography>
+            </Item>
+          </Grid>
+        </Grid>
+        {/* third grid */}
+        <Grid container spacing={2} className={`${classes.spacing} ${classes.fileUpload}`}>
+          <Grid item xs={5} className={classes.fileUpload}>
+            <Item>
+              <Typography variant="h6" sx={{ color: "#757886", fontSize: "1.6rem" }}>
+                File Uploads:
+              </Typography>
+            </Item>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} className={classes.spacing}>
+          {imageuploadContainer.map((img, index) => {
+            return (
+              <Grid item xs={4} key={index}>
+                <Item>
+                  <Grid container spacing={1} sx={{ justifyContent: "center" }}>
+                    <Grid item xs={3}>
+                      <Avatar variant="square" src={imageUpload} />
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Box component="div" sx={{ fontSize: "1.6rem" }}>
+                        {img.text}
+                      </Box>
+                      <Grid sx={{ marginTop: ".8rem" }}>
+                        <Box component="span" sx={{ fontSize: "1.6rem" }}>
+                          {img.value}
+                        </Box>
+                        <Box component="span" sx={{ fontSize: "1.6rem" }}>
+                          {img.time}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={1} className={classes.center}>
+                      <Avatar
+                        variant="square"
+                        sx={{ height: "2rem !important", width: ".8rem", objectFit: "contain" }}
+                        src={threeDot}
+                        className="image"
+                      />
+                    </Grid>
+                  </Grid>
+                </Item>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+        {/* third grid */}
       </Grid>
     </AppBar>
   );

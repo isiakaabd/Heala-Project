@@ -5,6 +5,7 @@ import HeaderProfile from "./HeaderProfile";
 import Toolbar from "@mui/material/Toolbar";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -26,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  link: {
+    textDecoration: "none",
+  },
   title: {
     fontSize: "2.4rem",
     color: theme.palette.common.red,
@@ -43,13 +47,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomHeaderText = ({ title, total }) => {
+const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
   return (
     <div className={classes.titleWrapper}>
-      <Typography variant="h3" classes={{ root: classes.title }}>
-        {title}
-      </Typography>
+      <Link to={`/${path}`} className={classes.link}>
+        <Typography variant="h3" classes={{ root: classes.title }}>
+          {title}
+        </Typography>
+      </Link>
       <ArrowUpwardIcon color="success" />
       <Typography variant="h5" className={classes.subtitle}>
         {total} total
@@ -61,22 +67,26 @@ const CustomHeaderText = ({ title, total }) => {
 CustomHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
-const CustomHeaderTitle = ({ title }) => {
+const CustomHeaderTitle = ({ title, path }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.titleWrapper}>
-      <Typography variant="h3" classes={{ root: classes.title }}>
-        {title}
-      </Typography>
+      <Link to={`/${path}`} className={classes.link}>
+        <Typography variant="h3" classes={{ root: classes.title }}>
+          {title}
+        </Typography>
+      </Link>
     </div>
   );
 };
 
 CustomHeaderTitle.propTypes = {
   title: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
 const HeaderText = ({ selectedMenu }) => {
@@ -95,28 +105,28 @@ const HeaderText = ({ selectedMenu }) => {
         </div>
       );
     case 1:
-      return <CustomHeaderText title="Patients" total={24} />;
+      return <CustomHeaderText title="Patients" total={24} path="patients" />;
     case 2:
-      return <CustomHeaderText title="HCPs" total={352} />;
+      return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
     case 3:
-      return <CustomHeaderText title="Partners" total={24} />;
+      return <CustomHeaderText title="Partners" total={24} path="partners" />;
 
     case 4:
-      return <CustomHeaderTitle title="Appointments" />;
+      return <CustomHeaderTitle title="Appointments" path="appointments" />;
     case 5:
-      return <CustomHeaderTitle title="Messages" />;
+      return <CustomHeaderTitle title="Messages" path="messages" />;
     case 6:
-      return <CustomHeaderTitle title="Email" />;
+      return <CustomHeaderTitle title="Email" path="email" />;
     case 7:
-      return <CustomHeaderTitle title="HCP Verification" />;
+      return <CustomHeaderTitle title="HCP Verification" path="verification" />;
     case 8:
-      return <CustomHeaderTitle title="Finance" />;
+      return <CustomHeaderTitle title="Finance" path="finance" />;
     case 9:
-      return <CustomHeaderTitle title="Referrals" />;
+      return <CustomHeaderTitle title="Referrals" path="referrals" />;
     case 10:
-      return <CustomHeaderTitle title="Subscription Plans" />;
+      return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
     case 11:
-      return <CustomHeaderTitle title="Settings" />;
+      return <CustomHeaderTitle title="Settings" path="settings" />;
     // case 12:
     //   return <CustomHeaderTitle title="HCP Verification/ HCP View" />;
     default:
