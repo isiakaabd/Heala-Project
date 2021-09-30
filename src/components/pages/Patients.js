@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
+import { isSelected } from "helpers/isSelected";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -89,8 +90,6 @@ const Patients = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const isSelected = (id) => selectedRows.indexOf(id) !== -1;
-
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>
@@ -124,7 +123,8 @@ const Patients = () => {
           {patientsRows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
-              const isItemSelected = isSelected(row.id);
+              const isItemSelected = isSelected(row.id, selectedRows);
+
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (

@@ -13,6 +13,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const options = [
+  { id: 0, value: "Name" },
+  { id: 1, value: "consultations" },
+];
+
 const Hcps = () => {
   const classes = useStyles();
   const [searchHcp, setSearchHcp] = useState("");
@@ -37,6 +42,7 @@ const Hcps = () => {
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             title="Filter HCPs"
+            options={options}
           />
         </Grid>
         <Grid item></Grid>

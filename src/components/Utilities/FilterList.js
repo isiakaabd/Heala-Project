@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     width: "15.2rem",
-    top: "16.3rem !important",
+    top: "17.3rem !important",
   },
   menuItem: {
     "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
