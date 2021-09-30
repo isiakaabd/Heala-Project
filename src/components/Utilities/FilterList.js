@@ -9,15 +9,9 @@ import { IoOptions } from "react-icons/io5";
 const useStyles = makeStyles((theme) => ({
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      fontSize: "1.5rem",
-      textTransform: "none",
-      height: "5rem",
-      //   display: "flex",
-      //   alignItems: "center",
+      ...theme.typography.btn,
       backgroundColor: "#fff",
       color: theme.palette.common.dark,
-      borderRadius: 7,
-      boxShadow: "0px 0px 4px -1px rgba(71,64,71,0.63)",
 
       "&:hover": {
         backgroundColor: "#fafafa",
@@ -43,8 +37,9 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     width: "15.2rem",
-    top: "16.3rem !important",
+    top: "17.3rem !important",
   },
+
   menuItem: {
     "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
       justifyContent: "center",

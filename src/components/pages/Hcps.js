@@ -3,6 +3,9 @@ import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
+import CustomButton from "components/Utilities/CustomButton";
+import AddIcon from "@mui/icons-material/Add";
+import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -11,10 +14,28 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.css-13i4rnv-MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
 }));
+
+const options = [
+  { id: 0, value: "Name" },
+  { id: 1, value: "consultations" },
+];
 
 const Hcps = () => {
   const classes = useStyles();
+  const theme = useTheme();
+
+  const buttonType = {
+    main: theme.palette.success.main,
+    light: theme.palette.success.light,
+    dark: theme.palette.success.dark,
+  };
+
   const [searchHcp, setSearchHcp] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -37,9 +58,12 @@ const Hcps = () => {
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             title="Filter HCPs"
+            options={options}
           />
         </Grid>
-        <Grid item></Grid>
+        <Grid item>
+          <CustomButton endIcon={<AddIcon />} title="Add HCP" type={buttonType} />
+        </Grid>
       </Grid>
       <Grid item></Grid>
     </Grid>

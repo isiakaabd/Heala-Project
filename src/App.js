@@ -5,7 +5,7 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
-import DashboardHome from "components/pages/DashboardHome";
+// import DashboardHome from "components/pages/DashboardHome";
 import Mail from "./components/pages/Mail";
 import HCPVerification from "components/pages/HCPVerification";
 import ViewHCP from "components/Utilities/ViewHCP";
@@ -15,6 +15,7 @@ import Finance from "components/pages/Finance";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
 import Hcps from "components/pages/Hcps";
+import Dashboard from "components/pages/Dashboard";
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -38,7 +39,7 @@ const App = () => {
             <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
             <section style={sectionStyles}>
               <Switch>
-                <Route path={["/", "/dashboard"]} exact component={DashboardHome} />
+                <Route path={["/", "/dashboard"]} exact component={Dashboard} />
 
                 <Route exact path="/patients" component={Patients} />
                 <Route exact path="/hcps" component={Hcps} />
