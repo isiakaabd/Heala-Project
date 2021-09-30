@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1.5rem",
       textTransform: "none",
       height: "5rem",
-      display: "flex",
-      alignItems: "center",
+      //   display: "flex",
+      //   alignItems: "center",
       backgroundColor: "#fff",
       color: theme.palette.common.dark,
       borderRadius: 7,
@@ -38,24 +38,33 @@ const useStyles = makeStyles((theme) => ({
 
   icon: {
     transform: "rotate(270deg)",
+    marginTop: "-.2rem",
   },
 
   paper: {
     width: "15.2rem",
-    top: "17.3rem !important",
+    top: "16.3rem !important",
+  },
+  menuItem: {
+    "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
+      justifyContent: "center",
+    },
   },
 }));
 
-const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title }) => {
+const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title, options }) => {
   const classes = useStyles();
 
   return (
     <Fragment>
-      <Button variant="contained" disableRipple onClick={onClick} className={classes.button}>
-        <span>{title}</span>
-        <span className={classes.iconWrapper}>
-          <IoOptions size={20} className={classes.icon} />
-        </span>
+      <Button
+        variant="contained"
+        disableRipple
+        onClick={onClick}
+        endIcon={<IoOptions size={20} className={classes.icon} />}
+        className={classes.button}
+      >
+        {title}
       </Button>
       <Menu
         id="basic-menu"
@@ -68,9 +77,11 @@ const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title }) => {
         classes={{ paper: classes.paper }}
         className={classes.menu}
       >
-        <MenuItem onClick={() => setAnchorEl(null)}>Name</MenuItem>
-        <MenuItem onClick={() => setAnchorEl(null)}>Age</MenuItem>
-        <MenuItem onClick={() => setAnchorEl(null)}>Date</MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.id} onClick={() => setAnchorEl(null)} className={classes.menuItem}>
+            {option.value}
+          </MenuItem>
+        ))}
       </Menu>
     </Fragment>
   );
@@ -82,6 +93,7 @@ FilterList.propTypes = {
   anchorEl: PropTypes.object,
   setAnchorEl: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired,
 };
 
 export default FilterList;

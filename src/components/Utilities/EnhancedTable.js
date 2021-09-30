@@ -6,7 +6,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import EnhancedTableHeader from "components/Utilities/TableHeader";
+import EnhancedTableHeader from "components/Utilities/EnhancedTableHeader";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,6 +16,8 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { makeStyles } from "@mui/styles";
+import { useSelector } from "react-redux";
+import { useActions } from "components/hooks/useActions";
 
 const useStyles = makeStyles((theme) => ({
   pagination: {
@@ -82,25 +84,17 @@ EnhancedTableToolbar.propTypes = {
 
 const EnhancedTable = (props) => {
   const classes = useStyles();
-  const {
-    rows,
-    children,
-    headCells,
-    rowsPerPage,
-    setRowsPerPage,
-    page,
-    setPage,
-    setSelected,
-    selected,
-  } = props;
+  const { setPage, setRowsPerPage, setSelectedRows } = useActions();
+  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { rows, children, headCells, paginationLabel } = props;
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((selected) => selected.id);
-      setSelected(newSelecteds);
+      setSelectedRows(newSelecteds);
       return;
     }
-    setSelected([]);
+    setSelectedRows([]);
   };
 
   //   const handleClick = (event, name) => {
@@ -138,11 +132,11 @@ const EnhancedTable = (props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {selected.length > 0 && <EnhancedTableToolbar numSelected={selected.length} />}
+        {selectedRows.length > 0 && <EnhancedTableToolbar numSelected={selectedRows.length} />}
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHeader
-              numSelected={selected.length}
+              numSelected={selectedRows.length}
               onSelectAllClick={handleSelectAllClick}
               rowCount={rows.length}
               headCells={headCells}
@@ -168,7 +162,7 @@ const EnhancedTable = (props) => {
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          labelRowsPerPage="Patients per page"
+          labelRowsPerPage={paginationLabel}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           className={classes.pagination}
@@ -188,6 +182,7 @@ EnhancedTable.propTypes = {
   setPage: PropTypes.func.isRequired,
   setSelected: PropTypes.func.isRequired,
   selected: PropTypes.array.isRequired,
+  paginationLabel: PropTypes.string,
 };
 
 export default EnhancedTable;
