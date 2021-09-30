@@ -71,9 +71,18 @@ export const muiTheme = createTheme({
       fontWeight: 300,
     },
     btn: {
-      padding: ".5em 1.5em",
-      borderRadius: "50px",
+      fontSize: "1.5rem",
       textTransform: "none",
+      height: "5rem",
+      borderRadius: 7,
+      boxShadow: "0px 0px 4px -1px rgba(71,64,71,0.63)",
+    },
+
+    rowBtn: {
+      textTransform: "none",
+      borderRadius: "2rem",
+      padding: "1rem",
+      maxWidth: "10rem",
     },
   },
   components: {

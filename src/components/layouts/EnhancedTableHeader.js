@@ -26,22 +26,24 @@ const useStyles = makeStyles((theme) => ({
 function EnhancedTableHead(props) {
   const classes = useStyles();
 
-  const { onSelectAllClick, numSelected, rowCount, headCells } = props;
+  const { onSelectAllClick, numSelected, rowCount, headCells, hasCheckbox } = props;
 
   return (
     <TableHead className={classes.tableHeader}>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell>
+        {hasCheckbox && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                "aria-label": "select all desserts",
+              }}
+            />
+          </TableCell>
+        )}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -62,6 +64,7 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   rowCount: PropTypes.number.isRequired,
   headCells: PropTypes.array.isRequired,
+  hasCheckbox: PropTypes.bool.isRequired,
 };
 
 export default EnhancedTableHead;

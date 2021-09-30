@@ -1,23 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import EnhancedTableHeader from "components/Utilities/EnhancedTableHeader";
+import EnhancedTableHeader from "./EnhancedTableHeader";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
+import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   pagination: {
@@ -39,54 +34,13 @@ const useStyles = makeStyles((theme) => ({
       background: "#eee",
     },
   },
-
-  delete: {
-    color: theme.palette.common.red,
-  },
 }));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={classes.tableToolbar}
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 && (
-        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      )}
-
-      {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon className={classes.delete} />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 
 const EnhancedTable = (props) => {
   const classes = useStyles();
   const { setPage, setRowsPerPage, setSelectedRows } = useActions();
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
-  const { rows, children, headCells, paginationLabel } = props;
+  const { rows, children, headCells, paginationLabel, title, hasCheckbox } = props;
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -112,7 +66,8 @@ const EnhancedTable = (props) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {selectedRows.length > 0 && <EnhancedTableToolbar numSelected={selectedRows.length} />}
+        <EnhancedTableToolbar numSelected={selectedRows.length} title={title} />
+
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHeader
@@ -120,6 +75,7 @@ const EnhancedTable = (props) => {
               onSelectAllClick={handleSelectAllClick}
               rowCount={rows.length}
               headCells={headCells}
+              hasCheckbox={hasCheckbox}
             />
             <TableBody>
               {children}
@@ -157,6 +113,8 @@ EnhancedTable.propTypes = {
   rows: PropTypes.array.isRequired,
   headCells: PropTypes.array.isRequired,
   paginationLabel: PropTypes.string,
+  title: PropTypes.string,
+  hasCheckbox: PropTypes.bool.isRequired,
 };
 
 export default EnhancedTable;

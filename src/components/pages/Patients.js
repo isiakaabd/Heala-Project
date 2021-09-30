@@ -6,7 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/Utilities/EnhancedTable";
+import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
@@ -119,6 +119,7 @@ const Patients = () => {
           rows={patientsRows}
           page={page}
           paginationLabel="Patients per page"
+          hasCheckbox={true}
         >
           {patientsRows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
