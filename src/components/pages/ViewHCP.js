@@ -1,6 +1,6 @@
 import { AppBar, Avatar, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { H1, H6 } from "components/Utilities/Texts";
+import { H1 } from "components/Utilities/Texts";
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";

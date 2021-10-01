@@ -26,6 +26,15 @@ export const patientsHeadCells = [
   },
 ];
 
+// Patient > Consultation Route Table
+export const consultationsHeadCells = [
+  { id: 100, label: "HCP Name" },
+  { id: 101, label: "Date" },
+  { id: 102, label: "Description" },
+  { id: 103, label: "" },
+  { id: 104, label: "" },
+];
+
 // Dashboard Route TableHeader
 export const waitingHeadCells = [
   { id: 0, label: "User ID" },

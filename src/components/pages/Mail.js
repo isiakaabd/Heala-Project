@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import DataTable from "components/Utilities/DataGrid";
 import { columns, rows } from "components/Utilities/DataHeader";
 import { AppBar } from "@mui/material";
-import download from "assets/images/avatar.png";
+// import download from "assets/images/avatar.png";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 
 const Mail = () => {

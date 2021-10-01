@@ -42,3 +42,55 @@ export const patientsRows = [
   { id: 6, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
   { id: 7, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
 ];
+
+// Patients > Consultation Table Dummy Data
+export const consultationsRows = [
+  {
+    id: 100,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 101,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 102,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 103,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 104,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 105,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 106,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+  {
+    id: 107,
+    name: "Raphael Igbenedion",
+    date: "7 July 2021",
+    description: "Health tips and counseling",
+  },
+];
