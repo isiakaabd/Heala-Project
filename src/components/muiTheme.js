@@ -84,6 +84,29 @@ export const muiTheme = createTheme({
       padding: "1rem",
       maxWidth: "10rem",
     },
+
+    cardIconWrapper: {
+      width: 86,
+      height: 84,
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    cardGridWrapper: {
+      height: "100%",
+      padding: "5rem 3rem",
+      borderRadius: 10,
+      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+    },
+
+    cardParentGrid: {
+      background: "#fff",
+      borderRadius: 10,
+      height: "25.8rem",
+      cursor: "pointer",
+    },
   },
   components: {
     MuiAppBar: {

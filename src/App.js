@@ -5,7 +5,6 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
-// import DashboardHome from "components/pages/DashboardHome";
 import Mail from "./components/pages/Mail";
 import HCPVerification from "components/pages/HCPVerification";
 import ViewHCP from "components/Utilities/ViewHCP";
@@ -16,13 +15,14 @@ import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
 import Hcps from "components/pages/Hcps";
 import Dashboard from "components/pages/Dashboard";
+import SinglePatient from "components/pages/SinglePatient";
+import PatientProfile from "components/pages/PatientProfile";
 
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
-  // marginBottom: "5rem",
   minHeight: "100vh",
   width: "100%",
   backgroundColor: "#fbfbfb",
@@ -40,8 +40,9 @@ const App = () => {
             <section style={sectionStyles}>
               <Switch>
                 <Route path={["/", "/dashboard"]} exact component={Dashboard} />
-
                 <Route exact path="/patients" component={Patients} />
+                <Route exact path="/patients/patientId" component={SinglePatient} />
+                <Route exact path="/patients/patientId/profile" component={PatientProfile} />
                 <Route exact path="/hcps" component={Hcps} />
                 <Route
                   path="/partners"
