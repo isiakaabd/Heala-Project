@@ -17,6 +17,7 @@ import Hcps from "components/pages/Hcps";
 import Dashboard from "components/pages/Dashboard";
 import SinglePatient from "components/pages/SinglePatient";
 import PatientProfile from "components/pages/PatientProfile";
+import Consultations from "components/pages/Consultations";
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -43,6 +44,7 @@ const App = () => {
                 <Route exact path="/patients" component={Patients} />
                 <Route exact path="/patients/patientId" component={SinglePatient} />
                 <Route exact path="/patients/patientId/profile" component={PatientProfile} />
+                <Route exact path="/patients/patientId/consultations" component={Consultations} />
                 <Route exact path="/hcps" component={Hcps} />
                 <Route
                   path="/partners"

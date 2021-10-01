@@ -87,8 +87,6 @@ const Patients = () => {
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   return (
     <Grid container direction="column">
@@ -102,14 +100,7 @@ const Patients = () => {
           />
         </Grid>
         <Grid item>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter Patients"
-            options={options}
-          />
+          <FilterList title="Filter Patients" options={options} width="15.2rem" />
         </Grid>
       </Grid>
       {/* The Search and Filter ends here */}

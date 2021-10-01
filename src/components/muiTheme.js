@@ -74,7 +74,7 @@ export const muiTheme = createTheme({
       fontSize: "1.5rem",
       textTransform: "none",
       height: "5rem",
-      borderRadius: 7,
+      borderRadius: 10,
       boxShadow: "0px 0px 4px -1px rgba(71,64,71,0.63)",
     },
 
