@@ -31,9 +31,9 @@ const Hcps = () => {
   const theme = useTheme();
 
   const buttonType = {
-    main: theme.palette.success.main,
-    light: theme.palette.success.light,
-    dark: theme.palette.success.dark,
+    background: theme.palette.success.main,
+    hover: theme.palette.success.light,
+    active: theme.palette.success.dark,
   };
 
   const [searchHcp, setSearchHcp] = useState("");

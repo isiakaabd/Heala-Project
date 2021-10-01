@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -6,56 +6,66 @@ import MenuItem from "@mui/material/MenuItem";
 import { makeStyles } from "@mui/styles";
 import { IoOptions } from "react-icons/io5";
 
-const useStyles = makeStyles((theme) => ({
-  button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      ...theme.typography.btn,
-      backgroundColor: "#fff",
-      color: theme.palette.common.dark,
+const FilterList = ({ width, title, options }) => {
+  const useStyles = makeStyles((theme) => ({
+    button: {
+      "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+        ...theme.typography.btn,
+        backgroundColor: "#fff",
+        color: theme.palette.common.dark,
 
-      "&:hover": {
-        backgroundColor: "#fafafa",
-      },
+        "&:hover": {
+          backgroundColor: "#fafafa",
+        },
 
-      "&:active": {
-        backgroundColor: "#f7f7f7",
-        boxShadow: "none",
+        "&:active": {
+          backgroundColor: "#f7f7f7",
+          boxShadow: "none",
+        },
       },
     },
-  },
 
-  iconWrapper: {
-    display: "block",
-    paddingTop: "0.6rem",
-    paddingLeft: "0.5rem",
-  },
-
-  icon: {
-    transform: "rotate(270deg)",
-    marginTop: "-.2rem",
-  },
-
-  paper: {
-    width: "15.2rem",
-    top: "17.3rem !important",
-  },
-
-  menuItem: {
-    "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
-      justifyContent: "center",
+    iconWrapper: {
+      display: "block",
+      paddingTop: "0.6rem",
+      paddingLeft: "0.5rem",
     },
-  },
-}));
 
-const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title, options }) => {
+    icon: {
+      transform: "rotate(270deg)",
+      marginTop: "-.2rem",
+    },
+
+    paper: {
+      width: width,
+      top: "17.3rem !important",
+    },
+
+    menuItem: {
+      "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
+        justifyContent: "center",
+      },
+    },
+  }));
+
   const classes = useStyles();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  // const [filter, setFilter] = useState(title);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(null);
+
+    // console.log(event.currentTarget.dataset);
+  };
 
   return (
     <Fragment>
       <Button
         variant="contained"
         disableRipple
-        onClick={onClick}
+        onClick={(event) => setAnchorEl(event.currentTarget)}
         endIcon={<IoOptions size={20} className={classes.icon} />}
         className={classes.button}
       >
@@ -73,7 +83,12 @@ const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title, options }) =>
         className={classes.menu}
       >
         {options.map((option) => (
-          <MenuItem key={option.id} onClick={() => setAnchorEl(null)} className={classes.menuItem}>
+          <MenuItem
+            data-my-value={option.value}
+            key={option.id}
+            onClick={handleClick}
+            className={classes.menuItem}
+          >
             {option.value}
           </MenuItem>
         ))}
@@ -83,10 +98,7 @@ const FilterList = ({ onClick, open, anchorEl, setAnchorEl, title, options }) =>
 };
 
 FilterList.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  anchorEl: PropTypes.object,
-  setAnchorEl: PropTypes.func.isRequired,
+  width: PropTypes.string,
   title: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
 };

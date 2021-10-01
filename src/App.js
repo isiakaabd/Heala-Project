@@ -16,13 +16,16 @@ import Email from "components/pages/Email";
 import Payout from "components/pages/Payout";
 import HCP from "components/pages/HCP";
 import Financetable from "components/pages/Financetable";
+import SinglePatient from "components/pages/SinglePatient";
+import PatientProfile from "components/pages/PatientProfile";
+import Consultations from "components/pages/Consultations";
+
 
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
   paddingTop: "12rem",
   paddingBottom: "5rem",
-  // marginBottom: "5rem",
   minHeight: "100vh",
   width: "100%",
   backgroundColor: "#fbfbfb",
@@ -40,8 +43,10 @@ const App = () => {
             <section style={sectionStyles}>
               <Switch>
                 <Route path={["/", "/dashboard"]} exact component={Dashboard} />
-
                 <Route exact path="/patients" component={Patients} />
+                <Route exact path="/patients/patientId" component={SinglePatient} />
+                <Route exact path="/patients/patientId/profile" component={PatientProfile} />
+                <Route exact path="/patients/patientId/consultations" component={Consultations} />
                 <Route exact path="/hcps" component={Hcps} />
                 <Route
                   path="/partners"

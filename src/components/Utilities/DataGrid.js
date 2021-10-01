@@ -87,13 +87,15 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
         textAlign: "left !important",
       },
 
-      "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft": {
-        justifyContent: "center !important",
-      },
+      "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft":
+        {
+          justifyContent: "center !important",
+        },
 
-      "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall": {
-        display: "none",
-      },
+      "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall":
+        {
+          display: "none",
+        },
 
       "& .MuiDataGrid-cell.CellSpecialization.MuiDataGrid-cell--textRight": {
         textAlign: "center !important",

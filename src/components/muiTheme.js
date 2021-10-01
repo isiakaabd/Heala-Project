@@ -74,7 +74,7 @@ export const muiTheme = createTheme({
       fontSize: "1.5rem",
       textTransform: "none",
       height: "5rem",
-      borderRadius: 7,
+      borderRadius: 10,
       boxShadow: "0px 0px 4px -1px rgba(71,64,71,0.63)",
     },
 
@@ -83,6 +83,29 @@ export const muiTheme = createTheme({
       borderRadius: "2rem",
       padding: "1rem",
       maxWidth: "10rem",
+    },
+
+    cardIconWrapper: {
+      width: 86,
+      height: 84,
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    cardGridWrapper: {
+      height: "100%",
+      padding: "5rem 3rem",
+      borderRadius: 10,
+      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+    },
+
+    cardParentGrid: {
+      background: "#fff",
+      borderRadius: 10,
+      height: "25.8rem",
+      cursor: "pointer",
     },
   },
   components: {
