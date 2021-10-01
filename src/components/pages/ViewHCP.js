@@ -22,7 +22,6 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 const gender = "Female";
-// import ResponsiveDatePickers from "components/Utilities/DateComponent";
 const useStyles = makeStyles((theme) => ({
   containerGrid: {
     background: "#fbfbfb !important ",
