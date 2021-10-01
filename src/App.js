@@ -7,7 +7,7 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Mail from "./components/pages/Mail";
 import HCPVerification from "components/pages/HCPVerification";
-import ViewHCP from "components/Utilities/ViewHCP";
+import ViewHCP from "components/pages/ViewHCP";
 import Referral from "components/pages/Referral";
 import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Finance";

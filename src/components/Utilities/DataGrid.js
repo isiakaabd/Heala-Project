@@ -11,6 +11,10 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
         borderBottom: ".3px solid #F8F8F8",
         fontSize: "1.6rem",
         background: "#FFFFFF",
+        // solving the hover effect
+        "& .MuiDataGrid-row:hover": {
+          background: "green",
+        },
       },
       "& .MuiDataGrid-root .MuiDataGrid-columnsContainer": {
         borderBottom: ".5px solid #F8F8F8",

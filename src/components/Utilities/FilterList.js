@@ -51,7 +51,14 @@ const FilterList = ({ width, title, options }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  // const [filter, setFilter] = useState(title);
   const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(null);
+
+    // console.log(event.currentTarget.dataset);
+  };
 
   return (
     <Fragment>
@@ -76,7 +83,12 @@ const FilterList = ({ width, title, options }) => {
         className={classes.menu}
       >
         {options.map((option) => (
-          <MenuItem key={option.id} onClick={() => setAnchorEl(null)} className={classes.menuItem}>
+          <MenuItem
+            data-my-value={option.value}
+            key={option.id}
+            onClick={handleClick}
+            className={classes.menuItem}
+          >
             {option.value}
           </MenuItem>
         ))}
