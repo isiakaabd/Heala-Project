@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import DataTable from "../Utilities/DataGrid";
 import { rows, Subscriptioncolumns } from "components/Utilities/DataHeader";
 import { AppBar } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 function SubscriptionPlans() {
   return (
@@ -38,10 +39,10 @@ function SubscriptionPlans() {
           <Grid item xs={3}>
             <IconLabelButtons
               placeholder="Create new plan"
-              height="inherit"
+              height="5.6rem"
               width="18.5rem"
               backgroundColor="#ED3237"
-              type="subscription"
+              endIcon={<AddIcon />}
               border="1rem"
             />
           </Grid>
