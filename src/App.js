@@ -5,19 +5,21 @@ import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
-import Mail from "./components/pages/Mail";
-import HCPVerification from "components/pages/HCPVerification";
 import ViewHCP from "components/pages/ViewHCP";
-import Referral from "components/pages/Referral";
-import SubscriptionPlans from "components/pages/SubscriptionPlans";
-import Finance from "components/pages/Finance";
+import ReferralTab from "components/pages/ReferralTab";
+import Subscription from "components/pages/Subscription";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
 import Hcps from "components/pages/Hcps";
 import Dashboard from "components/pages/Dashboard";
+import Email from "components/pages/Email";
+import Payout from "components/pages/Payout";
+import HCP from "components/pages/HCP";
+import Financetable from "components/pages/Financetable";
 import SinglePatient from "components/pages/SinglePatient";
 import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
+
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -55,11 +57,12 @@ const App = () => {
                   path="/messages"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>}
                 />
-                <Route path="/email" component={Mail} />
-                <Route path="/verification" component={HCPVerification} />
-                <Route path="/finance" component={Finance} />
-                <Route path="/referrals" component={Referral} />
-                <Route path="/plans" component={SubscriptionPlans} />
+                <Route path="/email" component={Email} />
+                <Route path="/payout" component={Payout} />
+                <Route path="/verification" component={HCP} />
+                <Route path="/finance" component={Financetable} />
+                <Route path="/referrals" component={ReferralTab} />
+                <Route path="/plans" component={Subscription} />
                 <Route path="/view" component={ViewHCP} />
                 <Route
                   path="/settings"
