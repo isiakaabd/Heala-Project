@@ -1,1 +1,1 @@
-export * as entitiesActions from "store/action-creators/entitiesActions";
+export * as tablesActions from "store/action-creators/tablesActions";

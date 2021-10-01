@@ -10,7 +10,8 @@ import Paper from "@mui/material/Paper";
 import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
 import threeDot from "assets/images/threeDot.svg";
-
+import IconLabelButtons from "components/Utilities/Button";
+import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 const Item = styled(Paper)(({ theme }) => ({
   boxShadow: "none",
   textAlign: "center",
@@ -252,7 +253,30 @@ const ViewHCP = () => {
           })}
         </Grid>
 
-        {/* third grid */}
+        <Grid
+          container
+          sx={{
+            maxHeight: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "baseline",
+          }}
+        >
+          <Item
+            sx={{
+              marginRight: "5rem !important",
+            }}
+          >
+            <IconLabelButtons
+              placeholder="Verify HCP"
+              height="4.8rem"
+              width="14.2rem"
+              backgroundColor="#ED3237"
+              border="1rem"
+              endIcon={<DoneSharpIcon />}
+            />
+          </Item>
+        </Grid>
       </Grid>
     </AppBar>
   );

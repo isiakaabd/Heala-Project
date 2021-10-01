@@ -7,6 +7,8 @@ import Grid from "@mui/material/Grid";
 import DataTable from "components/Utilities/DataGrid";
 import { columns, rows } from "components/Utilities/DataHeader";
 import { AppBar } from "@mui/material";
+import download from "assets/images/avatar.png";
+import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 
 const Mail = () => {
   const option = ["height", "long", "short"];
@@ -48,11 +50,12 @@ const Mail = () => {
             <Grid item xs={3} sx={{ marginRight: "4.5rem" }}>
               <IconLabelButtons
                 placeholder="Download email"
-                height="inherit"
+                height="5.7rem"
                 width="19rem"
                 backgroundColor="#3EA584"
                 type="download"
                 border="1rem"
+                endIcon={<DownloadSharpIcon />}
               />
             </Grid>
           </Grid>

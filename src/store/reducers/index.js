@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import entitiesReducer from "store/reducers/entitiesReducer";
+import tablesReducer from "store/reducers/tablesReducer";
 
 const reducers = combineReducers({
-  entities: entitiesReducer,
+  tables: tablesReducer,
 });
 
 export default reducers;

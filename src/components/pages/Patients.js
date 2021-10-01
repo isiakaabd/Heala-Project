@@ -6,7 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/Utilities/Table";
+import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
@@ -16,6 +16,10 @@ import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useActions } from "components/hooks/useActions";
+import { handleSelectedRows } from "helpers/selectedRows";
+import { isSelected } from "helpers/isSelected";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -33,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "12rem",
+      maxWidth: "10rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -41,6 +45,15 @@ const useStyles = makeStyles((theme) => ({
 
       "&:active": {
         background: "#fafafa",
+      },
+
+      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+        fontSize: "1.2rem",
+      },
+
+      "& .css-9tj150-MuiButton-endIcon": {
+        marginLeft: ".3rem",
+        marginTop: "-.2rem",
       },
     },
   },
@@ -58,85 +71,61 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "1.3rem",
     },
   },
-
-  arrow: {
-    "&.css-1jxdcj3-MuiSvgIcon-root": {
-      fontSize: "1.2rem",
-      marginTop: "-.2rem",
-      marginLeft: "1rem",
-    },
-  },
 }));
+
+const options = [
+  { id: 0, value: "Name" },
+  { id: 1, value: "Plan" },
+  { id: 2, value: "Consultation" },
+];
 
 const Patients = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [patient, setPatient] = useState("");
+  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { setSelectedRows } = useActions();
+
+  const [searchPatient, setSearchPatient] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [selected, setSelected] = useState([]);
   const open = Boolean(anchorEl);
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
 
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>
         <Grid item className={classes.searchGrid}>
           <Search
-            value={patient}
-            onChange={(e) => setPatient(e.target.value)}
+            value={searchPatient}
+            onChange={(e) => setSearchPatient(e.target.value)}
             placeholder="Type to search patients..."
             height="5rem"
           />
         </Grid>
-        <Grid item className={classes.filterBtnGrid}>
+        <Grid item>
           <FilterList
             onClick={(event) => setAnchorEl(event.currentTarget)}
             open={open}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             title="Filter Patients"
+            options={options}
           />
         </Grid>
       </Grid>
+      {/* The Search and Filter ends here */}
       <Grid item container>
         <EnhancedTable
           headCells={patientsHeadCells}
           rows={patientsRows}
           page={page}
-          rowsPerPage={rowsPerPage}
-          selected={selected}
-          setPage={setPage}
-          setRowsPerPage={setRowsPerPage}
-          setSelected={setSelected}
+          paginationLabel="Patients per page"
+          hasCheckbox={true}
         >
           {patientsRows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
-              const isItemSelected = isSelected(row.id);
+              const isItemSelected = isSelected(row.id, selectedRows);
+
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
@@ -150,7 +139,7 @@ const Patients = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -210,12 +199,12 @@ const Patients = () => {
                   <TableCell>
                     <Button
                       variant="contained"
+                      className={classes.button}
                       component={Link}
                       to="/patients/userId"
-                      className={classes.button}
+                      endIcon={<ArrowForwardIosIcon />}
                     >
-                      <span>View Profile</span>
-                      <ArrowForwardIosIcon className={classes.arrow} />
+                      View Profile
                     </Button>
                   </TableCell>
                 </TableRow>
