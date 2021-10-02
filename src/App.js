@@ -20,7 +20,6 @@ import SinglePatient from "components/pages/SinglePatient";
 import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
 
-
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
