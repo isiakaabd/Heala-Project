@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,17 +27,17 @@ const useStyles = makeStyles((theme) => ({
       overflowY: "scroll",
     },
 
-    "& .css-jau5dn-MuiButtonBase-root-MuiListItemButton-root": {
+    "& .MuiListItemButton-root": {
       marginBottom: "2em",
 
       "&:hover": {
         background: theme.palette.common.lightRed,
 
-        "& .css-1jxdcj3-MuiSvgIcon-root": {
+        "& .MuiSvgIcon-root": {
           color: theme.palette.common.red,
         },
 
-        "& .css-14aspbj-MuiTypography-root": {
+        "& .MuiTypography-root": {
           color: theme.palette.common.red,
         },
 
@@ -47,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
       },
     },
 
-    "& .css-cveggr-MuiListItemIcon-root": {
+    "& .MuiListItemIcon-root": {
       minWidth: 50,
     },
 
-    "& .css-1jxdcj3-MuiSvgIcon-root": {
+    "& .MuiSvgIcon-root": {
       fontSize: "2rem",
 
       "&:hover": {
@@ -59,11 +59,11 @@ const useStyles = makeStyles((theme) => ({
       },
     },
 
-    "& .css-14aspbj-MuiTypography-root": {
+    "& .MuiTypography-root": {
       fontSize: "1.45rem",
     },
 
-    "& .css-jau5dn-MuiButtonBase-root-MuiListItemButton-root.Mui-selected": {
+    "& .MuiListItemButton-root.Mui-selected": {
       backgroundColor: theme.palette.common.lightRed,
       color: theme.palette.common.red,
       borderRadius: ".5rem",
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.common.red,
       },
 
-      "& .css-14aspbj-MuiTypography-root": {
+      "& .MuiTypography-root": {
         color: theme.palette.common.red,
       },
     },
@@ -100,14 +100,14 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "7em",
   },
   logout: {
-    "&.css-jau5dn-MuiButtonBase-root-MuiListItemButton-root": {
+    "&.MuiListItemButton-root": {
       marginTop: "2.5rem",
 
-      "& .css-cveggr-MuiListItemIcon-root": {
+      "& .MuiListItemIcon-root": {
         color: theme.palette.common.red,
       },
 
-      "& .css-14aspbj-MuiTypography-root": {
+      "& .MuiTypography-root": {
         color: theme.palette.common.red,
       },
     },
@@ -117,19 +117,27 @@ const useStyles = makeStyles((theme) => ({
 const SideMenu = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
 
+  const { patientId } = useParams();
+  const location = useLocation();
+
+  console.log(patientId);
+
   useEffect(() => {
     [...menus].filter((menu) => {
-      switch (window.location.pathname) {
+      switch (location.pathname) {
         case menu.path:
           if (menu.id !== selectedMenu) {
             setSelectedMenu(menu.id);
           }
           break;
+        case `/patients/${patientId}`:
+          setSelectedMenu(1);
+          break;
         default:
           break;
       }
     });
-  });
+  }, [selectedMenu, setSelectedMenu]);
 
   return (
     <aside className={classes.aside}>

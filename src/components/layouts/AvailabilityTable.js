@@ -66,6 +66,7 @@ const AvailabilityTable = () => {
         page={page}
         paginationLabel="List per page"
         title="Availability Calendar"
+        hasCheckbox={false}
       >
         {availabilityRows
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

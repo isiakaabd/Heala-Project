@@ -25,7 +25,6 @@ const Card = ({ img, alt, title, background, children, header = "h2" }) => {
       className={classes.gridWrapper}
     >
       <Grid item className={`${classes.iconWrapper} ${classes.lightGreen}`} style={{ background }}>
-        {/* <img src={img} alt={alt} /> */}
         {children}
       </Grid>
       <Grid item>

@@ -165,23 +165,22 @@ const HCP = () => {
                   {row.entryDate}
                 </TableCell>
                 <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}> {row.firstName} {row.lastName}</span>
-                    </div>
-                  </TableCell>
+                  <div
+                    style={{
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span style={{ marginRight: "1rem" }}>
+                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
+                    </span>
+                    <span style={{ fontSize: "1.25rem" }}>
+                      {" "}
+                      {row.firstName} {row.lastName}
+                    </span>
+                  </div>
+                </TableCell>
                 <TableCell
                   align="center"
                   className={classes.tableCell}

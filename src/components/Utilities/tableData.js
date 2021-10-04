@@ -94,3 +94,73 @@ export const consultationsRows = [
     description: "Health tips and counseling",
   },
 ];
+
+// Patients > Prescriptions Table Dummy Data
+export const prescriptionsRows = [
+  { id: 200, date: "07 July 2021", details: "Details regarding the prescription", dosage: 8 },
+  { id: 201, date: "07 July 2021", details: "Details regarding the prescription", dosage: 5 },
+  { id: 202, date: "07 July 2021", details: "Details regarding the prescription", dosage: 7 },
+  { id: 203, date: "07 July 2021", details: "Details regarding the prescription", dosage: 4 },
+  { id: 204, date: "07 July 2021", details: "Details regarding the prescription", dosage: 5 },
+  { id: 205, date: "07 July 2021", details: "Details regarding the prescription", dosage: 6 },
+];
+
+// Patients > Medication Table Dummy Data
+export const medicationsRows = [
+  {
+    id: 300,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 301,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 302,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 303,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 304,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 305,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 306,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+  {
+    id: 307,
+    date: "7 July 2021",
+    name: "Name of Medication",
+    prescription: "Type of Prescription",
+    caregiver: "Raphael Igbenedion",
+  },
+];

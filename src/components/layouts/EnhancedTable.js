@@ -16,21 +16,21 @@ import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   pagination: {
-    "& .css-b6jmxr-MuiTablePagination-selectLabel": {
+    "& .MuiTablePagination-selectLabel": {
       fontSize: "1.2rem",
     },
 
-    "& .css-d9frgn-MuiInputBase-root-MuiTablePagination-select": {
+    "& .MuiTablePagination-select": {
       fontSize: "1.2rem",
     },
 
-    "& .css-gikigr-MuiTablePagination-displayedRows": {
+    "& .MuiTablePagination-displayedRows": {
       fontSize: "1.2rem",
     },
   },
 
   tableToolbar: {
-    "&.css-1x93y7r-MuiToolbar-root": {
+    "&.MuiToolbar-root": {
       background: "#eee",
     },
   },
