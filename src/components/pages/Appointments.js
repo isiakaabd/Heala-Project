@@ -48,7 +48,7 @@ const Appointments = () => {
           title="Waiting List"
           background={theme.palette.common.lightGreen}
         >
-          <CalendarIcon />
+          <CalendarIcon fill={theme.palette.common.green} />
         </Card>
       </Grid>
       <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>

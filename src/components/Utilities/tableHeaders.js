@@ -35,6 +35,23 @@ export const consultationsHeadCells = [
   { id: 104, label: "" },
 ];
 
+// Patients > Prescription Route Table
+export const prescriptionsHeadCells = [
+  { id: 200, label: "Date" },
+  { id: 201, label: "Details" },
+  { id: 202, label: "Dosage" },
+];
+
+// Patients > Medications Route Table
+export const medicationsHeadCells = [
+  { id: 300, label: "Date Prescribed" },
+  { id: 301, label: "Medication Name" },
+  { id: 302, label: "Prescription Types" },
+  { id: 303, label: "Caregiver" },
+];
+
+// ------------------------------------
+
 // Dashboard Route TableHeader
 export const waitingHeadCells = [
   { id: 0, label: "User ID" },

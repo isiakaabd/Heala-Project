@@ -15,7 +15,7 @@ import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -87,123 +87,126 @@ const Patients = () => {
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
+  const { patientId } = useParams();
 
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <Grid item className={classes.searchGrid}>
-          <Search
-            value={searchPatient}
-            onChange={(e) => setSearchPatient(e.target.value)}
-            placeholder="Type to search patients..."
-            height="5rem"
-          />
+    <>
+      <Grid container direction="column">
+        <Grid item container style={{ paddingBottom: "5rem" }}>
+          <Grid item className={classes.searchGrid}>
+            <Search
+              value={searchPatient}
+              onChange={(e) => setSearchPatient(e.target.value)}
+              placeholder="Type to search patients..."
+              height="5rem"
+            />
+          </Grid>
+          <Grid item>
+            <FilterList title="Filter Patients" options={options} width="15.2rem" />
+          </Grid>
         </Grid>
-        <Grid item>
-          <FilterList title="Filter Patients" options={options} width="15.2rem" />
-        </Grid>
-      </Grid>
-      {/* The Search and Filter ends here */}
-      <Grid item container>
-        <EnhancedTable
-          headCells={patientsHeadCells}
-          rows={patientsRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {patientsRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+        {/* The Search and Filter ends here */}
+        <Grid item container>
+          <EnhancedTable
+            headCells={patientsHeadCells}
+            rows={patientsRows}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {patientsRows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
                   >
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.patientName}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.patientName}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.plan}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.consultations}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Chip
-                      label={row.status}
-                      className={classes.badge}
-                      style={{
-                        background:
-                          row.status === "active"
-                            ? theme.palette.common.lightGreen
-                            : theme.palette.common.lightRed,
-                        color:
-                          row.status === "active"
-                            ? theme.palette.common.green
-                            : theme.palette.common.red,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to="/patients/patientId"
-                      endIcon={<ArrowForwardIosIcon />}
-                    >
-                      View Profile
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.patientName}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.patientName}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      {row.plan}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      {row.consultations}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <Chip
+                        label={row.status}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            row.status === "active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            row.status === "active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`patients/${row.id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                      >
+                        View Profile
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

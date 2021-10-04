@@ -6,15 +6,18 @@ import { makeStyles } from "@mui/styles";
 const CustomButton = ({
   title,
   endIcon,
+  onClick,
+  width = "auto",
   textColor = "#fff",
   type: { background, hover, active },
 }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
-      "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      "&.MuiButton-root": {
         ...theme.typography.btn,
         backgroundColor: background,
         color: textColor,
+        width: width,
 
         "&:hover": {
           backgroundColor: hover,
@@ -25,11 +28,11 @@ const CustomButton = ({
           boxShadow: "none",
         },
 
-        "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+        "& .MuiButton-endIcon>*:nth-of-type(1)": {
           fontSize: "2rem",
         },
 
-        "& .css-9tj150-MuiButton-endIcon": {
+        "& .MuiButton-endIcon": {
           marginLeft: ".5rem",
           marginTop: "-.2rem",
         },
@@ -40,7 +43,7 @@ const CustomButton = ({
   const classes = useStyles();
 
   return (
-    <Button variant="contained" endIcon={endIcon} className={classes.button}>
+    <Button variant="contained" endIcon={endIcon} className={classes.button} onClick={onClick}>
       {title}
     </Button>
   );
@@ -51,6 +54,8 @@ CustomButton.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string,
   textColor: PropTypes.string,
+  onClick: PropTypes.func,
+  width: PropTypes.string,
 };
 
 export default CustomButton;
