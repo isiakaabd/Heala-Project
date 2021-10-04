@@ -25,6 +25,145 @@ export const patientsHeadCells = [
     label: "",
   },
 ];
+export const emailHeader = [
+  {
+    id: 0,
+    label: "Entry Date",
+  },
+  {
+    id: 1,
+    label: "Name",
+  },
+  {
+    id: 2,
+    label: "Plan",
+  },
+
+  {
+    id: 4,
+    label: "Email",
+  },
+];
+
+export const HCPHeader = [
+  {
+    id: 0,
+    label: "Entry Date",
+  },
+  {
+    id: 1,
+    label: "Name",
+  },
+  {
+    id: 2,
+    label: "Medical ID",
+  },
+
+  {
+    id: 4,
+    label: "",
+  },
+];
+export const financeHeader = [
+  {
+    id: 0,
+    label: "Entry Date",
+  },
+  {
+    id: 1,
+    label: "Time",
+  },
+  {
+    id: 2,
+    label: "Name",
+  },
+
+  {
+    id: 3,
+    label: "Subscription Plan",
+  },
+  {
+    id: 4,
+    label: "Amount",
+  },
+];
+export const referralHeader = [
+  {
+    id: 0,
+    label: "Date",
+  },
+  {
+    id: 1,
+    label: "Time",
+  },
+  {
+    id: 2,
+    label: " HCP Name",
+  },
+
+  {
+    id: 3,
+    label: "Specialization",
+  },
+  {
+    id: 4,
+    label: "Patient's name",
+  },
+  {
+    id: 5,
+    label: "Status",
+  },
+  {
+    id: 5,
+    label: "",
+  },
+];
+export const subscriptionHeader = [
+  {
+    id: 0,
+    label: "Name of plan",
+  },
+  {
+    id: 1,
+    label: "Amount",
+  },
+  {
+    id: 2,
+    label: " Description",
+  },
+
+  {
+    id: 3,
+    label: "",
+  },
+];
+export const payoutHeader = [
+  {
+    id: 0,
+    label: "Date",
+  },
+  {
+    id: 1,
+    label: "Time",
+  },
+  {
+    id: 2,
+    label: " HCP Name",
+  },
+
+  {
+    id: 3,
+    label: "Medical ID",
+  },
+  {
+    id: 4,
+    label: "Amount Paid out",
+  },
+  {
+    id: 5,
+    label: "Payout status",
+  },
+];
 
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [

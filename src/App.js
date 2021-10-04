@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";

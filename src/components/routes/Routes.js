@@ -1,11 +1,11 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Mail from "components/pages/Mail";
-import HCPVerification from "components/pages/HCPVerification";
+import HCPVerification from "components/pages/HCP";
 import ViewHCP from "components/pages/ViewHCP";
 import Referral from "components/pages/Referral";
 import SubscriptionPlans from "components/pages/SubscriptionPlans";
-import Finance from "components/pages/Finance";
+import Finance from "components/pages/Financetable";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
 import Hcps from "components/pages/Hcps";
