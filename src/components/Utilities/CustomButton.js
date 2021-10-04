@@ -8,6 +8,7 @@ const CustomButton = ({
   endIcon,
   textColor = "#fff",
   type: { background, hover, active },
+  onClick,
 }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
@@ -40,7 +41,7 @@ const CustomButton = ({
   const classes = useStyles();
 
   return (
-    <Button variant="contained" endIcon={endIcon} className={classes.button}>
+    <Button variant="contained" endIcon={endIcon} className={classes.button} onClick={onClick}>
       {title}
     </Button>
   );
@@ -51,6 +52,7 @@ CustomButton.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string,
   textColor: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default CustomButton;

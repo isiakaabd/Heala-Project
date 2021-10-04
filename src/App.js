@@ -19,6 +19,8 @@ import Financetable from "components/pages/Financetable";
 import SinglePatient from "components/pages/SinglePatient";
 import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
+import MainFinanceTab from "components/pages/MainFinanceTab";
+import ViewReferral from "components/pages/ViewReferral";
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -59,10 +61,12 @@ const App = () => {
                 <Route path="/email" component={Email} />
                 <Route path="/payout" component={Payout} />
                 <Route path="/verification" component={HCP} />
-                <Route path="/finance" component={Financetable} />
+                <Route path="/finance" component={MainFinanceTab} />
+                <Route path="/earning" component={Financetable} />
                 <Route path="/referrals" component={ReferralTab} />
                 <Route path="/plans" component={Subscription} />
                 <Route path="/view" component={ViewHCP} />
+                <Route path="/view-referral" component={ViewReferral} />
                 <Route
                   path="/settings"
                   render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>}

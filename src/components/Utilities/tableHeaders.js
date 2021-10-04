@@ -101,7 +101,6 @@ export const referralHeader = [
     label: " HCP Name",
   },
 
-
   {
     id: 3,
     label: "Specialization",
@@ -132,7 +131,7 @@ export const subscriptionHeader = [
     id: 2,
     label: " Description",
   },
- 
+
   {
     id: 3,
     label: "",
@@ -164,7 +163,29 @@ export const payoutHeader = [
     id: 5,
     label: "Payout status",
   },
- 
+];
+export const viewRefferalHeader = [
+  {
+    id: 0,
+    label: "HCP name",
+  },
+  {
+    id: 1,
+    label: "Specialization",
+  },
+  {
+    id: 2,
+    label: " Available Time",
+  },
+
+  {
+    id: 4,
+    label: "",
+  },
+  {
+    id: 5,
+    label: "",
+  },
 ];
 
 // Patient > Consultation Route Table
@@ -175,7 +196,6 @@ export const consultationsHeadCells = [
   { id: 103, label: "" },
   { id: 104, label: "" },
 ];
-
 
 // Dashboard Route TableHeader
 export const waitingHeadCells = [
