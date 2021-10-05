@@ -5,6 +5,7 @@ const grey = "#757886";
 const red = "#ED3237";
 const lightRed = "#FEF8F7";
 const lightGrey = "#CCCCCC";
+const lighterGrey = "F2F2F2";
 const green = "#3EA584";
 const lightGreen = "#ECF6F3";
 
@@ -17,6 +18,7 @@ export const muiTheme = createTheme({
       green,
       lightRed,
       lightGrey,
+      lighterGrey,
       lightGreen,
     },
     primary: {
@@ -50,25 +52,26 @@ export const muiTheme = createTheme({
       fontWeight: 500,
     },
     h3: {
-      fontSize: "2rem",
+      fontSize: "2.25rem",
       fontWeight: 500,
     },
     h4: {
-      fontSize: "1.7rem",
+      fontSize: "1.85rem",
     },
     h5: {
-      fontSize: "1.2rem",
+      fontSize: "1.5rem",
       fontWeight: 500,
     },
 
     body1: {
-      fontSize: "1.2rem",
+      fontSize: "1.6rem",
       fontWeight: 300,
       color: dark,
     },
     body2: {
-      fontSize: "1rem",
+      fontSize: "1.3rem",
       fontWeight: 300,
+      lineHeight: 1.7,
     },
     btn: {
       fontSize: "1.5rem",
@@ -113,7 +116,7 @@ export const muiTheme = createTheme({
       styleOverrides: {
         root: {
           background: "#fff",
-          boxShadow: "none",
+          boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
         },
       },
     },

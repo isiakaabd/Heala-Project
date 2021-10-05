@@ -19,6 +19,8 @@ import displayPhoto from "assets/images/avatar.png";
 import { consultationsRows } from "components/Utilities/tableData";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import PreviousButton from "components/Utilities/PreviousButton";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -86,10 +88,15 @@ const Consultations = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const { patientId } = useParams();
+
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   return (
     <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/patients/${patientId}`} />
+      </Grid>
       <Grid
         item
         container
@@ -187,7 +194,7 @@ const Consultations = () => {
                       className={`${classes.tableBtn} ${classes.redBtn}`}
                       endIcon={<DeleteIcon color="error" />}
                     >
-                      Calcel
+                      Cancel
                     </Button>
                   </TableCell>
                 </TableRow>

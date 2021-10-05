@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -13,8 +13,8 @@ import { ReactComponent as ConsultationIcon } from "assets/images/consultation.s
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import { Link } from "react-router-dom";
-// import consultation from "assets/images/consultation.svg";
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -50,16 +50,22 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SinglePatient = () => {
+const SinglePatient = ({ setSelectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const { patientId } = useParams();
+
+  useEffect(() => {
+    setSelectedMenu(1);
+  }, []);
 
   const cards1 = [
     {
       id: 0,
       title: "Patient Profile",
       background: theme.palette.common.lightRed,
-      path: "/patients/patientId/profile",
+      path: "profile",
       icon: UserIcon,
       fill: theme.palette.common.red,
     },
@@ -67,7 +73,7 @@ const SinglePatient = () => {
       id: 1,
       title: "Consultations",
       background: theme.palette.common.lightGreen,
-      path: "/patients/patientId/consultations",
+      path: "consultations",
       icon: ConsultationIcon,
       fill: theme.palette.common.green,
     },
@@ -75,7 +81,7 @@ const SinglePatient = () => {
       id: 2,
       title: "Prescriptions",
       background: theme.palette.common.lightRed,
-      path: "/patients/patientId/prescriptions",
+      path: "prescriptions",
       icon: PrescriptionIcon,
       fill: theme.palette.common.red,
     },
@@ -86,7 +92,7 @@ const SinglePatient = () => {
       id: 3,
       title: "Medical Records",
       background: theme.palette.common.lightGreen,
-      path: "/patients/patientId/records",
+      path: "records",
       icon: AssignmentIcon,
       fill: theme.palette.common.green,
     },
@@ -94,7 +100,7 @@ const SinglePatient = () => {
       id: 4,
       title: "Case notes",
       background: theme.palette.common.lightRed,
-      path: "/patients/patientId/case-notes",
+      path: "case-notes",
       icon: UserIcon,
       fill: theme.palette.common.red,
     },
@@ -102,7 +108,7 @@ const SinglePatient = () => {
       id: 5,
       title: "Medications",
       background: theme.palette.common.lightGreen,
-      path: "/patients/patientId/medications",
+      path: "medications",
       icon: UserIcon,
       fill: theme.palette.common.green,
     },
@@ -154,7 +160,13 @@ const SinglePatient = () => {
       {/* TOP CARDS SECTION */}
       <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
         {cards1.map((card) => (
-          <Grid key={card.id} item className={classes.parentGrid} component={Link} to={card.path}>
+          <Grid
+            key={card.id}
+            item
+            className={classes.parentGrid}
+            component={Link}
+            to={`/patients/${patientId}/${card.path}`}
+          >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, { fill: card.fill })}
             </Card>
@@ -164,7 +176,13 @@ const SinglePatient = () => {
       {/* BOTTOM CARDS SECTION */}
       <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
         {cards2.map((card) => (
-          <Grid key={card.id} item className={classes.parentGrid} component={Link} to={card.path}>
+          <Grid
+            key={card.id}
+            item
+            className={classes.parentGrid}
+            component={Link}
+            to={`/patients/${patientId}/${card.path}`}
+          >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, {
                 fill: card.fill,
@@ -177,6 +195,10 @@ const SinglePatient = () => {
       </Grid>
     </Grid>
   );
+};
+
+SinglePatient.propTypes = {
+  setSelectedMenu: PropTypes.func.isRequired,
 };
 
 export default SinglePatient;

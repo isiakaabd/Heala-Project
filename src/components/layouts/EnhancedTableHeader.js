@@ -8,16 +8,16 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   tableHeader: {
-    "&.css-15wwp11-MuiTableHead-root": {
+    "&.MuiTableHead-root": {
       background: "rgb(251, 251, 251)",
     },
   },
   tableHeaderCell: {
-    "&.css-ce8zdd-MuiTableCell-root, &.css-bw3w4k-MuiTableCell-root": {
-      fontSize: "1.5rem",
+    "&.MuiTableCell-root, &.MuiTableCell-root": {
+      fontSize: "1.65rem",
     },
 
-    "&.css-nl5mae-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.5rem",
     },
   },
@@ -64,7 +64,7 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   rowCount: PropTypes.number.isRequired,
   headCells: PropTypes.array.isRequired,
-  hasCheckbox: PropTypes.bool.isRequired,
+  hasCheckbox: PropTypes.bool,
 };
 
 export default EnhancedTableHead;

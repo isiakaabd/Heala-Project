@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
+<<<<<<< HEAD
 import ViewHCP from "components/pages/ViewHCP";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
@@ -21,6 +22,9 @@ import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
 import MainFinanceTab from "components/pages/MainFinanceTab";
 import ViewReferral from "components/pages/ViewReferral";
+=======
+import Routes from "components/routes/Routes";
+>>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -42,6 +46,7 @@ const App = () => {
           <main style={{ display: "flex" }}>
             <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
             <section style={sectionStyles}>
+<<<<<<< HEAD
               <Switch>
                 <Route path={["/", "/dashboard"]} exact component={Dashboard} />
                 <Route exact path="/patients" component={Patients} />
@@ -72,6 +77,9 @@ const App = () => {
                   render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>}
                 />
               </Switch>
+=======
+              <Routes setSelectedMenu={setSelectedMenu} />
+>>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
             </section>
           </main>
         </div>
