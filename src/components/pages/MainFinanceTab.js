@@ -139,7 +139,7 @@ const MainFinanceTab = () => {
       <Grid container justifyContent="flex-start">
         <Grid
           item
-          md={2}
+          md={3}
           sm={5}
           component="div"
           container
@@ -168,7 +168,7 @@ const MainFinanceTab = () => {
 
         <Grid
           item
-          md={2}
+          md={3}
           sm={5}
           component="div"
           container
@@ -178,19 +178,18 @@ const MainFinanceTab = () => {
             height: "25.8rem",
           }}
         >
-          <Link to="/payout" style={{ textDecoration: "none" }}>
-            <Card className={classes.cardContainer}>
-              <Avatar sx={{ background: theme.palette.common.lightRed }}>
-                <MovingIcon sx={{ color: theme.palette.common.red }} />
-              </Avatar>
-
+          <Card className={classes.cardContainer}>
+            <Avatar sx={{ background: theme.palette.common.lightRed }}>
+              <MovingIcon sx={{ color: theme.palette.common.red }} />
+            </Avatar>
+            <Link to="/payout" style={{ textDecoration: "none" }}>
               <CardContent>
                 <Typography variant="h5" color="primary" component="div">
                   Payout Table
                 </Typography>
               </CardContent>
-            </Card>
-          </Link>
+            </Link>
+          </Card>
         </Grid>
       </Grid>
     </Stack>

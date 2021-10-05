@@ -109,7 +109,7 @@ const ReferralTab = () => {
             height="5rem"
           />
         </Grid>
-        <Grid item >
+        <Grid item>
           <FilterList
             onClick={(event) => setAnchorEl(event.currentTarget)}
             open={open}
@@ -231,7 +231,7 @@ const ReferralTab = () => {
                     variant="contained"
                     className={classes.button}
                     component={Link}
-                    to="/view-referral"
+                    to="/view"
                     endIcon={<ArrowForwardIosIcon />}
                   >
                     View referral

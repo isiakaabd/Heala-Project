@@ -163,7 +163,6 @@ export const payoutHeader = [
     id: 5,
     label: "Payout status",
   },
-<<<<<<< HEAD
 ];
 export const viewRefferalHeader = [
   {
@@ -187,8 +186,6 @@ export const viewRefferalHeader = [
     id: 5,
     label: "",
   },
-=======
->>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
 ];
 
 // Patient > Consultation Route Table
@@ -200,8 +197,6 @@ export const consultationsHeadCells = [
   { id: 104, label: "" },
 ];
 
-<<<<<<< HEAD
-=======
 // Patients > Prescription Route Table
 export const prescriptionsHeadCells = [
   { id: 200, label: "Date" },
@@ -219,7 +214,6 @@ export const medicationsHeadCells = [
 
 // ------------------------------------
 
->>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
 // Dashboard Route TableHeader
 export const waitingHeadCells = [
   { id: 0, label: "User ID" },
