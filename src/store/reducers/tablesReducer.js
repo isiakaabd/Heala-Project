@@ -22,6 +22,11 @@ const tablesReducer = (state = initialState, action) => {
         ...state,
         selectedRows: action.payload,
       };
+    case actionType.MODALS:
+      return {
+        ...state,
+        currentState: !action.payload,
+      };
     default:
       return state;
   }

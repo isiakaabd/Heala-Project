@@ -1,29 +1,33 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
-import DatePicker from "@material-ui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 import PropTypes from "prop-types";
-const ResponsiveDatePickers = ({ label }) => {
-  const [value, setValue] = useState({ label });
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
+const DateComponent = ({ label }) => {
+  const [value, setValue] = useState(null);
+
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          label={label}
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => (
-            <TextField {...params} helperText={params?.inputProps?.placeholder} />
-          )}
-        />
-      </LocalizationProvider>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        label={label}
+        rightArrowIcon={<KeyboardArrowDownIcon />}
+        rightArrowButton={<KeyboardArrowDownIcon />}
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </LocalizationProvider>
   );
 };
-ResponsiveDatePickers.propTypes = {
-  label: PropTypes.string.isRequired,
+export default DateComponent;
+
+DateComponent.propTypes = {
+  label: PropTypes.string,
+
+  // .isRequired,
 };
-export default ResponsiveDatePickers;

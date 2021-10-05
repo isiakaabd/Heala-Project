@@ -20,3 +20,12 @@ export const setSelectedRows = (selected) => {
     payload: selected,
   };
 };
+
+export const toggleModal = (currentState) => {
+  return {
+    type: actionType.MODALS,
+    payload: currentState,
+  };
+};
+
+// modal

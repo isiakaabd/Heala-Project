@@ -10,6 +10,7 @@ const CustomButton = ({
   width = "auto",
   textColor = "#fff",
   type: { background, hover, active },
+  onClick,
 }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
@@ -55,7 +56,10 @@ CustomButton.propTypes = {
   type: PropTypes.string,
   textColor: PropTypes.string,
   onClick: PropTypes.func,
+<<<<<<< HEAD
+=======
   width: PropTypes.string,
+>>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
 };
 
 export default CustomButton;
