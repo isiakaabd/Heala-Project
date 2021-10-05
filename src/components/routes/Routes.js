@@ -18,6 +18,12 @@ import CaseNotes from "components/pages/CaseNotes";
 import Medications from "components/pages/Medications";
 import SinglePatient from "components/pages/SinglePatient";
 import PropTypes from "prop-types";
+import Email from "components/pages/Email";
+import MainFinanceTab from "components/pages/MainFinanceTab";
+import Payout from "components/pages/Payout";
+import ReferralTab from "components/pages/ReferralTab";
+import Subscription from "components/pages/Subscription";
+import ViewReferral from "components/pages/ViewReferral";
 
 const Routes = ({ setSelectedMenu }) => {
   return (
@@ -39,11 +45,14 @@ const Routes = ({ setSelectedMenu }) => {
       <Route path="/partners" render={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>} />
       <Route path="/appointments" component={Appointments} />
       <Route path="/messages" render={() => <h3 style={{ fontSize: "3rem" }}>Messages</h3>} />
-      <Route path="/email" component={Mail} />
+      <Route path="/email" component={Email} />
       <Route path="/verification" component={HCPVerification} />
-      <Route path="/finance" component={Finance} />
-      <Route path="/referrals" component={Referral} />
-      <Route path="/plans" component={SubscriptionPlans} />
+      <Route path="/finance" component={MainFinanceTab} />
+      <Route path="/view-referral" component={ViewReferral} />
+      <Route path="/earning" component={Finance} />
+      <Route path="/payout" component={Payout} />
+      <Route path="/referrals" component={ReferralTab} />
+      <Route path="/plans" component={Subscription} />
       <Route path="/view" component={ViewHCP} />
       <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
     </Switch>

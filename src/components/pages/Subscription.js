@@ -269,9 +269,9 @@ const Subscription = () => {
           <Grid item>
             <Typography variant="h3">Create new plan</Typography>
           </Grid>
-          <Grid item container spacing={0.5} xs={{ flexDirection: "row", alignItems: "center" }}>
-            <Grid item sx={4} style={{ margin: "2rem 0" }}>
-              <FormControl fullWidth>
+          <Grid item container spacing={2} xs={{ flexDirection: "row", alignItems: "center" }}>
+            <Grid item sx={5} style={{ margin: "2rem 0" }}>
+              <FormControl style={{ maxWidth: "100%" }}>
                 <InputLabel htmlFor="outlined-adornment-amount">name of Plan</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-amount"
