@@ -6,11 +6,7 @@
     "@date-io/date-fns": "^1.3.13",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-<<<<<<< HEAD
     "@mui/core": "^5.0.0-alpha.49",
-=======
-    "@material-ui/lab": "^5.0.0-alpha.44",
->>>>>>> 20ad52ece060d92b0e8aa9a4cafe55f016accc0a
     "@mui/icons-material": "^5.0.0",
     "@mui/lab": "^5.0.0-alpha.49",
     "@mui/material": "^5.0.0",
