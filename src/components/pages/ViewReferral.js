@@ -10,16 +10,15 @@ import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
-import { referralHeader } from "components/Utilities/tableHeaders";
+import { viewRefferalHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Chip from "@mui/material/Chip";
+import { Chip } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "10rem",
+      maxWidth: "13rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -79,7 +78,7 @@ const options = [
   { id: 2, value: "Consultation" },
 ];
 
-const ReferralTab = () => {
+const ViewReferral = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -97,7 +96,7 @@ const ReferralTab = () => {
           <Search
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Type to search referrals..."
+            placeholder="Enter your email here..."
             height="5rem"
           />
         </Grid>
@@ -115,7 +114,7 @@ const ReferralTab = () => {
       {/* The Search and Filter ends here */}
       <Grid item container>
         <EnhancedTable
-          headCells={referralHeader}
+          headCells={viewRefferalHeader}
           rows={rows}
           page={page}
           paginationLabel="referral per page"
@@ -145,36 +144,21 @@ const ReferralTab = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.entryDate}
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.time}
-                </TableCell>
+
                 <TableCell align="center" className={classes.tableCell}>
                   <div
                     style={{
                       height: "100%",
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "flex-start",
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>
                       <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>
+                      {" "}
                       {row.firstName} {row.lastName}
                     </span>
                   </div>
@@ -182,29 +166,23 @@ const ReferralTab = () => {
                 <TableCell
                   align="center"
                   className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
+                  style={{ color: theme.palette.common.red }}
                 >
                   {row.specialization}
                 </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
+                <TableCell
+                  id={labelId}
+                  scope="row"
+                  align="center"
+                  className={classes.tableCell}
+                  color="secondary"
+                  style={{ color: theme.palette.common.grey }}
+                >
+                  {row.availableTime}
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
+                <TableCell>
                   <Chip
-                    label={row.status}
+                    label="send referral request"
                     className={classes.badge}
                     style={{
                       background:
@@ -215,18 +193,20 @@ const ReferralTab = () => {
                         row.status === "active"
                           ? theme.palette.common.green
                           : theme.palette.common.red,
+                      border: "none",
                     }}
+                    variant="outlined"
                   />
                 </TableCell>
+
                 <TableCell>
                   <Button
                     variant="contained"
                     className={classes.button}
-                    component={Link}
                     to="/view"
                     endIcon={<ArrowForwardIosIcon />}
                   >
-                    View referral
+                    View HCP profile
                   </Button>
                 </TableCell>
               </TableRow>
@@ -238,4 +218,4 @@ const ReferralTab = () => {
   );
 };
 
-export default ReferralTab;
+export default ViewReferral;

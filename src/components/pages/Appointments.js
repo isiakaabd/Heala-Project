@@ -57,6 +57,7 @@ const Appointments = () => {
           img={calendar}
           title="Waiting List"
           background={theme.palette.common.lightGreen}
+          
         >
           <CalendarIcon fill={theme.palette.common.green} />
         </Card>

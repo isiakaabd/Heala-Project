@@ -132,7 +132,7 @@ const ViewHCP = () => {
   ];
   const classes = useStyles();
   return (
-    <AppBar position="static" className={classes.containerGrid}>
+    <Grid position="static" className={classes.containerGrid}>
       <Grid component="div">
         <Typography variant="h1"> HCP view</Typography>
       </Grid>
@@ -281,7 +281,7 @@ const ViewHCP = () => {
           </Grid>
         </Grid>
       </Grid>
-    </AppBar>
+    </Grid>
   );
 };
 

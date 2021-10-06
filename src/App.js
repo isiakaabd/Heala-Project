@@ -7,6 +7,7 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
 
+
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",

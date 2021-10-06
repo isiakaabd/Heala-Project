@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { financeHeader } from "components/Utilities/tableHeaders";
@@ -19,7 +15,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -73,12 +68,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
-
 const Financetable = () => {
   const classes = useStyles();
   const theme = useTheme();
@@ -86,20 +75,10 @@ const Financetable = () => {
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  const buttonType = {
-    main: theme.palette.success.main,
-    light: theme.palette.success.light,
-    dark: theme.palette.success.dark,
-  };
-
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>
-      <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
+        <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
           Earnings table
         </H1>
       </Grid>
@@ -150,17 +129,16 @@ const Financetable = () => {
                   scope="row"
                   align="left"
                   className={classes.tableCell}
-                  style={{ color: theme.palette.common.black,  }}
+                  style={{ color: theme.palette.common.black }}
                 >
                   {row.time}
                 </TableCell>
-                   <TableCell align="center" className={classes.tableCell}>
+                <TableCell align="center" className={classes.tableCell}>
                   <div
                     style={{
                       height: "100%",
                       display: "flex",
                       alignItems: "center",
-                  
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>

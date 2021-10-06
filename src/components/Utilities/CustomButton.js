@@ -6,7 +6,6 @@ import { makeStyles } from "@mui/styles";
 const CustomButton = ({
   title,
   endIcon,
-  onClick,
   width = "auto",
   height,
   textColorOnHover,
@@ -54,13 +53,7 @@ const CustomButton = ({
   const classes = useStyles();
 
   return (
-    <Button
-      variant="contained"
-      endIcon={endIcon}
-      className={classes.button}
-      onClick={onClick}
-      {...rest}
-    >
+    <Button variant="contained" endIcon={endIcon} className={classes.button} {...rest}>
       {title}
     </Button>
   );
@@ -71,7 +64,6 @@ CustomButton.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.object,
   textColor: PropTypes.string,
-  onClick: PropTypes.func,
   width: PropTypes.string,
   height: PropTypes.string,
   borderRadius: PropTypes.string,

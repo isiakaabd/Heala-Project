@@ -4,8 +4,6 @@ import { Switch, Route } from "react-router-dom";
 import Mail from "components/pages/Mail";
 import HCPVerification from "components/pages/HCP";
 import ViewHCP from "components/pages/ViewHCP";
-import Referral from "components/pages/Referral";
-import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Financetable";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
@@ -28,6 +26,12 @@ import WaitingList from "components/pages/WaitingList";
 import Messages from "components/pages/Messages";
 import CreateMessage from "components/pages/CreateMessage";
 import ViewMessage from "components/pages/ViewMessage";
+import Email from "components/pages/Email";
+import MainFinanceTab from "components/pages/MainFinanceTab";
+import Payout from "components/pages/Payout";
+import ReferralTab from "components/pages/ReferralTab";
+import Subscription from "components/pages/Subscription";
+import ViewReferral from "components/pages/ViewReferral";
 
 const Routes = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
   return (
@@ -108,10 +112,14 @@ const Routes = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
       <Route path="/messages/create-message" render={(props) => <CreateMessage {...props} />} />
       <Route path="/messages/:messageId" render={(props) => <ViewMessage {...props} />} />
       <Route path="/email" component={Mail} />
+      <Route path="/email" component={Email} />
       <Route path="/verification" component={HCPVerification} />
-      <Route path="/finance" component={Finance} />
-      <Route path="/referrals" component={Referral} />
-      <Route path="/plans" component={SubscriptionPlans} />
+      <Route path="/finance" component={MainFinanceTab} />
+      <Route path="/view-referral" component={ViewReferral} />
+      <Route path="/earning" component={Finance} />
+      <Route path="/payout" component={Payout} />
+      <Route path="/referrals" component={ReferralTab} />
+      <Route path="/plans" component={Subscription} />
       <Route path="/view" component={ViewHCP} />
       <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
     </Switch>

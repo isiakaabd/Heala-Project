@@ -164,6 +164,29 @@ export const payoutHeader = [
     label: "Payout status",
   },
 ];
+export const viewRefferalHeader = [
+  {
+    id: 0,
+    label: "HCP name",
+  },
+  {
+    id: 1,
+    label: "Specialization",
+  },
+  {
+    id: 2,
+    label: " Available Time",
+  },
+
+  {
+    id: 4,
+    label: "",
+  },
+  {
+    id: 5,
+    label: "",
+  },
+];
 
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
