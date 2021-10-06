@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -15,7 +16,7 @@ import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -23,13 +24,13 @@ import { isSelected } from "helpers/isSelected";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -47,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
         background: "#fafafa",
       },
 
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
 
-      "& .css-9tj150-MuiButton-endIcon": {
+      "& .MuiButton-endIcon": {
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
@@ -59,13 +60,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.25rem !important",
       height: "2.7rem",
       borderRadius: "1.3rem",
@@ -79,7 +80,7 @@ const options = [
   { id: 2, value: "Consultation" },
 ];
 
-const Patients = () => {
+const Patients = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,7 +88,6 @@ const Patients = () => {
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
-  const { patientId } = useParams();
 
   return (
     <>
@@ -196,6 +196,7 @@ const Patients = () => {
                         component={Link}
                         to={`patients/${row.id}`}
                         endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => setSelectedSubMenu(2)}
                       >
                         View Profile
                       </Button>
@@ -208,6 +209,10 @@ const Patients = () => {
       </Grid>
     </>
   );
+};
+
+Patients.propTypes = {
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default Patients;

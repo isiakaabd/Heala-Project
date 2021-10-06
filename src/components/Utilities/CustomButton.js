@@ -7,9 +7,12 @@ const CustomButton = ({
   title,
   endIcon,
   width = "auto",
+  height,
+  textColorOnHover,
+  borderRadius,
   textColor = "#fff",
   type: { background, hover, active },
-  onClick,
+  ...rest
 }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
@@ -18,9 +21,16 @@ const CustomButton = ({
         backgroundColor: background,
         color: textColor,
         width: width,
+        borderRadius: borderRadius,
+        height: height,
 
         "&:hover": {
           backgroundColor: hover,
+          color: textColorOnHover,
+
+          "& .MuiButton-endIcon>*:nth-of-type(1)": {
+            color: textColorOnHover,
+          },
         },
 
         "&:active": {
@@ -43,7 +53,7 @@ const CustomButton = ({
   const classes = useStyles();
 
   return (
-    <Button variant="contained" endIcon={endIcon} className={classes.button} onClick={onClick}>
+    <Button variant="contained" endIcon={endIcon} className={classes.button} {...rest}>
       {title}
     </Button>
   );
@@ -52,10 +62,12 @@ const CustomButton = ({
 CustomButton.propTypes = {
   endIcon: PropTypes.node,
   title: PropTypes.string.isRequired,
-  type: PropTypes.string,
+  type: PropTypes.object,
   textColor: PropTypes.string,
-  onClick: PropTypes.func,
   width: PropTypes.string,
+  height: PropTypes.string,
+  borderRadius: PropTypes.string,
+  textColorOnHover: PropTypes.string,
 };
 
 export default CustomButton;

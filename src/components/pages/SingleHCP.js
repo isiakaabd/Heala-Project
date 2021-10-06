@@ -5,14 +5,13 @@ import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import PaymentsIcon from "@mui/icons-material/Payments";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
-import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -46,19 +45,19 @@ const useStyles = makeStyles((theme) => ({
   },
 
   icon: {
-    "&.css-1o5jd4y-MuiSvgIcon-root": {
+    "&.MuiSvgIcon-root": {
       fontSize: "4rem",
     },
   },
 }));
-const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
+const SingleHCP = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { patientId } = useParams();
+  const { hcpId } = useParams();
 
   useEffect(() => {
-    setSelectedMenu(1);
+    setSelectedMenu(2);
 
     // eslint-disable-next-line
   }, [selectedMenu]);
@@ -66,7 +65,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
   const cards1 = [
     {
       id: 0,
-      title: "Patient Profile",
+      title: "HCP Profile",
       background: theme.palette.common.lightRed,
       path: "profile",
       icon: UserIcon,
@@ -74,18 +73,18 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
     },
     {
       id: 1,
-      title: "Consultations",
+      title: "Appointments",
       background: theme.palette.common.lightGreen,
-      path: "consultations",
-      icon: ConsultationIcon,
+      path: "appointments",
+      icon: CalendarIcon,
       fill: theme.palette.common.green,
     },
     {
       id: 2,
-      title: "Prescriptions",
+      title: "Availability",
       background: theme.palette.common.lightRed,
-      path: "prescriptions",
-      icon: PrescriptionIcon,
+      path: "availability",
+      icon: ConsultationIcon,
       fill: theme.palette.common.red,
     },
   ];
@@ -93,27 +92,19 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
   const cards2 = [
     {
       id: 3,
-      title: "Medical Records",
+      title: "Earnings",
       background: theme.palette.common.lightGreen,
-      path: "records",
-      icon: AssignmentIcon,
+      path: "earnings",
+      icon: PaymentsIcon,
       fill: theme.palette.common.green,
     },
     {
       id: 4,
-      title: "Case notes",
+      title: "Patients",
       background: theme.palette.common.lightRed,
-      path: "case-notes",
+      path: "patients",
       icon: UserIcon,
       fill: theme.palette.common.red,
-    },
-    {
-      id: 5,
-      title: "Medications",
-      background: theme.palette.common.lightGreen,
-      path: "medications",
-      icon: UserIcon,
-      fill: theme.palette.common.green,
     },
   ];
 
@@ -121,12 +112,6 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
     background: "transparent",
     hover: "#fafafa",
     active: "#f4f4f4",
-  };
-
-  const greenButton = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
   };
 
   return (
@@ -146,16 +131,13 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
         {/* Action Buttons grid */}
         <Grid item>
           <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
+            <Grid item>
               <CustomButton
                 endIcon={<PersonRemoveIcon />}
-                title="Disable Patient"
+                title="Disable HCP"
                 type={trasparentButton}
                 textColor={theme.palette.common.red}
               />
-            </Grid>
-            <Grid item>
-              <CustomButton endIcon={<TrendingUpIcon />} title="Refer Patient" type={greenButton} />
             </Grid>
           </Grid>
         </Grid>
@@ -167,9 +149,8 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
             key={card.id}
             item
             className={classes.parentGrid}
-            // style={{ margin: card.id === 1 ? "0 2rem" : undefined }}
             component={Link}
-            to={`/patients/${patientId}/${card.path}`}
+            to={`/hcps/${hcpId}/${card.path}`}
           >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, { fill: card.fill })}
@@ -185,7 +166,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
             item
             className={classes.parentGrid}
             component={Link}
-            to={`/patients/${patientId}/${card.path}`}
+            to={`/hcps/${hcpId}/${card.path}`}
           >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, {
@@ -196,14 +177,16 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
             </Card>
           </Grid>
         ))}
+        {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above */}
+        <Grid item className={classes.parentGrid} style={{ visibility: "hidden" }}></Grid>
       </Grid>
     </Grid>
   );
 };
 
-SinglePatient.propTypes = {
-  setSelectedMenu: PropTypes.func.isRequired,
+SingleHCP.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
 };
 
-export default SinglePatient;
+export default SingleHCP;

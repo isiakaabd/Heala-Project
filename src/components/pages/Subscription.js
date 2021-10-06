@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { Avatar, CardMedia, CircularProgress, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { subscriptionHeader } from "components/Utilities/tableHeaders";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -22,17 +20,10 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -116,12 +107,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
-
 const Subscription = () => {
   const classes = useStyles();
   const theme = useTheme();
@@ -138,8 +123,6 @@ const Subscription = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const buttonType = {
     main: theme.palette.error.main,

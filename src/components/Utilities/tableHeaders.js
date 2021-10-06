@@ -229,3 +229,36 @@ export const availabilityHeadCells = [
   { id: 3, label: "Available Time" },
   { id: 4, label: "" },
 ];
+
+// HCPs HEADCELLS
+export const hcpsHeadCells = [
+  { id: 0, label: "Medical ID" },
+  { id: 1, label: "HCP Name" },
+  { id: 2, label: "Specialization" },
+  { id: 3, label: "Consultations" },
+  { id: 4, label: "Hospital" },
+  { id: 5, label: "Status" },
+  { id: 6, label: "" },
+];
+
+// Partner's HEADCELLS
+export const partnersHeadCells = [
+  { id: 0, label: "Partner's Name" },
+  { id: 1, label: "Category" },
+  { id: 2, label: "" },
+];
+
+// Partner's HEADCELLS
+export const messagesHeadCells = [
+  { id: 0, label: "Recipient" },
+  { id: 1, label: "Subject" },
+  { id: 2, label: "Date" },
+  { id: 3, label: "Time" },
+  { id: 4, label: "" },
+];
+// Partner's HEADCELLS
+export const hcpPatientsHeadCells = [
+  { id: 0, label: "User ID" },
+  { id: 1, label: "Patient Name" },
+  { id: 2, label: "" },
+];

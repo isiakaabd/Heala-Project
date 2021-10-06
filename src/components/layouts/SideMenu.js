@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.png";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 
 const useStyles = makeStyles((theme) => ({
@@ -114,13 +114,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideMenu = ({ selectedMenu, setSelectedMenu }) => {
+const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
 
-  const { patientId } = useParams();
   const location = useLocation();
-
-  console.log(patientId);
 
   useEffect(() => {
     [...menus].filter((menu) => {
@@ -130,13 +127,11 @@ const SideMenu = ({ selectedMenu, setSelectedMenu }) => {
             setSelectedMenu(menu.id);
           }
           break;
-        case `/patients/${patientId}`:
-          setSelectedMenu(1);
-          break;
         default:
           break;
       }
     });
+    // eslint-disable-next-line
   }, [selectedMenu, setSelectedMenu]);
 
   return (
@@ -149,7 +144,10 @@ const SideMenu = ({ selectedMenu, setSelectedMenu }) => {
           <ListItemButton
             disableRipple
             key={menu.id}
-            onClick={() => setSelectedMenu(menu.id)}
+            onClick={() => {
+              setSelectedMenu(menu.id);
+              setSelectedSubMenu(0);
+            }}
             selected={selectedMenu === menu.id}
             component={Link}
             to={menu.path}
@@ -184,6 +182,7 @@ const SideMenu = ({ selectedMenu, setSelectedMenu }) => {
 SideMenu.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default SideMenu;

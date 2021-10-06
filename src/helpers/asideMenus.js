@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 export const menus = [
   { id: 0, title: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
   { id: 1, title: "Patients", icon: GroupIcon, path: "/patients" },
-  { id: 2, title: "HCPS", icon: PersonAddAlt1Icon, path: "/hcps" },
+  { id: 2, title: "HCPs", icon: PersonAddAlt1Icon, path: "/hcps" },
   { id: 3, title: "Partners", icon: GroupsIcon, path: "/partners" },
   { id: 4, title: "Appointments", icon: AssignmentIcon, path: "/appointments" },
   { id: 5, title: "Messages", icon: BsChatDotsFill, path: "/messages" },

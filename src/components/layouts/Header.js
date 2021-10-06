@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ selectedMenu }) => {
+const Header = ({ selectedMenu, selectedSubMenu }) => {
   const classes = useStyles();
   return (
     <Fragment>
       <AppBar position="fixed" className={classes.appBar} classes={{ root: classes.appBar }}>
-        <HeaderContents selectedMenu={selectedMenu} />
+        <HeaderContents selectedMenu={selectedMenu} selectedSubMenu={selectedSubMenu} />
       </AppBar>
     </Fragment>
   );
@@ -28,6 +28,7 @@ const Header = ({ selectedMenu }) => {
 
 Header.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
 };
 
 export default Header;

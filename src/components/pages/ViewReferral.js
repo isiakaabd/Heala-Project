@@ -89,12 +89,6 @@ const ViewReferral = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const buttonType = {
-    main: theme.palette.success.main,
-    light: theme.palette.success.light,
-    dark: theme.palette.success.dark,
-  };
-
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>

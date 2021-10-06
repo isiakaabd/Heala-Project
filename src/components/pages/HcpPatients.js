@@ -2,27 +2,33 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import EnhancedTable from "components/layouts/EnhancedTable";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
-import { financeHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
-import { H1 } from "components/Utilities/Texts";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import EnhancedTable from "components/layouts/EnhancedTable";
+import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import { makeStyles } from "@mui/styles";
+import { useTheme } from "@mui/material/styles";
+import { Link, useParams } from "react-router-dom";
+import displayPhoto from "assets/images/avatar.png";
+import { handleSelectedRows } from "helpers/selectedRows";
+import { hcpPatientsRows } from "components/Utilities/tableData";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
+  parentGrid: {
+    paddingBottom: "10em",
+  },
+
+  tableCell: {
+    "&.css-1jilxo7-MuiTableCell-root": {
+      fontSize: "1.25rem",
     },
   },
+
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: "#fff",
@@ -32,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "10rem",
+      maxWidth: "12rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -45,53 +51,31 @@ const useStyles = makeStyles((theme) => ({
       "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
-
-      "& .css-9tj150-MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-
-  tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
-      fontSize: "1.25rem",
-    },
-  },
-
-  badge: {
-    "&.css-1eelh6y-MuiChip-root": {
-      fontSize: "1.6rem !important",
-      height: "3rem",
-      borderRadius: "1.3rem",
     },
   },
 }));
 
-const Financetable = () => {
+const HcpPatients = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { hcpId } = useParams();
+
   const { setSelectedRows } = useActions();
+  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
 
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
-          Earnings table
-        </H1>
-      </Grid>
-      {/* The Search and Filter ends here */}
-      <Grid item container>
-        <EnhancedTable
-          headCells={financeHeader}
-          rows={rows}
-          page={page}
-          paginationLabel="finance per page"
-          hasCheckbox={true}
-        >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+    <Grid item container className={classes.parentGrid}>
+      <EnhancedTable
+        headCells={hcpPatientsHeadCells}
+        rows={hcpPatientsRows}
+        page={page}
+        paginationLabel="List Per Page"
+        hasCheckbox={true}
+      >
+        {hcpPatientsRows
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((row, index) => {
             const isItemSelected = isSelected(row.id, selectedRows);
 
             const labelId = `enhanced-table-checkbox-${index}`;
@@ -120,52 +104,42 @@ const Financetable = () => {
                   scope="row"
                   align="center"
                   className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
+                  style={{ color: theme.palette.common.grey }}
                 >
-                  {row.entryDate}
+                  {row.id}
                 </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.time}
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
+                <TableCell align="left" className={classes.tableCell}>
                   <div
                     style={{
                       height: "100%",
                       display: "flex",
                       alignItems: "center",
+                      textAlign: "left",
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>
                       <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
                     </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
+                    <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                   </div>
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  {row.planName}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {row.amount}
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    className={classes.button}
+                    component={Link}
+                    to={`/hcps/${hcpId}/profile`}
+                    endIcon={<ArrowForwardIosIcon />}
+                  >
+                    View HCP Profile
+                  </Button>
                 </TableCell>
               </TableRow>
             );
           })}
-        </EnhancedTable>
-      </Grid>
+      </EnhancedTable>
     </Grid>
   );
 };
 
-export default Financetable;
+export default HcpPatients;
