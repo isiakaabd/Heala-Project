@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
     background: "#fff",
     borderRadius: "1rem",
+    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
 
     "&:not(:last-of-type)": {
       marginBottom: "5rem",
@@ -85,6 +86,9 @@ const CaseNotes = () => {
     <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton path={`/patients/${patientId}`} />
+      </Grid>
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <Typography variant="h2">Case Notes</Typography>
       </Grid>
       {caseNotes.map((casenote) => (
         <Grid

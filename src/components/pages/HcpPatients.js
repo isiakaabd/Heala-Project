@@ -6,17 +6,17 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import EnhancedTable from "./EnhancedTable";
-import { waitingHeadCells } from "components/Utilities/tableHeaders";
+import EnhancedTable from "components/layouts/EnhancedTable";
+import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import displayPhoto from "assets/images/avatar.png";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { waitingListRows } from "components/Utilities/tableData";
+import { hcpPatientsRows } from "components/Utilities/tableData";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "10rem",
+      maxWidth: "12rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -55,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WaitingListTable = () => {
+const HcpPatients = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { pathname } = useLocation();
+  const { hcpId } = useParams();
 
   const { setSelectedRows } = useActions();
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
@@ -67,14 +67,13 @@ const WaitingListTable = () => {
   return (
     <Grid item container className={classes.parentGrid}>
       <EnhancedTable
-        headCells={waitingHeadCells}
-        rows={waitingListRows}
+        headCells={hcpPatientsHeadCells}
+        rows={hcpPatientsRows}
         page={page}
         paginationLabel="List Per Page"
-        title={pathname === "/appointments/waiting-list" ? "" : "Waiting List"}
         hasCheckbox={true}
       >
-        {waitingListRows
+        {hcpPatientsRows
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map((row, index) => {
             const isItemSelected = isSelected(row.id, selectedRows);
@@ -124,18 +123,15 @@ const WaitingListTable = () => {
                     <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                   </div>
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  {row.time}
-                </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     className={classes.button}
                     component={Link}
-                    to="/waiting-list/userId"
+                    to={`/hcps/${hcpId}/profile`}
                     endIcon={<ArrowForwardIosIcon />}
                   >
-                    View Details
+                    View HCP Profile
                   </Button>
                 </TableCell>
               </TableRow>
@@ -146,4 +142,4 @@ const WaitingListTable = () => {
   );
 };
 
-export default WaitingListTable;
+export default HcpPatients;

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     "&.MuiTableCell-root": {
-      fontSize: "1.5rem",
+      fontSize: "1.35rem",
     },
   },
 }));

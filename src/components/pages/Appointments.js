@@ -6,6 +6,7 @@ import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   containerGrid: {
@@ -41,7 +42,16 @@ const Appointments = () => {
   const theme = useTheme();
   return (
     <Grid container justifyContent="space-between" className={classes.containerGrid}>
-      <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={6} sm={12}>
+      <Grid
+        item
+        className={classes.parentGrid}
+        component={Link}
+        to="/appointments/waiting-list"
+        style={{ marginRight: "2em", textDecoration: "none" }}
+        lg
+        md={6}
+        sm={12}
+      >
         <Card
           alt="A calendar icon used as a representation for the waiting list"
           img={calendar}

@@ -89,7 +89,11 @@ CustomHeaderTitle.propTypes = {
   path: PropTypes.string.isRequired,
 };
 
-const HeaderText = ({ selectedMenu }) => {
+const CustomeSubHeaderText = () => {
+  return <Typography variant="h2">Yay!! It works</Typography>;
+};
+
+const HeaderText = ({ selectedMenu, selectedSubMenu }) => {
   const classes = useStyles();
 
   switch (selectedMenu) {
@@ -105,6 +109,9 @@ const HeaderText = ({ selectedMenu }) => {
         </div>
       );
     case 1:
+      if (selectedSubMenu === 2) {
+        return <CustomeSubHeaderText />;
+      }
       return <CustomHeaderText title="Patients" total={24} path="patients" />;
     case 2:
       return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
@@ -145,13 +152,14 @@ const HeaderText = ({ selectedMenu }) => {
 
 HeaderText.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
 };
 
-const HeaderContent = ({ selectedMenu }) => {
+const HeaderContent = ({ selectedMenu, selectedSubMenu }) => {
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
-      <HeaderText selectedMenu={selectedMenu} />
+      <HeaderText selectedMenu={selectedMenu} selectedSubMenu={selectedSubMenu} />
       <HeaderProfile />
     </Toolbar>
   );
@@ -159,6 +167,7 @@ const HeaderContent = ({ selectedMenu }) => {
 
 HeaderContent.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
 };
 
 export default HeaderContent;

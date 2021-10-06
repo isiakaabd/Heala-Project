@@ -7,6 +7,7 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
     ...theme.typography.cardGridWrapper,
+    width: "100%",
   },
 
   iconWrapper: {

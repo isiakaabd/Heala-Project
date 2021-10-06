@@ -19,15 +19,25 @@ const sectionStyles = {
 
 const App = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
+  const [selectedSubMenu, setSelectedSubMenu] = useState(0);
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
-          <Header selectedMenu={selectedMenu} />
+          <Header selectedMenu={selectedMenu} selectedSubMenu={selectedSubMenu} />
           <main style={{ display: "flex" }}>
-            <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+            <SideMenu
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu}
+              setSelectedSubMenu={setSelectedSubMenu}
+            />
             <section style={sectionStyles}>
-              <Routes setSelectedMenu={setSelectedMenu} />
+              <Routes
+                setSelectedMenu={setSelectedMenu}
+                selectedMenu={selectedMenu}
+                selectedSubMenu={selectedSubMenu}
+                setSelectedSubMenu={setSelectedSubMenu}
+              />
             </section>
           </main>
         </div>
