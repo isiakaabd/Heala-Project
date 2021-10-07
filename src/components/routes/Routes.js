@@ -1,10 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import Mail from "components/pages/Mail";
 import HCPVerification from "components/pages/HCP";
 import ViewHCP from "components/pages/ViewHCP";
-import Referral from "components/pages/Referral";
-import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Finance from "components/pages/Financetable";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
@@ -24,6 +21,9 @@ import Payout from "components/pages/Payout";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
 import ViewReferral from "components/pages/ViewReferral";
+import Settings from "components/pages/Settings";
+import Administrator from "components/pages/Administrator";
+import Management from "components/pages/Management";
 
 const Routes = ({ setSelectedMenu }) => {
   return (
@@ -54,7 +54,9 @@ const Routes = ({ setSelectedMenu }) => {
       <Route path="/referrals" component={ReferralTab} />
       <Route path="/plans" component={Subscription} />
       <Route path="/view" component={ViewHCP} />
-      <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
+      <Route exact path="/settings/administrator" component={Administrator} />
+      <Route exact path="/settings/management" component={Management} />
+      <Route path="/settings" component={Settings} />
     </Switch>
   );
 };

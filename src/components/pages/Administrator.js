@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -11,9 +11,8 @@ import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
-import { HCPHeader } from "components/Utilities/tableHeaders";
+import { adminHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -21,6 +20,8 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
+import Chip from "@mui/material/Chip";
+import EditIcon from "@mui/icons-material/Edit";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -58,6 +59,28 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  redBtn: {
+    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      background: theme.palette.common.lightRed,
+      color: theme.palette.common.red,
+
+      "&:hover": {
+        background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+  greenBtn: {
+    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
+        color: "#fff",
+      },
+    },
+  },
 
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -79,8 +102,7 @@ const options = [
   { id: 1, value: "Plan" },
   { id: 2, value: "Consultation" },
 ];
-
-const HCP = () => {
+const Administrator = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -91,12 +113,6 @@ const HCP = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const buttonType = {
-    main: theme.palette.success.main,
-    light: theme.palette.success.light,
-    dark: theme.palette.success.dark,
-  };
-
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>
@@ -104,7 +120,7 @@ const HCP = () => {
           <Search
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Enter your email here..."
+            placeholder="Type to search referrals..."
             height="5rem"
           />
         </Grid>
@@ -114,7 +130,7 @@ const HCP = () => {
             open={open}
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
-            title="Filter by"
+            title="Filter Administrator"
             options={options}
           />
         </Grid>
@@ -122,10 +138,10 @@ const HCP = () => {
       {/* The Search and Filter ends here */}
       <Grid item container>
         <EnhancedTable
-          headCells={HCPHeader}
+          headCells={adminHeader}
           rows={rows}
           page={page}
-          paginationLabel="verification per page"
+          paginationLabel="admin per page"
           hasCheckbox={true}
         >
           {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
@@ -152,49 +168,62 @@ const HCP = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.entryDate}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
+
+                <TableCell align="center" className={classes.tableCell}>
                   <div
                     style={{
                       height: "100%",
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "left",
+                      paddingLeft: "5rem",
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>
                       <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>
-                      {" "}
                       {row.firstName} {row.lastName}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell
-                  align="center"
+                  id={labelId}
+                  scope="row"
+                  align="left"
                   className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
+                  style={{ color: theme.palette.common.black }}
                 >
-                  {row.medical}
+                  {row.category}
                 </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    component={Link}
-                    to="/view"
-                    endIcon={<ArrowForwardIosIcon />}
+
+                <TableCell align="left" className={classes.tableCell}>
+                  <div
+                    style={{
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                    }}
                   >
-                    View HCP
-                  </Button>
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      className={`${classes.button} ${classes.greenBtn}`}
+                      endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                    >
+                      Edit plan
+                    </Button>
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      className={classes.button}
+                      to="/view"
+                      endIcon={<ArrowForwardIosIcon />}
+                    >
+                      view admin
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             );
@@ -204,5 +233,4 @@ const HCP = () => {
     </Grid>
   );
 };
-
-export default HCP;
+export default Administrator;

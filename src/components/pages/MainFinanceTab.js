@@ -24,7 +24,6 @@ const MainFinanceTab = () => {
         marginRight: "5rem",
         "&:hover": {
           boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-          transform: "translateX(2px)",
           cursor: "pointer",
         },
         "&:active": {

@@ -4,13 +4,13 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
+import Chip from "@mui/material/Chip";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
-import { subscriptionHeader } from "components/Utilities/tableHeaders";
-
+import { roleHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -21,11 +21,9 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
-
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
       flex: 1,
       marginRight: "5rem",
     },
+  },
+
+  "&.makeStyles-tableHeaderCell-27.MuiTableCell-root": {
+    background: "red !important",
+    textAlign: "center",
   },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
       padding: "1rem",
       maxWidth: "15rem",
-
+      fontSize: "1.3rem",
       "&:hover": {
         background: "#fcfcfc",
       },
@@ -87,16 +90,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.css-1tykg82-MuiTableCell-root": {
       fontSize: "1.25rem",
+      textAlign: "center !important",
     },
   },
 
   badge: {
     "&.css-1eelh6y-MuiChip-root": {
-      fontSize: "1.6rem !important",
+      fontSize: "1.3rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
+      color: "#9497A1",
+      background: "#F2F2F2",
     },
     modal: {
       background: "red !important",
@@ -116,7 +122,7 @@ const options = [
   { id: 2, value: "Consultation" },
 ];
 
-const Subscription = () => {
+const Management = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
@@ -136,7 +142,7 @@ const Subscription = () => {
   const open = Boolean(anchorEl);
 
   const buttonType = {
-    main: theme.palette.error.main,
+    main: theme.palette.background.default,
     light: theme.palette.error.light,
     dark: theme.palette.error.dark,
   };
@@ -157,7 +163,7 @@ const Subscription = () => {
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
-              title="Create new plan"
+              title="Add new role"
               type={buttonType}
               onClick={handleDialogOpen}
             />
@@ -166,8 +172,9 @@ const Subscription = () => {
         {/* The Search and Filter ends here */}
         <Grid item container>
           <EnhancedTable
-            headCells={subscriptionHeader}
+            headCells={roleHeader}
             rows={rows}
+            sx={{ textAlign: "center" }}
             page={page}
             paginationLabel="subscription per page"
             hasCheckbox={true}
@@ -208,22 +215,32 @@ const Subscription = () => {
                   <TableCell
                     id={labelId}
                     scope="row"
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.red }}
-                  >
-                    {row.amount}
-                  </TableCell>
-
-                  <TableCell
                     align="center"
                     className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+                    // style={{ textAlign: "center !important" }}
                   >
-                    {row.description}
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      // spacing={2}
+                      style={{
+                        maxWidth: "25rem",
+                        display: "inline-flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {row.permission.map((per) => {
+                        return (
+                          <Grid item xs={6} key={per}>
+                            <Chip label={per} className={classes.badge} />
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
                   </TableCell>
 
-                  <TableCell align="left" className={classes.tableCell}>
+                  <TableCell align="center" className={classes.tableCell}>
                     <div
                       style={{
                         height: "100%",
@@ -236,18 +253,26 @@ const Subscription = () => {
                         variant="contained"
                         disableRipple
                         className={`${classes.button} ${classes.greenBtn}`}
-                        endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                        endIcon={
+                          <EditIcon
+                            style={{ color: theme.palette.common.green, fontSize: "1.8rem" }}
+                          />
+                        }
                       >
-                        Edit plan
+                        Edit role
                       </Button>
                       <Button
                         variant="contained"
                         disableRipple
                         className={`${classes.button} ${classes.redBtn}`}
                         to="/view"
-                        endIcon={<DeleteForeverIcon style={{ color: theme.palette.common.red }} />}
+                        endIcon={
+                          <DeleteForeverIcon
+                            style={{ color: theme.palette.common.red, fontSize: "1.8rem" }}
+                          />
+                        }
                       >
-                        Delete plan
+                        Delete role
                       </Button>
                     </div>
                   </TableCell>
@@ -261,21 +286,20 @@ const Subscription = () => {
       <Modals isOpen={isOpen} handleClose={handleDialogClose}>
         <Grid container className={classes.modal}>
           <Grid item>
-            <Typography variant="h3">Create new plan</Typography>
+            <Typography variant="h3">Add new role</Typography>
           </Grid>
-          <Grid item container spacing={2} xs={{ flexDirection: "row", alignItems: "center" }}>
-            <Grid item sx={5} style={{ margin: "2rem 0" }}>
-              <FormControl style={{ maxWidth: "100%" }}>
-                <InputLabel htmlFor="outlined-adornment-amount">name of Plan</InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Plan Name"
-                  // startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  label="Amount"
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} style={{ margin: "2rem 0" }}>
+          {/* <Grid item container xs={12}> */}
+          <Grid item xs={12}>
+            <FormControl style={{ width: "100%" }}>
+              <InputLabel htmlFor="outlined-adornment-amount">name of Plan</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                placeholder="Enter role name"
+                label="Name of Role"
+              />
+            </FormControl>
+          </Grid>
+          {/* <Grid item xs={6} style={{ margin: "2rem 0" }}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="outlined-adornment-amount">Category</InputLabel>
                 <OutlinedInput
@@ -296,8 +320,8 @@ const Subscription = () => {
                   label="Amount"
                 />
               </FormControl>
-            </Grid>
-          </Grid>
+            </Grid> */}
+          {/* </Grid> */}
           <Grid item xs={12}>
             <TextField
               id="outlined-multiline-static"
@@ -326,4 +350,4 @@ const Subscription = () => {
   );
 };
 
-export default Subscription;
+export default Management;
