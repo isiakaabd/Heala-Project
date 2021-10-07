@@ -104,7 +104,7 @@ const HCP = () => {
           <Search
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Enter your email here..."
+            placeholder="Type to search HCPs..."
             height="5rem"
           />
         </Grid>

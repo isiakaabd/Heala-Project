@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import DateComponent from "components/Utilities/DateComponent";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
+import { ReactComponent as Financearrowdown } from "assets/images/financearrowdown.svg";
 
 const MainFinanceTab = () => {
   const useStyles = makeStyles((theme) => ({
@@ -34,7 +35,11 @@ const MainFinanceTab = () => {
           textTransform: "uppercase",
         },
       },
-    },
+    }, 
+
+  iconWrapper: {
+    ...theme.typography.cardIconWrapper,
+  },
     cardGrid: {
       justifyContent: "center",
       alignItems: "center",
@@ -95,10 +100,11 @@ const MainFinanceTab = () => {
               xs={3}
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Grid item>
-                <Avatar sx={{ background: theme.palette.common.lightGreen }}>
+              <Grid item  className={`${classes.iconWrapper} ${classes.lightGreen}`} style={{background:"yellow"}}>
+              <Financearrowdown  />
+                {/* <Avatar sx={{ background: theme.palette.common.lightGreen }}>
                   <MovingIcon sx={{ color: "green" }} />
-                </Avatar>
+                </Avatar> */}
               </Grid>
               <Grid item>
                 <Typography noWrap variant="h1" component="div">

@@ -2,8 +2,9 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import circular from "assets/images/circular.svg";
+// import circular from "assets/images/circular.svg";
 import { Avatar } from "@mui/material";
+import { ReactComponent as Circular } from "assets/images/circular.svg";
 
 export const CircularProgressBar = (props) => {
   return (
@@ -21,7 +22,9 @@ export const CircularProgressBar = (props) => {
           justifyContent: "center",
         }}
       >
-        <Avatar src={circular} alt="progress divider" sx={{ width: "1.4rem", height: "1.1rem" }} />
+       <Circular />
+        {/* fill={theme.palette.common.red} */}
+        {/* <Avatar src={circular} alt="progress divider" sx={{ width: "1.4rem", height: "1.1rem" }} /> */}
       </Box>
     </Box>
   );

@@ -50,8 +50,9 @@ const CheckboxesGroup = ({ row }) => {
                   <Grid item>
                     <FormControlLabel
                       key={per}
-                      control={<Checkbox checked={per} onChange={handleChange} name={per} />}
+                      control={<Checkbox checked={per} onChange={handleChange} name={per}  color="success" />}
                       label={per}
+                     
                     />
                   </Grid>
                 </>

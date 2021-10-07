@@ -12,7 +12,7 @@ import imageUpload from "assets/images/imageUpload.svg";
 import threeDot from "assets/images/threeDot.svg";
 import IconLabelButtons from "components/Utilities/Button";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
-
+import CustomButton from "components/Utilities/CustomButton";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -98,6 +98,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewHCP = () => {
   const theme = useTheme();
+  const redButton = {
+    background: theme.palette.error.main,
+    hover: theme.palette.error.light,
+    active: theme.palette.error.dark,
+  };
   const imageuploadContainer = [
     {
       value: "74.89KB, ",
@@ -223,26 +228,6 @@ const ViewHCP = () => {
               {imageuploadContainer.map((img, index) => {
                 return (
                   <Grid container direction="row" xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
-                    {/* <Card> */}
-                    {/* <CardHeader
-                      avatar={<Avatar variant="square" src={imageUpload} />}
-                      action={
-                        <IconButton aria-label="settings">
-                          <MoreVertIcon />
-                        </IconButton>
-                      }
-                      title={img.text}
-                      subheader={(img.value, img.time)}
-                    /> */}
-
-                    {/* <Grid
-                      item
-                      sm
-                      container
-                      direction="row"
-                      spacing={1}
-                      sx={{ justifyContent: "center" }}
-                    > */}
                     <Grid item xs={3}>
                       <Avatar variant="square" src={imageUpload} />
                     </Grid>
@@ -260,7 +245,6 @@ const ViewHCP = () => {
                         <MoreVertIcon />
                       </IconButton>
                     </Grid>
-                    {/* </Grid> */}
                   </Grid>
                 );
               })}
@@ -270,15 +254,8 @@ const ViewHCP = () => {
 
         <Grid item sm container>
           <Grid item sx={{ margin: "auto 4rem auto auto" }}>
-            <IconLabelButtons
-              placeholder="Verify HCP"
-              height="4.8rem"
-              width="14.2rem"
-              backgroundColor="#ED3237"
-              border="1rem"
-              endIcon={<DoneSharpIcon />}
-            />
-          </Grid>
+  <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
+           </Grid>
         </Grid>
       </Grid>
     </Grid>

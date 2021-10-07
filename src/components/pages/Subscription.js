@@ -25,6 +25,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 
+import { ReactComponent as Naira } from "assets/images/naira.svg";
+
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -112,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
 const Subscription = () => {
   const classes = useStyles();
   const theme = useTheme();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogOpen = () => {
@@ -127,9 +130,9 @@ const Subscription = () => {
   const [searchMail, setSearchMail] = useState("");
 
   const buttonType = {
-    main: theme.palette.error.main,
-    light: theme.palette.error.light,
-    dark: theme.palette.error.dark,
+    background: theme.palette.error.main,
+    hover: theme.palette.error.light,
+    active: theme.palette.error.dark,
   };
 
   return (
@@ -276,17 +279,14 @@ const Subscription = () => {
                   id="outlined-adornment-amount"
                   placeholder="Enter Amount"
                   startAdornment={
-                    <InputAdornment
-                      style={{ color: "red !important" }}
-                      sx={{
-                        color: "red !important",
-
+                    <Naira
+                      color="error"
+                      style={{
+                        color: theme.palette.common.red,
                         background: theme.palette.common.lightRed,
+                        marginRight: "1rem",
                       }}
-                      position="start"
-                    >
-                      ₦
-                    </InputAdornment>
+                    />
                   }
                 />
               </FormControl>
