@@ -40,9 +40,11 @@ const Routes = (props) => {
     selectedMenu,
     setSelectedMenu,
     selectedSubMenu,
-    setSelectedSubMenu,
     selectedPatientMenu,
+    selectedHcpMenu,
+    setSelectedSubMenu,
     setSelectedPatientMenu,
+    setSelectedHcpMenu,
   } = props;
   return (
     <Switch>
@@ -160,20 +162,42 @@ const Routes = (props) => {
       <Route
         exact
         path="/hcps"
-        render={(props) => <Hcps {...props} setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => (
+          <Hcps
+            {...props}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
       />
       <Route
         exact
         path="/hcps/:hcpId"
         render={(props) => (
-          <SingleHCP {...props} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+          <SingleHCP
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route
         exact
         path="/hcps/:hcpId/profile"
         render={(props) => (
-          <HcpProfile {...props} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+          <HcpProfile
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route
@@ -184,6 +208,10 @@ const Routes = (props) => {
             {...props}
             selectedMenu={selectedMenu}
             setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
         )}
       />
@@ -195,6 +223,10 @@ const Routes = (props) => {
             {...props}
             selectedMenu={selectedMenu}
             setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
         )}
       />
@@ -283,9 +315,11 @@ Routes.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default Routes;

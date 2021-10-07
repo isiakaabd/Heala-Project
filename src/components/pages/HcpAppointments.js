@@ -42,9 +42,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpAppointments = ({ selectedMenu, setSelectedMenu }) => {
+const HcpAppointments = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedHcpMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    setSelectedHcpMenu,
+  } = props;
 
   const { hcpId } = useParams();
 
@@ -92,14 +101,16 @@ const HcpAppointments = ({ selectedMenu, setSelectedMenu }) => {
 
   useEffect(() => {
     setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(2);
 
     // eslint-disable-next-line
-  }, [selectedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
         <Typography variant="h2">HCP Appointments</Typography>
@@ -205,7 +216,11 @@ const HcpAppointments = ({ selectedMenu, setSelectedMenu }) => {
 
 HcpAppointments.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default HcpAppointments;

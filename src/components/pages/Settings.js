@@ -1,12 +1,10 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-// import GroupsIcon from "assets/images/calendar.svg";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import GroupsIcon from "@mui/icons-material/Groups";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({

@@ -80,7 +80,7 @@ const options = [
   { id: 1, value: "consultations" },
 ];
 
-const Hcps = ({ setSelectedSubMenu }) => {
+const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -223,7 +223,10 @@ const Hcps = ({ setSelectedSubMenu }) => {
                       component={Link}
                       to={`hcps/${row.id}`}
                       endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => setSelectedSubMenu(3)}
+                      onClick={() => {
+                        setSelectedSubMenu(3);
+                        setSelectedHcpMenu(0);
+                      }}
                     >
                       View Profile
                     </Button>
@@ -239,6 +242,7 @@ const Hcps = ({ setSelectedSubMenu }) => {
 
 Hcps.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default Hcps;

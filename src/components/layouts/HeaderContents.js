@@ -97,9 +97,11 @@ CustomHeaderTitle.propTypes = {
 };
 
 // SUBMENU HEADERS
-const CustomSubHeaderText = ({ title, subTitle, subSubTitle, selectedPatientMenu }) => {
+const CustomSubHeaderText = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const { title, subTitle, subSubTitle, scopedMenu, titleColor = theme.palette.common.red } = props;
 
   return (
     <div className={classes.customSubHeaderWrapper}>
@@ -116,12 +118,12 @@ const CustomSubHeaderText = ({ title, subTitle, subSubTitle, selectedPatientMenu
         variant="h3"
         classes={{ root: classes.title }}
         style={{
-          color: selectedPatientMenu === 0 ? theme.palette.common.red : theme.palette.common.grey,
+          color: titleColor,
         }}
       >
         {subTitle}
       </Typography>
-      {selectedPatientMenu !== 0 && (
+      {scopedMenu !== 0 && (
         <Fragment>
           <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
           <Typography
@@ -141,12 +143,14 @@ CustomSubHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string.isRequired,
   subSubTitle: PropTypes.string,
-  selectedPatientMenu: PropTypes.number.isRequired,
+  titleColor: PropTypes.string.isRequired,
+  scopedMenu: PropTypes.number,
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
-const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu }) => {
+const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const { pathname } = useLocation();
 
@@ -168,6 +172,10 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu }) => {
           <CustomSubHeaderText
             title="Patients"
             subTitle="Patient View"
+            scopedMenu={selectedPatientMenu}
+            titleColor={
+              selectedPatientMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
+            }
             subSubTitle={
               selectedPatientMenu === 1
                 ? "Patient Profile"
@@ -190,7 +198,29 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu }) => {
       return <CustomHeaderText title="Patients" total={24} path="patients" />;
     case 2:
       if (selectedSubMenu === 3) {
-        return <CustomSubHeaderText title="HCPs" subTitle="HCP View" />;
+        return (
+          <CustomSubHeaderText
+            scopedMenu={selectedHcpMenu}
+            subSubTitle={
+              selectedHcpMenu === 1
+                ? "HCP Profile"
+                : selectedHcpMenu === 2
+                ? "HCP Appointments"
+                : selectedHcpMenu === 3
+                ? "Availability"
+                : selectedHcpMenu === 4
+                ? "Earnings"
+                : selectedHcpMenu === 5
+                ? "Patients"
+                : ""
+            }
+            title="HCPs"
+            subTitle="HCP View"
+            titleColor={
+              selectedHcpMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
+            }
+          />
+        );
       }
       return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
     case 3:
@@ -266,9 +296,10 @@ HeaderText.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
 };
 
-const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu }) => {
+const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
@@ -276,6 +307,7 @@ const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu }) =
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
+        selectedHcpMenu={selectedHcpMenu}
       />
       <HeaderProfile />
     </Toolbar>
@@ -286,6 +318,7 @@ HeaderContent.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
 };
 
 export default HeaderContent;

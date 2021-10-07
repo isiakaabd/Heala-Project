@@ -184,7 +184,7 @@ const MainFinanceTab = ({ setSelectedSubMenu }) => {
           onClick={() => setSelectedSubMenu(9)}
         >
           <Card title="Payouts Table" background={theme.palette.common.lightRed}>
-            <TrendingDownIcon color="error" className={classes.cardIcon} />
+            <TrendingUpIcon color="error" className={classes.cardIcon} />
           </Card>
         </Grid>
       </Grid>

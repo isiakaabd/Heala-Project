@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
-import calendar from "assets/images/calendar.svg";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import Card from "components/Utilities/Card";

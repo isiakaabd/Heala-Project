@@ -23,7 +23,6 @@ import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -116,12 +115,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
-
 const Management = () => {
   const classes = useStyles();
   const theme = useTheme();
@@ -138,8 +131,6 @@ const Management = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const buttonType = {
     main: theme.palette.background.default,

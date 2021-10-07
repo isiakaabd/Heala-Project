@@ -82,7 +82,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpProfile = ({ selectedMenu, setSelectedMenu }) => {
+const HcpProfile = (props) => {
+  const {
+    selectedMenu,
+    setSelectedMenu,
+    selectedSubMenu,
+    setSelectedSubMenu,
+    selectedHcpMenu,
+    setSelectedHcpMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -96,14 +104,16 @@ const HcpProfile = ({ selectedMenu, setSelectedMenu }) => {
 
   useEffect(() => {
     setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(1);
 
     // eslint-disable-next-line
-  }, [selectedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid
@@ -293,7 +303,11 @@ const HcpProfile = ({ selectedMenu, setSelectedMenu }) => {
 
 HcpProfile.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default HcpProfile;
