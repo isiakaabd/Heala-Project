@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
       fontSize: "1.25rem",
+      textAlign: "center",
     },
   },
 

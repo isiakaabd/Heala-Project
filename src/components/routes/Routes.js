@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route } from "react-router-dom";
-import Mail from "components/pages/Mail";
 import HCPVerification from "components/pages/HCP";
 import ViewHCP from "components/pages/ViewHCP";
 import Finance from "components/pages/Financetable";
@@ -32,6 +31,9 @@ import Payout from "components/pages/Payout";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
 import ViewReferral from "components/pages/ViewReferral";
+import Settings from "components/pages/Settings";
+import Administrator from "components/pages/Administrator";
+import Management from "components/pages/Management";
 
 const Routes = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
   return (
@@ -111,7 +113,6 @@ const Routes = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
       <Route exact path="/messages" render={(props) => <Messages {...props} />} />
       <Route path="/messages/create-message" render={(props) => <CreateMessage {...props} />} />
       <Route path="/messages/:messageId" render={(props) => <ViewMessage {...props} />} />
-      <Route path="/email" component={Mail} />
       <Route path="/email" component={Email} />
       <Route path="/verification" component={HCPVerification} />
       <Route path="/finance" component={MainFinanceTab} />
@@ -121,7 +122,9 @@ const Routes = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
       <Route path="/referrals" component={ReferralTab} />
       <Route path="/plans" component={Subscription} />
       <Route path="/view" component={ViewHCP} />
-      <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
+      <Route exact path="/settings/administrator" component={Administrator} />
+      <Route exact path="/settings/management" component={Management} />
+      <Route path="/settings" component={Settings} />
     </Switch>
   );
 };

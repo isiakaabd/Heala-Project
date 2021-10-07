@@ -44,6 +44,34 @@ export const emailHeader = [
     label: "Email",
   },
 ];
+export const adminHeader = [
+  {
+    id: 0,
+    label: "Admin Name",
+  },
+  {
+    id: 1,
+    label: "Role",
+  },
+  {
+    id: 2,
+    label: "",
+  },
+];
+export const roleHeader = [
+  {
+    id: 0,
+    label: "Role",
+  },
+  {
+    id: 5,
+    label: "Permission",
+  },
+  {
+    id: 2,
+    label: "",
+  },
+];
 
 export const HCPHeader = [
   {
