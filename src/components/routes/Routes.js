@@ -73,7 +73,18 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
           />
         )}
       />
-      <Route path="/patients/:patientId/prescriptions" component={Prescriptions} />
+      <Route
+        path="/patients/:patientId/prescriptions"
+        render={(props) => (
+          <Prescriptions
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
       <Route path="/patients/:patientId/records" component={MedicalRecords} />
       <Route
         path="/patients/:patientId/case-notes"
