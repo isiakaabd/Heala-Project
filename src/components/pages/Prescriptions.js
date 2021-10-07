@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
@@ -24,7 +25,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Prescriptions = () => {
+const Prescriptions = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    selectedPatientMenu,
+    setSelectedPatientMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -32,10 +41,18 @@ const Prescriptions = () => {
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+
+  useEffect(() => {
+    setSelectedMenu(1);
+    setSelectedSubMenu(2);
+    setSelectedPatientMenu(3);
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${patientId}`} />
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "5rem" }}>
         <Typography variant="h2">Prescriptions</Typography>
@@ -98,6 +115,15 @@ const Prescriptions = () => {
       </Grid>
     </Grid>
   );
+};
+
+Prescriptions.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default Prescriptions;

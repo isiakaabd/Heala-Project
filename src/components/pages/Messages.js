@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -107,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = () => {
+const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -121,6 +122,12 @@ const Messages = () => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+
+  useEffect(() => {
+    setSelectedMenu(5);
+    setSelectedSubMenu(0);
+    //   eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <Grid container direction="column">
@@ -140,6 +147,7 @@ const Messages = () => {
             type={greenButtonType}
             component={Link}
             to="/messages/create-message"
+            onClick={() => setSelectedSubMenu(6)}
           />
         </Grid>
       </Grid>
@@ -228,6 +236,7 @@ const Messages = () => {
                       component={Link}
                       to={`messages/${row.id}`}
                       endIcon={<ArrowForwardIosIcon />}
+                      onClick={() => setSelectedSubMenu(6)}
                     >
                       View Profile
                     </Button>
@@ -239,6 +248,13 @@ const Messages = () => {
       </Grid>
     </Grid>
   );
+};
+
+Messages.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default Messages;

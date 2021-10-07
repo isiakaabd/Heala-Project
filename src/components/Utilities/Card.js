@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Card = ({ img, alt, title, background, children, header = "h2" }) => {
+const Card = ({ title, background, children, header = "h2", padding }) => {
   const classes = useStyles();
   return (
     <Grid
@@ -24,8 +24,9 @@ const Card = ({ img, alt, title, background, children, header = "h2" }) => {
       alignItems="center"
       justifyContent="space-between"
       className={classes.gridWrapper}
+      style={{ padding: padding ? padding : "5rem 3rem" }}
     >
-      <Grid item className={`${classes.iconWrapper} ${classes.lightGreen}`} style={{ background }}>
+      <Grid item className={classes.iconWrapper} style={{ background }}>
         {children}
       </Grid>
       <Grid item>
@@ -36,12 +37,11 @@ const Card = ({ img, alt, title, background, children, header = "h2" }) => {
 };
 
 Card.propTypes = {
-  img: PropTypes.string,
-  alt: PropTypes.string,
   title: PropTypes.string,
   background: PropTypes.string,
   header: PropTypes.string,
   children: PropTypes.node,
+  padding: PropTypes.string,
 };
 
 export default Card;

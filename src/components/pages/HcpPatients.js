@@ -7,6 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EnhancedTable from "components/layouts/EnhancedTable";
+import Typography from "@mui/material/Typography";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -17,6 +18,7 @@ import { Link, useParams } from "react-router-dom";
 import displayPhoto from "assets/images/avatar.png";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { hcpPatientsRows } from "components/Utilities/tableData";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -65,79 +67,91 @@ const HcpPatients = () => {
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
 
   return (
-    <Grid item container className={classes.parentGrid}>
-      <EnhancedTable
-        headCells={hcpPatientsHeadCells}
-        rows={hcpPatientsRows}
-        page={page}
-        paginationLabel="List Per Page"
-        hasCheckbox={true}
-      >
-        {hcpPatientsRows
-          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          .map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
+    <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/hcps/${hcpId}`} />
+      </Grid>
+      <Grid item style={{ marginBottom: "5rem" }}>
+        <Typography variant="h2">HCP Patients</Typography>
+      </Grid>
+      <Grid item container className={classes.parentGrid}>
+        <EnhancedTable
+          headCells={hcpPatientsHeadCells}
+          rows={hcpPatientsRows}
+          page={page}
+          paginationLabel="List Per Page"
+          hasCheckbox={true}
+        >
+          {hcpPatientsRows
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-            const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.grey }}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
                 >
-                  {row.id}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "left",
-                    }}
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.grey }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    component={Link}
-                    to={`/hcps/${hcpId}/profile`}
-                    endIcon={<ArrowForwardIosIcon />}
-                  >
-                    View HCP Profile
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-      </EnhancedTable>
+                    {row.id}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "left",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      className={classes.button}
+                      component={Link}
+                      to={`/hcps/${hcpId}/profile`}
+                      endIcon={<ArrowForwardIosIcon />}
+                    >
+                      View HCP Profile
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+        </EnhancedTable>
+      </Grid>
     </Grid>
   );
 };

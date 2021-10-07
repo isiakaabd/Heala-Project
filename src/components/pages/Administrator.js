@@ -14,13 +14,10 @@ import { rows } from "components/Utilities/DataHeader";
 import { adminHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
-import Chip from "@mui/material/Chip";
 import EditIcon from "@mui/icons-material/Edit";
 
 const useStyles = makeStyles((theme) => ({
