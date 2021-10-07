@@ -77,7 +77,15 @@ const caseNotes = [
   },
 ];
 
-const CaseNotes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const CaseNotes = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    selectedPatientMenu,
+    setSelectedPatientMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -86,13 +94,14 @@ const CaseNotes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
+    setSelectedPatientMenu(5);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${patientId}`} />
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
         <Typography variant="h2">Case Notes</Typography>
@@ -208,8 +217,10 @@ const CaseNotes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 CaseNotes.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default CaseNotes;

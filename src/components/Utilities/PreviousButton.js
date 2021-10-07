@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const PreviousButton = ({ path }) => {
+const PreviousButton = ({ path, ...rest }) => {
   const classes = useStyles();
   return (
-    <IconButton LinkComponent={Link} to={path}>
+    <IconButton LinkComponent={Link} to={path} {...rest}>
       <KeyboardBackspaceIcon color="error" className={classes.icon} />
     </IconButton>
   );

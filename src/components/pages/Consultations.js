@@ -85,7 +85,15 @@ const filterOptions = [
   { id: 2, value: "Description" },
 ];
 
-const Consultations = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Consultations = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    selectedPatientMenu,
+    setSelectedPatientMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -97,13 +105,14 @@ const Consultations = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
+    setSelectedPatientMenu(2);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${patientId}`} />
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
       <Grid
         item
@@ -217,8 +226,10 @@ const Consultations = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 Consultations.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default Consultations;

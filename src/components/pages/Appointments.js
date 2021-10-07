@@ -28,14 +28,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-
-  gridWrapper: {
-    ...theme.typography.cardGridWrapper,
-  },
-
-  iconWrapper: {
-    ...theme.typography.cardIconWrapper,
-  },
 }));
 
 const Appointments = ({ setSelectedSubMenu }) => {
@@ -54,12 +46,7 @@ const Appointments = ({ setSelectedSubMenu }) => {
         sm={12}
         onClick={() => setSelectedSubMenu(5)}
       >
-        <Card
-          alt="A calendar icon used as a representation for the waiting list"
-          img={calendar}
-          title="Waiting List"
-          background={theme.palette.common.lightGreen}
-        >
+        <Card title="Waiting List" background={theme.palette.common.lightGreen}>
           <CalendarIcon fill={theme.palette.common.green} />
         </Card>
       </Grid>
@@ -74,11 +61,7 @@ const Appointments = ({ setSelectedSubMenu }) => {
         sm={12}
         onClick={() => setSelectedSubMenu(5)}
       >
-        <Card
-          alt="An icon used as a representation for making consultation with the doctor"
-          title="Consultation"
-          background={theme.palette.common.lightRed}
-        >
+        <Card title="Consultation" background={theme.palette.common.lightRed}>
           <ConsultationIcon fill={theme.palette.common.red} />
         </Card>
       </Grid>

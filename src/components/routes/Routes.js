@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route } from "react-router-dom";
-import Mail from "components/pages/Mail";
 import HCPVerification from "components/pages/HCP";
 import ViewHCP from "components/pages/ViewHCP";
-import Finance from "components/pages/Financetable";
+import Earnings from "components/pages/Financetable";
 import Appointments from "components/pages/Appointments";
 import Patients from "components/pages/Patients";
 import Hcps from "components/pages/Hcps";
@@ -32,21 +31,46 @@ import Payout from "components/pages/Payout";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
 import ViewReferral from "components/pages/ViewReferral";
+import Settings from "components/pages/Settings";
+import Administrator from "components/pages/Administrator";
+import Management from "components/pages/Management";
 
-const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Routes = (props) => {
+  const {
+    selectedMenu,
+    setSelectedMenu,
+    selectedSubMenu,
+    setSelectedSubMenu,
+    selectedPatientMenu,
+    setSelectedPatientMenu,
+  } = props;
   return (
     <Switch>
       <Route path={["/", "/dashboard"]} exact component={Dashboard} />
       <Route
         exact
         path="/patients"
-        render={(props) => <Patients {...props} setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => (
+          <Patients
+            {...props}
+            setSelectedSubMenu={setSelectedSubMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
+          />
+        )}
       />
       <Route
         exact
         path="/patients/:patientId"
         render={(props) => (
-          <SinglePatient selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} {...props} />
+          <SinglePatient
+            {...props}
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route
@@ -68,8 +92,10 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
             {...props}
             selectedMenu={selectedMenu}
             setSelectedMenu={setSelectedMenu}
+            selectedPatientMenu={selectedPatientMenu}
             selectedSubMenu={selectedSubMenu}
             setSelectedSubMenu={setSelectedSubMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
           />
         )}
       />
@@ -82,10 +108,27 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
             setSelectedMenu={setSelectedMenu}
             selectedSubMenu={selectedSubMenu}
             setSelectedSubMenu={setSelectedSubMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
           />
         )}
       />
-      <Route path="/patients/:patientId/records" component={MedicalRecords} />
+
+      <Route
+        path="/patients/:patientId/records"
+        render={(props) => (
+          <MedicalRecords
+            {...props}
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
+          />
+        )}
+      />
+
       <Route
         path="/patients/:patientId/case-notes"
         render={(props) => (
@@ -95,14 +138,29 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
             setSelectedMenu={setSelectedMenu}
             selectedSubMenu={selectedSubMenu}
             setSelectedSubMenu={setSelectedSubMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
           />
         )}
       />
-      <Route path="/patients/:patientId/medications" component={Medications} />
+      <Route
+        path="/patients/:patientId/medications"
+        render={(props) => (
+          <Medications
+            {...props}
+            selectedMenu={selectedMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedPatientMenu={setSelectedPatientMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
       <Route
         exact
         path="/hcps"
-        render={(props) => <Hcps setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => <Hcps {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
       <Route
         exact
@@ -186,16 +244,19 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
           />
         )}
       />
-      <Route path="/email" component={Mail} />
       <Route path="/email" component={Email} />
       <Route
         path="/verification"
         render={(props) => <HCPVerification {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
-      <Route path="/finance" component={MainFinanceTab} />
+      <Route
+        path="/finance"
+        exact
+        render={(props) => <MainFinanceTab setSelectedSubMenu={setSelectedSubMenu} />}
+      />
       <Route path="/view-referral" component={ViewReferral} />
-      <Route path="/earning" component={Finance} />
-      <Route path="/payout" component={Payout} />
+      <Route path="/finance/earnings" component={Earnings} />
+      <Route path="/finance/payouts" component={Payout} />
       <Route path="/referrals" component={ReferralTab} />
       <Route path="/plans" component={Subscription} />
       <Route
@@ -211,15 +272,20 @@ const Routes = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSub
         )}
       />
       <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
+      <Route exact path="/settings/administrator" component={Administrator} />
+      <Route exact path="/settings/management" component={Management} />
+      <Route path="/settings" component={Settings} />
     </Switch>
   );
 };
 
 Routes.propTypes = {
-  setSelectedMenu: PropTypes.func.isRequired,
   selectedMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default Routes;

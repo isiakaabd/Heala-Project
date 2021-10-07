@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
       fontSize: "1.25rem",
+      textAlign: "center",
     },
   },
 
@@ -80,7 +81,7 @@ const options = [
   { id: 2, value: "Consultation" },
 ];
 
-const Patients = ({ setSelectedSubMenu }) => {
+const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -196,7 +197,10 @@ const Patients = ({ setSelectedSubMenu }) => {
                         component={Link}
                         to={`patients/${row.id}`}
                         endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => setSelectedSubMenu(2)}
+                        onClick={() => {
+                          setSelectedSubMenu(2);
+                          setSelectedPatientMenu(0);
+                        }}
                       >
                         View Profile
                       </Button>
@@ -213,6 +217,7 @@ const Patients = ({ setSelectedSubMenu }) => {
 
 Patients.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default Patients;
