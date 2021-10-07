@@ -13,7 +13,7 @@ import { useActions } from "components/hooks/useActions";
 import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import displayPhoto from "assets/images/avatar.png";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { waitingListRows } from "components/Utilities/tableData";
@@ -59,6 +59,8 @@ const WaitingListTable = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const { pathname } = useLocation();
+
   const { setSelectedRows } = useActions();
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
 
@@ -68,8 +70,8 @@ const WaitingListTable = () => {
         headCells={waitingHeadCells}
         rows={waitingListRows}
         page={page}
-        paginationLabel="List per page"
-        title="Waiting List"
+        paginationLabel="List Per Page"
+        title={pathname === "/appointments/waiting-list" ? "" : "Waiting List"}
         hasCheckbox={true}
       >
         {waitingListRows

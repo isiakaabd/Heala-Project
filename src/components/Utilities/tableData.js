@@ -164,3 +164,147 @@ export const medicationsRows = [
     caregiver: "Raphael Igbenedion",
   },
 ];
+
+// HCPS Table Dummy Data
+export const hcpsRows = [
+  {
+    id: 400,
+    name: "Raphael Igbinedion",
+    specialization: "Dentistry",
+    consultation: 22,
+    hospital: "Federal Teaching Hospital, Abakaliki",
+    status: "Active",
+  },
+  {
+    id: 401,
+    name: "Raphael Igbinedion",
+    specialization: "Dentistry",
+    consultation: 20,
+    hospital: "Federal Teaching Hospital, Akure",
+    status: "Blocked",
+  },
+  {
+    id: 402,
+    name: "Raphael Igbinedion",
+    specialization: "Pediatry",
+    consultation: 40,
+    hospital: "Federal Teaching Hospital, Owerri",
+    status: "Active",
+  },
+  {
+    id: 403,
+    name: "Raphael Igbinedion",
+    specialization: "Optometry",
+    consultation: 15,
+    hospital: "Federal Teaching Hospital, Akure",
+    status: "Active",
+  },
+  {
+    id: 404,
+    name: "Raphael Igbinedion",
+    specialization: "Dentistry",
+    consultation: 23,
+    hospital: "Federal Teaching Hospital, Abakaliki",
+    status: "Blocked",
+  },
+  {
+    id: 405,
+    name: "Raphael Igbinedion",
+    specialization: "Dentistry",
+    consultation: 32,
+    hospital: "Federal Teaching Hospital, Akure",
+    status: "Active",
+  },
+];
+
+// HCPS Table Dummy Data
+export const partnersRows = [
+  {
+    id: 500,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+  {
+    id: 501,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+  {
+    id: 502,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+  {
+    id: 503,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+  {
+    id: 504,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+  {
+    id: 505,
+    name: "Raphel Igbenedion",
+    category: "Partner's category",
+  },
+];
+
+// HCPS Table Dummy Data
+export const messagesRows = [
+  {
+    id: 600,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+  {
+    id: 601,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+  {
+    id: 602,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+  {
+    id: 603,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+  {
+    id: 604,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+  {
+    id: 605,
+    name: "Allison Igbinedion",
+    subject: "Appreciation message to DOCi team",
+    date: "July 7, 2021",
+    time: "10:00 AM",
+  },
+];
+
+// HCPS Patients Table Dummy Data
+export const hcpPatientsRows = [
+  { id: 700, name: "Raphael Igbinedion" },
+  { id: 701, name: "Raphael Igbinedion" },
+  { id: 702, name: "Raphael Igbinedion" },
+  { id: 703, name: "Raphael Igbinedion" },
+  { id: 704, name: "Raphael Igbinedion" },
+  { id: 705, name: "Raphael Igbinedion" },
+  { id: 706, name: "Raphael Igbinedion" },
+  { id: 707, name: "Raphael Igbinedion" },
+];

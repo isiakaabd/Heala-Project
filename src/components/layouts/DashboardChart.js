@@ -18,7 +18,7 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
     "&.MuiGrid-root": {
-      maxWidth: "42rem",
+      // maxWidth: "42rem",
     },
   },
   chartCard: {
@@ -132,7 +132,7 @@ const DashboardCharts = () => {
 
   return (
     <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between">
-      <Grid item md className={classes.parentGrid}>
+      <Grid item md style={{ marginRight: "2rem" }}>
         <Grid container direction="column">
           <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
             <Grid container direction="column">
@@ -412,7 +412,7 @@ const DashboardCharts = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item md className={classes.parentGrid}>
+      <Grid item md style={{ marginLeft: "2rem" }}>
         <Grid container direction="column" className={classes.chartCard}>
           <Grid item className={classes.headerGrid}>
             <Typography variant="h5">Patient Stats</Typography>
