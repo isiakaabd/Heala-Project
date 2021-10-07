@@ -99,7 +99,7 @@ const HcpAppointments = ({ selectedMenu, setSelectedMenu }) => {
   return (
     <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
         <Typography variant="h2">HCP Appointments</Typography>

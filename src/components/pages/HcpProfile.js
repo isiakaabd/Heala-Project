@@ -103,7 +103,7 @@ const HcpProfile = ({ selectedMenu, setSelectedMenu }) => {
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid

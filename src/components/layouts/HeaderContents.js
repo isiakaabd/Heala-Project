@@ -5,7 +5,9 @@ import HeaderProfile from "./HeaderProfile";
 import Toolbar from "@mui/material/Toolbar";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { Link } from "react-router-dom";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -39,16 +41,21 @@ const useStyles = makeStyles((theme) => ({
   },
   subtitle: {
     color: theme.palette.common.green,
-    "&.css-10ulodw-MuiTypography-root": {
+    "&.MuiTypography-root": {
       fontSize: "1.25rem",
       marginLeft: ".5rem",
       alignSelf: "flex-end",
     },
   },
+  customSubHeaderWrapper: {
+    display: "flex",
+    alignItems: "center",
+  },
 }));
 
 const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.titleWrapper}>
       <Link to={`/${path}`} className={classes.link}>
@@ -89,12 +96,34 @@ CustomHeaderTitle.propTypes = {
   path: PropTypes.string.isRequired,
 };
 
-const CustomeSubHeaderText = () => {
-  return <Typography variant="h2">Yay!! It works</Typography>;
+// SUBMENU HEADERS
+const CustomSubHeaderText = ({ title, subTitle }) => {
+  const classes = useStyles();
+  const theme = useTheme();
+
+  return (
+    <div className={classes.customSubHeaderWrapper}>
+      <Typography variant="h3" style={{ color: theme.palette.common.grey }}>
+        {title}
+      </Typography>
+      <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+      <Typography variant="h3" classes={{ root: classes.title }}>
+        {subTitle}
+      </Typography>
+    </div>
+  );
 };
 
+CustomSubHeaderText.propTypes = {
+  title: PropTypes.string.isRequired,
+  subTitle: PropTypes.string.isRequired,
+};
+
+// HEADER DYNAMIC RENDERING COMPONENT
 const HeaderText = ({ selectedMenu, selectedSubMenu }) => {
   const classes = useStyles();
+
+  const { pathname } = useLocation();
 
   switch (selectedMenu) {
     case 0:
@@ -110,21 +139,41 @@ const HeaderText = ({ selectedMenu, selectedSubMenu }) => {
       );
     case 1:
       if (selectedSubMenu === 2) {
-        return <CustomeSubHeaderText />;
+        return <CustomSubHeaderText title="Patients" subTitle="Patient View" />;
       }
       return <CustomHeaderText title="Patients" total={24} path="patients" />;
     case 2:
+      if (selectedSubMenu === 3) {
+        return <CustomSubHeaderText title="HCPs" subTitle="HCP View" />;
+      }
       return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
     case 3:
       return <CustomHeaderText title="Partners" total={24} path="partners" />;
 
     case 4:
+      if (selectedSubMenu === 5) {
+        if (pathname === "/appointments/waiting-list") {
+          return <CustomSubHeaderText title="Appointments" subTitle="Waiting List" />;
+        } else {
+          return <CustomSubHeaderText title="Appointments" subTitle="Consultation" />;
+        }
+      }
       return <CustomHeaderTitle title="Appointments" path="appointments" />;
     case 5:
+      if (selectedSubMenu === 6) {
+        if (pathname === "/messages/create-message") {
+          return <CustomSubHeaderText title="Messages" subTitle="New Message" />;
+        } else {
+          return <CustomSubHeaderText title="Messages" subTitle="View Message" />;
+        }
+      }
       return <CustomHeaderTitle title="Messages" path="messages" />;
     case 6:
       return <CustomHeaderTitle title="Email" path="email" />;
     case 7:
+      if (selectedSubMenu === 8) {
+        return <CustomSubHeaderText title="HCP Verification" subTitle="HCP View" />;
+      }
       return <CustomHeaderTitle title="HCP Verification" path="verification" />;
     case 8:
       return <CustomHeaderTitle title="Finance" path="finance" />;
@@ -134,8 +183,6 @@ const HeaderText = ({ selectedMenu, selectedSubMenu }) => {
       return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
     case 11:
       return <CustomHeaderTitle title="Settings" path="settings" />;
-    // case 12:
-    //   return <CustomHeaderTitle title="HCP Verification/ HCP View" />;
     default:
       return (
         <div>

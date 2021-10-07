@@ -21,8 +21,8 @@ const CustomButton = ({
         backgroundColor: background,
         color: textColor,
         width: width,
-        borderRadius: borderRadius,
-        height: height,
+        borderRadius: borderRadius ? borderRadius : 10,
+        height: height ? height : "5rem",
 
         "&:hover": {
           backgroundColor: hover,
