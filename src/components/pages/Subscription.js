@@ -6,6 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
+import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
@@ -249,33 +250,37 @@ const Subscription = () => {
       </Grid>
       {/* // modal */}
       <Modals isOpen={isOpen} handleClose={handleDialogClose}>
-        <Grid container className={classes.modal}>
+        <Grid container rowSpacing={3} className={classes.modal}>
           <Grid item>
             <Typography variant="h3">Create new plan</Typography>
           </Grid>
-          <Grid item container spacing={2} xs={{ flexDirection: "row", alignItems: "center" }}>
-            <Grid item sx={5} style={{ margin: "2rem 0" }}>
+          <Grid item container spacing={2} component="column">
+            <Grid item sx={6}>
+              <FormLabel component="legend" color="secondary">
+                Name of plan
+              </FormLabel>
               <FormControl style={{ maxWidth: "100%" }}>
-                <InputLabel htmlFor="outlined-adornment-amount">name of Plan</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-amount"
                   placeholder="Enter Plan Name"
                   // startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  label="Amount"
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={6} style={{ margin: "2rem 0" }}>
+            <Grid item xs={6}>
+              <FormLabel component="legend" color="secondary">
+                Category
+              </FormLabel>
               <FormControl fullWidth>
-                <InputLabel htmlFor="outlined-adornment-amount">Category</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-amount"
                   placeholder="Enter Amount"
                   startAdornment={
                     <InputAdornment
+                      style={{ color: "red !important" }}
                       sx={{
-                        color: "red",
-                        //theme.palette.common.red,
+                        color: "red !important",
+
                         background: theme.palette.common.lightRed,
                       }}
                       position="start"
@@ -283,25 +288,25 @@ const Subscription = () => {
                       ₦
                     </InputAdornment>
                   }
-                  label="Amount"
                 />
               </FormControl>
             </Grid>
           </Grid>
           <Grid item xs={12}>
+            <FormLabel component="legend" color="secondary">
+              Plan Description
+            </FormLabel>
             <TextField
               id="outlined-multiline-static"
-              label="Plan Description"
               multiline
               placeholder="Type Plan description"
               rows={4}
               style={{ width: "100%", height: "4%" }}
             />
           </Grid>
-          <Grid item xs={12} style={{ marginTop: "2rem " }}>
+          <Grid item xs={12}>
             <Button
               variant="contained"
-              // className={classes.button}
               to="/view"
               type="submit"
               color="error"
