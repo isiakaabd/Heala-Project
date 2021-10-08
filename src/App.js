@@ -6,7 +6,7 @@ import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
-
+import ScrollToView from "components/ScrollToView";
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
@@ -34,25 +34,28 @@ const App = () => {
             selectedPatientMenu={selectedPatientMenu}
             selectedHcpMenu={selectedHcpMenu}
           />
-          <main style={{ display: "flex" }}>
-            <SideMenu
-              selectedMenu={selectedMenu}
-              setSelectedMenu={setSelectedMenu}
-              setSelectedSubMenu={setSelectedSubMenu}
-            />
-            <section style={sectionStyles}>
-              <Routes
-                setSelectedMenu={setSelectedMenu}
+
+          <ScrollToView>
+            <main style={{ display: "flex" }}>
+              <SideMenu
                 selectedMenu={selectedMenu}
-                selectedSubMenu={selectedSubMenu}
+                setSelectedMenu={setSelectedMenu}
                 setSelectedSubMenu={setSelectedSubMenu}
-                selectedPatientMenu={selectedPatientMenu}
-                setSelectedPatientMenu={setSelectedPatientMenu}
-                selectedHcpMenu={selectedHcpMenu}
-                setSelectedHcpMenu={setSelectedHcpMenu}
               />
-            </section>
-          </main>
+              <section style={sectionStyles}>
+                <Routes
+                  setSelectedMenu={setSelectedMenu}
+                  selectedMenu={selectedMenu}
+                  selectedSubMenu={selectedSubMenu}
+                  setSelectedSubMenu={setSelectedSubMenu}
+                  selectedPatientMenu={selectedPatientMenu}
+                  setSelectedPatientMenu={setSelectedPatientMenu}
+                  selectedHcpMenu={selectedHcpMenu}
+                  setSelectedHcpMenu={setSelectedHcpMenu}
+                />
+              </section>
+            </main>
+          </ScrollToView>
         </div>
       </Router>
     </ThemeProvider>

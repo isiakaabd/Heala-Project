@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -57,19 +58,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpPatients = () => {
+const HcpPatients = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedHcpMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    setSelectedHcpMenu,
+  } = props;
 
   const { hcpId } = useParams();
 
   const { setSelectedRows } = useActions();
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
 
+  useEffect(() => {
+    setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(5);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "5rem" }}>
         <Typography variant="h2">HCP Patients</Typography>
@@ -154,6 +172,15 @@ const HcpPatients = () => {
       </Grid>
     </Grid>
   );
+};
+
+HcpPatients.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default HcpPatients;

@@ -12,6 +12,7 @@ import HcpProfile from "components/pages/HcpProfile";
 import HcpAppointments from "components/pages/HcpAppointments";
 import HcpPatients from "components/pages/HcpPatients";
 import HcpAvailability from "components/pages/HcpAvailability";
+import HcpEarnings from "components/pages/HcpEarnings";
 import Dashboard from "components/pages/Dashboard";
 import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
@@ -232,9 +233,32 @@ const Routes = (props) => {
       />
       <Route
         exact
+        path="/hcps/:hcpId/earnings"
+        render={(props) => (
+          <HcpEarnings
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
+      <Route
+        exact
         path="/hcps/:hcpId/patients"
         render={(props) => (
-          <HcpPatients {...props} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+          <HcpPatients
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route exact path="/partners" component={Partners} />
