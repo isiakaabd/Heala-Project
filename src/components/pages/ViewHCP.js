@@ -9,7 +9,6 @@ import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
-import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
