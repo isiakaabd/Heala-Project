@@ -22,7 +22,9 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
+import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -131,6 +133,7 @@ const Management = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogOpens = () => {
     setIsOpens(true);
@@ -138,6 +141,7 @@ const Management = () => {
   const handleDialogCloses = () => {
     setIsOpens(false);
   };
+  const open = Boolean(anchorEl);
 
   const buttonType = {
     background: theme.palette.error.main,
@@ -287,7 +291,7 @@ const Management = () => {
           <Grid item>
             <Typography variant="h3">Add new role</Typography>
           </Grid>
-          {/* <Grid item container xs={12}> */}
+
           <Grid item xs={12} rowSpacing={2}>
             <FormControl style={{ width: "100%" }}>
               <FormLabel component="legend" color="secondary">

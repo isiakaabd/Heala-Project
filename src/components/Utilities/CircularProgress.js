@@ -4,10 +4,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { ReactComponent as Circular } from "assets/images/circular.svg";
 
-export const CircularProgressBar = (props) => {
+export const CircularProgressBar = ({ value, color }) => {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress size="14rem" variant="determinate" value="80" {...props} />
+      <CircularProgress size="14rem" variant="determinate" value={value} color={color} />
       <Box
         sx={{
           top: 0,
@@ -21,13 +21,12 @@ export const CircularProgressBar = (props) => {
         }}
       >
         <Circular />
-        {/* fill={theme.palette.common.red} */}
-        {/* <Avatar src={circular} alt="progress divider" sx={{ width: "1.4rem", height: "1.1rem" }} /> */}
       </Box>
     </Box>
   );
 };
 
 CircularProgressBar.propTypes = {
-  props: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
 };

@@ -37,15 +37,14 @@ const CheckboxesGroup = ({ row }) => {
       >
         <FormGroup>
           <Grid container>
-            {row.map((per) => {
+            {row.map((per, index) => {
               return (
                 <>
-                  <Grid item>
+                  <Grid item key={index}>
                     <FormControlLabel
-                      key={per}
                       control={
                         <Checkbox
-                          checked={per}
+                          checked={true}
                           onChange={handleChange}
                           name={per}
                           color="success"
@@ -64,9 +63,6 @@ const CheckboxesGroup = ({ row }) => {
   );
 };
 CheckboxesGroup.propTypes = {
-  row: PropTypes.object.isRequired,
-  filter: PropTypes.func.isRequired,
-  map: PropTypes.func.isRequired,
-  //   props.permission: PropTypes.arr.isRequired,
+  row: PropTypes.array.isRequired,
 };
 export default CheckboxesGroup;

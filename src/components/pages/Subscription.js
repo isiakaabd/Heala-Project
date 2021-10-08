@@ -255,8 +255,8 @@ const Subscription = () => {
           <Grid item>
             <Typography variant="h3">Create new plan</Typography>
           </Grid>
-          <Grid item container spacing={2} component="column">
-            <Grid item sx={6}>
+          <Grid item container spacing={2} component="div">
+            <Grid item xs={6}>
               <FormLabel component="legend" color="secondary">
                 Name of plan
               </FormLabel>
