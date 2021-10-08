@@ -132,7 +132,7 @@ const Management = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const [anchorEl] = useState(null);
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogOpens = () => {
     setIsOpens(true);
@@ -140,7 +140,7 @@ const Management = () => {
   const handleDialogCloses = () => {
     setIsOpens(false);
   };
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
 
   const buttonType = {
     background: theme.palette.error.main,
