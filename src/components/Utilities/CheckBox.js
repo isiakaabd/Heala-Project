@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
@@ -22,14 +20,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CheckboxesGroup = ({ row }) => {
-  const [state, setState] = useState([row]);
+  // const [state, setState] = useState([row]);
 
   const handleChange = (event) => {};
-  // setState({
-  //   ...state,
-  //   [event.target.name]: event.target.checked,
-  // });
-  //   const error = props.filter((v) => v).length !== 2;
 
   const classes = useStyles();
   return (
@@ -50,9 +43,15 @@ const CheckboxesGroup = ({ row }) => {
                   <Grid item>
                     <FormControlLabel
                       key={per}
-                      control={<Checkbox checked={per} onChange={handleChange} name={per}  color="success" />}
+                      control={
+                        <Checkbox
+                          checked={per}
+                          onChange={handleChange}
+                          name={per}
+                          color="success"
+                        />
+                      }
                       label={per}
-                     
                     />
                   </Grid>
                 </>

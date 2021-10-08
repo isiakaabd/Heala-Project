@@ -22,9 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
-import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -133,7 +131,6 @@ const Management = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogOpens = () => {
     setIsOpens(true);
@@ -141,7 +138,6 @@ const Management = () => {
   const handleDialogCloses = () => {
     setIsOpens(false);
   };
-  const open = Boolean(anchorEl);
 
   const buttonType = {
     background: theme.palette.error.main,

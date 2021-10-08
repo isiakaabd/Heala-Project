@@ -89,7 +89,7 @@ const Email = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
- const buttonType = {
+  const buttonType = {
     background: theme.palette.success.main,
     hover: theme.palette.success.light,
     active: theme.palette.success.dark,

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -68,12 +69,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = () => {
+const Financetable = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  useEffect(() => {
+    setSelectedMenu(8);
+    setSelectedSubMenu(9);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <Grid container direction="column">
@@ -166,6 +173,13 @@ const Financetable = () => {
       </Grid>
     </Grid>
   );
+};
+
+Financetable.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default Financetable;
