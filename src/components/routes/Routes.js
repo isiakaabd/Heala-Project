@@ -12,6 +12,7 @@ import HcpProfile from "components/pages/HcpProfile";
 import HcpAppointments from "components/pages/HcpAppointments";
 import HcpPatients from "components/pages/HcpPatients";
 import HcpAvailability from "components/pages/HcpAvailability";
+import HcpEarnings from "components/pages/HcpEarnings";
 import Dashboard from "components/pages/Dashboard";
 import PatientProfile from "components/pages/PatientProfile";
 import Consultations from "components/pages/Consultations";
@@ -26,7 +27,7 @@ import Messages from "components/pages/Messages";
 import CreateMessage from "components/pages/CreateMessage";
 import ViewMessage from "components/pages/ViewMessage";
 import Email from "components/pages/Email";
-import MainFinanceTab from "components/pages/MainFinanceTab";
+import Finance from "components/pages/Finance";
 import Payout from "components/pages/Payout";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
@@ -232,9 +233,32 @@ const Routes = (props) => {
       />
       <Route
         exact
+        path="/hcps/:hcpId/earnings"
+        render={(props) => (
+          <HcpEarnings
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
+      <Route
+        exact
         path="/hcps/:hcpId/patients"
         render={(props) => (
-          <HcpPatients {...props} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+          <HcpPatients
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedHcpMenu={selectedHcpMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedHcpMenu={setSelectedHcpMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route exact path="/partners" component={Partners} />
@@ -281,12 +305,33 @@ const Routes = (props) => {
         path="/verification"
         render={(props) => <HCPVerification {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
-      <Route exact path="/finance/earnings" component={Earnings} />
-      <Route exact path="/finance/payouts" component={Payout} />
+      <Route
+        exact
+        path="/finance/earnings"
+        render={(props) => (
+          <Earnings
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/finance/payouts"
+        render={(props) => (
+          <Payout
+            {...props}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
       <Route
         path="/finance"
         exact
-        render={(props) => <MainFinanceTab {...props} setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => <Finance {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
       <Route path="/view-referral" component={ViewReferral} />
 

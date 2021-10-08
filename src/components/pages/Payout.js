@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { payoutHeader } from "components/Utilities/tableHeaders";
@@ -17,6 +17,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Chip from "@mui/material/Chip";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -70,15 +71,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = () => {
+const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
+  useEffect(() => {
+    setSelectedSubMenu(0);
+
+    // eslint-disable-next-line
+  }, [selectedSubMenu]);
+
   return (
     <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/finance`} onClick={() => setSelectedSubMenu(0)} />
+      </Grid>
       <Grid item container style={{ paddingBottom: "5rem" }}>
         <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
           Payout table
@@ -184,6 +194,11 @@ const Payout = () => {
       </Grid>
     </Grid>
   );
+};
+
+Payout.propTypes = {
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default Payout;

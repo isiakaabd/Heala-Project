@@ -291,7 +291,7 @@ const Management = () => {
           <Grid item>
             <Typography variant="h3">Add new role</Typography>
           </Grid>
-          {/* <Grid item container xs={12}> */}
+
           <Grid item xs={12} rowSpacing={2}>
             <FormControl style={{ width: "100%" }}>
               <FormLabel component="legend" color="secondary">

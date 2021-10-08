@@ -64,14 +64,6 @@ const SingleHCP = (props) => {
 
   const { hcpId } = useParams();
 
-  useEffect(() => {
-    setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(0);
-
-    // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
-
   const cards1 = [
     {
       id: 1,
@@ -123,6 +115,14 @@ const SingleHCP = (props) => {
     hover: "#fafafa",
     active: "#f4f4f4",
   };
+
+  useEffect(() => {
+    setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(0);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
   return (
     <Grid container direction="column" className={classes.gridContainer}>

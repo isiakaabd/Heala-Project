@@ -1,17 +1,17 @@
 import React from "react";
-import { Avatar, Grid, Typography } from "@mui/material";
-import MovingIcon from "@mui/icons-material/Moving";
+import PropTypes from "prop-types";
+import { Grid, Typography } from "@mui/material";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import DateComponent from "components/Utilities/DateComponent";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
-import { ReactComponent as Financearrowdown } from "assets/images/financearrowdown.svg";
+import Card from "components/Utilities/Card";
 
-const MainFinanceTab = () => {
+const Finance = ({ setSelectedSubMenu }) => {
   const useStyles = makeStyles((theme) => ({
     cardContainer: {
       "&.MuiCard-root": {
@@ -70,17 +70,43 @@ const MainFinanceTab = () => {
       borderRadius: "2rem",
       boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
     },
+    parentGrid: {
+      textDecoration: "none",
+      width: "24.7rem",
+      color: theme.palette.primary.main,
+      "&.MuiGrid-item": {
+        ...theme.typography.cardParentGrid,
+        minWidth: "20rem",
+
+        "&:hover": {
+          background: "#fcfcfc",
+        },
+
+        "&:active": {
+          background: "#fafafa",
+        },
+      },
+    },
+
+    cardIcon: {
+      "&.MuiSvgIcon-root": {
+        fontSize: "4rem",
+      },
+    },
   }));
 
   const theme = useTheme();
 
   const classes = useStyles();
+
   return (
-    <Stack position="static" className={classes.containerGrid} spacing={2}>
+    <Stack position="static" className={classes.containerGrid} spacing={3}>
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
-            <Typography variant="h1"> Earning</Typography>
+            <Typography variant="h1" color="black">
+              Earning
+            </Typography>
           </Grid>
           <Grid item>
             <DateComponent label="Last 30 Days" />
@@ -90,31 +116,29 @@ const MainFinanceTab = () => {
         <Grid item container sx={{ padding: "3rem 4rem" }}>
           <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
-              <CircularProgressBar sx={{ color: "green" }} />
+              <CircularProgressBar value={90} color="error" />
             </Grid>
             <Grid
               item
               sm
               container
-              spacing={4}
+              columnSpacing={2}
               xs={3}
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
               <Grid
-                item
-                // className={`${classes.iconWrapper} ${classes.lightGreen}`}
-                // style={{ background: "yellow" }}
+                className={classes.iconWrapper}
+                sx={{ background: theme.palette.common.lightGreen }}
               >
-                {/* <Financearrowdown  /> */}
-                <Avatar sx={{ background: theme.palette.common.lightGreen }}>
-                  <MovingIcon sx={{ color: "green" }} />
-                </Avatar>
+                <Grid item>
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography noWrap variant="h1" component="div">
+                <Typography noWrap variant="h1" component="div" color="black">
                   N700,000
                 </Typography>
-                <Typography variant="h6" color="secondary">
+                <Typography variant="h6" color="#CCCCCC">
                   Total earning
                 </Typography>
               </Grid>
@@ -124,20 +148,24 @@ const MainFinanceTab = () => {
               item
               sm
               container
-              spacing={4}
+              columnSpacing={2}
               xs={3}
-              sx={{ justifyContent: "flex-end", alignItems: "center" }}
+              sx={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Grid item>
-                <Avatar sx={{ background: theme.palette.common.lightRed }}>
-                  <MovingIcon sx={{ color: theme.palette.common.red }} />
-                </Avatar>
+              <Grid
+                className={classes.iconWrapper}
+                sx={{ background: theme.palette.common.lightRed }}
+              >
+                <Grid item>
+                  <TrendingUpIcon color="error" className={classes.cardIcon} />
+                </Grid>
               </Grid>
+
               <Grid item>
-                <Typography noWrap variant="h1" component="div">
+                <Typography noWrap variant="h1" component="div" color="black">
                   N700,000
                 </Typography>
-                <Typography variant="h6" color="secondary">
+                <Typography variant="h6" color="#CCCCCC">
                   Total Withdrawal
                 </Typography>
               </Grid>
@@ -145,59 +173,29 @@ const MainFinanceTab = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container justifyContent="flex-start">
+      <Grid container>
         <Grid
           item
-          md={3}
-          sm={5}
-          component="div"
-          container
-          className={classes.cardGrid}
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: "25.8rem",
-          }}
+          component={Link}
+          to="/finance/earnings"
+          className={classes.parentGrid}
+          style={{ marginRight: "5rem" }}
+          onClick={() => setSelectedSubMenu(9)}
         >
-          <Card className={classes.cardContainer}>
-            <Avatar sx={{ background: theme.palette.common.lightGreen }}>
-              <MovingIcon sx={{ color: theme.palette.common.green }} />
-            </Avatar>
-            {/* </CardMedia> */}
-            <Link to="/finance/earnings" style={{ textDecoration: "none" }}>
-              <CardContent>
-                <Typography variant="h5" color="primary" component="div">
-                  Earning Table
-                </Typography>
-              </CardContent>
-            </Link>
+          <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
+            <TrendingDownIcon color="success" className={classes.cardIcon} />
           </Card>
         </Grid>
-        {/* second */}
-
         <Grid
           item
-          md={3}
-          sm={5}
-          component="div"
-          container
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            height: "25.8rem",
-          }}
+          component={Link}
+          to="/finance/earnings"
+          className={classes.parentGrid}
+          style={{ marginRight: "5rem" }}
+          onClick={() => setSelectedSubMenu(9)}
         >
-          <Card className={classes.cardContainer}>
-            <Avatar sx={{ background: theme.palette.common.lightRed }}>
-              <MovingIcon sx={{ color: theme.palette.common.red }} />
-            </Avatar>
-            <Link to="/finance/payouts" style={{ textDecoration: "none" }}>
-              <CardContent>
-                <Typography variant="h5" color="primary" component="div">
-                  Payout Table
-                </Typography>
-              </CardContent>
-            </Link>
+          <Card title="Payouts Table" background={theme.palette.common.lightRed}>
+            <TrendingUpIcon color="error" className={classes.cardIcon} />
           </Card>
         </Grid>
       </Grid>
@@ -205,4 +203,8 @@ const MainFinanceTab = () => {
   );
 };
 
-export default MainFinanceTab;
+Finance.propTypes = {
+  setSelectedSubMenu: PropTypes.func.isRequired,
+};
+
+export default Finance;

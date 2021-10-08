@@ -22,8 +22,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
 
 import { ReactComponent as Naira } from "assets/images/naira.svg";
 
@@ -257,8 +255,8 @@ const Subscription = () => {
           <Grid item>
             <Typography variant="h3">Create new plan</Typography>
           </Grid>
-          <Grid item container spacing={2} component="column">
-            <Grid item sx={6}>
+          <Grid item container spacing={2} component="div">
+            <Grid item xs={6}>
               <FormLabel component="legend" color="secondary">
                 Name of plan
               </FormLabel>

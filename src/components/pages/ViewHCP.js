@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Avatar, Grid, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
@@ -9,7 +9,6 @@ import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
-import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const gender = "Female";
@@ -89,13 +88,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = () => {
+const ViewHCP = ({ setSelectedMenu, setSelectedSubMenu }) => {
   const theme = useTheme();
+
   const redButton = {
     background: theme.palette.error.main,
     hover: theme.palette.error.light,
     active: theme.palette.error.dark,
   };
+
   const imageuploadContainer = [
     {
       value: "74.89KB, ",
@@ -130,12 +131,12 @@ const ViewHCP = () => {
   ];
   const classes = useStyles();
 
-  // useEffect(() => {
-  //   setSelectedMenu(7);
-  //   setSelectedSubMenu(8);
+  useEffect(() => {
+    setSelectedMenu(7);
+    setSelectedSubMenu(8);
 
-  //   // eslint-disable-next-line
-  // }, [selectedMenu, selectedSubMenu]);
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid position="static" className={classes.containerGrid}>
       <Grid component="div">
