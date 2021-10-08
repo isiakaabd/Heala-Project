@@ -38,7 +38,12 @@ const Finance = ({ setSelectedSubMenu }) => {
     },
 
     iconWrapper: {
-      ...theme.typography.cardIconWrapper,
+      width: 60,
+      height: 60,
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
     cardGrid: {
       justifyContent: "center",
@@ -90,7 +95,7 @@ const Finance = ({ setSelectedSubMenu }) => {
 
     cardIcon: {
       "&.MuiSvgIcon-root": {
-        fontSize: "4rem",
+        fontSize: "3rem",
       },
     },
   }));
@@ -104,7 +109,7 @@ const Finance = ({ setSelectedSubMenu }) => {
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
-            <Typography variant="h1" color="black">
+            <Typography variant="h1" color=" #2D2F39">
               Earning
             </Typography>
           </Grid>
@@ -135,7 +140,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography noWrap variant="h1" component="div" color="black">
+                <Typography noWrap variant="h1" component="div" color="#2D2F39">
                   N700,000
                 </Typography>
                 <Typography variant="h6" color="#CCCCCC">
@@ -183,13 +188,15 @@ const Finance = ({ setSelectedSubMenu }) => {
           onClick={() => setSelectedSubMenu(9)}
         >
           <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
-            <TrendingDownIcon color="success" className={classes.cardIcon} />
+            <Grid className={classes.iconWrapper}>
+              <TrendingDownIcon color="success" className={classes.cardIcon} />
+            </Grid>
           </Card>
         </Grid>
         <Grid
           item
           component={Link}
-          to="/finance/earnings"
+          to="/finance/payouts"
           className={classes.parentGrid}
           style={{ marginRight: "5rem" }}
           onClick={() => setSelectedSubMenu(9)}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormLabel from "@mui/material/FormLabel";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -22,9 +22,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
-import TextField from "@mui/material/TextField";
+import PreviousButton from "components/Utilities/PreviousButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -151,8 +150,11 @@ const Management = () => {
 
   return (
     <>
-      <Grid container direction="column">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+      <Grid container direction="column" rowSpacing={1}>
+        <Grid item>
+          <PreviousButton path="/settings" />
+        </Grid>
+        <Grid item container style={{ paddingBottom: "3rem" }}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -286,22 +288,14 @@ const Management = () => {
         </Grid>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} handleClose={handleDialogClose}>
-        <Grid container className={classes.modal} rowSpacing={3}>
-          <Grid item>
-            <Typography variant="h3">Add new role</Typography>
-          </Grid>
-
+      <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
+        <>
           <Grid item xs={12} rowSpacing={2}>
             <FormControl style={{ width: "100%" }}>
               <FormLabel component="legend" color="secondary">
                 Name of Role
               </FormLabel>
-              <OutlinedInput
-                id="outlined-adornment-amount"
-                placeholder="Enter role name"
-                // label="Name of Role"
-              />
+              <OutlinedInput id="outlined-adornment-amount" placeholder="Enter role name" />
             </FormControl>
           </Grid>
 
@@ -316,7 +310,6 @@ const Management = () => {
           <Grid item xs={12}>
             <Button
               variant="contained"
-              // className={classes.button}
               to="/view"
               type="submit"
               color="error"
@@ -325,16 +318,12 @@ const Management = () => {
               Add Role
             </Button>
           </Grid>
-        </Grid>
+        </>
       </Modals>
 
       {/* Edit */}
-      <Modals isOpen={isOpens} handleClose={handleDialogCloses}>
-        <Grid container className={classes.modal} rowSpacing={3}>
-          <Grid item>
-            <Typography variant="h3">Edit role</Typography>
-          </Grid>
-          {/* <Grid item container xs={12}> */}
+      <Modals isOpen={isOpens} title="Edit role" handleClose={handleDialogCloses}>
+        <>
           <Grid item xs={12} rowSpacing={2}>
             <FormControl style={{ width: "100%" }}>
               <FormLabel component="legend" color="secondary">
@@ -368,7 +357,7 @@ const Management = () => {
               Save changes
             </Button>
           </Grid>
-        </Grid>
+        </>
       </Modals>
 
       {/* edit */}

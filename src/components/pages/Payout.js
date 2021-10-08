@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -11,7 +11,7 @@ import { rows } from "components/Utilities/DataHeader";
 import { payoutHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
-import { H1 } from "components/Utilities/Texts";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -25,6 +25,14 @@ const useStyles = makeStyles((theme) => ({
       flex: 1,
       marginRight: "5rem",
     },
+  },
+  iconWrapper: {
+    width: 20,
+    height: 20,
+    borderRadius: "50%",
+    display: "grid",
+    placeContent: "center",
+    background: theme.palette.common.lightGreen,
   },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -85,15 +93,19 @@ const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
   }, [selectedSubMenu]);
 
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/finance`} onClick={() => setSelectedSubMenu(0)} />
+    <Grid container direction="column" rowSpacing={2}>
+      <Grid item>
+        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
+      <Grid item container alignItems="center" columnGap={1}>
+        <Typography noWrap variant="h1" component="div" color="#2D2F39">
           Payout table
-        </H1>
+        </Typography>
+        <Grid item className={classes.iconWrapper}>
+          <TrendingUpIcon color="success" className={classes.cardIcon} />
+        </Grid>
       </Grid>
+
       {/* The Search and Filter ends here */}
       <Grid item container>
         <EnhancedTable

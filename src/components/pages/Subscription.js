@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -22,9 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
-
 import { ReactComponent as Naira } from "assets/images/naira.svg";
-
 import FormControl from "@mui/material/FormControl";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +61,17 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  closeIcon: {
+    "&.MuiSvgIcon-root": {
+      fontSize: "2rem ",
+      cursor: "pointer",
+
+      "&:hover": {
+        color: theme.palette.common.red,
+      },
+    },
+  },
+
   redBtn: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: theme.palette.common.lightRed,
@@ -250,22 +259,15 @@ const Subscription = () => {
         </Grid>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} handleClose={handleDialogClose}>
-        <Grid container rowSpacing={3} className={classes.modal}>
-          <Grid item>
-            <Typography variant="h3">Create new plan</Typography>
-          </Grid>
+      <Modals isOpen={isOpen} title="Create new plan" handleClose={handleDialogClose}>
+        <>
           <Grid item container spacing={2} component="div">
             <Grid item xs={6}>
               <FormLabel component="legend" color="secondary">
                 Name of plan
               </FormLabel>
               <FormControl style={{ maxWidth: "100%" }}>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Plan Name"
-                  // startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                />
+                <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
               </FormControl>
             </Grid>
             <Grid item xs={6}>
@@ -280,9 +282,9 @@ const Subscription = () => {
                     <Naira
                       color="error"
                       style={{
-                        color: theme.palette.common.red,
                         background: theme.palette.common.lightRed,
                         marginRight: "1rem",
+                        padding: ".6rem ",
                       }}
                     />
                   }
@@ -313,7 +315,7 @@ const Subscription = () => {
               Save Plan
             </Button>
           </Grid>
-        </Grid>
+        </>
       </Modals>
     </>
   );
