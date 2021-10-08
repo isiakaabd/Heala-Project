@@ -141,7 +141,15 @@ const Finance = ({ setSelectedSubMenu }) => {
               </Grid>
               <Grid item>
                 <Typography noWrap variant="h1" component="div" color="#2D2F39">
-                  N700,000
+                  <span
+                    style={{
+                      textDecoration: "line-through",
+                      textDecorationStyle: "double",
+                    }}
+                  >
+                    N{""}
+                  </span>
+                  700,000
                 </Typography>
                 <Typography variant="h6" color="#CCCCCC">
                   Total earning
@@ -168,7 +176,15 @@ const Finance = ({ setSelectedSubMenu }) => {
 
               <Grid item>
                 <Typography noWrap variant="h1" component="div" color="black">
-                  N700,000
+                  <span
+                    style={{
+                      textDecoration: "line-through",
+                      textDecorationStyle: "double",
+                    }}
+                  >
+                    N{""}
+                  </span>
+                  700,000
                 </Typography>
                 <Typography variant="h6" color="#CCCCCC">
                   Total Withdrawal
