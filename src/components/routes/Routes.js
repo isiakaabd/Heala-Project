@@ -281,14 +281,15 @@ const Routes = (props) => {
         path="/verification"
         render={(props) => <HCPVerification {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
+      <Route exact path="/finance/earnings" component={Earnings} />
+      <Route exact path="/finance/payouts" component={Payout} />
       <Route
         path="/finance"
         exact
-        render={(props) => <MainFinanceTab setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => <MainFinanceTab {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
       <Route path="/view-referral" component={ViewReferral} />
-      <Route path="/finance/earnings" component={Earnings} />
-      <Route path="/finance/payouts" component={Payout} />
+
       <Route path="/referrals" component={ReferralTab} />
       <Route path="/plans" component={Subscription} />
       <Route
@@ -303,7 +304,7 @@ const Routes = (props) => {
           />
         )}
       />
-      <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
+      {/* <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} /> */}
       <Route exact path="/settings/administrator" component={Administrator} />
       <Route exact path="/settings/management" component={Management} />
       <Route path="/settings" component={Settings} />

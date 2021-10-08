@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { Avatar, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -6,8 +7,9 @@ import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
 import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
-import IconLabelButtons from "components/Utilities/Button";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
+import CustomButton from "components/Utilities/CustomButton";
+import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -88,7 +90,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const ViewHCP = () => {
+  const theme = useTheme();
+  const redButton = {
+    background: theme.palette.error.main,
+    hover: theme.palette.error.light,
+    active: theme.palette.error.dark,
+  };
   const imageuploadContainer = [
     {
       value: "74.89KB, ",
@@ -123,12 +131,12 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSu
   ];
   const classes = useStyles();
 
-  useEffect(() => {
-    setSelectedMenu(7);
-    setSelectedSubMenu(8);
+  // useEffect(() => {
+  //   setSelectedMenu(7);
+  //   setSelectedSubMenu(8);
 
-    // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  //   // eslint-disable-next-line
+  // }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid position="static" className={classes.containerGrid}>
       <Grid component="div">
@@ -221,26 +229,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSu
               {imageuploadContainer.map((img, index) => {
                 return (
                   <Grid container direction="row" xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
-                    {/* <Card> */}
-                    {/* <CardHeader
-                      avatar={<Avatar variant="square" src={imageUpload} />}
-                      action={
-                        <IconButton aria-label="settings">
-                          <MoreVertIcon />
-                        </IconButton>
-                      }
-                      title={img.text}
-                      subheader={(img.value, img.time)}
-                    /> */}
-
-                    {/* <Grid
-                      item
-                      sm
-                      container
-                      direction="row"
-                      spacing={1}
-                      sx={{ justifyContent: "center" }}
-                    > */}
                     <Grid item xs={3}>
                       <Avatar variant="square" src={imageUpload} />
                     </Grid>
@@ -258,7 +246,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSu
                         <MoreVertIcon />
                       </IconButton>
                     </Grid>
-                    {/* </Grid> */}
                   </Grid>
                 );
               })}
@@ -268,14 +255,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSu
 
         <Grid item sm container>
           <Grid item sx={{ margin: "auto 4rem auto auto" }}>
-            <IconLabelButtons
-              placeholder="Verify HCP"
-              height="4.8rem"
-              width="14.2rem"
-              backgroundColor="#ED3237"
-              border="1rem"
-              endIcon={<DoneSharpIcon />}
-            />
+            <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
           </Grid>
         </Grid>
       </Grid>

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import FormLabel from "@mui/material/FormLabel";
 import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import Chip from "@mui/material/Chip";
+import CheckboxesGroup from "components/Utilities/CheckBox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
@@ -131,11 +133,20 @@ const Management = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isOpens, setIsOpens] = useState(false);
+  const handleDialogOpens = () => {
+    setIsOpens(true);
+  };
+  const handleDialogCloses = () => {
+    setIsOpens(false);
+  };
+  const open = Boolean(anchorEl);
 
   const buttonType = {
-    main: theme.palette.background.default,
-    light: theme.palette.error.light,
-    dark: theme.palette.error.dark,
+    background: theme.palette.error.main,
+    hover: theme.palette.error.light,
+    active: theme.palette.error.dark,
   };
 
   return (
@@ -244,6 +255,7 @@ const Management = () => {
                         variant="contained"
                         disableRipple
                         className={`${classes.button} ${classes.greenBtn}`}
+                        onClick={handleDialogOpens}
                         endIcon={
                           <EditIcon
                             style={{ color: theme.palette.common.green, fontSize: "1.8rem" }}
@@ -275,68 +287,92 @@ const Management = () => {
       </Grid>
       {/* // modal */}
       <Modals isOpen={isOpen} handleClose={handleDialogClose}>
-        <Grid container className={classes.modal}>
+        <Grid container className={classes.modal} rowSpacing={3}>
           <Grid item>
             <Typography variant="h3">Add new role</Typography>
           </Grid>
           {/* <Grid item container xs={12}> */}
-          <Grid item xs={12}>
+          <Grid item xs={12} rowSpacing={2}>
             <FormControl style={{ width: "100%" }}>
-              <InputLabel htmlFor="outlined-adornment-amount">name of Plan</InputLabel>
+              <FormLabel component="legend" color="secondary">
+                Name of Role
+              </FormLabel>
               <OutlinedInput
                 id="outlined-adornment-amount"
                 placeholder="Enter role name"
-                label="Name of Role"
+                // label="Name of Role"
               />
             </FormControl>
           </Grid>
-          {/* <Grid item xs={6} style={{ margin: "2rem 0" }}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="outlined-adornment-amount">Category</InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Amount"
-                  startAdornment={
-                    <InputAdornment
-                      sx={{
-                        color: "red",
-                        //theme.palette.common.red,
-                        background: theme.palette.common.lightRed,
-                      }}
-                      position="start"
-                    >
-                      ₦
-                    </InputAdornment>
-                  }
-                  label="Amount"
-                />
-              </FormControl>
-            </Grid> */}
-          {/* </Grid> */}
+
           <Grid item xs={12}>
-            <TextField
-              id="outlined-multiline-static"
-              label="Plan Description"
-              multiline
-              placeholder="Type Plan description"
-              rows={4}
-              style={{ width: "100%", height: "4%" }}
-            />
+            <FormLabel component="legend" color="secondary">
+              Permission
+            </FormLabel>
+            <FormControl style={{ width: "100%" }}>
+              <CheckboxesGroup row={rows[0].permission} />
+            </FormControl>
           </Grid>
-          <Grid item xs={12} style={{ marginTop: "2rem " }}>
+          <Grid item xs={12}>
             <Button
               variant="contained"
               // className={classes.button}
               to="/view"
               type="submit"
               color="error"
-              style={{ width: "100%" }}
+              style={{ width: "100%", padding: "1rem" }}
             >
-              Save Plan
+              Add Role
             </Button>
           </Grid>
         </Grid>
       </Modals>
+
+      {/* Edit */}
+      <Modals isOpen={isOpens} handleClose={handleDialogCloses}>
+        <Grid container className={classes.modal} rowSpacing={3}>
+          <Grid item>
+            <Typography variant="h3">Edit role</Typography>
+          </Grid>
+          {/* <Grid item container xs={12}> */}
+          <Grid item xs={12} rowSpacing={2}>
+            <FormControl style={{ width: "100%" }}>
+              <FormLabel component="legend" color="secondary">
+                Name of Role
+              </FormLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                placeholder="Enter role name"
+                // label="Name of Role"
+              />
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormLabel component="legend" color="secondary">
+              Permission
+            </FormLabel>
+            <FormControl style={{ width: "100%" }}>
+              <CheckboxesGroup row={rows[0].permission} />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              // className={classes.button}
+              to="/view"
+              type="submit"
+              color="error"
+              style={{ width: "100%", padding: "1rem" }}
+            >
+              Save changes
+            </Button>
+          </Grid>
+        </Grid>
+      </Modals>
+
+      {/* edit */}
+      {/* edit */}
     </>
   );
 };
