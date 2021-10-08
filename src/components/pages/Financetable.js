@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { Grid, Typography } from "@mui/material";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -11,11 +12,11 @@ import { rows } from "components/Utilities/DataHeader";
 import { financeHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
-import { H1 } from "components/Utilities/Texts";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -53,6 +54,14 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  iconWrapper: {
+    width: 20,
+    height: 20,
+    borderRadius: "50%",
+    display: "grid",
+    placeContent: "center",
+    background: theme.palette.common.lightGreen,
+  },
 
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -69,27 +78,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Financetable = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   useEffect(() => {
-    setSelectedMenu(8);
-    setSelectedSubMenu(9);
-
+    setSelectedSubMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <H1 fontSize="3.2rem" color="#4F4F4F" style={{ marginRight: "1rem" }}>
-          Earnings table
-        </H1>
+    <Grid container direction="column" rowSpacing={2}>
+      <Grid item>
+        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      {/* The Search and Filter ends here */}
+      <Grid item container alignItems="center" columnGap={1}>
+        <Typography noWrap variant="h1" component="div" color="#2D2F39">
+          Earnings table
+        </Typography>
+        <Grid item className={classes.iconWrapper}>
+          <TrendingDownIcon color="success" className={classes.cardIcon} />
+        </Grid>
+      </Grid>
+
       <Grid item container>
         <EnhancedTable
           headCells={financeHeader}
@@ -180,6 +193,7 @@ Financetable.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default Financetable;

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -19,6 +20,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -99,7 +101,7 @@ const options = [
   { id: 1, value: "Plan" },
   { id: 2, value: "Consultation" },
 ];
-const Administrator = () => {
+const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -109,10 +111,17 @@ const Administrator = () => {
   const [searchMail, setSearchMail] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  // useEffect(() => {
+  //   setSelectedSubMenu(0);
+  //   // eslint-disable-next-line
+  // }, [selectedMenu, selectedSubMenu]);
 
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
+    <Grid container direction="column" rowSpacing={1}>
+      <Grid item>
+        <PreviousButton path="/settings" />
+      </Grid>
+      <Grid item container style={{ paddingBottom: "3rem" }}>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchMail}
@@ -229,5 +238,11 @@ const Administrator = () => {
       </Grid>
     </Grid>
   );
+};
+Administrator.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 export default Administrator;
