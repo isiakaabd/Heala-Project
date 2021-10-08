@@ -2,101 +2,104 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Avatar, Grid, Typography } from "@mui/material";
 import MovingIcon from "@mui/icons-material/Moving";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import DateComponent from "components/Utilities/DateComponent";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
 
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    "&.MuiCard-root": {
-      width: "100%",
-      height: "15.8rem",
-      display: "flex",
+const Finance = ({ setSelectedSubMenu }) => {
+  const useStyles = makeStyles((theme) => ({
+    cardContainer: {
+      "&.MuiCard-root": {
+        width: "100%",
+        height: "15.8rem",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        background: "white",
+        marginRight: "5rem",
+        "&:hover": {
+          boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+          cursor: "pointer",
+        },
+        "&:active": {
+          background: "#fafafa",
+        },
+        "& .MuiCardContent-root .MuiTypography-h5": {
+          textDecoration: "none !important",
+          textTransform: "uppercase",
+        },
+      },
+    },
+
+    iconWrapper: {
+      ...theme.typography.cardIconWrapper,
+    },
+    cardGrid: {
       justifyContent: "center",
-      flexDirection: "column",
       alignItems: "center",
+      height: "25.8rem",
+    },
+    flexContainer: {
+      justifyContent: "space-between",
+      alignItems: "center",
+      margin: "auto",
+      width: "100%",
+
+      padding: "2rem 4rem",
+      "&:first-child": {
+        borderBottom: ".5px solid #F8F8F8",
+      },
+    },
+    lightGreen: {
+      color: theme.palette.common.green,
+    },
+
+    lightRed: {
+      color: theme.palette.common.red,
+    },
+    mainContainer: {
+      flexDirection: "column",
+      width: "100%",
       background: "white",
-      marginRight: "5rem",
-      "&:hover": {
-        boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-        transform: "translateX(2px)",
-        cursor: "pointer",
-      },
-      "&:active": {
-        background: "#fafafa",
-      },
-      "& .MuiCardContent-root .MuiTypography-h5": {
-        textDecoration: "none !important",
-        textTransform: "uppercase",
+      borderRadius: "2rem",
+      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+    },
+    parentGrid: {
+      textDecoration: "none",
+      width: "24.7rem",
+      color: theme.palette.primary.main,
+      "&.MuiGrid-item": {
+        ...theme.typography.cardParentGrid,
+        minWidth: "20rem",
+
+        "&:hover": {
+          background: "#fcfcfc",
+        },
+
+        "&:active": {
+          background: "#fafafa",
+        },
       },
     },
-  },
-  cardGrid: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: "25.8rem",
-  },
-  flexContainer: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: "auto",
-    width: "100%",
 
-    padding: "2rem 4rem",
-    "&:first-child": {
-      borderBottom: ".5px solid #F8F8F8",
-    },
-  },
-  lightGreen: {
-    color: theme.palette.common.green,
-  },
-
-  lightRed: {
-    color: theme.palette.common.red,
-  },
-  mainContainer: {
-    flexDirection: "column",
-    width: "100%",
-    background: "white",
-    borderRadius: "2rem",
-    boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-  },
-
-  parentGrid: {
-    textDecoration: "none",
-    width: "24.7rem",
-    color: theme.palette.primary.main,
-    "&.MuiGrid-item": {
-      ...theme.typography.cardParentGrid,
-      minWidth: "20rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
+    cardIcon: {
+      "&.MuiSvgIcon-root": {
+        fontSize: "4rem",
       },
     },
-  },
+  }));
 
-  cardIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "4rem",
-    },
-  },
-}));
-
-const MainFinanceTab = ({ setSelectedSubMenu }) => {
   const theme = useTheme();
 
   const classes = useStyles();
+
   return (
     <Stack position="static" className={classes.containerGrid} spacing={2}>
       <Grid container component="div" className={classes.mainContainer}>
@@ -122,7 +125,12 @@ const MainFinanceTab = ({ setSelectedSubMenu }) => {
               xs={3}
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Grid item>
+              <Grid
+                item
+                // className={`${classes.iconWrapper} ${classes.lightGreen}`}
+                // style={{ background: "yellow" }}
+              >
+                {/* <Financearrowdown  /> */}
                 <Avatar sx={{ background: theme.palette.common.lightGreen }}>
                   <MovingIcon sx={{ color: "green" }} />
                 </Avatar>
@@ -178,9 +186,9 @@ const MainFinanceTab = ({ setSelectedSubMenu }) => {
         <Grid
           item
           component={Link}
-          to="/finance/payouts"
+          to="/finance/earnings"
           className={classes.parentGrid}
-          style={{ marginLeft: "5rem" }}
+          style={{ marginRight: "5rem" }}
           onClick={() => setSelectedSubMenu(9)}
         >
           <Card title="Payouts Table" background={theme.palette.common.lightRed}>
@@ -192,8 +200,8 @@ const MainFinanceTab = ({ setSelectedSubMenu }) => {
   );
 };
 
-MainFinanceTab.propTypes = {
+Finance.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
-export default MainFinanceTab;
+export default Finance;

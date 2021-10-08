@@ -4,7 +4,6 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -21,7 +20,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -92,12 +90,6 @@ const HCP = ({ setSelectedSubMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const buttonType = {
-    main: theme.palette.success.main,
-    light: theme.palette.success.light,
-    dark: theme.palette.success.dark,
-  };
-
   return (
     <Grid container direction="column">
       <Grid item container style={{ paddingBottom: "5rem" }}>
@@ -105,7 +97,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           <Search
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Enter your email here..."
+            placeholder="Type to search HCPs..."
             height="5rem"
           />
         </Grid>
@@ -174,7 +166,6 @@ const HCP = ({ setSelectedSubMenu }) => {
                       <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>
-                      {" "}
                       {row.firstName} {row.lastName}
                     </span>
                   </div>

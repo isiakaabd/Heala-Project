@@ -27,7 +27,7 @@ import Messages from "components/pages/Messages";
 import CreateMessage from "components/pages/CreateMessage";
 import ViewMessage from "components/pages/ViewMessage";
 import Email from "components/pages/Email";
-import MainFinanceTab from "components/pages/MainFinanceTab";
+import Finance from "components/pages/Finance";
 import Payout from "components/pages/Payout";
 import ReferralTab from "components/pages/ReferralTab";
 import Subscription from "components/pages/Subscription";
@@ -306,13 +306,35 @@ const Routes = (props) => {
         render={(props) => <HCPVerification {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
       <Route
+        exact
+        path="/finance/earnings"
+        render={(props) => (
+          <Earnings
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/finance/payouts"
+        render={(props) => (
+          <Payout
+            {...props}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
+      <Route
         path="/finance"
         exact
-        render={(props) => <MainFinanceTab setSelectedSubMenu={setSelectedSubMenu} />}
+        render={(props) => <Finance {...props} setSelectedSubMenu={setSelectedSubMenu} />}
       />
       <Route path="/view-referral" component={ViewReferral} />
-      <Route path="/finance/earnings" component={Earnings} />
-      <Route path="/finance/payouts" component={Payout} />
+
       <Route path="/referrals" component={ReferralTab} />
       <Route path="/plans" component={Subscription} />
       <Route
@@ -327,7 +349,7 @@ const Routes = (props) => {
           />
         )}
       />
-      <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} />
+      {/* <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} /> */}
       <Route exact path="/settings/administrator" component={Administrator} />
       <Route exact path="/settings/management" component={Management} />
       <Route path="/settings" component={Settings} />
