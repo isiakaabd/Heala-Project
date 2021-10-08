@@ -1,21 +1,15 @@
-import { AppBar, Avatar, Grid, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import React from "react";
+import PropTypes from "prop-types";
+import { Avatar, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
-import threeDot from "assets/images/threeDot.svg";
-import IconLabelButtons from "components/Utilities/Button";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -136,6 +130,13 @@ const ViewHCP = () => {
     },
   ];
   const classes = useStyles();
+
+  // useEffect(() => {
+  //   setSelectedMenu(7);
+  //   setSelectedSubMenu(8);
+
+  //   // eslint-disable-next-line
+  // }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid position="static" className={classes.containerGrid}>
       <Grid component="div">
@@ -254,12 +255,19 @@ const ViewHCP = () => {
 
         <Grid item sm container>
           <Grid item sx={{ margin: "auto 4rem auto auto" }}>
-  <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
-           </Grid>
+            <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
   );
+};
+
+ViewHCP.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default ViewHCP;

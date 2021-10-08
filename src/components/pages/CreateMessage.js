@@ -2,6 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import CustomButton from "components/Utilities/CustomButton";
+import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -61,58 +62,63 @@ const CreateMessage = () => {
   };
 
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item>
-        <Typography variant="h4" style={{ marginBottom: "3rem" }}>
-          Create New Message
-        </Typography>
+    <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/messages`} />
       </Grid>
-      <Grid item container direction="column" className={classes.gridWrapper}>
-        <Grid item style={{ marginBottom: "3rem" }}>
-          <Grid container alignItems="center">
-            <Grid item>
-              <Typography variant="body2" className={classes.heading}>
-                Recipient:{" "}
-              </Typography>
-            </Grid>
-            <Grid item className={classes.inputGrid}>
-              <input className={classes.formInput} />
-            </Grid>
-          </Grid>
-          <Divider className={classes.divider} />
-        </Grid>
-        <Grid item style={{ marginBottom: "3rem" }}>
-          <Grid container alignItems="center">
-            <Grid item>
-              <Typography variant="body2" className={classes.heading}>
-                Subject:{" "}
-              </Typography>
-            </Grid>
-            <Grid item className={classes.inputGrid}>
-              <input className={classes.formInput} />
-            </Grid>
-          </Grid>
-          <Divider className={classes.divider} />
-        </Grid>
+      <Grid item container direction="column" alignItems="center">
         <Grid item>
-          <Grid container direction="column">
-            <Grid item>
-              <Typography variant="body2" className={classes.heading}>
-                Message:{" "}
-              </Typography>
-            </Grid>
-            <Grid item style={{ height: "15rem" }}>
-              <textarea className={`${classes.formInput} ${classes.textArea}`} />
-            </Grid>
-          </Grid>
-          <Divider className={classes.divider} />
+          <Typography variant="h4" style={{ marginBottom: "3rem" }}>
+            Create New Message
+          </Typography>
         </Grid>
-        <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
-          <CustomButton
-            title="Send Message"
-            type={redButton}
-            endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
-          />
+        <Grid item container direction="column" className={classes.gridWrapper}>
+          <Grid item style={{ marginBottom: "3rem" }}>
+            <Grid container alignItems="center">
+              <Grid item>
+                <Typography variant="body2" className={classes.heading}>
+                  Recipient:{" "}
+                </Typography>
+              </Grid>
+              <Grid item className={classes.inputGrid}>
+                <input className={classes.formInput} />
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+          </Grid>
+          <Grid item style={{ marginBottom: "3rem" }}>
+            <Grid container alignItems="center">
+              <Grid item>
+                <Typography variant="body2" className={classes.heading}>
+                  Subject:{" "}
+                </Typography>
+              </Grid>
+              <Grid item className={classes.inputGrid}>
+                <input className={classes.formInput} />
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+          </Grid>
+          <Grid item>
+            <Grid container direction="column">
+              <Grid item>
+                <Typography variant="body2" className={classes.heading}>
+                  Message:{" "}
+                </Typography>
+              </Grid>
+              <Grid item style={{ height: "15rem" }}>
+                <textarea className={`${classes.formInput} ${classes.textArea}`} />
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+          </Grid>
+          <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+            <CustomButton
+              title="Send Message"
+              type={redButton}
+              endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
+            />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

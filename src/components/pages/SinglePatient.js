@@ -51,7 +51,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
+const SinglePatient = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    setSelectedPatientMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -59,13 +67,15 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
 
   useEffect(() => {
     setSelectedMenu(1);
+    setSelectedSubMenu(2);
+    setSelectedPatientMenu(0);
 
     // eslint-disable-next-line
-  }, [selectedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
   const cards1 = [
     {
-      id: 0,
+      id: 1,
       title: "Patient Profile",
       background: theme.palette.common.lightRed,
       path: "profile",
@@ -73,7 +83,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
       fill: theme.palette.common.red,
     },
     {
-      id: 1,
+      id: 2,
       title: "Consultations",
       background: theme.palette.common.lightGreen,
       path: "consultations",
@@ -81,7 +91,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
       fill: theme.palette.common.green,
     },
     {
-      id: 2,
+      id: 3,
       title: "Prescriptions",
       background: theme.palette.common.lightRed,
       path: "prescriptions",
@@ -92,7 +102,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
 
   const cards2 = [
     {
-      id: 3,
+      id: 4,
       title: "Medical Records",
       background: theme.palette.common.lightGreen,
       path: "records",
@@ -100,7 +110,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
       fill: theme.palette.common.green,
     },
     {
-      id: 4,
+      id: 5,
       title: "Case notes",
       background: theme.palette.common.lightRed,
       path: "case-notes",
@@ -108,7 +118,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
       fill: theme.palette.common.red,
     },
     {
-      id: 5,
+      id: 6,
       title: "Medications",
       background: theme.palette.common.lightGreen,
       path: "medications",
@@ -170,6 +180,7 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
             // style={{ margin: card.id === 1 ? "0 2rem" : undefined }}
             component={Link}
             to={`/patients/${patientId}/${card.path}`}
+            onClick={() => setSelectedPatientMenu(card.id)}
           >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, { fill: card.fill })}
@@ -186,11 +197,12 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
             className={classes.parentGrid}
             component={Link}
             to={`/patients/${patientId}/${card.path}`}
+            onClick={() => setSelectedPatientMenu(card.id)}
           >
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, {
                 fill: card.fill,
-                color: card.id === 3 ? "success" : undefined,
+                color: "success",
                 style: { fontSize: "4rem" },
               })}
             </Card>
@@ -202,8 +214,12 @@ const SinglePatient = ({ setSelectedMenu, selectedMenu }) => {
 };
 
 SinglePatient.propTypes = {
-  setSelectedMenu: PropTypes.func.isRequired,
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default SinglePatient;

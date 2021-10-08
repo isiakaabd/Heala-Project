@@ -164,7 +164,7 @@ const MainFinanceTab = () => {
               <MovingIcon sx={{ color: theme.palette.common.green }} />
             </Avatar>
             {/* </CardMedia> */}
-            <Link to="/earning" style={{ textDecoration: "none" }}>
+            <Link to="/finance/earnings" style={{ textDecoration: "none" }}>
               <CardContent>
                 <Typography variant="h5" color="primary" component="div">
                   Earning Table
@@ -191,7 +191,7 @@ const MainFinanceTab = () => {
             <Avatar sx={{ background: theme.palette.common.lightRed }}>
               <MovingIcon sx={{ color: theme.palette.common.red }} />
             </Avatar>
-            <Link to="/payout" style={{ textDecoration: "none" }}>
+            <Link to="/finance/payouts" style={{ textDecoration: "none" }}>
               <CardContent>
                 <Typography variant="h5" color="primary" component="div">
                   Payout Table

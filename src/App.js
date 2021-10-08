@@ -7,7 +7,6 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
 
-
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
@@ -20,12 +19,21 @@ const sectionStyles = {
 
 const App = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
+  /* The selected SubMenu handles the visibility of the menu's sub. 0 is set as a buffer. so if you want to reset the submenu, just pass in 0 to the setSelectedSubMenu function. 1 is for the dashboard submenu, 2 for Patients and serially like that to the last menu items */
   const [selectedSubMenu, setSelectedSubMenu] = useState(0);
+  const [selectedPatientMenu, setSelectedPatientMenu] = useState(0);
+  const [selectedHcpMenu, setSelectedHcpMenu] = useState(0);
+
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
-          <Header selectedMenu={selectedMenu} selectedSubMenu={selectedSubMenu} />
+          <Header
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            selectedPatientMenu={selectedPatientMenu}
+            selectedHcpMenu={selectedHcpMenu}
+          />
           <main style={{ display: "flex" }}>
             <SideMenu
               selectedMenu={selectedMenu}
@@ -38,6 +46,10 @@ const App = () => {
                 selectedMenu={selectedMenu}
                 selectedSubMenu={selectedSubMenu}
                 setSelectedSubMenu={setSelectedSubMenu}
+                selectedPatientMenu={selectedPatientMenu}
+                setSelectedPatientMenu={setSelectedPatientMenu}
+                selectedHcpMenu={selectedHcpMenu}
+                setSelectedHcpMenu={setSelectedHcpMenu}
               />
             </section>
           </main>

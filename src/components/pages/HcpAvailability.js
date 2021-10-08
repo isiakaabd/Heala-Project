@@ -6,18 +6,29 @@ import AvailabilityCard from "components/Utilities/AvailabilityCard";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 
-const HcpAvailability = ({ selectedMenu, setSelectedMenu }) => {
+const HcpAvailability = (props) => {
   const { hcpId } = useParams();
+
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedHcpMenu,
+    setSelectedMenu,
+    setSelectedSubMenu,
+    setSelectedHcpMenu,
+  } = props;
 
   useEffect(() => {
     setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(3);
 
     // eslint-disable-next-line
-  }, [selectedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} />
+        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
         <Typography variant="h2">HCP Appointments</Typography>
@@ -54,7 +65,11 @@ const HcpAvailability = ({ selectedMenu, setSelectedMenu }) => {
 
 HcpAvailability.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default HcpAvailability;

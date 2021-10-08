@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -79,7 +80,7 @@ const options = [
   { id: 1, value: "consultations" },
 ];
 
-const Hcps = () => {
+const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -222,6 +223,10 @@ const Hcps = () => {
                       component={Link}
                       to={`hcps/${row.id}`}
                       endIcon={<ArrowForwardIosIcon />}
+                      onClick={() => {
+                        setSelectedSubMenu(3);
+                        setSelectedHcpMenu(0);
+                      }}
                     >
                       View Profile
                     </Button>
@@ -233,6 +238,11 @@ const Hcps = () => {
       </Grid>
     </Grid>
   );
+};
+
+Hcps.propTypes = {
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default Hcps;
