@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -20,7 +19,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -173,7 +171,6 @@ const HCP = () => {
                       <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>
-                      {" "}
                       {row.firstName} {row.lastName}
                     </span>
                   </div>

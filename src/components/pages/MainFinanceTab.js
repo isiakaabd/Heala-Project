@@ -35,11 +35,11 @@ const MainFinanceTab = () => {
           textTransform: "uppercase",
         },
       },
-    }, 
+    },
 
-  iconWrapper: {
-    ...theme.typography.cardIconWrapper,
-  },
+    iconWrapper: {
+      ...theme.typography.cardIconWrapper,
+    },
     cardGrid: {
       justifyContent: "center",
       alignItems: "center",
@@ -100,11 +100,15 @@ const MainFinanceTab = () => {
               xs={3}
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Grid item  className={`${classes.iconWrapper} ${classes.lightGreen}`} style={{background:"yellow"}}>
-              <Financearrowdown  />
-                {/* <Avatar sx={{ background: theme.palette.common.lightGreen }}>
+              <Grid
+                item
+                // className={`${classes.iconWrapper} ${classes.lightGreen}`}
+                // style={{ background: "yellow" }}
+              >
+                {/* <Financearrowdown  /> */}
+                <Avatar sx={{ background: theme.palette.common.lightGreen }}>
                   <MovingIcon sx={{ color: "green" }} />
-                </Avatar> */}
+                </Avatar>
               </Grid>
               <Grid item>
                 <Typography noWrap variant="h1" component="div">
