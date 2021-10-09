@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ setSelectedMenu, setSelectedSubMenu }) => {
+const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const theme = useTheme();
 
   const redButton = {

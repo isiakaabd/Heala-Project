@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
+import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import Card from "components/Utilities/Card";
@@ -126,6 +127,9 @@ const SingleHCP = (props) => {
 
   return (
     <Grid container direction="column" className={classes.gridContainer}>
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/hcps`} onClick={() => setSelectedSubMenu(0)} />
+      </Grid>
       <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
         {/* Display photo and profile name grid */}
         <Grid item>

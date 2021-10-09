@@ -31,7 +31,7 @@ const HcpAvailability = (props) => {
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <Typography variant="h2">HCP Appointments</Typography>
+        <Typography variant="h2">HCP Availability</Typography>
       </Grid>
       <Grid item>
         <Grid container style={{ marginBottom: "5rem" }}>

@@ -228,48 +228,43 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
 
     case 4:
       if (selectedSubMenu === 5) {
-        if (pathname === "/appointments/waiting-list") {
-          return (
-            <CustomSubHeaderText
-              title="Appointments"
-              subTitle="Waiting List"
-              selectedPatientMenu={selectedPatientMenu}
-            />
-          );
-        } else {
-          return (
-            <CustomSubHeaderText
-              title="Appointments"
-              subTitle="Consultation"
-              selectedPatientMenu={selectedPatientMenu}
-            />
-          );
-        }
+        return (
+          <CustomSubHeaderText
+            title="Appointments"
+            subTitle={pathname === "/appointments/waiting-list" ? "Waiting List" : "Consultation"}
+            scopedMenu={0}
+            selectedPatientMenu={selectedPatientMenu}
+          />
+        );
       }
       return <CustomHeaderTitle title="Appointments" path="appointments" />;
     case 5:
       if (selectedSubMenu === 6) {
-        if (pathname === "/messages/create-message") {
-          return <CustomSubHeaderText title="Messages" subTitle="New Message" />;
-        } else {
-          return <CustomSubHeaderText title="Messages" subTitle="View Message" />;
-        }
+        return (
+          <CustomSubHeaderText
+            title="Messages"
+            scopedMenu={0}
+            subTitle={pathname === "/messages/create-message" ? "New Message" : "View Message"}
+          />
+        );
       }
       return <CustomHeaderTitle title="Messages" path="messages" />;
     case 6:
       return <CustomHeaderTitle title="Email" path="email" />;
     case 7:
       if (selectedSubMenu === 8) {
-        return <CustomSubHeaderText title="HCP Verification" subTitle="HCP View" />;
+        return <CustomSubHeaderText title="HCP Verification" scopedMenu={0} subTitle="HCP View" />;
       }
       return <CustomHeaderTitle title="HCP Verification" path="verification" />;
     case 8:
       if (selectedSubMenu === 9) {
-        if (pathname === "/finance/earnings") {
-          return <CustomSubHeaderText title="Finance" subTitle="Earnings Table" />;
-        } else {
-          return <CustomSubHeaderText title="Finance" subTitle="Payouts Table" />;
-        }
+        return (
+          <CustomSubHeaderText
+            title="Finance"
+            scopedMenu={0}
+            subTitle={pathname === "/finance/earnings" ? "Earnings Table" : "Payouts Table"}
+          />
+        );
       }
       return <CustomHeaderTitle title="Finance" path="finance" />;
     case 9:
@@ -277,6 +272,15 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
     case 10:
       return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
     case 11:
+      if (selectedSubMenu === 12) {
+        return (
+          <CustomSubHeaderText
+            title="Settings"
+            subTitle={pathname === "/settings/administrator" ? "Administrator" : "Management"}
+            scopedMenu={0}
+          />
+        );
+      }
       return <CustomHeaderTitle title="Settings" path="settings" />;
     default:
       return (

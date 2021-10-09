@@ -268,10 +268,17 @@ const Routes = (props) => {
         path="/appointments"
         render={(props) => <Appointments setSelectedSubMenu={setSelectedSubMenu} />}
       />
+      <Route exact path="/appointments/consultation" render={() => <h1>Consultation</h1>} />
       <Route
         path="/appointments/waiting-list"
         render={(props) => (
-          <WaitingList {...props} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+          <WaitingList
+            {...props}
+            selectedMenu={selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
         )}
       />
       <Route
@@ -287,7 +294,18 @@ const Routes = (props) => {
           />
         )}
       />
-      <Route path="/messages/create-message" render={(props) => <CreateMessage {...props} />} />
+      <Route
+        path="/messages/create-message"
+        render={(props) => (
+          <CreateMessage
+            {...props}
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
       <Route
         path="/messages/:messageId"
         render={(props) => (
@@ -310,6 +328,7 @@ const Routes = (props) => {
         path="/finance/earnings"
         render={(props) => (
           <Earnings
+            {...props}
             selectedMenu={selectedMenu}
             selectedSubMenu={selectedSubMenu}
             setSelectedMenu={setSelectedMenu}
@@ -350,9 +369,25 @@ const Routes = (props) => {
         )}
       />
       {/* <Route path="/settings" render={() => <h3 style={{ fontSize: "3rem" }}>Settings</h3>} /> */}
-      <Route exact path="/settings/administrator" component={Administrator} />
+      <Route
+        exact
+        path="/settings"
+        render={(props) => <Settings {...props} setSelectedSubMenu={setSelectedSubMenu} />}
+      />
+      <Route
+        exact
+        path="/settings/administrator"
+        render={(props) => (
+          <Administrator
+            {...props}
+            selectedMenu={selectedMenu}
+            selectedSubMenu={selectedSubMenu}
+            setSelectedMenu={setSelectedMenu}
+            setSelectedSubMenu={setSelectedSubMenu}
+          />
+        )}
+      />
       <Route exact path="/settings/management" component={Management} />
-      <Route path="/settings" component={Settings} />
     </Switch>
   );
 };
