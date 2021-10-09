@@ -17,7 +17,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
@@ -71,9 +71,32 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  tableBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      height: "3rem",
+      fontSize: "1.25rem",
+      borderRadius: "2rem",
+      boxShadow: "none",
+
+      "&:hover": {
+        "& .MuiButton-endIcon>*:nth-of-type(1)": {
+          color: "#fff",
+        },
+      },
+
+      "&:active": {
+        boxShadow: "none",
+      },
+
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
+        fontSize: "1.5rem",
+      },
+    },
+  },
 
   redBtn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: theme.palette.common.lightRed,
       color: theme.palette.common.red,
 
@@ -83,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+
   greenBtn: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: theme.palette.common.lightGreen,
@@ -236,17 +260,17 @@ const Subscription = () => {
                       <Button
                         variant="contained"
                         disableRipple
-                        className={`${classes.button} ${classes.greenBtn}`}
-                        endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                        className={`${classes.tableBtn} ${classes.greenBtn}`}
+                        endIcon={<EditIcon color="success" />}
                       >
                         Edit plan
                       </Button>
                       <Button
                         variant="contained"
                         disableRipple
-                        className={`${classes.button} ${classes.redBtn}`}
+                        className={`${classes.tableBtn} ${classes.redBtn}`}
                         to="/view"
-                        endIcon={<DeleteForeverIcon style={{ color: theme.palette.common.red }} />}
+                        endIcon={<DeleteIcon color="error" />}
                       >
                         Delete plan
                       </Button>
