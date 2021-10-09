@@ -9,7 +9,7 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import FormSelect from "components/Utilities/FormSelect";
-import circle from "assets/images/circle.png";
+import circle2 from "assets/images/circle2.png";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -90,7 +90,9 @@ const HcpEarnings = (props) => {
               className={classes.headerGrid}
             >
               <Grid item>
-                <Typography variant="h5">Financial Stats</Typography>
+                <Typography variant="h5" style={{ fontSize: "3.3rem" }}>
+                  Earnings
+                </Typography>
               </Grid>
               <Grid item>
                 <FormSelect
@@ -111,7 +113,10 @@ const HcpEarnings = (props) => {
               className={classes.overviewGrid}
             >
               <Grid item>
-                <img src={circle} alt="A circle representing total earning and payout difference" />
+                <img
+                  src={circle2}
+                  alt="A circle representing total earning and payout difference"
+                />
               </Grid>
               <Grid item>
                 <Grid container alignItems="center">
@@ -121,7 +126,7 @@ const HcpEarnings = (props) => {
                   <Grid item style={{ marginLeft: "2rem" }}>
                     <Grid container direction="column">
                       <Grid item>
-                        <Typography variant="h2">
+                        <Typography variant="h2" style={{ fontSize: "3.9rem" }}>
                           <span
                             style={{
                               textDecoration: "line-through",
@@ -136,7 +141,7 @@ const HcpEarnings = (props) => {
                       <Grid item>
                         <Typography
                           variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
+                          style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
                         >
                           Total earnings
                         </Typography>
@@ -153,7 +158,7 @@ const HcpEarnings = (props) => {
                   <Grid item style={{ marginLeft: "2rem" }}>
                     <Grid container direction="column">
                       <Grid item>
-                        <Typography variant="h2">
+                        <Typography variant="h2" style={{ fontSize: "3.9rem" }}>
                           <span
                             style={{
                               textDecoration: "line-through",
@@ -168,7 +173,7 @@ const HcpEarnings = (props) => {
                       <Grid item>
                         <Typography
                           variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
+                          style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
                         >
                           Total payouts
                         </Typography>
