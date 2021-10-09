@@ -121,7 +121,14 @@ const Finance = ({ setSelectedSubMenu }) => {
         <Grid item container sx={{ padding: "3rem 4rem" }}>
           <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
-              <CircularProgressBar value={90} color="error" />
+              <CircularProgressBar
+                height="17rem"
+                width="17rem"
+                color="green"
+                trailColor="red"
+                value="65"
+                strokeWidth={6}
+              />
             </Grid>
             <Grid
               item
