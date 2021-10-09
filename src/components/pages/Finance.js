@@ -126,7 +126,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 width="17rem"
                 color="green"
                 trailColor="red"
-                value="65"
+                value={65}
                 strokeWidth={8}
               />
             </Grid>
@@ -200,7 +200,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                   variant="body2"
                   style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
                 >
-                  Total Withdrawal
+                  Total withdrawal
                 </Typography>
               </Grid>
             </Grid>

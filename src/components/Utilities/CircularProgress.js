@@ -53,5 +53,5 @@ CircularProgressBar.propTypes = {
   width: PropTypes.string.isRequired,
   trailColor: PropTypes.string.isRequired,
   strokeLinecap: PropTypes.string,
-  strokeWidth: PropTypes.string,
+  strokeWidth: PropTypes.number,
 };
