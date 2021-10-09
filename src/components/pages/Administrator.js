@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -101,7 +101,7 @@ const options = [
   { id: 1, value: "Plan" },
   { id: 2, value: "Consultation" },
 ];
-const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -115,6 +115,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) =>
   //   setSelectedSubMenu(0);
   //   // eslint-disable-next-line
   // }, [selectedMenu, selectedSubMenu]);
+
+  useEffect(() => {
+    setSelectedMenu(11);
+    setSelectedSubMenu(12);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <Grid container direction="column" rowSpacing={1}>
@@ -242,7 +249,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) =>
 Administrator.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
-
+  setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
 };
+
 export default Administrator;

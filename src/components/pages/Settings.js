@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
@@ -36,13 +37,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = () => {
+const Settings = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+
   return (
     <Grid container justifyContent="space-between" className={classes.containerGrid}>
       <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={6} sm={12}>
-        <Link to="/settings/administrator" style={{ textDecoration: "none" }}>
+        <Link
+          to="/settings/administrator"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
           <Card
             alt="A administrator icon used as a representation for the administrator "
             title="Administrator"
@@ -53,7 +59,11 @@ const Settings = () => {
         </Link>
       </Grid>
       <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>
-        <Link to="/settings/management" style={{ textDecoration: "none" }}>
+        <Link
+          to="/settings/management"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
           <Card
             alt="An icon used as a representation for making consultation with the doctor"
             title="Role Management"
@@ -65,6 +75,13 @@ const Settings = () => {
       </Grid>
     </Grid>
   );
+};
+
+Settings.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default Settings;

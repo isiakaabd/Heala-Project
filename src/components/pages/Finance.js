@@ -127,7 +127,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 color="green"
                 trailColor="red"
                 value="65"
-                strokeWidth={6}
+                strokeWidth={8}
               />
             </Grid>
             <Grid
@@ -147,7 +147,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
                   <span
                     style={{
                       textDecoration: "line-through",
@@ -158,7 +158,10 @@ const Finance = ({ setSelectedSubMenu }) => {
                   </span>
                   700,000
                 </Typography>
-                <Typography variant="h6" color="#CCCCCC">
+                <Typography
+                  variant="body2"
+                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                >
                   Total earning
                 </Typography>
               </Grid>
@@ -182,7 +185,7 @@ const Finance = ({ setSelectedSubMenu }) => {
               </Grid>
 
               <Grid item>
-                <Typography noWrap variant="h1" component="div" color="black">
+                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
                   <span
                     style={{
                       textDecoration: "line-through",
@@ -193,7 +196,10 @@ const Finance = ({ setSelectedSubMenu }) => {
                   </span>
                   700,000
                 </Typography>
-                <Typography variant="h6" color="#CCCCCC">
+                <Typography
+                  variant="body2"
+                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                >
                   Total Withdrawal
                 </Typography>
               </Grid>
