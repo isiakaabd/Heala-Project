@@ -121,7 +121,14 @@ const Finance = ({ setSelectedSubMenu }) => {
         <Grid item container sx={{ padding: "3rem 4rem" }}>
           <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
-              <CircularProgressBar value={90} color="error" />
+              <CircularProgressBar
+                height="17rem"
+                width="17rem"
+                color="green"
+                trailColor="red"
+                value={65}
+                strokeWidth={8}
+              />
             </Grid>
             <Grid
               item
@@ -140,7 +147,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
                   <span
                     style={{
                       textDecoration: "line-through",
@@ -151,7 +158,10 @@ const Finance = ({ setSelectedSubMenu }) => {
                   </span>
                   700,000
                 </Typography>
-                <Typography variant="h6" color="#CCCCCC">
+                <Typography
+                  variant="body2"
+                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                >
                   Total earning
                 </Typography>
               </Grid>
@@ -175,7 +185,7 @@ const Finance = ({ setSelectedSubMenu }) => {
               </Grid>
 
               <Grid item>
-                <Typography noWrap variant="h1" component="div" color="black">
+                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
                   <span
                     style={{
                       textDecoration: "line-through",
@@ -186,8 +196,11 @@ const Finance = ({ setSelectedSubMenu }) => {
                   </span>
                   700,000
                 </Typography>
-                <Typography variant="h6" color="#CCCCCC">
-                  Total Withdrawal
+                <Typography
+                  variant="body2"
+                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                >
+                  Total withdrawal
                 </Typography>
               </Grid>
             </Grid>

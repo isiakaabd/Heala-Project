@@ -310,7 +310,7 @@ const Subscription = () => {
               to="/view"
               type="submit"
               color="error"
-              style={{ width: "100%" }}
+              style={{ width: "100%", padding: "1.2rem" }}
             >
               Save Plan
             </Button>
