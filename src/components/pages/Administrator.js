@@ -20,6 +20,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -110,6 +111,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const [searchMail, setSearchMail] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  // useEffect(() => {
+  //   setSelectedSubMenu(0);
+  //   // eslint-disable-next-line
+  // }, [selectedMenu, selectedSubMenu]);
 
   useEffect(() => {
     setSelectedMenu(11);
@@ -119,8 +124,11 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   }, [selectedMenu, selectedSubMenu]);
 
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
+    <Grid container direction="column" rowSpacing={1}>
+      <Grid item>
+        <PreviousButton path="/settings" />
+      </Grid>
+      <Grid item container style={{ paddingBottom: "3rem" }}>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchMail}

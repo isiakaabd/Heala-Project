@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Avatar, Grid, Typography } from "@mui/material";
-import MovingIcon from "@mui/icons-material/Moving";
+import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Stack from "@mui/material/Stack";
@@ -39,7 +38,12 @@ const Finance = ({ setSelectedSubMenu }) => {
     },
 
     iconWrapper: {
-      ...theme.typography.cardIconWrapper,
+      width: 60,
+      height: 60,
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
     cardGrid: {
       justifyContent: "center",
@@ -91,7 +95,7 @@ const Finance = ({ setSelectedSubMenu }) => {
 
     cardIcon: {
       "&.MuiSvgIcon-root": {
-        fontSize: "4rem",
+        fontSize: "3rem",
       },
     },
   }));
@@ -101,11 +105,13 @@ const Finance = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
 
   return (
-    <Stack position="static" className={classes.containerGrid} spacing={2}>
+    <Stack position="static" className={classes.containerGrid} spacing={3}>
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
-            <Typography variant="h1"> Earning</Typography>
+            <Typography variant="h1" color=" #2D2F39">
+              Earning
+            </Typography>
           </Grid>
           <Grid item>
             <DateComponent label="Last 30 Days" />
@@ -115,31 +121,37 @@ const Finance = ({ setSelectedSubMenu }) => {
         <Grid item container sx={{ padding: "3rem 4rem" }}>
           <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
-              <CircularProgressBar sx={{ color: "green" }} />
+              <CircularProgressBar value={90} color="error" />
             </Grid>
             <Grid
               item
               sm
               container
-              spacing={4}
+              columnSpacing={2}
               xs={3}
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
               <Grid
-                item
-                // className={`${classes.iconWrapper} ${classes.lightGreen}`}
-                // style={{ background: "yellow" }}
+                className={classes.iconWrapper}
+                sx={{ background: theme.palette.common.lightGreen }}
               >
-                {/* <Financearrowdown  /> */}
-                <Avatar sx={{ background: theme.palette.common.lightGreen }}>
-                  <MovingIcon sx={{ color: "green" }} />
-                </Avatar>
+                <Grid item>
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography noWrap variant="h1" component="div">
-                  N700,000
+                <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                  <span
+                    style={{
+                      textDecoration: "line-through",
+                      textDecorationStyle: "double",
+                    }}
+                  >
+                    N{""}
+                  </span>
+                  700,000
                 </Typography>
-                <Typography variant="h6" color="secondary">
+                <Typography variant="h6" color="#CCCCCC">
                   Total earning
                 </Typography>
               </Grid>
@@ -149,20 +161,32 @@ const Finance = ({ setSelectedSubMenu }) => {
               item
               sm
               container
-              spacing={4}
+              columnSpacing={2}
               xs={3}
-              sx={{ justifyContent: "flex-end", alignItems: "center" }}
+              sx={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Grid item>
-                <Avatar sx={{ background: theme.palette.common.lightRed }}>
-                  <MovingIcon sx={{ color: theme.palette.common.red }} />
-                </Avatar>
+              <Grid
+                className={classes.iconWrapper}
+                sx={{ background: theme.palette.common.lightRed }}
+              >
+                <Grid item>
+                  <TrendingUpIcon color="error" className={classes.cardIcon} />
+                </Grid>
               </Grid>
+
               <Grid item>
-                <Typography noWrap variant="h1" component="div">
-                  N700,000
+                <Typography noWrap variant="h1" component="div" color="black">
+                  <span
+                    style={{
+                      textDecoration: "line-through",
+                      textDecorationStyle: "double",
+                    }}
+                  >
+                    N{""}
+                  </span>
+                  700,000
                 </Typography>
-                <Typography variant="h6" color="secondary">
+                <Typography variant="h6" color="#CCCCCC">
                   Total Withdrawal
                 </Typography>
               </Grid>
@@ -170,7 +194,7 @@ const Finance = ({ setSelectedSubMenu }) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container style={{ marginTop: "5rem" }}>
+      <Grid container>
         <Grid
           item
           component={Link}
@@ -180,13 +204,15 @@ const Finance = ({ setSelectedSubMenu }) => {
           onClick={() => setSelectedSubMenu(9)}
         >
           <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
-            <TrendingDownIcon color="success" className={classes.cardIcon} />
+            <Grid className={classes.iconWrapper}>
+              <TrendingDownIcon color="success" className={classes.cardIcon} />
+            </Grid>
           </Card>
         </Grid>
         <Grid
           item
           component={Link}
-          to="/finance/earnings"
+          to="/finance/payouts"
           className={classes.parentGrid}
           style={{ marginRight: "5rem" }}
           onClick={() => setSelectedSubMenu(9)}

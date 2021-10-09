@@ -27,34 +27,19 @@ const CheckboxesGroup = ({ row }) => {
   const classes = useStyles();
   return (
     <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
-      <FormControl
-        required
-        //    error={error}
-
-        component="fieldset"
-        sx={{ m: 3 }}
-        variant="standard"
-      >
+      <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
         <FormGroup>
           <Grid container>
-            {row.map((per) => {
+            {row.map((per, index) => {
               return (
-                <>
-                  <Grid item>
-                    <FormControlLabel
-                      key={per}
-                      control={
-                        <Checkbox
-                          checked={per}
-                          onChange={handleChange}
-                          name={per}
-                          color="success"
-                        />
-                      }
-                      label={per}
-                    />
-                  </Grid>
-                </>
+                <Grid item key={index}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={true} onChange={handleChange} name={per} color="success" />
+                    }
+                    label={per}
+                  />
+                </Grid>
               );
             })}
           </Grid>
@@ -64,9 +49,6 @@ const CheckboxesGroup = ({ row }) => {
   );
 };
 CheckboxesGroup.propTypes = {
-  row: PropTypes.object.isRequired,
-  filter: PropTypes.func.isRequired,
-  map: PropTypes.func.isRequired,
-  //   props.permission: PropTypes.arr.isRequired,
+  row: PropTypes.array.isRequired,
 };
 export default CheckboxesGroup;

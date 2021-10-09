@@ -142,7 +142,7 @@ export const referralHeader = [
     label: "Status",
   },
   {
-    id: 5,
+    id: 6,
     label: "",
   },
 ];
