@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -196,6 +197,7 @@ const Login = () => {
                 component={Link}
                 to="/signup"
                 className={classes.link}
+                onClick={() => setIsAuthenticated(true)}
               >
                 Sign up
               </Typography>
@@ -205,6 +207,10 @@ const Login = () => {
       </Grid>
     </Grid>
   );
+};
+
+Login.propTypes = {
+  setIsAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default Login;
