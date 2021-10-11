@@ -9,7 +9,7 @@ import { IoOptions } from "react-icons/io5";
 const FilterList = ({ width, title, options }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
-      "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      "&.MuiButton-root": {
         ...theme.typography.btn,
         backgroundColor: "#fff",
         color: theme.palette.common.dark,
@@ -42,7 +42,7 @@ const FilterList = ({ width, title, options }) => {
     },
 
     menuItem: {
-      "&.css-107m996-MuiButtonBase-root-MuiMenuItem-root": {
+      "&.MuiMenuItem-root": {
         justifyContent: "center",
       },
     },

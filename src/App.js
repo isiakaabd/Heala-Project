@@ -7,6 +7,7 @@ import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
 import ScrollToView from "components/ScrollToView";
+import Login from "components/pages/Login";
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
@@ -24,7 +25,7 @@ const App = () => {
   const [selectedPatientMenu, setSelectedPatientMenu] = useState(0);
   const [selectedHcpMenu, setSelectedHcpMenu] = useState(0);
 
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -40,7 +41,7 @@ const App = () => {
           )}
 
           <ScrollToView>
-            {!isAuthenticated && <Route path="/login" render={() => <h1>Login Page</h1>} />}
+            {!isAuthenticated && <Route path="/login" render={() => <Login />} />}
             {isAuthenticated && (
               <main style={{ display: "flex" }}>
                 <SideMenu
