@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu, setIsAuthenticated }) => {
   const classes = useStyles();
 
   const location = useLocation();
@@ -164,9 +164,11 @@ const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu }) => {
         ))}
         <ListItemButton
           disableRipple
-          onClick={() => setSelectedMenu(12)}
+          onClick={() => {
+            setSelectedMenu(12);
+            setIsAuthenticated(false);
+          }}
           classes={{ root: classes.logout }}
-          // component={Link}
         >
           <ListItemIcon>
             <HiLogout size={20} />
@@ -183,6 +185,7 @@ SideMenu.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setIsAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default SideMenu;
