@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -15,6 +14,8 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import Search from "components/Utilities/Search";
 import useFormInput from "components/hooks/useFormInput";
+import { useActions } from "components/hooks/useActions";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     position: "relative",
+    overflow: "hidden",
   },
   overlay: {
     width: "100%",
@@ -58,9 +60,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const { loginUser } = useActions();
+
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -96,6 +102,14 @@ const Login = ({ setIsAuthenticated }) => {
   //         break;
   //     }
   //   };
+
+  const handleLogin = () => {
+    loginUser();
+  };
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <Grid container className={classes.gridContainer}>
@@ -175,14 +189,26 @@ const Login = ({ setIsAuthenticated }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="body1" color="error" component={Link} className={classes.link}>
+                <Typography
+                  variant="body1"
+                  color="error"
+                  component={Link}
+                  to="forgot-password"
+                  className={classes.link}
+                >
                   Forgot password?
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
           <Grid item container>
-            <CustomButton title="Login" width="100%" type={buttonColors} disableRipple />
+            <CustomButton
+              title="Login"
+              width="100%"
+              type={buttonColors}
+              disableRipple
+              onClick={handleLogin}
+            />
           </Grid>
           <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>
             <Grid item>
@@ -197,7 +223,6 @@ const Login = ({ setIsAuthenticated }) => {
                 component={Link}
                 to="/signup"
                 className={classes.link}
-                onClick={() => setIsAuthenticated(true)}
               >
                 Sign up
               </Typography>
@@ -207,10 +232,6 @@ const Login = ({ setIsAuthenticated }) => {
       </Grid>
     </Grid>
   );
-};
-
-Login.propTypes = {
-  setIsAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default Login;
