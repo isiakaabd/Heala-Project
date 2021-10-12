@@ -6,6 +6,7 @@ import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
+import { useSelector } from "react-redux";
 import ScrollToView from "components/ScrollToView";
 import Login from "components/pages/Login";
 const sectionStyles = {
@@ -24,9 +25,8 @@ const App = () => {
   const [selectedSubMenu, setSelectedSubMenu] = useState(0);
   const [selectedPatientMenu, setSelectedPatientMenu] = useState(0);
   const [selectedHcpMenu, setSelectedHcpMenu] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  // const isAuthenticated = false;
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -42,34 +42,27 @@ const App = () => {
           )}
 
           <ScrollToView>
-            {!isAuthenticated && (
-              <Route
-                path="/login"
-                render={(props) => <Login {...props} setIsAuthenticated={setIsAuthenticated} />}
+            <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
+
+            <main style={{ display: !isAuthenticated ? "none" : "flex" }}>
+              <SideMenu
+                selectedMenu={selectedMenu}
+                setSelectedMenu={setSelectedMenu}
+                setSelectedSubMenu={setSelectedSubMenu}
               />
-            )}
-            {isAuthenticated && (
-              <main style={{ display: "flex" }}>
-                <SideMenu
-                  selectedMenu={selectedMenu}
+              <section style={sectionStyles}>
+                <Routes
                   setSelectedMenu={setSelectedMenu}
+                  selectedMenu={selectedMenu}
+                  selectedSubMenu={selectedSubMenu}
                   setSelectedSubMenu={setSelectedSubMenu}
-                  setIsAuthenticated={setIsAuthenticated}
+                  selectedPatientMenu={selectedPatientMenu}
+                  setSelectedPatientMenu={setSelectedPatientMenu}
+                  selectedHcpMenu={selectedHcpMenu}
+                  setSelectedHcpMenu={setSelectedHcpMenu}
                 />
-                <section style={sectionStyles}>
-                  <Routes
-                    setSelectedMenu={setSelectedMenu}
-                    selectedMenu={selectedMenu}
-                    selectedSubMenu={selectedSubMenu}
-                    setSelectedSubMenu={setSelectedSubMenu}
-                    selectedPatientMenu={selectedPatientMenu}
-                    setSelectedPatientMenu={setSelectedPatientMenu}
-                    selectedHcpMenu={selectedHcpMenu}
-                    setSelectedHcpMenu={setSelectedHcpMenu}
-                  />
-                </section>
-              </main>
-            )}
+              </section>
+            </main>
           </ScrollToView>
         </div>
       </Router>
