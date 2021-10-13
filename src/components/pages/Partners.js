@@ -8,7 +8,6 @@ import { makeStyles } from "@mui/styles";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import CustomButton from "components/Utilities/CustomButton";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -117,12 +116,6 @@ const Partners = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const redButtonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
-  };
-
   const darkButtonType = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
@@ -157,15 +150,19 @@ const Partners = () => {
             options={options}
           />
         </Grid>
-        <Grid item className={classes.actionBtnGrid}>
+        {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
             title="Add Partner Category"
             type={redButtonType}
           />
-        </Grid>
+        </Grid> */}
         <Grid item>
-          <CustomButton endIcon={<AddIcon />} title="Add New Partner" type={darkButtonType} />
+          <CustomButton
+            endIcon={<PersonAddAlt1Icon />}
+            title="Add New Partner"
+            type={darkButtonType}
+          />
         </Grid>
       </Grid>
       <Grid item container style={{ marginTop: "5rem" }}>
@@ -212,7 +209,7 @@ const Partners = () => {
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        paddingLeft: "7rem",
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>

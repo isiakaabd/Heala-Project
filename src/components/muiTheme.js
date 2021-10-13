@@ -8,6 +8,7 @@ const lightGrey = "#CCCCCC";
 const lighterGrey = "F2F2F2";
 const green = "#3EA584";
 const lightGreen = "#ECF6F3";
+const gold = "rgb(243, 173, 83)";
 
 export const muiTheme = createTheme({
   palette: {
@@ -20,6 +21,7 @@ export const muiTheme = createTheme({
       lightGrey,
       lighterGrey,
       lightGreen,
+      gold,
     },
     primary: {
       main: dark,
@@ -35,6 +37,9 @@ export const muiTheme = createTheme({
     },
     success: {
       main: green,
+    },
+    warning: {
+      main: gold,
     },
   },
   typography: {
