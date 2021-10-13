@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
 
       "&:hover": {
-        color: theme.palette.common.red,
+        color: "red",
       },
     },
   },
@@ -30,7 +30,7 @@ const style = {
   borderRadius: "2rem",
   p: 4,
 };
-const Modals = ({ isOpen, handleClose, title, color, children }) => {
+const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing }) => {
   const classes = useStyles();
   return (
     <div>
@@ -41,7 +41,7 @@ const Modals = ({ isOpen, handleClose, title, color, children }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Grid container rowSpacing={3} className={classes.modal}>
+          <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
             <Grid item container justifyContent="space-between" alignItems="center">
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
@@ -67,5 +67,6 @@ Modals.propTypes = {
   children: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
+  rowSpacing: PropTypes.number,
 };
 export default Modals;
