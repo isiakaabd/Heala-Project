@@ -4,7 +4,16 @@ import PropTypes from "prop-types";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { makeStyles } from "@mui/styles";
-const SearchContainer = ({ width, placeholder, height, placeholderWidth, value, onChange }) => {
+const SearchContainer = ({
+  width,
+  placeholder,
+  height,
+  placeholderWidth,
+  value,
+  onChange,
+  hasStartIcon = true,
+  ...rest
+}) => {
   const useStyles = makeStyles({
     //   root: {
     //     "& .css-1u99e1o-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -19,6 +28,7 @@ const SearchContainer = ({ width, placeholder, height, placeholderWidth, value, 
         id="input-with-icon-adornment"
         value={value}
         onChange={onChange}
+        {...rest}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -32,9 +42,11 @@ const SearchContainer = ({ width, placeholder, height, placeholderWidth, value, 
         placeholder={placeholder}
         inputProps={{ "aria-label": placeholder }}
         startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
+          hasStartIcon && (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          )
         }
       />
     </div>
@@ -46,6 +58,7 @@ SearchContainer.propTypes = {
   height: PropTypes.string,
   placeholderWidth: PropTypes.string,
   value: PropTypes.string,
+  hasStartIcon: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
 
