@@ -252,7 +252,7 @@ const Email = () => {
             </Grid>
           </Grid>
           <Grid item container xs={12}>
-            <Button variant="contained" to="/view" type="submit" className={classes.button}>
+            <Button variant="contained" onClick={handleDialogClose} to="/view" type="submit" className={classes.button}>
               Apply Filter
             </Button>
           </Grid>

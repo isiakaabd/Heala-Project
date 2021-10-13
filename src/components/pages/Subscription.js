@@ -352,6 +352,7 @@ const Subscription = () => {
               to="/view"
               type="submit"
              className={classes.btn}
+              onClick={handleDialogClose}
             >
               Save Plan
             </Button>

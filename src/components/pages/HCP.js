@@ -270,7 +270,7 @@ const HCP = ({ setSelectedSubMenu }) => {
             </Grid>
           </Grid>
           <Grid item container xs={12}>
-            <Button variant="contained" to="/view" type="submit" className={classes.btn}>
+            <Button variant="contained"  onClick={handleDialogClose} to="/view" type="submit" className={classes.btn}>
               Apply Filter
             </Button>
           </Grid>
