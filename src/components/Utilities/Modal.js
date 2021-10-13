@@ -20,17 +20,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  borderRadius: "2rem",
-  p: 4,
-};
-const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing }) => {
+const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, height }) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 500,
+    height: height,
+    bgcolor: "background.paper",
+    borderRadius: "2rem",
+    p: 4,
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -67,6 +69,12 @@ Modals.propTypes = {
   children: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
+  height: PropTypes.string,
   rowSpacing: PropTypes.number,
 };
+
+Modals.defaultProps = {
+  height: "80vh",
+};
+
 export default Modals;

@@ -14,7 +14,6 @@ import FormLabel from "@mui/material/FormLabel";
 import Modals from "components/Utilities/Modal";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-
 import { rows } from "components/Utilities/DataHeader";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
@@ -33,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
-   FormLabel:{
-    "&.MuiFormLabel-root":{
-    ...theme.typography.FormLabel
-    }
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
   },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -87,12 +86,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
 
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
@@ -222,7 +215,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           <Grid item container xs={12} spacing={2} component="div">
             <Grid item xs={6}>
               <Grid container direction="column" gap={1}>
-                <FormLabel component="legend"  className={classes.FormLabel}>
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Name
                 </FormLabel>
                 <FormControl fullWidth size="large">
@@ -238,7 +231,7 @@ const HCP = ({ setSelectedSubMenu }) => {
             {/* second grid */}
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend"  className={classes.FormLabel}>
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Date
                 </FormLabel>
                 <FormControl fullWidth>
@@ -255,7 +248,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           <Grid item container xs={12} spacing={2} marginBottom={8}>
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend"  className={classes.FormLabel}>
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Medical ID
                 </FormLabel>
                 <FormControl fullWidth style={{ height: "3rem" }}>
@@ -270,7 +263,13 @@ const HCP = ({ setSelectedSubMenu }) => {
             </Grid>
           </Grid>
           <Grid item container xs={12}>
-            <Button variant="contained"  onClick={handleDialogClose} to="/view" type="submit" className={classes.btn}>
+            <Button
+              variant="contained"
+              onClick={handleDialogClose}
+              to="/view"
+              type="submit"
+              className={classes.btn}
+            >
               Apply Filter
             </Button>
           </Grid>

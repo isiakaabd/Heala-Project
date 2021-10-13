@@ -8,6 +8,7 @@ const lightGrey = "#CCCCCC";
 const lighterGrey = "F2F2F2";
 const green = "#3EA584";
 const lightGreen = "#ECF6F3";
+const gold = "rgb(243, 173, 83)";
 const black = "#2D2F39";
 
 export const muiTheme = createTheme({
@@ -21,6 +22,7 @@ export const muiTheme = createTheme({
       lightGrey,
       lighterGrey,
       lightGreen,
+      gold,
       black,
     },
     primary: {
@@ -37,6 +39,9 @@ export const muiTheme = createTheme({
     },
     success: {
       main: green,
+    },
+    warning: {
+      main: gold,
     },
   },
   typography: {
@@ -112,11 +117,10 @@ export const muiTheme = createTheme({
       height: "25.8rem",
       cursor: "pointer",
     },
-     FormLabel:{
-     color: grey,
-     fontSize:"1.6rem"
-    
-  },
+    FormLabel: {
+      color: grey,
+      fontSize: "1.6rem",
+    },
   },
   components: {
     MuiAppBar: {

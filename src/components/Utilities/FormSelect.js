@@ -4,27 +4,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const useStyles = makeStyles((theme) => ({
-  select: {
-    "&.MuiSelect-select": {
-      padding: "50px !important",
-    },
-    typo: {
-      ...theme.palette.common.lighterGrey,
-      fontSize: "1.25rem",
-    },
-  },
-}));
 const FormSelect = ({ value, onChange, placeholderText, options, ...rest }) => {
-  const theme = useTheme();
-  const classes = useStyles();
-
   return (
-    <FormControl sx={{ minWidth: 120 }}>
+    <FormControl sx={{ width: "100%" }}>
       <Select
         value={value}
         onChange={onChange}
@@ -32,7 +16,7 @@ const FormSelect = ({ value, onChange, placeholderText, options, ...rest }) => {
         style={{ minHeight: 60 }}
         inputProps={{ "aria-label": "Select Referral Type" }}
         IconComponent={KeyboardArrowDownIcon}
-        className={classes.select}
+        {...rest}
       >
         <MenuItem value="">
           <Typography>{placeholderText}</Typography>

@@ -1,12 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { makeStyles } from "@mui/styles";
 import { IoOptions } from "react-icons/io5";
 
-const FilterList = ({ width, title, onClick }) => {
+const FilterList = ({ width, title, ...rest }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
       "&.MuiButton-root": {
@@ -50,49 +48,17 @@ const FilterList = ({ width, title, onClick }) => {
 
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  // const [filter, setFilter] = useState(title);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(null);
-
-    // console.log(event.currentTarget.dataset);
-  };
-
   return (
     <>
       <Button
         variant="contained"
         disableRipple
-        onClick={onClick}
         endIcon={<IoOptions size={20} className={classes.icon} />}
-         className={classes.button}
+        className={classes.button}
+        {...rest}
       >
         {title}
       </Button>
-      {/* <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        classes={{ paper: classes.paper }}
-        className={classes.menu}
-      >
-        {options.map((option) => (
-          <MenuItem
-            data-my-value={option.value}
-            key={option.id}
-            onClick={handleClick}
-            className={classes.menuItem}
-          >
-            {option.value}
-          </MenuItem>
-        ))}
-      </Menu> */}
     </>
   );
 };
@@ -100,7 +66,6 @@ const FilterList = ({ width, title, onClick }) => {
 FilterList.propTypes = {
   width: PropTypes.string,
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default FilterList;

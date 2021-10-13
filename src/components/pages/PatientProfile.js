@@ -16,6 +16,7 @@ import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
+import DisablePatient from "components/modals/DisablePatient";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +84,8 @@ const PatientProfile = () => {
 
   const { patientId } = useParams();
 
-  const [open, setOpen] = useState(false);
+  const [openReferPatient, setOpenReferPatient] = useState(false);
+  const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
   const greenButton = {
     background: theme.palette.success.main,
@@ -248,6 +250,7 @@ const PatientProfile = () => {
             title="Disable Patient"
             type={trasparentButton}
             textColor={theme.palette.common.red}
+            onClick={() => setOpenDisablePatient(true)}
           />
         </Grid>
         <Grid item style={{ marginLeft: "2rem" }}>
@@ -255,10 +258,11 @@ const PatientProfile = () => {
             endIcon={<TrendingUpIcon />}
             title="Refer Patient"
             type={greenButton}
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenReferPatient(true)}
           />
         </Grid>
-        <ReferPatient open={open} setOpen={setOpen} />
+        <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
+        <DisablePatient open={openDisablePatient} setOpen={setOpenDisablePatient} />
       </Grid>
     </Grid>
   );

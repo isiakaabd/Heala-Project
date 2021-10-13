@@ -221,33 +221,18 @@ export const hcpsRows = [
 export const partnersRows = [
   {
     id: 500,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
+    name: "General Hospital, Lekki",
+    category: "Hospital",
   },
   {
     id: 501,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
+    name: "H-Medix",
+    category: "Pharmacy",
   },
   {
     id: 502,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
-  },
-  {
-    id: 503,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
-  },
-  {
-    id: 504,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
-  },
-  {
-    id: 505,
-    name: "Raphel Igbenedion",
-    category: "Partner's category",
+    name: "X Lab",
+    category: "Diagnostic Center",
   },
 ];
 

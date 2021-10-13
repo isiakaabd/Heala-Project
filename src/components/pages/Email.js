@@ -27,21 +27,21 @@ import FormSelect from "components/Utilities/FormSelect";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       ...theme.typography.btn,
       width: "100%",
     },
   },
-  FormLabel:{
-    "&.MuiFormLabel-root":{
-    ...theme.typography.FormLabel
-    }
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
   },
 
   tableCell: {
@@ -76,9 +76,9 @@ const Email = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogOpen = () => setIsOpen(true);
-  
+
   const handleDialogClose = () => setIsOpen(false);
-  
+
   const buttonType = {
     background: theme.palette.success.main,
     hover: theme.palette.success.light,
@@ -202,12 +202,10 @@ const Email = () => {
           <Grid item container xs={12} spacing={2} component="div">
             <Grid item xs={6}>
               <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" 
-               className={classes.FormLabel}
-               >
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Name
                 </FormLabel>
-                <FormControl fullWidth >
+                <FormControl fullWidth>
                   <FormSelect
                     options={referralOptions}
                     value={referral}
@@ -220,7 +218,7 @@ const Email = () => {
             {/* second grid */}
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend"    className={classes.FormLabel}>
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Date
                 </FormLabel>
                 <FormControl fullWidth>
@@ -237,7 +235,7 @@ const Email = () => {
           <Grid item container xs={12} spacing={2} marginBottom={8}>
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend"     className={classes.FormLabel}>
+                <FormLabel component="legend" className={classes.FormLabel}>
                   Category
                 </FormLabel>
                 <FormControl fullWidth style={{ height: "3rem" }}>
@@ -252,7 +250,13 @@ const Email = () => {
             </Grid>
           </Grid>
           <Grid item container xs={12}>
-            <Button variant="contained" onClick={handleDialogClose} to="/view" type="submit" className={classes.button}>
+            <Button
+              variant="contained"
+              onClick={handleDialogClose}
+              to="/view"
+              type="submit"
+              className={classes.button}
+            >
               Apply Filter
             </Button>
           </Grid>
