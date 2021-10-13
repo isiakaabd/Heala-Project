@@ -112,6 +112,11 @@ export const muiTheme = createTheme({
       height: "25.8rem",
       cursor: "pointer",
     },
+     FormLabel:{
+     color: grey,
+     fontSize:"1.6rem"
+    
+  },
   },
   components: {
     MuiAppBar: {

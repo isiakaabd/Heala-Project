@@ -66,9 +66,8 @@ const FilterList = ({ width, title, onClick }) => {
         variant="contained"
         disableRipple
         onClick={onClick}
-        // #={(event) => setAnchorEl(event.currentTarget)}
         endIcon={<IoOptions size={20} className={classes.icon} />}
-        className={classes.button}
+         className={classes.button}
       >
         {title}
       </Button>

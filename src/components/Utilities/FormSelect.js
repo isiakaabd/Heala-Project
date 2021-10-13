@@ -29,8 +29,6 @@ const FormSelect = ({ value, onChange, placeholderText, options, ...rest }) => {
         value={value}
         onChange={onChange}
         displayEmpty
-        size="large"
-        // size="lar"
         style={{ minHeight: 60 }}
         inputProps={{ "aria-label": "Select Referral Type" }}
         IconComponent={KeyboardArrowDownIcon}

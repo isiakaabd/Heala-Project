@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+   FormLabel:{
+    "&.MuiFormLabel-root":{
+    ...theme.typography.FormLabel
+    }
+  },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: "#fff",
@@ -217,7 +222,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           <Grid item container xs={12} spacing={2} component="div">
             <Grid item xs={6}>
               <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend"  className={classes.FormLabel}>
                   Name
                 </FormLabel>
                 <FormControl fullWidth size="large">
@@ -233,7 +238,7 @@ const HCP = ({ setSelectedSubMenu }) => {
             {/* second grid */}
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend"  className={classes.FormLabel}>
                   Date
                 </FormLabel>
                 <FormControl fullWidth>
@@ -250,7 +255,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           <Grid item container xs={12} spacing={2} marginBottom={8}>
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend"  className={classes.FormLabel}>
                   Medical ID
                 </FormLabel>
                 <FormControl fullWidth style={{ height: "3rem" }}>

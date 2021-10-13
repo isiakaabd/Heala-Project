@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  FormLabel:{
+    "&.MuiFormLabel-root":{
+    ...theme.typography.FormLabel
+    }
+  },
 
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -70,14 +75,10 @@ const Email = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleDialogOpen = () => {
-    setIsOpen(true);
-  };
-  const handleDialogClose = () => {
-    setIsOpen(false);
-    console.log(123);
-  };
-
+  const handleDialogOpen = () => setIsOpen(true);
+  
+  const handleDialogClose = () => setIsOpen(false);
+  
   const buttonType = {
     background: theme.palette.success.main,
     hover: theme.palette.success.light,
@@ -201,10 +202,12 @@ const Email = () => {
           <Grid item container xs={12} spacing={2} component="div">
             <Grid item xs={6}>
               <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend" 
+               className={classes.FormLabel}
+               >
                   Name
                 </FormLabel>
-                <FormControl fullWidth size="large">
+                <FormControl fullWidth >
                   <FormSelect
                     options={referralOptions}
                     value={referral}
@@ -217,7 +220,7 @@ const Email = () => {
             {/* second grid */}
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend"    className={classes.FormLabel}>
                   Date
                 </FormLabel>
                 <FormControl fullWidth>
@@ -234,7 +237,7 @@ const Email = () => {
           <Grid item container xs={12} spacing={2} marginBottom={8}>
             <Grid item xs={6}>
               <Grid container gap={1} direction="column">
-                <FormLabel component="legend" color="secondary">
+                <FormLabel component="legend"     className={classes.FormLabel}>
                   Category
                 </FormLabel>
                 <FormControl fullWidth style={{ height: "3rem" }}>

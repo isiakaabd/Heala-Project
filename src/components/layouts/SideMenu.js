@@ -7,8 +7,9 @@ import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
+import { useActions } from "components/hooks/useActions";
 
 const useStyles = makeStyles((theme) => ({
   aside: {
@@ -114,10 +115,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu, setIsAuthenticated }) => {
+const SideMenu = (props) => {
+  const { selectedMenu, setSelectedMenu, setSelectedSubMenu } = props;
+
+  const { logout } = useActions();
+
   const classes = useStyles();
 
   const location = useLocation();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    setSelectedMenu(12);
+    logout();
+
+    history.push("/");
+  };
 
   useEffect(() => {
     [...menus].filter((menu) => {
@@ -162,14 +175,7 @@ const SideMenu = ({ selectedMenu, setSelectedMenu, setSelectedSubMenu, setIsAuth
             <ListItemText>{menu.title}</ListItemText>
           </ListItemButton>
         ))}
-        <ListItemButton
-          disableRipple
-          onClick={() => {
-            setSelectedMenu(12);
-            setIsAuthenticated(false);
-          }}
-          classes={{ root: classes.logout }}
-        >
+        <ListItemButton disableRipple onClick={handleLogout} classes={{ root: classes.logout }}>
           <ListItemIcon>
             <HiLogout size={20} />
           </ListItemIcon>
@@ -185,7 +191,6 @@ SideMenu.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setIsAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default SideMenu;
