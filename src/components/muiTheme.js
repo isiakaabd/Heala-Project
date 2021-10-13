@@ -9,6 +9,7 @@ const lighterGrey = "F2F2F2";
 const green = "#3EA584";
 const lightGreen = "#ECF6F3";
 const gold = "rgb(243, 173, 83)";
+const black = "#2D2F39";
 
 export const muiTheme = createTheme({
   palette: {
@@ -22,6 +23,7 @@ export const muiTheme = createTheme({
       lighterGrey,
       lightGreen,
       gold,
+      black,
     },
     primary: {
       main: dark,
@@ -114,6 +116,10 @@ export const muiTheme = createTheme({
       borderRadius: 10,
       height: "25.8rem",
       cursor: "pointer",
+    },
+    FormLabel: {
+      color: grey,
+      fontSize: "1.6rem",
     },
   },
   components: {

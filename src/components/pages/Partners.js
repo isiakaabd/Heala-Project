@@ -4,10 +4,15 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
 import { makeStyles } from "@mui/styles";
+import Modals from "components/Utilities/Modal";
+import FormSelect from "components/Utilities/FormSelect";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import CustomButton from "components/Utilities/CustomButton";
+import useFormInput from "components/hooks/useFormInput";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -105,12 +110,23 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
+  },
+  searchFilterBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: theme.palette.common.black,
+      width: "100%",
+    },
+  },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "consultations" },
-];
+const names = ["General Hospital, Lekki", "H-Medix", "X Lab"];
+const dates = ["Hello", "World", "Goodbye", "World"];
+const categories = ["Hospital", "Pharmacy", "Diagnostic Center"];
 
 const Partners = () => {
   const classes = useStyles();
@@ -123,11 +139,17 @@ const Partners = () => {
   };
 
   const [searchPartner, setSearchPartner] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [openFilterPartner, setOpenFilterPartner] = useState(false);
+  const [filterSelectInput, handleSelectedInput] = useFormInput({
+    hospitalName: "",
+    date: "",
+    category: "",
+  });
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+
+  const { hospitalName, date, category } = filterSelectInput;
 
   return (
     <Grid container direction="column">
@@ -141,14 +163,7 @@ const Partners = () => {
           />
         </Grid>
         <Grid item className={classes.actionBtnGrid}>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter HCPs"
-            options={options}
-          />
+          <FilterList title="Filter HCPs" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
         {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
@@ -244,6 +259,75 @@ const Partners = () => {
             })}
         </EnhancedTable>
       </Grid>
+      <Modals
+        isOpen={openFilterPartner}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={() => setOpenFilterPartner(false)}
+      >
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Name
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    name="hospitalName"
+                    options={names}
+                    value={hospitalName}
+                    onChange={handleSelectedInput}
+                    placeholderText="Select name"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item md>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Date
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    name="date"
+                    options={dates}
+                    value={date}
+                    onChange={handleSelectedInput}
+                    placeholderText="Choose Date"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+          <Grid item md>
+            <FormLabel component="legend" className={classes.FormLabel}>
+              Category
+            </FormLabel>
+            <FormControl fullWidth>
+              <FormSelect
+                name="category"
+                options={categories}
+                value={category}
+                onChange={handleSelectedInput}
+                placeholderText="Select category"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item md></Grid>
+        </Grid>
+        <Grid item container xs={12}>
+          <Button
+            variant="contained"
+            onClick={() => setOpenFilterPartner(false)}
+            type="submit"
+            className={classes.searchFilterBtn}
+            disableRipple
+          >
+            Apply Filter
+          </Button>
+        </Grid>
+      </Modals>
     </Grid>
   );
 };

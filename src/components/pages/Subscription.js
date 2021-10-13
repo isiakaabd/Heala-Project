@@ -21,15 +21,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import { ReactComponent as Naira } from "assets/images/naira.svg";
 import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.css-13i4rnv-MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
+    },
+  },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
     },
   },
   button: {
@@ -59,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
+    },
+  },
+  btn: {
+    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      ...theme.typography.btn,
+      width: "100%",
     },
   },
   closeIcon: {
@@ -287,54 +298,60 @@ const Subscription = () => {
         <>
           <Grid item container spacing={2} component="div">
             <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
-                Name of plan
-              </FormLabel>
-              <FormControl style={{ maxWidth: "100%" }}>
-                <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
-              </FormControl>
+              <Grid container direction="column" gap={1}>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Name of plan
+                </FormLabel>
+                <FormControl style={{ maxWidth: "100%" }}>
+                  <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
+                </FormControl>
+              </Grid>
             </Grid>
             <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
-                Category
-              </FormLabel>
-              <FormControl fullWidth>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Amount"
-                  startAdornment={
-                    <Naira
-                      color="error"
-                      style={{
-                        background: theme.palette.common.lightRed,
-                        marginRight: "1rem",
-                        padding: ".6rem ",
-                      }}
-                    />
-                  }
-                />
-              </FormControl>
+              <Grid container direction="column" gap={1}>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Category
+                </FormLabel>
+                <FormControl fullWidth>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    placeholder="Enter Amount"
+                    startAdornment={
+                      <Naira
+                        color="success"
+                        style={{
+                          background: theme.palette.common.lightGreen,
+                          marginRight: "1rem",
+                          padding: ".6rem ",
+                        }}
+                      />
+                    }
+                  />
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <FormLabel component="legend" color="secondary">
-              Plan Description
-            </FormLabel>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              placeholder="Type Plan description"
-              rows={4}
-              style={{ width: "100%", height: "4%" }}
-            />
+            <Grid container direction="column" gap={1}>
+              <FormLabel component="legend" className={classes.FormLabel}>
+                Plan Description
+              </FormLabel>
+              <TextField
+                id="outlined-multiline-static"
+                multiline
+                placeholder="Type Plan description"
+                rows={4}
+                style={{ width: "100%", height: "4%" }}
+              />
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Button
               variant="contained"
               to="/view"
               type="submit"
-              color="error"
-              style={{ width: "100%", padding: "1.2rem" }}
+              className={classes.btn}
+              onClick={handleDialogClose}
             >
               Save Plan
             </Button>

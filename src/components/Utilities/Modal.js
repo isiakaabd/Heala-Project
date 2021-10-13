@@ -14,23 +14,25 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
 
       "&:hover": {
-        color: theme.palette.common.red,
+        color: "red",
       },
     },
   },
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  borderRadius: "2rem",
-  p: 4,
-};
-const Modals = ({ isOpen, handleClose, title, color, children }) => {
+const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, height }) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 500,
+    height: height,
+    bgcolor: "background.paper",
+    borderRadius: "2rem",
+    p: 4,
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -41,7 +43,7 @@ const Modals = ({ isOpen, handleClose, title, color, children }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Grid container rowSpacing={3} className={classes.modal}>
+          <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
             <Grid item container justifyContent="space-between" alignItems="center">
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
@@ -67,5 +69,12 @@ Modals.propTypes = {
   children: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
+  height: PropTypes.string,
+  rowSpacing: PropTypes.number,
 };
+
+Modals.defaultProps = {
+  height: "80vh",
+};
+
 export default Modals;
