@@ -21,9 +21,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import TextField from "@mui/material/TextField";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import { ReactComponent as Naira } from "assets/images/naira.svg";
 import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -31,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
       flex: 1,
       marginRight: "5rem",
     },
+  },
+  FormLabel:{
+    "&.MuiFormLabel-root":{
+    ...theme.typography.FormLabel
+    }
   },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -59,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
+    },
+  },
+   btn: {
+    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      ...theme.typography.btn,
+      width: "100%",
     },
   },
   closeIcon: {
@@ -286,16 +297,20 @@ const Subscription = () => {
       <Modals isOpen={isOpen} title="Create new plan" handleClose={handleDialogClose}>
         <>
           <Grid item container spacing={2} component="div">
+           
             <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
+               <Grid container direction="column" gap={1}>
+              <FormLabel component="legend"  className={classes.FormLabel}>
                 Name of plan
               </FormLabel>
               <FormControl style={{ maxWidth: "100%" }}>
                 <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
               </FormControl>
             </Grid>
+            </Grid>
             <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
+               <Grid container direction="column" gap={1}>
+              <FormLabel component="legend"  className={classes.FormLabel}>
                 Category
               </FormLabel>
               <FormControl fullWidth>
@@ -304,9 +319,9 @@ const Subscription = () => {
                   placeholder="Enter Amount"
                   startAdornment={
                     <Naira
-                      color="error"
+                      color="success"
                       style={{
-                        background: theme.palette.common.lightRed,
+                        background: theme.palette.common.lightGreen,
                         marginRight: "1rem",
                         padding: ".6rem ",
                       }}
@@ -315,9 +330,11 @@ const Subscription = () => {
                 />
               </FormControl>
             </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
-            <FormLabel component="legend" color="secondary">
+             <Grid container direction="column" gap={1}>
+            <FormLabel component="legend"  className={classes.FormLabel}>
               Plan Description
             </FormLabel>
             <TextField
@@ -328,13 +345,14 @@ const Subscription = () => {
               style={{ width: "100%", height: "4%" }}
             />
           </Grid>
+          </Grid>
           <Grid item xs={12}>
             <Button
               variant="contained"
               to="/view"
               type="submit"
-              color="error"
-              style={{ width: "100%", padding: "1.2rem" }}
+             className={classes.btn}
+              onClick={handleDialogClose}
             >
               Save Plan
             </Button>

@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { makeStyles } from "@mui/styles";
 import { IoOptions } from "react-icons/io5";
 
-const FilterList = ({ width, title, options }) => {
+const FilterList = ({ width, title, onClick }) => {
   const useStyles = makeStyles((theme) => ({
     button: {
       "&.MuiButton-root": {
@@ -61,17 +61,17 @@ const FilterList = ({ width, title, options }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <Button
         variant="contained"
         disableRipple
-        onClick={(event) => setAnchorEl(event.currentTarget)}
+        onClick={onClick}
         endIcon={<IoOptions size={20} className={classes.icon} />}
-        className={classes.button}
+         className={classes.button}
       >
         {title}
       </Button>
-      <Menu
+      {/* <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -92,15 +92,15 @@ const FilterList = ({ width, title, options }) => {
             {option.value}
           </MenuItem>
         ))}
-      </Menu>
-    </Fragment>
+      </Menu> */}
+    </>
   );
 };
 
 FilterList.propTypes = {
   width: PropTypes.string,
   title: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default FilterList;
