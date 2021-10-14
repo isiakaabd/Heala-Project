@@ -16,7 +16,7 @@ import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
-import DisablePatient from "components/modals/DisablePatient";
+import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -262,7 +262,13 @@ const PatientProfile = () => {
           />
         </Grid>
         <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
-        <DisablePatient open={openDisablePatient} setOpen={setOpenDisablePatient} />
+        <DisablePatient
+          open={openDisablePatient}
+          setOpen={setOpenDisablePatient}
+          title="Delete Partner"
+          btnValue="disable"
+          confirmationMsg="disable Patient"
+        />
       </Grid>
     </Grid>
   );

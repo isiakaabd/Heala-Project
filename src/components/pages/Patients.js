@@ -239,89 +239,106 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
         </Grid>
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <>
-          {/* <Grid item component="div"  container spacing={3} xs={12}> */}
-          <Grid item container xs={12} spacing={2} component="div">
-            <Grid item xs={6}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Date
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    name="date"
-                    options={referralOptions}
-                    value={date}
-                    onChange={handleInputValue}
-                    placeholderText="Choose Date"
-                  />
-                </FormControl>
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Date
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="date"
+                        options={referralOptions}
+                        value={date}
+                        onChange={handleInputValue}
+                        placeholderText="Choose Date"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-            {/* second grid */}
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Plan
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    name="plan"
-                    options={plans}
-                    value={plan}
-                    onChange={handleInputValue}
-                    placeholderText="Select plan"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} spacing={2} marginBottom={8}>
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Gender
-                </FormLabel>
-                <FormControl fullWidth style={{ height: "3rem" }}>
-                  <FormSelect
-                    name="gender"
-                    options={genderType}
-                    value={gender}
-                    onChange={handleInputValue}
-                    placeholderText="Choose gender"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Status
-                </FormLabel>
-                <FormControl fullWidth style={{ height: "3rem" }}>
-                  <FormSelect
-                    name="status"
-                    options={statusType}
-                    value={status}
-                    onChange={handleInputValue}
-                    placeholderText="Select Status"
-                  />
-                </FormControl>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Specialization
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="plan"
+                        options={plans}
+                        value={plan}
+                        onChange={handleInputValue}
+                        placeholderText="Select plan"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12} style={{ marginTop: "5rem" }}>
+          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Hospital
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="gender"
+                        options={genderType}
+                        value={gender}
+                        onChange={handleInputValue}
+                        placeholderText="Choose gender"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Status
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="status"
+                        options={statusType}
+                        value={status}
+                        onChange={handleInputValue}
+                        placeholderText="Select Status"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
             <Button
               variant="contained"
               onClick={handleDialogClose}
-              to="/view"
               type="submit"
               className={classes.searchFilterBtn}
             >
               Apply Filter
             </Button>
           </Grid>
-        </>
+        </Grid>
       </Modals>
     </>
   );

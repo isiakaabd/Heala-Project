@@ -8,6 +8,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Card from "components/Utilities/Card";
+import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
@@ -16,7 +17,6 @@ import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.s
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
-import DisablePatient from "components/modals/DisablePatient";
 import ReferPatient from "components/modals/ReferPatient";
 
 const useStyles = makeStyles((theme) => ({
@@ -224,7 +224,13 @@ const SinglePatient = (props) => {
           </Grid>
         ))}
       </Grid>
-      <DisablePatient open={openDisablePatient} setOpen={setOpenDisablePatient} />
+      <DisablePatient
+        open={openDisablePatient}
+        setOpen={setOpenDisablePatient}
+        title="Delete Partner"
+        btnValue="disable"
+        confirmationMsg="disable Patient"
+      />
       <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
     </Grid>
   );
