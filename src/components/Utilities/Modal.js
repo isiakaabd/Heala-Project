@@ -41,7 +41,7 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        sx={{ height: "100%" }}
+        // sx={{ background: "red" }}
       >
         <Box sx={style}>
           <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>

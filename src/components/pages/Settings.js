@@ -96,7 +96,7 @@ const Settings = ({ setSelectedSubMenu }) => {
         >
           <Card
             alt="list management Icon"
-            title="Listmanagement"
+            title="List management"
             background={theme.palette.common.lightRed}
           >
             <CalendarIcon fill={theme.palette.common.red} />

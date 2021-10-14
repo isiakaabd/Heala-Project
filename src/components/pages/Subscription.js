@@ -166,9 +166,6 @@ const Subscription = () => {
   const handleDeleteOpenDialog = () => {
     setdeleteModal(true);
   };
-  // const handleDeleteCloseDialog = () => {
-  //   setdeleteModal(false);
-  // };
   const handleEditOpenDialog = () => {
     setEdit(true);
   };

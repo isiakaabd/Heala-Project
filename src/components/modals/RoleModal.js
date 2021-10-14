@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import FormLabel from "@mui/material/FormLabel";
-import TextField from "@mui/material/TextField";
-import { ReactComponent as Naira } from "assets/images/naira.svg";
+import { rows } from "components/Utilities/DataHeader";
 import FormControl from "@mui/material/FormControl";
+import CheckboxesGroup from "components/Utilities/CheckBox";
+import TextField from "@mui/material/TextField";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
-
 const useStyles = makeStyles((theme) => ({
   btn: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -16,7 +15,11 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
-
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
+  },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: "#fff",
@@ -31,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
       "&:hover": {
         background: "#fcfcfc",
       },
-
       "&:active": {
         background: "#fafafa",
       },
@@ -47,114 +49,74 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export const SubscriptionModal = ({ handleDialogClose, type }) => {
-  const classes = useStyles();
-  const theme = useTheme();
+export const RoleModal = ({ handleDialogClose, type }) => {
   const handleDialogCloses = () => {
     if (type === "edit") {
       console.log("hi from edit");
-      console.log(sub);
+      console.log(manage);
     } else {
-      console.log(sub);
+      console.log(manage);
     }
     handleDialogClose();
   };
+  const [manage, setManage] = useState({
+    name: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSub({ ...sub, [name]: value });
+    setManage({ ...manage, [name]: value });
   };
-
-  const [sub, setSub] = useState({
-    plan: "",
-    amount: "",
-    description: "",
-  });
-  const { plan, amount, description } = sub;
+  const classes = useStyles();
+  const { name } = manage;
   return (
     <>
       <Grid item container direction="column">
-        <Grid item container spacing={2}>
-          <Grid item xs={6} marginBottom={4}>
+        <Grid item container>
+          <Grid item container marginBottom={4}>
             <Grid container direction="column" gap={1}>
               <FormLabel component="legend" className={classes.FormLabel}>
-                Name of plan
+                Name of role
               </FormLabel>
               <FormControl fullWidth>
                 <TextField
                   id="outlined-adornment-amount"
-                  name="plan"
-                  value={plan}
+                  name="name"
+                  value={name}
                   placeholder="Enter Plan Name"
                   onChange={handleChange}
                 />
               </FormControl>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Grid container direction="column" gap={1}>
+
+          <Grid item container xs={12}>
+            <Grid item container direction="column" gap={1}>
               <FormLabel component="legend" className={classes.FormLabel}>
-                Category
+                Permission
               </FormLabel>
-              <FormControl fullWidth>
-                <TextField
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Amount"
-                  onChange={handleChange}
-                  name="amount"
-                  value={amount}
-                  InputProps={{
-                    startAdornment: (
-                      <Naira
-                        style={{
-                          background: theme.palette.common.lightGreen,
-                          marginRight: "1rem",
-                          padding: ".6rem ",
-                          borderRadius: "3px",
-                        }}
-                      />
-                    ),
-                  }}
-                />
+              <FormControl style={{ width: "100%" }}>
+                <CheckboxesGroup row={rows[0].permission} />
               </FormControl>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container spacing={2}>
-          <Grid item container direction="column" gap={1}>
-            <FormLabel component="legend" className={classes.FormLabel}>
-              Plan Description
-            </FormLabel>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              name="description"
-              value={description}
-              placeholder="Type Plan description"
-              rows={4}
-              style={{ width: "100%", height: "4%" }}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
       </Grid>
-
-      <Grid item container marginTop={12}>
+      <Grid item xs={12} marginTop={10}>
         <Button
           variant="contained"
           type="submit"
-          className={classes.btn}
           onClick={handleDialogCloses}
+          className={classes.btn}
         >
-          Save Plan
+          Add Role
         </Button>
       </Grid>
     </>
   );
 };
 
-SubscriptionModal.propTypes = {
+RoleModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
 };

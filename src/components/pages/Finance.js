@@ -104,7 +104,7 @@ const Finance = ({ setSelectedSubMenu }) => {
   const theme = useTheme();
 
   const classes = useStyles();
-  const options = [1, 2, 3];
+  const options = ["1", "2", "3"];
   const [finance, setFinance] = useState("");
 
   return (

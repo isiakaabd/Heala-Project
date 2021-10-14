@@ -143,7 +143,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
       </Grid>
 
       <Grid container className={classes.parentGrid}>
-        <Grid item container className={classes.firstGrid} component="row">
+        <Grid item container className={classes.firstGrid}>
           <Grid container sx={{ maxWidth: "40%" }}>
             <Grid
               item
@@ -227,7 +227,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item sm container spacing={2} className={classes.spacing}>
               {imageuploadContainer.map((img, index) => {
                 return (
-                  <Grid container direction="row" xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
+                  <Grid container item xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
                     <Grid item xs={3}>
                       <Avatar variant="square" src={imageUpload} />
                     </Grid>
@@ -235,7 +235,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                       <Grid>
                         <Typography variant="h6">{img.text}</Typography>
                       </Grid>
-                      <Grid item sm container direction="row">
+                      <Grid item sm container>
                         <Typography variant="h6">{img.value}</Typography>
                         <Typography variant="h6">{img.time}</Typography>
                       </Grid>
