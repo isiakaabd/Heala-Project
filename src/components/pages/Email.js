@@ -80,9 +80,9 @@ const Email = () => {
   const handleDialogClose = () => setIsOpen(false);
 
   const buttonType = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
   };
 
   return (
@@ -103,7 +103,7 @@ const Email = () => {
           <Grid item>
             <CustomButton
               endIcon={<DownloadSharpIcon />}
-              title="Download email"
+              title="Download Email"
               type={buttonType}
             />
           </Grid>
@@ -198,43 +198,43 @@ const Email = () => {
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <>
-          {/* <Grid item component="div"  container spacing={3} xs={12}> */}
-          <Grid item container xs={12} spacing={2} component="div">
-            <Grid item xs={6}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Name
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Select Name"
-                  />
-                </FormControl>
+          <Grid item container direction="column">
+            <Grid item container spacing={2}>
+              <Grid item xs={6} marginBottom={4}>
+                <Grid container direction="column" gap={1}>
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Name
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={referralOptions}
+                      value={referral}
+                      onChange={(event) => setReferral(event.target.value)}
+                      placeholderText="Select Name"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              {/* second grid */}
+              <Grid item xs={6}>
+                <Grid container gap={1} direction="column">
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Date
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={referralOptions}
+                      value={referral}
+                      onChange={(event) => setReferral(event.target.value)}
+                      placeholderText="Choose Date"
+                    />
+                  </FormControl>
+                </Grid>
               </Grid>
             </Grid>
-            {/* second grid */}
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Date
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Choose Date"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} spacing={2} marginBottom={8}>
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
+            {/* <Grid item container xs={6} direction="column"> */}
+            <Grid item container spacing={2}>
+              <Grid item container gap={1} xs={6}>
                 <FormLabel component="legend" className={classes.FormLabel}>
                   Category
                 </FormLabel>
@@ -249,7 +249,7 @@ const Email = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12}>
+          <Grid item container xs={12} marginTop={20}>
             <Button
               variant="contained"
               onClick={handleDialogClose}

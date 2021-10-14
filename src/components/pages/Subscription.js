@@ -6,7 +6,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
@@ -20,10 +19,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
-import TextField from "@mui/material/TextField";
-import { ReactComponent as Naira } from "assets/images/naira.svg";
-import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import { SubscriptionModal } from "components/modals/SubscriptionModal";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -158,11 +155,24 @@ const Subscription = () => {
   const theme = useTheme();
 
   const [isOpen, setIsOpen] = useState(false);
-
+  const [edit, setEdit] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
-  const handleDialogClose = () => {
+  const handleEditCloseDialog = () => {
+    setEdit(false);
+  };
+  const handleDeleteOpenDialog = () => {
+    setdeleteModal(true);
+  };
+  // const handleDeleteCloseDialog = () => {
+  //   setdeleteModal(false);
+  // };
+  const handleEditOpenDialog = () => {
+    setEdit(true);
+  };
+  const handleDialogClose = async () => {
     setIsOpen(false);
   };
 
@@ -172,9 +182,9 @@ const Subscription = () => {
   const [searchMail, setSearchMail] = useState("");
 
   const buttonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
   };
 
   return (
@@ -271,6 +281,7 @@ const Subscription = () => {
                       <Button
                         variant="contained"
                         disableRipple
+                        onClick={handleEditOpenDialog}
                         className={`${classes.tableBtn} ${classes.greenBtn}`}
                         endIcon={<EditIcon color="success" />}
                       >
@@ -279,6 +290,7 @@ const Subscription = () => {
                       <Button
                         variant="contained"
                         disableRipple
+                        onClick={handleDeleteOpenDialog}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         to="/view"
                         endIcon={<DeleteIcon color="error" />}
@@ -294,70 +306,28 @@ const Subscription = () => {
         </Grid>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} title="Create new plan" handleClose={handleDialogClose}>
-        <>
-          <Grid item container spacing={2} component="div">
-            <Grid item xs={6}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Name of plan
-                </FormLabel>
-                <FormControl style={{ maxWidth: "100%" }}>
-                  <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Category
-                </FormLabel>
-                <FormControl fullWidth>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    placeholder="Enter Amount"
-                    startAdornment={
-                      <Naira
-                        color="success"
-                        style={{
-                          background: theme.palette.common.lightGreen,
-                          marginRight: "1rem",
-                          padding: ".6rem ",
-                        }}
-                      />
-                    }
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container direction="column" gap={1}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Plan Description
-              </FormLabel>
-              <TextField
-                id="outlined-multiline-static"
-                multiline
-                placeholder="Type Plan description"
-                rows={4}
-                style={{ width: "100%", height: "4%" }}
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              to="/view"
-              type="submit"
-              className={classes.btn}
-              onClick={handleDialogClose}
-            >
-              Save Plan
-            </Button>
-          </Grid>
-        </>
+      <Modals
+        isOpen={isOpen}
+        title="Create new plan"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
+        <SubscriptionModal handleDialogClose={handleDialogClose} type="add" />
       </Modals>
+
+      {/* edit Modal */}
+      <Modals isOpen={edit} title="Edit plan" rowSpacing={5} handleClose={handleEditCloseDialog}>
+        <SubscriptionModal handleDialogClose={handleEditCloseDialog} type="edit" />
+      </Modals>
+
+      {/* delete modal */}
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Plan"
+        confirmationMsg="delete plan"
+        btnValue="Delete"
+      />
     </>
   );
 };

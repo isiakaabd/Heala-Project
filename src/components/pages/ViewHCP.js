@@ -92,11 +92,10 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const theme = useTheme();
 
   const redButton = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
   };
-
   const imageuploadContainer = [
     {
       value: "74.89KB, ",
@@ -153,7 +152,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               sx={{ justifyContent: "space-between", alignItems: "center", minWidth: "60%" }}
             >
               <Grid item>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant="h6" color="secondary">
                   Date:
                 </Typography>
               </Grid>
