@@ -36,7 +36,7 @@ const style = {
   borderRadius: "1rem",
 };
 
-const DisablePatient = ({ open, setOpen }) => {
+const DeleteOrDisable = ({ open, setOpen, title, confirmationMsg, btnValue, ...rest }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -78,22 +78,28 @@ const DisablePatient = ({ open, setOpen }) => {
               <BsExclamationCircle size="10rem" color={theme.palette.warning.main} />
             </Grid>
             <Grid item style={{ marginBottom: "2rem" }}>
-              <Typography variant="h2">Disable Patient</Typography>
+              <Typography variant="h2">{title}</Typography>
             </Grid>
             <Grid item style={{ marginBottom: "5rem" }}>
-              <Typography variant="body1">Are you sure to want to disable patient?</Typography>
+              <Typography variant="body1">{`Are you sure you want to ${confirmationMsg}?`}</Typography>
             </Grid>
             <Grid item container style={{ padding: "0 7rem" }}>
               <Grid item md style={{ marginRight: "2rem" }}>
                 <CustomButton
                   title="Discard"
-                  textColor={theme.palette.common.dark}
+                  textColor={theme.palette.common.black}
                   type={discardButton}
                   width="100%"
+                  onClick={() => setOpen(false)}
                 />
               </Grid>
               <Grid item md style={{ marginLeft: "2rem" }}>
-                <CustomButton title="Yes, disable" type={disableButton} width="100%" />
+                <CustomButton
+                  title={`Yes, ${btnValue}`}
+                  type={disableButton}
+                  width="100%"
+                  onClick={() => setOpen(false)}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -103,9 +109,12 @@ const DisablePatient = ({ open, setOpen }) => {
   );
 };
 
-DisablePatient.propTypes = {
+DeleteOrDisable.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  confirmationMsg: PropTypes.string.isRequired,
+  btnValue: PropTypes.string.isRequired,
 };
 
-export default DisablePatient;
+export default DeleteOrDisable;
