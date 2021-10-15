@@ -12,7 +12,7 @@ const Dashboard = () => {
       <Grid item>
         <DashboardCharts />
       </Grid>
-      <WaitingListTable />
+      <WaitingListTable path="/dashboard/waiting-list/listId" />
       <AvailabilityTable />
     </Grid>
   );

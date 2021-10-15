@@ -20,11 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-157lt5z-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.3rem !important",
-      //   height: "2.7rem",
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
       borderRadius: "1.5rem",
     },
   },
@@ -44,7 +41,6 @@ const DisplayProfile = (props) => {
 
   return (
     <Grid
-      item
       container
       justifyContent="space-between"
       alignItems="center"
@@ -77,7 +73,7 @@ const DisplayProfile = (props) => {
                         <Chip label="Dentistry" color="success" className={classes.badge} />
                       </Typography>
                     </Grid>
-                  ) : (
+                  ) : status ? (
                     <Grid item>
                       {" "}
                       <Typography variant="h4">
@@ -86,10 +82,20 @@ const DisplayProfile = (props) => {
                           label={status}
                           color={status === "Active" ? "success" : "error"}
                           className={classes.badge}
+                          style={{
+                            background:
+                              status === "Active"
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === "Active"
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
                         />
                       </Typography>
                     </Grid>
-                  )}
+                  ) : null}
                 </Grid>
               </Grid>
             </Grid>
