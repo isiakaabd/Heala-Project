@@ -118,11 +118,9 @@ const useStyles = makeStyles((theme) => ({
 
   badge: {
     "&.css-1eelh6y-MuiChip-root": {
-      fontSize: "1.3rem !important",
+      fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
-      color: "#9497A1",
-      background: "#F2F2F2",
     },
     modal: {
       background: "red !important",
@@ -162,9 +160,21 @@ const Management = () => {
     setEdit(false);
   };
   const buttonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
+  const checkbox = {
+    create: true,
+    update: true,
+    Delete: false,
+    read: false,
+  };
+  const checkbox1 = {
+    create: false,
+    update: true,
+    Delete: false,
+    read: false,
   };
 
   return (
@@ -300,12 +310,12 @@ const Management = () => {
       </Grid>
       {/* // modal */}
       <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
-        <RoleModal handleDialogClose={handleDialogClose} type="add" />
+        <RoleModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
       </Modals>
 
       {/* Edit */}
       <Modals isOpen={edit} title="Edit role" handleClose={handleEditDialogCloses}>
-        <RoleModal handleDialogClose={handleEditDialogCloses} type="edit" />
+        <RoleModal handleDialogClose={handleEditDialogCloses} type="edit" checkbox={checkbox1} />
       </Modals>
       {/* delete modal */}
       <DeleteOrDisable

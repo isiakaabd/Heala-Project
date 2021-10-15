@@ -232,7 +232,6 @@ const Email = () => {
                 </Grid>
               </Grid>
             </Grid>
-          
             <Grid item container spacing={2}>
               <Grid item container gap={1} xs={6}>
                 <FormLabel component="legend" className={classes.FormLabel}>

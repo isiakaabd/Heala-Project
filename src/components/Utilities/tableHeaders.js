@@ -53,8 +53,6 @@ export const PermissionHeader = [
     id: 6,
     label: "CRUD",
   },
- 
-
   {
     id: 3,
     label: "",

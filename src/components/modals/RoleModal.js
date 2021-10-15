@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import FormLabel from "@mui/material/FormLabel";
-import { rows } from "components/Utilities/DataHeader";
+import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
-import CheckboxesGroup from "components/Utilities/CheckBox";
-import TextField from "@mui/material/TextField";
-import { Grid } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import PropTypes from "prop-types";
+import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
+import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -15,60 +17,59 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  checkboxContainer: {
+    "&.MuiBox-root": {
+      padding: "2rem 0",
+      border: "1px solid #E0E0E0",
+      borderRadius: ".4rem",
+      "&:active": {
+        border: "2px solid black",
+      },
+    },
+  },
+  checkbox: {
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+    },
+    "&.Mui-checked": {
+      color: "green !important",
+    },
+  },
   FormLabel: {
     "&.MuiFormLabel-root": {
       ...theme.typography.FormLabel,
     },
   },
-  button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "15rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
 }));
-export const RoleModal = ({ handleDialogClose, type }) => {
+
+export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
   const handleDialogCloses = () => {
     if (type === "edit") {
       console.log("hi from edit");
       console.log(manage);
     } else {
+      console.log("hi from add");
       console.log(manage);
     }
     handleDialogClose();
   };
   const [manage, setManage] = useState({
     name: "",
+    ...checkbox,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setManage({ ...manage, [name]: value });
   };
+  const handleCheckBoxChange = (e) => {
+    const { name, checked } = e.target;
+    setManage({ ...manage, [name]: checked });
+  };
+
   const classes = useStyles();
-  const { name } = manage;
+  const { name, create, update, Delete, read } = manage;
+
   return (
     <>
       <Grid item container direction="column">
@@ -96,7 +97,58 @@ export const RoleModal = ({ handleDialogClose, type }) => {
                 Permission
               </FormLabel>
               <FormControl style={{ width: "100%" }}>
-                <CheckboxesGroup row={rows[0].permission} />
+                <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
+                  <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
+                    <FormGroup>
+                      <Grid container>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              className={classes.checkbox}
+                              checked={create}
+                              onChange={handleCheckBoxChange}
+                              name="create"
+                            />
+                          }
+                          label="create"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              className={classes.checkbox}
+                              checked={Delete}
+                              onChange={handleCheckBoxChange}
+                              name="Delete"
+                            />
+                          }
+                          label="Delete"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              className={classes.checkbox}
+                              checked={update}
+                              onChange={handleCheckBoxChange}
+                              name="update"
+                            />
+                          }
+                          label="update"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              className={classes.checkbox}
+                              checked={read}
+                              onChange={handleCheckBoxChange}
+                              name="read"
+                            />
+                          }
+                          label="read"
+                        />
+                      </Grid>
+                    </FormGroup>
+                  </FormControl>
+                </Box>
               </FormControl>
             </Grid>
           </Grid>
@@ -109,7 +161,7 @@ export const RoleModal = ({ handleDialogClose, type }) => {
           onClick={handleDialogCloses}
           className={classes.btn}
         >
-          Add Role
+          {type === "edit" ? "Save changes" : "Add Role"}
         </Button>
       </Grid>
     </>
@@ -119,4 +171,5 @@ export const RoleModal = ({ handleDialogClose, type }) => {
 RoleModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
+  checkbox: PropTypes.object.isRequired,
 };
