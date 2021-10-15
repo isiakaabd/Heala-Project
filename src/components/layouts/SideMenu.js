@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SideMenu = (props) => {
-  const { selectedMenu, setSelectedMenu, setSelectedSubMenu } = props;
+  const { selectedMenu, setSelectedMenu, setSelectedSubMenu, setWaitingListMenu } = props;
 
   const { logout } = useActions();
 
@@ -145,7 +145,7 @@ const SideMenu = (props) => {
       }
     });
     // eslint-disable-next-line
-  }, [selectedMenu, setSelectedMenu]);
+  }, [selectedMenu]);
 
   return (
     <aside className={classes.aside}>
@@ -160,6 +160,7 @@ const SideMenu = (props) => {
             onClick={() => {
               setSelectedMenu(menu.id);
               setSelectedSubMenu(0);
+              setWaitingListMenu(0);
             }}
             selected={selectedMenu === menu.id}
             component={Link}
@@ -191,6 +192,7 @@ SideMenu.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setWaitingListMenu: PropTypes.func.isRequired,
 };
 
 export default SideMenu;

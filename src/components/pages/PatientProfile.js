@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { makeStyles } from "@mui/styles";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
+import DisplayProfile from "components/Utilities/DisplayProfile";
 import displayPhoto from "assets/images/avatar.png";
 import { useTheme } from "@mui/material/styles";
-import { HiChat } from "react-icons/hi";
-import CallIcon from "@mui/icons-material/Call";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -105,57 +102,14 @@ const PatientProfile = () => {
         <PreviousButton path={`/patients/${patientId}`} />
       </Grid>
       {/* Display photo and profile name grid */}
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        className={classes.gridsWrapper}
-      >
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
-              <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
-            </Grid>
-            <Grid item>
-              <Grid container direction="column">
-                <Grid item style={{ marginBottom: "1rem" }}>
-                  <Typography variant="h3">Raphael Igbenedion</Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    <Grid item style={{ marginRight: "3rem" }}>
-                      <Typography variant="h4" color="error">
-                        <span style={{ color: theme.palette.common.lightGrey }}>User ID:</span>{" "}
-                        132467
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">
-                        <span style={{ color: theme.palette.common.lightGrey }}>Status:</span>{" "}
-                        <Chip label="Active" color="success" className={classes.badge} />
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        {/* Action Buttons grid */}
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
-              <CustomButton endIcon={<HiChat />} title="Chat" type={greenButton} />
-            </Grid>
-            <Grid item style={{ marginRight: "2rem" }}>
-              <CustomButton endIcon={<CallIcon />} title="Call" type={greenButton} />
-            </Grid>
-            <Grid item>
-              <CustomButton endIcon={<VideocamIcon />} title="Video" type={greenButton} />
-            </Grid>
-          </Grid>
-        </Grid>
+      <Grid item>
+        <DisplayProfile
+          fullName="Raphael Igbinedion"
+          displayPhoto={displayPhoto}
+          medicalTitle="User ID"
+          statusId={132467}
+          status="Active"
+        />
       </Grid>
       {/* PERSONAL INFO SECTION */}
       <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>

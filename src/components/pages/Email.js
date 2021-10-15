@@ -249,7 +249,7 @@ const Email = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12} marginTop={20}>
+          <Grid item container xs={12} marginTop={15}>
             <Button
               variant="contained"
               onClick={handleDialogClose}

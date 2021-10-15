@@ -148,7 +148,15 @@ CustomSubHeaderText.propTypes = {
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
-const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
+const HeaderText = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    selectedHcpMenu,
+    waitingListMenu,
+    selectedAppointmentMenu,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -228,14 +236,17 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
 
     case 4:
       if (selectedSubMenu === 5) {
-        return (
-          <CustomSubHeaderText
-            title="Appointments"
-            subTitle={pathname === "/appointments/waiting-list" ? "Waiting List" : "Consultation"}
-            scopedMenu={0}
-            selectedPatientMenu={selectedPatientMenu}
-          />
-        );
+        if (selectedAppointmentMenu === 1) {
+          return (
+            <CustomSubHeaderText
+              title="Appointments"
+              subTitle="Waiting List"
+              subSubTitle={waitingListMenu === 1 ? "Details View" : ""}
+              scopedMenu={waitingListMenu}
+            />
+          );
+        }
+        return <CustomSubHeaderText title="Appointments" subTitle="Consultation" scopedMenu={0} />;
       }
       return <CustomHeaderTitle title="Appointments" path="appointments" />;
     case 5:
@@ -301,9 +312,18 @@ HeaderText.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  waitingListMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
 };
 
-const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
+const HeaderContent = ({
+  selectedMenu,
+  selectedSubMenu,
+  selectedPatientMenu,
+  selectedHcpMenu,
+  waitingListMenu,
+  selectedAppointmentMenu,
+}) => {
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
@@ -312,6 +332,8 @@ const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, sel
         selectedSubMenu={selectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
         selectedHcpMenu={selectedHcpMenu}
+        waitingListMenu={waitingListMenu}
+        selectedAppointmentMenu={selectedAppointmentMenu}
       />
       <HeaderProfile />
     </Toolbar>
@@ -323,6 +345,8 @@ HeaderContent.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  waitingListMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
 };
 
 export default HeaderContent;

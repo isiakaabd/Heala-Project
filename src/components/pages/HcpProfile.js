@@ -2,17 +2,11 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { makeStyles } from "@mui/styles";
-import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DisplayProfile from "components/Utilities/DisplayProfile";
 import displayPhoto from "assets/images/avatar.png";
-import { useTheme } from "@mui/material/styles";
-import { HiChat } from "react-icons/hi";
-import CallIcon from "@mui/icons-material/Call";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
@@ -93,15 +87,8 @@ const HcpProfile = (props) => {
     setSelectedHcpMenu,
   } = props;
   const classes = useStyles();
-  const theme = useTheme();
 
   const { hcpId } = useParams();
-
-  const greenButton = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
-  };
 
   useEffect(() => {
     setSelectedMenu(2);
@@ -117,13 +104,15 @@ const HcpProfile = (props) => {
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       {/* Display photo and profile name grid */}
-      <DisplayProfile
-        fullName="Raphael Igbinedion"
-        displayPhoto={displayPhoto}
-        medicalTitle="Medical ID"
-        statusId={132467}
-        specialization="Dentistry"
-      />
+      <Grid item>
+        <DisplayProfile
+          fullName="Raphael Igbinedion"
+          displayPhoto={displayPhoto}
+          medicalTitle="Medical ID"
+          statusId={132467}
+          specialization="Dentistry"
+        />
+      </Grid>
       {/* PERSONAL INFO SECTION */}
       <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
         {/* GENDER GRID */}

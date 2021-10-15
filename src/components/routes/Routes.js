@@ -24,6 +24,7 @@ import Medications from "components/pages/Medications";
 import SinglePatient from "components/pages/SinglePatient";
 import Partners from "components/pages/Partners";
 import WaitingList from "components/pages/WaitingList";
+import WaitingListDetails from "components/pages/WaitingListDetails";
 import Messages from "components/pages/Messages";
 import CreateMessage from "components/pages/CreateMessage";
 import ViewMessage from "components/pages/ViewMessage";
@@ -47,6 +48,10 @@ const Routes = (props) => {
     setSelectedSubMenu,
     setSelectedPatientMenu,
     setSelectedHcpMenu,
+    waitingListMenu,
+    setWaitingListMenu,
+    selectedAppointmentMenu,
+    setSelectedAppointmentMenu,
   } = props;
   return (
     <Switch>
@@ -227,20 +232,39 @@ const Routes = (props) => {
       </PrivateRoute>
 
       <PrivateRoute exact path="/appointments">
-        <Appointments setSelectedSubMenu={setSelectedSubMenu} />
+        <Appointments
+          setSelectedSubMenu={setSelectedSubMenu}
+          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+        />
       </PrivateRoute>
 
-      <PrivateRoute exact path="/appointments/consultation">
-        <h1>Consultation</h1>
-      </PrivateRoute>
-
-      <PrivateRoute path="/appointments/waiting-list">
+      <PrivateRoute exact path="/appointments/waiting-list">
         <WaitingList
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
           selectedSubMenu={selectedSubMenu}
           setSelectedSubMenu={setSelectedSubMenu}
+          setWaitingListMenu={setWaitingListMenu}
+          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+          selectedAppointmentMenu={selectedAppointmentMenu}
         />
+      </PrivateRoute>
+
+      <PrivateRoute path="/appointments/waiting-list/:listId">
+        <WaitingListDetails
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+          waitingListMenu={waitingListMenu}
+          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+          selectedAppointmentMenu={selectedAppointmentMenu}
+          setWaitingListMenu={setWaitingListMenu}
+        />
+      </PrivateRoute>
+
+      <PrivateRoute exact path="/appointments/consultation">
+        <h1>Consultation</h1>
       </PrivateRoute>
 
       <PrivateRoute exact path="/messages">
@@ -357,10 +381,14 @@ Routes.propTypes = {
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  waitingListMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
+  setWaitingListMenu: PropTypes.func.isRequired,
+  setSelectedAppointmentMenu: PropTypes.func.isRequired,
 };
 
 export default Routes;
