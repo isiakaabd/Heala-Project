@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -121,15 +122,19 @@ const SideMenu = (props) => {
   const { logout } = useActions();
 
   const classes = useStyles();
-
+  const [Logout, setLogout] = useState(false);
   const location = useLocation();
   const history = useHistory();
 
   const handleLogout = () => {
-    setSelectedMenu(12);
-    logout();
+    setLogout(true);
 
-    history.push("/");
+    setSelectedMenu(12);
+    setTimeout(() => {
+      logout();
+
+      history.push("/");
+    }, 5000);
   };
 
   useEffect(() => {
@@ -148,43 +153,53 @@ const SideMenu = (props) => {
   }, [selectedMenu]);
 
   return (
-    <aside className={classes.aside}>
-      <div className={classes.logoWrapper}>
-        <img src={logo} alt="logo" />
-      </div>
-      <List>
-        {menus.map((menu) => (
-          <ListItemButton
-            disableRipple
-            key={menu.id}
-            onClick={() => {
-              setSelectedMenu(menu.id);
-              setSelectedSubMenu(0);
-              setWaitingListMenu(0);
-            }}
-            selected={selectedMenu === menu.id}
-            component={Link}
-            to={menu.path}
-          >
+    <>
+      <aside className={classes.aside}>
+        <div className={classes.logoWrapper}>
+          <img src={logo} alt="logo" />
+        </div>
+        <List>
+          {menus.map((menu) => (
+            <ListItemButton
+              disableRipple
+              key={menu.id}
+              onClick={() => {
+                setSelectedMenu(menu.id);
+                setSelectedSubMenu(0);
+                setWaitingListMenu(0);
+              }}
+              selected={selectedMenu === menu.id}
+              component={Link}
+              to={menu.path}
+            >
+              <ListItemIcon>
+                {React.createElement(
+                  menu.icon,
+                  menu.id === 5 ? { size: 20, className: "message-icon" } : {},
+                )}
+              </ListItemIcon>
+
+              <ListItemText>{menu.title}</ListItemText>
+            </ListItemButton>
+          ))}
+          <ListItemButton disableRipple onClick={handleLogout} classes={{ root: classes.logout }}>
             <ListItemIcon>
-              {React.createElement(
-                menu.icon,
-                menu.id === 5 ? { size: 20, className: "message-icon" } : {},
-              )}
+              <HiLogout size={20} />
             </ListItemIcon>
 
-            <ListItemText>{menu.title}</ListItemText>
+            <ListItemText>Logout</ListItemText>
           </ListItemButton>
-        ))}
-        <ListItemButton disableRipple onClick={handleLogout} classes={{ root: classes.logout }}>
-          <ListItemIcon>
-            <HiLogout size={20} />
-          </ListItemIcon>
-
-          <ListItemText>Logout</ListItemText>
-        </ListItemButton>
-      </List>
-    </aside>
+        </List>
+      </aside>
+      <DeleteOrDisable
+        open={Logout}
+        setOpen={setLogout}
+        title="Logout"
+        confirmationMsg="logout"
+        btnValue="Logout"
+        type="logout"
+      />
+    </>
   );
 };
 

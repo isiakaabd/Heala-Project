@@ -379,7 +379,12 @@ const Routes = (props) => {
       </PrivateRoute>
 
       <PrivateRoute path="/settings/management">
-        <Management />
+        <Management
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+          selectedSubMenu={selectedSubMenu}
+        />
       </PrivateRoute>
     </Switch>
   );

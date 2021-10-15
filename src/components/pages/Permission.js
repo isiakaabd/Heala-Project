@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormLabel from "@mui/material/FormLabel";
-import { Avatar, Grid, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Modals from "components/Utilities/Modal";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import AddIcon from "@mui/icons-material/Add";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -16,7 +15,6 @@ import FormControl from "@mui/material/FormControl";
 import { rows } from "components/Utilities/DataHeader";
 import { PermissionHeader } from "components/Utilities/tableHeaders";
 import Chip from "@mui/material/Chip";
-import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -25,20 +23,18 @@ import CustomButton from "components/Utilities/CustomButton";
 import FormSelect from "components/Utilities/FormSelect";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { RoleModal } from "components/modals/RoleModal";
 import { PermissionModal } from "components/modals/PermissionModal";
+import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-
 
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
-      justifyContent: "space-between",
-      alignItems: "center",
-      margin: "auto",
-      width: "100%",
-      paddingBottom: "2rem ",
-     
-    },
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: "auto",
+    width: "100%",
+    paddingBottom: "2rem ",
+  },
   button: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
@@ -115,33 +111,38 @@ const useStyles = makeStyles((theme) => ({
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
 
-
- const Permission = () => {
- 
+const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+  const checkbox = {
+    create: true,
+    update: true,
+    Delete: false,
+    read: false,
+  };
+  const checkbox1 = {
+    create: false,
+    update: true,
+    Delete: false,
+    read: false,
+  };
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
-  const [searchMail, setSearchMail] = useState("");
   const [referral, setReferral] = useState("");
-
- const [deleteModal, setdeleteModal] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const handleDialogOpen = () => setIsOpen(true);
-   const handleDeleteOpenDialog = () => {
+  const handleDeleteOpenDialog = () => {
     setdeleteModal(true);
   };
-   const handleEditOpenDialog = () => {
+  const handleEditOpenDialog = () => {
     setIsEdit(true);
   };
-   const handleEditCloseDialog = () => {
+  const handleEditCloseDialog = () => {
     setIsEdit(false);
   };
-  
 
   const handleDialogClose = () => setIsOpen(false);
 
@@ -150,18 +151,24 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
+  useEffect(() => {
+    setSelectedSubMenu(0);
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <>
       <Grid container direction="column">
-     <Grid item sm container className={classes.flexContainer}>
-
-           <Grid item>
+        <Grid item>
+          <PreviousButton path="/settings" onClick={() => setSelectedSubMenu(0)} />
+        </Grid>
+        <Grid item sm container className={classes.flexContainer}>
+          <Grid item>
             <Typography variant="h1" color=" #2D2F39">
               Permission management
             </Typography>
           </Grid>
-         
+
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
@@ -204,7 +211,7 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
                       }}
                     />
                   </TableCell>
-                   <TableCell
+                  <TableCell
                     id={labelId}
                     scope="row"
                     align="center"
@@ -222,19 +229,12 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
                         alignItems: "center",
                       }}
                     >
-                     
-                          <Grid item xs={6}>
-                            <Chip label={row.permission[0]} className={classes.badge} />
-                          </Grid>
-                
+                      <Grid item xs={6}>
+                        <Chip label={row.permission[0]} className={classes.badge} />
+                      </Grid>
                     </Grid>
                   </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                  >
+                  <TableCell id={labelId} scope="row" align="center" className={classes.tableCell}>
                     <Grid
                       container
                       rowSpacing={2}
@@ -255,7 +255,7 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
                       })}
                     </Grid>
                   </TableCell>
-                
+
                   <TableCell align="left" className={classes.tableCell}>
                     <div
                       style={{
@@ -272,7 +272,7 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
                         className={`${classes.tableBtn} ${classes.greenBtn}`}
                         endIcon={<EditIcon color="success" />}
                       >
-                        Edit 
+                        Edit
                       </Button>
                       <Button
                         variant="contained"
@@ -282,11 +282,10 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
                         to="/view"
                         endIcon={<DeleteIcon color="error" />}
                       >
-                        Delete 
+                        Delete
                       </Button>
                     </div>
                   </TableCell>
-                 
                 </TableRow>
               );
             })}
@@ -362,14 +361,18 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
       </Modals>
 
       {/* // modal */}
-      
+
       <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
-        <PermissionModal handleDialogClose={handleDialogClose} type="add" />
+        <PermissionModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
       </Modals>
 
       {/* edit modala */}
-       <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
-        <PermissionModal handleDialogClose={handleEditCloseDialog} type="edit" />
+      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+        <PermissionModal
+          handleDialogClose={handleEditCloseDialog}
+          type="edit"
+          checkbox={checkbox1}
+        />
       </Modals>
       {/* delete modal */}
       <DeleteOrDisable
@@ -381,6 +384,12 @@ const referralOptions = ["Hello", "World", "Goodbye", "World"];
       />
     </>
   );
-
-}
-export default Permission
+};
+export default Permission;
+Permission.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
+};
