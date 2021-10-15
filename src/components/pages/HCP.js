@@ -196,7 +196,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                       variant="contained"
                       className={classes.button}
                       component={Link}
-                      to="/view"
+                      to="/verification/view"
                       endIcon={<ArrowForwardIosIcon />}
                       onClick={() => setSelectedSubMenu(8)}
                     >
@@ -212,42 +212,43 @@ const HCP = ({ setSelectedSubMenu }) => {
       {/* Modal */}
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <>
-          <Grid item container xs={12} spacing={2} component="div">
-            <Grid item xs={6}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Name
-                </FormLabel>
-                <FormControl fullWidth size="large">
-                  <FormSelect
-                    options={categoryOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Select Name"
-                  />
-                </FormControl>
+          <Grid item container direction="column">
+            <Grid item container spacing={2}>
+              <Grid item xs={6} marginBottom={4}>
+                <Grid container direction="column" gap={1}>
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Name
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={categoryOptions}
+                      value={referral}
+                      onChange={(event) => setReferral(event.target.value)}
+                      placeholderText="Select Name"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              {/* second grid */}
+              <Grid item xs={6}>
+                <Grid container gap={1} direction="column">
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Date
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={categoryOptions}
+                      value={referral}
+                      onChange={(event) => setReferral(event.target.value)}
+                      placeholderText="Choose Date"
+                    />
+                  </FormControl>
+                </Grid>
               </Grid>
             </Grid>
-            {/* second grid */}
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Date
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={categoryOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Choose Date"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} spacing={2} marginBottom={8}>
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
+            {/* <Grid item container xs={6} direction="column"> */}
+            <Grid item container spacing={2}>
+              <Grid item container gap={1} xs={6}>
                 <FormLabel component="legend" className={classes.FormLabel}>
                   Medical ID
                 </FormLabel>
@@ -262,7 +263,7 @@ const HCP = ({ setSelectedSubMenu }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12}>
+          <Grid item container xs={12} marginTop={20}>
             <Button
               variant="contained"
               onClick={handleDialogClose}

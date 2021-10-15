@@ -299,8 +299,17 @@ const Routes = (props) => {
         <Email />
       </PrivateRoute>
 
-      <PrivateRoute path="/verification">
+      <PrivateRoute exact path="/verification">
         <HCPVerification setSelectedSubMenu={setSelectedSubMenu} />
+      </PrivateRoute>
+      <PrivateRoute exact path="/verification/view">
+        <ViewHCP
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+          setSelectedHcpMenu={setSelectedHcpMenu}
+        />
       </PrivateRoute>
 
       <PrivateRoute exact path="/finance">

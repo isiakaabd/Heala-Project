@@ -73,6 +73,36 @@ const Settings = ({ setSelectedSubMenu }) => {
           </Card>
         </Link>
       </Grid>
+      <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>
+        <Link
+          to="/settings/permissions"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
+          <Card
+            alt="An icon used as a permission for making consultation with the doctor"
+            title="Permissions"
+            background={theme.palette.common.lightRed}
+          >
+            <CalendarIcon fill={theme.palette.common.red} />
+          </Card>
+        </Link>
+      </Grid>
+      <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>
+        <Link
+          to="/settings/list-management"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
+          <Card
+            alt="list management Icon"
+            title="List management"
+            background={theme.palette.common.lightRed}
+          >
+            <CalendarIcon fill={theme.palette.common.red} />
+          </Card>
+        </Link>
+      </Grid>
     </Grid>
   );
 };

@@ -27,7 +27,7 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 500,
-    height: height,
+    height,
     bgcolor: "background.paper",
     borderRadius: "2rem",
     p: 4,
@@ -39,12 +39,13 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
       <Modal
         open={isOpen}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        // sx={{ background: "red" }}
       >
         <Box sx={style}>
           <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
-            <Grid item container justifyContent="space-between" alignItems="center">
+            <Grid item container justifyContent="space-between" alignItems="center" flex="2">
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
               </Grid>
