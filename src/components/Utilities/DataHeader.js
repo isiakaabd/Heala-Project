@@ -440,6 +440,7 @@ export const rows = [
     planName: "Plan 1",
     description: "This is the decription regarding this particular plan",
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
+     data:["create", "read","update","delete"],
   },
   {
     id: 2,
@@ -464,6 +465,7 @@ export const rows = [
       "permission5",
       "permission6",
     ],
+     data:["create", "read","update","delete"],
   },
   {
     id: 3,
@@ -481,6 +483,7 @@ export const rows = [
     specialization: "Dentistry",
     description: "This is the decription regarding this particular plan",
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
+     data:["create", "read","update","delete"],
   },
   {
     id: 4,
@@ -498,6 +501,7 @@ export const rows = [
     status: "active",
     specialization: "Dentistry",
     description: "This is the decription regarding this particular plan",
+     data:["create", "read","update","delete"],
   },
   {
     id: 5,
@@ -515,12 +519,14 @@ export const rows = [
     availableTime: "10:00AM - 3:30PM",
     description: "This is the decription regarding this particular plan",
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
+     data:["create", "read","update","delete"],
   },
   {
     id: 6,
     lastName: "Melisandre",
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
     entryDate: "july 17,2021",
+     data:["create", "read","update","delete"],
     firstName: null,
     status: "active",
     medical: 123445,
@@ -544,6 +550,7 @@ export const rows = [
     amount: "₦ 10,000",
     email: "sule@gmail.com",
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
+    data:["create", "read","update","delete"],
     time: "10:00AM",
     specialization: "Dentistry",
     availableTime: "10:00AM - 3:30PM",
@@ -555,6 +562,7 @@ export const rows = [
     entryDate: "july 17,2021",
     firstName: "Harvey",
     category: "HCP",
+    data:["create", "read","update","delete"],
     medical: 123445,
     status: "active",
     planName: "Plan 1",

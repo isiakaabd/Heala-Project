@@ -20,8 +20,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { RoleModal } from "components/modals/RoleModal";
+import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const useStyles = makeStyles((theme) => ({

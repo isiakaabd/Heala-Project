@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
 import FormLabel from "@mui/material/FormLabel";
+import { Avatar, Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Modals from "components/Utilities/Modal";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
+import AddIcon from "@mui/icons-material/Add";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -14,9 +14,8 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import FormControl from "@mui/material/FormControl";
 import { rows } from "components/Utilities/DataHeader";
-import { emailHeader } from "components/Utilities/tableHeaders";
+import { PermissionHeader } from "components/Utilities/tableHeaders";
 import Chip from "@mui/material/Chip";
-import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -24,14 +23,22 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
 import FormSelect from "components/Utilities/FormSelect";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { RoleModal } from "components/modals/RoleModal";
+import { PermissionModal } from "components/modals/PermissionModal";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
+
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
+  flexContainer: {
+      justifyContent: "space-between",
+      alignItems: "center",
+      margin: "auto",
+      width: "100%",
+      paddingBottom: "2rem ",
+     
     },
-  },
   button: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
@@ -57,12 +64,60 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "1.3rem",
     },
   },
+  tableBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      height: "3rem",
+      fontSize: "1.25rem",
+      borderRadius: "2rem",
+      boxShadow: "none",
+
+      "&:hover": {
+        "& .MuiButton-endIcon>*:nth-of-type(1)": {
+          color: "#fff",
+        },
+      },
+
+      "&:active": {
+        boxShadow: "none",
+      },
+
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
+        fontSize: "1.5rem",
+      },
+    },
+  },
+
+  redBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightRed,
+      color: theme.palette.common.red,
+
+      "&:hover": {
+        background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+
+  greenBtn: {
+    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
+        color: "#fff",
+      },
+    },
+  },
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-// const categoryOptions = ["First", "Second", "Third"];
 
-const Email = () => {
+
+ const Permission = () => {
+ 
   const classes = useStyles();
   const theme = useTheme();
 
@@ -71,11 +126,22 @@ const Email = () => {
 
   const [searchMail, setSearchMail] = useState("");
   const [referral, setReferral] = useState("");
-  // const [category, setCategory] = useState("");
 
+ const [deleteModal, setdeleteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const handleDialogOpen = () => setIsOpen(true);
+   const handleDeleteOpenDialog = () => {
+    setdeleteModal(true);
+  };
+   const handleEditOpenDialog = () => {
+    setIsEdit(true);
+  };
+   const handleEditCloseDialog = () => {
+    setIsEdit(false);
+  };
+  
 
   const handleDialogClose = () => setIsOpen(false);
 
@@ -88,30 +154,27 @@ const Email = () => {
   return (
     <>
       <Grid container direction="column">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
-          <Grid item className={classes.searchGrid}>
-            <Search
-              value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Enter your email here..."
-              height="5rem"
-            />
+     <Grid item sm container className={classes.flexContainer}>
+
+           <Grid item>
+            <Typography variant="h1" color=" #2D2F39">
+              Permission management
+            </Typography>
           </Grid>
-          <Grid item sx={{ marginRight: "2rem" }}>
-            <FilterList onClick={handleDialogOpen} title="Filter by" />
-          </Grid>
+         
           <Grid item>
             <CustomButton
-              endIcon={<DownloadSharpIcon />}
-              title="Download Email"
+              endIcon={<AddIcon />}
+              title="Add New Permission"
               type={buttonType}
+              onClick={handleDialogOpen}
             />
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
         <Grid item container>
           <EnhancedTable
-            headCells={emailHeader}
+            headCells={PermissionHeader}
             rows={rows}
             page={page}
             paginationLabel="email per page"
@@ -141,54 +204,89 @@ const Email = () => {
                       }}
                     />
                   </TableCell>
+                   <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    // style={{ textAlign: "center !important" }}
+                  >
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      // spacing={2}
+                      style={{
+                        maxWidth: "25rem",
+                        display: "inline-flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                     
+                          <Grid item xs={6}>
+                            <Chip label={row.permission[0]} className={classes.badge} />
+                          </Grid>
+                
+                    </Grid>
+                  </TableCell>
                   <TableCell
                     id={labelId}
                     scope="row"
                     align="center"
                     className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
                   >
-                    {row.entryDate}
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      // spacing={2}
+                      style={{
+                        maxWidth: "25rem",
+                        display: "inline-flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {row.data.map((per) => {
+                        return (
+                          <Grid item xs={6} key={per}>
+                            <Chip label={per} className={classes.badge} />
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
                   </TableCell>
+                
                   <TableCell align="left" className={classes.tableCell}>
                     <div
                       style={{
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "space-around",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {row.firstName} {row.lastName}
-                      </span>
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        onClick={handleEditOpenDialog}
+                        className={`${classes.tableBtn} ${classes.greenBtn}`}
+                        endIcon={<EditIcon color="success" />}
+                      >
+                        Edit 
+                      </Button>
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        onClick={handleDeleteOpenDialog}
+                        className={`${classes.tableBtn} ${classes.redBtn}`}
+                        to="/view"
+                        endIcon={<DeleteIcon color="error" />}
+                      >
+                        Delete 
+                      </Button>
                     </div>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.red }}
-                  >
-                    {row.category}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Chip
-                      label={row.email}
-                      variant="outlined"
-                      className={classes.badge}
-                      style={{
-                        background: theme.palette.common.white,
-                        color: theme.palette.common.green,
-                        fontSize: "1.25rem",
-                      }}
-                    />
-                  </TableCell>
+                 
                 </TableRow>
               );
             })}
@@ -232,7 +330,7 @@ const Email = () => {
                 </Grid>
               </Grid>
             </Grid>
-          
+            {/* <Grid item container xs={6} direction="column"> */}
             <Grid item container spacing={2}>
               <Grid item container gap={1} xs={6}>
                 <FormLabel component="legend" className={classes.FormLabel}>
@@ -262,8 +360,27 @@ const Email = () => {
           </Grid>
         </>
       </Modals>
+
+      {/* // modal */}
+      
+      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
+        <PermissionModal handleDialogClose={handleDialogClose} type="add" />
+      </Modals>
+
+      {/* edit modala */}
+       <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+        <PermissionModal handleDialogClose={handleEditCloseDialog} type="edit" />
+      </Modals>
+      {/* delete modal */}
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Permission"
+        confirmationMsg="delete permission"
+        btnValue="Delete"
+      />
     </>
   );
-};
 
-export default Email;
+}
+export default Permission
