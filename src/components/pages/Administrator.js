@@ -111,18 +111,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
 const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const referralOptions = ["Hello", "World", "Goodbye", "World"];
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
+  const options = [
+    { id: 0, value: "Name" },
+    { id: 1, value: "Plan" },
+    { id: 2, value: "Consultation" },
+  ];
   const [searchMail, setSearchMail] = useState("");
   const [referral, setReferral] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -222,7 +221,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                   </TableCell>
 
                   <TableCell align="left" className={classes.tableCell}>
-                    <div
+                    <Grid
                       style={{
                         height: "100%",
                         display: "flex",
@@ -247,7 +246,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                       >
                         view admin
                       </Button>
-                    </div>
+                    </Grid>
                   </TableCell>
                 </TableRow>
 

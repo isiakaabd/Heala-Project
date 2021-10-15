@@ -403,113 +403,115 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         height="90vh"
         handleClose={() => setOpenAddHcp(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="First Name"
-                  labelId="firstName"
-                  id="firstName"
-                  name="firstName"
-                  value={firstName}
-                  onChange={handleFormInput}
-                  placeholder="Enter first name"
-                />
+        <>
+          <Grid item container direction="column">
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    label="First Name"
+                    labelId="firstName"
+                    id="firstName"
+                    name="firstName"
+                    value={firstName}
+                    onChange={handleFormInput}
+                    placeholder="Enter first name"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Last Name"
+                    labelId="lastName"
+                    id="lastName"
+                    name="lastName"
+                    value={lastName}
+                    onChange={handleFormInput}
+                    placeholder="Enter last name"
+                  />
+                </Grid>
               </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Last Name"
-                  labelId="lastName"
-                  id="lastName"
-                  name="lastName"
-                  value={lastName}
-                  onChange={handleFormInput}
-                  placeholder="Enter last name"
-                />
+            </Grid>
+            <Grid item style={{ margin: "3rem 0" }}>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    type="email"
+                    label="Email"
+                    labelId="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleFormInput}
+                    placeholder="Enter email"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Phone Number"
+                    labelId="phoneNumber"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={phoneNumber}
+                    onChange={handleFormInput}
+                    placeholder="Enter phone number"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    label="Specialization"
+                    labelId="hcpSpecialization"
+                    id="hcpSpecialization"
+                    name="hcpSpecialization"
+                    value={hcpSpecialization}
+                    onChange={handleFormInput}
+                    placeholder="Enter specialization"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Hospital"
+                    labelId="hcpHospital"
+                    id="hcpHospital"
+                    name="hcpHospital"
+                    value={hcpHospital}
+                    onChange={handleFormInput}
+                    placeholder="Enter hospital"
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item style={{ margin: "3rem 0" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  type="email"
-                  label="Email"
-                  labelId="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleFormInput}
-                  placeholder="Enter email"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Phone Number"
-                  labelId="phoneNumber"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={phoneNumber}
-                  onChange={handleFormInput}
-                  placeholder="Enter phone number"
-                />
-              </Grid>
-            </Grid>
+          <Grid item container>
+            <label htmlFor="contained-button-file">
+              <Input
+                accept="image/*"
+                id="contained-button-file"
+                multiple
+                type="file"
+                style={{ display: "none" }}
+              />
+              <Button variant="contained" component="span" className={classes.uploadBtn}>
+                Upload Photo
+              </Button>
+            </label>
           </Grid>
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="Specialization"
-                  labelId="hcpSpecialization"
-                  id="hcpSpecialization"
-                  name="hcpSpecialization"
-                  value={hcpSpecialization}
-                  onChange={handleFormInput}
-                  placeholder="Enter specialization"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Hospital"
-                  labelId="hcpHospital"
-                  id="hcpHospital"
-                  name="hcpHospital"
-                  value={hcpHospital}
-                  onChange={handleFormInput}
-                  placeholder="Enter hospital"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container>
-          <label htmlFor="contained-button-file">
-            <Input
-              accept="image/*"
-              id="contained-button-file"
-              multiple
-              type="file"
-              style={{ display: "none" }}
-            />
-            <Button variant="contained" component="span" className={classes.uploadBtn}>
-              Upload Photo
-            </Button>
-          </label>
-        </Grid>
 
-        <Grid item container xs={12}>
-          <Button
-            variant="contained"
-            onClick={() => setOpenAddHcp(false)}
-            type="submit"
-            className={classes.searchFilterBtn}
-            disableRipple
-          >
-            Add HCP
-          </Button>
-        </Grid>
+          <Grid item container xs={12}>
+            <Button
+              variant="contained"
+              onClick={() => setOpenAddHcp(false)}
+              type="submit"
+              className={classes.searchFilterBtn}
+              disableRipple
+            >
+              Add HCP
+            </Button>
+          </Grid>
+        </>
       </Modals>
     </Grid>
   );

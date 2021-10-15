@@ -397,7 +397,7 @@ Routes.propTypes = {
   selectedHcpMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  waitingListMenu: PropTypes.func.isRequired,
+  waitingListMenu: PropTypes.number,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
