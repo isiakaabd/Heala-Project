@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Alert from "@mui/material/Alert";
 import FormSelect from "components/Utilities/FormSelect";
-import Grid from "@mui/material/Grid";
+import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -90,24 +91,60 @@ const useStyles = makeStyles((theme) => ({
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [state, setstate] = useState({
+    name: "First",
+    date: "Second",
+    medicalID: "Third",
+  });
+  const [response, setResponse] = useState("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setstate({ ...state, [name]: value });
+  };
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
   const [searchMail, setSearchMail] = useState("");
-  const [referral, setReferral] = useState("");
-
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
-  const handleDialogClose = () => {
-    setIsOpen(false);
-  };
+
   const categoryOptions = ["First", "Second", "Third"];
+  const { name, medicalID, date } = state;
+  useEffect(() => {
+    const z = setTimeout(() => {
+      setResponse("");
+    }, 2000);
+    return () => clearTimeout(z);
+  }, [response]);
+
+  const handleDialogClose = async () => {
+    setIsOpen(false);
+    await setTimeout(() => {
+      setResponse("Saved");
+    }, 3000);
+  };
+
   return (
     <>
+      <Grid container direction="column">
+        {response ? (
+          <Grid
+            item
+            width={300}
+            margin="auto"
+            justifyContent="center"
+            alignItems="center"
+            textAlign="center"
+          >
+            <Alert severity="success">
+              <Typography variant="h1">{response}</Typography>
+            </Alert>
+          </Grid>
+        ) : null}
+      </Grid>
       <Grid container direction="column">
         <Grid item container style={{ paddingBottom: "5rem" }}>
           <Grid item className={classes.searchGrid}>
@@ -222,8 +259,9 @@ const HCP = ({ setSelectedSubMenu }) => {
                   <FormControl fullWidth>
                     <FormSelect
                       options={categoryOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
+                      value={name}
+                      name="name"
+                      onChange={handleChange}
                       placeholderText="Select Name"
                     />
                   </FormControl>
@@ -238,8 +276,9 @@ const HCP = ({ setSelectedSubMenu }) => {
                   <FormControl fullWidth>
                     <FormSelect
                       options={categoryOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
+                      value={date}
+                      name="date"
+                      onChange={handleChange}
                       placeholderText="Choose Date"
                     />
                   </FormControl>
@@ -255,8 +294,9 @@ const HCP = ({ setSelectedSubMenu }) => {
                 <FormControl fullWidth style={{ height: "3rem" }}>
                   <FormSelect
                     options={categoryOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
+                    value={medicalID}
+                    name="medicalID"
+                    onChange={handleChange}
                     placeholderText="Select Category"
                   />
                 </FormControl>
