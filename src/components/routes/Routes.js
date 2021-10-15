@@ -36,6 +36,7 @@ import ViewReferral from "components/pages/ViewReferral";
 import Settings from "components/pages/Settings";
 import Administrator from "components/pages/Administrator";
 import Management from "components/pages/Management";
+import Permission from "components/pages/Permission";
 
 const Routes = (props) => {
   const {
@@ -338,6 +339,14 @@ const Routes = (props) => {
 
       <PrivateRoute path="/settings/administrator">
         <Administrator
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
+      </PrivateRoute>
+      <PrivateRoute path="/settings/permissions">
+        <Permission
           selectedMenu={selectedMenu}
           selectedSubMenu={selectedSubMenu}
           setSelectedMenu={setSelectedMenu}
