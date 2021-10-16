@@ -168,7 +168,7 @@ const Partners = () => {
   const [filterSelectInput, handleSelectedInput] = useFormInput({
     hospitalName: "",
     date: "",
-    category: "",
+    categoryName: "",
   });
 
   // ADD PARTNERS INPUT STATES
@@ -180,11 +180,10 @@ const Partners = () => {
   });
 
   const { firstName, lastName, email, category } = addPartnersFormInput;
+  const { hospitalName, date, categoryName } = filterSelectInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
-  const { hospitalName, date, categoryName } = filterSelectInput;
 
   return (
     <Grid container direction="column">

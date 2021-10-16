@@ -78,7 +78,6 @@ const Routes = (props) => {
 
       <PrivateRoute path="/patients/:patientId/profile">
         <PatientProfile
-          {...props}
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
           selectedSubMenu={selectedSubMenu}
@@ -99,7 +98,6 @@ const Routes = (props) => {
 
       <PrivateRoute path="/patients/:patientId/prescriptions">
         <Prescriptions
-          {...props}
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
           selectedSubMenu={selectedSubMenu}
@@ -278,7 +276,6 @@ const Routes = (props) => {
 
       <PrivateRoute path="/messages/create-message">
         <CreateMessage
-          {...props}
           selectedMenu={selectedMenu}
           selectedSubMenu={selectedSubMenu}
           setSelectedMenu={setSelectedMenu}
@@ -322,20 +319,29 @@ const Routes = (props) => {
           selectedSubMenu={selectedSubMenu}
           setSelectedMenu={setSelectedMenu}
           setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
         />
       </PrivateRoute>
 
       <PrivateRoute exact path="/finance/payouts">
-        <Payout selectedSubMenu={selectedSubMenu} setSelectedSubMenu={setSelectedSubMenu} />
+        <Payout
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
       </PrivateRoute>
 
-      <PrivateRoute path="/view-referral">
-        <ViewReferral />
+      <PrivateRoute path="/referrals/:referralId">
+        <ViewReferral
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
       </PrivateRoute>
 
       <PrivateRoute path="/referrals">
-        <ReferralTab />
+        <ReferralTab setSelectedSubMenu={setSelectedSubMenu} />
       </PrivateRoute>
 
       <PrivateRoute path="/plans">
@@ -382,8 +388,8 @@ Routes.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
+  waitingListMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  waitingListMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,

@@ -102,7 +102,7 @@ const Notifications = ({ anchorEl, setAnchorEl }) => {
 };
 
 Notifications.propTypes = {
-  anchorEl: PropTypes.object.isRequired,
+  anchorEl: PropTypes.object,
   setAnchorEl: PropTypes.func.isRequired,
 };
 

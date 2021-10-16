@@ -138,6 +138,7 @@ const Login = () => {
               </Grid>
               <Grid item>
                 <Search
+                  id="email"
                   value={email}
                   name="email"
                   placeholder="Enter your email"
@@ -157,6 +158,7 @@ const Login = () => {
               </Grid>
               <Grid item>
                 <Search
+                  id="password"
                   value={password}
                   placeholder="Enter your password"
                   type={showPassword ? "text" : "password"}

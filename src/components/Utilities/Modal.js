@@ -67,7 +67,7 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
 Modals.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
   height: PropTypes.string,

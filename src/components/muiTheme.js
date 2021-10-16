@@ -45,18 +45,18 @@ export const muiTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Circular Std Medium"', "Roboto", "sans-serif", "Cocon"].join(", "),
+    fontFamily: ['"Euclid Circular"', '"Circular Std Medium"', "Roboto", "sans-serif"].join(", "),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {
       fontSize: "3rem",
       color: dark,
-      fontWeight: 500,
+      fontWeight: 700,
     },
     h2: {
       fontSize: "2.5rem",
       color: dark,
-      fontWeight: 500,
+      fontWeight: 600,
     },
     h3: {
       fontSize: "2.25rem",
@@ -64,6 +64,7 @@ export const muiTheme = createTheme({
     },
     h4: {
       fontSize: "1.85rem",
+      fontWeight: 500,
     },
     h5: {
       fontSize: "1.5rem",
@@ -72,13 +73,14 @@ export const muiTheme = createTheme({
 
     body1: {
       fontSize: "1.6rem",
-      fontWeight: 300,
+      fontWeight: 500,
+      lineHeight: 1.7,
       color: dark,
     },
     body2: {
-      fontSize: "1.3rem",
-      fontWeight: 300,
-      lineHeight: 1.7,
+      fontSize: "1.4rem",
+      fontWeight: 500,
+      lineHeight: 1.85,
     },
     btn: {
       fontSize: "1.5rem",

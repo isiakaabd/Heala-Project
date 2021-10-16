@@ -140,7 +140,7 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
         </Grid>
       </Grid>
 
-      <Grid item container marginTop={12}>
+      <Grid item container marginTop={4}>
         <Button
           variant="contained"
           type="submit"

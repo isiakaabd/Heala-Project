@@ -112,7 +112,7 @@ const Finance = ({ setSelectedSubMenu }) => {
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
-            <Typography variant="h1" color=" #2D2F39">
+            <Typography variant="h1" color="#2D2F39">
               Earning
             </Typography>
           </Grid>
@@ -137,8 +137,8 @@ const Finance = ({ setSelectedSubMenu }) => {
               <CircularProgressBar
                 height="17rem"
                 width="17rem"
-                color="green"
-                trailColor="red"
+                color={theme.palette.common.green}
+                trailColor={theme.palette.common.red}
                 value={65}
                 strokeWidth={8}
               />
