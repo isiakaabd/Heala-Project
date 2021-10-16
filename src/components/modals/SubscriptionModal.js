@@ -11,8 +11,9 @@ import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       ...theme.typography.btn,
+      background: theme.palette.common.black,
       width: "100%",
     },
   },
@@ -140,7 +141,7 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
         </Grid>
       </Grid>
 
-      <Grid item container marginTop={4}>
+      <Grid item container marginTop={8}>
         <Button
           variant="contained"
           type="submit"

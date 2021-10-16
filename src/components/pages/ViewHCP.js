@@ -10,6 +10,7 @@ import imageUpload from "assets/images/imageUpload.svg";
 import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const gender = "Female";
 const useStyles = makeStyles((theme) => ({
@@ -138,6 +139,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid position="static" className={classes.containerGrid}>
+      <Grid item>
+        <PreviousButton path="/verification" />
+      </Grid>
       <Grid component="div">
         <Typography variant="h1"> HCP view</Typography>
       </Grid>
