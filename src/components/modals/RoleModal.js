@@ -12,8 +12,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 const useStyles = makeStyles((theme) => ({
   btn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       ...theme.typography.btn,
+      background: theme.palette.common.black,
       width: "100%",
     },
   },

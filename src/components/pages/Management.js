@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   greenBtn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
 
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
