@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
+const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,10 +87,11 @@ const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const { setSelectedRows } = useActions();
 
   useEffect(() => {
-    setSelectedSubMenu(0);
+    setSelectedMenu(8);
+    setSelectedSubMenu(9);
 
     // eslint-disable-next-line
-  }, [selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <Grid container direction="column" rowSpacing={2}>
@@ -209,7 +210,9 @@ const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
 };
 
 Payout.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
 };
 

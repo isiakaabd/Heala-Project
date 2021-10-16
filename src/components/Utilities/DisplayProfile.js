@@ -126,7 +126,7 @@ DisplayProfile.propTypes = {
   medicalTitle: PropTypes.string.isRequired,
   statusId: PropTypes.number.isRequired,
   specialization: PropTypes.string,
-  status: PropTypes.boolean,
+  status: PropTypes.string,
 };
 
 export default DisplayProfile;

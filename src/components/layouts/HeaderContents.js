@@ -143,7 +143,7 @@ CustomSubHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string.isRequired,
   subSubTitle: PropTypes.string,
-  titleColor: PropTypes.string.isRequired,
+  titleColor: PropTypes.string,
   scopedMenu: PropTypes.number,
 };
 
@@ -279,6 +279,9 @@ const HeaderText = (props) => {
       }
       return <CustomHeaderTitle title="Finance" path="finance" />;
     case 9:
+      if (selectedSubMenu === 10) {
+        return <CustomSubHeaderText title="Referrals" subTitle="Referral View" scopedMenu={0} />;
+      }
       return <CustomHeaderTitle title="Referrals" path="referrals" />;
     case 10:
       return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
@@ -316,14 +319,15 @@ HeaderText.propTypes = {
   selectedAppointmentMenu: PropTypes.number.isRequired,
 };
 
-const HeaderContent = ({
-  selectedMenu,
-  selectedSubMenu,
-  selectedPatientMenu,
-  selectedHcpMenu,
-  waitingListMenu,
-  selectedAppointmentMenu,
-}) => {
+const HeaderContent = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    selectedHcpMenu,
+    waitingListMenu,
+    selectedAppointmentMenu,
+  } = props;
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>

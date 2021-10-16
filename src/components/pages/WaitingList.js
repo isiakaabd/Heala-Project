@@ -28,10 +28,10 @@ const WaitingList = (props) => {
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton
-          path={`/appointments`}
+          path="/appointments"
           onClick={() => {
             setSelectedSubMenu(0);
-            selectedAppointmentMenu(0);
+            setSelectedAppointmentMenu(0);
           }}
         />
       </Grid>

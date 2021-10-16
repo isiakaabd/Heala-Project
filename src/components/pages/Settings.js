@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
-import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
+import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -69,7 +69,7 @@ const Settings = ({ setSelectedSubMenu }) => {
             title="Role Management"
             background={theme.palette.common.lightRed}
           >
-            <CalendarIcon fill={theme.palette.common.red} />
+            <ConsulationIcon fill={theme.palette.common.red} />
           </Card>
         </Link>
       </Grid>
@@ -84,7 +84,7 @@ const Settings = ({ setSelectedSubMenu }) => {
             title="Permissions"
             background={theme.palette.common.lightRed}
           >
-            <CalendarIcon fill={theme.palette.common.red} />
+            <ConsulationIcon fill={theme.palette.common.red} />
           </Card>
         </Link>
       </Grid>
@@ -99,7 +99,7 @@ const Settings = ({ setSelectedSubMenu }) => {
             title="List management"
             background={theme.palette.common.lightRed}
           >
-            <CalendarIcon fill={theme.palette.common.red} />
+            <ConsulationIcon fill={theme.palette.common.red} />
           </Card>
         </Link>
       </Grid>
