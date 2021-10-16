@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
+export const PermissionModal = ({ handleDialogClose, type, checkbox }) => {
   const handleDialogCloses = () => {
     if (type === "edit") {
       console.log("hi from edit");
@@ -77,7 +77,7 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
           <Grid item container marginBottom={4}>
             <Grid container direction="column" gap={1}>
               <FormLabel component="legend" className={classes.FormLabel}>
-                Name of role
+                Name of Permission
               </FormLabel>
               <FormControl fullWidth>
                 <TextField
@@ -161,14 +161,13 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
           onClick={handleDialogCloses}
           className={classes.btn}
         >
-          {type === "edit" ? "Save changes" : "Add Role"}
+          {type === "edit" ? "Save changes" : "Add Permission"}
         </Button>
       </Grid>
     </>
   );
 };
-
-RoleModal.propTypes = {
+PermissionModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   checkbox: PropTypes.object.isRequired,

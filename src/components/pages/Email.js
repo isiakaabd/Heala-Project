@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
+import React, { useState, useEffect } from "react";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import Modals from "components/Utilities/Modal";
@@ -24,6 +23,8 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
 import FormSelect from "components/Utilities/FormSelect";
+import Alert from "@mui/material/Alert";
+import { Grid, Typography } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -60,34 +61,63 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-// const categoryOptions = ["First", "Second", "Third"];
 
 const Email = () => {
   const classes = useStyles();
   const theme = useTheme();
-
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
   const [searchMail, setSearchMail] = useState("");
-  const [referral, setReferral] = useState("");
-  // const [category, setCategory] = useState("");
-
+  const [response, setResponse] = useState("");
+  const [state, setstate] = useState({
+    referral: "Hello",
+    date: "Goodbye",
+    category: "World",
+  });
   const [isOpen, setIsOpen] = useState(false);
-
   const handleDialogOpen = () => setIsOpen(true);
+  useEffect(() => {
+    const z = setTimeout(() => {
+      setResponse("");
+    }, 2000);
+    return () => clearTimeout(z);
+  }, [response]);
 
-  const handleDialogClose = () => setIsOpen(false);
-
+  const handleDialogClose = async () => {
+    setIsOpen(false);
+    await setTimeout(() => {
+      setResponse("Saved");
+    }, 3000);
+  };
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
+  //
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setstate({ ...state, [name]: value });
+  };
+  const { referral, category, date } = state;
   return (
     <>
       <Grid container direction="column">
+        {response ? (
+          <Grid
+            item
+            width={300}
+            margin="auto"
+            justifyContent="center"
+            alignItems="center"
+            textAlign="center"
+          >
+            <Alert severity="success">
+              <Typography variant="h1">{response}</Typography>
+            </Alert>
+          </Grid>
+        ) : null}
         <Grid item container style={{ paddingBottom: "5rem" }}>
           <Grid item className={classes.searchGrid}>
             <Search
@@ -209,7 +239,8 @@ const Email = () => {
                     <FormSelect
                       options={referralOptions}
                       value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
+                      name="referral"
+                      onChange={handleChange}
                       placeholderText="Select Name"
                     />
                   </FormControl>
@@ -224,15 +255,15 @@ const Email = () => {
                   <FormControl fullWidth>
                     <FormSelect
                       options={referralOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
+                      value={date}
+                      name="date"
+                      onChange={handleChange}
                       placeholderText="Choose Date"
                     />
                   </FormControl>
                 </Grid>
               </Grid>
             </Grid>
-            {/* <Grid item container xs={6} direction="column"> */}
             <Grid item container spacing={2}>
               <Grid item container gap={1} xs={6}>
                 <FormLabel component="legend" className={classes.FormLabel}>
@@ -241,15 +272,16 @@ const Email = () => {
                 <FormControl fullWidth style={{ height: "3rem" }}>
                   <FormSelect
                     options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
+                    value={category}
+                    name="category"
                     placeholderText="Save Category"
+                    onChange={handleChange}
                   />
                 </FormControl>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12} marginTop={15}>
+          <Grid item container xs={12} marginTop={20}>
             <Button
               variant="contained"
               onClick={handleDialogClose}

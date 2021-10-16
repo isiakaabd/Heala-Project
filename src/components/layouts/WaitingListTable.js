@@ -150,7 +150,7 @@ const WaitingListTable = ({ path, onClick }) => {
 
 WaitingListTable.propTypes = {
   path: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default WaitingListTable;

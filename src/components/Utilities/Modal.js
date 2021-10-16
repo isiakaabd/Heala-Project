@@ -35,13 +35,12 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
 
   const classes = useStyles();
   return (
-    <div>
+    <Grid container>
       <Modal
         open={isOpen}
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        // sx={{ background: "red" }}
       >
         <Box sx={style}>
           <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
@@ -61,7 +60,7 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
           </Grid>
         </Box>
       </Modal>
-    </div>
+    </Grid>
   );
 };
 Modals.propTypes = {

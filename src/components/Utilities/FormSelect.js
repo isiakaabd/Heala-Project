@@ -34,9 +34,9 @@ const FormSelect = ({ startAdornment, value, onChange, placeholderText, options,
 
 FormSelect.propTypes = {
   options: PropTypes.array.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholderText: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholderText: PropTypes.string.isRequired,
   startAdornment: PropTypes.element,
 };
 
