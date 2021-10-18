@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -7,6 +7,7 @@ import { makeStyles } from "@mui/styles";
 // import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.png";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import Notifications from "components/layouts/Notifications";
 import IconButton from "@mui/material/IconButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HeaderProfile = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const classes = useStyles();
 
   function notificationsLabel(count) {
@@ -58,11 +61,15 @@ const HeaderProfile = () => {
           </Grid>
         </Grid>
         <Grid item>
-          <IconButton aria-label={notificationsLabel(1)}>
+          <IconButton
+            aria-label={notificationsLabel(1)}
+            onClick={(event) => setAnchorEl(event.currentTarget)}
+          >
             <Badge badgeContent={1} color="error">
               <NotificationsActiveIcon color="primary" fontSize="large" />
             </Badge>
           </IconButton>
+          <Notifications anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
         </Grid>
       </Grid>
     </header>

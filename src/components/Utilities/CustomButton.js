@@ -6,11 +6,11 @@ import { makeStyles } from "@mui/styles";
 const CustomButton = ({
   title,
   endIcon,
-  width = "auto",
+  width,
   height,
   textColorOnHover,
   borderRadius,
-  textColor = "#fff",
+  textColor,
   type: { background, hover, active },
   ...rest
 }) => {
@@ -57,6 +57,11 @@ const CustomButton = ({
       {title}
     </Button>
   );
+};
+
+CustomButton.defaultProps = {
+  width: "auto",
+  textColor: "#fff",
 };
 
 CustomButton.propTypes = {
