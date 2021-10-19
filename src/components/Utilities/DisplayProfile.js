@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
@@ -31,7 +32,16 @@ const DisplayProfile = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { fullName, displayPhoto, medicalTitle, statusId, specialization, status } = props;
+  const {
+    fullName,
+    displayPhoto,
+    medicalTitle,
+    statusId,
+    specialization,
+    status,
+    path,
+    setChatMediaActive,
+  } = props;
 
   const greenButton = {
     background: theme.palette.success.main,
@@ -106,13 +116,30 @@ const DisplayProfile = (props) => {
       <Grid item>
         <Grid container alignItems="center">
           <Grid item style={{ marginRight: "2rem" }}>
-            <CustomButton endIcon={<HiChat />} title="Chat" type={greenButton} />
+            <CustomButton
+              endIcon={<HiChat />}
+              title="Chat"
+              type={greenButton}
+              component={Link}
+              to={path}
+              onClick={() => setChatMediaActive(true)}
+            />
           </Grid>
           <Grid item style={{ marginRight: "2rem" }}>
-            <CustomButton endIcon={<CallIcon />} title="Call" type={greenButton} />
+            <CustomButton
+              endIcon={<CallIcon />}
+              title="Call"
+              type={greenButton}
+              onClick={() => setChatMediaActive(true)}
+            />
           </Grid>
           <Grid item>
-            <CustomButton endIcon={<VideocamIcon />} title="Video" type={greenButton} />
+            <CustomButton
+              endIcon={<VideocamIcon />}
+              title="Video"
+              type={greenButton}
+              onClick={() => setChatMediaActive(true)}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -127,6 +154,8 @@ DisplayProfile.propTypes = {
   statusId: PropTypes.number.isRequired,
   specialization: PropTypes.string,
   status: PropTypes.string,
+  path: PropTypes.string.isRequired,
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default DisplayProfile;

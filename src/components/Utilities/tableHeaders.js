@@ -290,15 +290,15 @@ export const partnersHeadCells = [
   { id: 2, label: "" },
 ];
 
-// Partner's HEADCELLS
+// Messages's HEADCELLS
 export const messagesHeadCells = [
-  { id: 0, label: "Recipient" },
+  { id: 0, label: "Recipients" },
   { id: 1, label: "Subject" },
   { id: 2, label: "Date" },
   { id: 3, label: "Time" },
   { id: 4, label: "" },
 ];
-// Partner's HEADCELLS
+// HCP Patients HEADCELLS
 export const hcpPatientsHeadCells = [
   { id: 0, label: "User ID" },
   { id: 1, label: "Patient Name" },

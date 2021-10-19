@@ -113,9 +113,9 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const theme = useTheme();
 
   const greenButtonType = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
+    background: theme.palette.primary.main,
+    hover: theme.palette.primary.light,
+    active: theme.palette.primary.dark,
   };
 
   const [searchMessage, setSearchMessage] = useState("");

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PatientProfile = () => {
+const PatientProfile = ({ setChatMediaActive }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -109,6 +110,8 @@ const PatientProfile = () => {
           medicalTitle="User ID"
           statusId={132467}
           status="Active"
+          path={`/patients/${patientId}/profile/chat`}
+          setChatMediaActive={setChatMediaActive}
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
@@ -226,6 +229,10 @@ const PatientProfile = () => {
       </Grid>
     </Grid>
   );
+};
+
+PatientProfile.propTypes = {
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default PatientProfile;
