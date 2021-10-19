@@ -11,7 +11,6 @@ import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomButton from "components/Utilities/CustomButton";
 import { BsExclamationCircle } from "react-icons/bs";
-
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 const useStyles = makeStyles((theme) => ({
