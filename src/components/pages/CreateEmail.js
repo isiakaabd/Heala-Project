@@ -195,7 +195,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
           </Grid>
           <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
             <CustomButton
-              title="Send Message"
+              title="Send Mail"
               type={greenButton}
               onClick={handleDialogCloses}
               endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
