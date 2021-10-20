@@ -182,7 +182,7 @@ const SideMenu = (props) => {
               <ListItemText>{menu.title}</ListItemText>
             </ListItemButton>
           ))}
-          <ListItemButton disableRipple onClick={handleLogout} classes={{ root: classes.logout }}>
+          <ListItemButton disableRipple classes={{ root: classes.logout }}>
             <ListItemIcon>
               <HiLogout size={20} />
             </ListItemIcon>

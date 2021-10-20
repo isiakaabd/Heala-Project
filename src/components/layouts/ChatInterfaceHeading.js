@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const ChatInterfaceHeading = () => {
+const ChatInterfaceHeading = ({ setChatMediaActive }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -88,6 +89,7 @@ const ChatInterfaceHeading = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setChatMediaActive(false);
   };
 
   return (
@@ -165,6 +167,10 @@ const ChatInterfaceHeading = () => {
       </Grid>
     </Grid>
   );
+};
+
+ChatInterfaceHeading.propTypes = {
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default ChatInterfaceHeading;

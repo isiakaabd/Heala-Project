@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PatientProfile = ({ setChatMediaActive }) => {
+const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -97,6 +97,12 @@ const PatientProfile = ({ setChatMediaActive }) => {
     active: "#f4f4f4",
   };
 
+  useEffect(() => {
+    setChatMediaActive(false);
+
+    // eslint-disable-next-line
+  }, [chatMediaActive]);
+
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -110,7 +116,9 @@ const PatientProfile = ({ setChatMediaActive }) => {
           medicalTitle="User ID"
           statusId={132467}
           status="Active"
-          path={`/patients/${patientId}/profile/chat`}
+          chatPath={`/patients/${patientId}/profile/chat`}
+          callPath={`/patients/${patientId}/profile/call`}
+          videoPath={`/patients/${patientId}/profile/video`}
           setChatMediaActive={setChatMediaActive}
         />
       </Grid>
@@ -232,6 +240,7 @@ const PatientProfile = ({ setChatMediaActive }) => {
 };
 
 PatientProfile.propTypes = {
+  chatMediaActive: PropTypes.bool.isRequired,
   setChatMediaActive: PropTypes.func.isRequired,
 };
 

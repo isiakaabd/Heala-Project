@@ -37,7 +37,17 @@ const style = {
   borderRadius: "1rem",
 };
 
-const DeleteOrDisable = ({ open, setOpen, title, confirmationMsg, btnValue, type, ...rest }) => {
+const DeleteOrDisable = ({
+  open,
+  setOpen,
+  title,
+  confirmationMsg,
+  btnValue,
+  type,
+  onConfirm,
+  onCancel,
+  ...rest
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -124,6 +134,8 @@ DeleteOrDisable.propTypes = {
   confirmationMsg: PropTypes.string.isRequired,
   btnValue: PropTypes.string.isRequired,
   type: PropTypes.string,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
 };
 
 export default DeleteOrDisable;
