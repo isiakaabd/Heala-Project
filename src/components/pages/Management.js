@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import FormLabel from "@mui/material/FormLabel";
 import { Grid } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import Chip from "@mui/material/Chip";
-import CheckboxesGroup from "components/Utilities/CheckBox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
@@ -22,9 +20,9 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
+import { RoleModal } from "components/modals/RoleModal";
 import PreviousButton from "components/Utilities/PreviousButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import FormControl from "@mui/material/FormControl";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -33,13 +31,12 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
-
   "&.makeStyles-tableHeaderCell-27.MuiTableCell-root": {
     background: "red !important",
     textAlign: "center",
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -102,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   greenBtn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
 
@@ -120,12 +117,10 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
-      fontSize: "1.3rem !important",
+    "&.MuiChip-root": {
+      fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
-      color: "#9497A1",
-      background: "#F2F2F2",
     },
     modal: {
       background: "red !important",
@@ -143,31 +138,43 @@ const Management = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [deleteModal, setdeleteModal] = useState(false);
+  const [searchMail, setSearchMail] = useState("");
+  const [edit, setEdit] = useState(false);
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
   const handleDialogClose = () => {
     setIsOpen(false);
   };
-
+  const handleDeleteOpenDialog = () => {
+    setdeleteModal(true);
+  };
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  const [searchMail, setSearchMail] = useState("");
-
-  const [isOpens, setIsOpens] = useState(false);
-  const handleDialogOpens = () => {
-    setIsOpens(true);
+  const handleEditDialogOpens = () => {
+    setEdit(true);
   };
-  const handleDialogCloses = () => {
-    setIsOpens(false);
+  const handleEditDialogCloses = () => {
+    setEdit(false);
   };
-
   const buttonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
+  const checkbox = {
+    create: true,
+    update: true,
+    Delete: false,
+    read: false,
+  };
+  const checkbox1 = {
+    create: false,
+    update: true,
+    Delete: false,
+    read: false,
   };
 
   return (
@@ -279,7 +286,7 @@ const Management = () => {
                         variant="contained"
                         disableRipple
                         className={`${classes.tableBtn} ${classes.greenBtn}`}
-                        onClick={handleDialogOpens}
+                        onClick={handleEditDialogOpens}
                         endIcon={<EditIcon color="success" />}
                       >
                         Edit role
@@ -288,7 +295,7 @@ const Management = () => {
                         variant="contained"
                         disableRipple
                         className={`${classes.tableBtn} ${classes.redBtn}`}
-                        to="/view"
+                        onClick={handleDeleteOpenDialog}
                         endIcon={<DeleteIcon color="error" />}
                       >
                         Delete role
@@ -303,79 +310,21 @@ const Management = () => {
       </Grid>
       {/* // modal */}
       <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
-        <>
-          <Grid item xs={12} rowSpacing={2}>
-            <FormControl style={{ width: "100%" }}>
-              <FormLabel component="legend" color="secondary">
-                Name of Role
-              </FormLabel>
-              <OutlinedInput id="outlined-adornment-amount" placeholder="Enter role name" />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormLabel component="legend" color="secondary">
-              Permission
-            </FormLabel>
-            <FormControl style={{ width: "100%" }}>
-              <CheckboxesGroup row={rows[0].permission} />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              to="/view"
-              type="submit"
-              color="error"
-              style={{ width: "100%", padding: "1rem" }}
-            >
-              Add Role
-            </Button>
-          </Grid>
-        </>
+        <RoleModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
       </Modals>
 
       {/* Edit */}
-      <Modals isOpen={isOpens} title="Edit role" handleClose={handleDialogCloses}>
-        <>
-          <Grid item xs={12} rowSpacing={2}>
-            <FormControl style={{ width: "100%" }}>
-              <FormLabel component="legend" color="secondary">
-                Name of Role
-              </FormLabel>
-              <OutlinedInput
-                id="outlined-adornment-amount"
-                placeholder="Enter role name"
-                // label="Name of Role"
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormLabel component="legend" color="secondary">
-              Permission
-            </FormLabel>
-            <FormControl style={{ width: "100%" }}>
-              <CheckboxesGroup row={rows[0].permission} />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              // className={classes.button}
-              to="/view"
-              type="submit"
-              color="error"
-              style={{ width: "100%", padding: "1rem" }}
-            >
-              Save changes
-            </Button>
-          </Grid>
-        </>
+      <Modals isOpen={edit} title="Edit role" handleClose={handleEditDialogCloses}>
+        <RoleModal handleDialogClose={handleEditDialogCloses} type="edit" checkbox={checkbox1} />
       </Modals>
-
-      {/* edit */}
-      {/* edit */}
+      {/* delete modal */}
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Role"
+        confirmationMsg="delete role"
+        btnValue="Delete"
+      />
     </>
   );
 };

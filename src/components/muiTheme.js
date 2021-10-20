@@ -8,6 +8,8 @@ const lightGrey = "#CCCCCC";
 const lighterGrey = "F2F2F2";
 const green = "#3EA584";
 const lightGreen = "#ECF6F3";
+const gold = "rgb(243, 173, 83)";
+const black = "#2D2F39";
 
 export const muiTheme = createTheme({
   palette: {
@@ -20,6 +22,8 @@ export const muiTheme = createTheme({
       lightGrey,
       lighterGrey,
       lightGreen,
+      gold,
+      black,
     },
     primary: {
       main: dark,
@@ -36,20 +40,23 @@ export const muiTheme = createTheme({
     success: {
       main: green,
     },
+    warning: {
+      main: gold,
+    },
   },
   typography: {
-    fontFamily: ['"Circular Std Medium"', "Roboto", "sans-serif", "Cocon"].join(", "),
+    fontFamily: ['"Euclid Circular"', '"Circular Std Medium"', "Roboto", "sans-serif"].join(", "),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {
       fontSize: "3rem",
       color: dark,
-      fontWeight: 500,
+      fontWeight: 700,
     },
     h2: {
       fontSize: "2.5rem",
       color: dark,
-      fontWeight: 500,
+      fontWeight: 600,
     },
     h3: {
       fontSize: "2.25rem",
@@ -57,6 +64,7 @@ export const muiTheme = createTheme({
     },
     h4: {
       fontSize: "1.85rem",
+      fontWeight: 500,
     },
     h5: {
       fontSize: "1.5rem",
@@ -65,13 +73,14 @@ export const muiTheme = createTheme({
 
     body1: {
       fontSize: "1.6rem",
-      fontWeight: 300,
+      fontWeight: 500,
+      lineHeight: 1.7,
       color: dark,
     },
     body2: {
-      fontSize: "1.3rem",
-      fontWeight: 300,
-      lineHeight: 1.7,
+      fontSize: "1.4rem",
+      fontWeight: 500,
+      lineHeight: 1.85,
     },
     btn: {
       fontSize: "1.5rem",
@@ -109,6 +118,10 @@ export const muiTheme = createTheme({
       borderRadius: 10,
       height: "25.8rem",
       cursor: "pointer",
+    },
+    FormLabel: {
+      color: grey,
+      fontSize: "1.6rem",
     },
   },
   components: {

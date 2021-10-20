@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
@@ -8,6 +8,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Card from "components/Utilities/Card";
+import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
@@ -16,6 +17,7 @@ import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.s
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import ReferPatient from "components/modals/ReferPatient";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -65,14 +67,6 @@ const SinglePatient = (props) => {
   const theme = useTheme();
 
   const { patientId } = useParams();
-
-  useEffect(() => {
-    setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(0);
-
-    // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
   const cards1 = [
     {
@@ -140,6 +134,17 @@ const SinglePatient = (props) => {
     active: theme.palette.success.dark,
   };
 
+  const [openDisablePatient, setOpenDisablePatient] = useState(false);
+  const [openReferPatient, setOpenReferPatient] = useState(false);
+
+  useEffect(() => {
+    setSelectedMenu(1);
+    setSelectedSubMenu(2);
+    setSelectedPatientMenu(0);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+
   return (
     <Grid container direction="column" className={classes.gridContainer}>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -166,10 +171,16 @@ const SinglePatient = (props) => {
                 title="Disable Patient"
                 type={trasparentButton}
                 textColor={theme.palette.common.red}
+                onClick={() => setOpenDisablePatient(true)}
               />
             </Grid>
             <Grid item>
-              <CustomButton endIcon={<TrendingUpIcon />} title="Refer Patient" type={greenButton} />
+              <CustomButton
+                endIcon={<TrendingUpIcon />}
+                title="Refer Patient"
+                type={greenButton}
+                onClick={() => setOpenReferPatient(true)}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -213,6 +224,14 @@ const SinglePatient = (props) => {
           </Grid>
         ))}
       </Grid>
+      <DisablePatient
+        open={openDisablePatient}
+        setOpen={setOpenDisablePatient}
+        title="Delete Partner"
+        btnValue="disable"
+        confirmationMsg="disable Patient"
+      />
+      <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
     </Grid>
   );
 };

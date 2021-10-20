@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   name: {
-    fontSize: "1.2rem",
     fontWeight: "normal",
   },
   notification: {
@@ -54,7 +53,7 @@ const HeaderProfile = () => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body2" className={classes.role}>
+              <Typography variant="body2" className={classes.role} style={{ fontWeight: 400 }}>
                 Admin
               </Typography>
             </Grid>

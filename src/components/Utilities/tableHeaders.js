@@ -44,6 +44,20 @@ export const emailHeader = [
     label: "Email",
   },
 ];
+export const PermissionHeader = [
+  {
+    id: 0,
+    label: "Permission",
+  },
+  {
+    id: 6,
+    label: "CRUD",
+  },
+  {
+    id: 3,
+    label: "",
+  },
+];
 export const adminHeader = [
   {
     id: 0,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
@@ -6,11 +6,12 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import DateComponent from "components/Utilities/DateComponent";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
-
+import FormControl from "@mui/material/FormControl";
+import FormSelect from "components/Utilities/FormSelect";
+import DateRangeTwoToneIcon from "@mui/icons-material/DateRangeTwoTone";
 const Finance = ({ setSelectedSubMenu }) => {
   const useStyles = makeStyles((theme) => ({
     cardContainer: {
@@ -103,18 +104,30 @@ const Finance = ({ setSelectedSubMenu }) => {
   const theme = useTheme();
 
   const classes = useStyles();
+  const options = ["1", "2", "3"];
+  const [finance, setFinance] = useState("");
 
   return (
     <Stack position="static" className={classes.containerGrid} spacing={3}>
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
-            <Typography variant="h1" color=" #2D2F39">
+            <Typography variant="h1" color="#2D2F39">
               Earning
             </Typography>
           </Grid>
           <Grid item>
-            <DateComponent label="Last 30 Days" />
+            <FormControl sx={{ width: 200 }}>
+              <FormSelect
+                options={options}
+                startAdornment={
+                  <DateRangeTwoToneIcon sx={{ fontSize: "3rem !important" }} color="secondary" />
+                }
+                value={finance}
+                onChange={(event) => setFinance(event.target.value)}
+                placeholderText="Last 30 days"
+              />
+            </FormControl>
           </Grid>
         </Grid>
 
@@ -124,8 +137,8 @@ const Finance = ({ setSelectedSubMenu }) => {
               <CircularProgressBar
                 height="17rem"
                 width="17rem"
-                color="green"
-                trailColor="red"
+                color={theme.palette.common.green}
+                trailColor={theme.palette.common.red}
                 value={65}
                 strokeWidth={8}
               />

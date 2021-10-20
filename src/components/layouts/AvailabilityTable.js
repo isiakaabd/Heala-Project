@@ -16,12 +16,12 @@ import { availabilityRows } from "components/Utilities/tableData";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       ...theme.typography.rowBtn,
       paddingTop: ".5rem",
       paddingBottom: ".5rem",
@@ -37,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
         color: "#fff",
       },
 
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
     },
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.2rem !important",
       height: "2.7rem",
       borderRadius: "1.3rem",

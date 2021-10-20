@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -24,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
 
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -48,14 +49,14 @@ const useStyles = makeStyles((theme) => ({
         background: "#fafafa",
       },
 
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
     },
   },
 }));
 
-const WaitingListTable = () => {
+const WaitingListTable = ({ path, onClick }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -132,8 +133,9 @@ const WaitingListTable = () => {
                     variant="contained"
                     className={classes.button}
                     component={Link}
-                    to="/waiting-list/userId"
+                    to={`${path}/${row.id}`}
                     endIcon={<ArrowForwardIosIcon />}
+                    onClick={onClick}
                   >
                     View Details
                   </Button>
@@ -144,6 +146,11 @@ const WaitingListTable = () => {
       </EnhancedTable>
     </Grid>
   );
+};
+
+WaitingListTable.propTypes = {
+  path: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default WaitingListTable;

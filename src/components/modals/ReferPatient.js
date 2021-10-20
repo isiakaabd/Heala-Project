@@ -19,7 +19,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
+  height: "80vh",
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: "1rem",
@@ -58,9 +59,9 @@ const ReferPatient = ({ open, setOpen }) => {
   const [category, setCategory] = useState("");
 
   const buttonColorStyles = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.primary.main,
+    hover: theme.palette.primary.light,
+    active: theme.palette.primary.dark,
   };
 
   const handleClick = () => {
@@ -101,8 +102,8 @@ const ReferPatient = ({ open, setOpen }) => {
                 />
               </Grid>
             </Grid>
-            <Grid item container justifyContent="space-between" style={{ padding: "2rem" }}>
-              <Grid item>
+            <Grid item container style={{ padding: "2rem 2rem 3rem" }}>
+              <Grid item md style={{ marginRight: "2rem" }}>
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="body2" gutterBottom>
@@ -119,7 +120,7 @@ const ReferPatient = ({ open, setOpen }) => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item md style={{ marginLeft: "2rem" }}>
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="body2" gutterBottom>
@@ -137,23 +138,26 @@ const ReferPatient = ({ open, setOpen }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item container direction="column" style={{ padding: "2rem" }}>
+            <Grid item container direction="column" style={{ padding: "0 2rem 3rem" }}>
               <Grid item>
-                <Typography variant="body1">Referral Comment</Typography>
+                <Typography variant="body1" gutterBottom>
+                  Referral Comment
+                </Typography>
               </Grid>
               <Grid item>
                 <TextField
                   id="outlined-multiline-static"
                   aria-label="referral comment"
                   multiline
-                  rows={4}
+                  rows={7}
                   fullWidth
                   placeholder="Type your referral comment"
                 />
               </Grid>
             </Grid>
-            <Grid item container style={{ padding: "1rem 2rem 3rem" }}>
+            <Grid item container style={{ padding: "2rem 2rem 3rem" }}>
               <CustomButton
+                disableRipple
                 title="Search available HCP"
                 type={buttonColorStyles}
                 endIcon={<SearchIcon sx={{ ml: 1 }} />}

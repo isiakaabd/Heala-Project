@@ -4,10 +4,16 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
+import Modals from "components/Utilities/Modal";
+import FormSelect from "components/Utilities/FormSelect";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
+import FormInput from "components/Utilities/FormInput";
 import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -23,6 +29,12 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import useFormInput from "components/hooks/useFormInput";
+
+const dates = ["Hello", "World", "Goodbye", "World"];
+const specializations = ["Dentistry", "Pediatry", "Optometry", "Pathology"];
+const hospitals = ["General Hospital, Lekki", "H-Medix", "X Lab"];
+const statusType = ["Active", "Blocked"];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -73,26 +85,67 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "1.3rem",
     },
   },
-}));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "consultations" },
-];
+  searchFilterBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: theme.palette.common.black,
+      width: "100%",
+    },
+  },
+  uploadBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: "#f2f2f2",
+      boxShadow: "none",
+      color: theme.palette.common.black,
+
+      "&:hover": {
+        background: "#f2f3f3",
+        boxShadow: "none",
+      },
+
+      "&:active": {
+        boxShadow: "none",
+      },
+    },
+  },
+}));
 
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const buttonType = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
   };
 
   const [searchHcp, setSearchHcp] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [openHcpFilter, setOpenHcpFilter] = useState(false);
+  const [openAddHcp, setOpenAddHcp] = useState(false);
+
+  // FIltering modals select states
+  const [selectedInput, handleSelectedInput] = useFormInput({
+    date: "",
+    specialization: "",
+    hospital: "",
+    status: "",
+  });
+
+  // Add new HCP modals input state
+  const [formInput, handleFormInput] = useFormInput({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    specialization: "",
+    hospital: "",
+  });
+
+  const { date, specialization, hospital, status } = selectedInput;
+  const { firstName, lastName, email, phoneNumber, hcpSpecialization, hcpHospital } = formInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -109,17 +162,15 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
         <Grid item className={classes.filterBtnGrid}>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter HCPs"
-            options={options}
-          />
+          <FilterList onClick={() => setOpenHcpFilter(true)} title="Filter HCPs" />
         </Grid>
         <Grid item>
-          <CustomButton endIcon={<AddIcon />} title="Add HCP" type={buttonType} />
+          <CustomButton
+            endIcon={<AddIcon />}
+            title="Add HCP"
+            type={buttonType}
+            onClick={() => setOpenAddHcp(true)}
+          />
         </Grid>
       </Grid>
       <Grid item container style={{ marginTop: "5rem" }}>
@@ -236,6 +287,232 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             })}
         </EnhancedTable>
       </Grid>
+      {/* Filter Modal */}
+      <Modals
+        isOpen={openHcpFilter}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={() => setOpenHcpFilter(false)}
+      >
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Date
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="date"
+                        options={dates}
+                        value={date}
+                        onChange={handleSelectedInput}
+                        placeholderText="Choose Date"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Specialization
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="specialization"
+                        options={specializations}
+                        value={specialization}
+                        onChange={handleSelectedInput}
+                        placeholderText="Select Specialization"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Hospital
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="hospital"
+                        options={hospitals}
+                        value={hospital}
+                        onChange={handleSelectedInput}
+                        placeholderText="Choose hospital"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Status
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="status"
+                        options={statusType}
+                        value={status}
+                        onChange={handleSelectedInput}
+                        placeholderText="Select Status"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={() => setOpenHcpFilter(false)}
+              type="submit"
+              className={classes.searchFilterBtn}
+            >
+              Apply Filter
+            </Button>
+          </Grid>
+        </Grid>
+      </Modals>
+      {/* ADD HCP MODAL */}
+      <Modals
+        isOpen={openAddHcp}
+        title="Add HCP"
+        rowSpacing={5}
+        height="90vh"
+        handleClose={() => setOpenAddHcp(false)}
+      >
+        <>
+          <Grid item container direction="column">
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    label="First Name"
+                    labelId="firstName"
+                    id="firstName"
+                    name="firstName"
+                    value={firstName}
+                    onChange={handleFormInput}
+                    placeholder="Enter first name"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Last Name"
+                    labelId="lastName"
+                    id="lastName"
+                    name="lastName"
+                    value={lastName}
+                    onChange={handleFormInput}
+                    placeholder="Enter last name"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item style={{ margin: "3rem 0" }}>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    type="email"
+                    label="Email"
+                    labelId="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleFormInput}
+                    placeholder="Enter email"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Phone Number"
+                    labelId="phoneNumber"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={phoneNumber}
+                    onChange={handleFormInput}
+                    placeholder="Enter phone number"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <FormInput
+                    label="Specialization"
+                    labelId="hcpSpecialization"
+                    id="hcpSpecialization"
+                    name="hcpSpecialization"
+                    value={hcpSpecialization}
+                    onChange={handleFormInput}
+                    placeholder="Enter specialization"
+                  />
+                </Grid>
+                <Grid item md>
+                  <FormInput
+                    label="Hospital"
+                    labelId="hcpHospital"
+                    id="hcpHospital"
+                    name="hcpHospital"
+                    value={hcpHospital}
+                    onChange={handleFormInput}
+                    placeholder="Enter hospital"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container>
+            <label htmlFor="contained-button-file">
+              <Input
+                accept="image/*"
+                id="contained-button-file"
+                multiple
+                type="file"
+                style={{ display: "none" }}
+              />
+              <Button variant="contained" component="span" className={classes.uploadBtn}>
+                Upload Photo
+              </Button>
+            </label>
+          </Grid>
+
+          <Grid item container xs={12}>
+            <Button
+              variant="contained"
+              onClick={() => setOpenAddHcp(false)}
+              type="submit"
+              className={classes.searchFilterBtn}
+              disableRipple
+            >
+              Add HCP
+            </Button>
+          </Grid>
+        </>
+      </Modals>
     </Grid>
   );
 };

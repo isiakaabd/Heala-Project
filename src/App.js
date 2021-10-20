@@ -25,6 +25,8 @@ const App = () => {
   const [selectedSubMenu, setSelectedSubMenu] = useState(0);
   const [selectedPatientMenu, setSelectedPatientMenu] = useState(0);
   const [selectedHcpMenu, setSelectedHcpMenu] = useState(0);
+  const [selectedAppointmentMenu, setSelectedAppointmentMenu] = useState(0);
+  const [waitingListMenu, setWaitingListMenu] = useState(0);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -38,6 +40,8 @@ const App = () => {
               selectedSubMenu={selectedSubMenu}
               selectedPatientMenu={selectedPatientMenu}
               selectedHcpMenu={selectedHcpMenu}
+              selectedAppointmentMenu={selectedAppointmentMenu}
+              waitingListMenu={waitingListMenu}
             />
           )}
 
@@ -49,6 +53,8 @@ const App = () => {
                 selectedMenu={selectedMenu}
                 setSelectedMenu={setSelectedMenu}
                 setSelectedSubMenu={setSelectedSubMenu}
+                setWaitingListMenu={setWaitingListMenu}
+                setSelectedAppointmentMenu={setSelectedAppointmentMenu}
               />
               <section style={sectionStyles}>
                 <Routes
@@ -60,6 +66,10 @@ const App = () => {
                   setSelectedPatientMenu={setSelectedPatientMenu}
                   selectedHcpMenu={selectedHcpMenu}
                   setSelectedHcpMenu={setSelectedHcpMenu}
+                  selectedAppointmentMenu={selectedAppointmentMenu}
+                  setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                  waitingListMenu={waitingListMenu}
+                  setWaitingListMenu={setWaitingListMenu}
                 />
               </section>
             </main>

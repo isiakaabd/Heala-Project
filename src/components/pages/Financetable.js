@@ -78,14 +78,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   useEffect(() => {
-    setSelectedSubMenu(0);
+    setSelectedMenu(8);
+    setSelectedSubMenu(9);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
@@ -193,7 +194,6 @@ Financetable.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default Financetable;

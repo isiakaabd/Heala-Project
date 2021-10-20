@@ -14,35 +14,37 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
 
       "&:hover": {
-        color: theme.palette.common.red,
+        color: "red",
       },
     },
   },
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  borderRadius: "2rem",
-  p: 4,
-};
-const Modals = ({ isOpen, handleClose, title, color, children }) => {
+const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, height }) => {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 500,
+    height,
+    bgcolor: "background.paper",
+    borderRadius: "2rem",
+    p: 4,
+  };
+
   const classes = useStyles();
   return (
-    <div>
+    <Grid container>
       <Modal
         open={isOpen}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
         <Box sx={style}>
-          <Grid container rowSpacing={3} className={classes.modal}>
-            <Grid item container justifyContent="space-between" alignItems="center">
+          <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
+            <Grid item container justifyContent="space-between" alignItems="center" flex="2">
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
               </Grid>
@@ -58,14 +60,21 @@ const Modals = ({ isOpen, handleClose, title, color, children }) => {
           </Grid>
         </Box>
       </Modal>
-    </div>
+    </Grid>
   );
 };
 Modals.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
+  height: PropTypes.string,
+  rowSpacing: PropTypes.number,
 };
+
+Modals.defaultProps = {
+  height: "80vh",
+};
+
 export default Modals;

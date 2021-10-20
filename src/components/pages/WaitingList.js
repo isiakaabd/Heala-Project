@@ -5,23 +5,41 @@ import Typography from "@mui/material/Typography";
 import WaitingListTable from "components/layouts/WaitingListTable";
 import PreviousButton from "components/Utilities/PreviousButton";
 
-const WaitingList = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const WaitingList = (props) => {
+  const {
+    selectedMenu,
+    setSelectedMenu,
+    selectedSubMenu,
+    selectedAppointmentMenu,
+    setSelectedSubMenu,
+    setWaitingListMenu,
+    setSelectedAppointmentMenu,
+  } = props;
+
   useEffect(() => {
     setSelectedMenu(4);
+    setSelectedAppointmentMenu(1);
     setSelectedSubMenu(5);
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedAppointmentMenu]);
+
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/appointments`} onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton
+          path="/appointments"
+          onClick={() => {
+            setSelectedSubMenu(0);
+            setSelectedAppointmentMenu(0);
+          }}
+        />
       </Grid>
       <Grid item>
         <Typography variant="h2">Waiting List</Typography>
       </Grid>
       <Grid item style={{ marginTop: "5rem" }}>
-        <WaitingListTable />
+        <WaitingListTable path="/appointments/waiting-list" onClick={() => setWaitingListMenu(1)} />
       </Grid>
     </Grid>
   );
@@ -30,8 +48,11 @@ const WaitingList = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
 WaitingList.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setWaitingListMenu: PropTypes.func.isRequired,
+  setSelectedAppointmentMenu: PropTypes.func.isRequired,
 };
 
 export default WaitingList;

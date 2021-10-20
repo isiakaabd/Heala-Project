@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
-import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
+import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -69,7 +69,37 @@ const Settings = ({ setSelectedSubMenu }) => {
             title="Role Management"
             background={theme.palette.common.lightRed}
           >
-            <CalendarIcon fill={theme.palette.common.red} />
+            <ConsulationIcon fill={theme.palette.common.red} />
+          </Card>
+        </Link>
+      </Grid>
+      <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>
+        <Link
+          to="/settings/permissions"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
+          <Card
+            alt="An icon used as a permission for making consultation with the doctor"
+            title="Permissions"
+            background={theme.palette.common.lightRed}
+          >
+            <ConsulationIcon fill={theme.palette.common.red} />
+          </Card>
+        </Link>
+      </Grid>
+      <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={6} sm={12}>
+        <Link
+          to="/settings/list-management"
+          style={{ textDecoration: "none" }}
+          onClick={() => setSelectedSubMenu(12)}
+        >
+          <Card
+            alt="list management Icon"
+            title="List management"
+            background={theme.palette.common.lightRed}
+          >
+            <ConsulationIcon fill={theme.palette.common.red} />
           </Card>
         </Link>
       </Grid>

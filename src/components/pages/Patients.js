@@ -4,9 +4,13 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
+import FormSelect from "components/Utilities/FormSelect";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -21,6 +25,13 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import useFormInput from "components/hooks/useFormInput";
+
+const referralOptions = ["Hello", "World", "Goodbye", "World"];
+
+const plans = ["Plan 1", "Plan 2", "Plan 3", "Plan 4"];
+const genderType = ["Male", "Female", "Prefer not to say"];
+const statusType = ["Active", "Blocked"];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -70,25 +81,41 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiChip-root": {
       fontSize: "1.25rem !important",
       height: "2.7rem",
+
       borderRadius: "1.3rem",
     },
   },
+  searchFilterBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: theme.palette.common.black,
+      width: "100%",
+    },
+  },
 }));
-
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
 
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const [inputValue, handleInputValue] = useFormInput({
+    date: "",
+    plan: "",
+    gender: "",
+    status: "",
+  });
+
+  const { date, plan, gender, status } = inputValue;
+
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleDialogOpen = () => setIsOpen(true);
+
+  const handleDialogClose = () => setIsOpen(false);
 
   return (
     <>
@@ -103,7 +130,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             />
           </Grid>
           <Grid item>
-            <FilterList title="Filter Patients" options={options} width="15.2rem" />
+            <FilterList title="Filter Patients" width="15.2rem" onClick={handleDialogOpen} />
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
@@ -211,6 +238,108 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
           </EnhancedTable>
         </Grid>
       </Grid>
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Date
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="date"
+                        options={referralOptions}
+                        value={date}
+                        onChange={handleInputValue}
+                        placeholderText="Choose Date"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Specialization
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="plan"
+                        options={plans}
+                        value={plan}
+                        onChange={handleInputValue}
+                        placeholderText="Select plan"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Hospital
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="gender"
+                        options={genderType}
+                        value={gender}
+                        onChange={handleInputValue}
+                        placeholderText="Choose gender"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Status
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth style={{ height: "3rem" }}>
+                      <FormSelect
+                        name="status"
+                        options={statusType}
+                        value={status}
+                        onChange={handleInputValue}
+                        placeholderText="Select Status"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={handleDialogClose}
+              type="submit"
+              className={classes.searchFilterBtn}
+            >
+              Apply Filter
+            </Button>
+          </Grid>
+        </Grid>
+      </Modals>
     </>
   );
 };

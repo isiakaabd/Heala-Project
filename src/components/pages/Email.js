@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
+import React, { useState, useEffect } from "react";
+import FormLabel from "@mui/material/FormLabel";
+import Button from "@mui/material/Button";
+import Modals from "components/Utilities/Modal";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -9,6 +11,7 @@ import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
+import FormControl from "@mui/material/FormControl";
 import { rows } from "components/Utilities/DataHeader";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import Chip from "@mui/material/Chip";
@@ -19,41 +22,26 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
+import FormSelect from "components/Utilities/FormSelect";
+import Alert from "@mui/material/Alert";
+import { Grid, Typography } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "10rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      width: "100%",
+    },
+  },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
     },
   },
 
@@ -72,137 +60,241 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
+const referralOptions = ["Hello", "World", "Goodbye", "World"];
 
 const Email = () => {
   const classes = useStyles();
   const theme = useTheme();
-
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [response, setResponse] = useState("");
+  const [state, setstate] = useState({
+    referral: "Hello",
+    date: "Goodbye",
+    category: "World",
+  });
+  const [isOpen, setIsOpen] = useState(false);
+  const handleDialogOpen = () => setIsOpen(true);
+  useEffect(() => {
+    const z = setTimeout(() => {
+      setResponse("");
+    }, 2000);
+    return () => clearTimeout(z);
+  }, [response]);
 
-  const buttonType = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
+  const handleDialogClose = async () => {
+    setIsOpen(false);
+    await setTimeout(() => {
+      setResponse("Saved");
+    }, 3000);
   };
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
+  //
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setstate({ ...state, [name]: value });
+  };
+  const { referral, category, date } = state;
   return (
-    <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <Grid item className={classes.searchGrid}>
-          <Search
-            value={searchMail}
-            onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Enter your email here..."
-            height="5rem"
-          />
+    <>
+      <Grid container direction="column">
+        {response ? (
+          <Grid
+            item
+            width={300}
+            margin="auto"
+            justifyContent="center"
+            alignItems="center"
+            textAlign="center"
+          >
+            <Alert severity="success">
+              <Typography variant="h1">{response}</Typography>
+            </Alert>
+          </Grid>
+        ) : null}
+        <Grid item container style={{ paddingBottom: "5rem" }}>
+          <Grid item className={classes.searchGrid}>
+            <Search
+              value={searchMail}
+              onChange={(e) => setSearchMail(e.target.value)}
+              placeholder="Enter your email here..."
+              height="5rem"
+            />
+          </Grid>
+          <Grid item sx={{ marginRight: "2rem" }}>
+            <FilterList onClick={handleDialogOpen} title="Filter by" />
+          </Grid>
+          <Grid item>
+            <CustomButton
+              endIcon={<DownloadSharpIcon />}
+              title="Download Email"
+              type={buttonType}
+            />
+          </Grid>
         </Grid>
-        <Grid item sx={{ marginRight: "2rem" }}>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter by"
-            options={options}
-          />
-        </Grid>
-        <Grid item>
-          <CustomButton endIcon={<DownloadSharpIcon />} title="Download email" type={buttonType} />
-        </Grid>
-      </Grid>
-      {/* The Search and Filter ends here */}
-      <Grid item container>
-        <EnhancedTable
-          headCells={emailHeader}
-          rows={rows}
-          page={page}
-          paginationLabel="email per page"
-          hasCheckbox={true}
-        >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
+        {/* The Search and Filter ends here */}
+        <Grid item container>
+          <EnhancedTable
+            headCells={emailHeader}
+            rows={rows}
+            page={page}
+            paginationLabel="email per page"
+            hasCheckbox={true}
+          >
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-            const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
                 >
-                  {row.entryDate}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {row.category}
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <Chip
-                    label={row.email}
-                    variant="outlined"
-                    className={classes.badge}
-                    style={{
-                      background: theme.palette.common.white,
-                      color: theme.palette.common.green,
-                      fontSize: "1.25rem",
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </EnhancedTable>
+                    {row.entryDate}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {row.firstName} {row.lastName}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.red }}
+                  >
+                    {row.category}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <Chip
+                      label={row.email}
+                      variant="outlined"
+                      className={classes.badge}
+                      style={{
+                        background: theme.palette.common.white,
+                        color: theme.palette.common.green,
+                        fontSize: "1.25rem",
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </EnhancedTable>
+        </Grid>
       </Grid>
-    </Grid>
+
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+        <>
+          <Grid item container direction="column">
+            <Grid item container spacing={2}>
+              <Grid item xs={6} marginBottom={4}>
+                <Grid container direction="column" gap={1}>
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Name
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={referralOptions}
+                      value={referral}
+                      name="referral"
+                      onChange={handleChange}
+                      placeholderText="Select Name"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              {/* second grid */}
+              <Grid item xs={6}>
+                <Grid container gap={1} direction="column">
+                  <FormLabel component="legend" className={classes.FormLabel}>
+                    Date
+                  </FormLabel>
+                  <FormControl fullWidth>
+                    <FormSelect
+                      options={referralOptions}
+                      value={date}
+                      name="date"
+                      onChange={handleChange}
+                      placeholderText="Choose Date"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item container spacing={2}>
+              <Grid item container gap={1} xs={6}>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Category
+                </FormLabel>
+                <FormControl fullWidth style={{ height: "3rem" }}>
+                  <FormSelect
+                    options={referralOptions}
+                    value={category}
+                    name="category"
+                    placeholderText="Save Category"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} marginTop={20}>
+            <Button
+              variant="contained"
+              onClick={handleDialogClose}
+              to="/view"
+              type="submit"
+              className={classes.button}
+            >
+              Apply Filter
+            </Button>
+          </Grid>
+        </>
+      </Modals>
+    </>
   );
 };
 

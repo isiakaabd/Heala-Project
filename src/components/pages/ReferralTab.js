@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -23,13 +24,13 @@ import Chip from "@mui/material/Chip";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },
   },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "10rem",
+      width: "10rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -47,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
         background: "#fafafa",
       },
 
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
 
-      "& .css-9tj150-MuiButton-endIcon": {
+      "& .MuiButton-endIcon": {
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
@@ -59,13 +60,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
@@ -73,13 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
-
-const ReferralTab = () => {
+const ReferralTab = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,8 +82,6 @@ const ReferralTab = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   return (
     <Grid container direction="column">
@@ -102,14 +95,7 @@ const ReferralTab = () => {
           />
         </Grid>
         <Grid item>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter by"
-            options={options}
-          />
+          <FilterList onClick={() => console.log("Clicked")} title="Filter by" />
         </Grid>
       </Grid>
       {/* The Search and Filter ends here */}
@@ -223,8 +209,9 @@ const ReferralTab = () => {
                     variant="contained"
                     className={classes.button}
                     component={Link}
-                    to="/view"
+                    to={`/referrals/${row.id}`}
                     endIcon={<ArrowForwardIosIcon />}
+                    onClick={() => setSelectedSubMenu(10)}
                   >
                     View referral
                   </Button>
@@ -236,6 +223,10 @@ const ReferralTab = () => {
       </Grid>
     </Grid>
   );
+};
+
+ReferralTab.propTypes = {
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default ReferralTab;

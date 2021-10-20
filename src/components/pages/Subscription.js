@@ -6,7 +6,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
@@ -20,20 +19,23 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
-import TextField from "@mui/material/TextField";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import { ReactComponent as Naira } from "assets/images/naira.svg";
-import FormControl from "@mui/material/FormControl";
+import { SubscriptionModal } from "components/modals/SubscriptionModal";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },
   },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
+  },
   button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: "#fff",
       color: theme.palette.common.grey,
       textTransform: "none",
@@ -51,14 +53,20 @@ const useStyles = makeStyles((theme) => ({
         background: "#fafafa",
       },
 
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
 
-      "& .css-9tj150-MuiButton-endIcon": {
+      "& .MuiButton-endIcon": {
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
+    },
+  },
+  btn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      width: "100%",
     },
   },
   closeIcon: {
@@ -78,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1.25rem",
       borderRadius: "2rem",
       boxShadow: "none",
+      width: "12rem",
 
       "&:hover": {
         "& .MuiButton-endIcon>*:nth-of-type(1)": {
@@ -108,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   greenBtn: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
+    "&.MuiButton-root": {
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
 
@@ -119,13 +128,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
@@ -136,7 +145,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "2rem 1rem",
       },
     },
-    ".css-11lq3yg-MuiGrid-root": {
+    ".MuiGrid-root": {
       background: "red",
     },
   },
@@ -147,11 +156,21 @@ const Subscription = () => {
   const theme = useTheme();
 
   const [isOpen, setIsOpen] = useState(false);
-
+  const [edit, setEdit] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
-  const handleDialogClose = () => {
+  const handleEditCloseDialog = () => {
+    setEdit(false);
+  };
+  const handleDeleteOpenDialog = () => {
+    setdeleteModal(true);
+  };
+  const handleEditOpenDialog = () => {
+    setEdit(true);
+  };
+  const handleDialogClose = async () => {
     setIsOpen(false);
   };
 
@@ -161,9 +180,9 @@ const Subscription = () => {
   const [searchMail, setSearchMail] = useState("");
 
   const buttonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
   };
 
   return (
@@ -243,7 +262,7 @@ const Subscription = () => {
                   <TableCell
                     align="center"
                     className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+                    style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                   >
                     {row.description}
                   </TableCell>
@@ -260,6 +279,7 @@ const Subscription = () => {
                       <Button
                         variant="contained"
                         disableRipple
+                        onClick={handleEditOpenDialog}
                         className={`${classes.tableBtn} ${classes.greenBtn}`}
                         endIcon={<EditIcon color="success" />}
                       >
@@ -268,6 +288,7 @@ const Subscription = () => {
                       <Button
                         variant="contained"
                         disableRipple
+                        onClick={handleDeleteOpenDialog}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         to="/view"
                         endIcon={<DeleteIcon color="error" />}
@@ -283,64 +304,28 @@ const Subscription = () => {
         </Grid>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} title="Create new plan" handleClose={handleDialogClose}>
-        <>
-          <Grid item container spacing={2} component="div">
-            <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
-                Name of plan
-              </FormLabel>
-              <FormControl style={{ maxWidth: "100%" }}>
-                <OutlinedInput id="outlined-adornment-amount" placeholder="Enter Plan Name" />
-              </FormControl>
-            </Grid>
-            <Grid item xs={6}>
-              <FormLabel component="legend" color="secondary">
-                Category
-              </FormLabel>
-              <FormControl fullWidth>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Amount"
-                  startAdornment={
-                    <Naira
-                      color="error"
-                      style={{
-                        background: theme.palette.common.lightRed,
-                        marginRight: "1rem",
-                        padding: ".6rem ",
-                      }}
-                    />
-                  }
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <FormLabel component="legend" color="secondary">
-              Plan Description
-            </FormLabel>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              placeholder="Type Plan description"
-              rows={4}
-              style={{ width: "100%", height: "4%" }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              to="/view"
-              type="submit"
-              color="error"
-              style={{ width: "100%", padding: "1.2rem" }}
-            >
-              Save Plan
-            </Button>
-          </Grid>
-        </>
+      <Modals
+        isOpen={isOpen}
+        title="Create new plan"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
+        <SubscriptionModal handleDialogClose={handleDialogClose} type="add" />
       </Modals>
+
+      {/* edit Modal */}
+      <Modals isOpen={edit} title="Edit plan" rowSpacing={5} handleClose={handleEditCloseDialog}>
+        <SubscriptionModal handleDialogClose={handleEditCloseDialog} type="edit" />
+      </Modals>
+
+      {/* delete modal */}
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Plan"
+        confirmationMsg="delete plan"
+        btnValue="Delete"
+      />
     </>
   );
 };

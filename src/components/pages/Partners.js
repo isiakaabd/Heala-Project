@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import FormLabel from "@mui/material/FormLabel";
+import Input from "@mui/material/Input";
+import FormControl from "@mui/material/FormControl";
 import { makeStyles } from "@mui/styles";
+import Modals from "components/Utilities/Modal";
+import FormSelect from "components/Utilities/FormSelect";
+import FormInput from "components/Utilities/FormInput";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import CustomButton from "components/Utilities/CustomButton";
-import AddIcon from "@mui/icons-material/Add";
+import useFormInput from "components/hooks/useFormInput";
+import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -106,22 +114,44 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
+    },
+  },
+  searchFilterBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: theme.palette.common.black,
+      width: "100%",
+    },
+  },
+  uploadBtn: {
+    "&.MuiButton-root": {
+      ...theme.typography.btn,
+      background: "#f2f2f2",
+      boxShadow: "none",
+      color: theme.palette.common.black,
+
+      "&:hover": {
+        background: "#f2f3f3",
+        boxShadow: "none",
+      },
+
+      "&:active": {
+        boxShadow: "none",
+      },
+    },
+  },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "consultations" },
-];
+const names = ["General Hospital, Lekki", "H-Medix", "X Lab"];
+const dates = ["Hello", "World", "Goodbye", "World"];
+const categories = ["Hospital", "Pharmacy", "Diagnostic Center"];
 
 const Partners = () => {
   const classes = useStyles();
   const theme = useTheme();
-
-  const redButtonType = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
-  };
 
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -130,8 +160,27 @@ const Partners = () => {
   };
 
   const [searchPartner, setSearchPartner] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [openFilterPartner, setOpenFilterPartner] = useState(false);
+  const [openAddPartner, setOpenAddPartner] = useState(false);
+  const [openDeletePartner, setOpenDeletePartner] = useState(false);
+
+  // FILTER PARTNERS SELECT STATES
+  const [filterSelectInput, handleSelectedInput] = useFormInput({
+    hospitalName: "",
+    date: "",
+    categoryName: "",
+  });
+
+  // ADD PARTNERS INPUT STATES
+  const [addPartnersFormInput, handleFormInput] = useFormInput({
+    firstName: "",
+    lastName: "",
+    email: "",
+    category: "",
+  });
+
+  const { firstName, lastName, email, category } = addPartnersFormInput;
+  const { hospitalName, date, categoryName } = filterSelectInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -148,24 +197,15 @@ const Partners = () => {
           />
         </Grid>
         <Grid item className={classes.actionBtnGrid}>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter HCPs"
-            options={options}
-          />
-        </Grid>
-        <Grid item className={classes.actionBtnGrid}>
-          <CustomButton
-            endIcon={<PersonAddAlt1Icon />}
-            title="Add Partner Category"
-            type={redButtonType}
-          />
+          <FilterList title="Filter HCPs" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
         <Grid item>
-          <CustomButton endIcon={<AddIcon />} title="Add New Partner" type={darkButtonType} />
+          <CustomButton
+            endIcon={<PersonAddAlt1Icon />}
+            title="Add New Partner"
+            type={darkButtonType}
+            onClick={() => setOpenAddPartner(true)}
+          />
         </Grid>
       </Grid>
       <Grid item container style={{ marginTop: "5rem" }}>
@@ -212,7 +252,7 @@ const Partners = () => {
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        paddingLeft: "7rem",
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>
@@ -238,6 +278,7 @@ const Partners = () => {
                       disableRipple
                       className={`${classes.tableBtn} ${classes.redBtn}`}
                       endIcon={<DeleteIcon color="error" />}
+                      onClick={() => setOpenDeletePartner(true)}
                     >
                       Delete partner
                     </Button>
@@ -247,6 +288,189 @@ const Partners = () => {
             })}
         </EnhancedTable>
       </Grid>
+      <Modals
+        isOpen={openFilterPartner}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={() => setOpenFilterPartner(false)}
+      >
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Name
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    name="hospitalName"
+                    options={names}
+                    value={hospitalName}
+                    onChange={handleSelectedInput}
+                    placeholderText="Select name"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item md>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Date
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    name="date"
+                    options={dates}
+                    value={date}
+                    onChange={handleSelectedInput}
+                    placeholderText="Choose Date"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+          <Grid item md>
+            <FormLabel component="legend" className={classes.FormLabel}>
+              Category
+            </FormLabel>
+            <FormControl fullWidth>
+              <FormSelect
+                name="categoryName"
+                options={categories}
+                value={categoryName}
+                onChange={handleSelectedInput}
+                placeholderText="Select category"
+              />
+            </FormControl>
+          </Grid>
+          {/* Placeholder grid */}
+          <Grid item md></Grid>
+        </Grid>
+        <Grid item container xs={12}>
+          <Button
+            variant="contained"
+            onClick={() => setOpenFilterPartner(false)}
+            type="submit"
+            className={classes.searchFilterBtn}
+            disableRipple
+          >
+            Apply Filter
+          </Button>
+        </Grid>
+      </Modals>
+
+      {/* ADD NEW PARTER MODAL */}
+      <Modals
+        isOpen={openAddPartner}
+        title="Add HCP"
+        rowSpacing={5}
+        handleClose={() => setOpenAddPartner(false)}
+      >
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormInput
+                  label="First Name"
+                  labelId="firstName"
+                  id="firstName"
+                  name="firstName"
+                  value={firstName}
+                  onChange={handleFormInput}
+                  placeholder="Enter first name"
+                />
+              </Grid>
+              <Grid item md>
+                <FormInput
+                  label="Last Name"
+                  labelId="lastName"
+                  id="lastName"
+                  name="lastName"
+                  value={lastName}
+                  onChange={handleFormInput}
+                  placeholder="Enter last name"
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item style={{ margin: "3rem 0 0" }}>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormInput
+                  type="email"
+                  label="Email"
+                  labelId="email"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={handleFormInput}
+                  placeholder="Enter email"
+                />
+              </Grid>
+              <Grid item md>
+                <Grid container direction="column">
+                  <Grid item>
+                    <FormLabel component="legend" className={classes.FormLabel}>
+                      Category
+                    </FormLabel>
+                  </Grid>
+                  <Grid item>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="category"
+                        options={categories}
+                        value={category}
+                        onChange={handleFormInput}
+                        placeholderText="Select category"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container direction="column">
+          <Grid item style={{ paddingBottom: ".5rem" }}>
+            <Typography variant="body1" gutterBottom>
+              Upload your logo
+            </Typography>
+          </Grid>
+          <Grid item>
+            <label htmlFor="contained-button-file">
+              <Input
+                accept="image/*"
+                id="contained-button-file"
+                multiple
+                type="file"
+                style={{ display: "none" }}
+              />
+              <Button variant="contained" component="span" className={classes.uploadBtn}>
+                Upload Photo
+              </Button>
+            </label>
+          </Grid>
+        </Grid>
+
+        <Grid item container>
+          <Button
+            variant="contained"
+            onClick={() => setOpenAddPartner(false)}
+            type="submit"
+            className={classes.searchFilterBtn}
+            disableRipple
+          >
+            Add Partner
+          </Button>
+        </Grid>
+      </Modals>
+      <DeletePartner
+        open={openDeletePartner}
+        setOpen={setOpenDeletePartner}
+        title="Delete Partner"
+        btnValue="delete"
+        confirmationMsg="delete partner"
+      />
     </Grid>
   );
 };
