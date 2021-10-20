@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   checkboxContainer: {
     "&.MuiBox-root": {
       padding: "2rem 0",

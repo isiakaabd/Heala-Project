@@ -1,0 +1,101 @@
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import { makeStyles } from "@mui/styles";
+import displayPhoto from "assets/images/avatar.png";
+import PreviousButton from "components/Utilities/PreviousButton";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+const useStyles = makeStyles((theme) => ({
+  parentGrid: {
+    background: "#fff",
+    borderRadius: "1rem",
+    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
+  },
+  gridWrapper: {
+    padding: "3rem 5rem",
+  },
+  chip: {
+    "&.MuiChip-root": {
+      fontSize: "1.25rem",
+      height: "3rem",
+      borderRadius: "1.3rem",
+      background: theme.palette.common.white,
+      color: theme.palette.common.green,
+      "& .MuiChip-deleteIcon": {
+        color: "inherit",
+        fontSize: "inherit",
+      },
+    },
+  },
+}));
+
+const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+  const { emailId } = useParams();
+
+  const classes = useStyles();
+  const { emailData } = useSelector((state) => state.tables);
+
+  const details = emailData[emailId];
+  console.log(details);
+
+  useEffect(() => {
+    setSelectedMenu(6);
+    setSelectedSubMenu(7);
+    //   eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
+  return (
+    <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path={`/email`} />
+      </Grid>
+      <Grid item container direction="column" className={classes.parentGrid}>
+        <Grid item className={classes.gridWrapper}>
+          <Typography variant="h3"> {details.message}</Typography>
+        </Grid>
+        <Divider />
+        <Grid item style={{ padding: "1.5rem 5rem" }}>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Avatar src={displayPhoto} alt="Display photo of the sender" />
+            </Grid>
+            <Grid item style={{ margin: "0 3rem 0 1.5rem" }}>
+              <Typography variant="h5">{details.name[0]}</Typography>
+            </Grid>
+            <Grid item>
+              <Chip
+                variant="outlined"
+                deleteIcon={<ArrowForwardIosIcon />}
+                onClick={() => window.open(`mailto:${details.email}`, "_blank")}
+                onDelete={() => console.log(" ")}
+                label={details.email}
+                className={classes.chip}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider />
+        <Grid item className={classes.gridWrapper}>
+          <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+            {details.textarea}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
+
+ViewMail.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
+};
+
+export default ViewMail;
