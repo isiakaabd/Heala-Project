@@ -55,6 +55,7 @@ const Routes = (props) => {
     setWaitingListMenu,
     selectedAppointmentMenu,
     setSelectedAppointmentMenu,
+    setChatMediaActive,
   } = props;
   return (
     <Switch>
@@ -433,6 +434,7 @@ Routes.propTypes = {
   setSelectedHcpMenu: PropTypes.func.isRequired,
   setWaitingListMenu: PropTypes.func.isRequired,
   setSelectedAppointmentMenu: PropTypes.func.isRequired,
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default Routes;
