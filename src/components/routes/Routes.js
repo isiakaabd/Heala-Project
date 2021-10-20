@@ -38,6 +38,9 @@ import Settings from "components/pages/Settings";
 import Administrator from "components/pages/Administrator";
 import Management from "components/pages/Management";
 import Permission from "components/pages/Permission";
+import Chat from "components/pages/Chat";
+import PhoneCall from "components/pages/PhoneCall";
+import VideoCall from "components/pages/VideoCall";
 
 const Routes = (props) => {
   const {
@@ -53,6 +56,7 @@ const Routes = (props) => {
     setWaitingListMenu,
     selectedAppointmentMenu,
     setSelectedAppointmentMenu,
+    chatMediaActive,
     setChatMediaActive,
   } = props;
   return (
@@ -87,6 +91,28 @@ const Routes = (props) => {
         setSelectedMenu={setSelectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/patients/:patientId/profile/chat"
+        component={Chat}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/patients/:patientId/profile/call"
+        component={PhoneCall}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/patients/:patientId/profile/video"
+        component={VideoCall}
+        chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />
 
@@ -426,6 +452,7 @@ Routes.propTypes = {
   selectedHcpMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   waitingListMenu: PropTypes.number.isRequired,
+  chatMediaActive: PropTypes.bool.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,

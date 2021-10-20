@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -87,13 +88,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatMessagesInterface = () => {
+const ChatMessagesInterface = ({ setChatMediaActive }) => {
   const classes = useStyles();
 
   return (
     <Grid container direction="column">
       <Grid item container className={classes.chatHeadingParent}>
-        <ChatInterfaceHeading />
+        <ChatInterfaceHeading setChatMediaActive={setChatMediaActive} />
       </Grid>
       <Grid item className={classes.messagesBox}>
         <Grid container direction="column">
@@ -173,6 +174,10 @@ const ChatMessagesInterface = () => {
       </Grid>
     </Grid>
   );
+};
+
+ChatMessagesInterface.propTypes = {
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default ChatMessagesInterface;

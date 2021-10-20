@@ -52,28 +52,22 @@ const App = () => {
 
           <ScrollToView>
             <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
-            <Switch>
-              <PrivateRoute
-                path="/patients/:patientId/profile/chat"
-                component={Chat}
-                chatMediaActive={chatMediaActive}
-                setChatMediaActive={setChatMediaActive}
-              />
-            </Switch>
 
             <main
               style={{
-                display: !isAuthenticated || chatMediaActive ? "none" : "flex",
+                display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
               }}
             >
-              <SideMenu
-                selectedMenu={selectedMenu}
-                setSelectedMenu={setSelectedMenu}
-                setSelectedSubMenu={setSelectedSubMenu}
-                setWaitingListMenu={setWaitingListMenu}
-                setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-              />
-              <section style={sectionStyles}>
+              {!chatMediaActive && (
+                <SideMenu
+                  selectedMenu={selectedMenu}
+                  setSelectedMenu={setSelectedMenu}
+                  setSelectedSubMenu={setSelectedSubMenu}
+                  setWaitingListMenu={setWaitingListMenu}
+                  setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                />
+              )}
+              <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
                 <Routes
                   setSelectedMenu={setSelectedMenu}
                   selectedMenu={selectedMenu}
