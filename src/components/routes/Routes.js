@@ -38,6 +38,8 @@ import Settings from "components/pages/Settings";
 import Administrator from "components/pages/Administrator";
 import Management from "components/pages/Management";
 import Permission from "components/pages/Permission";
+import CreateEmail from "components/pages/CreateEmail";
+import ViewMail from "components/pages/ViewMail";
 
 const Routes = (props) => {
   const {
@@ -293,8 +295,30 @@ const Routes = (props) => {
         />
       </PrivateRoute>
 
+      <PrivateRoute exact path="/email/create-mail">
+        <CreateEmail
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
+      </PrivateRoute>
+      <PrivateRoute exact path="/email/:emailId">
+        <ViewMail
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
+      </PrivateRoute>
+
       <PrivateRoute path="/email">
-        <Email />
+        <Email
+          selectedMenu={selectedMenu}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedMenu={setSelectedMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
       </PrivateRoute>
 
       <PrivateRoute exact path="/verification">
