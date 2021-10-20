@@ -20,11 +20,10 @@ export const setSelectedRows = (selected) => {
     payload: selected,
   };
 };
-
-export const toggleModal = (currentState) => {
+export const emailData = (data) => {
   return {
-    type: actionType.MODALS,
-    payload: currentState,
+    type: actionType.EMAIL_DETAILS,
+    payload: data,
   };
 };
 

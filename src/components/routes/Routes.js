@@ -41,6 +41,8 @@ import Permission from "components/pages/Permission";
 import Chat from "components/pages/Chat";
 import PhoneCall from "components/pages/PhoneCall";
 import VideoCall from "components/pages/VideoCall";
+import CreateEmail from "components/pages/CreateEmail";
+import ViewMail from "components/pages/ViewMail";
 
 const Routes = (props) => {
   const {
@@ -332,7 +334,23 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
       />
 
-      <PrivateRoute path="/email" component={Email} />
+      <PrivateRoute exact path="/email" component={Email} />
+
+      <PrivateRoute
+        component={CreateEmail}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        component={ViewMail}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
       <PrivateRoute
         exact
