@@ -186,7 +186,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             <CustomButton
               endIcon={<AddIcon />}
               component={Link}
-              to="/email/create-mail"
+              to="/email/create-email"
               title="Add Email"
               type={buttonType}
             />

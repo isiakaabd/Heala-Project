@@ -101,6 +101,10 @@ export const HCPHeader = [
     label: "Entry Date",
   },
   {
+    id: 8,
+    label: "Type",
+  },
+  {
     id: 1,
     label: "Name",
   },
@@ -148,12 +152,12 @@ export const referralHeader = [
   },
   {
     id: 2,
-    label: " HCP Name",
+    label: " Name",
   },
 
   {
     id: 3,
-    label: "Specialization",
+    label: "Category",
   },
   {
     id: 4,
@@ -198,7 +202,7 @@ export const payoutHeader = [
   },
   {
     id: 2,
-    label: " HCP Name",
+    label: " Name",
   },
 
   {
@@ -214,14 +218,41 @@ export const payoutHeader = [
     label: "Payout status",
   },
 ];
-export const viewRefferalHeader = [
+export const pendingHeader = [
   {
     id: 0,
-    label: "HCP name",
+    label: "Date",
   },
   {
     id: 1,
-    label: "Specialization",
+    label: "doci ID",
+  },
+  {
+    id: 2,
+    label: " Name",
+  },
+
+  {
+    id: 3,
+    label: "Amount paid",
+  },
+  {
+    id: 4,
+    label: "Account Details",
+  },
+  {
+    id: 5,
+    label: "Bank",
+  },
+];
+export const viewRefferalHeader = [
+  {
+    id: 0,
+    label: "Name",
+  },
+  {
+    id: 1,
+    label: "Category",
   },
   {
     id: 2,
@@ -240,7 +271,7 @@ export const viewRefferalHeader = [
 
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
-  { id: 100, label: "HCP Name" },
+  { id: 100, label: "Name" },
   { id: 101, label: "Date" },
   { id: 102, label: "Description" },
   { id: 103, label: "" },
@@ -274,8 +305,8 @@ export const waitingHeadCells = [
 
 export const availabilityHeadCells = [
   { id: 0, label: "HCP ID" },
-  { id: 1, label: "HCP Name" },
-  { id: 2, label: "Specialization" },
+  { id: 1, label: "Name" },
+  { id: 2, label: "Category" },
   { id: 3, label: "Available Time" },
   { id: 4, label: "" },
 ];
@@ -283,8 +314,8 @@ export const availabilityHeadCells = [
 // HCPs HEADCELLS
 export const hcpsHeadCells = [
   { id: 0, label: "Medical ID" },
-  { id: 1, label: "HCP Name" },
-  { id: 2, label: "Specialization" },
+  { id: 1, label: "Name" },
+  { id: 2, label: "Category" },
   { id: 3, label: "Consultations" },
   { id: 4, label: "Hospital" },
   { id: 5, label: "Status" },
