@@ -3,6 +3,7 @@ const initialState = {
   page: 0,
   rowsPerPage: 5,
   selectedRows: [],
+  emailData: [],
 };
 
 const tablesReducer = (state = initialState, action) => {
@@ -22,10 +23,10 @@ const tablesReducer = (state = initialState, action) => {
         ...state,
         selectedRows: action.payload,
       };
-    case actionType.MODALS:
+    case actionType.EMAIL_DETAILS:
       return {
         ...state,
-        currentState: !action.payload,
+        emailData: [action.payload, ...state.emailData],
       };
     default:
       return state;

@@ -8,13 +8,25 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => (!isAuthenticated ? <Redirect to="/" /> : <Component {...props} />)}
+      render={(props) =>
+        !isAuthenticated ? (
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+        ) : (
+          <Component {...props} {...rest} />
+        )
+      }
     />
   );
 };
 
 PrivateRoute.propTypes = {
-  component: PropTypes.node,
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    state: PropTypes.shape({
+      from: PropTypes.string,
+    }),
+  }),
 };
 
 export default PrivateRoute;

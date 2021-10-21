@@ -28,11 +28,15 @@ export const patientsHeadCells = [
 export const emailHeader = [
   {
     id: 0,
-    label: "Entry Date",
+    label: "Recipients",
   },
   {
-    id: 1,
-    label: "Name",
+    id: 6,
+    label: "Subject",
+  },
+  {
+    id: 4,
+    label: "Entry Date",
   },
   {
     id: 2,
@@ -40,8 +44,12 @@ export const emailHeader = [
   },
 
   {
-    id: 4,
+    id: 8,
     label: "Email",
+  },
+  {
+    id: 9,
+    label: "",
   },
 ];
 export const PermissionHeader = [
@@ -290,15 +298,15 @@ export const partnersHeadCells = [
   { id: 2, label: "" },
 ];
 
-// Partner's HEADCELLS
+// Messages's HEADCELLS
 export const messagesHeadCells = [
-  { id: 0, label: "Recipient" },
+  { id: 0, label: "Recipients" },
   { id: 1, label: "Subject" },
   { id: 2, label: "Date" },
   { id: 3, label: "Time" },
   { id: 4, label: "" },
 ];
-// Partner's HEADCELLS
+// HCP Patients HEADCELLS
 export const hcpPatientsHeadCells = [
   { id: 0, label: "User ID" },
   { id: 1, label: "Patient Name" },

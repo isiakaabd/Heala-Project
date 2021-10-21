@@ -57,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "0.5rem",
-      maxWidth: "7rem",
-      fontSize: ".85rem",
+      maxWidth: "12rem",
+      fontSize: "1rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
       },
 
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "0.85rem",
+        fontSize: ".85rem",
       },
 
       "& .MuiButton-endIcon": {
@@ -279,7 +279,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         setSelectedHcpMenu(0);
                       }}
                     >
-                      View Profile
+                      View HCP
                     </Button>
                   </TableCell>
                 </TableRow>

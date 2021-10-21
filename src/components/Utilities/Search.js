@@ -44,7 +44,7 @@ const SearchContainer = ({
         startAdornment={
           hasStartIcon && (
             <InputAdornment position="start">
-              <SearchIcon />
+              <SearchIcon style={{ fontSize: "3rem" }} />
             </InputAdornment>
           )
         }
