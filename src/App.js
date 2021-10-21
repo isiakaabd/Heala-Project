@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
-import PrivateRoute from "components/routes/PrivateRoute";
 import { useSelector } from "react-redux";
 import ScrollToView from "components/ScrollToView";
 import Login from "components/pages/Login";
-import Chat from "components/pages/Chat";
 
 const sectionStyles = {
   paddingLeft: "39rem",
@@ -52,28 +50,22 @@ const App = () => {
 
           <ScrollToView>
             <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
-            <Switch>
-              <PrivateRoute
-                path="/patients/:patientId/profile/chat"
-                component={Chat}
-                chatMediaActive={chatMediaActive}
-                setChatMediaActive={setChatMediaActive}
-              />
-            </Switch>
 
             <main
               style={{
-                display: !isAuthenticated || chatMediaActive ? "none" : "flex",
+                display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
               }}
             >
-              <SideMenu
-                selectedMenu={selectedMenu}
-                setSelectedMenu={setSelectedMenu}
-                setSelectedSubMenu={setSelectedSubMenu}
-                setWaitingListMenu={setWaitingListMenu}
-                setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-              />
-              <section style={sectionStyles}>
+              {!chatMediaActive && (
+                <SideMenu
+                  selectedMenu={selectedMenu}
+                  setSelectedMenu={setSelectedMenu}
+                  setSelectedSubMenu={setSelectedSubMenu}
+                  setWaitingListMenu={setWaitingListMenu}
+                  setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                />
+              )}
+              <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
                 <Routes
                   setSelectedMenu={setSelectedMenu}
                   selectedMenu={selectedMenu}
