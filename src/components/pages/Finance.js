@@ -247,6 +247,20 @@ const Finance = ({ setSelectedSubMenu }) => {
             <TrendingUpIcon color="error" className={classes.cardIcon} />
           </Card>
         </Grid>
+        <Grid
+          item
+          component={Link}
+          to="/finance/pending"
+          className={classes.parentGrid}
+          style={{ marginRight: "5rem" }}
+          onClick={() => setSelectedSubMenu(10)}
+        >
+          <Card title="Pending Payout" background={theme.palette.common.lightRed}>
+            <Grid className={classes.iconWrapper}>
+              <TrendingUpIcon color="error" className={classes.cardIcon} />
+            </Grid>
+          </Card>
+        </Grid>
       </Grid>
     </Stack>
   );

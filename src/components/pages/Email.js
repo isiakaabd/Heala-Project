@@ -186,129 +186,138 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             <CustomButton
               endIcon={<AddIcon />}
               component={Link}
-              to="/email/create-mail"
+              to="/email/create-email"
               title="Add Email"
               type={buttonType}
             />
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
-          <EnhancedTable
-            headCells={emailHeader}
-            rows={rows}
-            page={page}
-            paginationLabel="email per page"
-            hasCheckbox={true}
-          >
-            {emailData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
+        {emailData && emailData.length > 0 ? (
+          <Grid item container>
+            <EnhancedTable
+              headCells={emailHeader}
+              rows={rows}
+              page={page}
+              paginationLabel="email per page"
+              hasCheckbox={true}
+            >
+              {emailData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <Grid container>
-                        <Grid item container flex=".4" columnGap={1}>
-                          {row.name.slice(0, 3).map((item) => {
-                            return (
-                              <Grid item key={item}>
-                                <Avatar
-                                  alt={item}
-                                  src={displayPhoto}
-                                  sx={{ width: 24, height: 24 }}
-                                />
-                              </Grid>
-                            );
-                          })}
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <Grid container>
+                          <Grid item container flex=".4" columnGap={1}>
+                            {row.name.slice(0, 3).map((item) => {
+                              return (
+                                <Grid item key={item}>
+                                  <Avatar
+                                    alt={item}
+                                    src={displayPhoto}
+                                    sx={{ width: 24, height: 24 }}
+                                  />
+                                </Grid>
+                              );
+                            })}
+                          </Grid>
+                          <Grid item container flex=".6" columnGap={2}>
+                            {row.name.slice(0, 3).map((item) => {
+                              return (
+                                <Grid key={item}>
+                                  <Typography>
+                                    {item.split("@").shift().toString().concat(",")}
+                                  </Typography>
+                                </Grid>
+                              );
+                            })}
+                          </Grid>
                         </Grid>
-                        <Grid item container flex=".6" columnGap={2}>
-                          {row.name.slice(0, 3).map((item) => {
-                            return (
-                              <Grid key={item}>
-                                <Typography>
-                                  {item.split("@").shift().toString().concat(",")}
-                                </Typography>
-                              </Grid>
-                            );
-                          })}
-                        </Grid>
-                      </Grid>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {row.message}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {row.entryData}
-                    </TableCell>
-
-                    <TableCell
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {row.plan}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <Chip
-                        label={row.email}
-                        variant="outlined"
-                        className={classes.chip}
-                        deleteIcon={<ArrowForwardIosIcon />}
-                        onClick={() => window.open(`mailto:${row.email}`, "_blank")}
-                        onDelete={() => console.log(" ")}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`email/${index}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => setSelectedSubMenu(7)}
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
                       >
-                        View mail
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </EnhancedTable>
-        </Grid>
+                        {row.message}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="center"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {row.entryData}
+                      </TableCell>
+
+                      <TableCell
+                        align="center"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {row.plan}
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <Chip
+                          label={row.email}
+                          variant="outlined"
+                          className={classes.chip}
+                          deleteIcon={<ArrowForwardIosIcon />}
+                          onClick={() => window.open(`mailto:${row.email}`, "_blank")}
+                          onDelete={() => console.log(" ")}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component={Link}
+                          to={`email/${index}`}
+                          endIcon={<ArrowForwardIosIcon />}
+                          onClick={() => setSelectedSubMenu(7)}
+                        >
+                          View mail
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          </Grid>
+        ) : (
+          <Grid>
+            <Typography fontSize="5rem" textAlign="center">
+              No Mail
+            </Typography>
+          </Grid>
+        )}
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>

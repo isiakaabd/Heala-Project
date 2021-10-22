@@ -43,6 +43,7 @@ import PhoneCall from "components/pages/PhoneCall";
 import VideoCall from "components/pages/VideoCall";
 import CreateEmail from "components/pages/CreateEmail";
 import ViewMail from "components/pages/ViewMail";
+import PendingPayout from "components/pages/PendingPayout";
 
 const Routes = (props) => {
   const {
@@ -363,10 +364,8 @@ const Routes = (props) => {
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
       />
-
-      <PrivateRoute exact path="/email" component={Email} />
-
       <PrivateRoute
+        path="/email/create-email"
         component={CreateEmail}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
@@ -375,6 +374,7 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
+        path="/email/:emailId"
         component={ViewMail}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
@@ -382,6 +382,14 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
       />
 
+      <PrivateRoute
+        path="/email"
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        component={Email}
+      />
       <PrivateRoute
         exact
         path="/verification"
@@ -421,6 +429,15 @@ const Routes = (props) => {
         exact
         path="/finance/payouts"
         component={Payout}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+      <PrivateRoute
+        exact
+        path="/finance/pending"
+        component={PendingPayout}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}

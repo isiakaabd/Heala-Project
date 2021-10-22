@@ -116,7 +116,10 @@ const DeleteOrDisable = ({
                   title={`Yes, ${btnValue}`}
                   type={disableButton}
                   width="100%"
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setOpen(false);
+                    onConfirm();
+                  }}
                 />
               </Grid>
             </Grid>

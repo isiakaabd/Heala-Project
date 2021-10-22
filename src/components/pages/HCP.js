@@ -201,6 +201,15 @@ const HCP = ({ setSelectedSubMenu }) => {
                   >
                     {row.entryDate}
                   </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
+                  >
+                    {row.type}
+                  </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <div
                       style={{

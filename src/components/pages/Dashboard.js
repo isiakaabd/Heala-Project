@@ -8,6 +8,8 @@ import AvailabilityTable from "components/layouts/AvailabilityTable";
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   useLayoutEffect(() => {
     setChatMediaActive(false);
+
+    // eslint-disable-next-line
   }, [chatMediaActive]);
   return (
     <Grid container direction="column">

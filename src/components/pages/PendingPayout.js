@@ -8,16 +8,14 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
-import { payoutHeader } from "components/Utilities/tableHeaders";
+import { pendingHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import CustomButton from "components/Utilities/CustomButton";
 import { isSelected } from "helpers/isSelected";
-import Chip from "@mui/material/Chip";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     placeContent: "center",
     marginLeft: "1rem",
-    background: theme.palette.common.lightGreen,
+    background: theme.palette.common.lightRed,
   },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
@@ -81,14 +79,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -110,28 +103,19 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
         <Grid item>
           <Grid item container alignItems="center">
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
-              Payout table
+              Pending Payout
             </Typography>
             <Grid item className={classes.iconWrapper} marginLeft="1rem">
-              <TrendingUpIcon color="success" className={classes.cardIcon} />
+              <TrendingUpIcon color="error" className={classes.cardIcon} />
             </Grid>
           </Grid>
-        </Grid>
-
-        <Grid item>
-          <CustomButton
-            endIcon={<TrendingUpIcon />}
-            title="Process Payout"
-            type={buttonType}
-            // onClick={handleAdminOpen}
-          />
         </Grid>
       </Grid>
 
       {/* The Search and Filter ends here */}
       <Grid item container>
         <EnhancedTable
-          headCells={payoutHeader}
+          headCells={pendingHeader}
           rows={rows}
           page={page}
           paginationLabel="payout per page"
@@ -177,7 +161,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                   className={classes.tableCell}
                   style={{ color: theme.palette.common.black }}
                 >
-                  {row.time}
+                  {row.medical}
                 </TableCell>
                 <TableCell align="center" className={classes.tableCell}>
                   <div
@@ -195,9 +179,6 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                     </span>
                   </div>
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  {row.medical}
-                </TableCell>
                 <TableCell
                   align="center"
                   className={classes.tableCell}
@@ -205,21 +186,19 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                 >
                   {row.amount}
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <Chip
-                    label={row.status}
-                    className={classes.badge}
-                    style={{
-                      background:
-                        row.status === "active"
-                          ? theme.palette.common.lightGreen
-                          : theme.palette.common.lightRed,
-                      color:
-                        row.status === "active"
-                          ? theme.palette.common.green
-                          : theme.palette.common.red,
-                    }}
-                  />
+                <TableCell
+                  align="center"
+                  className={classes.tableCell}
+                  style={{ color: theme.palette.common.red }}
+                >
+                  {row.account}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  className={classes.tableCell}
+                  style={{ color: theme.palette.common.green }}
+                >
+                  {row.bank}
                 </TableCell>
               </TableRow>
             );
@@ -230,11 +209,11 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   );
 };
 
-Payout.propTypes = {
+PendingPayout.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
-export default Payout;
+export default PendingPayout;
