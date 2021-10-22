@@ -149,7 +149,7 @@ const Chat = ({ chatMediaActive, setChatMediaActive }) => {
       </Grid>
 
       <Grid item className={classes.rightParentGrid}>
-        <ChatMessagesInterface />
+        <ChatMessagesInterface setChatMediaActive={setChatMediaActive} />
       </Grid>
     </Grid>
   );

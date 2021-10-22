@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     background: `url(${people}) no-repeat`,
+    backgroundSize: "cover",
     overflow: "hidden",
     backgroundPosition: "25% 50%",
   },
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     minHeight: "100%",
     background: `url(${loginBackground}) no-repeat`,
+    backgroundSize: "cover",
     backgroundPosition: "center",
     padding: "5rem 15rem",
   },
@@ -123,7 +125,7 @@ const Login = () => {
         </Grid>
       </Grid>
       <Grid item lg={7} className={classes.rightParentGrid}>
-        <Grid container direction="column" justifyContent="center">
+        <Grid container direction="column" justifyContent="center" style={{ height: "100%" }}>
           <Grid item style={{ marginBottom: "3rem" }}>
             <Typography variant="h2" style={{ fontSize: "5rem" }}>
               Sign into your account

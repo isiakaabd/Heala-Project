@@ -39,7 +39,9 @@ const DisplayProfile = (props) => {
     statusId,
     specialization,
     status,
-    path,
+    chatPath,
+    callPath,
+    videoPath,
     setChatMediaActive,
   } = props;
 
@@ -121,7 +123,7 @@ const DisplayProfile = (props) => {
               title="Chat"
               type={greenButton}
               component={Link}
-              to={path}
+              to={chatPath}
               onClick={() => setChatMediaActive(true)}
             />
           </Grid>
@@ -131,6 +133,8 @@ const DisplayProfile = (props) => {
               title="Call"
               type={greenButton}
               onClick={() => setChatMediaActive(true)}
+              component={Link}
+              to={callPath}
             />
           </Grid>
           <Grid item>
@@ -139,6 +143,8 @@ const DisplayProfile = (props) => {
               title="Video"
               type={greenButton}
               onClick={() => setChatMediaActive(true)}
+              component={Link}
+              to={videoPath}
             />
           </Grid>
         </Grid>
@@ -154,7 +160,9 @@ DisplayProfile.propTypes = {
   statusId: PropTypes.number.isRequired,
   specialization: PropTypes.string,
   status: PropTypes.string,
-  path: PropTypes.string.isRequired,
+  chatPath: PropTypes.string.isRequired,
+  callPath: PropTypes.string.isRequired,
+  videoPath: PropTypes.string.isRequired,
   setChatMediaActive: PropTypes.func.isRequired,
 };
 

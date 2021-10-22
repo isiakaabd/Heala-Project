@@ -38,6 +38,9 @@ import Settings from "components/pages/Settings";
 import Administrator from "components/pages/Administrator";
 import Management from "components/pages/Management";
 import Permission from "components/pages/Permission";
+import Chat from "components/pages/Chat";
+import PhoneCall from "components/pages/PhoneCall";
+import VideoCall from "components/pages/VideoCall";
 import CreateEmail from "components/pages/CreateEmail";
 import ViewMail from "components/pages/ViewMail";
 
@@ -55,368 +58,407 @@ const Routes = (props) => {
     setWaitingListMenu,
     selectedAppointmentMenu,
     setSelectedAppointmentMenu,
+    chatMediaActive,
     setChatMediaActive,
   } = props;
   return (
     <Switch>
-      <PrivateRoute path="/dashboard" exact>
-        <Dashboard />
-      </PrivateRoute>
-      <PrivateRoute exact path="/patients">
-        <Patients
-          setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute path="/dashboard" exact component={Dashboard} />
 
-      <PrivateRoute exact path="/patients/:patientId">
-        <SinglePatient
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/patients"
+        component={Patients}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+      />
 
-      <PrivateRoute path="/patients/:patientId/profile">
-        <PatientProfile
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/patients/:patientId"
+        component={SinglePatient}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/patients/:patientId/consultations">
-        <Consultations
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/patients/:patientId/profile"
+        component={PatientProfile}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
 
-      <PrivateRoute path="/patients/:patientId/prescriptions">
-        <Prescriptions
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/profile/chat"
+        component={Chat}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
 
-      <PrivateRoute path="/patients/:patientId/records">
-        <MedicalRecords
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/profile/call"
+        component={PhoneCall}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
 
-      <PrivateRoute path="/patients/:patientId/case-notes">
-        <CaseNotes
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/profile/video"
+        component={VideoCall}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
 
-      <PrivateRoute path="/patients/:patientId/medications">
-        <Medications
-          selectedMenu={selectedMenu}
-          selectedPatientMenu={selectedPatientMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedPatientMenu={setSelectedPatientMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/consultations"
+        component={Consultations}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+      />
 
-      <PrivateRoute exact path="/hcps">
-        <Hcps setSelectedHcpMenu={setSelectedHcpMenu} setSelectedSubMenu={setSelectedSubMenu} />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/prescriptions"
+        component={Prescriptions}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+      />
 
-      <PrivateRoute exact path="/hcps/:hcpId">
-        <SingleHCP
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/records"
+        component={MedicalRecords}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/profile">
-        <HcpProfile
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/case-notes"
+        component={CaseNotes}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/appointments">
-        <HcpAppointments
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/patients/:patientId/medications"
+        component={Medications}
+        selectedMenu={selectedMenu}
+        selectedPatientMenu={selectedPatientMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/availability">
-        <HcpAvailability
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/hcps"
+        component={Hcps}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/earnings">
-        <HcpEarnings
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId"
+        component={SingleHCP}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/earnings">
-        <HcpEarnings
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/profile"
+        component={HcpProfile}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/patients">
-        <HcpPatients
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedHcpMenu={selectedHcpMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/appointments"
+        component={HcpAppointments}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/partners">
-        <Partners />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/availability"
+        component={HcpAvailability}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/partners">
-        <h3 style={{ fontSize: "3rem" }}>Partners</h3>
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/earnings"
+        component={HcpEarnings}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/appointments">
-        <Appointments
-          setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/earnings"
+        component={HcpEarnings}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/appointments/waiting-list">
-        <WaitingList
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          setWaitingListMenu={setWaitingListMenu}
-          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-          selectedAppointmentMenu={selectedAppointmentMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/hcps/:hcpId/patients"
+        component={HcpPatients}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/appointments/waiting-list/:listId">
-        <WaitingListDetails
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          waitingListMenu={waitingListMenu}
-          setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-          selectedAppointmentMenu={selectedAppointmentMenu}
-          setWaitingListMenu={setWaitingListMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute exact path="/partners" component={Partners} />
 
-      <PrivateRoute exact path="/appointments/consultation">
-        <h1>Consultation</h1>
-      </PrivateRoute>
+      <PrivateRoute
+        path="/partners"
+        component={() => <h3 style={{ fontSize: "3rem" }}>Partners</h3>}
+      />
 
-      <PrivateRoute exact path="/messages">
-        <Messages
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/appointments"
+        component={Appointments}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+      />
 
-      <PrivateRoute path="/messages/create-message">
-        <CreateMessage
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/appointments/waiting-list"
+        component={WaitingList}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setWaitingListMenu={setWaitingListMenu}
+        setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+        selectedAppointmentMenu={selectedAppointmentMenu}
+      />
 
-      <PrivateRoute path="/messages/:messageId">
-        <ViewMessage
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/appointments/waiting-list/:listId"
+        component={WaitingListDetails}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        waitingListMenu={waitingListMenu}
+        setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+        selectedAppointmentMenu={selectedAppointmentMenu}
+        setWaitingListMenu={setWaitingListMenu}
+      />
 
-      <PrivateRoute exact path="/email/create-mail">
-        <CreateEmail
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
-      <PrivateRoute exact path="/email/:emailId">
-        <ViewMail
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/appointments/consultation"
+        component={() => <h1>Consultation</h1>}
+      />
 
-      <PrivateRoute path="/email">
-        <Email
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/messages"
+        component={Messages}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/verification">
-        <HCPVerification setSelectedSubMenu={setSelectedSubMenu} />
-      </PrivateRoute>
-      <PrivateRoute exact path="/verification/view">
-        <ViewHCP
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          setSelectedHcpMenu={setSelectedHcpMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/messages/create-message"
+        component={CreateMessage}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/finance">
-        <Finance setSelectedSubMenu={setSelectedSubMenu} />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/messages/:messageId"
+        component={ViewMessage}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/finance/earnings">
-        <Earnings
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute exact path="/email" component={Email} />
 
-      <PrivateRoute exact path="/finance/payouts">
-        <Payout
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        component={CreateEmail}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/referrals/:referralId">
-        <ViewReferral
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        component={ViewMail}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/referrals">
-        <ReferralTab setSelectedSubMenu={setSelectedSubMenu} />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/verification"
+        component={HCPVerification}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/plans">
-        <Subscription />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/verification/view"
+        component={ViewHCP}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+      />
 
-      <PrivateRoute path="/verification/view">
-        <ViewHCP
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          selectedSubMenu={selectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/finance"
+        component={Finance}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute exact path="/settings">
-        <Settings
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/finance/earnings"
+        component={Earnings}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/settings/administrator">
-        <Administrator
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
-      <PrivateRoute path="/settings/permissions">
-        <Permission
-          selectedMenu={selectedMenu}
-          selectedSubMenu={selectedSubMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/finance/payouts"
+        component={Payout}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
 
-      <PrivateRoute path="/settings/management">
-        <Management
-          selectedMenu={selectedMenu}
-          setSelectedMenu={setSelectedMenu}
-          setSelectedSubMenu={setSelectedSubMenu}
-          selectedSubMenu={selectedSubMenu}
-        />
-      </PrivateRoute>
+      <PrivateRoute
+        path="/referrals/:referralId"
+        component={ViewReferral}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        path="/referrals"
+        component={ReferralTab}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute path="/plans" component={Subscription} />
+
+      <PrivateRoute
+        path="/verification/view"
+        component={ViewHCP}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        selectedSubMenu={selectedSubMenu}
+      />
+
+      <PrivateRoute
+        exact
+        path="/settings"
+        component={Settings}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        path="/settings/administrator"
+        component={Administrator}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        path="/settings/permissions"
+        component={Permission}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        path="/settings/management"
+        component={Management}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        selectedSubMenu={selectedSubMenu}
+      />
     </Switch>
   );
 };
@@ -428,6 +470,7 @@ Routes.propTypes = {
   selectedHcpMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   waitingListMenu: PropTypes.number.isRequired,
+  chatMediaActive: PropTypes.bool.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
