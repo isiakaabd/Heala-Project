@@ -63,7 +63,13 @@ const Routes = (props) => {
   } = props;
   return (
     <Switch>
-      <PrivateRoute path="/dashboard" exact component={Dashboard} />
+      <PrivateRoute
+        path="/dashboard"
+        exact
+        component={Dashboard}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
 
       <PrivateRoute
         exact
@@ -194,14 +200,38 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
+        exact
         path="/hcps/:hcpId/profile"
         component={HcpProfile}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
+        chatMediaActive={chatMediaActive}
         setSelectedHcpMenu={setSelectedHcpMenu}
         setSelectedSubMenu={setSelectedSubMenu}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/hcps/:hcpId/profile/chat"
+        component={Chat}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/hcps/:hcpId/profile/call"
+        component={PhoneCall}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+
+      <PrivateRoute
+        path="/hcps/:hcpId/profile/video"
+        component={VideoCall}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
       />
 
       <PrivateRoute
