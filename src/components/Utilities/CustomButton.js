@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
+import { Link } from "react-router-dom";
 
 const CustomButton = ({
   title,
@@ -11,6 +12,7 @@ const CustomButton = ({
   textColorOnHover,
   borderRadius,
   textColor,
+  path,
   type: { background, hover, active },
   ...rest
 }) => {
@@ -53,7 +55,15 @@ const CustomButton = ({
   const classes = useStyles();
 
   return (
-    <Button variant="contained" endIcon={endIcon} className={classes.button} {...rest}>
+    <Button
+      variant="contained"
+      LinkComponent={Link}
+      to={path}
+      type="submit"
+      endIcon={endIcon}
+      className={classes.button}
+      {...rest}
+    >
       {title}
     </Button>
   );
@@ -73,6 +83,7 @@ CustomButton.propTypes = {
   height: PropTypes.string,
   borderRadius: PropTypes.string,
   textColorOnHover: PropTypes.string,
+  path: PropTypes.string,
 };
 
 export default CustomButton;
