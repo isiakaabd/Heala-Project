@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -57,17 +57,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 const VideoCall = ({ chatMediaActive, setChatMediaActive, history }) => {
   const classes = useStyles();
-  const { patientId } = useParams();
+  const { patientId, hcpId } = useParams();
+  const { pathname } = useLocation();
+
+  const renderPath = () => {
+    if (pathname.split("/")[1] === "patients") {
+      return `/patients/${patientId}/profile`;
+    } else if (pathname.split("/")[1] === "hcps") {
+      return `/hcps/${hcpId}/profile`;
+    } else {
+      return `/dashboard`;
+    }
+  };
+
+  const handleVideoEnded = () => {
+    setTimeout(() => {
+      setChatMediaActive(false);
+    }, 3000);
+  };
+
+  if (!chatMediaActive) history.push(renderPath());
 
   useEffect(() => {
     setChatMediaActive(true);
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-
-  if (!chatMediaActive) {
-    history.push(`/patients/${patientId}/profile`);
-  }
 
   return (
     <Grid
@@ -104,14 +119,7 @@ const VideoCall = ({ chatMediaActive, setChatMediaActive, history }) => {
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton
-                  className={classes.endCallButton}
-                  onClick={() =>
-                    setTimeout(() => {
-                      setChatMediaActive(false);
-                    }, 3000)
-                  }
-                >
+                <IconButton className={classes.endCallButton} onClick={handleVideoEnded}>
                   <CallEndIcon className={classes.icon} style={{ color: "#fff" }} />
                 </IconButton>
               </Grid>
