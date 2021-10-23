@@ -238,7 +238,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                       endIcon={<ArrowForwardIosIcon />}
                       onClick={() => setSelectedSubMenu(6)}
                     >
-                      View Profile
+                      View Message
                     </Button>
                   </TableCell>
                 </TableRow>

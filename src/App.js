@@ -36,17 +36,16 @@ const App = () => {
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
-          {!isAuthenticated ||
-            (!chatMediaActive && (
-              <Header
-                selectedMenu={selectedMenu}
-                selectedSubMenu={selectedSubMenu}
-                selectedPatientMenu={selectedPatientMenu}
-                selectedHcpMenu={selectedHcpMenu}
-                selectedAppointmentMenu={selectedAppointmentMenu}
-                waitingListMenu={waitingListMenu}
-              />
-            ))}
+          {isAuthenticated && !chatMediaActive && (
+            <Header
+              selectedMenu={selectedMenu}
+              selectedSubMenu={selectedSubMenu}
+              selectedPatientMenu={selectedPatientMenu}
+              selectedHcpMenu={selectedHcpMenu}
+              selectedAppointmentMenu={selectedAppointmentMenu}
+              waitingListMenu={waitingListMenu}
+            />
+          )}
 
           <ScrollToView>
             <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
