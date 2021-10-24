@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const ChatInterfaceHeading = ({ setChatMediaActive }) => {
+const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -138,12 +138,20 @@ const ChatInterfaceHeading = ({ setChatMediaActive }) => {
         <Grid item>
           <Grid container alignItems="center" spacing={2}>
             <Grid item>
-              <IconButton className={classes.iconButton}>
+              <IconButton
+                className={classes.iconButton}
+                component={Link}
+                to={`${renderPath()}/call`}
+              >
                 <CallIcon className={classes.chatIcon} />
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton className={classes.iconButton}>
+              <IconButton
+                className={classes.iconButton}
+                component={Link}
+                to={`${renderPath()}/video`}
+              >
                 <VideocamIcon className={classes.chatIcon} />
               </IconButton>
             </Grid>
@@ -181,6 +189,8 @@ const ChatInterfaceHeading = ({ setChatMediaActive }) => {
 };
 
 ChatInterfaceHeading.propTypes = {
+  callPath: PropTypes.string.isRequired,
+  videoPath: PropTypes.string.isRequired,
   setChatMediaActive: PropTypes.func.isRequired,
 };
 

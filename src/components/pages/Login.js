@@ -108,16 +108,16 @@ const Login = ({ history }) => {
   //   };
 
   const handleLogin = () => {
-    // const { state = {} } = location;
-    // const { prevLocation } = state;
+    const { state = {} } = location;
+    const { prevLocation } = state;
     loginUser();
 
-    // history.push(prevLocation || "/dashboard");
+    history.push(prevLocation || "/dashboard");
   };
 
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect to="/dashboard" />;
+  // }
 
   return (
     <Grid container className={classes.gridContainer}>

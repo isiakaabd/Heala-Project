@@ -28,6 +28,7 @@ const App = () => {
   const [selectedHcpMenu, setSelectedHcpMenu] = useState(0);
   const [selectedAppointmentMenu, setSelectedAppointmentMenu] = useState(0);
   const [waitingListMenu, setWaitingListMenu] = useState(0);
+  const [selectedScopedMenu, setSelectedScopedMenu] = useState(0);
   const [chatMediaActive, setChatMediaActive] = useState(false);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -44,11 +45,14 @@ const App = () => {
               selectedHcpMenu={selectedHcpMenu}
               selectedAppointmentMenu={selectedAppointmentMenu}
               waitingListMenu={waitingListMenu}
+              selectedScopedMenu={selectedScopedMenu}
             />
           )}
 
           <ScrollToView>
-            <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
+            {!isAuthenticated && (
+              <Route path={["/", "/login"]} render={(props) => <Login {...props} />} />
+            )}
 
             <main
               style={{
@@ -80,6 +84,8 @@ const App = () => {
                   setWaitingListMenu={setWaitingListMenu}
                   chatMediaActive={chatMediaActive}
                   setChatMediaActive={setChatMediaActive}
+                  selectedScopedMenu={selectedScopedMenu}
+                  setSelectedScopedMenu={setSelectedScopedMenu}
                 />
               </section>
             </main>

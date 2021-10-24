@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-157lt5z-MuiChip-root": {
-      fontSize: "1.3rem !important",
+    "&.MuiChip-root": {
+      fontSize: "1.3rem",
       //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   infoBadge: {
-    "&.css-1dl0kns-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.25rem",
       borderRadius: "1.5rem",
       color: theme.palette.common.green,

@@ -77,36 +77,36 @@ const caseNotes = [
   // },
 ];
 
-const CaseNotes = (props) => {
+const HcpCaseNotes = (props) => {
   const {
     selectedMenu,
     selectedSubMenu,
     setSelectedMenu,
+    selectedHcpMenu,
     selectedScopedMenu,
     setSelectedSubMenu,
-    selectedPatientMenu,
-    setSelectedPatientMenu,
+    setSelectedHcpMenu,
     setSelectedScopedMenu,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
 
-  const { patientId } = useParams();
+  const { hcpId } = useParams();
 
   useEffect(() => {
-    setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(5);
-    setSelectedScopedMenu(1);
+    setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(6);
+    setSelectedScopedMenu(2);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton
-          path={`/patients/${patientId}/consultations`}
-          onClick={() => setSelectedPatientMenu(0)}
+          path={`/hcps/${hcpId}/consultations`}
+          onClick={() => setSelectedHcpMenu(6)}
         />
       </Grid>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -220,15 +220,15 @@ const CaseNotes = (props) => {
   );
 };
 
-CaseNotes.propTypes = {
+HcpCaseNotes.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
   setSelectedScopedMenu: PropTypes.func.isRequired,
 };
 
-export default CaseNotes;
+export default HcpCaseNotes;

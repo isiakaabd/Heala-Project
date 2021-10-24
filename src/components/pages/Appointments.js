@@ -57,7 +57,7 @@ const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
         className={classes.parentGrid}
         component={Link}
         to="/appointments/consultation"
-        style={{ marginLeft: "2em", textDecoration: "none" }}
+        style={{ marginLeft: "2em", textDecoration: "none", visibility: "hidden" }}
         lg
         md={6}
         sm={12}

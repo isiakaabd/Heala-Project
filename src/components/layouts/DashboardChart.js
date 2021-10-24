@@ -10,7 +10,7 @@ import chart1 from "assets/images/chart1.png";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import FormSelect from "components/Utilities/FormSelect";
-import circle from "assets/images/circle.png";
+import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import "chartjs-plugin-style";
@@ -239,9 +239,13 @@ const DashboardCharts = () => {
                   className={classes.overviewGrid}
                 >
                   <Grid item>
-                    <img
-                      src={circle}
-                      alt="A circle representing total earning and payout difference"
+                    <CircularProgressBar
+                      height="8rem"
+                      width="8rem"
+                      color={theme.palette.common.green}
+                      trailColor={theme.palette.common.red}
+                      value={65}
+                      strokeWidth={8}
                     />
                   </Grid>
                   <Grid item>

@@ -9,7 +9,7 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import FormSelect from "components/Utilities/FormSelect";
-import circle2 from "assets/images/circle2.png";
+import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -113,9 +113,13 @@ const HcpEarnings = (props) => {
               className={classes.overviewGrid}
             >
               <Grid item>
-                <img
-                  src={circle2}
-                  alt="A circle representing total earning and payout difference"
+                <CircularProgressBar
+                  height="17rem"
+                  width="17rem"
+                  color={theme.palette.common.green}
+                  trailColor={theme.palette.common.red}
+                  value={65}
+                  strokeWidth={8}
                 />
               </Grid>
               <Grid item>
