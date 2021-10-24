@@ -7,13 +7,13 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import chart1 from "assets/images/chart1.png";
-import chart2 from "assets/images/chart2.png";
-import Chip from "@mui/material/Chip";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import FormSelect from "components/Utilities/FormSelect";
-import circle from "assets/images/circle.png";
+import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import LineChart from "components/Utilities/LineChart";
+import "chartjs-plugin-style";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -55,18 +55,7 @@ const useStyles = makeStyles((theme) => ({
   bottomChartGrid: {
     padding: "3rem 2rem",
   },
-  intervalButtonsGrid: {
-    background: theme.palette.common.lightGreen,
-    borderRadius: "20rem",
-    padding: ".5rem 0",
-  },
 
-  chip: {
-    "&.MuiChip-root": {
-      background: "#fff",
-      fontSize: "1.05rem",
-    },
-  },
   dottedCircle: {
     width: 12,
     height: 12,
@@ -78,13 +67,6 @@ const useStyles = makeStyles((theme) => ({
   },
   green: {
     borderColor: theme.palette.common.green,
-  },
-
-  active: {
-    "&.MuiChip-root": {
-      background: theme.palette.common.green,
-      color: "#fff",
-    },
   },
 
   iconWrapper: {
@@ -131,8 +113,8 @@ const DashboardCharts = () => {
   ];
 
   return (
-    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between">
-      <Grid item md style={{ marginRight: "2rem" }}>
+    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={5}>
+      <Grid item md>
         <Grid container direction="column">
           <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
             <Grid container direction="column">
@@ -167,30 +149,12 @@ const DashboardCharts = () => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item container direction="column" className={classes.bottomChartGrid}>
-                <Grid item>
-                  <img src={chart2} alt="line graph" className={classes.chartImg} />
-                </Grid>
-                <Grid item>
-                  <Grid
-                    container
-                    justifyContent="space-evenly"
-                    className={classes.intervalButtonsGrid}
-                  >
-                    {timeFrames.map((timeFrame) => (
-                      <Grid item key={timeFrame.id}>
-                        <Chip
-                          label={timeFrame.time}
-                          color={timeFrame === timeFrame.id ? "success" : undefined}
-                          clickable
-                          className={`${classes.chip} ${
-                            selectedTimeframe === timeFrame.id ? classes.active : undefined
-                          }`}
-                          onClick={() => setSelectedTimeframe(timeFrame.id)}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Grid>
+                <LineChart
+                  timeFrames={timeFrames}
+                  selectedTimeframe={selectedTimeframe}
+                  setSelectedTimeframe={setSelectedTimeframe}
+                  tooltipTitle="1800 HCPs"
+                />
                 <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
                   <Grid item>
                     <Grid container direction="column">
@@ -275,9 +239,13 @@ const DashboardCharts = () => {
                   className={classes.overviewGrid}
                 >
                   <Grid item>
-                    <img
-                      src={circle}
-                      alt="A circle representing total earning and payout difference"
+                    <CircularProgressBar
+                      height="8rem"
+                      width="8rem"
+                      color={theme.palette.common.green}
+                      trailColor={theme.palette.common.red}
+                      value={65}
+                      strokeWidth={8}
                     />
                   </Grid>
                   <Grid item>
@@ -412,7 +380,7 @@ const DashboardCharts = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item md style={{ marginLeft: "2rem" }}>
+      <Grid item md>
         <Grid container direction="column" className={classes.chartCard}>
           <Grid item className={classes.headerGrid}>
             <Typography variant="h5">Patient Stats</Typography>
@@ -459,26 +427,13 @@ const DashboardCharts = () => {
           <Grid item className={classes.headerGrid}></Grid>
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container direction="column" className={classes.bottomChartGrid}>
-            <Grid item>
-              <img src={chart2} alt="line graph" className={classes.chartImg} />
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-                {timeFrames.map((timeFrame) => (
-                  <Grid item key={timeFrame.id}>
-                    <Chip
-                      label={timeFrame.time}
-                      color={timeFrame === timeFrame.id ? "success" : undefined}
-                      clickable
-                      className={`${classes.chip} ${
-                        selectedTimeframe === timeFrame.id ? classes.active : undefined
-                      }`}
-                      onClick={() => setSelectedTimeframe(timeFrame.id)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+            <LineChart
+              timeFrames={timeFrames}
+              selectedTimeframe={selectedTimeframe}
+              setSelectedTimeframe={setSelectedTimeframe}
+              tooltipTitle="1800 Patients"
+            />
+
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
               <Grid item>
                 <Grid container direction="column">
@@ -536,26 +491,12 @@ const DashboardCharts = () => {
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container direction="column" className={classes.bottomChartGrid}>
-            <Grid item>
-              <img src={chart2} alt="line graph" className={classes.chartImg} />
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-                {timeFrames.map((timeFrame) => (
-                  <Grid item key={timeFrame.id}>
-                    <Chip
-                      label={timeFrame.time}
-                      color={timeFrame === timeFrame.id ? "success" : undefined}
-                      clickable
-                      className={`${classes.chip} ${
-                        selectedTimeframe === timeFrame.id ? classes.active : undefined
-                      }`}
-                      onClick={() => setSelectedTimeframe(timeFrame.id)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+            <LineChart
+              timeFrames={timeFrames}
+              selectedTimeframe={selectedTimeframe}
+              setSelectedTimeframe={setSelectedTimeframe}
+              tooltipTitle="900 Subscribers"
+            />
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
               <Grid item>
                 <Grid container direction="column">

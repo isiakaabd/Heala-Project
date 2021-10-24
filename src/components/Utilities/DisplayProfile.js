@@ -71,14 +71,14 @@ const DisplayProfile = (props) => {
               <Grid item>
                 <Grid container alignItems="center">
                   <Grid item style={{ marginRight: "3rem" }}>
-                    <Typography variant="h4" color="error">
+                    <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
                       <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span>{" "}
                       {statusId}
                     </Typography>
                   </Grid>
                   {specialization ? (
                     <Grid item>
-                      <Typography variant="h4">
+                      <Typography variant="h4" style={{ fontWeight: 400 }}>
                         <span style={{ color: theme.palette.common.lightGrey }}>
                           Specialization:
                         </span>{" "}

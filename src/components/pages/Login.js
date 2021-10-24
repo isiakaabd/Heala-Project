@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Link, Redirect, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -62,9 +63,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = ({ history }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const location = useLocation();
 
   const { loginUser } = useActions();
 
@@ -106,12 +108,16 @@ const Login = () => {
   //   };
 
   const handleLogin = () => {
+    const { state = {} } = location;
+    const { prevLocation } = state;
     loginUser();
+
+    history.push(prevLocation || "/dashboard");
   };
 
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect to="/dashboard" />;
+  // }
 
   return (
     <Grid container className={classes.gridContainer}>
@@ -236,6 +242,10 @@ const Login = () => {
       </Grid>
     </Grid>
   );
+};
+
+Login.propTypes = {
+  history: PropTypes.object,
 };
 
 export default Login;

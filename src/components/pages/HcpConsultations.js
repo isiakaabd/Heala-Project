@@ -1,33 +1,31 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import Avatar from "@mui/material/Avatar";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Button from "@mui/material/Button";
+import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import Typography from "@mui/material/Typography";
-import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
+import Avatar from "@mui/material/Avatar";
+import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
-import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link, useParams } from "react-router-dom";
-import displayPhoto from "assets/images/avatar.png";
+import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { hcpPatientsRows } from "components/Utilities/tableData";
+import displayPhoto from "assets/images/avatar.png";
+import { consultationsRows } from "components/Utilities/tableData";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-  parentGrid: {
-    paddingBottom: "10em",
-  },
-
   tableCell: {
-    "&.MuiTableCell-root": {
+    "&.css-1jilxo7-MuiTableCell-root": {
       fontSize: "1.25rem",
     },
   },
@@ -54,53 +52,75 @@ const useStyles = makeStyles((theme) => ({
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
         fontSize: "1.2rem",
       },
+
+      "& .MuiButton-endIcon": {
+        marginLeft: ".3rem",
+      },
     },
   },
 }));
 
-const HcpPatients = (props) => {
-  const classes = useStyles();
-  const theme = useTheme();
+const filterOptions = [
+  { id: 0, value: "Name" },
+  { id: 1, value: "Date" },
+  { id: 2, value: "Description" },
+];
 
+const HcpConsultations = (props) => {
   const {
     selectedMenu,
     selectedSubMenu,
     selectedHcpMenu,
+    selectedScopedMenu,
     setSelectedMenu,
     setSelectedSubMenu,
     setSelectedHcpMenu,
+    setSelectedScopedMenu,
   } = props;
+  const classes = useStyles();
+  const theme = useTheme();
 
   const { hcpId } = useParams();
 
-  const { setSelectedRows } = useActions();
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { setSelectedRows } = useActions();
 
   useEffect(() => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
-    setSelectedHcpMenu(5);
-
+    setSelectedHcpMenu(6);
+    setSelectedScopedMenu(0);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
 
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
-      <Grid item style={{ marginBottom: "5rem" }}>
-        <Typography variant="h2">HCP Patients</Typography>
+      <Grid
+        item
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ paddingBottom: "5rem" }}
+      >
+        <Grid item>
+          <Typography variant="h2">Consultations</Typography>
+        </Grid>
+        <Grid item>
+          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
+        </Grid>
       </Grid>
-      <Grid item container className={classes.parentGrid}>
+      <Grid item container>
         <EnhancedTable
-          headCells={hcpPatientsHeadCells}
-          rows={hcpPatientsRows}
+          headCells={consultationsHeadCells}
+          rows={consultationsRows}
           page={page}
-          paginationLabel="List Per Page"
+          paginationLabel="Patients per page"
           hasCheckbox={true}
         >
-          {hcpPatientsRows
+          {consultationsRows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row.id, selectedRows);
@@ -127,26 +147,20 @@ const HcpPatients = (props) => {
                     />
                   </TableCell>
                   <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
+                    align="left"
                     className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
+                    style={{ maxWidth: "20rem" }}
                   >
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
                     <div
                       style={{
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
-                        textAlign: "left",
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>
                         <Avatar
-                          alt="Remy Sharp"
+                          alt={`Display Photo of ${row.name}`}
                           src={displayPhoto}
                           sx={{ width: 24, height: 24 }}
                         />
@@ -154,15 +168,30 @@ const HcpPatients = (props) => {
                       <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                     </div>
                   </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    {row.date}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                  >
+                    {row.description}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
                       className={classes.button}
                       component={Link}
-                      to={`/hcps/${hcpId}/profile`}
+                      to={`/hcps/${row.id}/consultations/case-notes`}
                       endIcon={<ArrowForwardIosIcon />}
+                      onClick={() => {
+                        setSelectedSubMenu(2);
+                        setSelectedHcpMenu(0);
+                        setSelectedScopedMenu(2);
+                      }}
                     >
-                      View HCP Profile
+                      View Case Note
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -174,13 +203,15 @@ const HcpPatients = (props) => {
   );
 };
 
-HcpPatients.propTypes = {
+HcpConsultations.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
+  setSelectedScopedMenu: PropTypes.func.isRequired,
 };
 
-export default HcpPatients;
+export default HcpConsultations;
