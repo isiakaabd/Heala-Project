@@ -123,6 +123,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
             endIcon={<TrendingUpIcon />}
             title="Process Payout"
             type={buttonType}
+            to="/finance/pending"
             // onClick={handleAdminOpen}
           />
         </Grid>

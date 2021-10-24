@@ -11,6 +11,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ReactHTMLParser from "react-html-parser";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -41,9 +42,8 @@ const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedS
 
   const classes = useStyles();
   const { emailData } = useSelector((state) => state.tables);
-
   const details = emailData[emailId];
-  console.log(details);
+  const parseTextArea = ReactHTMLParser(details.textarea);
 
   useEffect(() => {
     setSelectedMenu(6);
@@ -60,30 +60,51 @@ const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedS
           <Typography variant="h3"> {details.message}</Typography>
         </Grid>
         <Divider />
-        <Grid item style={{ padding: "1.5rem 5rem" }}>
-          <Grid container alignItems="center">
-            <Grid item>
-              <Avatar src={displayPhoto} alt="Display photo of the sender" />
+        <Grid item container style={{ padding: "1.5rem 5rem" }}>
+          <Grid container alignItems="center" flexWrap="nowrap">
+            <Grid item container alignItems="center" gap={2}>
+              <Grid item>
+                <Chip
+                  avatar={<Avatar alt="name" src={displayPhoto} />}
+                  label="Doctor's Name "
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item>
+                <Chip
+                  variant="outlined"
+                  deleteIcon={<ArrowForwardIosIcon />}
+                  onClick={() => window.open(`mailto:${details.email}`, "_blank")}
+                  onDelete={() => console.log(" ")}
+                  label={details.email}
+                  className={classes.chip}
+                />
+              </Grid>
             </Grid>
-            <Grid item style={{ margin: "0 3rem 0 1.5rem" }}>
-              <Typography variant="h5">{details.name[0]}</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                deleteIcon={<ArrowForwardIosIcon />}
-                onClick={() => window.open(`mailto:${details.email}`, "_blank")}
-                onDelete={() => console.log(" ")}
-                label={details.email}
-                className={classes.chip}
-              />
+            <Divider orientation="vertical" />
+            <Divider orientation="vertical" />
+            <Grid item container></Grid>
+            <Grid item container>
+              <Grid container rowSpacing={1} columnSpacing={2}>
+                {details.name.map((item) => {
+                  return (
+                    <Grid item key={item}>
+                      <Chip
+                        avatar={<Avatar alt={item} src={displayPhoto} />}
+                        label={item}
+                        variant="outlined"
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            {details.textarea}
+            {parseTextArea}
           </Typography>
         </Grid>
       </Grid>
