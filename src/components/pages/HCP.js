@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Alert from "@mui/material/Alert";
+import * as Yup from "yup";
 import FormSelect from "components/Utilities/FormSelect";
 import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
@@ -25,6 +26,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import Filter from "components/modals/Filter";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -102,6 +104,14 @@ const HCP = ({ setSelectedSubMenu }) => {
     setstate({ ...state, [name]: value });
   };
 
+  const validationSchema = Yup.object({
+    // checkbox: Yup.array().min(1, "Add atleast a permission"),
+    Name: Yup.string("Enter your Permission").required("select an option"),
+    Specialization: Yup.string("Enter your Permission").required("select an option"),
+    Date: Yup.string("Enter your Permission").required("select an option"),
+    Status: Yup.string("Enter your Permission").required("select an option"),
+  });
+
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
@@ -111,8 +121,13 @@ const HCP = ({ setSelectedSubMenu }) => {
     setIsOpen(true);
   };
 
-  const categoryOptions = ["First", "Second", "Third"];
-  const { name, medicalID, date } = state;
+  const initialValues = {
+    Name: " ",
+    Date: " ",
+    Specialization: " ",
+    Status: " ",
+  };
+
   useEffect(() => {
     const z = setTimeout(() => {
       setResponse("");
@@ -120,12 +135,19 @@ const HCP = ({ setSelectedSubMenu }) => {
     return () => clearTimeout(z);
   }, [response]);
 
-  const handleDialogClose = async () => {
+  const handleDialogClose = () => {
     setIsOpen(false);
-    await setTimeout(() => {
+    setTimeout(() => {
       setResponse("Saved");
     }, 3000);
   };
+  const checkbox = [
+    { key: "select an option", value: " " },
+    { key: "create", value: "create" },
+    { key: "update", value: "update" },
+    { key: "read", value: "read" },
+    { key: "delete", value: "delete" },
+  ];
 
   return (
     <>
@@ -256,74 +278,13 @@ const HCP = ({ setSelectedSubMenu }) => {
         </Grid>
       </Grid>
       {/* Modal */}
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <>
-          <Grid item container direction="column">
-            <Grid item container spacing={2}>
-              <Grid item xs={6} marginBottom={4}>
-                <Grid container direction="column" gap={1}>
-                  <FormLabel component="legend" className={classes.FormLabel}>
-                    Name
-                  </FormLabel>
-                  <FormControl fullWidth>
-                    <FormSelect
-                      options={categoryOptions}
-                      value={name}
-                      name="name"
-                      onChange={handleChange}
-                      placeholderText="Select Name"
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-              {/* second grid */}
-              <Grid item xs={6}>
-                <Grid container gap={1} direction="column">
-                  <FormLabel component="legend" className={classes.FormLabel}>
-                    Date
-                  </FormLabel>
-                  <FormControl fullWidth>
-                    <FormSelect
-                      options={categoryOptions}
-                      value={date}
-                      name="date"
-                      onChange={handleChange}
-                      placeholderText="Choose Date"
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Grid>
-            {/* <Grid item container xs={6} direction="column"> */}
-            <Grid item container spacing={2}>
-              <Grid item container gap={1} xs={6}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Medical ID
-                </FormLabel>
-                <FormControl fullWidth style={{ height: "3rem" }}>
-                  <FormSelect
-                    options={categoryOptions}
-                    value={medicalID}
-                    name="medicalID"
-                    onChange={handleChange}
-                    placeholderText="Select Category"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} marginTop={20}>
-            <Button
-              variant="contained"
-              onClick={handleDialogClose}
-              to="/view"
-              type="submit"
-              className={classes.btn}
-            >
-              Apply Filter
-            </Button>
-          </Grid>
-        </>
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={2} handleClose={handleDialogClose}>
+        <Filter
+          options={checkbox}
+          type="hcp"
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        />
       </Modals>
     </>
   );

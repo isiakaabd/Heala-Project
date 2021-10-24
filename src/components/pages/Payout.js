@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -123,6 +124,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
             endIcon={<TrendingUpIcon />}
             title="Process Payout"
             type={buttonType}
+            to="/finance/pending"
             // onClick={handleAdminOpen}
           />
         </Grid>

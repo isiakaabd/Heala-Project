@@ -204,7 +204,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                     }}
                   />
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Button
                     variant="contained"
                     className={classes.button}
@@ -215,7 +215,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                   >
                     View referral
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             );
           })}

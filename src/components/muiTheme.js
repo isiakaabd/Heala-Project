@@ -120,8 +120,28 @@ export const muiTheme = createTheme({
       cursor: "pointer",
     },
     FormLabel: {
-      color: grey,
       fontSize: "1.6rem",
+      color: dark,
+    },
+    input: {
+      // ...theme
+      width: "100%",
+      height: "5rem",
+      border: "1px solid lightGrey",
+      borderRadius: ".5rem",
+      padding: "1rem",
+      fontSize: "1.6rem",
+      color: dark,
+      fontWeight: 600,
+
+      "&:focus": {
+        outline: "none",
+      },
+
+      "&::placeholder": {
+        color: lightGrey,
+        fontWeight: 500,
+      },
     },
   },
   components: {

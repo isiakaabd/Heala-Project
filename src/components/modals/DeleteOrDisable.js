@@ -134,7 +134,7 @@ DeleteOrDisable.propTypes = {
   confirmationMsg: PropTypes.string.isRequired,
   btnValue: PropTypes.string.isRequired,
   type: PropTypes.string,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
 };
 
