@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Alert from "@mui/material/Alert";
 import * as Yup from "yup";
-import FormSelect from "components/Utilities/FormSelect";
 import { Grid, Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -11,8 +10,6 @@ import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import Modals from "components/Utilities/Modal";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
@@ -93,19 +90,10 @@ const useStyles = makeStyles((theme) => ({
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [state, setstate] = useState({
-    name: "First",
-    date: "Second",
-    medicalID: "Third",
-  });
+
   const [response, setResponse] = useState("");
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setstate({ ...state, [name]: value });
-  };
 
   const validationSchema = Yup.object({
-    // checkbox: Yup.array().min(1, "Add atleast a permission"),
     Name: Yup.string("Enter your Permission").required("select an option"),
     Specialization: Yup.string("Enter your Permission").required("select an option"),
     Date: Yup.string("Enter your Permission").required("select an option"),

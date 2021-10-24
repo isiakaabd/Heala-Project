@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-157lt5z-MuiChip-root": {
-      fontSize: "1.3rem !important",
+    "&.MuiChip-root": {
+      fontSize: "1.3rem",
       //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   infoBadge: {
-    "&.css-1dl0kns-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.25rem",
       borderRadius: "1.5rem",
       color: theme.palette.common.green,
@@ -82,21 +82,24 @@ const HcpProfile = (props) => {
     selectedMenu,
     setSelectedMenu,
     selectedSubMenu,
+    chatMediaActive,
     setSelectedSubMenu,
     selectedHcpMenu,
     setSelectedHcpMenu,
+    setChatMediaActive,
   } = props;
   const classes = useStyles();
 
   const { hcpId } = useParams();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
     setSelectedHcpMenu(1);
+    setChatMediaActive(false);
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -111,6 +114,10 @@ const HcpProfile = (props) => {
           medicalTitle="Medical ID"
           statusId={132467}
           specialization="Dentistry"
+          chatPath={`/hcps/${hcpId}/profile/chat`}
+          callPath={`/hcps/${hcpId}/profile/call`}
+          videoPath={`/hcps/${hcpId}/profile/video`}
+          setChatMediaActive={setChatMediaActive}
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
@@ -248,9 +255,11 @@ HcpProfile.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  chatMediaActive: PropTypes.bool.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default HcpProfile;

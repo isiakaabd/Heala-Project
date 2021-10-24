@@ -1,6 +1,5 @@
 import React from "react";
-
-import { Field, ErrorMessage, FieldArray, validateYupSchema } from "formik";
+import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Selects = (props) => {
   const classes = useStyles();
-  const { name, label, options, placeholder, ...rest } = props;
+  const { name, label, options, ...rest } = props;
 
   console.log(name);
 

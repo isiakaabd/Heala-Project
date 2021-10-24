@@ -27,21 +27,14 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "70rem !important",
       boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.1)",
       "& .MuiFormControl-root": {
-        "& .WAMuiChipInput-chipContainer-21": {
+        "& .WAMuiChipInput-standard-6 ": {
           display: "flex",
           alignItems: "center",
-          "& .WAMuiChipInput-chip-33": {
-            padding: ".6rem",
-            "& .MuiChip-label": {
-              fontSize: "1.5rem",
-              "&::hover": {
-                color: "green",
-              },
-            },
-          },
-          "& .MuiInputBase-root": {
-            fontSize: "1.5rem",
-          },
+          fontSize: "1.5rem",
+        },
+        "& .WAMuiChipInput-chip-16": {
+          padding: ".6rem",
+          fontSize: "1.5rem",
         },
       },
     },
@@ -143,8 +136,6 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
       validateOnMount
     >
       {(formik) => {
-        console.log(formik);
-
         return (
           <Form>
             <Grid container direction="column">
@@ -172,35 +163,37 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                             const { value, name, onChange } = field;
                             const { setFieldValue } = form;
                             return (
-                              <ChipInput
-                                fullWidth
-                                {...field}
-                                name="name"
-                                id="name"
-                                value={value}
-                                style={{
-                                  padding: "12px",
-                                }}
-                                disableUnderline
-                                alwaysShowPlaceholder={true}
-                                placeholder="Enter your recipient's email"
-                                onAdd={(newVal) => {
-                                  const newArr = [...value, newVal];
-                                  if (isEvent(newArr)) {
-                                    onChange(newArr);
-                                  } else {
-                                    setFieldValue(name, newArr);
-                                  }
-                                }}
-                                onDelete={(deletedVal) => {
-                                  const newArr = value.filter((state) => state !== deletedVal);
-                                  if (isEvent(newArr)) {
-                                    onChange(newArr);
-                                  } else {
-                                    setFieldValue(name, newArr);
-                                  }
-                                }}
-                              />
+                              <ChipWrapper>
+                                <ChipInput
+                                  fullWidth
+                                  {...field}
+                                  name="name"
+                                  id="name"
+                                  value={value}
+                                  style={{
+                                    padding: "1.2rem",
+                                  }}
+                                  disableUnderline
+                                  // alwaysShowPlaceholder={true}
+                                  // placeholder="Enter your recipient's email"
+                                  onAdd={(newVal) => {
+                                    const newArr = [...value, newVal];
+                                    if (isEvent(newArr)) {
+                                      onChange(newArr);
+                                    } else {
+                                      setFieldValue(name, newArr);
+                                    }
+                                  }}
+                                  onDelete={(deletedVal) => {
+                                    const newArr = value.filter((state) => state !== deletedVal);
+                                    if (isEvent(newArr)) {
+                                      onChange(newArr);
+                                    } else {
+                                      setFieldValue(name, newArr);
+                                    }
+                                  }}
+                                />
+                              </ChipWrapper>
                             );
                           }}
                         </Field>
@@ -235,12 +228,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                           Message:{" "}
                         </Typography>
                       </Grid>
-                      <Grid
-                        item
-                        container
-                        sx={{ marginBottom: "2rem", maxWidth: "100%" }}
-                        maxWidth="100%"
-                      >
+                      <Grid item container sx={{ marginBottom: "2rem" }} maxWidth="100%">
                         <Field name="textarea">
                           {({ field, form }) => {
                             return (
@@ -251,7 +239,6 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                                   name="textarea"
                                   data={field.value}
                                   editor={ClassicEditor}
-                                  style={{ fontSize: "28px", background: "red" }}
                                   onChange={(e, editor) => {
                                     form.setFieldValue("textarea", editor.getData("text"));
                                   }}
@@ -293,6 +280,9 @@ const Wrapper = styled.div`
     max-height: 200px;
     overflow: scroll;
   }
+`;
+const ChipWrapper = styled.div`
+  font-size: 1.4rem;
 `;
 CreateEmail.propTypes = {
   selectedMenu: PropTypes.number.isRequired,

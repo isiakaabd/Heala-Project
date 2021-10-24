@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.png";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 import { useActions } from "components/hooks/useActions";
 
@@ -124,17 +124,10 @@ const SideMenu = (props) => {
   const classes = useStyles();
   const [Logout, setLogout] = useState(false);
   const location = useLocation();
-  const history = useHistory();
 
   const handleLogout = () => {
-    setLogout(true);
-
     setSelectedMenu(12);
-    setTimeout(() => {
-      logout();
-
-      history.push("/");
-    }, 5000);
+    logout();
   };
 
   useEffect(() => {
@@ -182,7 +175,11 @@ const SideMenu = (props) => {
               <ListItemText>{menu.title}</ListItemText>
             </ListItemButton>
           ))}
-          <ListItemButton disableRipple classes={{ root: classes.logout }}>
+          <ListItemButton
+            disableRipple
+            classes={{ root: classes.logout }}
+            onClick={() => setLogout(true)}
+          >
             <ListItemIcon>
               <HiLogout size={20} />
             </ListItemIcon>
@@ -198,6 +195,7 @@ const SideMenu = (props) => {
         confirmationMsg="logout"
         btnValue="Logout"
         type="logout"
+        onConfirm={handleLogout}
       />
     </>
   );

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "0.5rem",
-      maxWidth: "7rem",
+      maxWidth: "10rem",
       fontSize: ".85rem",
 
       "&:hover": {
@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
 
       "& .MuiButton-endIcon": {
         marginLeft: ".2rem",
-        marginTop: "-.2rem",
       },
     },
   },
@@ -238,7 +237,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                       endIcon={<ArrowForwardIosIcon />}
                       onClick={() => setSelectedSubMenu(6)}
                     >
-                      View Profile
+                      View Message
                     </Button>
                   </TableCell>
                 </TableRow>

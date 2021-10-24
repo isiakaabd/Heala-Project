@@ -194,7 +194,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     setAdmin({ ...admin, [name]: checked });
   };
   const { firstName, lastName, email, password } = admin;
-  const { name, create, update, Delete, read } = admin;
+  const { create, update, Delete, read } = admin;
 
   return (
     <>

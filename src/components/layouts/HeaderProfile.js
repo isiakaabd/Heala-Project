@@ -53,7 +53,7 @@ const HeaderProfile = () => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body2" className={classes.role} style={{ fontWeight: 400 }}>
+              <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
                 Admin
               </Typography>
             </Grid>

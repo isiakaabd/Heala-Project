@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -97,7 +97,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     active: "#f4f4f4",
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setChatMediaActive(false);
 
     // eslint-disable-next-line

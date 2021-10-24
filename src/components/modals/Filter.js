@@ -1,6 +1,5 @@
-import Selects from "components/validation/Select";
 import React from "react";
-import { Grid, Button } from "@mui/material";
+import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import CustomButton from "components/Utilities/CustomButton";
@@ -39,7 +38,7 @@ const Filter = (props) => {
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
-  const { options, validationSchema, initialValues, type, name, label } = props;
+  const { options, validationSchema, initialValues, type } = props;
 
   const theme = useTheme();
   const onSubmit = (values, onSubmitProps) => {

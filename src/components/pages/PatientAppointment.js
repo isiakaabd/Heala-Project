@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
@@ -10,7 +9,7 @@ import Button from "@mui/material/Button";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import Avatar from "@mui/material/Avatar";
-import { consultationsHeadCells } from "components/Utilities/tableHeaders";
+import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
@@ -19,7 +18,8 @@ import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.png";
 import { consultationsRows } from "components/Utilities/tableData";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 
@@ -30,31 +30,50 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  button: {
+  tableBtn: {
     "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
+      ...theme.typography.btn,
+      height: "3rem",
+      fontSize: "1.25rem",
       borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "12rem",
+      boxShadow: "none",
 
       "&:hover": {
-        background: "#fcfcfc",
+        "& .MuiButton-endIcon>*:nth-of-type(1)": {
+          color: "#fff",
+        },
       },
 
       "&:active": {
-        background: "#fafafa",
+        boxShadow: "none",
       },
 
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
+        fontSize: "1.5rem",
       },
+    },
+  },
 
-      "& .MuiButton-endIcon": {
-        marginLeft: ".3rem",
+  redBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightRed,
+      color: theme.palette.common.red,
+
+      "&:hover": {
+        background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+
+  greenBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
+        color: "#fff",
       },
     },
   },
@@ -66,16 +85,14 @@ const filterOptions = [
   { id: 2, value: "Description" },
 ];
 
-const Consultations = (props) => {
+const PatientAppointment = (props) => {
   const {
     selectedMenu,
     selectedSubMenu,
-    selectedPatientMenu,
-    selectedScopedMenu,
     setSelectedMenu,
     setSelectedSubMenu,
+    selectedPatientMenu,
     setSelectedPatientMenu,
-    setSelectedScopedMenu,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -88,10 +105,9 @@ const Consultations = (props) => {
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
-    setSelectedPatientMenu(5);
-    setSelectedScopedMenu(0);
+    setSelectedPatientMenu(2);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
   return (
     <Grid container direction="column">
@@ -106,15 +122,15 @@ const Consultations = (props) => {
         style={{ paddingBottom: "5rem" }}
       >
         <Grid item>
-          <Typography variant="h2">Consultations</Typography>
+          <Typography variant="h2">Appointments</Typography>
         </Grid>
         <Grid item>
-          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
+          <FilterList options={filterOptions} title="Filter Appointments" width="18.7rem" />
         </Grid>
       </Grid>
       <Grid item container>
         <EnhancedTable
-          headCells={consultationsHeadCells}
+          headCells={appointmentsHeadCells}
           rows={consultationsRows}
           page={page}
           paginationLabel="Patients per page"
@@ -178,20 +194,24 @@ const Consultations = (props) => {
                   >
                     {row.description}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
                     <Button
                       variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`/patients/${row.id}/consultations/case-note`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => {
-                        setSelectedSubMenu(2);
-                        setSelectedPatientMenu(0);
-                        setSelectedScopedMenu(1);
-                      }}
+                      disableRipple
+                      className={`${classes.tableBtn} ${classes.greenBtn}`}
+                      endIcon={<AssignmentIcon color="success" />}
                     >
-                      View Case Note
+                      Reschedule
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      className={`${classes.tableBtn} ${classes.redBtn}`}
+                      endIcon={<DeleteIcon color="error" />}
+                    >
+                      Cancel
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -203,15 +223,13 @@ const Consultations = (props) => {
   );
 };
 
-Consultations.propTypes = {
+PatientAppointment.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
 };
 
-export default Consultations;
+export default PatientAppointment;
