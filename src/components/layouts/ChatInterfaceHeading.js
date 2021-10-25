@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
@@ -80,7 +80,8 @@ const ChatInterfaceHeading = ({ setChatMediaActive }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { patientId } = useParams();
+  const { patientId, hcpId } = useParams();
+  const { pathname } = useLocation();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -90,6 +91,16 @@ const ChatInterfaceHeading = ({ setChatMediaActive }) => {
   const handleClose = () => {
     setAnchorEl(null);
     setChatMediaActive(false);
+  };
+
+  const renderPath = () => {
+    if (pathname.split("/")[1] === "patients") {
+      return `/patients/${patientId}/profile`;
+    } else if (pathname.split("/")[1] === "hcps") {
+      return `/hcps/${hcpId}/profile`;
+    } else {
+      return `/dashboard`;
+    }
   };
 
   return (
@@ -154,7 +165,7 @@ const ChatInterfaceHeading = ({ setChatMediaActive }) => {
                   onClick={handleClose}
                   disableRipple
                   component={Link}
-                  to={`/patients/${patientId}/profile`}
+                  to={renderPath}
                   className={classes.menuItem}
                 >
                   <HiOutlineLogout size="3rem" />

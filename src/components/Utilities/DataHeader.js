@@ -547,7 +547,6 @@ export const rows = [
     permission: ["permission 1", "permission 2", "permission4", "permission3"],
     entryDate: "July 17, 2021",
 
-
     data: ["create", "read", "update", "delete"],
     firstName: null,
     status: "active",

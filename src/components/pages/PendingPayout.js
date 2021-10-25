@@ -15,9 +15,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import CustomButton from "components/Utilities/CustomButton";
 import { isSelected } from "helpers/isSelected";
-import Chip from "@mui/material/Chip";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,11 +82,6 @@ const useStyles = makeStyles((theme) => ({
 const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -117,15 +110,6 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
             </Grid>
           </Grid>
         </Grid>
-
-        {/* <Grid item>
-          <CustomButton
-            endIcon={<TrendingUpIcon />}
-            title="Process Payout"
-            type={buttonType}
-            // onClick={handleAdminOpen}
-          />
-        </Grid> */}
       </Grid>
 
       {/* The Search and Filter ends here */}

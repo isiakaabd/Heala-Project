@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
@@ -80,7 +80,8 @@ const useStyles = makeStyles((theme) => ({
 const PhoneCall = ({ chatMediaActive, setChatMediaActive, history }) => {
   const classes = useStyles();
 
-  const { patientId } = useParams();
+  const { patientId, hcpId } = useParams();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     setChatMediaActive(true);
@@ -88,9 +89,23 @@ const PhoneCall = ({ chatMediaActive, setChatMediaActive, history }) => {
     // eslint-disable-next-line
   }, [chatMediaActive]);
 
-  if (!chatMediaActive) {
-    history.push(`/patients/${patientId}/profile`);
-  }
+  const renderPath = () => {
+    if (pathname.split("/")[1] === "patients") {
+      return `/patients/${patientId}/profile`;
+    } else if (pathname.split("/")[1] === "hcps") {
+      return `/hcps/${hcpId}/profile`;
+    } else {
+      return `/dashboard`;
+    }
+  };
+
+  const handleCallEnded = () => {
+    setTimeout(() => {
+      setChatMediaActive(false);
+    }, 3000);
+  };
+
+  if (!chatMediaActive) history.push(renderPath());
 
   return (
     <Grid
@@ -149,14 +164,7 @@ const PhoneCall = ({ chatMediaActive, setChatMediaActive, history }) => {
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton
-                  className={classes.endCallButton}
-                  onClick={() =>
-                    setTimeout(() => {
-                      setChatMediaActive(false);
-                    }, 3000)
-                  }
-                >
+                <IconButton className={classes.endCallButton} onClick={handleCallEnded}>
                   <CallEndIcon className={classes.icon} style={{ color: "#fff" }} />
                 </IconButton>
               </Grid>
