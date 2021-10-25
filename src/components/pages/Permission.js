@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
@@ -112,18 +113,24 @@ const useStyles = makeStyles((theme) => ({
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
 
 const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
-  const checkbox = {
-    create: true,
-    update: true,
-    Delete: false,
-    read: false,
+  const checkbox = [
+    { key: "create", value: "create" },
+    { key: "update", value: "update" },
+    { key: "read", value: "read" },
+    { key: "delete", value: "delete" },
+  ];
+
+  const initialValues = {
+    name: "",
+    checkbox: [],
+    isTall: true,
   };
-  const checkbox1 = {
-    create: false,
-    update: true,
-    Delete: false,
-    read: false,
-  };
+
+  const validationSchema = Yup.object({
+    checkbox: Yup.array().min(1, "Add atleast a permission"),
+    name: Yup.string("Enter your Permission").required("permission is required"),
+  });
+
   const classes = useStyles();
   const theme = useTheme();
 
@@ -211,17 +218,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                       }}
                     />
                   </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    // style={{ textAlign: "center !important" }}
-                  >
+                  <TableCell id={labelId} scope="row" align="center" className={classes.tableCell}>
                     <Grid
                       container
                       rowSpacing={2}
-                      // spacing={2}
                       style={{
                         maxWidth: "25rem",
                         display: "inline-flex",
@@ -238,7 +238,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                     <Grid
                       container
                       rowSpacing={2}
-                      // spacing={2}
                       style={{
                         maxWidth: "25rem",
                         display: "inline-flex",
@@ -363,7 +362,13 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
       {/* // modal */}
 
       <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
-        <PermissionModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
+        <PermissionModal
+          handleDialogClose={handleDialogClose}
+          type="add"
+          options={checkbox}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        />
       </Modals>
 
       {/* edit modala */}
@@ -371,7 +376,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"
-          checkbox={checkbox1}
+          options={checkbox}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
         />
       </Modals>
       {/* delete modal */}

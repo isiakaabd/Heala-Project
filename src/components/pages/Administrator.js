@@ -194,7 +194,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     setAdmin({ ...admin, [name]: checked });
   };
   const { firstName, lastName, email, password } = admin;
-  const { name, create, update, Delete, read } = admin;
+  const { create, update, Delete, read } = admin;
 
   return (
     <>
@@ -259,7 +259,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     </TableCell>
 
                     <TableCell align="center" className={classes.tableCell}>
-                      <div
+                      <Grid
                         style={{
                           height: "100%",
                           display: "flex",
@@ -278,7 +278,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                         <span style={{ fontSize: "1.25rem" }}>
                           {row.firstName} {row.lastName}
                         </span>
-                      </div>
+                      </Grid>
                     </TableCell>
                     <TableCell
                       id={labelId}

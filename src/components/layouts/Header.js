@@ -23,6 +23,7 @@ const Header = (props) => {
     selectedHcpMenu,
     waitingListMenu,
     selectedAppointmentMenu,
+    selectedScopedMenu,
   } = props;
   const classes = useStyles();
   return (
@@ -35,6 +36,7 @@ const Header = (props) => {
           selectedHcpMenu={selectedHcpMenu}
           waitingListMenu={waitingListMenu}
           selectedAppointmentMenu={selectedAppointmentMenu}
+          selectedScopedMenu={selectedScopedMenu}
         />
       </AppBar>
     </Fragment>
@@ -48,6 +50,7 @@ Header.propTypes = {
   selectedHcpMenu: PropTypes.number.isRequired,
   waitingListMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
 };
 
 export default Header;

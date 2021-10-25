@@ -79,9 +79,9 @@ const SinglePatient = (props) => {
     },
     {
       id: 2,
-      title: "Consultations",
+      title: "Appointments",
       background: theme.palette.common.lightGreen,
-      path: "consultations",
+      path: "appointments",
       icon: ConsultationIcon,
       fill: theme.palette.common.green,
     },
@@ -106,9 +106,9 @@ const SinglePatient = (props) => {
     },
     {
       id: 5,
-      title: "Case notes",
+      title: "Consultations",
       background: theme.palette.common.lightRed,
-      path: "case-notes",
+      path: "consultations",
       icon: UserIcon,
       fill: theme.palette.common.red,
     },
@@ -192,7 +192,6 @@ const SinglePatient = (props) => {
             key={card.id}
             item
             className={classes.parentGrid}
-            // style={{ margin: card.id === 1 ? "0 2rem" : undefined }}
             component={Link}
             to={`/patients/${patientId}/${card.path}`}
             onClick={() => setSelectedPatientMenu(card.id)}

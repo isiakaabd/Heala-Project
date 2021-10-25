@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import FormLabel from "@mui/material/FormLabel";
-import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
+
 const useStyles = makeStyles((theme) => ({
   btn: {
     "&.MuiButton-root": {
@@ -43,133 +39,66 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const PermissionModal = ({ handleDialogClose, type, checkbox }) => {
-  const handleDialogCloses = () => {
-    if (type === "edit") {
-      console.log("hi from edit");
-      console.log(manage);
-    } else {
-      console.log("hi from add");
-      console.log(manage);
-    }
-    handleDialogClose();
-  };
-  const [manage, setManage] = useState({
-    name: "",
-    ...checkbox,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setManage({ ...manage, [name]: value });
-  };
-  const handleCheckBoxChange = (e) => {
-    const { name, checked } = e.target;
-    setManage({ ...manage, [name]: checked });
+export const PermissionModal = (props) => {
+  const { options, initialValues, type, validationSchema, handleDialogClose } = props;
+  const onSubmit = (values, onSubmitProps) => {
+    onSubmitProps.resetForm();
   };
 
   const classes = useStyles();
-  const { name, create, update, Delete, read } = manage;
-
+  console.log(options);
   return (
-    <>
-      <Grid item container direction="column">
-        <Grid item container>
-          <Grid item container marginBottom={4}>
-            <Grid container direction="column" gap={1}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Name of Permission
-              </FormLabel>
-              <FormControl fullWidth>
-                <TextField
-                  id="outlined-adornment-amount"
-                  name="name"
-                  value={name}
-                  placeholder="Enter Plan Name"
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          <Grid item container xs={12}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnMount
+    >
+      {(formik) => {
+        return (
+          <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Permission
-              </FormLabel>
-              <FormControl style={{ width: "100%" }}>
-                <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
-                  <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
-                    <FormGroup>
-                      <Grid container>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              className={classes.checkbox}
-                              checked={create}
-                              onChange={handleCheckBoxChange}
-                              name="create"
-                            />
-                          }
-                          label="create"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              className={classes.checkbox}
-                              checked={Delete}
-                              onChange={handleCheckBoxChange}
-                              name="Delete"
-                            />
-                          }
-                          label="Delete"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              className={classes.checkbox}
-                              checked={update}
-                              onChange={handleCheckBoxChange}
-                              name="update"
-                            />
-                          }
-                          label="update"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              className={classes.checkbox}
-                              checked={read}
-                              onChange={handleCheckBoxChange}
-                              name="read"
-                            />
-                          }
-                          label="read"
-                        />
-                      </Grid>
-                    </FormGroup>
-                  </FormControl>
-                </Box>
-              </FormControl>
+              <Grid item container rowSpacing={3}>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    name="name"
+                    label="Name of Permission"
+                    placeholder="Enter Permission Name"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="checkbox"
+                    name="checkbox"
+                    options={options}
+                    label="Permission"
+                  />
+                </Grid>
+                <Grid item xs={12} marginTop={10}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    onClick={handleDialogClose}
+                    className={classes.btn}
+                    disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
+                  >
+                    {type === "edit" ? "Save changes" : "Add Permission"}
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} marginTop={10}>
-        <Button
-          variant="contained"
-          type="submit"
-          onClick={handleDialogCloses}
-          className={classes.btn}
-        >
-          {type === "edit" ? "Save changes" : "Add Permission"}
-        </Button>
-      </Grid>
-    </>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 PermissionModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
-  checkbox: PropTypes.object.isRequired,
+  options: PropTypes.array.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  validationSchema: PropTypes.object.isRequired,
 };

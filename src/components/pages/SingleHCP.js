@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import Card from "components/Utilities/Card";
 import { makeStyles } from "@mui/styles";
@@ -56,9 +57,11 @@ const SingleHCP = (props) => {
     selectedMenu,
     setSelectedMenu,
     selectedSubMenu,
+    selectedScopedMenu,
     setSelectedSubMenu,
     selectedHcpMenu,
     setSelectedHcpMenu,
+    setSelectedScopedMenu,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -109,6 +112,14 @@ const SingleHCP = (props) => {
       icon: UserIcon,
       fill: theme.palette.common.red,
     },
+    {
+      id: 6,
+      title: "Consultations",
+      background: theme.palette.common.lightGreen,
+      path: "consultations",
+      icon: AssignmentIcon,
+      fill: theme.palette.common.red,
+    },
   ];
 
   const trasparentButton = {
@@ -121,9 +132,10 @@ const SingleHCP = (props) => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
     setSelectedHcpMenu(0);
+    setSelectedScopedMenu(0);
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
 
   return (
     <Grid container direction="column" className={classes.gridContainer}>
@@ -187,14 +199,14 @@ const SingleHCP = (props) => {
             <Card title={card.title} background={card.background} header="h4">
               {React.createElement(card.icon, {
                 fill: card.fill,
-                color: card.id === 4 ? "success" : undefined,
+                color: card.id === 4 || card.id === 6 ? "success" : undefined,
                 style: { fontSize: "4rem" },
               })}
             </Card>
           </Grid>
         ))}
-        {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above */}
-        <Grid item className={classes.parentGrid} style={{ visibility: "hidden" }}></Grid>
+        {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above
+        <Grid item className={classes.parentGrid} style={{ visibility: "hidden" }}></Grid> */}
       </Grid>
     </Grid>
   );
@@ -204,9 +216,11 @@ SingleHCP.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
+  setSelectedScopedMenu: PropTypes.func.isRequired,
 };
 
 export default SingleHCP;
