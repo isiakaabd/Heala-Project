@@ -165,16 +165,16 @@ const Management = () => {
     active: theme.palette.primary.dark,
   };
   const checkbox = {
-    create: true,
-    update: true,
-    Delete: false,
-    read: false,
+    "permission 1": true,
+    "permission 2": true,
+    "permission 3": false,
+    "permission 4": true,
   };
   const checkbox1 = {
-    create: false,
-    update: true,
-    Delete: false,
-    read: false,
+    "permission 1": true,
+    "permission 2": true,
+    "permission 3": false,
+    "permission 4": true,
   };
 
   return (
@@ -243,7 +243,7 @@ const Management = () => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.black }}
                   >
-                    {row.planName}
+                    {row.roleName}
                   </TableCell>
                   <TableCell
                     id={labelId}

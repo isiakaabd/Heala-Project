@@ -149,10 +149,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     active: theme.palette.primary.dark,
   };
   const checkbox = {
-    create: true,
-    update: true,
-    Delete: false,
-    read: false,
+    "role 1": true,
+    "role 2": true,
+    "role 3": false,
+    "role 4": false,
   };
   const referralOptions = ["Hello", "World", "Goodbye", "World"];
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
@@ -326,54 +326,52 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     rowSpacing={5}
                     handleClose={handleDialogClose}
                   >
-                    <>
-                      <Grid item container direction="column">
-                        <Grid item container spacing={2}>
-                          <Grid item xs={6} marginBottom={4}>
-                            <Grid container direction="column" gap={1}>
-                              <FormLabel component="legend" className={classes.FormLabel}>
-                                Admin Name
-                              </FormLabel>
-                              <FormControl fullWidth>
-                                <FormSelect
-                                  options={referralOptions}
-                                  value={referral}
-                                  onChange={(event) => setReferral(event.target.value)}
-                                  placeholderText="Select Name"
-                                />
-                              </FormControl>
-                            </Grid>
+                    <Grid item container direction="column">
+                      <Grid item container spacing={2}>
+                        <Grid item xs={6} marginBottom={4}>
+                          <Grid container direction="column" gap={1}>
+                            <FormLabel component="legend" className={classes.FormLabel}>
+                              Admin Name
+                            </FormLabel>
+                            <FormControl fullWidth>
+                              <FormSelect
+                                options={referralOptions}
+                                value={referral}
+                                onChange={(event) => setReferral(event.target.value)}
+                                placeholderText="Select Name"
+                              />
+                            </FormControl>
                           </Grid>
-                          {/* second grid */}
-                          <Grid item xs={6}>
-                            <Grid container gap={1} direction="column">
-                              <FormLabel component="legend" className={classes.FormLabel}>
-                                Role
-                              </FormLabel>
-                              <FormControl fullWidth>
-                                <FormSelect
-                                  options={referralOptions}
-                                  value={referral}
-                                  onChange={(event) => setReferral(event.target.value)}
-                                  placeholderText="Select Role"
-                                />
-                              </FormControl>
-                            </Grid>
+                        </Grid>
+                        {/* second grid */}
+                        <Grid item xs={6}>
+                          <Grid container gap={1} direction="column">
+                            <FormLabel component="legend" className={classes.FormLabel}>
+                              Role
+                            </FormLabel>
+                            <FormControl fullWidth>
+                              <FormSelect
+                                options={referralOptions}
+                                value={referral}
+                                onChange={(event) => setReferral(event.target.value)}
+                                placeholderText="Select Role"
+                              />
+                            </FormControl>
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid item container xs={12} marginTop={30}>
-                        <Button
-                          variant="contained"
-                          onClick={handleDialogClose}
-                          to="/view"
-                          type="submit"
-                          className={classes.btn}
-                        >
-                          Apply Filter
-                        </Button>
-                      </Grid>
-                    </>
+                    </Grid>
+                    <Grid item container xs={12} marginTop={30}>
+                      <Button
+                        variant="contained"
+                        onClick={handleDialogClose}
+                        to="/view"
+                        type="submit"
+                        className={classes.btn}
+                      >
+                        Apply Filter
+                      </Button>
+                    </Grid>
                   </Modals>
                 </>
               );
@@ -388,145 +386,138 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         height="90vh"
         handleClose={handleAdminClose}
       >
-        <>
-          <Grid item container direction="column">
-            <Grid item>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <FormInput
-                    label="First Name"
-                    labelId="firstName"
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    onChange={handleChange}
-                    placeholder="Enter first name"
-                  />
-                </Grid>
-                <Grid item md>
-                  <FormInput
-                    label="Last Name"
-                    labelId="lastName"
-                    id="lastName"
-                    name="lastName"
-                    value={lastName}
-                    onChange={handleChange}
-                    placeholder="Enter last name"
-                  />
-                </Grid>
+        <Grid item container direction="column">
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormInput
+                  label="First Name"
+                  labelId="firstName"
+                  id="firstName"
+                  name="firstName"
+                  value={firstName}
+                  onChange={handleChange}
+                  placeholder="Enter first name"
+                />
               </Grid>
-            </Grid>
-            <Grid item style={{ margin: "3rem 0" }}>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <FormInput
-                    type="email"
-                    label="Email"
-                    labelId="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Enter email"
-                  />
-                </Grid>
-                <Grid item md>
-                  <FormInput
-                    label="Password"
-                    labelId="password"
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder="Enter Password"
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid item container xs={12}>
-                <Grid item container direction="column" gap={1}>
-                  <label htmlFor="permission" className={classes.FormLabel}>
-                    Permission
-                  </label>
-                  {/* <FormLabel
-                    // className={classes.FormLabel}
-                    sx={{ fontSize: "1.6rem", color: theme.palette.common.dark }}
-                  >
-                    Permission
-                  </FormLabel> */}
-                  <FormControl style={{ width: "100%" }}>
-                    <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
-                      <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
-                        <FormGroup>
-                          <Grid container>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  className={classes.checkbox}
-                                  checked={create}
-                                  onChange={handleCheckBoxChange}
-                                  name="create"
-                                />
-                              }
-                              label="create"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  className={classes.checkbox}
-                                  checked={Delete}
-                                  onChange={handleCheckBoxChange}
-                                  name="Delete"
-                                />
-                              }
-                              label="Delete"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  className={classes.checkbox}
-                                  checked={update}
-                                  onChange={handleCheckBoxChange}
-                                  name="update"
-                                />
-                              }
-                              label="update"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  className={classes.checkbox}
-                                  checked={read}
-                                  onChange={handleCheckBoxChange}
-                                  name="read"
-                                />
-                              }
-                              label="read"
-                            />
-                          </Grid>
-                        </FormGroup>
-                      </FormControl>
-                    </Box>
-                  </FormControl>
-                </Grid>
+              <Grid item md>
+                <FormInput
+                  label="Last Name"
+                  labelId="lastName"
+                  id="lastName"
+                  name="lastName"
+                  value={lastName}
+                  onChange={handleChange}
+                  placeholder="Enter last name"
+                />
               </Grid>
             </Grid>
           </Grid>
+          <Grid item style={{ margin: "3rem 0" }}>
+            <Grid container spacing={2}>
+              <Grid item md>
+                <FormInput
+                  type="email"
+                  label="Email"
+                  labelId="email"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={handleChange}
+                  placeholder="Enter email"
+                />
+              </Grid>
+              <Grid item md>
+                <FormInput
+                  label="Password"
+                  labelId="password"
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handleChange}
+                  placeholder="Enter Password"
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid item container xs={12}>
+              <Grid item container direction="column" gap={1}>
+                <label htmlFor="permission" className={classes.FormLabel}>
+                  Role
+                </label>
 
-          <Grid item container xs={12}>
-            <Button
-              variant="contained"
-              onClick={handleAdminClose}
-              type="submit"
-              className={classes.btn}
-              disableRipple
-            >
-              Add Admin
-            </Button>
+                <FormControl style={{ width: "100%" }}>
+                  <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
+                    <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
+                      <FormGroup>
+                        <Grid container>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                className={classes.checkbox}
+                                checked={create}
+                                onChange={handleCheckBoxChange}
+                                name="role 1"
+                              />
+                            }
+                            label="role 1"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                className={classes.checkbox}
+                                checked={Delete}
+                                onChange={handleCheckBoxChange}
+                                name="role 2"
+                              />
+                            }
+                            label="role 2"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                className={classes.checkbox}
+                                checked={update}
+                                onChange={handleCheckBoxChange}
+                                name="role 3"
+                              />
+                            }
+                            label="role 3"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                className={classes.checkbox}
+                                checked={read}
+                                onChange={handleCheckBoxChange}
+                                name="role 4"
+                              />
+                            }
+                            label="role 4"
+                          />
+                        </Grid>
+                      </FormGroup>
+                    </FormControl>
+                  </Box>
+                </FormControl>
+              </Grid>
+            </Grid>
           </Grid>
-        </>
+        </Grid>
+
+        <Grid item container xs={12}>
+          <Button
+            variant="contained"
+            onClick={handleAdminClose}
+            type="submit"
+            className={classes.btn}
+            disableRipple
+          >
+            Add Admin
+          </Button>
+        </Grid>
       </Modals>
     </>
   );

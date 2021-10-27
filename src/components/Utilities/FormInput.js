@@ -22,7 +22,13 @@ const FormInput = ({ label, labelId, id, ...rest }) => {
           {label}
         </label>
       </Grid>
-      <input id={id} className={classes.input} {...rest} autoComplete="off" />
+      <input
+        id={id}
+        className={classes.input}
+        {...rest}
+        autoComplete="off"
+        style={{ minHeight: "5rem" }}
+      />
     </Grid>
   );
 };

@@ -2,6 +2,6 @@
     "compilerOptions": {
       "baseUrl": "src"
     },
-    "include": ["src", "Subscription.js"]
+    "include": ["src", "Subscription.js", "helpers"]
 }
   

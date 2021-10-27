@@ -84,11 +84,6 @@ const useStyles = makeStyles((theme) => ({
 const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -116,16 +111,6 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
               <TrendingUpIcon color="success" className={classes.cardIcon} />
             </Grid>
           </Grid>
-        </Grid>
-
-        <Grid item>
-          <CustomButton
-            endIcon={<TrendingUpIcon />}
-            title="Process Payout"
-            type={buttonType}
-            to="/finance/pending"
-            // onClick={handleAdminOpen}
-          />
         </Grid>
       </Grid>
 
