@@ -186,7 +186,7 @@ const HcpCaseNotes = (props) => {
                 <Grid container alignItems="center">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
-                      Caregiver:{" "}
+                      Patient:{" "}
                     </Typography>
                   </Grid>
                   <Grid item>
