@@ -108,10 +108,10 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                               className={classes.checkbox}
                               checked={create}
                               onChange={handleCheckBoxChange}
-                              name="create"
+                              name="permission 1"
                             />
                           }
-                          label="create"
+                          label="permission 1"
                         />
                         <FormControlLabel
                           control={
@@ -119,10 +119,10 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                               className={classes.checkbox}
                               checked={Delete}
                               onChange={handleCheckBoxChange}
-                              name="Delete"
+                              name="permission 2"
                             />
                           }
-                          label="Delete"
+                          label="permission 2"
                         />
                         <FormControlLabel
                           control={
@@ -130,10 +130,10 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                               className={classes.checkbox}
                               checked={update}
                               onChange={handleCheckBoxChange}
-                              name="update"
+                              name="permission 3"
                             />
                           }
-                          label="update"
+                          label="permission 3"
                         />
                         <FormControlLabel
                           control={
@@ -141,10 +141,10 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                               className={classes.checkbox}
                               checked={read}
                               onChange={handleCheckBoxChange}
-                              name="read"
+                              name="permission 4"
                             />
                           }
-                          label="read"
+                          label="permission 4"
                         />
                       </Grid>
                     </FormGroup>

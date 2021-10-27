@@ -71,7 +71,7 @@ const Routes = (props) => {
   return (
     <Switch>
       <PrivateRoute
-        path="/dashboard"
+        path={["/", "/dashboard"]}
         exact
         component={Dashboard}
         chatMediaActive={chatMediaActive}

@@ -482,6 +482,18 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     placeholder="Enter hospital"
                   />
                 </Grid>
+                {/* <Grid item>
+                      <FormControl fullWidth>
+                        <FormSelect
+                          sx={{ height: "5rem" }}
+                          name="specialization"
+                          options={specializations}
+                          value={specialization}
+                          onChange={handleSelectedInput}
+                          placeholderText="Select Specialization"
+                        />
+                      </FormControl>
+                    </Grid> */}
               </Grid>
             </Grid>
           </Grid>

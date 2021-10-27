@@ -17,6 +17,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PreviousButton from "components/Utilities/PreviousButton";
+import CustomButton from "components/Utilities/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -92,7 +93,11 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
@@ -109,6 +114,15 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               <TrendingUpIcon color="error" className={classes.cardIcon} />
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item>
+          <CustomButton
+            endIcon={<TrendingUpIcon />}
+            title="Process Payout"
+            type={buttonType}
+            to="/finance/pending"
+            // onClick={handleAdminOpen}
+          />
         </Grid>
       </Grid>
 

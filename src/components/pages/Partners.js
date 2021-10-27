@@ -197,7 +197,7 @@ const Partners = () => {
           />
         </Grid>
         <Grid item className={classes.actionBtnGrid}>
-          <FilterList title="Filter HCPs" onClick={() => setOpenFilterPartner(true)} />
+          <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
         <Grid item>
           <CustomButton
@@ -362,7 +362,7 @@ const Partners = () => {
       {/* ADD NEW PARTER MODAL */}
       <Modals
         isOpen={openAddPartner}
-        title="Add HCP"
+        title="Add PATNERS"
         rowSpacing={5}
         handleClose={() => setOpenAddPartner(false)}
       >
