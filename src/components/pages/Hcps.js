@@ -472,44 +472,70 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   />
                 </Grid>
                 <Grid item md>
-                  <FormInput
-                    label="Hospital"
-                    labelId="hcpHospital"
-                    id="hcpHospital"
-                    name="hcpHospital"
-                    value={hcpHospital}
-                    onChange={handleFormInput}
-                    placeholder="Enter hospital"
-                  />
+                  <Grid container direction="column" gap={1}>
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Select Affliate
+                      </FormLabel>
+                    </Grid>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="Affliate"
+                        options={specializations}
+                        value={specialization}
+                        onChange={handleSelectedInput}
+                        placeholderText="Select Affliate"
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-                {/* <Grid item>
-                      <FormControl fullWidth>
-                        <FormSelect
-                          sx={{ height: "5rem" }}
-                          name="specialization"
-                          options={specializations}
-                          value={specialization}
-                          onChange={handleSelectedInput}
-                          placeholderText="Select Specialization"
-                        />
-                      </FormControl>
-                    </Grid> */}
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item container>
-            <label htmlFor="contained-button-file">
-              <Input
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-                style={{ display: "none" }}
-              />
-              <Button variant="contained" component="span" className={classes.uploadBtn}>
-                Upload Photo
-              </Button>
-            </label>
+
+            <Grid item style={{ margin: "3rem 0" }}>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <Grid container direction="column" gap={1}>
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Plan
+                      </FormLabel>
+                    </Grid>
+                    <FormControl fullWidth>
+                      <FormSelect
+                        name="Affliate"
+                        options={specializations}
+                        value={specialization}
+                        onChange={handleSelectedInput}
+                        placeholderText="Select plan"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid item md display="flex" alignItems="center">
+                  <Grid
+                    container
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={1}
+                  >
+                    <label htmlFor="contained-button-file">
+                      <Input
+                        accept="image/*"
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        style={{ display: "none" }}
+                      />
+                      <Button variant="contained" component="span" className={classes.uploadBtn}>
+                        Upload Photo
+                      </Button>
+                    </label>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item container xs={12}>
