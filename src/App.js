@@ -9,7 +9,6 @@ import Routes from "components/routes/Routes";
 import { useSelector } from "react-redux";
 import ScrollToView from "components/ScrollToView";
 import Login from "components/pages/Login";
-
 const sectionStyles = {
   paddingLeft: "39rem",
   paddingRight: "5rem",
