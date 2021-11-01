@@ -96,7 +96,7 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
           <Grid item xs={6}>
             <Grid container direction="column" gap={1}>
               <FormLabel component="legend" className={classes.FormLabel}>
-                Category
+                Amount
               </FormLabel>
               <FormControl fullWidth>
                 <TextField
