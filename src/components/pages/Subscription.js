@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
   FormLabel: {
     "&.MuiFormLabel-root": {
       ...theme.typography.FormLabel,
@@ -188,7 +193,7 @@ const Subscription = () => {
   return (
     <>
       <Grid container direction="column">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -198,7 +203,7 @@ const Subscription = () => {
             />
           </Grid>
 
-          <Grid item>
+          <Grid item className={classes.filterBtnGrid}>
             <CustomButton
               endIcon={<AddIcon />}
               title="Create new plan"
@@ -208,7 +213,7 @@ const Subscription = () => {
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
+        <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={subscriptionHeader}
             rows={rows}
