@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -82,7 +87,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
 
   return (
     <Grid container direction="column">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
+      <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchMail}
@@ -96,7 +101,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
         </Grid>
       </Grid>
       {/* The Search and Filter ends here */}
-      <Grid item container>
+      <Grid item container style={{ marginTop: "5rem" }}>
         <EnhancedTable
           headCells={referralHeader}
           rows={rows}

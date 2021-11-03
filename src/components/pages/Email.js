@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
   chip: {
     "&.MuiChip-root": {
       fontSize: "1.25rem",
@@ -160,7 +165,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             </Alert>
           </Grid>
         ) : null}
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -169,10 +174,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
               height="5rem"
             />
           </Grid>
-          <Grid item sx={{ marginRight: "2rem" }}>
+          <Grid item className={classes.filterBtnGrid}>
             <FilterList onClick={handleDialogOpen} title="Filter by" />
           </Grid>
-          <Grid item sx={{ marginRight: "2rem" }}>
+          <Grid item className={classes.filterBtnGrid}>
             <CustomButton
               endIcon={<DownloadSharpIcon />}
               title="Download Email"
@@ -192,7 +197,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         {/* The Search and Filter ends here */}
 
         {emailData && emailData.length > 0 ? (
-          <Grid item container>
+          <Grid item container style={{ marginTop: "5rem" }}>
             <EnhancedTable
               headCells={emailHeader}
               rows={rows}

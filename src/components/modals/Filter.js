@@ -128,7 +128,7 @@ const Filter = (props) => {
 Filter.propTypes = {
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   options: PropTypes.array.isRequired,
   initialValues: PropTypes.object.isRequired,
   validationSchema: PropTypes.object.isRequired,

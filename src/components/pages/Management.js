@@ -183,7 +183,7 @@ const Management = () => {
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
-        <Grid item container style={{ paddingBottom: "3rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -203,7 +203,7 @@ const Management = () => {
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
+        <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={roleHeader}
             rows={rows}

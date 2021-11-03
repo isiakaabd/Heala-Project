@@ -39,6 +39,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
@@ -202,7 +207,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
-        <Grid item container style={{ paddingBottom: "3rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -211,10 +216,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               height="5rem"
             />
           </Grid>
-          <Grid item>
+          <Grid item className={classes.filterBtnGrid}>
             <FilterList onClick={handleDialogOpen} title="Filter Administrator" options={options} />
           </Grid>
-          <Grid item sx={{ marginLeft: "5rem" }}>
+          <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
               title="Add Admin"
@@ -224,7 +229,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
+        <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={adminHeader}
             rows={rows}

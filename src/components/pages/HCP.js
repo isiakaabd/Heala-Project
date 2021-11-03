@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  filterBtnGrid: {
+    "&.MuiGrid-root": {
+      marginRight: "3rem",
+    },
+  },
   FormLabel: {
     "&.MuiFormLabel-root": {
       ...theme.typography.FormLabel,
@@ -153,7 +158,7 @@ const HCP = ({ setSelectedSubMenu }) => {
         ) : null}
       </Grid>
       <Grid container direction="column">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -167,7 +172,7 @@ const HCP = ({ setSelectedSubMenu }) => {
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
+        <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={HCPHeader}
             rows={rows}
