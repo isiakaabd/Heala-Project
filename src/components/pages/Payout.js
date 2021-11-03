@@ -15,7 +15,6 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import CustomButton from "components/Utilities/CustomButton";
 import { isSelected } from "helpers/isSelected";
 import Chip from "@mui/material/Chip";
 import PreviousButton from "components/Utilities/PreviousButton";

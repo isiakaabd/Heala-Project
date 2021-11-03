@@ -22,7 +22,7 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
 
 PrivateRoute.propTypes = {
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  path: PropTypes.string,
+  path: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     state: PropTypes.shape({

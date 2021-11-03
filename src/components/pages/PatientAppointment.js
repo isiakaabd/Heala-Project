@@ -7,7 +7,6 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import FormInput from "components/Utilities/FormInput";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import FilterList from "components/Utilities/FilterList";
@@ -126,13 +125,8 @@ const PatientAppointment = (props) => {
     setSelectedPatientMenu(2);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  const options = [
-    { id: 0, value: "Name" },
-    { id: 1, value: "Plan" },
-    { id: 2, value: "Consultation" },
-  ];
 
-  const [formInput, handleFormInput] = useFormInput({
+  const [formInput] = useFormInput({
     date: "",
     plan: "",
     gender: "",
@@ -140,7 +134,7 @@ const PatientAppointment = (props) => {
   });
   const dates = ["Hello", "World", "Goodbye", "World"];
 
-  const { date, plan, gender, status } = formInput;
+  const { date, plan, gender } = formInput;
   return (
     <>
       <Grid container direction="column">
