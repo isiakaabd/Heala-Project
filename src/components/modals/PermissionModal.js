@@ -43,10 +43,11 @@ export const PermissionModal = (props) => {
   const { options, initialValues, type, validationSchema, handleDialogClose } = props;
   const onSubmit = (values, onSubmitProps) => {
     onSubmitProps.resetForm();
+    console.log(values);
   };
 
   const classes = useStyles();
-  console.log(options);
+
   return (
     <Formik
       initialValues={initialValues}

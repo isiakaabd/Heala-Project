@@ -228,6 +228,7 @@ const SinglePatient = (props) => {
         setOpen={setOpenDisablePatient}
         title="Delete Partner"
         btnValue="disable"
+        onConfirm={() => console.log("confirmed")}
         confirmationMsg="disable Patient"
       />
       <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />

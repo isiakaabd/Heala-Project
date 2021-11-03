@@ -41,7 +41,7 @@ const Checkbox = (props) => {
       <Box className={classes.checkboxContainer}>
         <FormControl sx={{ m: 4 }} variant="standard">
           <Grid container spacing={2}>
-            <Field name={name} {...rest} as={Checkbox}>
+            <Field name={name} {...rest}>
               {({ field }) => {
                 return options.map((option, index) => {
                   return (

@@ -233,6 +233,8 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
           title="Delete Partner"
           btnValue="disable"
           confirmationMsg="disable Patient"
+          onConfirm={() => console.log("confirmed")}
+          // onConfirm={onConfirm}
         />
       </Grid>
     </Grid>

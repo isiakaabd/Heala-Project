@@ -388,6 +388,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
         title="Delete Permission"
         confirmationMsg="delete permission"
         btnValue="Delete"
+        onConfirm={() => console.log("confirmed")}
       />
     </>
   );

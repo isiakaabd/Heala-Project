@@ -138,7 +138,11 @@ const Chat = ({ chatMediaActive, setChatMediaActive }) => {
             <AccountCircleIcon className={classes.contactIcon} />
           </Grid>
           <Grid item style={{ marginBottom: "2rem", paddingLeft: "2rem", paddingRight: "2rem" }}>
-            <Search placeholder="Search messages..." className={classes.searchInput} />
+            <Search
+              placeholder="Search messages..."
+              className={classes.searchInput}
+              onChange={() => console.log("changed")}
+            />
           </Grid>
           <Grid item>
             {chatLists.map((list) => (

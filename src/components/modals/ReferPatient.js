@@ -84,7 +84,7 @@ const ReferPatient = ({ open, setOpen }) => {
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Grid container column>
+          <Grid container>
             <Grid
               item
               container

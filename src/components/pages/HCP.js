@@ -125,9 +125,6 @@ const HCP = ({ setSelectedSubMenu }) => {
 
   const handleDialogClose = () => {
     setIsOpen(false);
-    setTimeout(() => {
-      setResponse("Saved");
-    }, 3000);
   };
   const checkbox = [
     { key: "select an option", value: " " },

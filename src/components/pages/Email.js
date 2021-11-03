@@ -124,9 +124,6 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
 
   const handleDialogClose = () => {
     setIsOpen(false);
-    setTimeout(() => {
-      setResponse("Saved");
-    }, 3000);
   };
   const buttonType = {
     background: theme.palette.common.black,
