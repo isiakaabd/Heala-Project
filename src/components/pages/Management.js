@@ -322,6 +322,7 @@ const Management = () => {
         open={deleteModal}
         setOpen={setdeleteModal}
         title="Delete Role"
+        onConfirm={() => console.log("confirmed")}
         confirmationMsg="delete role"
         btnValue="Delete"
       />

@@ -362,6 +362,7 @@ const PatientAppointment = (props) => {
       {/* delete modal */}
       <DeleteOrDisable
         open={deleteModal}
+        onConfirm={() => console.log("confrimed")}
         setOpen={setdeleteModal}
         title="Cancel Consultation"
         confirmationMsg="cancel appointment"

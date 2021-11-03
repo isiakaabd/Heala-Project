@@ -238,147 +238,141 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
-                <>
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
 
-                    <TableCell align="center" className={classes.tableCell}>
-                      <Grid
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "left",
-                          paddingLeft: "5rem",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {row.firstName} {row.lastName}
-                        </span>
-                      </Grid>
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                  <TableCell align="center" className={classes.tableCell}>
+                    <Grid
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "left",
+                        paddingLeft: "5rem",
+                      }}
                     >
-                      {row.category}
-                    </TableCell>
-
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-around",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.button} ${classes.greenBtn}`}
-                          endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
-                        >
-                          Edit plan
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={classes.button}
-                          to="/view"
-                          endIcon={<ArrowForwardIosIcon />}
-                        >
-                          view admin
-                        </Button>
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-
-                  <Modals
-                    isOpen={isOpen}
-                    title="Filter"
-                    rowSpacing={5}
-                    handleClose={handleDialogClose}
-                  >
-                    <Grid item container direction="column">
-                      <Grid item container spacing={2}>
-                        <Grid item xs={6} marginBottom={4}>
-                          <Grid container direction="column" gap={1}>
-                            <FormLabel component="legend" className={classes.FormLabel}>
-                              Admin Name
-                            </FormLabel>
-                            <FormControl fullWidth>
-                              <FormSelect
-                                options={referralOptions}
-                                value={referral}
-                                onChange={(event) => setReferral(event.target.value)}
-                                placeholderText="Select Name"
-                              />
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                        {/* second grid */}
-                        <Grid item xs={6}>
-                          <Grid container gap={1} direction="column">
-                            <FormLabel component="legend" className={classes.FormLabel}>
-                              Role
-                            </FormLabel>
-                            <FormControl fullWidth>
-                              <FormSelect
-                                options={referralOptions}
-                                value={referral}
-                                onChange={(event) => setReferral(event.target.value)}
-                                placeholderText="Select Role"
-                              />
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </Grid>
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {row.firstName} {row.lastName}
+                      </span>
                     </Grid>
-                    <Grid item container xs={12} marginTop={30}>
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
+                  >
+                    {row.category}
+                  </TableCell>
+
+                  <TableCell align="left" className={classes.tableCell}>
+                    <Grid
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                      }}
+                    >
                       <Button
                         variant="contained"
-                        onClick={handleDialogClose}
-                        to="/view"
-                        type="submit"
-                        className={classes.btn}
+                        disableRipple
+                        className={`${classes.button} ${classes.greenBtn}`}
+                        endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
                       >
-                        Apply Filter
+                        Edit plan
+                      </Button>
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        className={classes.button}
+                        to="/view"
+                        endIcon={<ArrowForwardIosIcon />}
+                      >
+                        view admin
                       </Button>
                     </Grid>
-                  </Modals>
-                </>
+                  </TableCell>
+                </TableRow>
               );
             })}
+            )
           </EnhancedTable>
         </Grid>
       </Grid>
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+        <Grid item container direction="column">
+          <Grid item container spacing={2}>
+            <Grid item xs={6} marginBottom={4}>
+              <Grid container direction="column" gap={1}>
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Admin Name
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    options={referralOptions}
+                    value={referral}
+                    onChange={(event) => setReferral(event.target.value)}
+                    placeholderText="Select Name"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Grid container gap={1} direction="column">
+                <FormLabel component="legend" className={classes.FormLabel}>
+                  Role
+                </FormLabel>
+                <FormControl fullWidth>
+                  <FormSelect
+                    options={referralOptions}
+                    value={referral}
+                    onChange={(event) => setReferral(event.target.value)}
+                    placeholderText="Select Role"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container xs={12} marginTop={30}>
+          <Button
+            variant="contained"
+            onClick={handleDialogClose}
+            to="/view"
+            type="submit"
+            className={classes.btn}
+          >
+            Apply Filter
+          </Button>
+        </Grid>
+      </Modals>
+
       <Modals
         isOpen={isAdmin}
         title="Add Admin"

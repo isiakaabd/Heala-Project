@@ -102,10 +102,10 @@ const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedS
           </Grid>
         </Grid>
         <Divider />
-        <Grid item className={classes.gridWrapper}>
-          <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            {parseTextArea}
-          </Typography>
+        <Grid item className={classes.gridWrapper} style={{ lineHeight: 1.85, fontSize: "1.5rem" }}>
+          {/* <Typography variant="body1" style={{ lineHeight: 1.85 }}> */}
+          {parseTextArea}
+          {/* </Typography> */}
         </Grid>
       </Grid>
     </Grid>

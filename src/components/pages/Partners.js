@@ -469,6 +469,7 @@ const Partners = () => {
         setOpen={setOpenDeletePartner}
         title="Delete Partner"
         btnValue="delete"
+        onConfirm={() => console.log("confirmed")}
         confirmationMsg="delete partner"
       />
     </Grid>

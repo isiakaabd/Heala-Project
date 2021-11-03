@@ -323,6 +323,7 @@ const Subscription = () => {
         open={deleteModal}
         setOpen={setdeleteModal}
         title="Delete Plan"
+        onConfirm={() => console.log("confirmed")}
         confirmationMsg="delete plan"
         btnValue="Delete"
       />
