@@ -145,7 +145,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   });
 
   const { date, specialization, hospital, status } = selectedInput;
-  const { firstName, lastName, email, phoneNumber, hcpSpecialization, hcpHospital } = formInput;
+  const { firstName, lastName, email, phoneNumber, hcpSpecialization } = formInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
