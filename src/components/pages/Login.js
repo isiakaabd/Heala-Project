@@ -89,24 +89,6 @@ const Login = ({ history }) => {
 
   const { email, password } = formInput;
 
-  //   const validateInput = (event) => {
-  //     let valid;
-
-  //     switch (event.target.name) {
-  //       case "email":
-  //         valid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-
-  //         if (!valid) {
-  //           setEmailHelper("Invalid email");
-  //         } else {
-  //           setEmailHelper("");
-  //         }
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   };
-
   const handleLogin = () => {
     const { state = {} } = location;
     const { prevLocation } = state;
