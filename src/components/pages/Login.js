@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, useLocation } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import * as Yup from "yup";
+import LoginInput from "components/validation/LoginInput";
+import { Formik, Form } from "formik";
+import { Link, Redirect } from "react-router-dom";
+import { Grid, Typography, Alert } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import CustomButton from "components/Utilities/CustomButton";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,10 +15,11 @@ import loginBackground from "assets/images/login-background.svg";
 import logo from "assets/images/logo-white.png";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import Search from "components/Utilities/Search";
-import useFormInput from "components/hooks/useFormInput";
 import { useActions } from "components/hooks/useActions";
-// import { useSelector } from "react-redux";
+import { Login_USER } from "components/graphQL/Mutation";
+import { useMutation } from "@apollo/client";
+import { useSelector } from "react-redux";
+import { setAccessToken } from "./accessToken";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -63,166 +66,222 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ history }) => {
+const Login = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const location = useLocation();
 
+  const [errors, seterrors] = useState({});
   const { loginUser } = useActions();
 
-  // const { isAuthenticated } = useSelector((state) => state.auth);
-
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const buttonColors = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
     active: theme.palette.primary.dark,
   };
-
-  const [showPassword, setShowPassword] = useState(false);
-  //   const [emailHelper, setEmailHelper] = useState("");
-  const [formInput, handleFormInput] = useFormInput({
+  const initialValues = {
     email: "",
     password: "",
+    authType: "normal",
+  };
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [login] = useMutation(Login_USER, {
+    // // fetchPolicy:"network-only",
+    // update(_, result) {
+    //   if (result) {
+    //     seterrors({
+    //       message: "Login Successful",
+    //       type: "success",
+    //     });
+    //   } else {
+    //     seterrors({
+    //       message: "Something went wrong",
+    //       type: "error",
+    //     });
+    //   }
+    // },
   });
 
-  const { email, password } = formInput;
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    password: Yup.string("Enter your password").required("password is required"),
+  });
 
-  const handleLogin = () => {
-    const { state = {} } = location;
-    const { prevLocation } = state;
-    loginUser();
+  const onSubmit = async (values, onSubmitProps) => {
+    try {
+      const { data } = await login({
+        variables: values,
+      });
+      if (data) {
+        setAccessToken(data.login.account.access_token);
+      }
+      loginUser(data); //put loading here also
+      seterrors({
+        message: "successful",
+        type: "success",
+      });
+    } catch (err) {
+      console.log(err.message);
+      seterrors({
+        message: err.message,
+        type: "error",
+      });
+    }
 
-    history.push(prevLocation || "/dashboard");
+    // finally {
+    //   LoginUser(data);
+    // }
+    onSubmitProps.resetForm();
   };
 
-  // if (isAuthenticated) {
-  //   return <Redirect to="/dashboard" />;
-  // }
+  useEffect(() => {
+    if (isAuthenticated) {
+      return <Redirect to="/dashboard" />;
+    }
+  }, [isAuthenticated]);
 
   return (
-    <Grid container className={classes.gridContainer}>
-      <Grid item lg={5} className={classes.leftParentGrid}>
-        <Grid item container direction="column" className={classes.peopleImgWrapper}>
-          <Grid item className={classes.overlay}></Grid>
-          <Grid item className={classes.peopleBgImage}></Grid>
-          <Grid item>
-            <img src={logo} alt="Brand logo" className={classes.logo} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item lg={7} className={classes.rightParentGrid}>
-        <Grid container direction="column" justifyContent="center" style={{ height: "100%" }}>
-          <Grid item style={{ marginBottom: "3rem" }}>
-            <Typography variant="h2" style={{ fontSize: "5rem" }}>
-              Sign into your account
-            </Typography>
-          </Grid>
-          <Grid item style={{ marginBottom: "2rem" }}>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="body1" gutterBottom>
-                  Email address
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Search
-                  id="email"
-                  value={email}
-                  name="email"
-                  placeholder="Enter your email"
-                  onChange={handleFormInput}
-                  //   helperText={emailHelper}
-                  hasStartIcon={false}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ marginBottom: "2rem" }}>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="body1" gutterBottom>
-                  Password
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Search
-                  id="password"
-                  value={password}
-                  placeholder="Enter your password"
-                  type={showPassword ? "text" : "password"}
-                  onChange={handleFormInput}
-                  name="password"
-                  hasStartIcon={false}
-                  endAdornment={
-                    <InputAdornment
-                      position="end"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </InputAdornment>
-                  }
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ marginBottom: "5rem" }}>
-            <Grid container alignItems="center" justifyContent="space-between">
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <Checkbox {...label} defaultChecked color="success" />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">Remember me</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography
-                  variant="body1"
-                  color="error"
-                  component={Link}
-                  to="forgot-password"
-                  className={classes.link}
-                >
-                  Forgot password?
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container>
-            <CustomButton
-              title="Login"
-              width="100%"
-              type={buttonColors}
-              disableRipple
-              onClick={handleLogin}
-            />
-          </Grid>
-          <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>
+    <>
+      <Grid container className={classes.gridContainer}>
+        <Grid item lg={5} className={classes.leftParentGrid}>
+          <Grid item container direction="column" className={classes.peopleImgWrapper}>
+            <Grid item className={classes.overlay}></Grid>
+            <Grid item className={classes.peopleBgImage}></Grid>
             <Grid item>
-              <Typography variant="body2" style={{ color: theme.palette.common.grey }} paddingRight>
-                Dont have an account?{" "}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                variant="h5"
-                color="primary"
-                component={Link}
-                to="/signup"
-                className={classes.link}
-              >
-                Sign up
-              </Typography>
+              <img src={logo} alt="Brand logo" className={classes.logo} />
             </Grid>
           </Grid>
         </Grid>
+        <Grid item lg={7} sm={10} className={classes.rightParentGrid}>
+          {errors && Object.keys(errors).length !== 0 && (
+            <Alert variant="filled" severity={errors.type} sx={{ justifyContent: "center" }}>
+              {errors.message}
+            </Alert>
+          )}
+
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            validateOnChange={false}
+            validateOnMount
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    style={{ height: "100%" }}
+                  >
+                    <Grid item style={{ marginBottom: "3rem" }}>
+                      <Typography variant="h2" style={{ fontSize: "5rem" }}>
+                        Sign into your account
+                      </Typography>
+                    </Grid>
+                    <Grid item style={{ marginBottom: "2rem" }}>
+                      <Grid container direction="column">
+                        <LoginInput
+                          label="Email address"
+                          name="email"
+                          type="email"
+                          id="email"
+                          placeholder="Enter your email"
+                          hasStartIcon={false}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid item style={{ marginBottom: "2rem" }}>
+                      <Grid container direction="column">
+                        <LoginInput
+                          id="password"
+                          label="password"
+                          name="password"
+                          placeholder="Enter your password"
+                          type={showPassword ? "text" : "password"}
+                          hasStartIcon={false}
+                          endAdornment={
+                            <InputAdornment
+                              position="end"
+                              onClick={() => setShowPassword((prev) => !prev)}
+                              style={{ cursor: "pointer" }}
+                            >
+                              {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            </InputAdornment>
+                          }
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid item style={{ marginBottom: "5rem" }}>
+                      <Grid container alignItems="center" justifyContent="space-between">
+                        <Grid item>
+                          <Grid container alignItems="center">
+                            <Grid item>
+                              <Checkbox {...label} defaultChecked color="success" />
+                            </Grid>
+                            <Grid item>
+                              <Typography variant="body1">Remember me</Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            variant="body1"
+                            color="error"
+                            component={Link}
+                            to="forgot-password"
+                            className={classes.link}
+                          >
+                            Forgot password?
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item container>
+                      <CustomButton
+                        title="Login"
+                        width="100%"
+                        type={buttonColors}
+                        disableRipple
+                        disabled={
+                          // formik.isSubmitting ||
+                          !formik.dirty || !formik.isValid
+                        }
+                      />
+                    </Grid>
+                    <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>
+                      <Grid item>
+                        <Typography
+                          variant="body2"
+                          style={{ color: theme.palette.common.grey }}
+                          paddingRight
+                        >
+                          Dont have an account?{" "}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant="h5"
+                          color="primary"
+                          component={Link}
+                          to="/signup"
+                          className={classes.link}
+                        >
+                          Sign up
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

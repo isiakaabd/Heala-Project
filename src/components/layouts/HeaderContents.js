@@ -8,6 +8,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+// import { GetUserInfo } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -183,9 +184,21 @@ const HeaderText = (props) => {
     selectedAppointmentMenu,
     selectedScopedMenu,
   } = props;
+
+  // const id = "6188339f772751001a780b71";
+
+  // const userId = localStorage.getItem("userId");
+  // const { data, error, loading } = useQuery(UserInfo, {
+  //   variable: {
+  //     id: id,
+  //   },
+  // });
+  // const data = GetUserInfo(userId);
+  // console.log(data);
+
   const classes = useStyles();
   const theme = useTheme();
-
+  // console.log(data);
   const { pathname } = useLocation();
 
   switch (selectedMenu) {

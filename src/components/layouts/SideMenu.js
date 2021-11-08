@@ -11,6 +11,8 @@ import logo from "assets/images/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 import { useActions } from "components/hooks/useActions";
+import { useMutation } from "@apollo/client";
+import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   aside: {
@@ -120,14 +122,20 @@ const SideMenu = (props) => {
   const { selectedMenu, setSelectedMenu, setSelectedSubMenu, setWaitingListMenu } = props;
 
   const { logout } = useActions();
+  const [logout_user] = useMutation(LOGOUT_USER);
 
   const classes = useStyles();
   const [Logout, setLogout] = useState(false);
   const location = useLocation();
 
-  const handleLogout = () => {
-    setSelectedMenu(12);
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout_user();
+      logout();
+      setSelectedMenu(12);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   useEffect(() => {
