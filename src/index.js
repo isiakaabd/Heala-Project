@@ -103,7 +103,7 @@ import { getAccessToken } from "components/pages/accessToken";
 console.log("token", getAccessToken());
 
 const client = new ApolloClient({
-  uri: "http://api-staging.doci.ng",
+  uri: "http://api-staging.doci.ng/",
   credentials: "include",
   cache: new InMemoryCache(),
 
