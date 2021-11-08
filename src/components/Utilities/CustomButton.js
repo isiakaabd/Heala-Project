@@ -58,7 +58,7 @@ const CustomButton = ({
     <Button
       variant="contained"
       LinkComponent={Link}
-      to={path}
+      to={path ? path : ""}
       type="submit"
       endIcon={endIcon}
       className={classes.button}
