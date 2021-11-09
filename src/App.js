@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
+import { setAccessToken } from "components/pages/accessToken";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import { muiTheme } from "components/muiTheme";
@@ -31,7 +32,10 @@ const App = () => {
   const [chatMediaActive, setChatMediaActive] = useState(false);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
-
+  useEffect(() => {
+    const refresh_token = localStorage.getItem("refresh_token");
+    setAccessToken(refresh_token);
+  }, []);
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>

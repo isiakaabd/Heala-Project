@@ -26,3 +26,28 @@ export const GetUserInfo = (id) => {
     loading,
   };
 };
+
+const getUserDetails = gql`
+  query findAccount($id: ID!) {
+    account(id: $id) {
+      _id
+      email
+      dociId
+      createdAt
+      updatedAt
+      isEmailVerified
+    }
+  }
+`;
+export const UserProfile = (id) => {
+  const { data, error, loading } = useQuery(getUserDetails, {
+    variables: {
+      id,
+    },
+  });
+  return {
+    data,
+    error,
+    loading,
+  };
+};

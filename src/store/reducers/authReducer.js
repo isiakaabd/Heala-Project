@@ -1,44 +1,25 @@
 import * as actionTypes from "store/action-types";
 const initialState = {
-  loading: false,
+  loading: true,
   token: localStorage.getItem("token"),
   dociId: localStorage.getItem("dociId"),
   userId: localStorage.getItem("userId"),
   authError: null,
-  isAuthenticated: localStorage.getItem("isAuthenticated"),
+  isAuthenticated: localStorage.getItem("token") ? true : false,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case actionTypes.GET_CREDENTIALS:
-    // case actionTypes.GET_USER:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //     user: null,
-    //     token: null,
-    //     isAutheticated: false,
-    //     authError: null,
-    //   };
-    //   // case actionTypes.USER_LOADED:
-    //   localStorage.setItem("isAuthenticated", true);
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     isAuthenticated: true,
-    //     user: action.payload,
-    //     authError: null,
-    //   };
     case actionTypes.LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.access_token);
-      localStorage.setItem("dociId", action.payload.dociId);
-      localStorage.setItem("userId", action.payload._id);
-      localStorage.setItem("refresh_token", action.payload.refresh_token);
+      localStorage.setItem("token", action.payload.data.login.account.access_token);
+      localStorage.setItem("dociId", action.payload.data.login.account.dociId);
+      localStorage.setItem("userId", action.payload.data.login.account._id);
+      localStorage.setItem("refresh_token", action.payload.data.login.account.refresh_token);
 
       return {
         ...state,
         ...action.payload,
-        loading: false,
+        loading: action.payload.loading,
         isAuthenticated: true,
       };
     case actionTypes.LOGIN_FAILURE:
