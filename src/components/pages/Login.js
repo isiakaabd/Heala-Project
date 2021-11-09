@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 import LoginInput from "components/validation/LoginInput";
@@ -16,9 +16,9 @@ import logo from "assets/images/logo-white.png";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { useActions } from "components/hooks/useActions";
+import { useSelector } from "react-redux";
 import { Login_USER } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
-import { useSelector } from "react-redux";
 import { setAccessToken } from "./accessToken";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,9 +72,9 @@ const Login = () => {
 
   const [errors, seterrors] = useState({});
   const { loginUser } = useActions();
-
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
   const buttonColors = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
@@ -87,7 +87,7 @@ const Login = () => {
   };
   const [showPassword, setShowPassword] = useState(false);
 
-  const [login] = useMutation(Login_USER, {
+  const [login, { error, loading }] = useMutation(Login_USER, {
     // // fetchPolicy:"network-only",
     // update(_, result) {
     //   if (result) {
@@ -103,7 +103,9 @@ const Login = () => {
     //   }
     // },
   });
-
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").required("Email is required"),
     password: Yup.string("Enter your password").required("password is required"),
@@ -114,14 +116,20 @@ const Login = () => {
       const { data } = await login({
         variables: values,
       });
-      if (data) {
-        setAccessToken(data.login.account.access_token);
-      }
-      loginUser(data); //put loading here also
-      seterrors({
-        message: "successful",
+      await seterrors({
+        message: "login successful",
         type: "success",
       });
+
+      if (data) {
+        const payload = {
+          data,
+          error,
+          loading,
+        };
+        setAccessToken(data.login.account.access_token);
+        loginUser(payload); //put loading here also
+      }
     } catch (err) {
       console.log(err.message);
       seterrors({
@@ -133,14 +141,9 @@ const Login = () => {
     // finally {
     //   LoginUser(data);
     // }
+
     onSubmitProps.resetForm();
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      return <Redirect to="/dashboard" />;
-    }
-  }, [isAuthenticated]);
 
   return (
     <>
@@ -248,7 +251,7 @@ const Login = () => {
                         disableRipple
                         disabled={
                           // formik.isSubmitting ||
-                          !formik.dirty || !formik.isValid
+                          !(formik.dirty || formik.isValid)
                         }
                       />
                     </Grid>

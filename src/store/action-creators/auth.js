@@ -1,11 +1,11 @@
 import * as actionTypes from "store/action-types";
 
 export const loginUser = (data) => async (dispatch) => {
-  const dataValue = await data.login.account;
+  console.log(data);
   try {
     dispatch({
       type: actionTypes.LOGIN_SUCCESS,
-      payload: dataValue,
+      payload: data,
     });
   } catch (err) {
     console.log(err.message);
