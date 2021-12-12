@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
@@ -118,11 +118,11 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
   }
 
   return (
-    <Fragment>
-      <Grid>
+    <Grid item container>
+      <Grid item container sx={{ maxWidth: "100%" }}>
         <Line data={data} options={options} />;
       </Grid>
-      <Grid item>
+      <Grid item container>
         <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
           {timeFrames.map((timeFrame) => (
             <Grid item key={timeFrame.id}>
@@ -139,7 +139,7 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
           ))}
         </Grid>
       </Grid>
-    </Fragment>
+    </Grid>
   );
 };
 

@@ -113,10 +113,10 @@ const DashboardCharts = () => {
   ];
 
   return (
-    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={5}>
-      <Grid item md>
+    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
+      <Grid item container lg>
         <Grid container direction="column">
-          <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
+          <Grid item className={classes.chartCard} sx={{ marginBottom: "3em" }}>
             <Grid container direction="column">
               <Grid item className={classes.headerGrid}>
                 <Typography variant="h5">HCP Stats</Typography>
@@ -148,7 +148,7 @@ const DashboardCharts = () => {
                 </Grid>
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
-              <Grid item container direction="column" className={classes.bottomChartGrid}>
+              <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
                 <LineChart
                   timeFrames={timeFrames}
                   selectedTimeframe={selectedTimeframe}
@@ -424,9 +424,9 @@ const DashboardCharts = () => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item className={classes.headerGrid}></Grid>
+          {/* <Grid item className={classes.headerGrid}></Grid> */}
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container direction="column" className={classes.bottomChartGrid}>
+          <Grid item lg={5} direction="column" className={classes.bottomChartGrid}>
             <LineChart
               timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
