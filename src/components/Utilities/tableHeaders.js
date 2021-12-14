@@ -311,7 +311,6 @@ export const availabilityHeadCells = [
   { id: 4, label: "" },
 ];
 
-// HCPs HEADCELLS
 export const hcpsHeadCells = [
   { id: 0, label: "Medical ID" },
   { id: 1, label: "Name" },
