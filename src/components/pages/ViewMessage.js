@@ -44,7 +44,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
       </Grid>
       <Grid item container direction="column" className={classes.parentGrid}>
         <Grid item className={classes.gridWrapper}>
-          <Typography variant="h3">Appreciate message to Heala  team</Typography>
+          <Typography variant="h3">Appreciate message to Heala team</Typography>
         </Grid>
         <Divider />
         <Grid item style={{ padding: "1.5rem 5rem" }}>
@@ -67,15 +67,15 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            I want to use this medium to thank Heala  team for their relentless services to the world
+            I want to use this medium to thank Heala team for their relentless services to the world
             and their provision of quality healthcare service. I want to use this medium to thank
-            Heala  team for their relentless services to the world and their provision of quality
-            healthcare service. I want to use this medium to thank Heala  team for their relentless
+            Heala team for their relentless services to the world and their provision of quality
+            healthcare service. I want to use this medium to thank Heala team for their relentless
             services to the world and their provision of quality healthcare service. I want to use
-            this medium to thank Heala  team for their relentless services to the world and their
-            provision of quality healthcare service. I want to use this medium to thank Heala  team
+            this medium to thank Heala team for their relentless services to the world and their
+            provision of quality healthcare service. I want to use this medium to thank Heala team
             for their relentless services to the world and their provision of quality healthcare
-            service. 
+            service.
           </Typography>
         </Grid>
       </Grid>
