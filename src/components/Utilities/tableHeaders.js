@@ -225,7 +225,7 @@ export const pendingHeader = [
   },
   {
     id: 1,
-    label: "doci ID",
+    label: "Heala  ID",
   },
   {
     id: 2,
@@ -311,7 +311,6 @@ export const availabilityHeadCells = [
   { id: 4, label: "" },
 ];
 
-// HCPs HEADCELLS
 export const hcpsHeadCells = [
   { id: 0, label: "Medical ID" },
   { id: 1, label: "Name" },
