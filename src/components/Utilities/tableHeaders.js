@@ -225,7 +225,7 @@ export const pendingHeader = [
   },
   {
     id: 1,
-    label: "doci ID",
+    label: "Heala  ID",
   },
   {
     id: 2,
