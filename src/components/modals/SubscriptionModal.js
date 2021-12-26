@@ -8,6 +8,8 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
+import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
+import { useMutation } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -49,15 +51,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const SubscriptionModal = ({ handleDialogClose, type }) => {
+export const SubscriptionModal = ({ handleDialogClose, type, setAlert, editId }) => {
+  const [createPlan] = useMutation(CREATE_PLAN);
+  const [updatePlan] = useMutation(UPDATE_PLAN);
+
   const classes = useStyles();
   const theme = useTheme();
-  const handleDialogCloses = () => {
+  const handleDialogCloses = async () => {
+    const { name, amount, description } = sub;
     if (type === "edit") {
-      console.log("hi from edit");
-      console.log(sub);
+      console.log(editId);
+      try {
+        await updatePlan({
+          variables: {
+            id: editId,
+            name,
+            amount: Number(amount),
+            description,
+          },
+        });
+        setAlert({
+          message: "Plan successfully updated",
+          type: "success",
+        });
+        setTimeout(() => {
+          setAlert(null);
+        }, 5000);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      console.log(sub);
+      try {
+        await createPlan({
+          variables: {
+            name,
+            amount: Number(amount),
+            description,
+          },
+        });
+        setAlert({
+          message: "Plan successfully created",
+          type: "success",
+        });
+        setTimeout(() => {
+          setAlert(null);
+        }, 5000);
+      } catch (errors) {
+        setAlert({
+          message: errors.message,
+          type: "danger",
+        });
+        setTimeout(() => {
+          setAlert(null);
+        }, 5000);
+        console.log(errors);
+      }
     }
     handleDialogClose();
   };
@@ -68,11 +116,11 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
   };
 
   const [sub, setSub] = useState({
-    plan: "",
+    name: "",
     amount: "",
     description: "",
   });
-  const { plan, amount, description } = sub;
+  const { name, amount, description } = sub;
   return (
     <>
       <Grid item container direction="column">
@@ -85,8 +133,8 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
               <FormControl fullWidth>
                 <TextField
                   id="outlined-adornment-amount"
-                  name="plan"
-                  value={plan}
+                  name="name"
+                  value={name}
                   placeholder="Enter Plan Name"
                   onChange={handleChange}
                 />
@@ -157,5 +205,7 @@ export const SubscriptionModal = ({ handleDialogClose, type }) => {
 
 SubscriptionModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
+  setAlert: PropTypes.func,
+  editId: PropTypes.string,
   type: PropTypes.string.isRequired,
 };

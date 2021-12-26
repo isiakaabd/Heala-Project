@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Grid } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Grid, Alert } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
@@ -8,7 +8,6 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { subscriptionHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -21,6 +20,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import { SubscriptionModal } from "components/modals/SubscriptionModal";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { useQuery } from "@apollo/client";
+import { getPlans } from "components/graphQL/useQuery";
+import { useMutation } from "@apollo/client";
+import { DELETE_PLAN } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -159,8 +162,11 @@ const useStyles = makeStyles((theme) => ({
 const Subscription = () => {
   const classes = useStyles();
   const theme = useTheme();
-
+  const [alert, setAlert] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [deletePlan] = useMutation(DELETE_PLAN);
+  const [id, setId] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [edit, setEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const handleDialogOpen = () => {
@@ -169,16 +175,34 @@ const Subscription = () => {
   const handleEditCloseDialog = () => {
     setEdit(false);
   };
-  const handleDeleteOpenDialog = () => {
+  const handleDeleteOpenDialog = (id) => {
+    console.log(id);
+
+    setId(id);
     setdeleteModal(true);
   };
-  const handleEditOpenDialog = () => {
+  const handleEditOpenDialog = (id) => {
     setEdit(true);
+    setEditId(id);
   };
   const handleDialogClose = async () => {
     setIsOpen(false);
   };
-
+  const onConfirm = async () => {
+    try {
+      const { message } = await deletePlan({ variables: { id } });
+      setAlert({
+        message: message,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        message: error.message,
+        type: "danger",
+      });
+      console.log(error.message);
+    }
+  };
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
@@ -189,10 +213,30 @@ const Subscription = () => {
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
+  const [plan, setPlan] = useState([]);
+  const { loading, data } = useQuery(getPlans);
 
+  useEffect(() => {
+    if (data && data.getPlans.plan) {
+      setPlan(data.getPlans.plan);
+    }
+  }, [data]);
+
+  if (loading) return <div>Loading</div>;
+  // else if (!loading && plan) {
   return (
     <>
-      <Grid container direction="column">
+      <Grid container direction="column" gap={2}>
+        {alert && Object.keys(alert).length > 0 && (
+          <Alert
+            variant="filled"
+            severity={alert.type}
+            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
+          >
+            {alert.message}
+          </Alert>
+        )}
+
         <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
@@ -213,98 +257,98 @@ const Subscription = () => {
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
+
         <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={subscriptionHeader}
-            rows={rows}
+            rows={plan}
             page={page}
             paginationLabel="subscription per page"
             hasCheckbox={true}
           >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
-
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+            {plan &&
+              plan.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    {row.planName}
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.red }}
-                  >
-                    {row.amount}
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
-                  >
-                    {row.description}
-                  </TableCell>
-
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        onClick={handleEditOpenDialog}
-                        className={`${classes.tableBtn} ${classes.greenBtn}`}
-                        endIcon={<EditIcon color="success" />}
+                      {row.name}
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.red }}
+                    >
+                      {row.amount}
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                    >
+                      {row.description}
+                    </TableCell>
+
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
                       >
-                        Edit plan
-                      </Button>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        onClick={handleDeleteOpenDialog}
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        to="/view"
-                        endIcon={<DeleteIcon color="error" />}
-                      >
-                        Delete plan
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          onClick={() => handleEditOpenDialog(row._id)}
+                          className={`${classes.tableBtn} ${classes.greenBtn}`}
+                          endIcon={<EditIcon color="success" />}
+                        >
+                          Edit plan
+                        </Button>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          onClick={() => handleDeleteOpenDialog(row._id)}
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          to="/view"
+                          endIcon={<DeleteIcon color="error" />}
+                        >
+                          Delete plan
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </EnhancedTable>
         </Grid>
       </Grid>
@@ -315,12 +359,17 @@ const Subscription = () => {
         rowSpacing={5}
         handleClose={handleDialogClose}
       >
-        <SubscriptionModal handleDialogClose={handleDialogClose} type="add" />
+        <SubscriptionModal handleDialogClose={handleDialogClose} type="add" setAlert={setAlert} />
       </Modals>
 
       {/* edit Modal */}
       <Modals isOpen={edit} title="Edit plan" rowSpacing={5} handleClose={handleEditCloseDialog}>
-        <SubscriptionModal handleDialogClose={handleEditCloseDialog} type="edit" />
+        <SubscriptionModal
+          handleDialogClose={handleEditCloseDialog}
+          type="edit"
+          editId={editId}
+          setAlert={setAlert}
+        />
       </Modals>
 
       {/* delete modal */}
@@ -328,7 +377,7 @@ const Subscription = () => {
         open={deleteModal}
         setOpen={setdeleteModal}
         title="Delete Plan"
-        onConfirm={() => console.log("confirmed")}
+        onConfirm={onConfirm}
         confirmationMsg="delete plan"
         btnValue="Delete"
       />

@@ -8,7 +8,6 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { UserProfile } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -54,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomHeaderText = ({ title, total, path }) => {
+const CustomHeaderText = ({ title, total, path, data }) => {
   const classes = useStyles();
 
   return (
@@ -76,6 +75,7 @@ CustomHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   path: PropTypes.string.isRequired,
+  data: PropTypes.object,
 };
 
 const CustomHeaderTitle = ({ title, path }) => {
@@ -109,9 +109,10 @@ const CustomSubHeaderText = (props) => {
     scopedSubTitle,
     scopedMenu,
     scopedSubMenu,
+    data,
     titleColor = theme.palette.common.red,
   } = props;
-
+  console.log(data);
   return (
     <div className={classes.customSubHeaderWrapper}>
       <Typography variant="h3" style={{ color: theme.palette.common.grey }}>
@@ -171,6 +172,7 @@ CustomSubHeaderText.propTypes = {
   titleColor: PropTypes.string,
   scopedMenu: PropTypes.number.isRequired,
   scopedSubMenu: PropTypes.number.isRequired,
+  data: PropTypes.object,
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
@@ -185,10 +187,6 @@ const HeaderText = (props) => {
     selectedScopedMenu,
   } = props;
 
-  const userId = localStorage.getItem("userId");
-
-  const { data } = UserProfile(userId);
-
   const classes = useStyles();
   const theme = useTheme();
 
@@ -202,7 +200,9 @@ const HeaderText = (props) => {
             Welcome,
           </Typography>
           <Typography variant="h3" color="primary" className={classes.name}>
-            {data ? data.account.email : "Admin"}
+            {/* {data ? data.account.email :  */}
+            Admin
+            {/* } */}
           </Typography>
         </div>
       );
@@ -392,6 +392,7 @@ const HeaderContent = (props) => {
     waitingListMenu,
     selectedAppointmentMenu,
     selectedScopedMenu,
+    data,
   } = props;
   const classes = useStyles();
   return (
@@ -405,7 +406,7 @@ const HeaderContent = (props) => {
         selectedAppointmentMenu={selectedAppointmentMenu}
         selectedScopedMenu={selectedScopedMenu}
       />
-      <HeaderProfile />
+      <HeaderProfile data={data} />
     </Toolbar>
   );
 };
@@ -418,6 +419,7 @@ HeaderContent.propTypes = {
   waitingListMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,
+  data: PropTypes.object,
 };
 
 export default HeaderContent;

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
-import { Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
+import { Grid, Typography, Button, Alert, Chip } from "@mui/material";
 import Modals from "components/Utilities/Modal";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -13,9 +12,7 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import FormControl from "@mui/material/FormControl";
-import { rows } from "components/Utilities/DataHeader";
 import { PermissionHeader } from "components/Utilities/tableHeaders";
-import Chip from "@mui/material/Chip";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -27,7 +24,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { PermissionModal } from "components/modals/PermissionModal";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-
+import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { DELETE_PERMISSION } from "components/graphQL/Mutation";
+import { getPermissions } from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -111,8 +111,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-
 const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+  const [singlePermission, setSinglePermission] = useState("");
   const checkbox = [
     { key: "create", value: "create" },
     { key: "update", value: "update" },
@@ -122,13 +122,14 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
 
   const initialValues = {
     name: "",
-    checkbox: [],
-    isTall: true,
+    // checkbox: [],
+    description: "",
   };
 
   const validationSchema = Yup.object({
-    checkbox: Yup.array().min(1, "Add atleast a permission"),
+    // checkbox: Yup.array().min(1, "Add atleast a permission"),
     name: Yup.string("Enter your Permission").required("permission is required"),
+    description: Yup.string("Enter Description").required("Description is required"),
   });
 
   const classes = useStyles();
@@ -140,31 +141,100 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const [deleteModal, setdeleteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [editDetails] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const handleDialogOpen = () => setIsOpen(true);
-  const handleDeleteOpenDialog = () => {
+  const [alert, setAlert] = useState(null);
+  const handleDeleteOpenDialog = (id) => {
     setdeleteModal(true);
+    setDeleteId(id);
   };
-  const handleEditOpenDialog = () => {
+  const handleEditOpenDialog = async (id) => {
+    setEditId(id);
+    // const { data, loading, error } = await FetchData(id);
+    // setEditDetails(data);
+
     setIsEdit(true);
   };
+
   const handleEditCloseDialog = () => {
     setIsEdit(false);
   };
-
-  const handleDialogClose = () => setIsOpen(false);
+  const onConfirm = async () => {
+    try {
+      const { data } = await deletPlan({ variables: { id: deleteId } });
+      setAlert({
+        message: data.deletePermission.message,
+        type: "success",
+      });
+      setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+    } catch (error) {
+      setAlert({
+        message: "Plan  not successfully deleted",
+        type: "danger",
+      });
+      setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+    }
+  };
+  const handleDialogClose = () => {
+    // if (type === "add") {
+    //   console.log("add");
+    // }
+    setIsOpen(false);
+  };
 
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
+
+  const { loading, data } = useQuery(getPermissions);
+  const [deletPlan] = useMutation(DELETE_PERMISSION);
+  // provide a closure for  data fetching
+  // function FetchData(id) {
+  //   const { data, loading, error } = useQuery(getSinglePermissions, {
+  //     variables: {
+  //       id,
+  //     },
+  //   });
+  //   return {
+  //     data,
+  //     loading,
+  //     error,
+  //   };
+  // }
+
   useEffect(() => {
     setSelectedSubMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  const [permission, setPermission] = useState([]);
+
+  useEffect(() => {
+    if (data && data.getPermissions.permission) {
+      setPermission(data.getPermissions.permission);
+    }
+  }, [permission, data]);
+
+  if (loading) return <div>Loading</div>;
 
   return (
     <>
+      {alert && Object.keys(alert).length > 0 && (
+        <Alert
+          variant="filled"
+          severity={alert.type}
+          sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
+        >
+          {alert.message}
+        </Alert>
+      )}
       <Grid container direction="column">
         <Grid item>
           <PreviousButton path="/settings" onClick={() => setSelectedSubMenu(0)} />
@@ -189,105 +259,117 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
         <Grid item container>
           <EnhancedTable
             headCells={PermissionHeader}
-            rows={rows}
+            rows={Permission}
             page={page}
-            paginationLabel="email per page"
+            paginationLabel="permission per page"
             hasCheckbox={true}
           >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+            {permission
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell id={labelId} scope="row" align="center" className={classes.tableCell}>
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      style={{
-                        maxWidth: "25rem",
-                        display: "inline-flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
                     >
-                      <Grid item xs={6}>
-                        <Chip label={row.permission[0]} className={classes.badge} />
+                      <Grid
+                        container
+                        rowSpacing={2}
+                        style={{
+                          maxWidth: "25rem",
+                          display: "inline-flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Grid item xs={6}>
+                          <Chip label={row.name} className={classes.badge} />
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </TableCell>
-                  <TableCell id={labelId} scope="row" align="center" className={classes.tableCell}>
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      style={{
-                        maxWidth: "25rem",
-                        display: "inline-flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
+                    </TableCell>
+                    {/* <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
                     >
-                      {row.data.map((per) => {
-                        return (
-                          <Grid item xs={6} key={per}>
-                            <Chip label={per} className={classes.badge} />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </TableCell>
+                      <Grid
+                        container
+                        rowSpacing={2}
+                        style={{
+                          maxWidth: "25rem",
+                          display: "inline-flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {permission.map((per) => {
+                          return (
+                            <Grid item xs={6} key={per._id}>
+                              <Chip label={per.description} className={classes.badge} />
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    </TableCell> */}
 
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        onClick={handleEditOpenDialog}
-                        className={`${classes.tableBtn} ${classes.greenBtn}`}
-                        endIcon={<EditIcon color="success" />}
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
                       >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        onClick={handleDeleteOpenDialog}
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        to="/view"
-                        endIcon={<DeleteIcon color="error" />}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          onClick={() => handleEditOpenDialog(row._id)}
+                          className={`${classes.tableBtn} ${classes.greenBtn}`}
+                          endIcon={<EditIcon color="success" />}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          onClick={() => handleDeleteOpenDialog(row._id)}
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          to="/view"
+                          endIcon={<DeleteIcon color="error" />}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </EnhancedTable>
         </Grid>
       </Grid>
@@ -368,6 +450,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
           options={checkbox}
           initialValues={initialValues}
           validationSchema={validationSchema}
+          setAlert={setAlert}
         />
       </Modals>
 
@@ -377,8 +460,12 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
           handleDialogClose={handleEditCloseDialog}
           type="edit"
           options={checkbox}
-          initialValues={initialValues}
+          initialValues={singlePermission}
+          editId={editId}
           validationSchema={validationSchema}
+          setAlert={setAlert}
+          editDetails={editDetails}
+          setSinglePermission={setSinglePermission}
         />
       </Modals>
       {/* delete modal */}
@@ -388,7 +475,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
         title="Delete Permission"
         confirmationMsg="delete permission"
         btnValue="Delete"
-        onConfirm={() => console.log("confirmed")}
+        onConfirm={onConfirm}
       />
     </>
   );

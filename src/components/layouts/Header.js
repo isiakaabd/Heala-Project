@@ -25,7 +25,9 @@ const Header = (props) => {
     selectedAppointmentMenu,
     selectedScopedMenu,
   } = props;
+
   const classes = useStyles();
+
   return (
     <Fragment>
       <AppBar position="fixed" className={classes.appBar} classes={{ root: classes.appBar }}>

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import * as Yup from "yup";
 import LoginInput from "components/validation/LoginInput";
 import { Formik, Form } from "formik";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Grid, Typography, Alert } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import CustomButton from "components/Utilities/CustomButton";
@@ -19,7 +19,7 @@ import { useActions } from "components/hooks/useActions";
 import { useSelector } from "react-redux";
 import { Login_USER } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
-import { setAccessToken } from "./accessToken";
+import { setAccessToken } from "../../accessToken";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -68,13 +68,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const { authError } = useSelector((state) => state.auth);
   const theme = useTheme();
-
-  const [errors, seterrors] = useState({});
-  const { loginUser } = useActions();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const [loginInfo] = useMutation(Login_USER); //{ data, loading, error }
+  const { loginUser, loginFailue } = useActions();
+  // const { authError } = useSelector((state) => state.auth);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
+  const [showPassword, setShowPassword] = useState(false);
   const buttonColors = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
@@ -85,27 +86,7 @@ const Login = () => {
     password: "",
     authType: "normal",
   };
-  const [showPassword, setShowPassword] = useState(false);
 
-  const [login, { error, loading }] = useMutation(Login_USER, {
-    // // fetchPolicy:"network-only",
-    // update(_, result) {
-    //   if (result) {
-    //     seterrors({
-    //       message: "Login Successful",
-    //       type: "success",
-    //     });
-    //   } else {
-    //     seterrors({
-    //       message: "Something went wrong",
-    //       type: "error",
-    //     });
-    //   }
-    // },
-  });
-  if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
-  }
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").required("Email is required"),
     password: Yup.string("Enter your password").required("password is required"),
@@ -113,38 +94,34 @@ const Login = () => {
 
   const onSubmit = async (values, onSubmitProps) => {
     try {
-      const { data } = await login({
-        variables: values,
-      });
-      await seterrors({
-        message: "login successful",
-        type: "success",
+      const { email, password, authType } = values;
+      const { data } = await loginInfo({ variables: { email, password, authType } });
+      if (data) {
+        setAccessToken(data.login.account.access_token);
+      }
+      loginUser({
+        data: data,
+        messages: {
+          message: "Login sucessful",
+          type: "success",
+        },
       });
 
-      if (data) {
-        const payload = {
-          data,
-          error,
-          loading,
-        };
-        setAccessToken(data.login.account.access_token);
-        loginUser(payload); //put loading here also
-      }
-    } catch (err) {
-      console.log(err.message);
-      seterrors({
-        message: err.message,
+      history.push("/dashboard");
+    } catch (error) {
+      loginFailue({
+        message: error.message,
         type: "error",
       });
     }
 
-    // finally {
-    //   LoginUser(data);
-    // }
-
     onSubmitProps.resetForm();
   };
+  // if (isAuthenticated) {
+  //   alert(11);
 
+  //   return <Redirect to="/dashboard" />;
+  // }
   return (
     <>
       <Grid container className={classes.gridContainer}>
@@ -158,9 +135,10 @@ const Login = () => {
           </Grid>
         </Grid>
         <Grid item lg={7} sm={10} className={classes.rightParentGrid}>
-          {errors && Object.keys(errors).length !== 0 && (
-            <Alert variant="filled" severity={errors.type} sx={{ justifyContent: "center" }}>
-              {errors.message}
+          {Object.keys(authError).length > 0 && (
+            // state && (
+            <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>
+              {authError.message}
             </Alert>
           )}
 
@@ -249,10 +227,7 @@ const Login = () => {
                         width="100%"
                         type={buttonColors}
                         disableRipple
-                        disabled={
-                          // formik.isSubmitting ||
-                          !(formik.dirty || formik.isValid)
-                        }
+                        disabled={formik.isSubmitting || !(formik.dirty || formik.isValid)}
                       />
                     </Grid>
                     <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>

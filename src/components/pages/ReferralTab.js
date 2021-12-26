@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -9,7 +9,6 @@ import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { referralHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
@@ -18,6 +17,8 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Chip from "@mui/material/Chip";
+import { useQuery } from "@apollo/client";
+import { getRefferals } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -82,9 +83,16 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
+  const [referral, setReferral] = useState([]);
   const [searchMail, setSearchMail] = useState("");
+  const { loading, data } = useQuery(getRefferals);
 
+  useEffect(() => {
+    if (data && data.getReferrals.referral) {
+      setReferral(data.getReferrals.referral);
+    }
+  }, [referral, data]);
+  if (loading) return <div>Loading</div>;
   return (
     <Grid container direction="column">
       <Grid item container>
@@ -104,123 +112,117 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
       <Grid item container style={{ marginTop: "5rem" }}>
         <EnhancedTable
           headCells={referralHeader}
-          rows={rows}
+          rows={referral}
           page={page}
           paginationLabel="referral per page"
           hasCheckbox={true}
         >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
+          {referral
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-            const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
                 >
-                  {row.entryDate}
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.time}
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.specialization}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                    {new Date(row.createdAt)}
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <Chip
-                    label={row.status}
-                    className={classes.badge}
-                    style={{
-                      background:
-                        row.status === "active"
-                          ? theme.palette.common.lightGreen
-                          : theme.palette.common.lightRed,
-                      color:
-                        row.status === "active"
-                          ? theme.palette.common.green
-                          : theme.palette.common.red,
-                    }}
-                  />
-                </TableCell>
-                {/* <TableCell>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    component={Link}
-                    to={`/referrals/${row.id}`}
-                    endIcon={<ArrowForwardIosIcon />}
-                    onClick={() => setSelectedSubMenu(10)}
+                    {new Date(row.updatedAt)}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    View referral
-                  </Button>
-                </TableCell> */}
-              </TableRow>
-            );
-          })}
+                    {row.specialization}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <Chip
+                      label={row.status}
+                      className={classes.badge}
+                      style={{
+                        background:
+                          row.status === "active"
+                            ? theme.palette.common.lightGreen
+                            : theme.palette.common.lightRed,
+                        color:
+                          row.status === "active"
+                            ? theme.palette.common.green
+                            : theme.palette.common.red,
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </EnhancedTable>
       </Grid>
     </Grid>

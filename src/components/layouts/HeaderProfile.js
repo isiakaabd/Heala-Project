@@ -4,11 +4,14 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import { makeStyles } from "@mui/styles";
+import PropTypes from "prop-types";
 // import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.png";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "components/layouts/Notifications";
 import IconButton from "@mui/material/IconButton";
+// import { useSelector } from "react-redux";
+// import { UserProfile } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   role: {
@@ -38,6 +41,7 @@ const HeaderProfile = () => {
     }
     return `${count} notifications`;
   }
+  // const { id } = useSelector((state) => state.auth);
 
   return (
     <header>
@@ -49,12 +53,12 @@ const HeaderProfile = () => {
           <Grid container direction="column" justifyContent="center">
             <Grid item>
               <Typography variant="body1" className={classes.name}>
-                Emmanuel Chuckwu
+                {/* {loading ? "Admin" : error ? "Admin" : email} */} email
               </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
-                Admin
+                {/* {loading ? "Admin" : error ? "Admin" : email} */} email
               </Typography>
             </Grid>
           </Grid>
@@ -73,6 +77,9 @@ const HeaderProfile = () => {
       </Grid>
     </header>
   );
+};
+HeaderProfile.propTypes = {
+  data: PropTypes.object,
 };
 
 export default HeaderProfile;

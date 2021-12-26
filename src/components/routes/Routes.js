@@ -48,6 +48,9 @@ import CreateEmail from "components/pages/CreateEmail";
 import ViewMail from "components/pages/ViewMail";
 import PendingPayout from "components/pages/PendingPayout";
 import CircularChart from "components/Utilities/CircularChart";
+// import { useSelector } from "react-redux";
+// import { useActions } from "components/hooks/useActions";
+// import { UserProfile } from "components/graphQL/useQuery";
 
 const Routes = (props) => {
   const {
@@ -68,8 +71,20 @@ const Routes = (props) => {
     selectedScopedMenu,
     setSelectedScopedMenu,
   } = props;
+  // const { id } = useSelector((state) => state.auth);
+  // const { data, loading, error } = UserProfile(id);
+  // const { refreshAuth, userDetail } = useActions();
+
+  // useEffect(() => {
+  //   if (data) {
+  //     userDetail(data.account);
+  //   }
+  // }, [data]);
+  // if (loading) return <div>Loading</div>;
+  // else {
   return (
     <Switch>
+      {/* <Route path="/dashboard" exact render={() => <h1>Hello World</h1>} /> */}
       <PrivateRoute
         path={["/", "/dashboard"]}
         exact
@@ -550,6 +565,7 @@ const Routes = (props) => {
       />
     </Switch>
   );
+  // }
 };
 
 Routes.propTypes = {
