@@ -117,10 +117,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 const SideMenu = (props) => {
   const { selectedMenu, setSelectedMenu, setSelectedSubMenu, setWaitingListMenu } = props;
-
   const { logout } = useActions();
   const [logout_user] = useMutation(LOGOUT_USER);
 

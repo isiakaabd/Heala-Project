@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
-import { useTheme } from "@mui/material/styles";
+// import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { CREATE_MESSAGE } from "components/graphQL/Mutation";
+import { useMutation } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -55,20 +57,55 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
-  const theme = useTheme();
-
-  const greenButton = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
-    active: theme.palette.primary.dark,
-  };
+  // const theme = useTheme();
+  const [createNewMessage] = useMutation(CREATE_MESSAGE);
+  // const greenButton = {
+  //   background: theme.palette.primary.main,
+  //   hover: theme.palette.primary.light,
+  //   active: theme.palette.primary.dark,
+  // };
   useEffect(() => {
     setSelectedMenu(5);
     setSelectedSubMenu(6);
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  const [state, setState] = useState({
+    subject: "",
+    recipient: "",
+    textarea: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
+  const { subject, recipient, textarea } = state;
+  const submitMesage = async (e) => {
+    const id = localStorage.getItem("user_id");
+    try {
+      const { data } = await createNewMessage({
+        variables: {
+          sender: id,
+          recipient,
+          subject,
+          body: textarea,
+        },
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
 
+    setState({
+      subject: "",
+      recipient: "",
+      textarea: "",
+    });
+    e.preventDefault();
+  };
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -89,7 +126,12 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                 </Typography>
               </Grid>
               <Grid item className={classes.inputGrid}>
-                <input className={classes.formInput} />
+                <input
+                  className={classes.formInput}
+                  name="recipient"
+                  value={recipient}
+                  onChange={handleChange}
+                />
               </Grid>
             </Grid>
             <Divider className={classes.divider} />
@@ -102,7 +144,12 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                 </Typography>
               </Grid>
               <Grid item className={classes.inputGrid}>
-                <input className={classes.formInput} />
+                <input
+                  className={classes.formInput}
+                  name="subject"
+                  value={subject}
+                  onChange={handleChange}
+                />
               </Grid>
             </Grid>
             <Divider className={classes.divider} />
@@ -115,7 +162,12 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                 </Typography>
               </Grid>
               <Grid item style={{ height: "15rem" }}>
-                <textarea className={`${classes.formInput} ${classes.textArea}`} />
+                <textarea
+                  className={`${classes.formInput} ${classes.textArea}`}
+                  name="textarea"
+                  value={textarea}
+                  onChange={handleChange}
+                />
               </Grid>
             </Grid>
             <Divider className={classes.divider} />
@@ -123,7 +175,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
             <CustomButton
               title="Send Message"
-              type={greenButton}
+              // type={greenButton}
+              type="submit"
+              onClick={submitMesage}
               endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
             />
           </Grid>

@@ -8,3 +8,5 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGOUT = "LOGOUT";
 export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
 export const GET_USER = "GET_USER";
+export const REFRESH_USER = "REFRESH_USER";
+export const USER_DETAIL = "USER_DETAIL";

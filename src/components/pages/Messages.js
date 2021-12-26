@@ -14,13 +14,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { messagesHeadCells } from "components/Utilities/tableHeaders";
-import { messagesRows } from "components/Utilities/tableData";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import { useQuery } from "@apollo/client";
+import { getMessage } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -118,6 +119,14 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   };
 
   const [searchMessage, setSearchMessage] = useState("");
+  const [message, setMessage] = useState([]);
+  const { loading, data } = useQuery(getMessage);
+
+  useEffect(() => {
+    if (data && data.getMessages.messages) {
+      setMessage(data.getMessages.messages);
+    }
+  }, [message, data]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -127,7 +136,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-
+  if (loading) return <div>Loading</div>;
   return (
     <Grid container direction="column">
       <Grid item container>
@@ -153,96 +162,97 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
       <Grid item container style={{ marginTop: "5rem" }}>
         <EnhancedTable
           headCells={messagesHeadCells}
-          rows={messagesRows}
+          rows={message}
           page={page}
-          paginationLabel="Patients per page"
+          paginationLabel="Message per page"
           hasCheckbox={true}
         >
-          {messagesRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+          {message.length > 0 &&
+            message
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
                   >
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "15rem" }}
-                  >
-                    {row.subject}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.date}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.time}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`messages/${row.id}`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => setSelectedSubMenu(6)}
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.sender}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.sender}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "15rem" }}
                     >
-                      View Message
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      {row.subject}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {row.createdAt}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {row.time}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`messages/${row._id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => setSelectedSubMenu(6)}
+                      >
+                        View Message
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
         </EnhancedTable>
       </Grid>
     </Grid>

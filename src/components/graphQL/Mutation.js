@@ -16,9 +16,169 @@ export const Login_USER = gql`
     }
   }
 `;
+export const CREATE_PLAN = gql`
+  mutation createPlan($name: String!, $amount: Float!, $description: String!) {
+    createPlan(data: { name: $name, amount: $amount, description: $description }) {
+      plan {
+        _id
+        name
+        amount
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 
+export const DELETE_PLAN = gql`
+  mutation deletePlan($id: String!) {
+    deletePlan(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const UPDATE_PLAN = gql`
+  mutation updatePlan($id: String!, $name: String!, $amount: Float!, $description: String!) {
+    updatePlan(data: { id: $id, name: $name, amount: $amount, description: $description }) {
+      plan {
+        _id
+        name
+        amount
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CREATE_PERMISSION = gql`
+  mutation createPermission($name: String!, $description: String!) {
+    createPermission(data: { name: $name, description: $description }) {
+      permission {
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const UPDATE_PERMISSION = gql`
+  mutation updatePermission($id: String!, $name: String!, $description: String!) {
+    updatePermission(data: { id: $id, name: $name, description: $description }) {
+      permission {
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const DELETE_PERMISSION = gql`
+  mutation deletePermission($id: String!) {
+    deletePermission(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// message
+export const CREATE_MESSAGE = gql`
+  mutation createMessage($recipient: String!, $sender: String!, $subject: String!, $body: String!) {
+    createMessage(
+      data: { recipient: $recipient, sender: $sender, subject: $subject, body: $body }
+    ) {
+      messages {
+        _id
+        recipient
+        subject
+        sender
+        createdAt
+        updatedAt
+        body
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// mutation createMessage(
+//   $recipient:String!,
+//    $sender: String!,
+//     $subject:String!,
+//     $body:String!
+//     )
+//     {
+// createMessage(
+//   data: {
+//  recipient: $recipient,
+//  sender:  $sender,
+//  subject:  $subject,
+// body:  $body
+//   }
+// ) {
+//   messages {
+//   _id
+//   recipient
+//   subject
+//   sender
+//   createdAt
+//   updatedAt
+//   body
+//   }
+//   errors {
+//     field
+//     message
+//   }
+// }
 export const LOGOUT_USER = gql`
   mutation logout {
     logout
+  }
+`;
+export const getNewAccessToken = gql`
+  mutation refreshToken {
+    refreshToken {
+      account {
+        _id
+        dociId
+        email
+        isEmailVerified
+      }
+    }
   }
 `;
