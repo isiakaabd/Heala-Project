@@ -14,7 +14,7 @@ import {
 import { getAccessToken } from "./accessToken";
 
 const httpLink = createHttpLink({
-  uri: "http://api-staging.heala.io",
+  uri: "https://api-staging.heala.io",
   credentials: "include",
 });
 
