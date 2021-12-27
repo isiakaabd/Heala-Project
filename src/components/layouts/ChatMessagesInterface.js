@@ -1,11 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import InputAdornment from "@mui/material/InputAdornment";
-import Chip from "@mui/material/Chip";
+import { Grid, Typography, IconButton, Divider, InputAdornment, Chip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import MicIcon from "@mui/icons-material/Mic";

@@ -1,10 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography, Avatar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {

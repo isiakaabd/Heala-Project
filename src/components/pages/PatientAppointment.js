@@ -11,6 +11,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
+import { useQuery } from "@apollo/client";
+import { getAppointment } from "components/graphQL/useQuery";
 import Avatar from "@mui/material/Avatar";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
@@ -113,7 +115,23 @@ const PatientAppointment = (props) => {
   const handlePatientOpen = () => setIsPatient(true);
   const handlePatientClose = () => setIsPatient(false);
   const { patientId } = useParams();
+  const [appointment, setAppointment] = useState("");
+  console.log(patientId);
 
+  const { loading, data } = useQuery(getAppointment, {
+    variables: {
+      id: patientId,
+    },
+  });
+  useEffect(() => {
+    if (data) {
+      //&& data.profile
+      console.log(data);
+      setAppointment(data.profile);
+      // setPatientProfile(data.profiles.data);
+    }
+  }, [data, patientId]);
+  console.log(appointment, loading);
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const handleDeleteOpenDialog = () => {

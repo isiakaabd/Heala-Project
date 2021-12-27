@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -16,6 +16,9 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import { getProfile } from "components/graphQL/useQuery";
+import { deleteProfile } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -77,14 +80,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
+  const { patientId } = useParams();
+  const { loading, data } = useQuery(getProfile, {
+    variables: {
+      id: patientId,
+    },
+  });
+  const [disableUser] = useMutation(deleteProfile);
+
   const classes = useStyles();
   const theme = useTheme();
+  const [patientProfile, setPatientProfile] = useState("");
+  useEffect(() => {
+    if (data && data.profile) {
+      setPatientProfile(data.profile);
+      // setPatientProfile(data.profiles.data);
+    }
+  }, [data, patientId]);
 
-  const { patientId } = useParams();
+  const onConfirm = async () => {
+    try {
+      const { data } = await disableUser({ variables: { id: patientId } });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [openReferPatient, setOpenReferPatient] = useState(false);
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
-
   const greenButton = {
     background: theme.palette.success.main,
     hover: theme.palette.success.light,
@@ -102,143 +126,157 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-
-  return (
-    <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients/${patientId}`} />
-      </Grid>
-      {/* Display photo and profile name grid */}
-      <Grid item>
-        <DisplayProfile
-          fullName="Raphael Igbinedion"
-          displayPhoto={displayPhoto}
-          medicalTitle="User ID"
-          statusId={132467}
-          status="Active"
-          chatPath={`/patients/${patientId}/profile/chat`}
-          callPath={`/patients/${patientId}/profile/call`}
-          videoPath={`/patients/${patientId}/profile/video`}
-          setChatMediaActive={setChatMediaActive}
-        />
-      </Grid>
-      {/* PERSONAL INFO SECTION */}
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
-        {/* GENDER GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Gender</Typography>
-            </Grid>
-            <Grid item>
-              <Chip variant="outlined" label="Male" className={classes.infoBadge} />
-            </Grid>
-          </Grid>
+  if (loading) return <div>Loading</div>;
+  if (patientProfile) {
+    return (
+      <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
+        <Grid item style={{ marginBottom: "3rem" }}>
+          <PreviousButton path={`/patients/${patientId}`} />
         </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Date of Birth</Typography>
-            </Grid>
-            <Grid item>
-              <Chip variant="outlined" label="7/11/1995" className={classes.infoBadge} />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
-        {/* EMAIL ADDRESS GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Email Address</Typography>
-            </Grid>
-            <Grid item>
-              <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                <span>raphaeligbinedion@yahoo.com</span>
-                <ArrowForwardIosIcon className={classes.linkIcon} />
-              </a>
-            </Grid>
-          </Grid>
-        </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Phone Number</Typography>
-            </Grid>
-            <Grid item>
-              <a href="tel:+2347086937133" className={classes.link}>
-                <span>08123456789</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-              {/* <Chip variant="outlined" label="08123456789" className={classes.infoBadge} /> */}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        justifyContent="center"
-        alignItems="center"
-        className={`${classes.gridsWrapper} ${classes.buttonsGridWrapper}`}
-      >
-        <Grid item style={{ marginRight: "2rem" }}>
-          <CustomButton
-            endIcon={<PersonRemoveIcon />}
-            title="Disable Patient"
-            type={trasparentButton}
-            textColor={theme.palette.common.red}
-            onClick={() => setOpenDisablePatient(true)}
+        {/* Display photo and profile name grid */}
+        <Grid item>
+          <DisplayProfile
+            fullName="Raphael Igbinedion"
+            displayPhoto={displayPhoto}
+            medicalTitle="User ID"
+            statusId={patientProfile._id}
+            status="Active"
+            chatPath={`/patients/${patientId}/profile/chat`}
+            callPath={`/patients/${patientId}/profile/call`}
+            videoPath={`/patients/${patientId}/profile/video`}
+            setChatMediaActive={setChatMediaActive}
           />
         </Grid>
-        <Grid item style={{ marginLeft: "2rem" }}>
-          <CustomButton
-            endIcon={<TrendingUpIcon />}
-            title="Refer Patient"
-            type={greenButton}
-            onClick={() => setOpenReferPatient(true)}
+        {/* PERSONAL INFO SECTION */}
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+          {/* GENDER GRID */}
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+            <Grid
+              container
+              direction="column"
+              style={{ height: "100%" }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4">Gender</Typography>
+              </Grid>
+              <Grid item>
+                <Chip
+                  variant="outlined"
+                  label={patientProfile.gender}
+                  className={classes.infoBadge}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* DATE OF BIRTH GRID */}
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+            <Grid
+              container
+              direction="column"
+              style={{ height: "100%" }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4">GenoType</Typography>
+              </Grid>
+              <Grid item>
+                <Chip
+                  variant="outlined"
+                  label={patientProfile.genotype}
+                  className={classes.infoBadge}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+          {/* EMAIL ADDRESS GRID */}
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+            <Grid
+              container
+              direction="column"
+              style={{ height: "100%" }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4">Email Address</Typography>
+              </Grid>
+              <Grid item>
+                <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
+                  <span>raphaeligbinedion@yahoo.com</span>
+                  <ArrowForwardIosIcon className={classes.linkIcon} />
+                </a>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* DATE OF BIRTH GRID */}
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+            <Grid
+              container
+              direction="column"
+              style={{ height: "100%" }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4">Phone Number</Typography>
+              </Grid>
+              <Grid item>
+                <a href={`tel:+234${patientProfile.phoneNumber}`} className={classes.link}>
+                  <span>{patientProfile.phoneNumber}</span>
+                  <IoCopy
+                    className={classes.linkIcon}
+                    size={12.5}
+                    style={{ marginLeft: "1.2rem" }}
+                  />
+                </a>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          justifyContent="center"
+          alignItems="center"
+          className={`${classes.gridsWrapper} ${classes.buttonsGridWrapper}`}
+        >
+          <Grid item style={{ marginRight: "2rem" }}>
+            <CustomButton
+              endIcon={<PersonRemoveIcon />}
+              title="Disable Patient"
+              type={trasparentButton}
+              textColor={theme.palette.common.red}
+              onClick={() => setOpenDisablePatient(true)}
+            />
+          </Grid>
+          <Grid item style={{ marginLeft: "2rem" }}>
+            <CustomButton
+              endIcon={<TrendingUpIcon />}
+              title="Refer Patient"
+              type={greenButton}
+              onClick={() => setOpenReferPatient(true)}
+            />
+          </Grid>
+          <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
+          <DisablePatient
+            open={openDisablePatient}
+            setOpen={setOpenDisablePatient}
+            title="Delete Partner"
+            btnValue="disable"
+            confirmationMsg="disable Patient"
+            onConfirm={onConfirm}
           />
         </Grid>
-        <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
-        <DisablePatient
-          open={openDisablePatient}
-          setOpen={setOpenDisablePatient}
-          title="Delete Partner"
-          btnValue="disable"
-          confirmationMsg="disable Patient"
-          onConfirm={() => console.log("confirmed")}
-          // onConfirm={onConfirm}
-        />
       </Grid>
-    </Grid>
-  );
+    );
+  } else {
+    return null;
+  }
 };
 
 PatientProfile.propTypes = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as Yup from "yup";
 import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
@@ -25,9 +25,9 @@ import { PermissionModal } from "components/modals/PermissionModal";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { useQuery } from "@apollo/client";
+import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
-import { getPermissions } from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -152,15 +152,12 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   };
   const handleEditOpenDialog = async (id) => {
     setEditId(id);
-    // const { data, loading, error } = await FetchData(id);
-    // setEditDetails(data);
-
     setIsEdit(true);
   };
 
-  const handleEditCloseDialog = () => {
+  const handleEditCloseDialog = useCallback(() => {
     setIsEdit(false);
-  };
+  }, []);
   const onConfirm = async () => {
     try {
       const { data } = await deletPlan({ variables: { id: deleteId } });
@@ -181,12 +178,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
       }, 5000);
     }
   };
-  const handleDialogClose = () => {
-    // if (type === "add") {
-    //   console.log("add");
-    // }
-    setIsOpen(false);
-  };
+  const handleDialogClose = () => setIsOpen(false);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -196,19 +188,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
 
   const { loading, data } = useQuery(getPermissions);
   const [deletPlan] = useMutation(DELETE_PERMISSION);
-  // provide a closure for  data fetching
-  // function FetchData(id) {
-  //   const { data, loading, error } = useQuery(getSinglePermissions, {
-  //     variables: {
-  //       id,
-  //     },
-  //   });
-  //   return {
-  //     data,
-  //     loading,
-  //     error,
-  //   };
-  // }
 
   useEffect(() => {
     setSelectedSubMenu(0);

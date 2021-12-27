@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -15,7 +15,6 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
-import { patientsRows } from "components/Utilities/tableData";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -26,6 +25,8 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import useFormInput from "components/hooks/useFormInput";
+import { useQuery } from "@apollo/client";
+import { getPatients } from "components/graphQL/useQuery";
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
 
@@ -97,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const patient = useQuery(getPatients);
 
   const [inputValue, handleInputValue] = useFormInput({
     date: "",
@@ -104,6 +106,12 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     gender: "",
     status: "",
   });
+  const [profiles, setProfiles] = useState(undefined);
+  useEffect(() => {
+    if (patient.data && patient.data.profiles.data) {
+      setProfiles(patient.data.profiles.data);
+    }
+  }, [patient.data]);
 
   const { date, plan, gender, status } = inputValue;
 
@@ -112,236 +120,241 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   const [searchPatient, setSearchPatient] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  console.log(profiles);
 
   const handleDialogOpen = () => setIsOpen(true);
-
   const handleDialogClose = () => setIsOpen(false);
 
-  return (
-    <>
-      <Grid container direction="column">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
-          <Grid item className={classes.searchGrid}>
-            <Search
-              value={searchPatient}
-              onChange={(e) => setSearchPatient(e.target.value)}
-              placeholder="Type to search patients..."
-              height="5rem"
-            />
-          </Grid>
-          <Grid item>
-            <FilterList title="Filter Patients" width="15.2rem" onClick={handleDialogOpen} />
-          </Grid>
-        </Grid>
-        {/* The Search and Filter ends here */}
-        <Grid item container>
-          <EnhancedTable
-            headCells={patientsHeadCells}
-            rows={patientsRows}
-            page={page}
-            paginationLabel="Patients per page"
-            hasCheckbox={true}
-          >
-            {patientsRows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
-
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
-                    >
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${row.patientName}`}
-                            src={displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.patientName}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      {row.plan}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      {row.consultations}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <Chip
-                        label={row.status}
-                        className={classes.badge}
-                        style={{
-                          background:
-                            row.status === "active"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            row.status === "active"
-                              ? theme.palette.common.green
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`patients/${row.id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => {
-                          setSelectedSubMenu(2);
-                          setSelectedPatientMenu(0);
-                        }}
-                      >
-                        View Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </EnhancedTable>
-        </Grid>
-      </Grid>
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Date
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="date"
-                        options={referralOptions}
-                        value={date}
-                        onChange={handleInputValue}
-                        placeholderText="Choose Date"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Specialization
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="plan"
-                        options={plans}
-                        value={plan}
-                        onChange={handleInputValue}
-                        placeholderText="Select plan"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
+  if (patient.loading) return <div>loading</div>;
+  if (profiles) {
+    return (
+      <>
+        <Grid container direction="column">
+          <Grid item container style={{ paddingBottom: "5rem" }}>
+            <Grid item className={classes.searchGrid}>
+              <Search
+                value={searchPatient}
+                onChange={(e) => setSearchPatient(e.target.value)}
+                placeholder="Type to search patients..."
+                height="5rem"
+              />
+            </Grid>
+            <Grid item>
+              <FilterList title="Filter Patients" width="15.2rem" onClick={handleDialogOpen} />
             </Grid>
           </Grid>
-          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Hospital
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
-                        name="gender"
-                        options={genderType}
-                        value={gender}
-                        onChange={handleInputValue}
-                        placeholderText="Choose gender"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Status
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
-                        name="status"
-                        options={statusType}
-                        value={status}
-                        onChange={handleInputValue}
-                        placeholderText="Select Status"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={handleDialogClose}
-              type="submit"
-              className={classes.searchFilterBtn}
+          {/* The Search and Filter ends here */}
+          <Grid item container>
+            <EnhancedTable
+              headCells={patientsHeadCells}
+              rows={profiles}
+              page={page}
+              paginationLabel="Patients per page"
+              hasCheckbox={true}
             >
-              Apply Filter
-            </Button>
+              {profiles
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row._id, selectedRows);
+
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="center"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey }}
+                      >
+                        {row._id}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={`Display Photo of ${row.firstName}`}
+                              src={displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.firstName} {row.lastName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        {row.plan}
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        {row.consultations}
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <Chip
+                          label={row.status}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              row.status === "active"
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              row.status === "active"
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component={Link}
+                          to={`patients/${row._id}`}
+                          endIcon={<ArrowForwardIosIcon />}
+                          onClick={() => {
+                            setSelectedSubMenu(2);
+                            setSelectedPatientMenu(0);
+                          }}
+                        >
+                          View Profile
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
           </Grid>
         </Grid>
-      </Modals>
-    </>
-  );
+        <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+          <Grid item container direction="column">
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Date
+                      </FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <FormControl fullWidth>
+                        <FormSelect
+                          name="date"
+                          options={referralOptions}
+                          value={date}
+                          onChange={handleInputValue}
+                          placeholderText="Choose Date"
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item md>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Specialization
+                      </FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <FormControl fullWidth>
+                        <FormSelect
+                          name="plan"
+                          options={plans}
+                          value={plan}
+                          onChange={handleInputValue}
+                          placeholderText="Select plan"
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+              <Grid container spacing={2}>
+                <Grid item md>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Hospital
+                      </FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <FormControl fullWidth style={{ height: "3rem" }}>
+                        <FormSelect
+                          name="gender"
+                          options={genderType}
+                          value={gender}
+                          onChange={handleInputValue}
+                          placeholderText="Choose gender"
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item md>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormLabel component="legend" className={classes.FormLabel}>
+                        Status
+                      </FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <FormControl fullWidth style={{ height: "3rem" }}>
+                        <FormSelect
+                          name="status"
+                          options={statusType}
+                          value={status}
+                          onChange={handleInputValue}
+                          placeholderText="Select Status"
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={handleDialogClose}
+                type="submit"
+                className={classes.searchFilterBtn}
+              >
+                Apply Filter
+              </Button>
+            </Grid>
+          </Grid>
+        </Modals>
+      </>
+    );
+  } else return null;
 };
 
 Patients.propTypes = {

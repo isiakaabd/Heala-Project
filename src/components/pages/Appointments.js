@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+
   return (
     <Grid container justifyContent="space-between" className={classes.containerGrid}>
       <Grid

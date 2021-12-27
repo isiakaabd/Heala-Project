@@ -97,7 +97,8 @@ const Login = () => {
       const { email, password, authType } = values;
       const { data } = await loginInfo({ variables: { email, password, authType } });
       if (data) {
-        setAccessToken(data.login.account.access_token);
+        setAccessToken(data.login.account.refresh_token);
+        history.push("/");
       }
       loginUser({
         data: data,
@@ -106,8 +107,6 @@ const Login = () => {
           type: "success",
         },
       });
-
-      history.push("/dashboard");
     } catch (error) {
       loginFailue({
         message: error.message,

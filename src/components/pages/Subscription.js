@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import { Grid, Alert } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -168,6 +169,7 @@ const Subscription = () => {
   const [id, setId] = useState(null);
   const [editId, setEditId] = useState(null);
   const [edit, setEdit] = useState(false);
+  const [singleData, setSingleData] = useState("");
   const [deleteModal, setdeleteModal] = useState(false);
   const handleDialogOpen = () => {
     setIsOpen(true);
@@ -176,17 +178,17 @@ const Subscription = () => {
     setEdit(false);
   };
   const handleDeleteOpenDialog = (id) => {
-    console.log(id);
-
     setId(id);
     setdeleteModal(true);
   };
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
+    console.log(id);
   };
   const handleDialogClose = async () => {
     setIsOpen(false);
+    setEditId(null);
   };
   const onConfirm = async () => {
     try {
@@ -223,7 +225,18 @@ const Subscription = () => {
   }, [data]);
 
   if (loading) return <div>Loading</div>;
-  // else if (!loading && plan) {
+
+  const initialValues = {
+    name: "",
+    amount: "",
+    description: "",
+  };
+
+  const validationSchema = Yup.object({
+    name: Yup.string("Enter your Name").required("Name is required"),
+    amount: Yup.string("Enter your Amount").required("Amount is required"),
+    description: Yup.string("Enter Description").required("Description is required"),
+  });
   return (
     <>
       <Grid container direction="column" gap={2}>
@@ -359,7 +372,13 @@ const Subscription = () => {
         rowSpacing={5}
         handleClose={handleDialogClose}
       >
-        <SubscriptionModal handleDialogClose={handleDialogClose} type="add" setAlert={setAlert} />
+        <SubscriptionModal
+          handleDialogClose={handleDialogClose}
+          type="add"
+          setAlert={setAlert}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        />
       </Modals>
 
       {/* edit Modal */}
@@ -369,6 +388,9 @@ const Subscription = () => {
           type="edit"
           editId={editId}
           setAlert={setAlert}
+          initialValues={singleData}
+          validationSchema={validationSchema}
+          setSingleData={setSingleData}
         />
       </Modals>
 

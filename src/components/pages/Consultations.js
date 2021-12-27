@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import Avatar from "@mui/material/Avatar";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -18,10 +13,11 @@ import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.png";
-import { consultationsRows } from "components/Utilities/tableData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getConsultations } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -79,11 +75,20 @@ const Consultations = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
+  const { patientConsultation } = useActions();
   const { patientId } = useParams();
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  const [consultations, setConsultations] = useState([]);
+  const { loading, data } = useQuery(getConsultations);
+
+  useEffect(() => {
+    if (data && data.getConsultations.data) {
+      setConsultations(data.getConsultations.data);
+      patientConsultation(data);
+    }
+  }, [data, consultations, patientConsultation]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -92,7 +97,7 @@ const Consultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
-
+  if (loading) return <div>Loading</div>;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -115,15 +120,15 @@ const Consultations = (props) => {
       <Grid item container>
         <EnhancedTable
           headCells={consultationsHeadCells}
-          rows={consultationsRows}
+          rows={consultations}
           page={page}
           paginationLabel="Patients per page"
           hasCheckbox={true}
         >
-          {consultationsRows
+          {consultations
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+              const isItemSelected = isSelected(row._id, selectedRows);
 
               const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -133,12 +138,12 @@ const Consultations = (props) => {
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.id}
+                  key={row._id}
                   selected={isItemSelected}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -169,7 +174,7 @@ const Consultations = (props) => {
                     </div>
                   </TableCell>
                   <TableCell align="center" className={classes.tableCell}>
-                    {row.date}
+                    {dateMoment(row.createdAt)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -183,7 +188,7 @@ const Consultations = (props) => {
                       variant="contained"
                       className={classes.button}
                       component={Link}
-                      to={`/patients/${row.id}/consultations/case-note`}
+                      to={`/patients/${row._id}/consultations/case-note`}
                       endIcon={<ArrowForwardIosIcon />}
                       onClick={() => {
                         setSelectedSubMenu(2);

@@ -29,6 +29,15 @@ export const getPlans = gql`
     }
   }
 `;
+export const getSinglePlan = gql`
+  query getPlan($id: ID!) {
+    getPlan(id: $id) {
+      name
+      amount
+      description
+    }
+  }
+`;
 
 export const getMessage = gql`
   query getMessages {
@@ -67,6 +76,38 @@ export const getSinglePermissions = gql`
     }
   }
 `;
+export const getConsultations = gql`
+  query getConsultations {
+    getConsultations {
+      data {
+        _id
+        doctor
+        patient
+        ailment
+        severity
+        description
+        treatment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const findProfile = gql`
+  query findProfile($id: ID!) {
+    profile(id: $id) {
+      _id
+      firstName
+      lastName
+      height
+      weight
+      bloodGroup
+      genotype
+      gender
+      phoneNumber
+    }
+  }
+`;
 
 export const getRefferals = gql`
   query getReferrals {
@@ -80,6 +121,113 @@ export const getRefferals = gql`
         note
         specialization
         testType
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getConsultation = gql`
+  query getConsultation($id: ID!) {
+    getConsultation(id: $id) {
+      _id
+      doctor
+      patient
+      ailment
+      severity
+      description
+      treatment
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getMyEarnings = gql`
+  query getMyEarnings {
+    getMyEarnings {
+      data {
+        _id
+        doctor
+        balance
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getPatients = gql`
+  query findProfiles {
+    profiles {
+      data {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        genotype
+        gender
+        phoneNumber
+      }
+    }
+  }
+`;
+
+export const getProfile = gql`
+  query findProfile($id: ID!) {
+    profile(id: $id) {
+      _id
+      firstName
+      lastName
+      height
+      weight
+      bloodGroup
+      genotype
+      gender
+      phoneNumber
+    }
+  }
+`;
+export const getMedication = gql`
+  query getMedication($id: ID!) {
+    getMedication(id: $id) {
+      medication {
+        _id
+        name
+        interval
+        doctor
+        createdAt
+        updatedAt
+        dosage
+      }
+    }
+  }
+`;
+export const getAppointment = gql`
+  query getAppointment($id: ID!) {
+    getAppointment(id: $id) {
+      _id
+      doctor
+      patient
+      date
+      time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const getMyConsultation = gql`
+  query getMyConsultations {
+    getMyConsultations {
+      data {
+        _id
+        doctor
+        patient
+        ailment
+        severity
+        description
+        treatment
         createdAt
         updatedAt
       }
