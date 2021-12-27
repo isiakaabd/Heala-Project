@@ -67,7 +67,6 @@ export const SubscriptionModal = ({
       id: editId,
     },
   });
-
   useEffect(() => {
     if (single.data && single.data.getPlan) {
       setSingleData({
