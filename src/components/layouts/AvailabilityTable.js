@@ -1,10 +1,5 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
+import { TableRow, Grid, TableCell, Button, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";

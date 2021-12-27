@@ -1,16 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link, useParams, useLocation } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Grid, Typography, Menu, MenuItem, Avatar, IconButton } from "@mui/material";
 import { HiOutlineLogout } from "react-icons/hi";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 import avatar from "assets/images/photo1.png";
-import IconButton from "@mui/material/IconButton";
 import CallIcon from "@mui/icons-material/Call";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import MoreVertIcon from "@mui/icons-material/MoreVert";

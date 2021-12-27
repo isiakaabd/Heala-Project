@@ -18,6 +18,8 @@ import { medicationsRows } from "components/Utilities/tableData";
 import PreviousButton from "components/Utilities/PreviousButton";
 import displayPhoto from "assets/images/avatar.png";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getMedication } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -43,6 +45,13 @@ const Medications = (props) => {
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  const { loading, data } = useQuery(getMedication, {
+    variables: {
+      id: patientId,
+    },
+  });
+
+  console.log(data);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -51,7 +60,7 @@ const Medications = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-
+  if (loading) return <div>Loading</div>;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>

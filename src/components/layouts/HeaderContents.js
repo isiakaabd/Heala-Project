@@ -109,10 +109,9 @@ const CustomSubHeaderText = (props) => {
     scopedSubTitle,
     scopedMenu,
     scopedSubMenu,
-    data,
     titleColor = theme.palette.common.red,
   } = props;
-  console.log(data);
+
   return (
     <div className={classes.customSubHeaderWrapper}>
       <Typography variant="h3" style={{ color: theme.palette.common.grey }}>

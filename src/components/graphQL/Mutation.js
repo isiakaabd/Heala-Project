@@ -136,35 +136,6 @@ export const CREATE_MESSAGE = gql`
   }
 `;
 
-// mutation createMessage(
-//   $recipient:String!,
-//    $sender: String!,
-//     $subject:String!,
-//     $body:String!
-//     )
-//     {
-// createMessage(
-//   data: {
-//  recipient: $recipient,
-//  sender:  $sender,
-//  subject:  $subject,
-// body:  $body
-//   }
-// ) {
-//   messages {
-//   _id
-//   recipient
-//   subject
-//   sender
-//   createdAt
-//   updatedAt
-//   body
-//   }
-//   errors {
-//     field
-//     message
-//   }
-// }
 export const LOGOUT_USER = gql`
   mutation logout {
     logout
@@ -174,10 +145,19 @@ export const getNewAccessToken = gql`
   mutation refreshToken {
     refreshToken {
       account {
-        _id
-        dociId
-        email
-        isEmailVerified
+        access_token
+        refresh_token
+      }
+    }
+  }
+`;
+export const deleteProfile = gql`
+  mutation deleteProfile($id: String!) {
+    deleteProfile(data: { id: $id }) {
+      count
+      errors {
+        field
+        message
       }
     }
   }
