@@ -69,14 +69,14 @@ export const SubscriptionModal = ({
   });
 
   useEffect(() => {
-    if (single && single.data.getPlan) {
+    if (single.data && single.data.getPlan) {
       setSingleData({
         description: single.data.getPlan.description,
         name: single.data.getPlan.name,
         amount: single.data.getPlan.amount,
       });
     }
-  }, [single, setSingleData]);
+  }, [single.data, setSingleData]);
 
   const classes = useStyles();
 
@@ -102,7 +102,7 @@ export const SubscriptionModal = ({
       } catch (error) {
         console.log(error);
       }
-    } else {
+    } else if (type === "add") {
       try {
         await createPlan({
           variables: {
