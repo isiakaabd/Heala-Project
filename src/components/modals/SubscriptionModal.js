@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import FormLabel from "@mui/material/FormLabel";
-import TextField from "@mui/material/TextField";
-import { ReactComponent as Naira } from "assets/images/naira.svg";
-import FormControl from "@mui/material/FormControl";
+import React, { useEffect } from "react";
+
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
-import { useMutation } from "@apollo/client";
+import { getSinglePlan } from "components/graphQL/useQuery";
+import { useMutation, useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -51,16 +50,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const SubscriptionModal = ({ handleDialogClose, type, setAlert, editId }) => {
+export const SubscriptionModal = ({
+  handleDialogClose,
+  type,
+  setAlert,
+  editId,
+  setSingleData,
+  initialValues,
+  validationSchema,
+}) => {
   const [createPlan] = useMutation(CREATE_PLAN);
   const [updatePlan] = useMutation(UPDATE_PLAN);
 
+  const single = useQuery(getSinglePlan, {
+    variables: {
+      id: editId,
+    },
+  });
+
+  useEffect(() => {
+    if (single && single.data.getPlan) {
+      setSingleData({
+        description: single.data.getPlan.description,
+        name: single.data.getPlan.name,
+        amount: single.data.getPlan.amount,
+      });
+    }
+  }, [single, setSingleData]);
+
   const classes = useStyles();
-  const theme = useTheme();
-  const handleDialogCloses = async () => {
-    const { name, amount, description } = sub;
+
+  const onSubmit = async (values, onSubmitProps) => {
+    const { name, amount, description } = values;
     if (type === "edit") {
-      console.log(editId);
       try {
         await updatePlan({
           variables: {
@@ -108,98 +130,58 @@ export const SubscriptionModal = ({ handleDialogClose, type, setAlert, editId })
       }
     }
     handleDialogClose();
+    onSubmitProps.resetForm();
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSub({ ...sub, [name]: value });
-  };
-
-  const [sub, setSub] = useState({
-    name: "",
-    amount: "",
-    description: "",
-  });
-  const { name, amount, description } = sub;
   return (
-    <>
-      <Grid item container direction="column">
-        <Grid item container spacing={2}>
-          <Grid item xs={6} marginBottom={4}>
-            <Grid container direction="column" gap={1}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Name of plan
-              </FormLabel>
-              <FormControl fullWidth>
-                <TextField
-                  id="outlined-adornment-amount"
-                  name="name"
-                  value={name}
-                  placeholder="Enter Plan Name"
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid item xs={6}>
-            <Grid container direction="column" gap={1}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Amount
-              </FormLabel>
-              <FormControl fullWidth>
-                <TextField
-                  id="outlined-adornment-amount"
-                  placeholder="Enter Amount"
-                  onChange={handleChange}
-                  name="amount"
-                  value={amount}
-                  InputProps={{
-                    startAdornment: (
-                      <Naira
-                        style={{
-                          background: theme.palette.common.lightGreen,
-                          marginRight: "1rem",
-                          padding: ".6rem ",
-                          borderRadius: "3px",
-                        }}
-                      />
-                    ),
-                  }}
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2}>
-          <Grid item container direction="column" gap={1}>
-            <FormLabel component="legend" className={classes.FormLabel}>
-              Plan Description
-            </FormLabel>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              name="description"
-              value={description}
-              placeholder="Type Plan description"
-              rows={4}
-              style={{ width: "100%", height: "4%" }}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnMount
+    >
+      {(formik) => {
+        return (
+          <Form style={{ marginTop: "3rem" }}>
+            <Grid item container direction="column" gap={1}>
+              <Grid item container rowSpacing={3}>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    name="name"
+                    label="Name of plan"
+                    placeholder="Enter Plan Name"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    placeholder="Enter Amount"
+                    name="amount"
+                    label="Amount"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    placeholder="Enter your Description"
+                    name="description"
+                    label="Description"
+                  />
+                </Grid>
 
-      <Grid item container marginTop={8}>
-        <Button
-          variant="contained"
-          type="submit"
-          className={classes.btn}
-          onClick={handleDialogCloses}
-        >
-          Save Plan
-        </Button>
-      </Grid>
-    </>
+                <Grid item xs={12} marginTop={10}>
+                  <Button variant="contained" type="submit" className={classes.btn}>
+                    {type === "edit" ? "Save Plan" : "Add Plan"}
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
@@ -208,4 +190,8 @@ SubscriptionModal.propTypes = {
   setAlert: PropTypes.func,
   editId: PropTypes.string,
   type: PropTypes.string.isRequired,
+  edit: PropTypes.bool,
+  initialValues: PropTypes.object,
+  validationSchema: PropTypes.object,
+  setSingleData: PropTypes.func,
 };

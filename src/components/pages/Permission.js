@@ -152,9 +152,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   };
   const handleEditOpenDialog = async (id) => {
     setEditId(id);
-    // const { data, loading, error } = await FetchData(id);
-    // setEditDetails(data);
-
     setIsEdit(true);
   };
 
@@ -191,19 +188,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
 
   const { loading, data } = useQuery(getPermissions);
   const [deletPlan] = useMutation(DELETE_PERMISSION);
-  // provide a closure for  data fetching
-  // function FetchData(id) {
-  //   const { data, loading, error } = useQuery(getSinglePermissions, {
-  //     variables: {
-  //       id,
-  //     },
-  //   });
-  //   return {
-  //     data,
-  //     loading,
-  //     error,
-  //   };
-  // }
 
   useEffect(() => {
     setSelectedSubMenu(0);

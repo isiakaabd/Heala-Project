@@ -130,7 +130,7 @@ const PatientAppointment = (props) => {
       setAppointment(data.profile);
       // setPatientProfile(data.profiles.data);
     }
-  }, [data]);
+  }, [data, patientId]);
   console.log(appointment, loading);
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();

@@ -29,6 +29,15 @@ export const getPlans = gql`
     }
   }
 `;
+export const getSinglePlan = gql`
+  query getPlan($id: ID!) {
+    getPlan(id: $id) {
+      name
+      amount
+      description
+    }
+  }
+`;
 
 export const getMessage = gql`
   query getMessages {
@@ -130,6 +139,19 @@ export const getConsultation = gql`
       treatment
       createdAt
       updatedAt
+    }
+  }
+`;
+export const getMyEarnings = gql`
+  query getMyEarnings {
+    getMyEarnings {
+      data {
+        _id
+        doctor
+        balance
+        createdAt
+        updatedAt
+      }
     }
   }
 `;

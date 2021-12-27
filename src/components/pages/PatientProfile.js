@@ -96,7 +96,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
       setPatientProfile(data.profile);
       // setPatientProfile(data.profiles.data);
     }
-  }, [data]);
+  }, [data, patientId]);
 
   const onConfirm = async () => {
     try {

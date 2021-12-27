@@ -4,9 +4,9 @@ import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
 import { CREATE_PERMISSION, UPDATE_PERMISSION } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
-import FormikControl from "components/validation/FormikControl";
 import { useQuery } from "@apollo/client";
 import { getSinglePermissions } from "components/graphQL/useQuery";
 
@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const PermissionModal = ({
-  options,
   type,
   handleDialogClose,
   initialValues,
