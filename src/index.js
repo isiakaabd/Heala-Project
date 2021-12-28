@@ -15,7 +15,7 @@ import { getAccessToken } from "./accessToken";
 
 const httpLink = createHttpLink({
   // uri: "https://api-staging.heala.io",
-  uri: "http://heala-staging.us-east-1.elasticbeanstalk.com",
+  uri: "https://heala-staging.us-east-1.elasticbeanstalk.com",
   // credentials: "inc",
 });
 
