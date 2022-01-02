@@ -93,20 +93,24 @@ const Login = () => {
   });
 
   const onSubmit = async (values, onSubmitProps) => {
+    let isMounted = true;
+
     try {
       const { email, password, authType } = values;
-      const { data } = await loginInfo({ variables: { email, password, authType } });
-      if (data) {
-        setAccessToken(data.login.account.refresh_token);
-        history.push("/");
+      if (isMounted) {
+        const { data } = await loginInfo({ variables: { email, password, authType } });
+        if (data) {
+          setAccessToken(data.login.account.refresh_token);
+          history.push("/");
+        }
+        loginUser({
+          data: data,
+          messages: {
+            message: "Login sucessful",
+            type: "success",
+          },
+        });
       }
-      loginUser({
-        data: data,
-        messages: {
-          message: "Login sucessful",
-          type: "success",
-        },
-      });
     } catch (error) {
       loginFailue({
         message: error.message,
@@ -115,6 +119,7 @@ const Login = () => {
     }
 
     onSubmitProps.resetForm();
+    return () => (isMounted = false);
   };
   // if (isAuthenticated) {
   //   alert(11);
@@ -236,7 +241,7 @@ const Login = () => {
                           style={{ color: theme.palette.common.grey }}
                           paddingRight
                         >
-                          Dont have an account?{" "}
+                          Dont have an account?
                         </Typography>
                       </Grid>
                       <Grid item>
