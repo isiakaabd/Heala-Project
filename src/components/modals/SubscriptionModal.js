@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
@@ -191,7 +190,7 @@ SubscriptionModal.propTypes = {
   editId: PropTypes.string,
   type: PropTypes.string.isRequired,
   edit: PropTypes.bool,
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   validationSchema: PropTypes.object,
   setSingleData: PropTypes.func,
 };

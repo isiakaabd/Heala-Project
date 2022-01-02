@@ -14,7 +14,8 @@ import {
 import { getAccessToken } from "./accessToken";
 
 const httpLink = createHttpLink({
-  uri: "https://heala-staging.us-east-1.elasticbeanstalk.com",
+  uri: "http://api-staging.heala.io",
+  credentials: "include",
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
