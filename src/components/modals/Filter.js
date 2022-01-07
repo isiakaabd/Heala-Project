@@ -18,21 +18,18 @@ const useStyles = makeStyles((theme) => ({
 const Filter = (props) => {
   const classes = useStyles();
   const checkbox2 = [
-    { key: "select an option", value: " " },
     { key: "create", value: "create" },
     { key: "update", value: "update" },
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
   const checkbox5 = [
-    { key: "select an option", value: " " },
     { key: "create", value: "create" },
     { key: "update", value: "update" },
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
   const checkbox4 = [
-    { key: "select an option", value: " " },
     { key: "create", value: "create" },
     { key: "update", value: "update" },
     { key: "read", value: "read" },
@@ -68,19 +65,19 @@ const Filter = (props) => {
                 <Grid item xs={6}>
                   <FormikControl
                     control="select"
+                    options={options}
                     name={type === "hcp" ? "Name" : "Enter Value"}
                     placeholder="Select Name"
                     label="Name"
-                    options={options}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <FormikControl
                     control="select"
-                    placeholder="Choose Date"
-                    name={type === "hcp" ? "Date" : "Enter Value"}
-                    label={type === "hcp" ? "Choose Date" : "Enter Value"}
                     options={checkbox2}
+                    name={type === "hcp" ? "Date" : "Enter Value"}
+                    placeholder="Choose Date"
+                    label={type === "hcp" ? "Choose Date" : "Enter Value"}
                   />
                 </Grid>
               </Grid>
@@ -89,16 +86,16 @@ const Filter = (props) => {
                 <Grid item xs={6}>
                   <FormikControl
                     control="select"
-                    placeholder="jj"
+                    placeholder="Select Status"
                     name="Status"
-                    label={type === "hcp" ? "Select Category" : "Enter Value"}
+                    label={type === "hcp" ? "Select Status" : "Enter Value"}
                     options={checkbox4}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <FormikControl
                     control="select"
-                    placeholder="hhh"
+                    placeholder="Select Category"
                     name={type === "hcp" ? "Specialization" : "Enter Value"}
                     label={type === "hcp" ? "Select Category" : "Enter Value"}
                     options={checkbox5}

@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikControl from "components/validation/FormikControl";
 import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import FormLabel from "@mui/material/FormLabel";
 import Input from "@mui/material/Input";
-import FormControl from "@mui/material/FormControl";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
-import FormSelect from "components/Utilities/FormSelect";
-import FormInput from "components/Utilities/FormInput";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import CustomButton from "components/Utilities/CustomButton";
-import useFormInput from "components/hooks/useFormInput";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
@@ -145,9 +143,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const names = ["General Hospital, Lekki", "H-Medix", "X Lab"];
-const dates = ["Hello", "World", "Goodbye", "World"];
-const categories = ["Hospital", "Pharmacy", "Diagnostic Center"];
+// const names = ["General Hospital, Lekki", "H-Medix", "X Lab"];
+// const dates = ["Hello", "World", "Goodbye", "World"];
+// const categories = ["Hospital", "Pharmacy", "Diagnostic Center"];
 
 const Partners = () => {
   const classes = useStyles();
@@ -158,6 +156,36 @@ const Partners = () => {
     hover: theme.palette.primary.light,
     active: theme.palette.primary.dark,
   };
+  const initialValues = {
+    Name: "",
+    date: "",
+    category: "",
+  };
+  const initialValues1 = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    category: "",
+    image: "",
+  };
+
+  const validationSchema = Yup.object({
+    Name: Yup.string("Select your Name").required("Name is required"),
+    date: Yup.string("Date your hospital").required("Date is required"),
+    category: Yup.string("select your category").required("category is required"),
+  });
+  const validationSchema1 = Yup.object({
+    firstName: Yup.string("Enter your firstName").required("firstName is required"),
+    lastName: Yup.string("Enter your lastName").required("lastName is required"),
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    category: Yup.string("select your category").required("category is required"),
+  });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+  const onSubmit1 = (values) => {
+    console.log(values);
+  };
 
   const [searchPartner, setSearchPartner] = useState("");
   const [openFilterPartner, setOpenFilterPartner] = useState(false);
@@ -165,22 +193,17 @@ const Partners = () => {
   const [openDeletePartner, setOpenDeletePartner] = useState(false);
 
   // FILTER PARTNERS SELECT STATES
-  const [filterSelectInput, handleSelectedInput] = useFormInput({
-    hospitalName: "",
-    date: "",
-    categoryName: "",
-  });
 
   // ADD PARTNERS INPUT STATES
-  const [addPartnersFormInput, handleFormInput] = useFormInput({
-    firstName: "",
-    lastName: "",
-    email: "",
-    category: "",
-  });
 
-  const { firstName, lastName, email, category } = addPartnersFormInput;
-  const { hospitalName, date, categoryName } = filterSelectInput;
+  const specializations = [
+    { key: "Dentistry", value: "Dentistry" },
+    { key: "Pediatry", value: "Pediatry" },
+    { key: "Optometry", value: "Optometry" },
+    { key: "Pathology", value: "Pathology" },
+  ];
+
+  // const { hospitalName, date, categoryName } = filterSelectInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -294,175 +317,175 @@ const Partners = () => {
         rowSpacing={5}
         handleClose={() => setOpenFilterPartner(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Name
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    name="hospitalName"
-                    options={names}
-                    value={hospitalName}
-                    onChange={handleSelectedInput}
-                    placeholderText="Select name"
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item md>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Date
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    name="date"
-                    options={dates}
-                    value={date}
-                    onChange={handleSelectedInput}
-                    placeholderText="Choose Date"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
-          <Grid item md>
-            <FormLabel component="legend" className={classes.FormLabel}>
-              Category
-            </FormLabel>
-            <FormControl fullWidth>
-              <FormSelect
-                name="categoryName"
-                options={categories}
-                value={categoryName}
-                onChange={handleSelectedInput}
-                placeholderText="Select category"
-              />
-            </FormControl>
-          </Grid>
-          {/* Placeholder grid */}
-          <Grid item md></Grid>
-        </Grid>
-        <Grid item container xs={12}>
-          <Button
-            variant="contained"
-            onClick={() => setOpenFilterPartner(false)}
-            type="submit"
-            className={classes.searchFilterBtn}
-            disableRipple
-          >
-            Apply Filter
-          </Button>
-        </Grid>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column" gap={3}>
+                  <Grid item marginBottom={3}>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          name="Name"
+                          label="Name"
+                          placeholder="Select name"
+                        />
+                      </Grid>
+                      <Grid item md>
+                        <FormikControl
+                          control="select"
+                          options={specializations}
+                          name="date"
+                          label="Date"
+                          placeholder="Choose Date"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+                  <Grid item md>
+                    <FormikControl
+                      control="select"
+                      options={specializations}
+                      name="category"
+                      label="Category"
+                      placeholder="Select Category"
+                    />
+                  </Grid>
+                  {/* Placeholder grid */}
+                  <Grid item md></Grid>
+                </Grid>
+                <Grid item container xs={12}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenFilterPartner(false)}
+                    type="submit"
+                    className={classes.searchFilterBtn}
+                    disableRipple
+                  >
+                    Apply Filter
+                  </Button>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
 
       {/* ADD NEW PARTER MODAL */}
       <Modals
         isOpen={openAddPartner}
-        title="Add PATNERS"
+        title="Add Partners"
         rowSpacing={5}
         handleClose={() => setOpenAddPartner(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="First Name"
-                  labelId="firstName"
-                  id="firstName"
-                  name="firstName"
-                  value={firstName}
-                  onChange={handleFormInput}
-                  placeholder="Enter first name"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Last Name"
-                  labelId="lastName"
-                  id="lastName"
-                  name="lastName"
-                  value={lastName}
-                  onChange={handleFormInput}
-                  placeholder="Enter last name"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ margin: "3rem 0 0" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  type="email"
-                  label="Email"
-                  labelId="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleFormInput}
-                  placeholder="Enter email"
-                />
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
                   <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Category
-                    </FormLabel>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          label="First Name"
+                          labelId="firstName"
+                          id="firstName"
+                          name="firstName"
+                          placeholder="Enter first name"
+                        />
+                      </Grid>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          label="Last Name"
+                          labelId="lastName"
+                          id="lastName"
+                          name="lastName"
+                          placeholder="Enter last name"
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="category"
-                        options={categories}
-                        value={category}
-                        onChange={handleFormInput}
-                        placeholderText="Select category"
-                      />
-                    </FormControl>
+                  <Grid item style={{ margin: "3rem 0 0" }}>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          type="email"
+                          label="Email"
+                          labelId="email"
+                          id="email"
+                          name="email"
+                          placeholder="Enter email"
+                        />
+                      </Grid>
+                      <Grid item md>
+                        <Grid container direction="column">
+                          <FormikControl
+                            control="select"
+                            options={specializations}
+                            name="category"
+                            label="Category"
+                            placeholder="Select Category"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container direction="column">
-          <Grid item style={{ paddingBottom: ".5rem" }}>
-            <Typography variant="body1" gutterBottom>
-              Upload your logo
-            </Typography>
-          </Grid>
-          <Grid item>
-            <label htmlFor="contained-button-file">
-              <Input
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-                style={{ display: "none" }}
-              />
-              <Button variant="contained" component="span" className={classes.uploadBtn}>
-                Upload Photo
-              </Button>
-            </label>
-          </Grid>
-        </Grid>
-
-        <Grid item container>
-          <Button
-            variant="contained"
-            onClick={() => setOpenAddPartner(false)}
-            type="submit"
-            className={classes.searchFilterBtn}
-            disableRipple
-          >
-            Add Partner
-          </Button>
-        </Grid>
+                <Grid item container direction="column" marginBottom={4}>
+                  <Grid item style={{ paddingBottom: ".5rem" }}>
+                    <Typography variant="body1" gutterBottom>
+                      Upload your logo
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <label htmlFor="contained-button-file">
+                      <Input
+                        accept="image/*"
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        name="image"
+                        style={{ display: "none" }}
+                      />
+                      <Button variant="contained" component="span" className={classes.uploadBtn}>
+                        Upload Photo
+                      </Button>
+                    </label>
+                  </Grid>
+                </Grid>
+                <Grid item container marginTop={4}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenAddPartner(false)}
+                    type="submit"
+                    className={classes.searchFilterBtn}
+                    disableRipple
+                  >
+                    Add Partner
+                  </Button>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
       <DeletePartner
         open={openDeletePartner}

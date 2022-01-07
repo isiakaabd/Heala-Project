@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery } from "@apollo/client";
-import { getAppointment } from "components/graphQL/useQuery";
+import { getAllAppointment } from "components/graphQL/useQuery";
 import Avatar from "@mui/material/Avatar";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
@@ -23,7 +23,6 @@ import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.png";
-import { consultationsRows } from "components/Utilities/tableData";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PreviousButton from "components/Utilities/PreviousButton";
@@ -115,23 +114,16 @@ const PatientAppointment = (props) => {
   const handlePatientOpen = () => setIsPatient(true);
   const handlePatientClose = () => setIsPatient(false);
   const { patientId } = useParams();
-  const [appointment, setAppointment] = useState("");
-  console.log(patientId);
+  const [patientAppointment, setPatientAppointment] = useState([]);
 
-  const { loading, data } = useQuery(getAppointment, {
-    variables: {
-      id: patientId,
-    },
-  });
+  const { loading, data } = useQuery(getAllAppointment);
   useEffect(() => {
     if (data) {
-      //&& data.profile
-      console.log(data);
-      setAppointment(data.profile);
-      // setPatientProfile(data.profiles.data);
+      setPatientAppointment(data.getAppointments.data.filter((i) => i.patient == patientId));
     }
   }, [data, patientId]);
-  console.log(appointment, loading);
+
+  console.log(patientAppointment);
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const handleDeleteOpenDialog = () => {
@@ -153,6 +145,7 @@ const PatientAppointment = (props) => {
   const dates = ["Hello", "World", "Goodbye", "World"];
 
   const { date, plan, gender } = formInput;
+  if (loading) return <p>loading</p>;
   return (
     <>
       <Grid container direction="column">
@@ -184,15 +177,15 @@ const PatientAppointment = (props) => {
         <Grid item container>
           <EnhancedTable
             headCells={appointmentsHeadCells}
-            rows={consultationsRows}
+            rows={patientAppointment}
             page={page}
             paginationLabel="Patients per page"
             hasCheckbox={true}
           >
-            {consultationsRows
+            {patientAppointment
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
+                const isItemSelected = isSelected(row._id, selectedRows);
 
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -202,7 +195,7 @@ const PatientAppointment = (props) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row._id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -245,7 +238,7 @@ const PatientAppointment = (props) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      {row.description}
+                      {row.time}
                     </TableCell>
                     <TableCell align="center" className={classes.tableCell}>
                       <Button

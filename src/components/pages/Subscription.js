@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
+import Loader from "components/Utilities/Loader";
 import { Grid, Alert } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -224,7 +225,7 @@ const Subscription = () => {
     }
   }, [data]);
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
 
   const initialValues = {
     name: "",

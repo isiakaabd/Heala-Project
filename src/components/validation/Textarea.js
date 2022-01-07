@@ -3,7 +3,7 @@ import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
-import FormLabel from "@mui/material/FormLabel";
+import { FormLabel, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,11 +14,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     fontSize: "1.5rem",
-    padding: ".5rem 1rem",
+    // padding: ".5rem 1rem",
     border: "none",
-
     color: theme.palette.common.grey,
-
     "&:focus": {
       outline: "none",
     },
@@ -37,43 +35,57 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EmptyTextarea = (props) => {
-  const { name, value, onChange } = props;
+  console.log(props);
+  const { name, value, onChange, placeholder, onBlur } = props;
 
   const classes = useStyles();
   return (
-    <textarea
-      value={value}
-      onChange={onChange}
-      name={name}
-      //   rows={7}
-      style={{ height: "100%" }}
-      className={`${classes.formInput} ${classes.textArea}`}
-    />
+    <Grid container>
+      <TextField
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        name={name}
+        multiline
+        minRows={5}
+        placeholder={placeholder}
+        style={{ height: "100%" }}
+        className={`${classes.formInput} ${classes.textArea}`}
+      />
+      <div>
+        <ErrorMessage name={name} component={TextError} />
+      </div>
+    </Grid>
   );
 };
 EmptyTextarea.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  field: PropTypes.string,
+  onBlur: PropTypes.func,
+  placeholder: PropTypes.string,
   value: PropTypes.string,
 };
-const Textarea = (props) => {
-  const { label, name, ...rest } = props;
+const Textarea = ({ label, name, fLabel, placeholder, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <Grid container direction="column" gap={1} sx={{ height: "100% !important" }}>
-      <FormLabel component="legend" className={classes.FormLabel}>
-        {label}
-      </FormLabel>
-      <Field id={name} name={name} as={EmptyTextarea} {...rest} />
-      <ErrorMessage name={name} component={TextError} />
-    </Grid>
+    <>
+      <Grid container direction="column" gap={1} sx={{ height: "100% !important" }}>
+        {!fLabel ? (
+          <FormLabel component="legend" className={classes.FormLabel}>
+            {label}
+          </FormLabel>
+        ) : null}
+        <Field id={name} name={name} as={EmptyTextarea} placeholder={placeholder} {...rest} />
+      </Grid>
+    </>
   );
 };
 Textarea.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
   name: PropTypes.string.isRequired,
+  fLabel: PropTypes.bool,
 };
 
 export default Textarea;

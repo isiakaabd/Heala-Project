@@ -5,8 +5,7 @@ import Checkbox from "./Checkbox";
 import Textarea from "./Textarea";
 import PropTypes from "prop-types";
 
-const FormikControl = (props) => {
-  const { control, ...rest } = props;
+const FormikControl = ({ control, ...rest }) => {
   switch (control) {
     case "input":
       return <Input {...rest} />;

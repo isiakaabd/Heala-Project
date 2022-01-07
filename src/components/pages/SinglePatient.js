@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography } from "@mui/material";
+import Modals from "components/Utilities/Modal";
 import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
@@ -133,10 +133,18 @@ const SinglePatient = (props) => {
     hover: theme.palette.success.light,
     active: theme.palette.success.dark,
   };
+  const initialValues = {
+    referral: "",
+    category: "",
+    textarea: "",
+  };
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
-  const [openReferPatient, setOpenReferPatient] = useState(false);
 
+  const handleDialogOpen = () => setIsOpen(true);
+
+  const handleDialogClose = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
@@ -179,7 +187,7 @@ const SinglePatient = (props) => {
                 endIcon={<TrendingUpIcon />}
                 title="Refer Patient"
                 type={greenButton}
-                onClick={() => setOpenReferPatient(true)}
+                onClick={handleDialogOpen}
               />
             </Grid>
           </Grid>
@@ -231,7 +239,9 @@ const SinglePatient = (props) => {
         onConfirm={() => console.log("confirmed")}
         confirmationMsg="disable Patient"
       />
-      <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
+      <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
+        <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
+      </Modals>
     </Grid>
   );
 };

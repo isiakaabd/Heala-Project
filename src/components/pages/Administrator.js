@@ -171,9 +171,9 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const [referral, setReferral] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const handleAdminClose = () => setIsAdmin(false);
   const handleDialogOpen = () => setIsOpen(true);
   const handleAdminOpen = () => setIsAdmin(true);
-  const handleAdminClose = () => setIsAdmin(false);
   const handleDialogClose = () => setIsOpen(false);
 
   useEffect(() => {

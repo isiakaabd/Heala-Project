@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import Loader from "components/Utilities/Loader";
+import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -94,9 +96,17 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
-      // setPatientProfile(data.profiles.data);
     }
   }, [data, patientId]);
+  const handleDialogOpen = () => setIsOpen(true);
+  const initialValues = {
+    referral: "",
+    category: "",
+    textarea: "",
+  };
+
+  const handleDialogClose = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onConfirm = async () => {
     try {
@@ -107,7 +117,6 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     }
   };
 
-  const [openReferPatient, setOpenReferPatient] = useState(false);
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
   const greenButton = {
     background: theme.palette.success.main,
@@ -126,7 +135,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
   if (patientProfile) {
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -259,10 +268,14 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
               endIcon={<TrendingUpIcon />}
               title="Refer Patient"
               type={greenButton}
-              onClick={() => setOpenReferPatient(true)}
+              onClick={handleDialogOpen}
             />
           </Grid>
-          <ReferPatient open={openReferPatient} setOpen={setOpenReferPatient} />
+
+          <Modals isOpen={isOpen} title="Add Admin" handleClose={handleDialogClose}>
+            <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
+          </Modals>
+
           <DisablePatient
             open={openDisablePatient}
             setOpen={setOpenDisablePatient}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Loader from "components/Utilities/Loader";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -120,12 +121,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   const [searchPatient, setSearchPatient] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  console.log(profiles);
-
   const handleDialogOpen = () => setIsOpen(true);
   const handleDialogClose = () => setIsOpen(false);
 
-  if (patient.loading) return <div>loading</div>;
+  if (patient.loading) return <Loader />;
   if (profiles) {
     return (
       <>
