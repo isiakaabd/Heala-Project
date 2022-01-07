@@ -162,3 +162,34 @@ export const deleteProfile = gql`
     }
   }
 `;
+export const createRole = gql`
+  mutation createRole(
+    $name: String!
+    $editable: Boolean!
+    $description: String!
+    $permissions: [String!]
+  ) {
+    createRole(
+      data: {
+        name: $name
+        editable: $editable
+        description: $description
+        permissions: $permissions
+      }
+    ) {
+      role {
+        _id
+        name
+        permissions
+        editable
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

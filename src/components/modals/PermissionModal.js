@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme) => ({
 
 export const PermissionModal = ({
   type,
-  handleDialogClose,
   initialValues,
   validationSchema,
   setAlert,
+  handleDialogClose,
   editId,
   setSinglePermission,
 }) => {
@@ -95,8 +95,7 @@ export const PermissionModal = ({
       }
     } else if (type === "edit") {
       try {
-        const { data } = await updatePermission({ variables: { id: editId, description, name } });
-        console.log(data);
+        await updatePermission({ variables: { id: editId, description, name } });
         setAlert({
           message: "Permission successfully updated",
           type: "success",
@@ -152,14 +151,7 @@ export const PermissionModal = ({
                     placeholder="Enter Description"
                   />
                 </Grid>
-                {/* <Grid item container>
-                  <FormikControl
-                    control="checkbox"
-                    name="checkbox"
-                    options={options}
-                    label="Permission"
-                  />
-                </Grid> */}
+
                 <Grid item xs={12} marginTop={10}>
                   <Button
                     variant="contained"

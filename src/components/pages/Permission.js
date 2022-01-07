@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Loader from "components/Utilities/Loader";
 import * as Yup from "yup";
 import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
@@ -142,6 +143,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
+  const handleEditCloseDialog = useCallback(() => {
+    setIsEdit(false);
+  }, []);
   const [editDetails] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const handleDialogOpen = () => setIsOpen(true);
@@ -155,9 +159,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
     setIsEdit(true);
   };
 
-  const handleEditCloseDialog = useCallback(() => {
-    setIsEdit(false);
-  }, []);
   const onConfirm = async () => {
     try {
       const { data } = await deletPlan({ variables: { id: deleteId } });
@@ -201,7 +202,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
     }
   }, [permission, data]);
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
 
   return (
     <>

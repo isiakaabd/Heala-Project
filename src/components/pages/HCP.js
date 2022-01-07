@@ -115,10 +115,10 @@ const HCP = ({ setSelectedSubMenu }) => {
   };
 
   const initialValues = {
-    Name: " ",
-    Date: " ",
-    Specialization: " ",
-    Status: " ",
+    Name: "",
+    Date: "",
+    Specialization: "",
+    Status: "",
   };
 
   useEffect(() => {

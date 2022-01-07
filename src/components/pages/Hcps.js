@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -8,12 +11,8 @@ import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
-import FormSelect from "components/Utilities/FormSelect";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import FormInput from "components/Utilities/FormInput";
 import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -29,12 +28,15 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import useFormInput from "components/hooks/useFormInput";
 
-const dates = ["Hello", "World", "Goodbye", "World"];
-const specializations = ["Dentistry", "Pediatry", "Optometry", "Pathology"];
-const hospitals = ["General Hospital, Lekki", "H-Medix", "X Lab"];
-const statusType = ["Active", "Blocked"];
+const specializations = [
+  { key: "Dentistry", value: "Dentistry" },
+  { key: "Pediatry", value: "Pediatry" },
+  { key: "Optometry", value: "Optometry" },
+  { key: "Pathology", value: "Pathology" },
+];
+
+// const statusType = ["Active", "Blocked"];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -126,26 +128,48 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [openHcpFilter, setOpenHcpFilter] = useState(false);
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
-  // FIltering modals select states
-  const [selectedInput, handleSelectedInput] = useFormInput({
-    date: "",
-    specialization: "",
-    hospital: "",
-    status: "",
-  });
-
-  // Add new HCP modals input state
-  const [formInput, handleFormInput] = useFormInput({
+  const initialValues = {
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     specialization: "",
     hospital: "",
-  });
+    affliate: "",
+    image: "",
+    plan: "",
+  };
 
-  const { date, specialization, hospital, status } = selectedInput;
-  const { firstName, lastName, email, phoneNumber, hcpSpecialization } = formInput;
+  const validationSchema = Yup.object({
+    affliate: Yup.string("Enter your affliate").required("affliate is required"),
+    plan: Yup.string("Select your plan").required("plan is required"),
+    hospital: Yup.string("Enter your hospital").required("hospital is required"),
+    firstName: Yup.string("Enter your firstName").required("firstName is required"),
+    lastName: Yup.string("Enter your lastName").required("lastName is required"),
+    specialization: Yup.string("Enter your specialization").required("specialization is required"),
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    phoneNumber: Yup.number("Enter a valid email").required("phone Number is required"),
+  });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+  const onSubmit1 = (values) => {
+    console.log(values);
+  };
+
+  // FIltering modals select state
+  const initialValues1 = {
+    Fspecialization: "",
+    Date: "",
+    status: "",
+    hospital: "",
+  };
+  const validationSchema1 = Yup.object({
+    Date: Yup.string("Enter your Date").required("Date is required"),
+    status: Yup.string("Select your status").required("status is required"),
+    hospital: Yup.string("Enter your hospital").required("hospital is required"),
+    Fspecialization: Yup.string("Enter your specialization").required("specialization is required"),
+  });
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -294,106 +318,68 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         rowSpacing={5}
         handleClose={() => setOpenHcpFilter(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Date
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="date"
-                        options={dates}
-                        value={date}
-                        onChange={handleSelectedInput}
-                        placeholderText="Choose Date"
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column" gap={1}>
+                  <Grid item container rowSpacing={3}>
+                    <Grid item container>
+                      <FormikControl
+                        control="input"
+                        name="Date"
+                        label="Date"
+                        placeholder="Choose Date"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Specialization
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="specialization"
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="select"
                         options={specializations}
-                        value={specialization}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select Specialization"
+                        name="Fspecialization"
+                        label="Specialization"
+                        placeholder="Select Specialization"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Hospital
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="select"
                         name="hospital"
-                        options={hospitals}
-                        value={hospital}
-                        onChange={handleSelectedInput}
-                        placeholderText="Choose hospital"
+                        options={specializations}
+                        label="Hospital"
+                        placeholder="Choose hospital"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Status
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="input"
                         name="status"
-                        options={statusType}
-                        value={status}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select Status"
+                        label="Select Status"
+                        placeholder="Choose hospital"
                       />
-                    </FormControl>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={() => setOpenHcpFilter(false)}
-              type="submit"
-              className={classes.searchFilterBtn}
-            >
-              Apply Filter
-            </Button>
-          </Grid>
-        </Grid>
+                <Grid item marginTop={3}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenHcpFilter(false)}
+                    type="submit"
+                    className={classes.searchFilterBtn}
+                  >
+                    Apply Filter
+                  </Button>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
       {/* ADD HCP MODAL */}
       <Modals
@@ -404,151 +390,147 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         handleClose={() => setOpenAddHcp(false)}
       >
         <>
-          <Grid item container direction="column">
-            <Grid item>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <FormInput
-                    label="First Name"
-                    labelId="firstName"
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    onChange={handleFormInput}
-                    placeholder="Enter first name"
-                  />
-                </Grid>
-                <Grid item md>
-                  <FormInput
-                    label="Last Name"
-                    labelId="lastName"
-                    id="lastName"
-                    name="lastName"
-                    value={lastName}
-                    onChange={handleFormInput}
-                    placeholder="Enter last name"
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item style={{ margin: "3rem 0" }}>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <FormInput
-                    type="email"
-                    label="Email"
-                    labelId="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={handleFormInput}
-                    placeholder="Enter email"
-                  />
-                </Grid>
-                <Grid item md>
-                  <FormInput
-                    label="Phone Number"
-                    labelId="phoneNumber"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={phoneNumber}
-                    onChange={handleFormInput}
-                    placeholder="Enter phone number"
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <FormInput
-                    label="Specialization"
-                    labelId="hcpSpecialization"
-                    id="hcpSpecialization"
-                    name="hcpSpecialization"
-                    value={hcpSpecialization}
-                    onChange={handleFormInput}
-                    placeholder="Enter specialization"
-                  />
-                </Grid>
-                <Grid item md>
-                  <Grid container direction="column" gap={1}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            validateOnChange={false}
+            validateOnMount
+          >
+            {(formik) => {
+              return (
+                <Form style={{ marginTop: "3rem" }}>
+                  <Grid item container direction="column">
                     <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Select Affliate
-                      </FormLabel>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="First Name"
+                            labelId="firstName"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="Enter first name"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="Last Name"
+                            labelId="lastName"
+                            id="lastName"
+                            name="lastName"
+                            placeholder="Enter last name"
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="Affliate"
-                        options={specializations}
-                        value={specialization}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select Affliate"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid item style={{ margin: "3rem 0" }}>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <Grid container direction="column" gap={1}>
+                    <Grid item style={{ margin: "3rem 0" }}>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            type="email"
+                            label="Email"
+                            labelId="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter email"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="Phone Number"
+                            labelId="phoneNumber"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            placeholder="Enter phone number"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
                     <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Plan
-                      </FormLabel>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            options={specializations}
+                            control="select"
+                            label="Plan"
+                            name="plan"
+                            placeholder="Select Plan"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            options={specializations}
+                            control="select"
+                            label=" Affliate"
+                            labelId="Affliate"
+                            name="affliate"
+                            placeholder="Select Affliate"
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="Affliate"
-                        options={specializations}
-                        value={specialization}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select plan"
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Grid item md display="flex" alignItems="center">
-                  <Grid
-                    container
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={1}
-                  >
-                    <label htmlFor="contained-button-file">
-                      <Input
-                        accept="image/*"
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        style={{ display: "none" }}
-                      />
-                      <Button variant="contained" component="span" className={classes.uploadBtn}>
-                        Upload Photo
-                      </Button>
-                    </label>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
 
-          <Grid item container xs={12}>
-            <Button
-              variant="contained"
-              onClick={() => setOpenAddHcp(false)}
-              type="submit"
-              className={classes.searchFilterBtn}
-              disableRipple
-            >
-              Add HCP
-            </Button>
-          </Grid>
+                    <Grid item style={{ margin: "3rem 0" }}>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="Specialization"
+                            labelId="specialization"
+                            id="specialization"
+                            name="specialization"
+                            placeholder="Enter specialization"
+                          />
+                        </Grid>
+                        <Grid item md display="flex" alignItems="center">
+                          <Grid
+                            container
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+                            gap={1}
+                          >
+                            <label htmlFor="contained-button-file">
+                              <Input
+                                accept="image/*"
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                                name="image"
+                                style={{ display: "none" }}
+                              />
+                              <Button
+                                variant="contained"
+                                component="span"
+                                className={classes.uploadBtn}
+                              >
+                                Upload Photo
+                              </Button>
+                            </label>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => setOpenAddHcp(false)}
+                      type="submit"
+                      className={classes.searchFilterBtn}
+                      disableRipple
+                    >
+                      Add HCP
+                    </Button>
+                  </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
         </>
       </Modals>
     </Grid>

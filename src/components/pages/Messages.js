@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
+import Loader from "components/Utilities/Loader";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import Search from "components/Utilities/Search";
@@ -136,7 +137,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
   return (
     <Grid container direction="column">
       <Grid item container>

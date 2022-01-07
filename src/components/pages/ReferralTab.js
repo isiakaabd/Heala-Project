@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Loader from "components/Utilities/Loader";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
@@ -92,7 +93,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
       setReferral(data.getReferrals.referral);
     }
   }, [referral, data]);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
   return (
     <Grid container direction="column">
       <Grid item container>

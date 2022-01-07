@@ -7,7 +7,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
-// import { useTheme } from "@mui/material/styles";
+
 import { makeStyles } from "@mui/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
@@ -76,7 +76,6 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     recipient: "",
     textarea: "",
   };
-  console.log(initialValues);
 
   const validationSchema = Yup.object({
     subject: Yup.string("Enter your subject").required("Subject is required"),
@@ -175,7 +174,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     <Grid container direction="column">
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
-                          Message:{" "}
+                          Message:
                         </Typography>
                       </Grid>
                       <Grid item style={{ height: "15rem" }}>
@@ -184,10 +183,11 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                           id="textarea"
                           name="textarea"
                           variant="standard"
+                          fLabel={true}
                         />
                       </Grid>
                     </Grid>
-                    <Divider className={classes.divider} />
+                    {/* <Divider className={classes.divider} /> */}
                   </Grid>
                   <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton

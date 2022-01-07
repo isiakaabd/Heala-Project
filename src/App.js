@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
+import Loader from "components/Utilities/Loader";
 import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
@@ -52,7 +53,7 @@ const App = () => {
           {!isAuthenticated && (
             <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
           )}
-          {isAuthenticated && !chatMediaActive && state && <div>loading</div>}
+          {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
           {isAuthenticated && !chatMediaActive && !state && (
             <>
               <Header

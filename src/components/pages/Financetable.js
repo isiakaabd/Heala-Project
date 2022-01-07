@@ -18,6 +18,7 @@ import { isSelected } from "helpers/isSelected";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useQuery } from "@apollo/client";
 import { getMyEarnings } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -97,7 +98,7 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     setSelectedSubMenu(9);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
   if (earning) {
     return (
       <Grid container direction="column" rowSpacing={2}>

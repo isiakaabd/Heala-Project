@@ -216,6 +216,21 @@ export const getAppointment = gql`
     }
   }
 `;
+export const getAllAppointment = gql`
+  query getAppointments {
+    getAppointments {
+      data {
+        _id
+        doctor
+        patient
+        date
+        time
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 export const getMyConsultation = gql`
   query getMyConsultations {
