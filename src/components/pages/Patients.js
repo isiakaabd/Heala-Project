@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
+import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import FormSelect from "components/Utilities/FormSelect";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -25,15 +25,24 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import useFormInput from "components/hooks/useFormInput";
 import { useQuery } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
 
-const referralOptions = ["Hello", "World", "Goodbye", "World"];
-
-const plans = ["Plan 1", "Plan 2", "Plan 3", "Plan 4"];
-const genderType = ["Male", "Female", "Prefer not to say"];
-const statusType = ["Active", "Blocked"];
+const genderType = [
+  { key: "Male", value: "Male" },
+  { key: "Female", value: "Female" },
+  { key: "Prefer not to say", value: "Prefer not to say" },
+];
+const plans = [
+  { key: "Plan 1", value: "Plan 1" },
+  { key: "Plan 2", value: "Plan 2" },
+  { key: "Plan 3", value: "Plan 3" },
+  { key: "Plan 4", value: "Plan 4" },
+];
+const statusType = [
+  { key: "Active", value: "Active" },
+  { key: "Blocked", value: "Blocked" },
+];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -101,20 +110,28 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const theme = useTheme();
   const patient = useQuery(getPatients);
 
-  const [inputValue, handleInputValue] = useFormInput({
-    date: "",
+  const initialValues = {
+    hospital: "",
     plan: "",
+    specialization: "",
     gender: "",
-    status: "",
+  };
+
+  const validationSchema = Yup.object({
+    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
+    status: Yup.string("Select your status").required("Status is required"),
+    gender: Yup.string("Select your gender").required("Gender is required"),
+    specialization: Yup.string("Enter your specialization").required("Specialization is required"),
   });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   const [profiles, setProfiles] = useState(undefined);
   useEffect(() => {
     if (patient.data && patient.data.profiles.data) {
       setProfiles(patient.data.profiles.data);
     }
   }, [patient.data]);
-
-  const { date, plan, gender, status } = inputValue;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -155,9 +172,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id, selectedRows);
-
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -250,106 +265,76 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
           </Grid>
         </Grid>
         <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-          <Grid item container direction="column">
-            <Grid item>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <Grid container direction="column">
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            validateOnChange={false}
+            validateOnMount
+            validateOnBlur
+          >
+            {(formik) => {
+              return (
+                <Form style={{ marginTop: "3rem" }}>
+                  <Grid item container direction="column">
                     <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Date
-                      </FormLabel>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            name="hospital"
+                            label="Hospital"
+                            placeholder="Enter hospital"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="select"
+                            options={plans}
+                            name="plan"
+                            label="Plan"
+                            placeholder="Select plan"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="select"
+                            options={genderType}
+                            name="gender"
+                            label="Gender"
+                            placeholder="Choose gender"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="select"
+                            options={statusType}
+                            name="specialization"
+                            label="Specialization"
+                            placeholder="Select Specialization"
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid item>
-                      <FormControl fullWidth>
-                        <FormSelect
-                          name="date"
-                          options={referralOptions}
-                          value={date}
-                          onChange={handleInputValue}
-                          placeholderText="Choose Date"
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item md>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Specialization
-                      </FormLabel>
-                    </Grid>
-                    <Grid item>
-                      <FormControl fullWidth>
-                        <FormSelect
-                          name="plan"
-                          options={plans}
-                          value={plan}
-                          onChange={handleInputValue}
-                          placeholderText="Select plan"
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-              <Grid container spacing={2}>
-                <Grid item md>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Hospital
-                      </FormLabel>
-                    </Grid>
-                    <Grid item>
-                      <FormControl fullWidth style={{ height: "3rem" }}>
-                        <FormSelect
-                          name="gender"
-                          options={genderType}
-                          value={gender}
-                          onChange={handleInputValue}
-                          placeholderText="Choose gender"
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item md>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <FormLabel component="legend" className={classes.FormLabel}>
-                        Status
-                      </FormLabel>
-                    </Grid>
-                    <Grid item>
-                      <FormControl fullWidth style={{ height: "3rem" }}>
-                        <FormSelect
-                          name="status"
-                          options={statusType}
-                          value={status}
-                          onChange={handleInputValue}
-                          placeholderText="Select Status"
-                        />
-                      </FormControl>
+                      <Button
+                        variant="contained"
+                        onClick={handleDialogClose}
+                        type="submit"
+                        className={classes.searchFilterBtn}
+                      >
+                        Apply Filter
+                      </Button>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                onClick={handleDialogClose}
-                type="submit"
-                className={classes.searchFilterBtn}
-              >
-                Apply Filter
-              </Button>
-            </Grid>
-          </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
         </Modals>
       </>
     );

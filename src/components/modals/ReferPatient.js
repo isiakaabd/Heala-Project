@@ -1,8 +1,8 @@
 import React from "react";
-import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 
@@ -102,12 +102,12 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
                     label="Referral comment"
                   />
                 </Grid>
-                <Grid item xs={12} marginTop={10}>
+                <Grid item xs={12} marginTop={5}>
                   <Button
                     variant="contained"
                     type="submit"
                     className={classes.searchFilterBtn}
-                    disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
+                    // disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
                   >
                     Search available HCP
                   </Button>

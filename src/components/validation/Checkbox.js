@@ -1,77 +1,63 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import PropTypes from "prop-types";
+// import { CheckboxWithLabel } from "formik-material-ui";
+import { FormLabel, FormControl, Box, FormGroup, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import PropTypes from "prop-types";
+import { CheckboxWithLabel } from "formik-mui";
 
 const useStyles = makeStyles((theme) => ({
-  checkboxContainer: {
-    "&.MuiBox-root": {
-      padding: "2rem 0",
-      border: "1px solid #E0E0E0",
-      borderRadius: ".4rem",
-      // "&:active": {
-      //   border: "2px solid black",
-      // },
-    },
-  },
   label: {
     ...theme.typography.FormLabel,
   },
-  checkbox: {
-    height: "2rem",
-    width: "2rem",
-    "&:checked": {
-      color: "green !important",
+  checkboxContainer: {
+    "&.MuiBox-root": {
+      display: "flex",
+      justifyContent: "center",
+      width: "100%",
+      padding: "2rem 0",
+      border: "1px solid #E0E0E0",
+      borderRadius: ".4rem",
+      "&:active": {
+        border: "2px solid black",
+      },
     },
   },
 }));
-const Checkbox = (props) => {
+const Checkboxs = ({ name, options, formlabel }) => {
   const classes = useStyles();
-  const { label, name, options, ...rest } = props;
   return (
-    <Grid container direction="column" gap={1}>
-      <FormLabel component="legend" className={classes.checkboxContainer}>
-        {label}
-      </FormLabel>
+    <Grid container gap={1}>
+      <Grid item>
+        <FormLabel component="legend" className={classes.label}>
+          {formlabel}
+        </FormLabel>
+      </Grid>
       <Box className={classes.checkboxContainer}>
-        <FormControl sx={{ m: 4 }} variant="standard">
-          <Grid container spacing={2}>
-            <Field name={name} {...rest}>
-              {({ field }) => {
-                return options.map((option, index) => {
-                  return (
-                    <Grid item key={index} display="flex" columnGap={2}>
-                      <input
-                        type="checkbox"
-                        className={classes.checkbox}
-                        {...field}
-                        value={option.value}
-                        checked={field.value.includes(option.value)}
-                      />
-                      <label htmlFor={option.value} className={classes.label}>
-                        {option.key}
-                      </label>
-                    </Grid>
-                  );
-                });
-              }}
-            </Field>
-          </Grid>
+        <FormControl component="fieldset">
+          <FormGroup className={classes.FormGroup} sx={{ flexDirection: "initial" }}>
+            {options.map((opt) => (
+              <Field
+                type="checkbox"
+                component={CheckboxWithLabel}
+                name={name}
+                key={opt.value}
+                value={opt.value}
+                Label={{ label: opt.label }}
+              />
+            ))}
+          </FormGroup>
         </FormControl>
       </Box>
       <ErrorMessage name={name} component={TextError} />
     </Grid>
   );
 };
-
-Checkbox.propTypes = {
-  label: PropTypes.string.isRequired,
+export default Checkboxs;
+Checkboxs.propTypes = {
   name: PropTypes.string.isRequired,
+  formlabel: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
 };
-export default Checkbox;

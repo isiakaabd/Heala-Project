@@ -124,7 +124,6 @@ export const muiTheme = createTheme({
       color: dark,
     },
     input: {
-      // ...theme
       width: "100%",
       height: "5rem",
       border: "1px solid lightGrey",
@@ -134,13 +133,9 @@ export const muiTheme = createTheme({
       color: dark,
       fontWeight: 600,
 
-      "&:focus": {
-        outline: "none",
-      },
-
       "&::placeholder": {
         color: lightGrey,
-        fontWeight: 500,
+        fontWeight: "500 !important",
       },
     },
   },

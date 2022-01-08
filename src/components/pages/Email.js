@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import FormLabel from "@mui/material/FormLabel";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
@@ -15,7 +17,6 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
 import { useTheme } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
 import { rows } from "components/Utilities/DataHeader";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import Chip from "@mui/material/Chip";
@@ -25,10 +26,27 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
-import FormSelect from "components/Utilities/FormSelect";
 import Alert from "@mui/material/Alert";
 import { Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+
+const genderType = [
+  { key: "Male", value: "Male" },
+  { key: "Female", value: "Female" },
+  { key: "Prefer not to say", value: "Prefer not to say" },
+];
+const plans = [
+  { key: "Plan 1", value: "Plan 1" },
+  { key: "Plan 2", value: "Plan 2" },
+  { key: "Plan 3", value: "Plan 3" },
+  { key: "Plan 4", value: "Plan 4" },
+];
+const plans1 = [
+  { key: "Plan 1", value: "Plan 1" },
+  { key: "Plan 2", value: "Plan 2" },
+  { key: "Plan 3", value: "Plan 3" },
+  { key: "Plan 4", value: "Plan 4" },
+];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -104,8 +122,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const referralOptions = ["Hello", "World", "Goodbye", "World"];
-
 const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -113,11 +129,6 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const [response, setResponse] = useState("");
-  const [state, setstate] = useState({
-    referral: "Hello",
-    date: "Goodbye",
-    category: "World",
-  });
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   useEffect(() => {
@@ -135,13 +146,20 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  //
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setstate({ ...state, [name]: value });
+  const initialValues = {
+    referral: "",
+    date: "",
+    category: "",
   };
-  const { referral, category, date } = state;
+
+  const validationSchema = Yup.object({
+    category: Yup.string("Select your category").required("Category is required"),
+    referral: Yup.string("Select your referral").required("Refferal is required"),
+    date: Yup.string("Select date").required("Date is required"),
+  });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
 
   useEffect(() => {
     setSelectedMenu(6);
@@ -324,70 +342,65 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Grid item container direction="column">
-          <Grid item container spacing={2}>
-            <Grid item xs={6} marginBottom={4}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Name
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    name="referral"
-                    onChange={handleChange}
-                    placeholderText="Select Name"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-            {/* second grid */}
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Date
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={date}
-                    name="date"
-                    onChange={handleChange}
-                    placeholderText="Choose Date"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container spacing={2}>
-            <Grid item container gap={1} xs={6}>
-              <FormLabel component="legend" className={classes.FormLabel}>
-                Category
-              </FormLabel>
-              <FormControl fullWidth style={{ height: "3rem" }}>
-                <FormSelect
-                  options={referralOptions}
-                  value={category}
-                  name="category"
-                  placeholderText="Save Category"
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container xs={12} marginTop={20}>
-          <Button
-            variant="contained"
-            onClick={handleDialogClose}
-            to="/view"
-            type="submit"
-            className={classes.btn}
-          >
-            Apply Filter
-          </Button>
-        </Grid>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
+                  <Grid item container spacing={2}>
+                    <Grid item xs={6} marginBottom={4}>
+                      <FormikControl
+                        control="input"
+                        name="referral"
+                        options={genderType}
+                        label="Name"
+                        placeholder="Select Name"
+                      />
+                    </Grid>
+                    {/* second grid */}
+                    <Grid item xs={6}>
+                      <FormikControl
+                        control="select"
+                        name="date"
+                        options={plans}
+                        label="Date"
+                        placeholder="Choose Date"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item container spacing={2}>
+                    <Grid item container gap={1} xs={6}>
+                      <FormikControl
+                        control="select"
+                        name="category"
+                        options={plans1}
+                        label="Category"
+                        placeholder="Save Category"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item container xs={12} marginTop={20}>
+                  <Button
+                    variant="contained"
+                    onClick={handleDialogClose}
+                    to="/view"
+                    type="submit"
+                    className={classes.btn}
+                  >
+                    Apply Filter
+                  </Button>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
     </>
   );

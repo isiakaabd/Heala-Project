@@ -136,6 +136,8 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
       validateOnMount
     >
       {(formik) => {
+        console.log(formik);
+
         return (
           <Form>
             <Grid container direction="column">
@@ -166,7 +168,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                               <ChipWrapper>
                                 <ChipInput
                                   fullWidth
-                                  {...field}
+                                  // {...field}
                                   name="name"
                                   id="name"
                                   value={value}
@@ -174,8 +176,6 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                                     padding: "1.2rem",
                                   }}
                                   disableUnderline
-                                  // alwaysShowPlaceholder={true}
-                                  // placeholder="Enter your recipient's email"
                                   onAdd={(newVal) => {
                                     const newArr = [...value, newVal];
                                     if (isEvent(newArr)) {

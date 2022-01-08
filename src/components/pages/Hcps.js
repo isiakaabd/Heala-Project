@@ -141,14 +141,14 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   };
 
   const validationSchema = Yup.object({
-    affliate: Yup.string("Enter your affliate").required("affliate is required"),
-    plan: Yup.string("Select your plan").required("plan is required"),
-    hospital: Yup.string("Enter your hospital").required("hospital is required"),
-    firstName: Yup.string("Enter your firstName").required("firstName is required"),
-    lastName: Yup.string("Enter your lastName").required("lastName is required"),
-    specialization: Yup.string("Enter your specialization").required("specialization is required"),
+    affliate: Yup.string("Enter your affliate").required("Affliate is required"),
+    plan: Yup.string("Select your plan").required("Hlan is required"),
+    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
+    firstName: Yup.string("Enter your first Name").required("First name is required"),
+    lastName: Yup.string("Enter your last Name").required("Last name is required"),
+    specialization: Yup.string("Enter your specialization").required("Specialization is required"),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
-    phoneNumber: Yup.number("Enter a valid email").required("phone Number is required"),
+    phoneNumber: Yup.number("Enter a valid email").required("Phone Number is required"),
   });
   const onSubmit = (values) => {
     console.log(values);
