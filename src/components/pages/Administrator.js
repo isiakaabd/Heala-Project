@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import Modals from "components/Utilities/Modal";
-import FormSelect from "components/Utilities/FormSelect";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
+import { Grid, TableRow, TableCell } from "@mui/material";
 import CustomButton from "components/Utilities/CustomButton";
-import Box from "@mui/material/Box";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Search from "components/Utilities/Search";
@@ -28,9 +25,6 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import PreviousButton from "components/Utilities/PreviousButton";
 import AddIcon from "@mui/icons-material/Add";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import FormInput from "components/Utilities/FormInput";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -153,22 +147,65 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const checkbox = {
-    "role 1": true,
-    "role 2": true,
-    "role 3": false,
-    "role 4": false,
-  };
-  const referralOptions = ["Hello", "World", "Goodbye", "World"];
+
+  const specializations = [
+    { key: "Dentistry", value: "Dentistry" },
+    { key: "Pediatry", value: "Pediatry" },
+    { key: "Optometry", value: "Optometry" },
+    { key: "Pathology", value: "Pathology" },
+  ];
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const options = [
-    { id: 0, value: "Name" },
-    { id: 1, value: "Plan" },
-    { id: 2, value: "Consultation" },
+
+  const initialValues = {
+    role: "",
+    name: "",
+  };
+  const optionss = [
+    {
+      label: "option 1",
+      value: "option 1",
+    },
+    {
+      label: "option 2",
+      value: "option 2",
+    },
+    {
+      label: "option 3",
+      value: "three",
+    },
   ];
+
+  const validationSchema = Yup.object({
+    role: Yup.string("Select your role").required("Role is required"),
+    name: Yup.string("Enter your name").required("Name is required"),
+  });
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+  const initialValues1 = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    checkbox: [],
+  };
+
+  const validationSchema1 = Yup.object({
+    checkbox: Yup.array().min(1, "Add atleast a permission"),
+    password: Yup.string()
+      .required("password is required")
+      .min(8, "Password is too short - should be 8 chars minimum."),
+    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
+    firstName: Yup.string("Enter your first Name").required("First name is required"),
+    lastName: Yup.string("Enter your last Name").required("Last name is required"),
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
+  });
+  const onSubmit1 = (values) => {
+    console.log(values);
+  };
+
   const [searchMail, setSearchMail] = useState("");
-  const [referral, setReferral] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const handleAdminClose = () => setIsAdmin(false);
@@ -182,24 +219,6 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const [admin, setAdmin] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    ...checkbox,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAdmin({ ...admin, [name]: value });
-  };
-  const handleCheckBoxChange = (e) => {
-    const { name, checked } = e.target;
-    setAdmin({ ...admin, [name]: checked });
-  };
-  const { firstName, lastName, email, password } = admin;
-  const { create, update, Delete, read } = admin;
 
   return (
     <>
@@ -217,7 +236,11 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
             />
           </Grid>
           <Grid item className={classes.filterBtnGrid}>
-            <FilterList onClick={handleDialogOpen} title="Filter Administrator" options={options} />
+            <FilterList
+              onClick={handleDialogOpen}
+              title="Filter Administrator"
+              options={optionss}
+            />
           </Grid>
           <Grid item>
             <CustomButton
@@ -330,52 +353,54 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         </Grid>
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Grid item container direction="column">
-          <Grid item container spacing={2}>
-            <Grid item xs={6} marginBottom={4}>
-              <Grid container direction="column" gap={1}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Admin Name
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Select Name"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            console.log(formik);
 
-            <Grid item xs={6}>
-              <Grid container gap={1} direction="column">
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Role
-                </FormLabel>
-                <FormControl fullWidth>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Select Role"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container xs={12} marginTop={30}>
-          <Button
-            variant="contained"
-            onClick={handleDialogClose}
-            to="/view"
-            type="submit"
-            className={classes.btn}
-          >
-            Apply Filter
-          </Button>
-        </Grid>
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
+                  <Grid item container spacing={2}>
+                    <Grid item xs={6} marginBottom={4}>
+                      <FormikControl
+                        control="input"
+                        name="name"
+                        label="Admin Name"
+                        placeholder="Select Name"
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormikControl
+                        control="select"
+                        name="role"
+                        label="Role"
+                        options={specializations}
+                        placeholder="Select Role"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item container xs={12} marginTop={30}>
+                  <Button
+                    variant="contained"
+                    onClick={handleDialogClose}
+                    to="/view"
+                    type="submit"
+                    className={classes.btn}
+                  >
+                    Apply Filter
+                  </Button>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
 
       <Modals
@@ -385,138 +410,94 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         height="90vh"
         handleClose={handleAdminClose}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="First Name"
-                  labelId="firstName"
-                  id="firstName"
-                  name="firstName"
-                  value={firstName}
-                  onChange={handleChange}
-                  placeholder="Enter first name"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Last Name"
-                  labelId="lastName"
-                  id="lastName"
-                  name="lastName"
-                  value={lastName}
-                  onChange={handleChange}
-                  placeholder="Enter last name"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ margin: "3rem 0" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  type="email"
-                  label="Email"
-                  labelId="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleChange}
-                  placeholder="Enter email"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Password"
-                  labelId="password"
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={handleChange}
-                  placeholder="Enter Password"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid item container xs={12}>
-              <Grid item container direction="column" gap={1}>
-                <label htmlFor="permission" className={classes.FormLabel}>
-                  Role
-                </label>
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {(formik) => {
+            console.log(formik);
 
-                <FormControl style={{ width: "100%" }}>
-                  <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
-                    <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
-                      <FormGroup>
-                        <Grid container>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                className={classes.checkbox}
-                                checked={create}
-                                onChange={handleCheckBoxChange}
-                                name="role 1"
-                              />
-                            }
-                            label="role 1"
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                className={classes.checkbox}
-                                checked={Delete}
-                                onChange={handleCheckBoxChange}
-                                name="role 2"
-                              />
-                            }
-                            label="role 2"
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                className={classes.checkbox}
-                                checked={update}
-                                onChange={handleCheckBoxChange}
-                                name="role 3"
-                              />
-                            }
-                            label="role 3"
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                className={classes.checkbox}
-                                checked={read}
-                                onChange={handleCheckBoxChange}
-                                name="role 4"
-                              />
-                            }
-                            label="role 4"
-                          />
-                        </Grid>
-                      </FormGroup>
-                    </FormControl>
-                  </Box>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item container xs={12}>
-          <Button
-            variant="contained"
-            onClick={handleAdminClose}
-            type="submit"
-            className={classes.btn}
-            disableRipple
-          >
-            Add Admin
-          </Button>
-        </Grid>
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
+                  <Grid item>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          labelId="firstName"
+                          label="firstName"
+                          id="firstName"
+                          name="firstName"
+                          placeholder="Enter first name"
+                        />
+                      </Grid>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          label="Last Name"
+                          labelId="lastName"
+                          id="lastName"
+                          name="lastName"
+                          placeholder="Enter last name"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item style={{ margin: "3rem 0" }}>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          label="Email"
+                          labelId="email"
+                          id="email"
+                          placeholder="Enter email"
+                          name="email"
+                        />
+                      </Grid>
+                      <Grid item md>
+                        <FormikControl
+                          control="input"
+                          label="Password"
+                          labelId="password"
+                          type="password"
+                          id="password"
+                          name="password"
+                          placeholder="Enter Password"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Grid item container direction="column" xs={12}>
+                      <FormikControl
+                        control="checkbox"
+                        formlabel="Role"
+                        name="checkbox"
+                        options={optionss}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item container xs={12} marginTop={5}>
+                    <Button
+                      variant="contained"
+                      // onClick={handleAdminClose}
+                      type="submit"
+                      className={classes.btn}
+                      disableRipple
+                    >
+                      Add Admin
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
     </>
   );

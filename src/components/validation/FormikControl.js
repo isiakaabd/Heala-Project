@@ -1,7 +1,7 @@
 import React from "react";
 import Input from "./Input";
 import Selects from "./Select";
-import Checkbox from "./Checkbox";
+import Checkboxs from "./Checkbox";
 import Textarea from "./Textarea";
 import PropTypes from "prop-types";
 
@@ -14,7 +14,7 @@ const FormikControl = ({ control, ...rest }) => {
     case "select":
       return <Selects {...rest} />;
     case "checkbox":
-      return <Checkbox {...rest} />;
+      return <Checkboxs {...rest} />;
     default:
       return null;
   }

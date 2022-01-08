@@ -25,7 +25,7 @@ const Input = (props) => {
       <FormLabel component="legend" className={classes.FormLabel}>
         {label}
       </FormLabel>
-      <Field id={name} name={name} className={classes.input} {...rest} />
+      <Field id={name} name={name} className={classes.input} {...rest} style={{ minHeight: 50 }} />
       <ErrorMessage name={name} component={TextError} />
     </Grid>
   );

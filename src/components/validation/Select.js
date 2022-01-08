@@ -9,30 +9,30 @@ import { MenuItem, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
-  input: {
-    ...theme.typography.input,
-    minHeight: "5rem",
-  },
   FormLabel: {
     "&.MuiFormLabel-root": {
       ...theme.typography.FormLabel,
-      paddingBottom: "1rem",
     },
+  },
+  select: {
+    fontWeight: 200,
+    color: theme.palette.common.lightGrey,
+    minHeight: 50,
+    fontSize: "1.6rem !important",
   },
 }));
 
-export const Formiks = ({ value, name, onChange, onBlur, children, label }) => {
+export const Formiks = ({ value, name, onChange, onBlur, children }) => {
   const classes = useStyles();
   return (
     <FormControl fullWidth>
-      <FormLabel className={classes.FormLabel}>{label}</FormLabel>
       <Select
         name={name}
         displayEmpty
         onBlur={onBlur}
         value={value}
-        className={classes.input}
         onChange={onChange}
+        className={classes.select}
       >
         {children}
       </Select>
@@ -51,9 +51,10 @@ Formiks.propTypes = {
 
 const Selects = (props) => {
   const { name, label, options, placeholder } = props;
-
+  const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
+      <FormLabel className={classes.FormLabel}>{label}</FormLabel>
       <Field name={name} as={Formiks} label={label}>
         <MenuItem value="">{placeholder}</MenuItem>
         {options.map((option) => (

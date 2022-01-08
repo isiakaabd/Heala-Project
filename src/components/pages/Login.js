@@ -89,7 +89,9 @@ const Login = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").required("Email is required"),
-    password: Yup.string("Enter your password").required("password is required"),
+    password: Yup.string()
+      .required("password is required")
+      .min(8, "Password is too short - should be 8 chars minimum."),
   });
 
   const onSubmit = async (values, onSubmitProps) => {
