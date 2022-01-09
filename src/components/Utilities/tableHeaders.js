@@ -174,7 +174,7 @@ export const referralHeader = [
 ];
 export const subscriptionHeader = [
   {
-    id: 0,
+    id: 8,
     label: "Name of plan",
   },
   {

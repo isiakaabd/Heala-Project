@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import Loader from "components/Utilities/Loader";
-import { Grid, Alert } from "@mui/material";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
+import { Grid, Button, Alert, TableRow, Typography, TableCell } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { subscriptionHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -22,9 +19,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import { SubscriptionModal } from "components/modals/SubscriptionModal";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { getPlans } from "components/graphQL/useQuery";
-import { useMutation } from "@apollo/client";
 import { DELETE_PLAN } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
@@ -224,7 +220,6 @@ const Subscription = () => {
       setPlan(data.getPlans.plan);
     }
   }, [data]);
-
   if (loading) return <Loader />;
 
   const initialValues = {
@@ -273,97 +268,104 @@ const Subscription = () => {
         {/* The Search and Filter ends here */}
 
         <Grid item container style={{ marginTop: "5rem" }}>
-          <EnhancedTable
-            headCells={subscriptionHeader}
-            rows={plan}
-            page={page}
-            paginationLabel="subscription per page"
-            hasCheckbox={true}
-          >
-            {plan &&
-              plan.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+          {plan && plan.length > 0 ? (
+            <EnhancedTable
+              headCells={subscriptionHeader}
+              rows={plan}
+              page={page}
+              paginationLabel="subscription per page"
+              hasCheckbox={true}
+            >
+              {plan
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      {row.name}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {row.amount}
-                    </TableCell>
-
-                    <TableCell
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
-                    >
-                      {row.description}
-                    </TableCell>
-
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-around",
-                        }}
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
                       >
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          onClick={() => handleEditOpenDialog(row._id)}
-                          className={`${classes.tableBtn} ${classes.greenBtn}`}
-                          endIcon={<EditIcon color="success" />}
+                        {row.name}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {row.amount}
+                      </TableCell>
+
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                      >
+                        {row.description}
+                      </TableCell>
+
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                          }}
                         >
-                          Edit plan
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          onClick={() => handleDeleteOpenDialog(row._id)}
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          to="/view"
-                          endIcon={<DeleteIcon color="error" />}
-                        >
-                          Delete plan
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </EnhancedTable>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            onClick={() => handleEditOpenDialog(row._id)}
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            endIcon={<EditIcon color="success" />}
+                          >
+                            Edit plan
+                          </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            to="/view"
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Delete plan
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          ) : (
+            <Grid container alignItems="center" marginTop={5} height="100%" justifyContent="center">
+              <Typography variant="h1">No Mail here</Typography>
+            </Grid>
+          )}
         </Grid>
       </Grid>
       {/* // modal */}

@@ -12,6 +12,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { findProfile, getConsultation } from "components/graphQL/useQuery";
 import { dateMoment, timeMoment } from "components/Utilities/Time";
+import Loader from "components/Utilities/Loader";
+
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
     background: "#fff",
@@ -43,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
 const caseNotes = [
   {
     id: 0,
-
     photo: displayPhoto,
     caregiver: "Raphael Igbenedion",
   },
@@ -72,7 +73,7 @@ const CaseNotes = (props) => {
     setSelectedScopedMenu(1);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
-  const [caseNoteState, setCaseNoteState] = useState(undefined);
+  const [caseNoteState, setCaseNoteState] = useState([]);
   const { consultation } = useSelector((state) => state.patient);
   const [doctor, setDoctor] = useState("");
   const consultations = useQuery(getConsultation, {
@@ -82,6 +83,7 @@ const CaseNotes = (props) => {
   });
   useEffect(() => {
     const x = consultation.getConsultations.data.filter((i) => i._id === patientId);
+    console.log(x);
     setDoctor(x[0].doctor);
   }, [consultation.getConsultations.data, patientId]);
 
@@ -90,7 +92,8 @@ const CaseNotes = (props) => {
       id: doctor,
     },
   });
-  console.log(doctorProfile.data);
+
+  //
 
   useEffect(() => {
     if (consultations.data && consultations.data.getConsultation) {
@@ -98,9 +101,11 @@ const CaseNotes = (props) => {
     }
   }, [consultations, caseNoteState.data]);
 
-  if (consultations.loading) return <div>Loading..</div>;
+  if (consultations.loading) return <Loader />;
 
-  if (caseNoteState) {
+  if (caseNoteState && caseNoteState.treatment) {
+    let medications = caseNoteState.treatment;
+    console.log(medications);
     return (
       <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
         <Grid item style={{ marginBottom: "3rem" }}>
@@ -215,6 +220,7 @@ const CaseNotes = (props) => {
                 </Grid>
                 <Grid item container gap={3}>
                   <Grid item>
+                    {/* {caseNoteState.treatment[medication]} */}
                     {Object.keys(caseNoteState.treatment).map((i) => (
                       <Typography variant="body2" key={i}>
                         {i}

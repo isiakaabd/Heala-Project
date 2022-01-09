@@ -18,6 +18,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -97,7 +98,7 @@ const Consultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>

@@ -231,6 +231,22 @@ export const getAllAppointment = gql`
     }
   }
 `;
+export const getMedications = gql`
+  query getMedications {
+    getMedications {
+      medication {
+        _id
+        name
+        interval
+        doctor
+        createdAt
+        updatedAt
+        dosage
+        patient
+      }
+    }
+  }
+`;
 
 export const getMyConsultation = gql`
   query getMyConsultations {

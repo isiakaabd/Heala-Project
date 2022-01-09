@@ -11,6 +11,8 @@ import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
+import { useQuery } from "@apollo/client";
+import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
@@ -18,6 +20,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import ReferPatient from "components/modals/ReferPatient";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -138,6 +141,17 @@ const SinglePatient = (props) => {
     category: "",
     textarea: "",
   };
+  const [patientProfile, setPatientProfile] = useState("");
+  const profile = useQuery(findProfile, {
+    variables: {
+      id: patientId,
+    },
+  });
+  useEffect(() => {
+    if (profile.data) {
+      setPatientProfile(profile.data.profile);
+    }
+  }, [profile.data, patientId]);
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
@@ -152,98 +166,106 @@ const SinglePatient = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-
-  return (
-    <Grid container direction="column" className={classes.gridContainer}>
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/patients`} onClick={() => setSelectedSubMenu(0)} />
-      </Grid>
-      <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
-        {/* Display photo and profile name grid */}
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
-              <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+  if (profile.loading) return <Loader />;
+  else {
+    return (
+      <Grid container direction="column" className={classes.gridContainer}>
+        <Grid item style={{ marginBottom: "3rem" }}>
+          <PreviousButton path={`/patients`} onClick={() => setSelectedSubMenu(0)} />
+        </Grid>
+        <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
+          {/* Display photo and profile name grid */}
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item style={{ marginRight: "2rem" }}>
+                <Avatar
+                  alt={patientProfile.firstName}
+                  src={displayPhoto}
+                  sx={{ width: 50, height: 50 }}
+                />
+              </Grid>
+              <Grid item>
+                <Typography variant="h2">
+                  {patientProfile.firstName} {patientProfile.lastName}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography variant="h2">Raphael Igbenedion</Typography>
+          </Grid>
+          {/* Action Buttons grid */}
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item style={{ marginRight: "2rem" }}>
+                <CustomButton
+                  endIcon={<PersonRemoveIcon />}
+                  title="Disable Patient"
+                  type={trasparentButton}
+                  textColor={theme.palette.common.red}
+                  onClick={() => setOpenDisablePatient(true)}
+                />
+              </Grid>
+              <Grid item>
+                <CustomButton
+                  endIcon={<TrendingUpIcon />}
+                  title="Refer Patient"
+                  type={greenButton}
+                  onClick={handleDialogOpen}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        {/* Action Buttons grid */}
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
-              <CustomButton
-                endIcon={<PersonRemoveIcon />}
-                title="Disable Patient"
-                type={trasparentButton}
-                textColor={theme.palette.common.red}
-                onClick={() => setOpenDisablePatient(true)}
-              />
+        {/* TOP CARDS SECTION */}
+        <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
+          {cards1.map((card) => (
+            <Grid
+              key={card.id}
+              item
+              className={classes.parentGrid}
+              component={Link}
+              to={`/patients/${patientId}/${card.path}`}
+              onClick={() => setSelectedPatientMenu(card.id)}
+            >
+              <Card title={card.title} background={card.background} header="h4">
+                {React.createElement(card.icon, { fill: card.fill })}
+              </Card>
             </Grid>
-            <Grid item>
-              <CustomButton
-                endIcon={<TrendingUpIcon />}
-                title="Refer Patient"
-                type={greenButton}
-                onClick={handleDialogOpen}
-              />
-            </Grid>
-          </Grid>
+          ))}
         </Grid>
+        {/* BOTTOM CARDS SECTION */}
+        <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
+          {cards2.map((card) => (
+            <Grid
+              key={card.id}
+              item
+              className={classes.parentGrid}
+              component={Link}
+              to={`/patients/${patientId}/${card.path}`}
+              onClick={() => setSelectedPatientMenu(card.id)}
+            >
+              <Card title={card.title} background={card.background} header="h4">
+                {React.createElement(card.icon, {
+                  fill: card.fill,
+                  color: "success",
+                  style: { fontSize: "4rem" },
+                })}
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        <DisablePatient
+          open={openDisablePatient}
+          setOpen={setOpenDisablePatient}
+          title="Delete Partner"
+          btnValue="disable"
+          onConfirm={() => console.log("confirmed")}
+          confirmationMsg="disable Patient"
+        />
+        <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
+          <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
+        </Modals>
       </Grid>
-      {/* TOP CARDS SECTION */}
-      <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
-        {cards1.map((card) => (
-          <Grid
-            key={card.id}
-            item
-            className={classes.parentGrid}
-            component={Link}
-            to={`/patients/${patientId}/${card.path}`}
-            onClick={() => setSelectedPatientMenu(card.id)}
-          >
-            <Card title={card.title} background={card.background} header="h4">
-              {React.createElement(card.icon, { fill: card.fill })}
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {/* BOTTOM CARDS SECTION */}
-      <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
-        {cards2.map((card) => (
-          <Grid
-            key={card.id}
-            item
-            className={classes.parentGrid}
-            component={Link}
-            to={`/patients/${patientId}/${card.path}`}
-            onClick={() => setSelectedPatientMenu(card.id)}
-          >
-            <Card title={card.title} background={card.background} header="h4">
-              {React.createElement(card.icon, {
-                fill: card.fill,
-                color: "success",
-                style: { fontSize: "4rem" },
-              })}
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      <DisablePatient
-        open={openDisablePatient}
-        setOpen={setOpenDisablePatient}
-        title="Delete Partner"
-        btnValue="disable"
-        onConfirm={() => console.log("confirmed")}
-        confirmationMsg="disable Patient"
-      />
-      <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
-        <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
-      </Modals>
-    </Grid>
-  );
+    );
+  }
 };
 
 SinglePatient.propTypes = {
