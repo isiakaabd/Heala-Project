@@ -172,6 +172,23 @@ export const getPatients = gql`
     }
   }
 `;
+export const getDoctorsProfile = gql`
+  query doctorProfiles {
+    doctorProfiles {
+      data {
+        _id
+        firstName
+        lastName
+        gender
+        phoneNumber
+        createdAt
+        updatedAt
+        email
+        dociId
+      }
+    }
+  }
+`;
 
 export const getProfile = gql`
   query findProfile($id: ID!) {
