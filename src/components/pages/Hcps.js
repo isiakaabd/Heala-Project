@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Input from "@mui/material/Input";
-import Button from "@mui/material/Button";
+import {
+  Grid,
+  Typography,
+  TableRow,
+  TableCell,
+  Button,
+  Checkbox,
+  Input,
+  Chip,
+  Avatar,
+} from "@mui/material";
+import { useQuery } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
@@ -18,9 +24,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
-import { hcpsRows } from "components/Utilities/tableData";
-import Chip from "@mui/material/Chip";
-import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.png";
 import { Link } from "react-router-dom";
@@ -28,6 +31,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
+import { getDoctorsProfile } from "components/graphQL/useQuery";
 
 const specializations = [
   { key: "Dentistry", value: "Dentistry" },
@@ -117,6 +121,13 @@ const useStyles = makeStyles((theme) => ({
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [profiles, setProfiles] = useState("");
+  const doctorProfile = useQuery(getDoctorsProfile);
+  useEffect(() => {
+    if (doctorProfile.data) {
+      setProfiles(doctorProfile.data.doctorProfiles.data);
+    }
+  }, [doctorProfile]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -173,7 +184,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
+  console.log(profiles);
   return (
     <Grid container direction="column">
       <Grid item container>
@@ -198,118 +209,124 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         </Grid>
       </Grid>
       <Grid item container style={{ marginTop: "5rem" }}>
-        <EnhancedTable
-          headCells={hcpsHeadCells}
-          rows={hcpsRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {hcpsRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
-
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
+        {profiles.length > 0 ? (
+          <EnhancedTable
+            headCells={hcpsHeadCells}
+            rows={profiles}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {profiles
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.specialization}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.consultation}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.hospital}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Chip
-                      label={row.status}
-                      className={classes.badge}
-                      style={{
-                        background:
-                          row.status === "Active"
-                            ? theme.palette.common.lightGreen
-                            : theme.palette.common.lightRed,
-                        color:
-                          row.status === "Active"
-                            ? theme.palette.common.green
-                            : theme.palette.common.red,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`hcps/${row.id}`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => {
-                        setSelectedSubMenu(3);
-                        setSelectedHcpMenu(0);
-                      }}
+                      {row.dociId}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.name}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {row.firstName} {row.lastName}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
                     >
-                      View HCP
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
+                      {row.specialization}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      {row.consultation}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {row.hospital}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <Chip
+                        label={row.status}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            row.status === "Active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            row.status === "Active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`hcps/${row.id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(3);
+                          setSelectedHcpMenu(0);
+                        }}
+                      >
+                        View HCP
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        ) : (
+          <Grid container alignItems="center" height="100%" justifyContent="center">
+            <Typography variant="h1">No Message here</Typography>
+          </Grid>
+        )}
       </Grid>
       {/* Filter Modal */}
       <Modals
