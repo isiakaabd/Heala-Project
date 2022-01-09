@@ -11,13 +11,12 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
+import { Avatar, Chip, Typography } from "@mui/material";
 import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Chip from "@mui/material/Chip";
 import { useQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
 
@@ -111,120 +110,126 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
       </Grid>
       {/* The Search and Filter ends here */}
       <Grid item container style={{ marginTop: "5rem" }}>
-        <EnhancedTable
-          headCells={referralHeader}
-          rows={referral}
-          page={page}
-          paginationLabel="referral per page"
-          hasCheckbox={true}
-        >
-          {referral
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+        {referral.length > 0 ? (
+          <EnhancedTable
+            headCells={referralHeader}
+            rows={referral}
+            page={page}
+            paginationLabel="referral per page"
+            hasCheckbox={true}
+          >
+            {referral
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
                   >
-                    {new Date(row.createdAt)}
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
-                  >
-                    {new Date(row.updatedAt)}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
-                  >
-                    {row.specialization}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                      {new Date(row.createdAt)}
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Chip
-                      label={row.status}
-                      className={classes.badge}
-                      style={{
-                        background:
-                          row.status === "active"
-                            ? theme.palette.common.lightGreen
-                            : theme.palette.common.lightRed,
-                        color:
-                          row.status === "active"
-                            ? theme.palette.common.green
-                            : theme.palette.common.red,
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
+                      {new Date(row.updatedAt)}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      {row.specialization}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <Chip
+                        label={row.status}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            row.status === "active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            row.status === "active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        ) : (
+          <Grid container alignItems="center" height="100%" justifyContent="center">
+            <Typography variant="h1">No Referral here</Typography>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

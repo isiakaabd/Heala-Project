@@ -155,7 +155,7 @@ const SideMenu = (props) => {
     <>
       <aside className={classes.aside}>
         <div className={classes.logoWrapper}>
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" width={40} height={40} />
         </div>
         <List>
           {menus.map((menu) => (

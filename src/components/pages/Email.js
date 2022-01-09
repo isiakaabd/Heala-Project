@@ -333,10 +333,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             </EnhancedTable>
           </Grid>
         ) : (
-          <Grid>
-            <Typography fontSize="5rem" textAlign="center">
-              No Mail
-            </Typography>
+          <Grid container alignItems="center" marginTop={5} height="100%" justifyContent="center">
+            <Typography variant="h1">No Mail here</Typography>
           </Grid>
         )}
       </Grid>
