@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getConsultations } from "components/graphQL/useQuery";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
@@ -22,6 +24,8 @@ import { consultationsRows } from "components/Utilities/tableData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
+import Loader from "components/Utilities/Loader";
+import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -79,11 +83,22 @@ const HcpConsultations = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
+  // const { hcpConsultation } = useActions();
 
   const { hcpId } = useParams();
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  // const { consultation } = useSelector((state) => state.hcp);
+
   const { setSelectedRows } = useActions();
+  const [consultations, setConsultations] = useState([]);
+  const { loading, data } = useQuery(getConsultations);
+
+  useEffect(() => {
+    if (data && data.getConsultations.data) {
+      setConsultations(data.getConsultations.data);
+    }
+  }, [data, hcpId]);
 
   useEffect(() => {
     setSelectedMenu(2);
@@ -92,7 +107,7 @@ const HcpConsultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
-
+  if (loading) return <Loader />;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -120,20 +135,21 @@ const HcpConsultations = (props) => {
           paginationLabel="Patients per page"
           hasCheckbox={true}
         >
-          {consultationsRows
+          {consultations
+            .filter((i) => i.doctor == hcpId)
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row.id, selectedRows);
 
               const labelId = `enhanced-table-checkbox-${index}`;
-
+              localStorage.setItem("hcp", row._id);
               return (
                 <TableRow
                   hover
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.id}
+                  key={row._id}
                   selected={isItemSelected}
                 >
                   <TableCell padding="checkbox">
@@ -155,7 +171,7 @@ const HcpConsultations = (props) => {
                       style={{
                         height: "100%",
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "left",
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>
@@ -168,11 +184,11 @@ const HcpConsultations = (props) => {
                       <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.date}
+                  <TableCell align="left" className={classes.tableCell}>
+                    {dateMoment(row.createdAt)}
                   </TableCell>
                   <TableCell
-                    align="center"
+                    align="left"
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                   >
@@ -183,7 +199,7 @@ const HcpConsultations = (props) => {
                       variant="contained"
                       className={classes.button}
                       component={Link}
-                      to={`/hcps/${row.id}/consultations/case-notes`}
+                      to={`/hcps/${hcpId}/consultations/case-notes/${row._id}`}
                       endIcon={<ArrowForwardIosIcon />}
                       onClick={() => {
                         setSelectedSubMenu(2);

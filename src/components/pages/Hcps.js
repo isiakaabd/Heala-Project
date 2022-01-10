@@ -117,7 +117,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
+    disabled: "#F7F7FF",
   };
   const [profiles, setProfiles] = useState("");
   const doctorProfile = useQuery(getDoctorsProfile);
@@ -176,7 +176,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  console.log(profiles);
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>
@@ -236,18 +235,18 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     <TableCell
                       id={labelId}
                       scope="row"
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
                     >
                       {row.dociId}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       <div
                         style={{
                           height: "100%",
                           display: "flex",
-                          alignItems: "center",
+                          alignItems: "left",
                         }}
                       >
                         <span style={{ marginRight: "1rem" }}>
@@ -263,23 +262,23 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       </div>
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
                       {row.specialization}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       {row.consultation}
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
                       {row.hospital}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       <Chip
                         label={row.status}
                         className={classes.badge}
@@ -300,7 +299,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`hcps/${row.id}`}
+                        to={`hcps/${row._id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
                           setSelectedSubMenu(3);

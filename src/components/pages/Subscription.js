@@ -189,7 +189,10 @@ const Subscription = () => {
   };
   const onConfirm = async () => {
     try {
-      const { message } = await deletePlan({ variables: { id } });
+      const { message } = await deletePlan({
+        variables: { id },
+        refetchQueries: [{ query: getPlans }],
+      });
       setAlert({
         message: message,
         type: "success",

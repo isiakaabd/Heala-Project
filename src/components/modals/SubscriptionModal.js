@@ -5,6 +5,7 @@ import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
+import { getPlans } from "components/graphQL/useQuery";
 import { getSinglePlan } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
@@ -19,7 +20,9 @@ export const SubscriptionModal = ({
   initialValues,
 }) => {
   const theme = useTheme();
-  const [createPlan] = useMutation(CREATE_PLAN);
+  const [createPlan] = useMutation(CREATE_PLAN, {
+    refetchQueries: [{ query: getPlans }],
+  });
   const [updatePlan] = useMutation(UPDATE_PLAN);
 
   const single = useQuery(getSinglePlan, {

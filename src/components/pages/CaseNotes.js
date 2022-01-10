@@ -63,9 +63,7 @@ const CaseNotes = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
   const { patientId } = useParams();
-
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -11,6 +11,9 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { doctor } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -92,6 +95,19 @@ const HcpProfile = (props) => {
 
   const { hcpId } = useParams();
 
+  const [doctorProfile, setDoctorProfile] = useState("");
+  const profile = useQuery(doctor, {
+    variables: {
+      id: hcpId,
+    },
+  });
+
+  useEffect(() => {
+    if (profile.data) {
+      setDoctorProfile(profile.data.doctorProfile);
+    }
+  }, [profile.data, hcpId]);
+
   useLayoutEffect(() => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
@@ -101,6 +117,9 @@ const HcpProfile = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
 
+  if (profile.loading) return <Loader />;
+  console.log(doctorProfile);
+
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -109,11 +128,13 @@ const HcpProfile = (props) => {
       {/* Display photo and profile name grid */}
       <Grid item>
         <DisplayProfile
-          fullName="Raphael Igbinedion"
+          fullName={`${doctorProfile.firstName} ${doctorProfile.lastName}`}
           displayPhoto={displayPhoto}
           medicalTitle="Medical ID"
-          statusId={132467}
-          specialization="Dentistry"
+          statusId={doctorProfile._id}
+          specialization={
+            doctorProfile.specialization ? doctorProfile.specialization : "Not assigned"
+          }
           chatPath={`/hcps/${hcpId}/profile/chat`}
           callPath={`/hcps/${hcpId}/profile/call`}
           videoPath={`/hcps/${hcpId}/profile/video`}
@@ -135,7 +156,11 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="Male" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label={doctorProfile.gender == 0 ? "Male" : "Female"}
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -152,7 +177,11 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Date of Birth</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="7/11/1995" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label={doctorProfile.email ? doctorProfile.email : <span>DOB not Provided</span>}
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -171,10 +200,14 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Email Address</Typography>
             </Grid>
             <Grid item>
-              <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                <span>raphaeligbinedion@yahoo.com</span>
-                <ArrowForwardIosIcon className={classes.linkIcon} />
-              </a>
+              {doctorProfile.email ? (
+                <a href={`mailto:${doctorProfile.email}`} className={classes.link}>
+                  <span>{doctorProfile.email}</span>
+                  <ArrowForwardIosIcon className={classes.linkIcon} />
+                </a>
+              ) : (
+                <span className={classes.link}>No Email Address</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -191,11 +224,18 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Phone Number</Typography>
             </Grid>
             <Grid item>
-              <a href="tel:+2347086937133" className={classes.link}>
-                <span>08123456789</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-              {/* <Chip variant="outlined" label="08123456789" className={classes.infoBadge} /> */}
+              {doctorProfile.phoneNumber ? (
+                <a href={doctorProfile.phoneNumber} className={classes.link}>
+                  <span>{doctorProfile.phoneNumber} </span>
+                  <IoCopy
+                    className={classes.linkIcon}
+                    size={12.5}
+                    style={{ marginLeft: "1.2rem" }}
+                  />
+                </a>
+              ) : (
+                <span className={classes.link}>No Phone Number</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -214,38 +254,18 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Hospital</Typography>
             </Grid>
             <Grid item>
-              <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                <span>Federal Teaching Hospital, Abakaliki</span>
-                <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
-              </a>
+              {doctorProfile.hospital ? (
+                <a href={doctorProfile.email} className={classes.link}>
+                  <span>{doctorProfile.hospital}</span>
+                  <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
+                </a>
+              ) : (
+                <span className={classes.link}>No Hospital attached</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
         {/* PLACEHOLDER GRID */}
-        <Grid
-          item
-          md
-          className={classes.cardGrid}
-          style={{ marginLeft: "2rem", visibility: "hidden" }}
-        >
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Phone Number</Typography>
-            </Grid>
-            <Grid item>
-              <a href="tel:+2347086937133" className={classes.link}>
-                <span>08123456789</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-            </Grid>
-          </Grid>
-        </Grid>
       </Grid>
     </Grid>
   );

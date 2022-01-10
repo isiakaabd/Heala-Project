@@ -82,7 +82,7 @@ const DisplayProfile = (props) => {
                         <span style={{ color: theme.palette.common.lightGrey }}>
                           Specialization:
                         </span>{" "}
-                        <Chip label="Dentistry" color="success" className={classes.badge} />
+                        <Chip label={specialization} color="success" className={classes.badge} />
                       </Typography>
                     </Grid>
                   ) : status ? (
@@ -157,7 +157,7 @@ DisplayProfile.propTypes = {
   fullName: PropTypes.string.isRequired,
   displayPhoto: PropTypes.string.isRequired,
   medicalTitle: PropTypes.string.isRequired,
-  statusId: PropTypes.number.isRequired,
+  statusId: PropTypes.string,
   specialization: PropTypes.string,
   status: PropTypes.string,
   chatPath: PropTypes.string.isRequired,

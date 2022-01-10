@@ -282,19 +282,14 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         }}
                       />
                     </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                    >
+                    <TableCell id={labelId} scope="row" align="left" className={classes.tableCell}>
                       <Grid
                         container
                         rowSpacing={2}
                         style={{
                           maxWidth: "25rem",
                           display: "inline-flex",
-                          justifyContent: "center",
+                          justifyContent: "left",
                           alignItems: "center",
                         }}
                       >

@@ -344,7 +344,7 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
-        path="/hcps/:hcpId/consultations/case-notes"
+        path="/hcps/:hcpId/consultations/case-notes/:rowId"
         component={HcpCaseNote}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
