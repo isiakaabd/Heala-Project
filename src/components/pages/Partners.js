@@ -150,7 +150,7 @@ const Partners = () => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: "#F7F7FF",
+    disabled: theme.palette.common.black,
   };
 
   const darkButtonType = {
