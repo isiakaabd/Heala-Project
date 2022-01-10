@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 
-const UserInfo = gql`
+export const doctor = gql`
   query doctorProfile($id: ID!) {
     doctorProfile(id: $id) {
       _id
@@ -282,19 +282,6 @@ export const getMyConsultation = gql`
     }
   }
 `;
-
-export const GetUserInfo = (id) => {
-  const { data, error, loading } = useQuery(UserInfo, {
-    variables: {
-      id,
-    },
-  });
-  return {
-    data,
-    error,
-    loading,
-  };
-};
 
 export const getUserDetails = gql`
   query findAccount($id: ID!) {

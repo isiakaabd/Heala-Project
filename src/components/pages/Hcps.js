@@ -117,7 +117,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
+    disabled: "#F7F7FF",
   };
   const [profiles, setProfiles] = useState("");
   const doctorProfile = useQuery(getDoctorsProfile);
@@ -176,7 +176,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  console.log(profiles);
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>
@@ -300,7 +299,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`hcps/${row.id}`}
+                        to={`hcps/${row._id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
                           setSelectedSubMenu(3);

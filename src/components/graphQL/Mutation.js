@@ -193,3 +193,15 @@ export const createRole = gql`
     }
   }
 `;
+export const deleteAppointment = gql`
+  mutation deleteAppointment($id: String!) {
+    deleteAppointment(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

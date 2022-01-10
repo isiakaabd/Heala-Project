@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
+import { useQuery } from "@apollo/client";
+import { doctor } from "components/graphQL/useQuery";
 import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -16,6 +18,7 @@ import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -67,6 +70,17 @@ const SingleHCP = (props) => {
   const theme = useTheme();
 
   const { hcpId } = useParams();
+  const [doctorProfile, setDoctorProfile] = useState("");
+  const profile = useQuery(doctor, {
+    variables: {
+      id: hcpId,
+    },
+  });
+  useEffect(() => {
+    if (profile.data) {
+      setDoctorProfile(profile.data.doctorProfile);
+    }
+  }, [profile.data, hcpId]);
 
   const cards1 = [
     {
@@ -136,7 +150,7 @@ const SingleHCP = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
-
+  if (profile.loading) return <Loader />;
   return (
     <Grid container direction="column" className={classes.gridContainer}>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -150,7 +164,7 @@ const SingleHCP = (props) => {
               <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
             </Grid>
             <Grid item>
-              <Typography variant="h2">Raphael Igbenedion</Typography>
+              <Typography variant="h2">{`${doctorProfile.firstName} ${doctorProfile.lastName}`}</Typography>
             </Grid>
           </Grid>
         </Grid>
