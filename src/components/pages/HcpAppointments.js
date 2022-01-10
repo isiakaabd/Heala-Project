@@ -84,6 +84,7 @@ const HcpAppointments = (props) => {
     try {
       await deleteAppointments({
         variables: { id },
+
         refetchQueries: [{ query: getAllAppointment }],
       });
       setAlert({

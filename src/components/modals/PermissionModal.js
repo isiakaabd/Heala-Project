@@ -48,8 +48,8 @@ export const PermissionModal = ({
     const { description, name } = values;
     if (type === "add") {
       try {
-        const { data } = await createPermission({ variables: { description, name } });
-        console.log(data);
+        await createPermission({ variables: { description, name } });
+
         setAlert({
           message: "Permission successfully created",
           type: "success",

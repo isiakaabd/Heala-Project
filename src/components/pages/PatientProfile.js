@@ -17,10 +17,10 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
 import DisablePatient from "components/modals/DeleteOrDisable";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import { getProfile } from "components/graphQL/useQuery";
 import { deleteProfile } from "components/graphQL/Mutation";
+import { getProfile, getPatients } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -107,11 +107,11 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
 
   const handleDialogClose = () => setIsOpen(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  const history = useHistory();
   const onConfirm = async () => {
     try {
-      const { data } = await disableUser({ variables: { id: patientId } });
-      console.log(data);
+      await disableUser({ variables: { id: patientId }, refetchQueries: [{ query: getPatients }] });
+      history.push("/patients");
     } catch (error) {
       console.log(error);
     }

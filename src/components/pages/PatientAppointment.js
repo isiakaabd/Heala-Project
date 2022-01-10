@@ -5,17 +5,21 @@ import * as Yup from "yup";
 import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
+import {
+  Grid,
+  Alert,
+  Typography,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Button,
+  Avatar,
+} from "@mui/material";
+import { deleteAppointment } from "components/graphQL/Mutation";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { getAllAppointment } from "components/graphQL/useQuery";
-import Avatar from "@mui/material/Avatar";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -108,10 +112,38 @@ const PatientAppointment = (props) => {
     selectedPatientMenu,
     setSelectedPatientMenu,
   } = props;
+  const [deleteAppointments] = useMutation(deleteAppointment);
+  const [alert, setAlert] = useState(null);
+  const onConfirm = async () => {
+    try {
+      await deleteAppointments({
+        variables: { id },
+
+        refetchQueries: [{ query: getAllAppointment }],
+      });
+      setAlert({
+        message: "appointment deleted successfully",
+        type: "success",
+      });
+      setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+    } catch (error) {
+      setAlert({
+        message: "appointment  not successfully deleted",
+        type: "danger",
+      });
+      setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+      console.log(error);
+    }
+  };
   const [deleteModal, setdeleteModal] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
   const [isPatient, setIsPatient] = useState(false);
+  const [id, setId] = useState(null);
   const handlePatientOpen = () => setIsPatient(true);
   const handlePatientClose = () => setIsPatient(false);
   const { patientId } = useParams();
@@ -141,15 +173,18 @@ const PatientAppointment = (props) => {
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const handleDeleteOpenDialog = () => {
-    setdeleteModal(true);
-  };
+
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
     setSelectedPatientMenu(2);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  const handleDelete = (id) => {
+    setId(id);
+    setdeleteModal(true);
+  };
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -183,6 +218,15 @@ const PatientAppointment = (props) => {
   return (
     <>
       <Grid container direction="column">
+        {alert && Object.keys(alert).length > 0 && (
+          <Alert
+            variant="filled"
+            severity={alert.type}
+            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
+          >
+            {alert.message}
+          </Alert>
+        )}
         <Grid item style={{ marginBottom: "3rem" }}>
           <PreviousButton
             path={`/patients/${patientId}`}
@@ -288,7 +332,7 @@ const PatientAppointment = (props) => {
                       <Button
                         variant="contained"
                         disableRipple
-                        onClick={handleDeleteOpenDialog}
+                        onClick={() => handleDelete(row._id)}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         endIcon={<DeleteIcon color="error" />}
                       >
@@ -387,6 +431,15 @@ const PatientAppointment = (props) => {
         title="Cancel Consultation"
         confirmationMsg="cancel appointment"
         btnValue="cancel"
+      />
+
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Appointment"
+        onConfirm={onConfirm}
+        confirmationMsg="delete appointment"
+        btnValue="Delete"
       />
     </>
   );
