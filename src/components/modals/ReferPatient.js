@@ -28,7 +28,6 @@ const validationSchema = Yup.object({
 const ReferPatient = ({ handleDialogClose, initialValues }) => {
   const theme = useTheme();
   const onSubmit = async (values, onSubmitProps) => {
-    console.log(values);
     onSubmitProps.resetForm();
     handleDialogClose();
   };
@@ -36,7 +35,7 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: "#F7F7FF",
+    disabled: theme.palette.common.black,
   };
   return (
     <Formik

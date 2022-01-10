@@ -45,7 +45,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             className={classes.tableHeaderCell}
-            align={headCell.id === 1 ? "left" : "center"}
+            align="left"
             padding={headCell.disablePadding ? "none" : "normal"}
           >
             {headCell.label}

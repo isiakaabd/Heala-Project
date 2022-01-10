@@ -43,12 +43,14 @@ const CustomButton = ({
         "&:active": {
           backgroundColor: active,
           boxShadow: "none",
+          color: textColor,
         },
 
         "&:disabled": {
           backgroundColor: disabled,
-          color: "brown",
+          color: textColor,
           boxShadow: "none",
+          cursor: "no-drop",
         },
         "& .MuiButton-endIcon>*:nth-of-type(1)": {
           fontSize: "2rem",
