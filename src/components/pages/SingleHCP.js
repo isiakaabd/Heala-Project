@@ -4,21 +4,24 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
-import { useQuery } from "@apollo/client";
-import { doctor } from "components/graphQL/useQuery";
+import { useQuery, useMutation } from "@apollo/client";
+import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
 import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import Card from "components/Utilities/Card";
+import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import Loader from "components/Utilities/Loader";
+import { deleteDoctor } from "components/graphQL/Mutation";
+//
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -70,12 +73,26 @@ const SingleHCP = (props) => {
   const theme = useTheme();
 
   const { hcpId } = useParams();
+  const history = useHistory();
+  const [disableUser] = useMutation(deleteDoctor);
   const [doctorProfile, setDoctorProfile] = useState("");
+  const [openDisableDoctor, setOpenDisableDoctor] = useState(false);
   const profile = useQuery(doctor, {
     variables: {
       id: hcpId,
     },
   });
+  const onConfirm = async () => {
+    try {
+      await disableUser({
+        variables: { id: hcpId },
+        refetchQueries: [{ query: getDoctorsProfile }],
+      });
+      history.push("/hcps");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (profile.data) {
       setDoctorProfile(profile.data.doctorProfile);
@@ -152,77 +169,89 @@ const SingleHCP = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
   if (profile.loading) return <Loader />;
   return (
-    <Grid container direction="column" className={classes.gridContainer}>
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps`} onClick={() => setSelectedSubMenu(0)} />
-      </Grid>
-      <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
-        {/* Display photo and profile name grid */}
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item style={{ marginRight: "2rem" }}>
-              <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+    <>
+      <Grid container direction="column" className={classes.gridContainer}>
+        <Grid item style={{ marginBottom: "3rem" }}>
+          <PreviousButton path={`/hcps`} onClick={() => setSelectedSubMenu(0)} />
+        </Grid>
+        <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
+          {/* Display photo and profile name grid */}
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item style={{ marginRight: "2rem" }}>
+                <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+              </Grid>
+              <Grid item>
+                <Typography variant="h2">{`${doctorProfile.firstName} ${doctorProfile.lastName}`}</Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography variant="h2">{`${doctorProfile.firstName} ${doctorProfile.lastName}`}</Typography>
+          </Grid>
+          {/* Action Buttons grid */}
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item>
+                <CustomButton
+                  endIcon={<PersonRemoveIcon />}
+                  title="Disable HCP"
+                  onClick={() => setOpenDisableDoctor(true)}
+                  type={trasparentButton}
+                  textColor={theme.palette.common.red}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        {/* Action Buttons grid */}
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item>
-              <CustomButton
-                endIcon={<PersonRemoveIcon />}
-                title="Disable HCP"
-                type={trasparentButton}
-                textColor={theme.palette.common.red}
-              />
+        {/* TOP CARDS SECTION */}
+        <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
+          {cards1.map((card) => (
+            <Grid
+              key={card.id}
+              item
+              className={classes.parentGrid}
+              component={Link}
+              to={`/hcps/${hcpId}/${card.path}`}
+              onClick={() => setSelectedHcpMenu(card.id)}
+            >
+              <Card title={card.title} background={card.background} header="h4">
+                {React.createElement(card.icon, { fill: card.fill })}
+              </Card>
             </Grid>
-          </Grid>
+          ))}
         </Grid>
-      </Grid>
-      {/* TOP CARDS SECTION */}
-      <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
-        {cards1.map((card) => (
-          <Grid
-            key={card.id}
-            item
-            className={classes.parentGrid}
-            component={Link}
-            to={`/hcps/${hcpId}/${card.path}`}
-            onClick={() => setSelectedHcpMenu(card.id)}
-          >
-            <Card title={card.title} background={card.background} header="h4">
-              {React.createElement(card.icon, { fill: card.fill })}
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {/* BOTTOM CARDS SECTION */}
-      <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
-        {cards2.map((card) => (
-          <Grid
-            key={card.id}
-            item
-            className={classes.parentGrid}
-            component={Link}
-            to={`/hcps/${hcpId}/${card.path}`}
-            onClick={() => setSelectedHcpMenu(card.id)}
-          >
-            <Card title={card.title} background={card.background} header="h4">
-              {React.createElement(card.icon, {
-                fill: card.fill,
-                color: card.id === 4 || card.id === 6 ? "success" : undefined,
-                style: { fontSize: "4rem" },
-              })}
-            </Card>
-          </Grid>
-        ))}
-        {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above
+        {/* BOTTOM CARDS SECTION */}
+        <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
+          {cards2.map((card) => (
+            <Grid
+              key={card.id}
+              item
+              className={classes.parentGrid}
+              component={Link}
+              to={`/hcps/${hcpId}/${card.path}`}
+              onClick={() => setSelectedHcpMenu(card.id)}
+            >
+              <Card title={card.title} background={card.background} header="h4">
+                {React.createElement(card.icon, {
+                  fill: card.fill,
+                  color: card.id === 4 || card.id === 6 ? "success" : undefined,
+                  style: { fontSize: "4rem" },
+                })}
+              </Card>
+            </Grid>
+          ))}
+          {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above
         <Grid item className={classes.parentGrid} style={{ visibility: "hidden" }}></Grid> */}
+        </Grid>
       </Grid>
-    </Grid>
+
+      <DisablePatient
+        open={openDisableDoctor}
+        setOpen={setOpenDisableDoctor}
+        title="Delete HCP"
+        btnValue="delete"
+        confirmationMsg="delete HCP"
+        onConfirm={onConfirm}
+      />
+    </>
   );
 };
 

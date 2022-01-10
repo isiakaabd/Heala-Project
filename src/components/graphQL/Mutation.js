@@ -205,3 +205,14 @@ export const deleteAppointment = gql`
     }
   }
 `;
+export const deleteDoctor = gql`
+  mutation deleteDoctorProfile($id: String!) {
+    deleteDoctorProfile(data: { id: $id }) {
+      count
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

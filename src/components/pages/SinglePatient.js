@@ -11,15 +11,17 @@ import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.png";
-import { useQuery } from "@apollo/client";
 import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import ReferPatient from "components/modals/ReferPatient";
+import { useQuery, useMutation } from "@apollo/client";
+import { deleteProfile } from "components/graphQL/Mutation";
+import { getPatients } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
@@ -66,10 +68,21 @@ const SinglePatient = (props) => {
     setSelectedSubMenu,
     setSelectedPatientMenu,
   } = props;
+  const history = useHistory();
+
   const classes = useStyles();
   const theme = useTheme();
   const { patientId } = useParams();
+  const [disableUser] = useMutation(deleteProfile);
+  const onConfirm = async () => {
+    try {
+      await disableUser({ variables: { id: patientId }, refetchQueries: [{ query: getPatients }] });
 
+      history.push("/patients");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const cards1 = [
     {
       id: 1,
@@ -254,9 +267,9 @@ const SinglePatient = (props) => {
         <DisablePatient
           open={openDisablePatient}
           setOpen={setOpenDisablePatient}
-          title="Delete Partner"
-          btnValue="disable"
-          onConfirm={() => console.log("confirmed")}
+          title="Delete Patient"
+          btnValue="delete"
+          onConfirm={onConfirm}
           confirmationMsg="disable Patient"
         />
         <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
