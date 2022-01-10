@@ -1,22 +1,12 @@
 import React from "react";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import { makeStyles } from "@mui/styles";
-import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
+import CustomButton from "components/Utilities/CustomButton";
 import { useTheme } from "@mui/material/styles";
-const useStyles = makeStyles((theme) => ({
-  btn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-}));
+
 const Filter = (props) => {
-  const classes = useStyles();
   const checkbox2 = [
     { key: "create", value: "create" },
     { key: "update", value: "update" },
@@ -44,10 +34,11 @@ const Filter = (props) => {
     onSubmitProps.resetForm();
   };
 
-  const greenButton = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
   return (
     <Formik
@@ -57,7 +48,7 @@ const Filter = (props) => {
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isSubmitting, dirty, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid container direction="column" gap={3} marginBottom={4}>
@@ -104,15 +95,12 @@ const Filter = (props) => {
               </Grid>
               <Grid item xs={12} marginTop={24}>
                 <CustomButton
-                  variant="contained"
-                  title="Send Mail"
-                  type={greenButton}
-                  // onClick={handleDialogClose}
-                  className={classes.btn}
-                  disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
-                >
-                  {type === "hcp" ? "Save changes" : "Add Permission"}
-                </CustomButton>
+                  title={type === "hcp" ? "Save changes" : "Add Permission"}
+                  width="100%"
+                  type={buttonType}
+                  isSubmitting={isSubmitting}
+                  disabled={!(dirty || isValid)}
+                />
               </Grid>
             </Grid>
           </Form>

@@ -7,9 +7,8 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
-
 import { makeStyles } from "@mui/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
 import { Formik, Form } from "formik";
@@ -63,13 +62,12 @@ const useStyles = makeStyles((theme) => ({
 const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-
   const [createNewMessage] = useMutation(CREATE_MESSAGE);
-  //
-  const greenButton = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
   const initialValues = {
     subject: "",
@@ -118,7 +116,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isValid, isSubmitting, dirty }) => {
         return (
           <Form>
             <Grid container direction="column">
@@ -192,9 +190,11 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                   <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton
                       title="Send Message"
-                      type={greenButton}
-                      disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
-                      endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                      // endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
                     />
                   </Grid>
                 </Grid>

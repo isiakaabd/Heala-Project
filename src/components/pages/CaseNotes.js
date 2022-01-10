@@ -83,7 +83,6 @@ const CaseNotes = (props) => {
   });
   useEffect(() => {
     const x = consultation.getConsultations.data.filter((i) => i._id === patientId);
-    console.log(x);
     setDoctor(x[0].doctor);
   }, [consultation.getConsultations.data, patientId]);
 
@@ -104,8 +103,6 @@ const CaseNotes = (props) => {
   if (consultations.loading) return <Loader />;
 
   if (caseNoteState && caseNoteState.treatment) {
-    let medications = caseNoteState.treatment;
-    console.log(medications);
     return (
       <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
         <Grid item style={{ marginBottom: "3rem" }}>
@@ -220,7 +217,6 @@ const CaseNotes = (props) => {
                 </Grid>
                 <Grid item container gap={3}>
                   <Grid item>
-                    {/* {caseNoteState.treatment[medication]} */}
                     {Object.keys(caseNoteState.treatment).map((i) => (
                       <Typography variant="body2" key={i}>
                         {i}

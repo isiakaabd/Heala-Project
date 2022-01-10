@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import * as Yup from "yup";
 import Loader from "components/Utilities/Loader";
-import { Grid, Button, Alert, TableRow, Typography, TableCell } from "@mui/material";
+import { Grid, Button, Alert, TableRow, TableCell } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -13,6 +12,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
+import NoData from "components/layouts/NoData";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -228,14 +228,9 @@ const Subscription = () => {
     description: "",
   };
 
-  const validationSchema = Yup.object({
-    name: Yup.string("Enter your Name").required("Name is required"),
-    amount: Yup.string("Enter your Amount").required("Amount is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
-  });
   return (
     <>
-      <Grid container direction="column" gap={2}>
+      <Grid container direction="column" flexWrap="nowrap" gap={2} height="100%">
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -267,8 +262,8 @@ const Subscription = () => {
         </Grid>
         {/* The Search and Filter ends here */}
 
-        <Grid item container style={{ marginTop: "5rem" }}>
-          {plan && plan.length > 0 ? (
+        <Grid item container height="100%" direction="column">
+          {plan.length > 0 ? (
             <EnhancedTable
               headCells={subscriptionHeader}
               rows={plan}
@@ -362,12 +357,11 @@ const Subscription = () => {
                 })}
             </EnhancedTable>
           ) : (
-            <Grid container alignItems="center" marginTop={5} height="100%" justifyContent="center">
-              <Typography variant="h1">No Mail here</Typography>
-            </Grid>
+            <NoData />
           )}
         </Grid>
       </Grid>
+
       {/* // modal */}
       <Modals
         isOpen={isOpen}
@@ -380,7 +374,6 @@ const Subscription = () => {
           type="add"
           setAlert={setAlert}
           initialValues={initialValues}
-          validationSchema={validationSchema}
         />
       </Modals>
 
@@ -392,7 +385,6 @@ const Subscription = () => {
           editId={editId}
           setAlert={setAlert}
           initialValues={singleData}
-          validationSchema={validationSchema}
           setSingleData={setSingleData}
         />
       </Modals>

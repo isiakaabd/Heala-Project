@@ -101,10 +101,7 @@ const Login = () => {
       const { email, password, authType } = values;
       if (isMounted) {
         const { data } = await loginInfo({ variables: { email, password, authType } });
-        if (data) {
-          setAccessToken(data.login.account.refresh_token);
-          history.push("/");
-        }
+
         loginUser({
           data: data,
           messages: {
@@ -112,6 +109,10 @@ const Login = () => {
             type: "success",
           },
         });
+        if (data) {
+          setAccessToken(data.login.account.refresh_token);
+          history.push("/");
+        }
       }
     } catch (error) {
       loginFailue({
@@ -155,7 +156,7 @@ const Login = () => {
             validateOnChange={false}
             validateOnMount
           >
-            {(formik) => {
+            {({ isSubmitting, isValid, dirty }) => {
               return (
                 <Form>
                   <Grid
@@ -233,7 +234,8 @@ const Login = () => {
                         width="100%"
                         type={buttonColors}
                         disableRipple
-                        disabled={formik.isSubmitting || !(formik.dirty || formik.isValid)}
+                        isSubmitting={isSubmitting}
+                        disabled={!(dirty || isValid)}
                       />
                     </Grid>
                     <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>

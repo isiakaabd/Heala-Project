@@ -1,41 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Grid, Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import CustomButton from "components/Utilities/CustomButton";
+import { Grid } from "@mui/material";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-
-const useStyles = makeStyles((theme) => ({
-  headerGridWrapper: {
-    padding: "1.5rem 2rem",
-    background: "rgb(251, 251, 251)",
-    borderRadius: "1rem",
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottom: `1px solid ${theme.palette.common.lightGrey}`,
-  },
-
-  closeIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "2rem",
-      cursor: "pointer",
-
-      "&:hover": {
-        color: theme.palette.common.red,
-      },
-    },
-  },
-  searchFilterBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      // color: theme.palette.common.grey,
-      width: "100%",
-    },
-  },
-}));
-
+import { useTheme } from "@mui/material/styles";
 const checkbox2 = [
   { key: "create", value: "create" },
   { key: "update", value: "update" },
@@ -56,13 +26,18 @@ const validationSchema = Yup.object({
 });
 
 const ReferPatient = ({ handleDialogClose, initialValues }) => {
+  const theme = useTheme();
   const onSubmit = async (values, onSubmitProps) => {
     console.log(values);
     onSubmitProps.resetForm();
     handleDialogClose();
   };
-
-  const classes = useStyles();
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
   return (
     <Formik
       initialValues={initialValues}
@@ -71,7 +46,7 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isSubmitting, dirty, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -103,14 +78,13 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
                   />
                 </Grid>
                 <Grid item xs={12} marginTop={5}>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    className={classes.searchFilterBtn}
-                    // disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
-                  >
-                    Search available HCP
-                  </Button>
+                  <CustomButton
+                    title="Search available HCP"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Grid>
             </Grid>

@@ -7,7 +7,7 @@ import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
 import displayPhoto from "assets/images/avatar.png";
 import imageUpload from "assets/images/imageUpload.svg";
-import DoneSharpIcon from "@mui/icons-material/DoneSharp";
+// import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PreviousButton from "components/Utilities/PreviousButton";
@@ -92,10 +92,11 @@ const useStyles = makeStyles((theme) => ({
 const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const theme = useTheme();
 
-  const redButton = {
+  const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
   const imageuploadContainer = [
     {
@@ -258,7 +259,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
         <Grid item sm container>
           <Grid item sx={{ margin: "auto 4rem auto auto" }}>
-            <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
+            <CustomButton
+              title="Verify HCP"
+              width="100%"
+              type={buttonType}
+              // isSubmitting={isSubmitting}
+              // disabled={!(dirty || isValid)}
+            />
           </Grid>
         </Grid>
       </Grid>

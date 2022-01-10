@@ -7,7 +7,7 @@ import { muiTheme } from "components/muiTheme";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
-import ScrollToView from "components/ScrollToView";
+import ScrollToView from "components/ScrollToView"
 import Login from "components/pages/Login";
 import { setAccessToken } from "./accessToken";
 import { useSelector } from "react-redux";

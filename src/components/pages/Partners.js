@@ -143,13 +143,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const names = ["General Hospital, Lekki", "H-Medix", "X Lab"];
-// const dates = ["Hello", "World", "Goodbye", "World"];
-// const categories = ["Hospital", "Pharmacy", "Diagnostic Center"];
-
 const Partners = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
 
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -324,7 +326,7 @@ const Partners = () => {
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
+          {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column" gap={3}>
@@ -364,15 +366,13 @@ const Partners = () => {
                   <Grid item md></Grid>
                 </Grid>
                 <Grid item container xs={12}>
-                  <Button
-                    variant="contained"
-                    onClick={() => setOpenFilterPartner(false)}
-                    type="submit"
-                    className={classes.searchFilterBtn}
-                    disableRipple
-                  >
-                    Apply Filter
-                  </Button>
+                  <CustomButton
+                    title="Apply Filter"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Form>
             );
@@ -394,7 +394,7 @@ const Partners = () => {
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
+          {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
@@ -472,15 +472,13 @@ const Partners = () => {
                   </Grid>
                 </Grid>
                 <Grid item container marginTop={4}>
-                  <Button
-                    variant="contained"
-                    onClick={() => setOpenAddPartner(false)}
-                    type="submit"
-                    className={classes.searchFilterBtn}
-                    disableRipple
-                  >
-                    Add Partner
-                  </Button>
+                  <CustomButton
+                    title="Add Partner"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Form>
             );
