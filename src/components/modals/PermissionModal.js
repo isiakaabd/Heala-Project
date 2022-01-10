@@ -1,47 +1,14 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material/styles";
+import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { CREATE_PERMISSION, UPDATE_PERMISSION } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { getSinglePermissions } from "components/graphQL/useQuery";
-
-const useStyles = makeStyles((theme) => ({
-  btn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-  checkboxContainer: {
-    "&.MuiBox-root": {
-      padding: "2rem 0",
-      border: "1px solid #E0E0E0",
-      borderRadius: ".4rem",
-      "&:active": {
-        border: "2px solid black",
-      },
-    },
-  },
-  checkbox: {
-    "& .MuiSvgIcon-root": {
-      fontSize: 28,
-    },
-    "&.Mui-checked": {
-      color: "green !important",
-    },
-  },
-  FormLabel: {
-    "&.MuiFormLabel-root": {
-      ...theme.typography.FormLabel,
-    },
-  },
-}));
 
 export const PermissionModal = ({
   type,
@@ -52,6 +19,13 @@ export const PermissionModal = ({
   editId,
   setSinglePermission,
 }) => {
+  const theme = useTheme();
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
   const [createPermission] = useMutation(CREATE_PERMISSION);
   const [updatePermission] = useMutation(UPDATE_PERMISSION);
 
@@ -120,8 +94,6 @@ export const PermissionModal = ({
     onSubmitProps.resetForm();
   };
 
-  const classes = useStyles();
-
   return (
     <Formik
       initialValues={initialValues}
@@ -130,7 +102,7 @@ export const PermissionModal = ({
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isSubmitting, dirty, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -153,15 +125,13 @@ export const PermissionModal = ({
                 </Grid>
 
                 <Grid item xs={12} marginTop={10}>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    // onClick={handleDialogClose}
-                    className={classes.btn}
-                    // disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
-                  >
-                    {type === "edit" ? "Save changes" : "Add Permission"}
-                  </Button>
+                  <CustomButton
+                    title={type === "edit" ? "Save changes" : "Add Permission"}
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Grid>
             </Grid>

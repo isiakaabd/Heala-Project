@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
+import Loader from "components/Utilities/Loader";
 
 const CustomButton = ({
   title,
@@ -13,7 +14,8 @@ const CustomButton = ({
   borderRadius,
   textColor,
   path,
-  type: { background, hover, active },
+  type: { background, hover, active, disabled },
+  isSubmitting,
   ...rest
 }) => {
   const useStyles = makeStyles((theme) => ({
@@ -25,6 +27,9 @@ const CustomButton = ({
         width: width,
         borderRadius: borderRadius ? borderRadius : 10,
         height: height ? height : "5rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
 
         "&:hover": {
           backgroundColor: hover,
@@ -40,6 +45,11 @@ const CustomButton = ({
           boxShadow: "none",
         },
 
+        "&:disabled": {
+          backgroundColor: disabled,
+          color: "brown",
+          boxShadow: "none",
+        },
         "& .MuiButton-endIcon>*:nth-of-type(1)": {
           fontSize: "2rem",
         },
@@ -64,7 +74,7 @@ const CustomButton = ({
       className={classes.button}
       {...rest}
     >
-      {title}
+      {!isSubmitting && title} {isSubmitting && <Loader size={35} color="info" />}
     </Button>
   );
 };
@@ -84,6 +94,7 @@ CustomButton.propTypes = {
   borderRadius: PropTypes.string,
   textColorOnHover: PropTypes.string,
   path: PropTypes.string,
+  isSubmitting: PropTypes.bool,
 };
 
 export default CustomButton;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modals from "components/Utilities/Modal";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
@@ -149,6 +150,12 @@ const PatientAppointment = (props) => {
     setSelectedPatientMenu(2);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
 
   const genderType = [
     { key: "Male", value: "Male" },
@@ -309,7 +316,7 @@ const PatientAppointment = (props) => {
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
+          {({ isSubmitting, dirty, isValid }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column" gap={2}>
@@ -358,15 +365,13 @@ const PatientAppointment = (props) => {
                     </Grid>
                   </Grid>
                   <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
-                    <Button
-                      variant="contained"
-                      // onClick={handlePatientClose}
-                      type="submit"
-                      className={classes.btn}
-                      disableRipple
-                    >
-                      Apply Filter
-                    </Button>
+                    <CustomButton
+                      title=" Apply Filter"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
                   </Grid>
                 </Grid>
               </Form>

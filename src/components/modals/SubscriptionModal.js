@@ -1,53 +1,14 @@
 import React, { useEffect } from "react";
+import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
 import { getSinglePlan } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
-
-const useStyles = makeStyles((theme) => ({
-  btn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-
-  button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "15rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-}));
+import * as Yup from "yup";
+import { useTheme } from "@mui/material/styles";
 
 export const SubscriptionModal = ({
   handleDialogClose,
@@ -56,8 +17,8 @@ export const SubscriptionModal = ({
   editId,
   setSingleData,
   initialValues,
-  validationSchema,
 }) => {
+  const theme = useTheme();
   const [createPlan] = useMutation(CREATE_PLAN);
   const [updatePlan] = useMutation(UPDATE_PLAN);
 
@@ -66,18 +27,24 @@ export const SubscriptionModal = ({
       id: editId,
     },
   });
+  const validationSchema = Yup.object({
+    name: Yup.string("Enter your Name").required("Name is required"),
+    amount: Yup.number("Enter your Amount")
+      .typeError(" Enter a valid amount")
+      .min(0, "Min value is  1")
+      .required("Amount is required"),
+    description: Yup.string("Enter Description").required("Description is required"),
+  });
 
   useEffect(() => {
     if (single.data && single.data.getPlan) {
       setSingleData({
         description: single.data.getPlan.description,
         name: single.data.getPlan.name,
-        amount: single.data.getPlan.amount,
+        amount: Number(single.data.getPlan.amount),
       });
     }
   }, [single.data, setSingleData]);
-
-  const classes = useStyles();
 
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description } = values;
@@ -131,7 +98,12 @@ export const SubscriptionModal = ({
     handleDialogClose();
     onSubmitProps.resetForm();
   };
-
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
   return (
     <Formik
       initialValues={initialValues}
@@ -140,7 +112,7 @@ export const SubscriptionModal = ({
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isSubmitting, dirty, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -171,9 +143,13 @@ export const SubscriptionModal = ({
                 </Grid>
 
                 <Grid item xs={12} marginTop={10}>
-                  <Button variant="contained" type="submit" className={classes.btn}>
-                    {type === "edit" ? "Save Plan" : "Add Plan"}
-                  </Button>
+                  <CustomButton
+                    title={type === "edit" ? "Save Plan" : "Add Plan"}
+                    width="100%"
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                    type={buttonType}
+                  />
                 </Grid>
               </Grid>
             </Grid>

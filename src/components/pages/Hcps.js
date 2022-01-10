@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Input,
-  Chip,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Button, Checkbox, Input, Chip, Avatar } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
@@ -121,6 +112,13 @@ const useStyles = makeStyles((theme) => ({
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
   const [profiles, setProfiles] = useState("");
   const doctorProfile = useQuery(getDoctorsProfile);
   useEffect(() => {
@@ -128,12 +126,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       setProfiles(doctorProfile.data.doctorProfiles.data);
     }
   }, [doctorProfile]);
-
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
 
   const [searchHcp, setSearchHcp] = useState("");
   const [openHcpFilter, setOpenHcpFilter] = useState(false);
@@ -186,7 +178,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { setSelectedRows } = useActions();
   console.log(profiles);
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
@@ -208,7 +200,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
       </Grid>
-      <Grid item container style={{ marginTop: "5rem" }}>
+      <Grid item container height="100%" direction="column">
         {profiles.length > 0 ? (
           <EnhancedTable
             headCells={hcpsHeadCells}
@@ -323,9 +315,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
               })}
           </EnhancedTable>
         ) : (
-          <Grid container alignItems="center" height="100%" justifyContent="center">
-            <Typography variant="h1">No Message here</Typography>
-          </Grid>
+          <NoData />
         )}
       </Grid>
       {/* Filter Modal */}
@@ -342,7 +332,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
+          {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column" gap={1}>
@@ -384,14 +374,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   </Grid>
                 </Grid>
                 <Grid item marginTop={3}>
-                  <Button
-                    variant="contained"
-                    onClick={() => setOpenHcpFilter(false)}
-                    type="submit"
-                    className={classes.searchFilterBtn}
-                  >
-                    Apply Filter
-                  </Button>
+                  <CustomButton
+                    title="Apply Filter"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Form>
             );
@@ -414,7 +403,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             validateOnChange={false}
             validateOnMount
           >
-            {(formik) => {
+            {({ isSubmitting, dirty, isValid }) => {
               return (
                 <Form style={{ marginTop: "3rem" }}>
                   <Grid item container direction="column">
@@ -534,15 +523,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     </Grid>
                   </Grid>
                   <Grid item container xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={() => setOpenAddHcp(false)}
-                      type="submit"
-                      className={classes.searchFilterBtn}
-                      disableRipple
-                    >
-                      Add HCP
-                    </Button>
+                    <CustomButton
+                      title="Add HCP"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
                   </Grid>
                 </Form>
               );

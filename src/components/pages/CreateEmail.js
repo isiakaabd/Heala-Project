@@ -11,7 +11,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useActions } from "components/hooks/useActions";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";
@@ -92,11 +92,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
   const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
-  const greenButton = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
-    active: theme.palette.primary.dark,
-  };
+
   const { emailData } = useActions();
 
   useEffect(() => {
@@ -105,6 +101,13 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
 
   const onSubmit = (values, onSubmitProps) => {
     onSubmitProps.setSubmitting(false);
@@ -135,9 +138,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
-        console.log(formik);
-
+      {({ isSubmitting, isValid, dirty }) => {
         return (
           <Form>
             <Grid container direction="column">
@@ -168,7 +169,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                               <ChipWrapper>
                                 <ChipInput
                                   fullWidth
-                                  // {...field}
+                                  {...field}
                                   name="name"
                                   id="name"
                                   value={value}
@@ -206,7 +207,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                     <Grid container alignItems="center">
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
-                          Subject:{" "}
+                          Subject:
                         </Typography>
                       </Grid>
                       <Grid item className={classes.inputGrid}>
@@ -255,9 +256,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                   <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton
                       title="Send Mail"
-                      type={greenButton}
-                      disabled={formik.isSubmitting || !(formik.dirty && formik.isValid)}
-                      endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
                     />
                   </Grid>
                 </Grid>

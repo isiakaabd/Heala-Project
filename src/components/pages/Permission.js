@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Loader from "components/Utilities/Loader";
+import CustomButton from "components/Utilities/CustomButton";
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
 import { Grid, Typography, Button, Alert, Chip } from "@mui/material";
 import Modals from "components/Utilities/Modal";
@@ -12,14 +14,11 @@ import AddIcon from "@mui/icons-material/Add";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
 import { PermissionHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
-import FormSelect from "components/Utilities/FormSelect";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { PermissionModal } from "components/modals/PermissionModal";
@@ -126,6 +125,20 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
     // checkbox: [],
     description: "",
   };
+  const initialValues1 = {
+    name: "",
+    date: "",
+    category: "",
+  };
+
+  const validationSchema1 = Yup.object({
+    name: Yup.string("Enter your Permission").required("permission is required"),
+    date: Yup.string("Select Date").required("Date is required"),
+    category: Yup.string("Select Category").required("Category is required"),
+  });
+  const onSubmit1 = (values) => {
+    console.log(values);
+  };
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
@@ -138,7 +151,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [referral, setReferral] = useState("");
   const [deleteModal, setdeleteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -291,31 +303,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         </Grid>
                       </Grid>
                     </TableCell>
-                    {/* <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                    >
-                      <Grid
-                        container
-                        rowSpacing={2}
-                        style={{
-                          maxWidth: "25rem",
-                          display: "inline-flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        {permission.map((per) => {
-                          return (
-                            <Grid item xs={6} key={per._id}>
-                              <Chip label={per.description} className={classes.badge} />
-                            </Grid>
-                          );
-                        })}
-                      </Grid>
-                    </TableCell> */}
 
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -355,70 +342,62 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <>
-          <Grid item container direction="column">
-            <Grid item container spacing={2}>
-              <Grid item xs={6} marginBottom={4}>
-                <Grid container direction="column" gap={1}>
-                  <FormLabel component="legend" className={classes.FormLabel}>
-                    Name
-                  </FormLabel>
-                  <FormControl fullWidth>
-                    <FormSelect
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, dirty, isValid }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
+                  <Grid item container spacing={2}>
+                    <Grid item xs={6} marginBottom={4}>
+                      <FormikControl
+                        control="select"
+                        options={referralOptions}
+                        name="name"
+                        label="Name"
+                        placeholder="Enter Plan Name"
+                      />
+                    </Grid>
+                    {/* second grid */}
+                    <Grid item xs={6}>
+                      <FormikControl
+                        control="select"
+                        options={referralOptions}
+                        name="date"
+                        label="Date"
+                        placeholder="Choose Date"
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item container spacing={2}>
+                    <FormikControl
+                      control="select"
                       options={referralOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
-                      placeholderText="Select Name"
+                      name="category"
+                      label="Category"
+                      placeholder="Save Category"
                     />
-                  </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              {/* second grid */}
-              <Grid item xs={6}>
-                <Grid container gap={1} direction="column">
-                  <FormLabel component="legend" className={classes.FormLabel}>
-                    Date
-                  </FormLabel>
-                  <FormControl fullWidth>
-                    <FormSelect
-                      options={referralOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
-                      placeholderText="Choose Date"
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Grid>
-            {/* <Grid item container xs={6} direction="column"> */}
-            <Grid item container spacing={2}>
-              <Grid item container gap={1} xs={6}>
-                <FormLabel component="legend" className={classes.FormLabel}>
-                  Category
-                </FormLabel>
-                <FormControl fullWidth style={{ height: "3rem" }}>
-                  <FormSelect
-                    options={referralOptions}
-                    value={referral}
-                    onChange={(event) => setReferral(event.target.value)}
-                    placeholderText="Save Category"
+                <Grid item container xs={12} marginTop={20}>
+                  <CustomButton
+                    title="Apply Filter"
+                    width="100%"
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                    type={buttonType}
                   />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} marginTop={20}>
-            <Button
-              variant="contained"
-              onClick={handleDialogClose}
-              to="/view"
-              type="submit"
-              className={classes.button}
-            >
-              Apply Filter
-            </Button>
-          </Grid>
-        </>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
 
       {/* // modal */}

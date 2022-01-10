@@ -146,6 +146,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
 
   const specializations = [
@@ -360,9 +361,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
-            console.log(formik);
-
+          {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
@@ -387,15 +386,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                   </Grid>
                 </Grid>
                 <Grid item container xs={12} marginTop={30}>
-                  <Button
-                    variant="contained"
-                    onClick={handleDialogClose}
-                    to="/view"
-                    type="submit"
-                    className={classes.btn}
-                  >
-                    Apply Filter
-                  </Button>
+                  <CustomButton
+                    title="Apply Filter"
+                    width="100%"
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                    type={buttonType}
+                  />
                 </Grid>
               </Form>
             );
@@ -417,9 +414,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
-            console.log(formik);
-
+          {({ isValid, isSubmitting, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
@@ -483,15 +478,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     </Grid>
                   </Grid>
                   <Grid item container xs={12} marginTop={5}>
-                    <Button
-                      variant="contained"
-                      // onClick={handleAdminClose}
-                      type="submit"
-                      className={classes.btn}
-                      disableRipple
-                    >
-                      Add Admin
-                    </Button>
+                    <CustomButton
+                      title="Add Admin"
+                      width="100%"
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                      type={buttonType}
+                    />
                   </Grid>
                 </Grid>
               </Form>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import NoData from "components/layouts/NoData";
 import { Link } from "react-router-dom";
-import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
 import Loader from "components/Utilities/Loader";
-import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import Search from "components/Utilities/Search";
 import CustomButton from "components/Utilities/CustomButton";
@@ -15,7 +13,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { messagesHeadCells } from "components/Utilities/tableHeaders";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Button, Checkbox, Grid } from "@mui/material";
 import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -140,7 +138,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   if (loading) return <Loader />;
   else {
     return (
-      <Grid container direction="column">
+      <Grid containerdirection="column" flexWrap="nowrap" height="100%">
         <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
@@ -161,7 +159,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             />
           </Grid>
         </Grid>
-        <Grid item container style={{ marginTop: "5rem", height: "100%", flexGrow: 1 }}>
+        <Grid item container height="100%" direction="column">
           {message.length > 0 ? (
             <EnhancedTable
               headCells={messagesHeadCells}
@@ -257,9 +255,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                 })}
             </EnhancedTable>
           ) : (
-            <Grid container alignItems="center" height="100%" justifyContent="center">
-              <Typography variant="h1">No Message here</Typography>
-            </Grid>
+            <NoData />
           )}
         </Grid>
       </Grid>

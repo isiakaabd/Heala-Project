@@ -10,6 +10,7 @@ const green = "#3EA584";
 const lightGreen = "#ECF6F3";
 const gold = "rgb(243, 173, 83)";
 const black = "#2D2F39";
+const disable = "#cccccc";
 
 export const muiTheme = createTheme({
   palette: {
@@ -17,6 +18,7 @@ export const muiTheme = createTheme({
       dark,
       grey,
       red,
+      disable,
       green,
       lightRed,
       lightGrey,
@@ -42,6 +44,9 @@ export const muiTheme = createTheme({
     },
     warning: {
       main: gold,
+    },
+    disabled: {
+      main: disable,
     },
   },
   typography: {

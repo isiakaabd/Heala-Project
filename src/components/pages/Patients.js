@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
+import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
@@ -141,6 +142,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const handleDialogOpen = () => setIsOpen(true);
   const handleDialogClose = () => setIsOpen(false);
 
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
+
   if (patient.loading) return <Loader />;
   if (profiles) {
     return (
@@ -273,7 +281,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             validateOnMount
             validateOnBlur
           >
-            {(formik) => {
+            {({ isSubmitting, isValid, dirty }) => {
               return (
                 <Form style={{ marginTop: "3rem" }}>
                   <Grid item container direction="column">
@@ -321,14 +329,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       </Grid>
                     </Grid>
                     <Grid item>
-                      <Button
-                        variant="contained"
-                        onClick={handleDialogClose}
-                        type="submit"
-                        className={classes.searchFilterBtn}
-                      >
-                        Apply Filter
-                      </Button>
+                      <CustomButton
+                        title="Apply Filter"
+                        width="100%"
+                        type={buttonType}
+                        isSubmitting={isSubmitting}
+                        disabled={!(dirty || isValid)}
+                      />
                     </Grid>
                   </Grid>
                 </Form>

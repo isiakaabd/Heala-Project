@@ -1,37 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
+import CustomButton from "components/Utilities/CustomButton";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-
-const useStyles = makeStyles((theme) => ({
-  btn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-
-  checkbox: {
-    "& .MuiSvgIcon-root": {
-      fontSize: 28,
-    },
-    "&.Mui-checked": {
-      color: "green !important",
-    },
-  },
-  FormLabel: {
-    "&.MuiFormLabel-root": {
-      ...theme.typography.FormLabel,
-    },
-  },
-}));
+import { useTheme } from "@mui/material/styles";
 
 export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
+  const theme = useTheme();
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
+  };
   const optionss = [
     {
       label: "permission 1",
@@ -47,7 +30,6 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
     },
   ];
 
-  const classes = useStyles();
   const initialValues = {
     name: "",
     checkbox: [],
@@ -68,7 +50,7 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
       validateOnChange={false}
       validateOnMount
     >
-      {(formik) => {
+      {({ isSubmitting, dirty, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column">
@@ -96,14 +78,13 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                 </Grid>
               </Grid>
               <Grid item xs={12} marginTop={10}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  // onClick={handleDialogCloses}
-                  className={classes.btn}
-                >
-                  {type === "edit" ? "Save changes" : "Add Role"}
-                </Button>
+                <CustomButton
+                  title={type === "edit" ? "Save changes" : "Add Role"}
+                  width="100%"
+                  isSubmitting={isSubmitting}
+                  type={buttonType}
+                  disabled={!(dirty || isValid)}
+                />
               </Grid>
             </Grid>
           </Form>

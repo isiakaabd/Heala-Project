@@ -68,7 +68,6 @@ const SinglePatient = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
   const { patientId } = useParams();
 
   const cards1 = [

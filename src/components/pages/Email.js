@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
@@ -145,6 +146,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
   const initialValues = {
     referral: "",
@@ -169,7 +171,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
 
   return (
     <>
-      <Grid container direction="column">
+      <Grid container direction="column" height="100%" flexWrap="nowrap">
         {response ? (
           <Grid
             item
@@ -215,8 +217,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         </Grid>
         {/* The Search and Filter ends here */}
 
-        {emailData && emailData.length > 0 ? (
-          <Grid item container style={{ marginTop: "5rem" }}>
+        <Grid item container direction="column" height="100%">
+          {emailData && emailData.length > 0 ? (
             <EnhancedTable
               headCells={emailHeader}
               rows={rows}
@@ -331,12 +333,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                   );
                 })}
             </EnhancedTable>
-          </Grid>
-        ) : (
-          <Grid container alignItems="center" marginTop={5} height="100%" justifyContent="center">
-            <Typography variant="h1">No Mail here</Typography>
-          </Grid>
-        )}
+          ) : (
+            <NoData />
+          )}
+        </Grid>
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
@@ -347,7 +347,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
           validateOnChange={false}
           validateOnMount
         >
-          {(formik) => {
+          {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
@@ -385,15 +385,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                   </Grid>
                 </Grid>
                 <Grid item container xs={12} marginTop={20}>
-                  <Button
-                    variant="contained"
-                    onClick={handleDialogClose}
-                    to="/view"
-                    type="submit"
-                    className={classes.btn}
-                  >
-                    Apply Filter
-                  </Button>
+                  <CustomButton
+                    title=" Apply Filter"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Form>
             );
