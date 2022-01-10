@@ -203,9 +203,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       <TableCell
                         id={labelId}
                         scope="row"
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.grey }}
+                        style={{ color: theme.palette.common.grey, textAlign: "left" }}
                       >
                         {row._id}
                       </TableCell>
@@ -214,7 +214,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           style={{
                             height: "100%",
                             display: "flex",
-                            alignItems: "center",
+                            alignItems: "left",
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
@@ -229,13 +229,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
+                      <TableCell align="left" className={classes.tableCell}>
                         {row.plan}
                       </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
+                      <TableCell align="left" className={classes.tableCell}>
                         {row.consultations}
                       </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
+                      <TableCell align="left" className={classes.tableCell}>
                         <Chip
                           label={row.status}
                           className={classes.badge}

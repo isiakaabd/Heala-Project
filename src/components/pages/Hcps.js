@@ -235,18 +235,18 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     <TableCell
                       id={labelId}
                       scope="row"
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
                     >
                       {row.dociId}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       <div
                         style={{
                           height: "100%",
                           display: "flex",
-                          alignItems: "center",
+                          alignItems: "left",
                         }}
                       >
                         <span style={{ marginRight: "1rem" }}>
@@ -262,23 +262,23 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       </div>
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
                       {row.specialization}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       {row.consultation}
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
                       {row.hospital}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       <Chip
                         label={row.status}
                         className={classes.badge}
