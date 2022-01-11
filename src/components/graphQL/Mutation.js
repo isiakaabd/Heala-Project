@@ -216,3 +216,21 @@ export const deleteDoctor = gql`
     }
   }
 `;
+export const addPartner = gql`
+  mutation addPartner($name: String!, $category: String!, $email: String!, $plan: String!) {
+    addPartner(data: { name: $name, category: $category, email: $email, plan: $plan }) {
+      partner {
+        _id
+        name
+        email
+        category
+        plan
+        logoImageUrl
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

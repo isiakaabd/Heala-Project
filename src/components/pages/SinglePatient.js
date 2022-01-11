@@ -20,9 +20,9 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import ReferPatient from "components/modals/ReferPatient";
 import { useQuery, useMutation } from "@apollo/client";
-import { deleteProfile } from "components/graphQL/Mutation";
 import { getPatients } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
+import { deleteProfile } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
