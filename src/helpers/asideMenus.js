@@ -18,6 +18,7 @@ export const menus = [
   { id: 5, title: "Messages", icon: BsChatDotsFill, path: "/messages" },
   { id: 6, title: "Emails", icon: EmailIcon, path: "/email" },
   { id: 7, title: "HCP Verification", icon: VerifiedIcon, path: "/verification" },
+  { id: 12, title: "White Label", icon: LoopIcon, path: "/label" },
   { id: 8, title: "Finance", icon: PaymentsIcon, path: "/finance" },
   { id: 9, title: "Referrals", icon: LoopIcon, path: "/referrals" },
   { id: 10, title: "Subscription", icon: SubscriptionsIcon, path: "/plans" },

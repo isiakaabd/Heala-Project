@@ -257,7 +257,7 @@ const HeaderText = (props) => {
                 ? "Patients"
                 : selectedHcpMenu === 6
                 ? "Consultations"
-                : ""
+                : "White Label"
             }
             title="HCPs"
             subTitle="HCP View"
@@ -358,6 +358,18 @@ const HeaderText = (props) => {
         );
       }
       return <CustomHeaderTitle title="Settings" path="settings" />;
+    case 12:
+      if (selectedSubMenu === 13) {
+        return (
+          <CustomSubHeaderText
+            title="White Label"
+            subTitle={pathname === "/label/provider" ? "Providers" : "User Types"}
+            scopedMenu={0}
+            scopedSubMenu={0}
+          />
+        );
+      }
+      return <CustomHeaderTitle title="White Label" path="label" />;
     default:
       return (
         <div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import NoData from "components/layouts/NoData";
 import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -82,7 +83,7 @@ const Consultations = (props) => {
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
-  const { loading, data } = useQuery(getConsultations);
+  const { loading, data, error } = useQuery(getConsultations);
 
   useEffect(() => {
     if (data && data.getConsultations.data) {
@@ -99,6 +100,8 @@ const Consultations = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
   if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -127,6 +130,7 @@ const Consultations = (props) => {
           hasCheckbox={true}
         >
           {consultations
+            .filter((i) => i.patient == patientId)
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row._id, selectedRows);
@@ -174,17 +178,17 @@ const Consultations = (props) => {
                       <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
+                  <TableCell align="left" className={classes.tableCell}>
                     {dateMoment(row.createdAt)}
                   </TableCell>
                   <TableCell
-                    align="center"
+                    align="left"
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                   >
                     {row.description}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     <Button
                       variant="contained"
                       className={classes.button}

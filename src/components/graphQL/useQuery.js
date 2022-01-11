@@ -295,6 +295,20 @@ export const getUserDetails = gql`
     }
   }
 `;
+export const getPartners = gql`
+  query getPartners {
+    getPartners {
+      data {
+        _id
+        name
+        email
+        category
+        plan
+        logoImageUrl
+      }
+    }
+  }
+`;
 export const UserProfile = (id) => {
   const { data, error, loading } = useQuery(getUserDetails, {
     variables: {

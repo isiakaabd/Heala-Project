@@ -48,6 +48,9 @@ import CreateEmail from "components/pages/CreateEmail";
 import ViewMail from "components/pages/ViewMail";
 import PendingPayout from "components/pages/PendingPayout";
 import CircularChart from "components/Utilities/CircularChart";
+import WhiteLabel from "components/pages/WhiteLabel";
+import Providers from "components/pages/Providers";
+import UserTypes from "./UserTypes";
 // import { useSelector } from "react-redux";
 // import { useActions } from "components/hooks/useActions";
 // import { UserProfile } from "components/graphQL/useQuery";
@@ -463,6 +466,32 @@ const Routes = (props) => {
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
+      />
+      <PrivateRoute
+        exact
+        path="/label"
+        component={WhiteLabel}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+      <PrivateRoute
+        path="/label/provider"
+        component={Providers}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+
+      <PrivateRoute
+        path="/label/types"
+        component={UserTypes}
+        selectedMenu={selectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
       />
 
       <PrivateRoute

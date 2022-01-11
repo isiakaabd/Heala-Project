@@ -245,6 +245,33 @@ export const pendingHeader = [
     label: "Bank",
   },
 ];
+export const pendingHeader2 = [
+  {
+    id: 0,
+    label: "Date",
+  },
+  {
+    id: 1,
+    label: "Heala  ID",
+  },
+  {
+    id: 2,
+    label: " Name",
+  },
+
+  {
+    id: 3,
+    label: "Amount paid",
+  },
+  {
+    id: 4,
+    label: "Account Details",
+  },
+  {
+    id: 5,
+    label: "Bank",
+  },
+];
 export const viewRefferalHeader = [
   {
     id: 0,
@@ -324,6 +351,11 @@ export const hcpsHeadCells = [
 // Partner's HEADCELLS
 export const partnersHeadCells = [
   { id: 0, label: "Partner's Name" },
+  { id: 1, label: "Category" },
+  { id: 2, label: "" },
+];
+export const partnersHeadCells2 = [
+  { id: 0, label: "Provider" },
   { id: 1, label: "Category" },
   { id: 2, label: "" },
 ];

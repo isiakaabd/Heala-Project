@@ -427,6 +427,7 @@ export const rows = [
   {
     id: 1,
     lastName: "Snow",
+    name: "Heala",
     entryDate: "July 17, 2021",
     firstName: "Jon",
     category: "HCP",
@@ -456,6 +457,7 @@ export const rows = [
     category: "User",
     planName: "Plan 1",
     amount: "₦ 10,000",
+    name: "Heala",
     medical: 123445,
     bank: "Kuda MFB",
     status: "active",
@@ -484,6 +486,7 @@ export const rows = [
     roleName: "role 1",
     bank: "Kuda MFB",
     entryDate: "July 17, 2021",
+    name: "Heala",
     firstName: "Jaime",
     planName: "Plan 1",
     category: "HCP",

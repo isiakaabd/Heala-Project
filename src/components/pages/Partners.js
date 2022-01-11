@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { Formik, Form } from "formik";
+import NoData from "components/layouts/NoData";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
 import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
+
 import Input from "@mui/material/Input";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
@@ -18,16 +16,20 @@ import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { partnersHeadCells } from "components/Utilities/tableHeaders";
-import { partnersRows } from "components/Utilities/tableData";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-
+import { useQuery } from "@apollo/client";
+import { getPartners } from "components/graphQL/useQuery";
+import { partnersHeadCells } from "components/Utilities/tableHeaders";
+import Loader from "components/Utilities/Loader";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -152,6 +154,11 @@ const Partners = () => {
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
+  const redButton = {
+    background: theme.palette.error.light,
+    hover: theme.palette.error.light,
+    active: theme.palette.error.dark,
+  };
 
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -204,16 +211,26 @@ const Partners = () => {
     { key: "Optometry", value: "Optometry" },
     { key: "Pathology", value: "Pathology" },
   ];
+  const { loading, error, data } = useQuery(getPartners);
+  const [partner, setPartners] = useState([]);
+  useEffect(() => {
+    if (data) {
+      setPartners(data.getPartners.data);
+    }
+  }, [data]);
 
   // const { hospitalName, date, categoryName } = filterSelectInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  console.log(partner);
 
+  if (error) return <NoData error={error.message} />;
+  if (loading) return <Loader />;
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>
-        <Grid item className={classes.searchGrid}>
+        <Grid item className={classes.searchGrid} gap={2}>
           <Search
             value={searchPartner}
             onChange={(e) => setSearchPartner(e.target.value)}
@@ -224,6 +241,15 @@ const Partners = () => {
         <Grid item className={classes.actionBtnGrid}>
           <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
+        <Grid item className={classes.actionBtnGrid}>
+          <CustomButton
+            endIcon={<PersonAddAlt1Icon />}
+            title="Add  Partner Category"
+            type={redButton}
+
+            // onClick={() => setOpenAddPartner(true)}
+          />
+        </Grid>
         <Grid item>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
@@ -233,85 +259,88 @@ const Partners = () => {
           />
         </Grid>
       </Grid>
-      <Grid item container style={{ marginTop: "5rem" }}>
-        <EnhancedTable
-          headCells={partnersHeadCells}
-          rows={partnersRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {partnersRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+      <Grid item container height="100%" direction="column">
+        {partner.length > 0 ? (
+          <EnhancedTable
+            headCells={partnersHeadCells}
+            rows={partner}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {partner
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        paddingLeft: "7rem",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                  >
-                    {row.category}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Button
-                      variant="contained"
-                      disableRipple
-                      className={`${classes.tableBtn} ${classes.redBtn}`}
-                      endIcon={<DeleteIcon color="error" />}
-                      onClick={() => setOpenDeletePartner(true)}
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.name}`}
+                            src={row.logoImageUrl}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      Delete partner
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
+                      {row.category}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        className={`${classes.tableBtn} ${classes.redBtn}`}
+                        endIcon={<DeleteIcon color="error" />}
+                        onClick={() => setOpenDeletePartner(true)}
+                      >
+                        Delete partner
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        ) : (
+          <NoData />
+        )}
       </Grid>
       <Modals
         isOpen={openFilterPartner}

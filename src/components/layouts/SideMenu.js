@@ -130,7 +130,7 @@ const SideMenu = (props) => {
     try {
       await logout_user();
       logout();
-      setSelectedMenu(12);
+      setSelectedMenu(13);
     } catch (err) {
       console.log(err.message);
     }
