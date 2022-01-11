@@ -8,12 +8,6 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
-// const WhiteLabel = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
-//   return <div>daasdd</div>;
-// };
-
-// import React from "react";
-
 const useStyles = makeStyles((theme) => ({
   containerGrid: {
     paddingTop: "7em",

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
+import { ProviderModal } from "components/modals/ProviderModal";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import { pendingHeader } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import NoData from "components/layouts/NoData";
 import { Grid, TableRow, TableCell } from "@mui/material";
 import CustomButton from "components/Utilities/CustomButton";
-import Checkbox from "@mui/material/Checkbox";
+import { Checkbox, Alert } from "@mui/material";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -19,7 +20,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
-
+import Modals from "components/Utilities/Modal";
 import AddIcon from "@mui/icons-material/Add";
 
 const useStyles = makeStyles((theme) => ({
@@ -79,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
 
       "&:hover": {
-        background: theme.palette.error.light,
-        color: "#fff",
+        background: theme.palette.common.lightGrey,
+        color: "white",
       },
     },
   },
@@ -151,6 +152,9 @@ const useStyles = makeStyles((theme) => ({
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const handleDialogOpen = () => {
+    setIsOpen(true);
+  };
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -161,7 +165,12 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  const [setOpenDeletePartner] = useState(false);
+  const initialValues = {
+    name: "",
+    type: "",
+    description: "",
+  };
+
   //   openDeletePartner
   useEffect(() => {
     setSelectedMenu(12);
@@ -170,102 +179,166 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
   const [searchHcp, setSearchHcp] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleEditCloseDialog = () => {
+    setEdit(false);
+  };
+  const [alert, setAlert] = useState(null);
+  const [edit, setEdit] = useState(false);
+  const handleDialogClose = async () => {
+    setIsOpen(false);
+    setEditId(null);
+  };
+  const handleEditOpenDialog = (id) => {
+    setEdit(true);
+    setEditId(id);
+    console.log(id);
+  };
   return (
-    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container>
-        <Grid item className={classes.searchGrid}>
-          <Search
-            value={searchHcp}
-            placeholder="Type to search partners..."
-            onChange={(e) => setSearchHcp(e.target.value)}
-            height="5rem"
-          />
-        </Grid>
-        <Grid item className={classes.filterBtnGrid}>
-          <FilterList title="Filter partner" />
-          {/* onClick={() => setOpenHcpFilter(true)} */}
-        </Grid>
-        <Grid item>
-          <CustomButton endIcon={<AddIcon />} title="Add new Provider" type={buttonType} />
-          {/* onClick={() => setOpenAddHcp(true)} */}
-        </Grid>
-      </Grid>
-      <Grid item container height="100%" direction="column">
-        {pendingHeader.length > 0 ? (
-          <EnhancedTable
-            headCells={partnersHeadCells2}
-            rows={rows}
-            page={page}
-            paginationLabel="Patients per page"
-            hasCheckbox={true}
+    <>
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+        {alert && Object.keys(alert).length > 0 && (
+          <Alert
+            variant="filled"
+            severity={alert.type}
+            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
           >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
-
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row._id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar sx={{ width: 24, height: 24 }}>H</Avatar>
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {row.firstName} {row.lastName}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                  >
-                    {row.category}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Button
-                      variant="contained"
-                      disableRipple
-                      className={`${classes.tableBtn} ${classes.redBtn}`}
-                      endIcon={<EditIcon color="secondary" />}
-                      onClick={() => setOpenDeletePartner(true)}
-                    >
-                      action
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </EnhancedTable>
-        ) : (
-          <NoData />
+            {alert.message}
+          </Alert>
         )}
+        <Grid item container>
+          <Grid item className={classes.searchGrid}>
+            <Search
+              value={searchHcp}
+              placeholder="Type to search partners..."
+              onChange={(e) => setSearchHcp(e.target.value)}
+              height="5rem"
+            />
+          </Grid>
+          <Grid item className={classes.filterBtnGrid}>
+            <FilterList title="Filter partner" />
+            {/* onClick={() => setOpenHcpFilter(true)} */}
+          </Grid>
+          <Grid item>
+            <CustomButton
+              endIcon={<AddIcon />}
+              title="Add new Provider"
+              type={buttonType}
+              onClick={handleDialogOpen}
+            />
+          </Grid>
+        </Grid>
+        <Grid item container height="100%" direction="column">
+          {pendingHeader.length > 0 ? (
+            <EnhancedTable
+              headCells={partnersHeadCells2}
+              rows={rows}
+              page={page}
+              paginationLabel="Patients per page"
+              hasCheckbox={true}
+            >
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
+
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar sx={{ width: 24, height: 24 }}>H</Avatar>
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.firstName} {row.lastName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      >
+                        {row.category}
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          endIcon={<EditIcon color="secondary" />}
+                          onClick={() => handleEditOpenDialog(row.id)}
+                        >
+                          action
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          ) : (
+            <NoData />
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+
+      <Modals
+        isOpen={isOpen}
+        title="Add new Provider"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
+        <ProviderModal
+          handleDialogClose={handleDialogClose}
+          type="add"
+          setAlert={setAlert}
+          editId={editId}
+          initialValues={initialValues}
+        />
+      </Modals>
+      {/* edit Modal */}
+      <Modals
+        isOpen={edit}
+        title="Edit Provider"
+        rowSpacing={5}
+        handleClose={handleEditCloseDialog}
+      >
+        <ProviderModal
+          handleDialogClose={handleEditCloseDialog}
+          type="edit"
+          editId={editId}
+          setAlert={setAlert}
+          initialValues={initialValues}
+          //   setSingleData={setSingleData}
+        />
+      </Modals>
+    </>
   );
 };
 Providers.propTypes = {
