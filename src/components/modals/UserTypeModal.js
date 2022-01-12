@@ -130,7 +130,7 @@ export const UserTypeModal = ({
 
                 <Grid item xs={12} marginTop={10}>
                   <CustomButton
-                    title={type === "edit" ? "Save Provider" : "Add Provider"}
+                    title={type === "edit" ? "Save UserTypes" : "Add UserTypes"}
                     width="100%"
                     isSubmitting={isSubmitting}
                     disabled={!(dirty || isValid)}
