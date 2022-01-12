@@ -7,7 +7,10 @@ import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import { calculateBMI } from "components/Utilities/bMI";
 import { getProfile } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -52,9 +55,9 @@ const MedicalRecords = (props) => {
   const classes = useStyles();
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
-  const { loading, data } = useQuery(getProfile, {
+  const { loading, data, error } = useQuery(getProfile, {
     variables: {
-      id: patientId,
+      profileId: patientId,
     },
   });
 
@@ -74,7 +77,8 @@ const MedicalRecords = (props) => {
     }
   }, [data]);
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   if (patientProfile) {
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -189,7 +193,11 @@ const MedicalRecords = (props) => {
                 <Typography variant="h4">BMI</Typography>
               </Grid>
               <Grid item>
-                <Chip variant="outlined" label="no value" className={classes.infoBadge} />
+                <Chip
+                  variant="outlined"
+                  label={calculateBMI(patientProfile.height, patientProfile.weight)}
+                  className={classes.infoBadge}
+                />
               </Grid>
             </Grid>
           </Grid>

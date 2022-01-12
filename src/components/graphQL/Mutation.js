@@ -234,3 +234,25 @@ export const addPartner = gql`
     }
   }
 `;
+export const createAllery = gql`
+  mutation createAllergy(
+    $food: String!
+    $medication: String!
+    $profile: String!
+    $severity: String!
+  ) {
+    createAllergy(
+      data: { food: $food, medication: $medication, profile: $profile, severity: $severity }
+    ) {
+      allergy {
+        _id
+        food
+        medication
+        profile
+        createdAt
+        updatedAt
+        severity
+      }
+    }
+  }
+`;

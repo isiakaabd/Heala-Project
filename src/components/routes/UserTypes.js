@@ -73,28 +73,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  redBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightGrey,
-      color: "white",
-
-      "&:hover": {
-        background: theme.palette.common.lightGrey,
-        color: "white",
-      },
-    },
-  },
-  greenBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
-
-      "&:hover": {
-        background: theme.palette.success.light,
-        color: "#fff",
-      },
-    },
-  },
 
   tableCell: {
     "&.MuiTableCell-root": {
@@ -286,7 +264,7 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                         <Button
                           variant="contained"
                           disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          className={`${classes.button}`}
                           endIcon={<EditIcon color="secondary" />}
                           onClick={() => handleEditOpenDialog(row.id)}
                         >
