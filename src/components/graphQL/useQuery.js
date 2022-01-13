@@ -318,6 +318,21 @@ export const getPartners = gql`
     }
   }
 `;
+export const getAllergies = gql`
+  query findAllergies {
+    findAllergies {
+      allergies {
+        _id
+        food
+        medication
+        profile
+        createdAt
+        updatedAt
+        severity
+      }
+    }
+  }
+`;
 export const UserProfile = (id) => {
   const { data, error, loading } = useQuery(getUserDetails, {
     variables: {

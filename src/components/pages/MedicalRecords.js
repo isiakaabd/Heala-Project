@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+import { Grid, Typography, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+// import combineQuery from "graphql-combine-query";
 import { calculateBMI } from "components/Utilities/bMI";
-import { getProfile } from "components/graphQL/useQuery";
+import { getProfile /*getAllergies*/ } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 
@@ -60,7 +59,16 @@ const MedicalRecords = (props) => {
       profileId: patientId,
     },
   });
-
+  // const { document, variables } = combineQuery("FooBarQuery")
+  //   .add(getProfile, {
+  //     variables: {
+  //       profileId: patientId,
+  //     },
+  //   })
+  //   .add(getAllergies);
+  // console.log(variables);
+  console.log(document);
+  // const { data } = FooBarQuery();
   const allergies = ["Vanilla Fragrance", "Pineapple", "Eggroll"];
 
   useEffect(() => {

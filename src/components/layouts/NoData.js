@@ -2,8 +2,6 @@ import React from "react";
 import { Grid, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 const NoData = ({ error }) => {
-  console.log(error);
-
   return (
     <Grid container alignItems="center" direction="column" height="100%" justifyContent="center">
       <Grid item>
@@ -19,6 +17,5 @@ const NoData = ({ error }) => {
 };
 NoData.propTypes = {
   error: PropTypes.string,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 export default NoData;
