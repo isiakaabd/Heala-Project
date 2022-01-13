@@ -2,12 +2,12 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import Loader from "components/Utilities/Loader";
 import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+import NoData from "components/layouts/NoData";
+import { Typography, Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
+// import { useApolloClient } from "@apollo/client";
 import DisplayProfile from "components/Utilities/DisplayProfile";
 import displayPhoto from "assets/images/avatar.png";
 import { useTheme } from "@mui/material/styles";
@@ -19,7 +19,7 @@ import ReferPatient from "components/modals/ReferPatient";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import { deleteProfile } from "components/graphQL/Mutation";
+import { deleteProfile /*createAllery*/ } from "components/graphQL/Mutation";
 import { getProfile, getPatients } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,10 +82,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
+  // const client = useApolloClient();
   const { patientId } = useParams();
-  const { loading, data } = useQuery(getProfile, {
+  const { loading, data, error } = useQuery(getProfile, {
     variables: {
-      id: patientId,
+      profileId: patientId,
     },
   });
   const [disableUser] = useMutation(deleteProfile);
@@ -129,6 +130,34 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     hover: "#fafafa",
     active: "#f4f4f4",
   };
+  // const [create] = useMutation(createAllery);
+
+  // if (value.data) {
+
+  // }
+
+  // useEffect(() => {
+  //   const fetching = async () => {
+  //     try {
+  //       const value = await create({
+  //         variables: {
+  //           food: "Isssssu",
+  //           medication: "quinnw",
+  //           profile: patientId,
+  //           severity: "mild",
+  //         },
+  //       });
+  //       const planetId = value.data.createAllergy.allergy.profile;
+  //       console.log(planetId);
+
+  //       const query1Result = await client.query({ query: getProfile, variables: planetId });
+  //       console.log(query1Result);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   fetching();
+  // }, []);
 
   useLayoutEffect(() => {
     setChatMediaActive(false);
@@ -136,6 +165,8 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     // eslint-disable-next-line
   }, [chatMediaActive]);
   if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+
   if (patientProfile) {
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>

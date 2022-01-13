@@ -33,6 +33,7 @@
     "formik-mui": "^4.0.0-alpha.3",
     "formik-mui-lab": "^1.0.0-alpha.3",
     "graphql": "^16.0.1",
+    "graphql-combine-query": "^1.2.3",
     "jwt-decode": "^3.1.2",
     "material-ui-chip-input": "^1.1.0",
     "material-ui-formik-components": "^0.7.3",

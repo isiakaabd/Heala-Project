@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Alert, Typography } from "@mui/material";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { useQuery, useMutation } from "@apollo/client";
-import { getAllAppointment } from "components/graphQL/useQuery";
+import { getAllAppointment /*findProfile*/ } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
 import Divider from "@mui/material/Divider";
 import CustomButton from "components/Utilities/CustomButton";
@@ -53,6 +53,8 @@ const HcpAppointments = (props) => {
   const theme = useTheme();
   const [appointment, setAppointment] = useState([]);
   const { loading, data } = useQuery(getAllAppointment);
+  console.log;
+
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
     if (data) {

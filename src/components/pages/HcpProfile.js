@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
+import NoData from "components/layouts/NoData";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DisplayProfile from "components/Utilities/DisplayProfile";
@@ -11,8 +12,9 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useQuery /*useMutation*/ } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
+// import { createAllery } from "components/graphQL/Mutation";
 import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
@@ -96,12 +98,18 @@ const HcpProfile = (props) => {
   const { hcpId } = useParams();
 
   const [doctorProfile, setDoctorProfile] = useState("");
+  // const profile = useQuery(createAllery, {
+  //   variables: {
+  //     id: hcpId,
+  //   },
+  // });
+
   const profile = useQuery(doctor, {
     variables: {
       id: hcpId,
     },
   });
-
+  console.log(profile);
   useEffect(() => {
     if (profile.data) {
       setDoctorProfile(profile.data.doctorProfile);
@@ -118,7 +126,7 @@ const HcpProfile = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
 
   if (profile.loading) return <Loader />;
-  console.log(doctorProfile);
+  if (profile.error) return <NoData error={profile.error.message} />;
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>

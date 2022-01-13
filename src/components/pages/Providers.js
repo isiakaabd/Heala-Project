@@ -5,16 +5,13 @@ import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import { pendingHeader } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import NoData from "components/layouts/NoData";
-import { Grid, TableRow, TableCell } from "@mui/material";
+import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
 import CustomButton from "components/Utilities/CustomButton";
-import { Checkbox, Alert } from "@mui/material";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
 import { rows } from "components/Utilities/DataHeader";
-import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -291,7 +288,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                         <Button
                           variant="contained"
                           disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          className={`${classes.button}`}
                           endIcon={<EditIcon color="secondary" />}
                           onClick={() => handleEditOpenDialog(row.id)}
                         >

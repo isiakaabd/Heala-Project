@@ -93,6 +93,15 @@ export const getConsultations = gql`
     }
   }
 `;
+
+//   const userQuery = gql`query User { user { id } }`;
+// const stuffQuery = gql`query SomeOtherStuff($id: ID) { someOtherStuff(id: $id){ stuff } }`;
+
+// export default compose(
+//   graphql(userQuery, { name: 'userData' })
+//   graphql(stuffQuery, { name: 'stuffData', options: ({userData:{id}={}}) => ({variables: {id}}) }),
+// )(YourComponent)
+
 export const findProfile = gql`
   query findProfile($id: ID!) {
     profile(id: $id) {
@@ -191,8 +200,8 @@ export const getDoctorsProfile = gql`
 `;
 
 export const getProfile = gql`
-  query findProfile($id: ID!) {
-    profile(id: $id) {
+  query findProfile($profileId: ID!) {
+    profile(id: $profileId) {
       _id
       firstName
       lastName
