@@ -6,6 +6,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Loader from "components/Utilities/Loader";
 import { makeStyles } from "@mui/styles";
+import { dateMoment, timeMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -195,7 +196,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         />
                       </TableCell>
                       <TableCell
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
                         style={{ maxWidth: "20rem" }}
                       >
@@ -204,7 +205,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                             height: "100%",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
+                            justifyContent: "flex-start",
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
@@ -225,18 +226,18 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         {row.subject}
                       </TableCell>
                       <TableCell
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {row.createdAt}
+                        {dateMoment(row.createdAt)}
                       </TableCell>
                       <TableCell
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {row.time}
+                        {timeMoment(row.time)}
                       </TableCell>
                       <TableCell>
                         <Button

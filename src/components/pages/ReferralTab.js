@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
+import { dateMoment, timeMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -86,7 +87,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
   const { setSelectedRows } = useActions();
   const [referral, setReferral] = useState([]);
   const [searchMail, setSearchMail] = useState("");
-  const { loading, data } = useQuery(getRefferals);
+  const { loading, data, error } = useQuery(getRefferals);
 
   useEffect(() => {
     if (data && data.getReferrals.referral) {
@@ -94,6 +95,8 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
     }
   }, [referral, data]);
   if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+
   return (
     <Grid container direction="column" height="100%">
       {referral.length > 0 ? (
@@ -153,7 +156,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {new Date(row.createdAt)}
+                        {dateMoment(row.createdAt)}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -162,7 +165,8 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {new Date(row.updatedAt)}
+                        {/* {new Date(row.updatedAt)} */}
+                        {timeMoment(row.updatedAt)}
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
                         <div
@@ -183,13 +187,27 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         </div>
                       </TableCell>
                       <TableCell
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
                         {row.specialization}
                       </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {row.reason}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {row.note}
+                      </TableCell>
+                      {/* <TableCell align="left" className={classes.tableCell}>
                         <div
                           style={{
                             height: "100%",
@@ -206,7 +224,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="center" className={classes.tableCell}>
                         <Chip
                           label={row.status}

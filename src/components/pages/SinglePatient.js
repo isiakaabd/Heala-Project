@@ -7,7 +7,6 @@ import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-// import { useLazyQuery } from "@apollo/client";
 import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
@@ -150,15 +149,19 @@ const SinglePatient = (props) => {
     active: theme.palette.success.dark,
   };
   const initialValues = {
-    referral: "",
-    category: "",
-    textarea: "",
+    type: "",
+    reason: "",
+    note: "",
+    specialization: "",
+    patient: patientId,
+    doctor: localStorage.getItem("user_id"),
   };
   const [patientProfile, setPatientProfile] = useState("");
   const profile = useQuery(findProfile, {
     variables: {
       id: patientId,
     },
+    fetchPolicy: "cache-and-network",
   });
   useEffect(() => {
     if (profile.data) {
@@ -182,21 +185,23 @@ const SinglePatient = (props) => {
   if (profile.loading) return <Loader />;
   else {
     return (
-      <Grid container direction="column" className={classes.gridContainer}>
-        <Grid item style={{ marginBottom: "3rem" }}>
+      <Grid container direction="column" className={classes.gridContainer} gap={2}>
+        <Grid item>
           <PreviousButton path={`/patients`} onClick={() => setSelectedSubMenu(0)} />
         </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
           <Grid item>
             <Grid container alignItems="center">
-              <Grid item style={{ marginRight: "2rem" }}>
-                <Avatar
-                  alt={patientProfile.firstName}
-                  src={displayPhoto}
-                  sx={{ width: 50, height: 50 }}
-                />
-              </Grid>
+              {patientProfile.image ? (
+                <Grid item style={{ marginRight: "2rem" }}>
+                  <Avatar
+                    alt={patientProfile.firstName}
+                    src={displayPhoto}
+                    sx={{ width: 50, height: 50 }}
+                  />
+                </Grid>
+              ) : null}
               <Grid item>
                 <Typography variant="h2">
                   {patientProfile.firstName} {patientProfile.lastName}
@@ -274,7 +279,11 @@ const SinglePatient = (props) => {
           confirmationMsg="disable Patient"
         />
         <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
-          <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
+          <ReferPatient
+            type="refer"
+            handleDialogClose={handleDialogClose}
+            initialValues={initialValues}
+          />
         </Modals>
       </Grid>
     );

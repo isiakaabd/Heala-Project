@@ -4,10 +4,9 @@ import { Grid, Typography, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-// import combineQuery from "graphql-combine-query";
+import { useLazyQuery } from "@apollo/client";
 import { calculateBMI } from "components/Utilities/bMI";
-import { getProfile /*getAllergies*/ } from "components/graphQL/useQuery";
+import { getProfile, getAllergies } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 
@@ -54,22 +53,23 @@ const MedicalRecords = (props) => {
   const classes = useStyles();
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
-  const { loading, data, error } = useQuery(getProfile, {
-    variables: {
-      profileId: patientId,
-    },
-  });
-  // const { document, variables } = combineQuery("FooBarQuery")
-  //   .add(getProfile, {
-  //     variables: {
-  //       profileId: patientId,
-  //     },
-  //   })
-  //   .add(getAllergies);
-  // console.log(variables);
-  console.log(document);
-  // const { data } = FooBarQuery();
-  const allergies = ["Vanilla Fragrance", "Pineapple", "Eggroll"];
+
+  const [patients, { loading, data, error }] = useLazyQuery(getProfile);
+  const [alergy, allergyResult] = useLazyQuery(getAllergies);
+  const [alergies, setAlergies] = useState([]);
+
+  useEffect(() => {
+    const fetching = async () => {
+      try {
+        patients({ variables: { profileId: patientId } });
+        alergy();
+        setAlergies(allergyResult.data.findAllergies.allergies);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetching();
+  }, [alergy, patients, patientId, allergyResult.data]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -81,13 +81,15 @@ const MedicalRecords = (props) => {
   useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
-      // setPatientProfile(data.profiles.data);
     }
   }, [data]);
 
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (loading || allergyResult.loading) return <Loader />;
+  if (error || allergyResult.error)
+    return <NoData error={allergyResult.error.message || error.message} />;
   if (patientProfile) {
+    console.log(patientProfile);
+
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
         <Grid item style={{ marginBottom: "3rem" }}>
@@ -223,11 +225,25 @@ const MedicalRecords = (props) => {
               </Grid>
               <Grid item>
                 <Grid container justifyContent="space-around">
-                  {allergies.map((allergy) => (
-                    <Grid item key={allergy} className={classes.allergies}>
-                      <Chip variant="outlined" label="no value" className={classes.infoBadge} />
-                    </Grid>
-                  ))}
+                  {alergies && alergies.filter((i) => i.profile == patientId) > 0 ? (
+                    alergies
+                      .filter((i) => i.profile == patientId)
+                      .map((alergy) => (
+                        <Grid item key={alergy.profile} className={classes.allergies}>
+                          <Chip
+                            variant="outlined"
+                            label={alergy.food}
+                            className={classes.infoBadge}
+                          />
+                        </Grid>
+                      ))
+                  ) : (
+                    <Chip
+                      variant="outlined"
+                      label="No Allergy for this Patient"
+                      className={classes.infoBadge}
+                    />
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -256,7 +272,7 @@ const MedicalRecords = (props) => {
         </Grid>
       </Grid>
     );
-  } else return null;
+  } else return <NoData />;
 };
 MedicalRecords.propTypes = {
   selectedMenu: PropTypes.number.isRequired,

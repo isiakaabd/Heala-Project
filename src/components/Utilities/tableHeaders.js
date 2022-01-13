@@ -13,6 +13,10 @@ export const patientsHeadCells = [
     label: "Plan",
   },
   {
+    id: 8,
+    label: "Provider",
+  },
+  {
     id: 3,
     label: "Consultations",
   },
@@ -152,20 +156,21 @@ export const referralHeader = [
   },
   {
     id: 2,
-    label: " Name",
+    label: "Name",
   },
 
   {
     id: 3,
     label: "Category",
   },
+
   {
-    id: 4,
-    label: "Patient's name",
+    id: 8,
+    label: "Reason",
   },
   {
-    id: 5,
-    label: "Status",
+    id: 18,
+    label: "Note",
   },
   {
     id: 6,

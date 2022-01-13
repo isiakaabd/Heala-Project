@@ -239,6 +239,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           {row.plan}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
+                          {row.provider}
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
                           {row.consultations}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>

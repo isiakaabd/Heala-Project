@@ -35,9 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EmptyTextarea = (props) => {
-  console.log(props);
-  const { name, value, onChange, placeholder, onBlur } = props;
-
+  const { name, value, minRows, onChange, placeholder, onBlur } = props;
   const classes = useStyles();
   return (
     <Grid container>
@@ -47,7 +45,7 @@ const EmptyTextarea = (props) => {
         onBlur={onBlur}
         name={name}
         multiline
-        minRows={5}
+        minRows={minRows ? minRows : 5}
         placeholder={placeholder}
         style={{ height: "100%" }}
         className={`${classes.formInput} ${classes.textArea}`}
@@ -64,6 +62,7 @@ EmptyTextarea.propTypes = {
   onBlur: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.string,
+  minRows: PropTypes.number,
 };
 const Textarea = ({ label, name, fLabel, placeholder, ...rest }) => {
   const classes = useStyles();
