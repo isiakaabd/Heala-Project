@@ -215,7 +215,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   }, [permission, data]);
 
   if (loading) return <Loader />;
-
+  console.log(permission);
   return (
     <>
       {alert && Object.keys(alert).length > 0 && (

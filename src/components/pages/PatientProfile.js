@@ -7,7 +7,6 @@ import { Typography, Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
-// import { useApolloClient } from "@apollo/client";
 import DisplayProfile from "components/Utilities/DisplayProfile";
 import displayPhoto from "assets/images/avatar.png";
 import { useTheme } from "@mui/material/styles";
@@ -18,8 +17,8 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams, useHistory } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
-import { deleteProfile /*createAllery*/ } from "components/graphQL/Mutation";
+import { useQuery, useMutation /*useLazyQuery*/ } from "@apollo/client";
+import { deleteProfile } from "components/graphQL/Mutation";
 import { getProfile, getPatients } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   // const client = useApolloClient();
   const { patientId } = useParams();
-  const { loading, data, error } = useQuery(getProfile, {
+  const profile = useQuery(getProfile, {
     variables: {
       profileId: patientId,
     },
@@ -95,10 +94,10 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   const theme = useTheme();
   const [patientProfile, setPatientProfile] = useState("");
   useEffect(() => {
-    if (data && data.profile) {
-      setPatientProfile(data.profile);
+    if (profile.data && profile.data.profile) {
+      setPatientProfile(profile.data.profile);
     }
-  }, [data, patientId]);
+  }, [profile.data, patientId]);
   const handleDialogOpen = () => setIsOpen(true);
   const initialValues = {
     referral: "",
@@ -130,42 +129,36 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     hover: "#fafafa",
     active: "#f4f4f4",
   };
-  // const [create] = useMutation(createAllery);
+  // const [create] = useMutation(createReminder);
+  // const [getProf, { loading, error, data }] = useLazyQuery(getReminder);
 
   // if (value.data) {
-
+  // console.log(data);
   // }
 
   // useEffect(() => {
   //   const fetching = async () => {
   //     try {
-  //       const value = await create({
-  //         variables: {
-  //           food: "Isssssu",
-  //           medication: "quinnw",
-  //           profile: patientId,
-  //           severity: "mild",
-  //         },
-  //       });
-  //       const planetId = value.data.createAllergy.allergy.profile;
-  //       console.log(planetId);
-
-  //       const query1Result = await client.query({ query: getProfile, variables: planetId });
-  //       console.log(query1Result);
+  //       const value = await create();
+  //       const planetId = value.data.createReminder.reminder._id;
+  //       const z = getProf({ variables: { id: planetId } });
+  //       if (z) {
+  //         console.log(z);
+  //       }
   //     } catch (err) {
   //       console.error(err);
   //     }
   //   };
   //   fetching();
-  // }, []);
+  // }, [create, getProf]);
 
   useLayoutEffect(() => {
     setChatMediaActive(false);
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (profile.loading) return <Loader />;
+  if (profile.error) return <NoData error={profile.error.message} />;
 
   if (patientProfile) {
     return (
@@ -204,7 +197,13 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={patientProfile.gender}
+                  label={
+                    patientProfile.gender == 0
+                      ? "Male"
+                      : patientProfile.gender == 1
+                      ? "Female"
+                      : "Prefer not to say"
+                  }
                   className={classes.infoBadge}
                 />
               </Grid>

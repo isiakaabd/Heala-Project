@@ -193,6 +193,35 @@ export const createRole = gql`
     }
   }
 `;
+export const createReminder = gql`
+  mutation createReminder {
+    createReminder(
+      data: {
+        date: "2021-08-15T23:19:02+01:00"
+        description: "wake me up for my appointment"
+        patient: "6116f2828497025413dcec5d"
+        type: "appointment"
+        interval: "daily"
+      }
+    ) {
+      reminder {
+        _id
+        date
+        description
+        type
+        createdAt
+        updatedAt
+        patient
+        interval
+      }
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const deleteAppointment = gql`
   mutation deleteAppointment($id: String!) {
     deleteAppointment(data: { id: $id }) {

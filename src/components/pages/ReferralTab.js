@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
+import { dateMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -94,6 +95,8 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
     }
   }, [referral, data]);
   if (loading) return <Loader />;
+  console.log(referral);
+
   return (
     <Grid container direction="column" height="100%">
       {referral.length > 0 ? (
@@ -153,7 +156,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {new Date(row.createdAt)}
+                        {dateMoment(row.createdAt)}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -162,7 +165,8 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {new Date(row.updatedAt)}
+                        {/* {new Date(row.updatedAt)} */}
+                        {dateMoment(row.updatedAt)}
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
                         <div

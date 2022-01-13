@@ -312,7 +312,6 @@ export const getPartners = gql`
         name
         email
         category
-        plan
         logoImageUrl
       }
     }
@@ -333,6 +332,23 @@ export const getAllergies = gql`
     }
   }
 `;
+export const getReminder = gql`
+  query getReminder($id: ID!) {
+    getReminder(id: $id) {
+      reminder {
+        _id
+        date
+        description
+        type
+        createdAt
+        updatedAt
+        patient
+        interval
+      }
+    }
+  }
+`;
+
 export const UserProfile = (id) => {
   const { data, error, loading } = useQuery(getUserDetails, {
     variables: {

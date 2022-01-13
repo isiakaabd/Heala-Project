@@ -7,7 +7,6 @@ import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-// import { useLazyQuery } from "@apollo/client";
 import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
@@ -159,6 +158,7 @@ const SinglePatient = (props) => {
     variables: {
       id: patientId,
     },
+    fetchPolicy: "cache-and-network",
   });
   useEffect(() => {
     if (profile.data) {
