@@ -223,7 +223,6 @@ const Partners = () => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  console.log(partner);
 
   if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;

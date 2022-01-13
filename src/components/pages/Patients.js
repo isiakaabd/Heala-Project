@@ -151,6 +151,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   };
 
   if (patient.loading) return <Loader />;
+  if (patient.error) return <NoData error={patient.error.message} />;
   if (profiles) {
     return (
       <>

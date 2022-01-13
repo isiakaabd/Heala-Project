@@ -70,6 +70,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
       ...headers,
       authorization: accessToken ? `bearer ${accessToken}` : null,
       "Content-Type": "application/json",
+      " Access-Control-Allow-Credentials": true,
     },
   }));
 
