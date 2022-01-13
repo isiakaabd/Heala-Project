@@ -234,6 +234,44 @@ export const deleteAppointment = gql`
     }
   }
 `;
+export const requestReferral = gql`
+  mutation requestReferral(
+    $doctor: String!
+    $patient: String!
+    $type: String!
+    $reason: String!
+    $note: String!
+    $specialization: String!
+  ) {
+    requestReferral(
+      data: {
+        doctor: $doctor
+        patient: $patient
+        type: $type
+        reason: $reason
+        note: $note
+        specialization: $specialization
+      }
+    ) {
+      referral {
+        _id
+        doctor
+        patient
+        type
+        reason
+        note
+        specialization
+        testType
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const deleteDoctor = gql`
   mutation deleteDoctorProfile($id: String!) {
     deleteDoctorProfile(data: { id: $id }) {

@@ -53,11 +53,7 @@ const MedicalRecords = (props) => {
   const classes = useStyles();
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
-  // const { loading, data, error } = useQuery(getProfile, {
-  //   variables: {
-  //     profileId: patientId,
-  //   },
-  // });
+
   const [patients, { loading, data, error }] = useLazyQuery(getProfile);
   const [alergy, allergyResult] = useLazyQuery(getAllergies);
   const [alergies, setAlergies] = useState([]);
@@ -85,13 +81,15 @@ const MedicalRecords = (props) => {
   useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
-      // setPatientProfile(data.profiles.data);
     }
   }, [data]);
 
   if (loading || allergyResult.loading) return <Loader />;
-  if (error || allergyResult.error) return <NoData error={error.message} />;
+  if (error || allergyResult.error)
+    return <NoData error={allergyResult.error.message || error.message} />;
   if (patientProfile) {
+    console.log(patientProfile);
+
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
         <Grid item style={{ marginBottom: "3rem" }}>
@@ -274,7 +272,7 @@ const MedicalRecords = (props) => {
         </Grid>
       </Grid>
     );
-  } else return null;
+  } else return <NoData />;
 };
 MedicalRecords.propTypes = {
   selectedMenu: PropTypes.number.isRequired,

@@ -3,31 +3,43 @@ import PropTypes from "prop-types";
 import CustomButton from "components/Utilities/CustomButton";
 import { Grid } from "@mui/material";
 import * as Yup from "yup";
+import { useMutation } from "@apollo/client";
+import { requestReferral } from "components/graphQL/Mutation";
+import { getRefferals } from "components/graphQL/useQuery";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
-const checkbox2 = [
-  { key: "create", value: "create" },
-  { key: "update", value: "update" },
-  { key: "read", value: "read" },
-  { key: "delete", value: "delete" },
-];
-const checkbox1 = [
-  { key: "create", value: "create" },
-  { key: "update", value: "update" },
-  { key: "read", value: "read" },
-  { key: "delete", value: "delete" },
-];
+const checkbox2 = [{ key: "dentist", value: "dentist" }];
+const checkbox1 = [{ key: "hcp", value: "hcp" }];
 
 const validationSchema = Yup.object({
-  referral: Yup.string("choose a referral").required("Referral is required"),
-  textarea: Yup.string("Enter your message").required("Message is required"),
-  category: Yup.string("choose a referral").required("referral is required"),
+  type: Yup.string("choose a referral").required("Referral is required"),
+  note: Yup.string("Enter your message").required("note is required"),
+  reason: Yup.string("State a reason").required("reason is required"),
+  specialization: Yup.string("select a specialization").required("specialization is required"),
 });
 
-const ReferPatient = ({ handleDialogClose, initialValues }) => {
+const ReferPatient = ({ handleDialogClose, initialValues, type }) => {
+  const [referPatient] = useMutation(requestReferral);
   const theme = useTheme();
   const onSubmit = async (values, onSubmitProps) => {
+    if (type === "refer") {
+      const { reason, patient, note, type, doctor, specialization } = values;
+      console.log(doctor, patient, type, reason, note, specialization);
+
+      await referPatient({
+        variables: {
+          doctor: doctor,
+          patient: patient,
+          type: type,
+          reason: reason,
+          note: note,
+          specialization: specialization,
+        },
+        refetchQueries: [{ query: getRefferals }],
+      });
+    }
+
     onSubmitProps.resetForm();
     handleDialogClose();
   };
@@ -53,7 +65,7 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
                 <Grid item container>
                   <FormikControl
                     control="select"
-                    name="referral"
+                    name="type"
                     options={checkbox1}
                     label="Referral Type"
                     placeholder="Select Type"
@@ -61,19 +73,28 @@ const ReferPatient = ({ handleDialogClose, initialValues }) => {
                 </Grid>
                 <Grid item container>
                   <FormikControl
-                    control="select"
-                    name="category"
-                    options={checkbox2}
-                    label="Refferal"
-                    placeholder="Select Referral"
+                    control="input"
+                    name="reason"
+                    label="Reason"
+                    placeholder="State Reason"
                   />
                 </Grid>
                 <Grid item container>
                   <FormikControl
                     control="textarea"
                     fLabel={false}
-                    name="textarea"
+                    name="note"
                     label="Referral comment"
+                    minRows={3}
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="select"
+                    name="specialization"
+                    label="Specialization"
+                    placeholder="Select specialization"
+                    options={checkbox2}
                   />
                 </Grid>
                 <Grid item xs={12} marginTop={5}>
@@ -99,6 +120,7 @@ ReferPatient.propTypes = {
   setOpen: PropTypes.func.isRequired,
   handleDialogClose: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
+  type: PropTypes.string,
 };
 
 export default ReferPatient;

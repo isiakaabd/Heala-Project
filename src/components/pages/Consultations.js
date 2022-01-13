@@ -103,17 +103,11 @@ const Consultations = (props) => {
   if (error) return <NoData error={error.message} />;
 
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
+      <Grid item>
         <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ paddingBottom: "5rem" }}
-      >
+      <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
@@ -121,94 +115,98 @@ const Consultations = (props) => {
           <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
         </Grid>
       </Grid>
-      <Grid item container>
-        <EnhancedTable
-          headCells={consultationsHeadCells}
-          rows={consultations}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {consultations
-            .filter((i) => i.patient == patientId)
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row._id, selectedRows);
+      {consultations.filter((i) => i.patient == patientId).length > 0 ? (
+        <Grid item container direction="column" height="100%">
+          <EnhancedTable
+            headCells={consultationsHeadCells}
+            rows={consultations}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {consultations
+              .filter((i) => i.patient == patientId)
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row._id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {dateMoment(row.createdAt)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                  >
-                    {row.description}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`/patients/${row._id}/consultations/case-note`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => {
-                        setSelectedSubMenu(2);
-                        setSelectedPatientMenu(0);
-                        setSelectedScopedMenu(1);
-                      }}
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.name}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {dateMoment(row.createdAt)}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      View Case Note
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
-      </Grid>
+                      {row.description}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`/patients/${row._id}/consultations/case-note`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(2);
+                          setSelectedPatientMenu(0);
+                          setSelectedScopedMenu(1);
+                        }}
+                      >
+                        View Case Note
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        </Grid>
+      ) : (
+        <NoData />
+      )}
     </Grid>
   );
 };
