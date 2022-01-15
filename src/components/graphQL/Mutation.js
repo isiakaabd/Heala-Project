@@ -284,15 +284,28 @@ export const deleteDoctor = gql`
   }
 `;
 export const addPartner = gql`
-  mutation addPartner($name: String!, $category: String!, $email: String!, $plan: String!) {
-    addPartner(data: { name: $name, category: $category, email: $email, plan: $plan }) {
+  mutation addPartner($name: String!, $category: String!, $email: String!) {
+    addPartner(data: { name: $name, category: $category, email: $email }) {
       partner {
         _id
         name
         email
         category
-        plan
         logoImageUrl
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const addPartnerCategory = gql`
+  mutation addPartnerCategory($name: String!) {
+    addPartnerCategory(data: { name: $name }) {
+      category {
+        _id
+        name
       }
       errors {
         field
@@ -319,6 +332,56 @@ export const createAllery = gql`
         createdAt
         updatedAt
         severity
+      }
+    }
+  }
+`;
+export const createDOctorProfile = gql`
+  mutation createDoctorProfile(
+    $firstName: String!
+    $lastName: String!
+    $gender: String
+    $dociId: String!
+    $phoneNumber: String!
+    $hospital: String!
+    $specialization: String!
+    $dob: String!
+    $cadre: String!
+    $image: String!
+  ) {
+    createDoctorProfile(
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        phoneNumber: $phoneNumber
+        dociId: $dociId
+        hospital: $hospital
+        specialization: $specialization
+        dob: $dob
+        cadre: $cadre
+        image: $image
+      }
+    ) {
+      profile {
+        _id
+        dociId
+        createdAt
+        updatedAt
+        firstName
+        lastName
+        gender
+        phoneNumber
+        email
+        hospital
+        specialization
+        dob
+        cadre
+        picture
+      }
+      errors {
+        field
+        message
       }
     }
   }

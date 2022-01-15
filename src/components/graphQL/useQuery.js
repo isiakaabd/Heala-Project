@@ -6,11 +6,17 @@ export const doctor = gql`
       _id
       firstName
       lastName
+      dociId
+      dob
+      image
+      cadre
+      specialization
       gender
       phoneNumber
       createdAt
       updatedAt
       email
+      hospital
     }
   }
 `;
@@ -151,6 +157,25 @@ export const getConsultation = gql`
     }
   }
 `;
+// export const c = gql`
+//   query getConsultation($id: ID!, $authorId: ID!) {
+//     getConsultation(id: $id) {
+//       patient @client @export(as: "authorId")
+//     }
+//     profile(id: $authorId) {
+//       _id
+//       firstName
+//       lastName
+//       height
+//       weight
+//       bloodGroup
+//       genotype
+//       gender
+//       phoneNumber
+//     }
+//   }
+// `;
+
 export const getMyEarnings = gql`
   query getMyEarnings {
     getMyEarnings {
@@ -184,16 +209,21 @@ export const getPatients = gql`
 export const getDoctorsProfile = gql`
   query doctorProfiles {
     doctorProfiles {
-      data {
+      profile {
         _id
         firstName
         lastName
+        dociId
+        dob
+        hospital
+        image
+        cadre
+        specialization
         gender
         phoneNumber
         createdAt
         updatedAt
         email
-        dociId
       }
     }
   }
@@ -344,6 +374,19 @@ export const getReminder = gql`
         updatedAt
         patient
         interval
+      }
+    }
+  }
+`;
+export const getDoctorPatients = gql`
+  query getDoctorPatients {
+    getDoctorPatients {
+      data {
+        _id
+        doctor
+        patient
+        createdAt
+        updatedAt
       }
     }
   }

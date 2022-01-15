@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
 import { Formik, Form } from "formik";
 import NoData from "components/layouts/NoData";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
-import Typography from "@mui/material/Typography";
-
-import Input from "@mui/material/Input";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
@@ -16,20 +12,19 @@ import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { getPartners } from "components/graphQL/useQuery";
+import { addPartner /*addPartnerCategory*/ } from "components/graphQL/Mutation";
+// import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import Loader from "components/Utilities/Loader";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
+
+import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -170,47 +165,68 @@ const Partners = () => {
     date: "",
     category: "",
   };
-  const initialValues1 = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    category: "",
-    image: "",
-  };
 
   const validationSchema = Yup.object({
     Name: Yup.string("Select your Name").required("Name is required"),
+    cadre: Yup.string("Select your Cadre").required("Cadre is required"),
     date: Yup.string("Date your hospital").required("Date is required"),
-    category: Yup.string("select your category").required("category is required"),
+    specialization: Yup.string("select your specialization").required("specialization is required"),
+  });
+  const initialValues1 = {
+    name: "",
+    email: "",
+    specialization: "",
+    image: null,
+  };
+  const initialValues2 = {
+    category: "",
+  };
+  const validationSchema2 = Yup.object({
+    category: Yup.string("select your Category").required("Category is required"),
   });
   const validationSchema1 = Yup.object({
-    firstName: Yup.string("Enter your firstName").required("firstName is required"),
-    lastName: Yup.string("Enter your lastName").required("lastName is required"),
+    name: Yup.string("Enter your name").required("name is required"),
+    image: Yup.string("Upload a single Image")
+      .typeError("Pick correct image")
+      .required("Image is required"),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
-    category: Yup.string("select your category").required("category is required"),
+    specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
+  const [addPartners] = useMutation(addPartner);
+
   const onSubmit = (values) => {
     console.log(values);
   };
-  const onSubmit1 = (values) => {
+  const onSubmit2 = (values) => {
     console.log(values);
+  };
+  const onSubmit1 = async (values) => {
+    const { name, email, specialization, image } = values;
+    await addPartners({
+      variables: {
+        name,
+        email,
+        category: specialization,
+        image,
+      },
+      refetchQueries: [{ query: getPartners }],
+    });
   };
 
   const [searchPartner, setSearchPartner] = useState("");
   const [openFilterPartner, setOpenFilterPartner] = useState(false);
   const [openAddPartner, setOpenAddPartner] = useState(false);
   const [openDeletePartner, setOpenDeletePartner] = useState(false);
-
-  // FILTER PARTNERS SELECT STATES
-
-  // ADD PARTNERS INPUT STATES
+  const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
 
   const specializations = [
-    { key: "Dentistry", value: "Dentistry" },
+    { key: "Diagnostics", value: "diagnostics" },
+    { key: "Dental", value: "Dental" },
     { key: "Pediatry", value: "Pediatry" },
     { key: "Optometry", value: "Optometry" },
     { key: "Pathology", value: "Pathology" },
   ];
+
   const { loading, error, data } = useQuery(getPartners);
   const [partner, setPartners] = useState([]);
   useEffect(() => {
@@ -218,8 +234,6 @@ const Partners = () => {
       setPartners(data.getPartners.data);
     }
   }, [data]);
-
-  // const { hospitalName, date, categoryName } = filterSelectInput;
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -245,8 +259,7 @@ const Partners = () => {
             endIcon={<PersonAddAlt1Icon />}
             title="Add  Partner Category"
             type={redButton}
-
-            // onClick={() => setOpenAddPartner(true)}
+            onClick={() => setAddPartnerCategory(true)}
           />
         </Grid>
         <Grid item>
@@ -422,91 +435,117 @@ const Partners = () => {
           validateOnChange={false}
           validateOnMount
         >
-          {({ isSubmitting, isValid, dirty }) => {
+          {({ isSubmitting, isValid, dirty, setFieldValue, setValues, values, errors }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
-                  <Grid item>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          label="First Name"
-                          labelId="firstName"
-                          id="firstName"
-                          name="firstName"
-                          placeholder="Enter first name"
-                        />
+                <Grid container direction="column" gap={4}>
+                  <Grid item container>
+                    <Grid item container direction="column" gap={1}>
+                      <Grid item container>
+                        <Grid item container>
+                          <FormikControl
+                            control="input"
+                            label="Name"
+                            id="name"
+                            name="name"
+                            placeholder="Enter last name"
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          label="Last Name"
-                          labelId="lastName"
-                          id="lastName"
-                          name="lastName"
-                          placeholder="Enter last name"
-                        />
+                      <Grid item container>
+                        <Grid item container>
+                          <FormikControl
+                            control="input"
+                            label="Email"
+                            id="name"
+                            name="email"
+                            placeholder="Enter Email"
+                          />
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item style={{ margin: "3rem 0 0" }}>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          type="email"
-                          label="Email"
-                          labelId="email"
-                          id="email"
-                          name="email"
-                          placeholder="Enter email"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <Grid container direction="column">
+                      <Grid item container>
+                        <Grid item container>
                           <FormikControl
                             control="select"
                             options={specializations}
-                            name="category"
+                            name="specialization"
                             label="Category"
-                            placeholder="Select Category"
+                            placeholder="Specialization"
                           />
+                        </Grid>
+                      </Grid>
+                      <Grid item container direction="column" gap={2}>
+                        <Grid item container>
+                          <Grid container spacing={2}>
+                            <Grid item md>
+                              <FormikControl
+                                control="file"
+                                name="image"
+                                label="Company Logo"
+                                setFieldValue={setFieldValue}
+                              />
+                            </Grid>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item container direction="column" marginBottom={4}>
-                  <Grid item style={{ paddingBottom: ".5rem" }}>
-                    <Typography variant="body1" gutterBottom>
-                      Upload your logo
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <label htmlFor="contained-button-file">
-                      <Input
-                        accept="image/*"
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        name="image"
-                        style={{ display: "none" }}
-                      />
-                      <Button variant="contained" component="span" className={classes.uploadBtn}>
-                        Upload Photo
-                      </Button>
-                    </label>
+                  <Grid item container>
+                    <CustomButton
+                      title="Add Partner"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
                   </Grid>
                 </Grid>
-                <Grid item container marginTop={4}>
-                  <CustomButton
-                    title="Add Partner"
-                    width="100%"
-                    type={buttonType}
-                    isSubmitting={isSubmitting}
-                    disabled={!(dirty || isValid)}
-                  />
+              </Form>
+            );
+          }}
+        </Formik>
+      </Modals>
+
+      {/* Add Partner Category */}
+      <Modals
+        isOpen={openAddPartnerCategory}
+        title="Add Partners Category"
+        rowSpacing={5}
+        handleClose={() => setAddPartnerCategory(false)}
+      >
+        <Formik
+          initialValues={initialValues2}
+          onSubmit={onSubmit2}
+          validationSchema={validationSchema2}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, isValid, dirty }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid container direction="column" gap={4}>
+                  <Grid item container>
+                    <Grid item container direction="column" gap={1}>
+                      <Grid item container>
+                        <FormikControl
+                          control="select"
+                          options={specializations}
+                          name="category"
+                          label="Category"
+                          placeholder="Specialization"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container>
+                    <CustomButton
+                      title="Add Partner"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
+                  </Grid>
                 </Grid>
               </Form>
             );

@@ -58,7 +58,7 @@ const HcpAppointments = (props) => {
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
     if (data) {
-      setAppointment(data.getAppointments.data.filter((i) => i.doctor == hcpId));
+      setAppointment(data.getAppointments.data);
     }
   }, [data, hcpId]);
   const handleDeleteOpenDialog = (id) => {
@@ -134,11 +134,10 @@ const HcpAppointments = (props) => {
             {alert.message}
           </Alert>
         )}
-        <Grid item style={{ marginBottom: "3rem" }}>
+        <Grid item>
           <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
         </Grid>
-
-        {appointment.length > 0 ? (
+        {appointment.filter((i) => i.doctor == hcpId).length > 0 ? (
           appointment.map((appoint) => (
             <Grid
               item

@@ -116,10 +116,10 @@ const ReferPatient = ({ handleDialogClose, initialValues, type }) => {
 };
 
 ReferPatient.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  handleDialogClose: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired,
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+  handleDialogClose: PropTypes.func,
+  initialValues: PropTypes.object,
   type: PropTypes.string,
 };
 

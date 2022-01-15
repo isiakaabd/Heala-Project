@@ -110,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const patient = useQuery(getPatients);
 
   const initialValues = {
     hospital: "",
@@ -128,7 +127,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const onSubmit = (values) => {
     console.log(values);
   };
-  const [profiles, setProfiles] = useState(undefined);
+  const patient = useQuery(getPatients);
+  const [profiles, setProfiles] = useState([]);
   useEffect(() => {
     if (patient.data && patient.data.profiles.data) {
       setProfiles(patient.data.profiles.data);

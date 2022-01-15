@@ -14,6 +14,7 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import Avatar from "@mui/material/Avatar";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
+import NoData from "components/layouts/NoData";
 import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -109,112 +110,119 @@ const HcpConsultations = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
   if (loading) return <Loader />;
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" height="100%">
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ paddingBottom: "5rem" }}
-      >
-        <Grid item>
-          <Typography variant="h2">Consultations</Typography>
-        </Grid>
-        <Grid item>
-          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
-        </Grid>
-      </Grid>
-      <Grid item container>
-        <EnhancedTable
-          headCells={consultationsHeadCells}
-          rows={consultationsRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {consultations
-            .filter((i) => i.doctor == hcpId)
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+      {consultations.filter((i) => i.doctor == hcpId).length > 0 ? (
+        <>
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            style={{ paddingBottom: "5rem" }}
+            height="100%"
+            direction="column"
+          >
+            <Grid item>
+              <Typography variant="h2">Consultations</Typography>
+            </Grid>
+            <Grid item>
+              <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
+            </Grid>
+          </Grid>
+          <Grid item container>
+            <EnhancedTable
+              headCells={consultationsHeadCells}
+              rows={consultationsRows}
+              page={page}
+              paginationLabel="Patients per page"
+              hasCheckbox={true}
+            >
+              {consultations
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
-              localStorage.setItem("hcp", row._id);
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row._id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "left",
-                      }}
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  localStorage.setItem("hcp", row._id);
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
                         />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {dateMoment(row.createdAt)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                  >
-                    {row.description}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`/hcps/${hcpId}/consultations/case-notes/${row._id}`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => {
-                        setSelectedSubMenu(2);
-                        setSelectedHcpMenu(0);
-                        setSelectedScopedMenu(2);
-                      }}
-                    >
-                      View Case Note
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
-      </Grid>
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ maxWidth: "20rem" }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={`Display Photo of ${row.name}`}
+                              src={displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {dateMoment(row.createdAt)}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      >
+                        {row.description}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component={Link}
+                          to={`/hcps/${hcpId}/consultations/case-notes/${row._id}`}
+                          endIcon={<ArrowForwardIosIcon />}
+                          onClick={() => {
+                            setSelectedSubMenu(2);
+                            setSelectedHcpMenu(0);
+                            setSelectedScopedMenu(2);
+                          }}
+                        >
+                          View Case Note
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          </Grid>
+        </>
+      ) : (
+        <NoData />
+      )}
     </Grid>
   );
 };
