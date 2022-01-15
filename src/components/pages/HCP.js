@@ -8,12 +8,12 @@ import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
+import NoData from "components/layouts/NoData";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -109,6 +109,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [respondData] = useState([]); //setRespondData
 
   const handleDialogOpen = () => {
     setIsOpen(true);
@@ -141,130 +142,135 @@ const HCP = ({ setSelectedSubMenu }) => {
 
   return (
     <>
-      <Grid container direction="column">
-        {response ? (
-          <Grid
-            item
-            width={300}
-            margin="auto"
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
-          >
-            <Alert severity="success">
-              <Typography variant="h1">{response}</Typography>
-            </Alert>
-          </Grid>
-        ) : null}
-      </Grid>
-      <Grid container direction="column">
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
-          <Grid item className={classes.searchGrid}>
-            <Search
-              value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Type to search HCPs..."
-              height="5rem"
-            />
-          </Grid>
-          <Grid item>
-            <FilterList onClick={handleDialogOpen} title="Filter by" />
+          {response ? (
+            <Grid
+              item
+              width={300}
+              margin="auto"
+              justifyContent="left"
+              alignItems="center"
+              textAlign="left"
+            >
+              <Alert severity="success">
+                <Typography variant="h1">{response}</Typography>
+              </Alert>
+            </Grid>
+          ) : null}
+          <Grid item container>
+            <Grid item className={classes.searchGrid}>
+              <Search
+                value={searchMail}
+                onChange={(e) => setSearchMail(e.target.value)}
+                placeholder="Type to search HCPs..."
+                height="5rem"
+              />
+            </Grid>
+            <Grid item>
+              <FilterList onClick={handleDialogOpen} title="Filter by" />
+            </Grid>
           </Grid>
         </Grid>
-        {/* The Search and Filter ends here */}
-        <Grid item container style={{ marginTop: "5rem" }}>
-          <EnhancedTable
-            headCells={HCPHeader}
-            rows={rows}
-            page={page}
-            paginationLabel="verification per page"
-            hasCheckbox={true}
-          >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+        <Grid container item height="100%" direction="column">
+          {respondData.length > 0 ? (
+            <EnhancedTable
+              headCells={HCPHeader}
+              rows={respondData}
+              page={page}
+              paginationLabel="verification per page"
+              hasCheckbox={true}
+            >
+              {respondData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
-                  >
-                    {row.entryDate}
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
-                  >
-                    {row.type}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
                         />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {row.firstName} {row.lastName}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.red }}
-                  >
-                    {row.medical}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to="/verification/view"
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => setSelectedSubMenu(8)}
-                    >
-                      View HCP
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </EnhancedTable>
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {row.entryDate}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {row.type}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.firstName} {row.lastName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {row.medical}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component={Link}
+                          to="/verification/view"
+                          endIcon={<ArrowForwardIosIcon />}
+                          onClick={() => setSelectedSubMenu(8)}
+                        >
+                          View HCP
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          ) : (
+            <NoData />
+          )}
         </Grid>
       </Grid>
       {/* Modal */}

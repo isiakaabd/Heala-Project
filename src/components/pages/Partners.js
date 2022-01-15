@@ -242,7 +242,7 @@ const Partners = () => {
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container>
+      <Grid item container style={{ paddingBottom: "5rem" }}>
         <Grid item className={classes.searchGrid} gap={2}>
           <Search
             value={searchPartner}

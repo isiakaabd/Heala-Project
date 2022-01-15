@@ -186,7 +186,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             </Alert>
           </Grid>
         ) : null}
-        <Grid item container>
+        <Grid item container style={{ paddingBottom: "5rem" }}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}

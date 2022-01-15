@@ -180,7 +180,7 @@ const SingleHCP = (props) => {
               <Grid item style={{ marginRight: "2rem" }}>
                 <Avatar
                   alt={`Display Photo`}
-                  src={doctorProfile.image}
+                  src={doctorProfile.picture}
                   sx={{ width: 50, height: 50 }}
                 />
               </Grid>
@@ -241,8 +241,6 @@ const SingleHCP = (props) => {
               </Card>
             </Grid>
           ))}
-          {/* This grid is used as a placeholder to aid the uniformity of the alignment with the grid above
-        <Grid item className={classes.parentGrid} style={{ visibility: "hidden" }}></Grid> */}
         </Grid>
       </Grid>
 

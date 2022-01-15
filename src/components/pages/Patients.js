@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
       fontSize: "1.25rem",
-      textAlign: "center",
+      textAlign: "left",
     },
   },
 
@@ -236,17 +236,17 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           </div>
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
-                          {row.plan}
+                          {row.plan ? row.plan : "No Value"}
+                        </TableCell>
+                        <TableCell align="left" textAlign="left" className={classes.tableCell}>
+                          {row.provider ? row.provider : "No Value"}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
-                          {row.provider}
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          {row.consultations}
+                          {row.consultations ? row.consultations : "No Value"}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
                           <Chip
-                            label={row.status}
+                            label={row.status ? row.status : "No value"}
                             className={classes.badge}
                             style={{
                               background:

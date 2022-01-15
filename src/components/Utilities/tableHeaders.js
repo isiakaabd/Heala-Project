@@ -190,9 +190,16 @@ export const subscriptionHeader = [
     id: 2,
     label: " Description",
   },
-
   {
-    id: 3,
+    id: 4,
+    label: " Provider",
+  },
+  {
+    id: 6,
+    label: "Duration",
+  },
+  {
+    id: 8,
     label: "",
   },
 ];
