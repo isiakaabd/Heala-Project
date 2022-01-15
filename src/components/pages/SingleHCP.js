@@ -13,7 +13,6 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.png";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
@@ -179,7 +178,11 @@ const SingleHCP = (props) => {
           <Grid item>
             <Grid container alignItems="center">
               <Grid item style={{ marginRight: "2rem" }}>
-                <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+                <Avatar
+                  alt={`Display Photo`}
+                  src={doctorProfile.image}
+                  sx={{ width: 50, height: 50 }}
+                />
               </Grid>
               <Grid item>
                 <Typography variant="h2">{`${doctorProfile.firstName} ${doctorProfile.lastName}`}</Typography>

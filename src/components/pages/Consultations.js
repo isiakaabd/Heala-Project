@@ -84,6 +84,9 @@ const Consultations = (props) => {
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
   const { loading, data, error } = useQuery(getConsultations);
+  // const cd = useQuery(c, { variables: { id: "61c90cb9ce9b310013d0b694" } });
+
+  // console.log(cd);
 
   useEffect(() => {
     if (data && data.getConsultations.data) {

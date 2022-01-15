@@ -16,6 +16,7 @@ import { useQuery /*useMutation*/ } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
 // import { createAllery } from "components/graphQL/Mutation";
 import Loader from "components/Utilities/Loader";
+import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -164,11 +165,7 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip
-                variant="outlined"
-                label={doctorProfile.gender == 0 ? "Male" : "Female"}
-                className={classes.infoBadge}
-              />
+              <Chip variant="outlined" label={doctorProfile.gender} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -187,7 +184,9 @@ const HcpProfile = (props) => {
             <Grid item>
               <Chip
                 variant="outlined"
-                label={doctorProfile.email ? doctorProfile.email : <span>DOB not Provided</span>}
+                label={
+                  doctorProfile.dob ? dateMoment(doctorProfile.dob) : <span>DOB not Provided</span>
+                }
                 className={classes.infoBadge}
               />
             </Grid>
