@@ -240,7 +240,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   if (docProfile.error) return <NoData error={docProfile.error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container>
+      <Grid item container style={{ paddingBottom: "5rem" }}>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchHcp}
@@ -314,7 +314,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
                             alt={`Display Photo of ${row.name}`}
-                            src={row.image}
+                            src={row.picture}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -331,18 +331,18 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       {row.specialization}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {row.consultation}
+                      {row.consultation ? row.consultation : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {row.hospital}
+                      {row.hospital ? row.hospital : "No Value"}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <Chip
-                        label={row.status}
+                        label={row.status ? row.status : "No Value"}
                         className={classes.badge}
                         style={{
                           background:

@@ -37,6 +37,8 @@ export const SubscriptionModal = ({
       .min(0, "Min value is  1")
       .required("Amount is required"),
     description: Yup.string("Enter Description").required("Description is required"),
+    provider: Yup.string("Enter Provider").required("Provider is required"),
+    duration: Yup.string("Enter Duration").required("Duration is required"),
   });
 
   useEffect(() => {
@@ -45,12 +47,14 @@ export const SubscriptionModal = ({
         description: single.data.getPlan.description,
         name: single.data.getPlan.name,
         amount: Number(single.data.getPlan.amount),
+        duration: single.data.getPlan.duration,
+        provider: single.data.getPlan.provider,
       });
     }
   }, [single.data, setSingleData]);
 
   const onSubmit = async (values, onSubmitProps) => {
-    const { name, amount, description } = values;
+    const { name, amount, description, duration, provider } = values;
     if (type === "edit") {
       try {
         await updatePlan({
@@ -59,6 +63,8 @@ export const SubscriptionModal = ({
             name,
             amount: Number(amount),
             description,
+            duration,
+            provider,
           },
         });
         setAlert({
@@ -78,6 +84,8 @@ export const SubscriptionModal = ({
             name,
             amount: Number(amount),
             description,
+            duration,
+            provider,
           },
         });
         setAlert({
@@ -119,7 +127,7 @@ export const SubscriptionModal = ({
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
-              <Grid item container rowSpacing={3}>
+              <Grid item container rowSpacing={2}>
                 <Grid item container>
                   <FormikControl
                     control="input"
@@ -139,13 +147,29 @@ export const SubscriptionModal = ({
                 <Grid item container>
                   <FormikControl
                     control="input"
+                    placeholder="Enter Duration"
+                    name="duration"
+                    label="Duration"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    placeholder="Enter Provider"
+                    name="provider"
+                    label="Provider"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
                     placeholder="Enter your Description"
                     name="description"
                     label="Description"
                   />
                 </Grid>
 
-                <Grid item xs={12} marginTop={10}>
+                <Grid item xs={12}>
                   <CustomButton
                     title={type === "edit" ? "Save Plan" : "Add Plan"}
                     width="100%"

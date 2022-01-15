@@ -181,7 +181,6 @@ const Subscription = () => {
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
-    console.log(id);
   };
   const handleDialogClose = async () => {
     setIsOpen(false);
@@ -229,6 +228,8 @@ const Subscription = () => {
     name: "",
     amount: "",
     description: "",
+    duration: "",
+    provider: "",
   };
 
   return (
@@ -244,7 +245,7 @@ const Subscription = () => {
           </Alert>
         )}
 
-        <Grid item container>
+        <Grid item container style={{ paddingBottom: "5rem" }}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -323,6 +324,20 @@ const Subscription = () => {
                         style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                       >
                         {row.description}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                      >
+                        {row.provider}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                      >
+                        {row.duration}
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>

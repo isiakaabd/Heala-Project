@@ -12,7 +12,7 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
-import { Avatar, Chip } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import displayPhoto from "assets/images/avatar.png";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -20,6 +20,8 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Link } from "react-router-dom";
 import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
@@ -152,7 +154,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                       <TableCell
                         id={labelId}
                         scope="row"
-                        align="center"
+                        align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
@@ -168,7 +170,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                         {/* {new Date(row.updatedAt)} */}
                         {timeMoment(row.updatedAt)}
                       </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
+                      <TableCell align="left" className={classes.tableCell}>
                         <div
                           style={{
                             height: "100%",
@@ -207,39 +209,22 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                       >
                         {row.note}
                       </TableCell>
-                      {/* <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
+
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component={Link}
+                          disabled
+                          // to={`hcps/${row._id}`}
+                          endIcon={<ArrowForwardIosIcon />}
+                          // onClick={() => {
+                          //   setSelectedSubMenu(3);
+                          //   setSelectedHcpMenu(0);
+                          // }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src={displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
-                        </div>
-                      </TableCell> */}
-                      <TableCell align="center" className={classes.tableCell}>
-                        <Chip
-                          label={row.status}
-                          className={classes.badge}
-                          style={{
-                            background:
-                              row.status === "active"
-                                ? theme.palette.common.lightGreen
-                                : theme.palette.common.lightRed,
-                            color:
-                              row.status === "active"
-                                ? theme.palette.common.green
-                                : theme.palette.common.red,
-                          }}
-                        />
+                          View Referral
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );

@@ -17,8 +17,22 @@ export const Login_USER = gql`
   }
 `;
 export const CREATE_PLAN = gql`
-  mutation createPlan($name: String!, $amount: Float!, $description: String!) {
-    createPlan(data: { name: $name, amount: $amount, description: $description }) {
+  mutation createPlan(
+    $name: String!
+    $amount: Float!
+    $description: String
+    $duration: String
+    $provider: String
+  ) {
+    createPlan(
+      data: {
+        name: $name
+        amount: $amount
+        description: $description
+        duration: $duration
+        provider: $provider
+      }
+    ) {
       plan {
         _id
         name

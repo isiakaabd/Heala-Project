@@ -139,8 +139,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   if (loading) return <Loader />;
   else {
     return (
-      <Grid containerdirection="column" flexWrap="nowrap" height="100%">
-        <Grid item container>
+      <Grid containerdirection="column" gap={2} flexWrap="nowrap" height="100%">
+        <Grid item container style={{ paddingBottom: "5rem" }}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMessage}

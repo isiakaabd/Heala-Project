@@ -6,6 +6,7 @@ export const doctor = gql`
       _id
       firstName
       lastName
+      picture
       dociId
       dob
       image
@@ -29,6 +30,8 @@ export const getPlans = gql`
         name
         amount
         description
+        provider
+        duration
         createdAt
         updatedAt
       }
@@ -41,6 +44,8 @@ export const getSinglePlan = gql`
       name
       amount
       description
+      provider
+      duration
     }
   }
 `;
@@ -213,6 +218,7 @@ export const getDoctorsProfile = gql`
         _id
         firstName
         lastName
+        picture
         dociId
         dob
         hospital

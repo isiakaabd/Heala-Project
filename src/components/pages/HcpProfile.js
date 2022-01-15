@@ -7,7 +7,6 @@ import NoData from "components/layouts/NoData";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DisplayProfile from "components/Utilities/DisplayProfile";
-import displayPhoto from "assets/images/avatar.png";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
@@ -138,7 +137,7 @@ const HcpProfile = (props) => {
       <Grid item>
         <DisplayProfile
           fullName={`${doctorProfile.firstName} ${doctorProfile.lastName}`}
-          displayPhoto={displayPhoto}
+          displayPhoto={doctorProfile.picture}
           medicalTitle="Medical ID"
           statusId={doctorProfile._id}
           specialization={
