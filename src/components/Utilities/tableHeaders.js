@@ -13,6 +13,10 @@ export const patientsHeadCells = [
     label: "Plan",
   },
   {
+    id: 8,
+    label: "Provider",
+  },
+  {
     id: 3,
     label: "Consultations",
   },
@@ -28,11 +32,15 @@ export const patientsHeadCells = [
 export const emailHeader = [
   {
     id: 0,
-    label: "Entry Date",
+    label: "Recipients",
   },
   {
-    id: 1,
-    label: "Name",
+    id: 6,
+    label: "Subject",
+  },
+  {
+    id: 4,
+    label: "Entry Date",
   },
   {
     id: 2,
@@ -40,8 +48,26 @@ export const emailHeader = [
   },
 
   {
-    id: 4,
+    id: 8,
     label: "Email",
+  },
+  {
+    id: 9,
+    label: "",
+  },
+];
+export const PermissionHeader = [
+  {
+    id: 0,
+    label: "Permission",
+  },
+  {
+    id: 6,
+    label: "CRUD",
+  },
+  {
+    id: 3,
+    label: "",
   },
 ];
 export const adminHeader = [
@@ -77,6 +103,10 @@ export const HCPHeader = [
   {
     id: 0,
     label: "Entry Date",
+  },
+  {
+    id: 8,
+    label: "Type",
   },
   {
     id: 1,
@@ -126,20 +156,21 @@ export const referralHeader = [
   },
   {
     id: 2,
-    label: " HCP Name",
+    label: "Name",
   },
 
   {
     id: 3,
-    label: "Specialization",
+    label: "Category",
+  },
+
+  {
+    id: 8,
+    label: "Reason",
   },
   {
-    id: 4,
-    label: "Patient's name",
-  },
-  {
-    id: 5,
-    label: "Status",
+    id: 18,
+    label: "Note",
   },
   {
     id: 6,
@@ -148,7 +179,7 @@ export const referralHeader = [
 ];
 export const subscriptionHeader = [
   {
-    id: 0,
+    id: 8,
     label: "Name of plan",
   },
   {
@@ -159,9 +190,16 @@ export const subscriptionHeader = [
     id: 2,
     label: " Description",
   },
-
   {
-    id: 3,
+    id: 4,
+    label: " Provider",
+  },
+  {
+    id: 6,
+    label: "Duration",
+  },
+  {
+    id: 8,
     label: "",
   },
 ];
@@ -176,7 +214,7 @@ export const payoutHeader = [
   },
   {
     id: 2,
-    label: " HCP Name",
+    label: " Name",
   },
 
   {
@@ -192,14 +230,68 @@ export const payoutHeader = [
     label: "Payout status",
   },
 ];
-export const viewRefferalHeader = [
+export const pendingHeader = [
   {
     id: 0,
-    label: "HCP name",
+    label: "Date",
   },
   {
     id: 1,
-    label: "Specialization",
+    label: "Heala  ID",
+  },
+  {
+    id: 2,
+    label: " Name",
+  },
+
+  {
+    id: 3,
+    label: "Amount paid",
+  },
+  {
+    id: 4,
+    label: "Account Details",
+  },
+  {
+    id: 5,
+    label: "Bank",
+  },
+];
+export const pendingHeader2 = [
+  {
+    id: 0,
+    label: "Date",
+  },
+  {
+    id: 1,
+    label: "Heala  ID",
+  },
+  {
+    id: 2,
+    label: " Name",
+  },
+
+  {
+    id: 3,
+    label: "Amount paid",
+  },
+  {
+    id: 4,
+    label: "Account Details",
+  },
+  {
+    id: 5,
+    label: "Bank",
+  },
+];
+export const viewRefferalHeader = [
+  {
+    id: 0,
+    label: "Name",
+  },
+  {
+    id: 1,
+    label: "Category",
   },
   {
     id: 2,
@@ -218,7 +310,7 @@ export const viewRefferalHeader = [
 
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
-  { id: 100, label: "HCP Name" },
+  { id: 100, label: "Name" },
   { id: 101, label: "Date" },
   { id: 102, label: "Description" },
   { id: 103, label: "" },
@@ -252,17 +344,15 @@ export const waitingHeadCells = [
 
 export const availabilityHeadCells = [
   { id: 0, label: "HCP ID" },
-  { id: 1, label: "HCP Name" },
-  { id: 2, label: "Specialization" },
+  { id: 1, label: "Name" },
+  { id: 2, label: "Category" },
   { id: 3, label: "Available Time" },
-  { id: 4, label: "" },
 ];
 
-// HCPs HEADCELLS
 export const hcpsHeadCells = [
   { id: 0, label: "Medical ID" },
-  { id: 1, label: "HCP Name" },
-  { id: 2, label: "Specialization" },
+  { id: 1, label: "Name" },
+  { id: 2, label: "Category" },
   { id: 3, label: "Consultations" },
   { id: 4, label: "Hospital" },
   { id: 5, label: "Status" },
@@ -275,16 +365,21 @@ export const partnersHeadCells = [
   { id: 1, label: "Category" },
   { id: 2, label: "" },
 ];
+export const partnersHeadCells2 = [
+  { id: 0, label: "Provider" },
+  { id: 1, label: "Category" },
+  { id: 2, label: "" },
+];
 
-// Partner's HEADCELLS
+// Messages's HEADCELLS
 export const messagesHeadCells = [
-  { id: 0, label: "Recipient" },
+  { id: 0, label: "Recipients" },
   { id: 1, label: "Subject" },
   { id: 2, label: "Date" },
   { id: 3, label: "Time" },
   { id: 4, label: "" },
 ];
-// Partner's HEADCELLS
+// HCP Patients HEADCELLS
 export const hcpPatientsHeadCells = [
   { id: 0, label: "User ID" },
   { id: 1, label: "Patient Name" },

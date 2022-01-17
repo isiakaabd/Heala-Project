@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import HeaderProfile from "./HeaderProfile";
@@ -8,6 +8,8 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useLazyQuery } from "@apollo/client";
+import { getPatients, DoctorCount } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -53,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomHeaderText = ({ title, total, path }) => {
+const CustomHeaderText = ({ title, total, path, data }) => {
   const classes = useStyles();
 
   return (
@@ -75,6 +77,7 @@ CustomHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   path: PropTypes.string.isRequired,
+  data: PropTypes.object,
 };
 
 const CustomHeaderTitle = ({ title, path }) => {
@@ -101,7 +104,15 @@ const CustomSubHeaderText = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { title, subTitle, subSubTitle, scopedMenu, titleColor = theme.palette.common.red } = props;
+  const {
+    title,
+    subTitle,
+    subSubTitle,
+    scopedSubTitle,
+    scopedMenu,
+    scopedSubMenu,
+    titleColor = theme.palette.common.red,
+  } = props;
 
   return (
     <div className={classes.customSubHeaderWrapper}>
@@ -129,9 +140,24 @@ const CustomSubHeaderText = (props) => {
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
-            style={{ color: theme.palette.common.red }}
+            style={{
+              color: scopedSubMenu === 0 ? theme.palette.common.red : theme.palette.common.grey,
+            }}
           >
             {subSubTitle}
+          </Typography>
+        </Fragment>
+      )}
+
+      {scopedSubMenu !== 0 && (
+        <Fragment>
+          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+          <Typography
+            variant="h3"
+            classes={{ root: classes.title }}
+            style={{ color: theme.palette.common.red }}
+          >
+            {scopedSubTitle}
           </Typography>
         </Fragment>
       )}
@@ -143,14 +169,39 @@ CustomSubHeaderText.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string.isRequired,
   subSubTitle: PropTypes.string,
-  titleColor: PropTypes.string.isRequired,
-  scopedMenu: PropTypes.number,
+  scopedSubTitle: PropTypes.string,
+  titleColor: PropTypes.string,
+  scopedMenu: PropTypes.number.isRequired,
+  scopedSubMenu: PropTypes.number.isRequired,
+  data: PropTypes.object,
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
-const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
+const HeaderText = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    selectedHcpMenu,
+    waitingListMenu,
+    selectedAppointmentMenu,
+    selectedScopedMenu,
+  } = props;
+
   const classes = useStyles();
   const theme = useTheme();
+  const [patient, patientContent] = useLazyQuery(getPatients, { fetchPolicy: "cache-first" });
+  const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      patient();
+      doctor();
+      if (patientContent.data) setProfiles(patientContent.data.profiles.data);
+    };
+    fetch();
+  }, [doctor, patient, patientContent.data, doctorContent.data]);
 
   const { pathname } = useLocation();
 
@@ -162,7 +213,9 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
             Welcome,
           </Typography>
           <Typography variant="h3" color="primary" className={classes.name}>
-            Emmanuel Chukwu
+            {/* {data ? data.account.email :  */}
+            Admin
+            {/* } */}
           </Typography>
         </div>
       );
@@ -173,6 +226,8 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
             title="Patients"
             subTitle="Patient View"
             scopedMenu={selectedPatientMenu}
+            scopedSubMenu={selectedScopedMenu}
+            scopedSubTitle={selectedScopedMenu === 1 ? "Case Note" : ""}
             titleColor={
               selectedPatientMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
             }
@@ -180,13 +235,13 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
               selectedPatientMenu === 1
                 ? "Patient Profile"
                 : selectedPatientMenu === 2
-                ? "Consultations"
+                ? "Appointments"
                 : selectedPatientMenu === 3
                 ? "Prescriptions"
                 : selectedPatientMenu === 4
                 ? "Medical Records"
                 : selectedPatientMenu === 5
-                ? "Case Notes"
+                ? "Consultations"
                 : selectedPatientMenu === 6
                 ? "Medications"
                 : ""
@@ -195,12 +250,20 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
           />
         );
       }
-      return <CustomHeaderText title="Patients" total={24} path="patients" />;
+      return (
+        <CustomHeaderText
+          title="Patients"
+          total={patientContent.loading ? "Loading" : profiles.length}
+          path="patients"
+        />
+      );
     case 2:
       if (selectedSubMenu === 3) {
         return (
           <CustomSubHeaderText
             scopedMenu={selectedHcpMenu}
+            scopedSubMenu={selectedScopedMenu}
+            scopedSubTitle={selectedScopedMenu === 2 ? "Case Note" : ""}
             subSubTitle={
               selectedHcpMenu === 1
                 ? "HCP Profile"
@@ -212,7 +275,9 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
                 ? "Earnings"
                 : selectedHcpMenu === 5
                 ? "Patients"
-                : ""
+                : selectedHcpMenu === 6
+                ? "Consultations"
+                : "White Label"
             }
             title="HCPs"
             subTitle="HCP View"
@@ -222,18 +287,35 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
           />
         );
       }
-      return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
+      return (
+        <CustomHeaderText
+          title="HCPs"
+          total={doctorContent.data && doctorContent.data.DoctorCount}
+          path="hcps"
+        />
+      );
     case 3:
       return <CustomHeaderText title="Partners" total={24} path="partners" />;
 
     case 4:
       if (selectedSubMenu === 5) {
+        if (selectedAppointmentMenu === 1) {
+          return (
+            <CustomSubHeaderText
+              title="Appointments"
+              subTitle="Waiting List"
+              subSubTitle={waitingListMenu === 1 ? "Details View" : ""}
+              scopedMenu={waitingListMenu}
+              scopedSubMenu={0}
+            />
+          );
+        }
         return (
           <CustomSubHeaderText
             title="Appointments"
-            subTitle={pathname === "/appointments/waiting-list" ? "Waiting List" : "Consultation"}
+            subTitle="Consultation"
             scopedMenu={0}
-            selectedPatientMenu={selectedPatientMenu}
+            scopedSubMenu={0}
           />
         );
       }
@@ -244,6 +326,7 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
           <CustomSubHeaderText
             title="Messages"
             scopedMenu={0}
+            scopedSubMenu={0}
             subTitle={pathname === "/messages/create-message" ? "New Message" : "View Message"}
           />
         );
@@ -253,7 +336,14 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
       return <CustomHeaderTitle title="Email" path="email" />;
     case 7:
       if (selectedSubMenu === 8) {
-        return <CustomSubHeaderText title="HCP Verification" scopedMenu={0} subTitle="HCP View" />;
+        return (
+          <CustomSubHeaderText
+            title="HCP Verification"
+            scopedMenu={0}
+            scopedSubMenu={0}
+            subTitle="HCP View"
+          />
+        );
       }
       return <CustomHeaderTitle title="HCP Verification" path="verification" />;
     case 8:
@@ -262,12 +352,23 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
           <CustomSubHeaderText
             title="Finance"
             scopedMenu={0}
+            scopedSubMenu={0}
             subTitle={pathname === "/finance/earnings" ? "Earnings Table" : "Payouts Table"}
           />
         );
       }
       return <CustomHeaderTitle title="Finance" path="finance" />;
     case 9:
+      if (selectedSubMenu === 10) {
+        return (
+          <CustomSubHeaderText
+            title="Referrals"
+            subTitle="Referral View"
+            scopedMenu={0}
+            scopedSubMenu={0}
+          />
+        );
+      }
       return <CustomHeaderTitle title="Referrals" path="referrals" />;
     case 10:
       return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
@@ -278,10 +379,23 @@ const HeaderText = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, select
             title="Settings"
             subTitle={pathname === "/settings/administrator" ? "Administrator" : "Management"}
             scopedMenu={0}
+            scopedSubMenu={0}
           />
         );
       }
       return <CustomHeaderTitle title="Settings" path="settings" />;
+    case 12:
+      if (selectedSubMenu === 13) {
+        return (
+          <CustomSubHeaderText
+            title="White Label"
+            subTitle={pathname === "/label/provider" ? "Providers" : "User Types"}
+            scopedMenu={0}
+            scopedSubMenu={0}
+          />
+        );
+      }
+      return <CustomHeaderTitle title="White Label" path="label" />;
     default:
       return (
         <div>
@@ -301,9 +415,22 @@ HeaderText.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  waitingListMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
 };
 
-const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, selectedHcpMenu }) => {
+const HeaderContent = (props) => {
+  const {
+    selectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    selectedHcpMenu,
+    waitingListMenu,
+    selectedAppointmentMenu,
+    selectedScopedMenu,
+    data,
+  } = props;
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
@@ -312,8 +439,11 @@ const HeaderContent = ({ selectedMenu, selectedSubMenu, selectedPatientMenu, sel
         selectedSubMenu={selectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
         selectedHcpMenu={selectedHcpMenu}
+        waitingListMenu={waitingListMenu}
+        selectedAppointmentMenu={selectedAppointmentMenu}
+        selectedScopedMenu={selectedScopedMenu}
       />
-      <HeaderProfile />
+      <HeaderProfile data={data} />
     </Toolbar>
   );
 };
@@ -323,6 +453,10 @@ HeaderContent.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  waitingListMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
+  data: PropTypes.object,
 };
 
 export default HeaderContent;

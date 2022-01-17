@@ -7,6 +7,55 @@
   src: url("assets/fonts/Circular-Std-Medium.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  src: url("assets/fonts/EuclidCircularA-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-weight: 300;
+  src: url("assets/fonts/EuclidCircularA-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-weight: 500;
+  src: url("assets/fonts/EuclidCircularA-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-weight: 600;
+  src: url("assets/fonts/EuclidCircularA-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-weight: 700;
+  src: url("assets/fonts/EuclidCircularA-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-style: italic;
+  src: url("assets/fonts/EuclidCircularA-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Euclid Circular";
+  font-display: swap;
+  font-weight: 500;
+  font-style: italic;
+  src: url("assets/fonts/EuclidCircularA-MediumItalic.woff2") format("woff2");
+}
+
 *,
 *::before,
 *::after {
@@ -18,7 +67,7 @@
 html,
 body {
   font-size: 62.5%;
-  font-family: "Circular Std Medium", sans-serif;
+  font-family: "Euclid Circular", sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -34,4 +83,19 @@ body {
 
 .MuiSelect-select {
   padding: 10px !important;
+}
+
+
+.kpNhUO {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 1rem !important;
+  font-size: 1.5rem !important;
+  overflow: hidden !important
+}
+
+.kpNhUO p {
+  height: 100px !important;
+  max-height: 200px;
+  overflow: scroll;
 }

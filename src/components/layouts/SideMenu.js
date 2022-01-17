@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -6,10 +7,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
-import logo from "assets/images/logo.png";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import logo from "assets/images/logo.svg";
+import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 import { useActions } from "components/hooks/useActions";
+import { useMutation } from "@apollo/client";
+import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   aside: {
@@ -97,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logoWrapper: {
     paddingTop: "3em",
-    paddingBottom: "5em",
+    paddingBottom: "2em",
     paddingLeft: "7em",
   },
   logout: {
@@ -114,22 +117,23 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 const SideMenu = (props) => {
-  const { selectedMenu, setSelectedMenu, setSelectedSubMenu } = props;
-
+  const { selectedMenu, setSelectedMenu, setSelectedSubMenu, setWaitingListMenu } = props;
   const { logout } = useActions();
+  const [logout_user] = useMutation(LOGOUT_USER);
 
   const classes = useStyles();
-
+  const [Logout, setLogout] = useState(false);
   const location = useLocation();
-  const history = useHistory();
 
-  const handleLogout = () => {
-    setSelectedMenu(12);
-    logout();
-
-    history.push("/");
+  const handleLogout = async () => {
+    try {
+      await logout_user();
+      logout();
+      setSelectedMenu(13);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   useEffect(() => {
@@ -145,45 +149,61 @@ const SideMenu = (props) => {
       }
     });
     // eslint-disable-next-line
-  }, [selectedMenu, setSelectedMenu]);
+  }, [selectedMenu]);
 
   return (
-    <aside className={classes.aside}>
-      <div className={classes.logoWrapper}>
-        <img src={logo} alt="logo" />
-      </div>
-      <List>
-        {menus.map((menu) => (
+    <>
+      <aside className={classes.aside}>
+        <div className={classes.logoWrapper}>
+          <img src={logo} alt="logo" width={60} height={60} />
+        </div>
+        <List>
+          {menus.map((menu) => (
+            <ListItemButton
+              disableRipple
+              key={menu.id}
+              onClick={() => {
+                setSelectedMenu(menu.id);
+                setSelectedSubMenu(0);
+                setWaitingListMenu(0);
+              }}
+              selected={selectedMenu === menu.id}
+              component={Link}
+              to={menu.path}
+            >
+              <ListItemIcon>
+                {React.createElement(
+                  menu.icon,
+                  menu.id === 5 ? { size: 20, className: "message-icon" } : {},
+                )}
+              </ListItemIcon>
+
+              <ListItemText>{menu.title}</ListItemText>
+            </ListItemButton>
+          ))}
           <ListItemButton
             disableRipple
-            key={menu.id}
-            onClick={() => {
-              setSelectedMenu(menu.id);
-              setSelectedSubMenu(0);
-            }}
-            selected={selectedMenu === menu.id}
-            component={Link}
-            to={menu.path}
+            classes={{ root: classes.logout }}
+            onClick={() => setLogout(true)}
           >
             <ListItemIcon>
-              {React.createElement(
-                menu.icon,
-                menu.id === 5 ? { size: 20, className: "message-icon" } : {},
-              )}
+              <HiLogout size={20} />
             </ListItemIcon>
 
-            <ListItemText>{menu.title}</ListItemText>
+            <ListItemText>Logout</ListItemText>
           </ListItemButton>
-        ))}
-        <ListItemButton disableRipple onClick={handleLogout} classes={{ root: classes.logout }}>
-          <ListItemIcon>
-            <HiLogout size={20} />
-          </ListItemIcon>
-
-          <ListItemText>Logout</ListItemText>
-        </ListItemButton>
-      </List>
-    </aside>
+        </List>
+      </aside>
+      <DeleteOrDisable
+        open={Logout}
+        setOpen={setLogout}
+        title="Logout"
+        confirmationMsg="logout"
+        btnValue="Logout"
+        type="logout"
+        onConfirm={handleLogout}
+      />
+    </>
   );
 };
 
@@ -191,6 +211,7 @@ SideMenu.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setWaitingListMenu: PropTypes.func.isRequired,
 };
 
 export default SideMenu;

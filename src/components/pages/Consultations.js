@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import NoData from "components/layouts/NoData";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import Avatar from "@mui/material/Avatar";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -16,12 +13,13 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import displayPhoto from "assets/images/avatar.png";
-import { consultationsRows } from "components/Utilities/tableData";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+import displayPhoto from "assets/images/avatar.svg";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getConsultations } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -30,50 +28,31 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  tableBtn: {
+  button: {
     "&.MuiButton-root": {
-      ...theme.typography.btn,
-      height: "3rem",
-      fontSize: "1.25rem",
+      background: "#fff",
+      color: theme.palette.common.grey,
+      textTransform: "none",
       borderRadius: "2rem",
-      boxShadow: "none",
+      display: "flex",
+      alignItems: "center",
+      padding: "1rem",
+      maxWidth: "12rem",
 
       "&:hover": {
-        "& .MuiButton-endIcon>*:nth-of-type(1)": {
-          color: "#fff",
-        },
+        background: "#fcfcfc",
       },
 
       "&:active": {
-        boxShadow: "none",
+        background: "#fafafa",
       },
 
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.5rem",
+        fontSize: "1.2rem",
       },
-    },
-  },
 
-  redBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightRed,
-      color: theme.palette.common.red,
-
-      "&:hover": {
-        background: theme.palette.error.light,
-        color: "#fff",
-      },
-    },
-  },
-
-  greenBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
-
-      "&:hover": {
-        background: theme.palette.success.light,
-        color: "#fff",
+      "& .MuiButton-endIcon": {
+        marginLeft: ".3rem",
       },
     },
   },
@@ -89,38 +68,49 @@ const Consultations = (props) => {
   const {
     selectedMenu,
     selectedSubMenu,
+    selectedPatientMenu,
+    selectedScopedMenu,
     setSelectedMenu,
     setSelectedSubMenu,
-    selectedPatientMenu,
     setSelectedPatientMenu,
+    setSelectedScopedMenu,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
+  const { patientConsultation } = useActions();
   const { patientId } = useParams();
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  const [consultations, setConsultations] = useState([]);
+  const { loading, data, error } = useQuery(getConsultations);
+  // const cd = useQuery(c, { variables: { id: "61c90cb9ce9b310013d0b694" } });
+
+  // console.log(cd);
+
+  useEffect(() => {
+    if (data && data.getConsultations.data) {
+      setConsultations(data.getConsultations.data);
+      patientConsultation(data);
+    }
+  }, [data, consultations, patientConsultation]);
 
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
-    setSelectedPatientMenu(2);
+    setSelectedPatientMenu(5);
+    setSelectedScopedMenu(0);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
 
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
+      <Grid item>
         <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ paddingBottom: "5rem" }}
-      >
+      <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
@@ -128,97 +118,98 @@ const Consultations = (props) => {
           <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
         </Grid>
       </Grid>
-      <Grid item container>
-        <EnhancedTable
-          headCells={consultationsHeadCells}
-          rows={consultationsRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {consultationsRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+      {consultations.filter((i) => i.patient == patientId).length > 0 ? (
+        <Grid item container direction="column" height="100%">
+          <EnhancedTable
+            headCells={consultationsHeadCells}
+            rows={consultations}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {consultations
+              .filter((i) => i.patient == patientId)
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.date}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                  >
-                    {row.description}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Button
-                      variant="contained"
-                      disableRipple
-                      className={`${classes.tableBtn} ${classes.greenBtn}`}
-                      endIcon={<AssignmentIcon color="success" />}
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.name}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {dateMoment(row.createdAt)}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      Reschedule
-                    </Button>
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Button
-                      variant="contained"
-                      disableRipple
-                      className={`${classes.tableBtn} ${classes.redBtn}`}
-                      endIcon={<DeleteIcon color="error" />}
-                    >
-                      Cancel
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
-      </Grid>
+                      {row.description}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`/patients/${row._id}/consultations/case-note`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(2);
+                          setSelectedPatientMenu(0);
+                          setSelectedScopedMenu(1);
+                        }}
+                      >
+                        View Case Note
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        </Grid>
+      ) : (
+        <NoData />
+      )}
     </Grid>
   );
 };
@@ -227,9 +218,11 @@ Consultations.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
+  selectedScopedMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedPatientMenu: PropTypes.func.isRequired,
+  setSelectedScopedMenu: PropTypes.func.isRequired,
 };
 
 export default Consultations;

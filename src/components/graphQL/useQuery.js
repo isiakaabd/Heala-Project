@@ -1,0 +1,482 @@
+import { gql, useQuery } from "@apollo/client";
+
+export const doctor = gql`
+  query doctorProfile($id: ID!) {
+    doctorProfile(id: $id) {
+      _id
+      firstName
+      lastName
+      picture
+      dociId
+      dob
+      image
+      cadre
+      specialization
+      gender
+      phoneNumber
+      createdAt
+      updatedAt
+      email
+      hospital
+    }
+  }
+`;
+
+export const getPlans = gql`
+  query getPlans {
+    getPlans {
+      plan {
+        _id
+        name
+        amount
+        description
+        provider
+        duration
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getSinglePlan = gql`
+  query getPlan($id: ID!) {
+    getPlan(id: $id) {
+      name
+      amount
+      description
+      provider
+      duration
+    }
+  }
+`;
+export const DoctorCount = gql`
+  query DoctorCount {
+    DoctorCount
+  }
+`;
+export const dashboard = gql`
+  query getStats {
+    getStats {
+      patientStats
+      doctorStats
+      totalEarnings
+      totalPayout
+      appointmentStats
+      subscribers
+      availabilityCalendar {
+        _id
+        doctor
+        dates {
+          day
+          available
+          times {
+            start
+            stop
+          }
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const getMessage = gql`
+  query getMessages {
+    getMessages {
+      messages {
+        _id
+        recipient
+        subject
+        sender
+        createdAt
+        updatedAt
+        body
+      }
+    }
+  }
+`;
+export const getPermissions = gql`
+  query getPermissions {
+    getPermissions {
+      permission {
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getSinglePermissions = gql`
+  query getPermission($id: ID!) {
+    getPermission(id: $id) {
+      _id
+      name
+      description
+    }
+  }
+`;
+export const getConsultations = gql`
+  query getConsultations {
+    getConsultations {
+      data {
+        _id
+        doctor
+        patient
+        ailment
+        severity
+        description
+        treatment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+//   const userQuery = gql`query User { user { id } }`;
+// const stuffQuery = gql`query SomeOtherStuff($id: ID) { someOtherStuff(id: $id){ stuff } }`;
+
+// export default compose(
+//   graphql(userQuery, { name: 'userData' })
+//   graphql(stuffQuery, { name: 'stuffData', options: ({userData:{id}={}}) => ({variables: {id}}) }),
+// )(YourComponent)
+
+export const findProfile = gql`
+  query findProfile($id: ID!) {
+    profile(id: $id) {
+      _id
+      firstName
+      lastName
+      height
+      weight
+      bloodGroup
+      genotype
+      gender
+      phoneNumber
+    }
+  }
+`;
+
+export const getRefferals = gql`
+  query getReferrals {
+    getReferrals {
+      referral {
+        _id
+        doctor
+        patient
+        type
+        reason
+        note
+        specialization
+        testType
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getConsultation = gql`
+  query getConsultation($id: ID!) {
+    getConsultation(id: $id) {
+      _id
+      doctor
+      patient
+      ailment
+      severity
+      description
+      treatment
+      createdAt
+      updatedAt
+    }
+  }
+`;
+// export const c = gql`
+//   query getConsultation($id: ID!, $authorId: ID!) {
+//     getConsultation(id: $id) {
+//       patient @client @export(as: "authorId")
+//     }
+//     profile(id: $authorId) {
+//       _id
+//       firstName
+//       lastName
+//       height
+//       weight
+//       bloodGroup
+//       genotype
+//       gender
+//       phoneNumber
+//     }
+//   }
+// `;
+
+export const getMyEarnings = gql`
+  query getMyEarnings {
+    getMyEarnings {
+      data {
+        _id
+        doctor
+        balance
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getPatients = gql`
+  query findProfiles {
+    profiles {
+      data {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        genotype
+        gender
+        phoneNumber
+      }
+    }
+  }
+`;
+export const getDoctorsProfile = gql`
+  query doctorProfiles {
+    doctorProfiles {
+      profile {
+        _id
+        firstName
+        lastName
+        picture
+        dociId
+        dob
+        hospital
+        image
+        cadre
+        specialization
+        gender
+        phoneNumber
+        createdAt
+        updatedAt
+        email
+      }
+    }
+  }
+`;
+
+export const getProfile = gql`
+  query findProfile($profileId: ID!) {
+    profile(id: $profileId) {
+      _id
+      firstName
+      lastName
+      height
+      weight
+      bloodGroup
+      genotype
+      gender
+      phoneNumber
+    }
+  }
+`;
+export const getMedication = gql`
+  query getMedication($id: ID!) {
+    getMedication(id: $id) {
+      medication {
+        _id
+        name
+        interval
+        doctor
+        createdAt
+        updatedAt
+        dosage
+      }
+    }
+  }
+`;
+export const getAppointment = gql`
+  query getAppointment($id: ID!) {
+    getAppointment(id: $id) {
+      _id
+      doctor
+      patient
+      date
+      time
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getAllAppointment = gql`
+  query getAppointments {
+    getAppointments {
+      data {
+        _id
+        doctor
+        patient
+        date
+        time
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getMedications = gql`
+  query getMedications {
+    getMedications {
+      medication {
+        _id
+        name
+        interval
+        doctor
+        createdAt
+        updatedAt
+        dosage
+        patient
+      }
+    }
+  }
+`;
+
+export const getMyConsultation = gql`
+  query getMyConsultations {
+    getMyConsultations {
+      data {
+        _id
+        doctor
+        patient
+        ailment
+        severity
+        description
+        treatment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const getUserDetails = gql`
+  query findAccount($id: ID!) {
+    account(id: $id) {
+      _id
+      email
+      dociId
+      createdAt
+      updatedAt
+      isEmailVerified
+    }
+  }
+`;
+export const getProviders = gql`
+  query getProviders {
+    getProviders {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getPartners = gql`
+  query getPartners {
+    getPartners {
+      data {
+        _id
+        name
+        email
+        category
+        logoImageUrl
+      }
+    }
+  }
+`;
+export const getAllergies = gql`
+  query findAllergies {
+    findAllergies {
+      allergies {
+        _id
+        food
+        medication
+        profile
+        createdAt
+        updatedAt
+        severity
+      }
+    }
+  }
+`;
+export const getReminder = gql`
+  query getReminder($id: ID!) {
+    getReminder(id: $id) {
+      reminder {
+        _id
+        date
+        description
+        type
+        createdAt
+        updatedAt
+        patient
+        interval
+      }
+    }
+  }
+`;
+export const getDoctorPatients = gql`
+  query getDoctorPatients {
+    getDoctorPatients {
+      data {
+        _id
+        doctor
+        patient
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getSingleProvider = gql`
+  query getProvider($id: ID!) {
+    getProvider(id: $id) {
+      _id
+      name
+      icon
+      userTypeId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getUserTypes = gql`
+  query getUserTypes {
+    getUserTypes {
+      userType {
+        _id
+        name
+        icon
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const UserProfile = (id) => {
+  const { data, error, loading } = useQuery(getUserDetails, {
+    variables: {
+      id,
+    },
+  });
+  return {
+    data,
+    error,
+    loading,
+  };
+};

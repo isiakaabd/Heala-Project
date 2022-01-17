@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +44,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
       </Grid>
       <Grid item container direction="column" className={classes.parentGrid}>
         <Grid item className={classes.gridWrapper}>
-          <Typography variant="h3">Appreciate message to DOCi team</Typography>
+          <Typography variant="h3">Appreciate message to Heala team</Typography>
         </Grid>
         <Divider />
         <Grid item style={{ padding: "1.5rem 5rem" }}>
@@ -67,13 +67,13 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            I want to use this medium to thank DOCi team for their relentless services to the world
+            I want to use this medium to thank Heala team for their relentless services to the world
             and their provision of quality healthcare service. I want to use this medium to thank
-            DOCi team for their relentless services to the world and their provision of quality
-            healthcare service. I want to use this medium to thank DOCi team for their relentless
+            Heala team for their relentless services to the world and their provision of quality
+            healthcare service. I want to use this medium to thank Heala team for their relentless
             services to the world and their provision of quality healthcare service. I want to use
-            this medium to thank DOCi team for their relentless services to the world and their
-            provision of quality healthcare service. I want to use this medium to thank DOCi team
+            this medium to thank Heala team for their relentless services to the world and their
+            provision of quality healthcare service. I want to use this medium to thank Heala team
             for their relentless services to the world and their provision of quality healthcare
             service.
           </Typography>

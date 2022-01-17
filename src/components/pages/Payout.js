@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { payoutHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     display: "grid",
     placeContent: "center",
+    marginLeft: "1rem",
     background: theme.palette.common.lightGreen,
   },
   button: {
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
+const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,22 +88,28 @@ const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const { setSelectedRows } = useActions();
 
   useEffect(() => {
-    setSelectedSubMenu(0);
+    setSelectedMenu(8);
+    setSelectedSubMenu(9);
 
     // eslint-disable-next-line
-  }, [selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu]);
 
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
         <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      <Grid item container alignItems="center" columnGap={1}>
-        <Typography noWrap variant="h1" component="div" color="#2D2F39">
-          Payout table
-        </Typography>
-        <Grid item className={classes.iconWrapper}>
-          <TrendingUpIcon color="success" className={classes.cardIcon} />
+
+      <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
+        <Grid item>
+          <Grid item container alignItems="center">
+            <Typography noWrap variant="h1" component="div" color="#2D2F39">
+              Payout table
+            </Typography>
+            <Grid item className={classes.iconWrapper} marginLeft="1rem">
+              <TrendingUpIcon color="success" className={classes.cardIcon} />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
@@ -209,7 +216,9 @@ const Payout = ({ selectedSubMenu, setSelectedSubMenu }) => {
 };
 
 Payout.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
 };
 

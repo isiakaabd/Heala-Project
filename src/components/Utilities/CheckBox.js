@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
@@ -8,10 +8,9 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   checkboxContainer: {
     "&.MuiBox-root": {
-      //   background: "red",
       padding: "2rem 0",
       border: "1px solid #E0E0E0",
       borderRadius: ".4rem",
@@ -20,9 +19,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CheckboxesGroup = ({ row }) => {
-  // const [state, setState] = useState([row]);
+  const [state, setState] = useState(row);
 
-  const handleChange = (event) => {};
+  const { create, update, Delete, read } = state;
+
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    setState({
+      ...state,
+      [name]: checked,
+    });
+  };
 
   const classes = useStyles();
   return (
@@ -30,18 +37,22 @@ const CheckboxesGroup = ({ row }) => {
       <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
         <FormGroup>
           <Grid container>
-            {row.map((per, index) => {
-              return (
-                <Grid item key={index}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox checked={true} onChange={handleChange} name={per} color="success" />
-                    }
-                    label={per}
-                  />
-                </Grid>
-              );
-            })}
+            <FormControlLabel
+              control={<Checkbox checked={create} onChange={handleChange} name="create" />}
+              label="create"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={Delete} onChange={handleChange} name="Delete" />}
+              label="Delete"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={update} onChange={handleChange} name="update" />}
+              label="update"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={read} onChange={handleChange} name="read" />}
+              label="read"
+            />
           </Grid>
         </FormGroup>
       </FormControl>

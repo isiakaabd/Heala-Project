@@ -1,19 +1,20 @@
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import React, { useState, useEffect } from "react";
+import { Grid, Typography, Divider } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import Loader from "components/Utilities/Loader";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import Divider from "@mui/material/Divider";
 import chart1 from "assets/images/chart1.png";
-import chart2 from "assets/images/chart2.png";
-import Chip from "@mui/material/Chip";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import FormSelect from "components/Utilities/FormSelect";
-import circle from "assets/images/circle.png";
+import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import LineChart from "components/Utilities/LineChart";
+import "chartjs-plugin-style";
+import { useLazyQuery } from "@apollo/client";
+import { dashboard } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -55,18 +56,7 @@ const useStyles = makeStyles((theme) => ({
   bottomChartGrid: {
     padding: "3rem 2rem",
   },
-  intervalButtonsGrid: {
-    background: theme.palette.common.lightGreen,
-    borderRadius: "20rem",
-    padding: ".5rem 0",
-  },
 
-  chip: {
-    "&.MuiChip-root": {
-      background: "#fff",
-      fontSize: "1.05rem",
-    },
-  },
   dottedCircle: {
     width: 12,
     height: 12,
@@ -78,13 +68,6 @@ const useStyles = makeStyles((theme) => ({
   },
   green: {
     borderColor: theme.palette.common.green,
-  },
-
-  active: {
-    "&.MuiChip-root": {
-      background: theme.palette.common.green,
-      color: "#fff",
-    },
   },
 
   iconWrapper: {
@@ -119,22 +102,46 @@ const DashboardCharts = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const [patient, patientValue] = useLazyQuery(dashboard);
+  const [patients, setPatients] = useState([]);
+  const [doctorStats, setDoctorStats] = useState([]);
+  const [appointmentStats, setAppointmentStats] = useState([]);
+  const [subscribers, setsubscribers] = useState([]);
+  const [totalEarning, setTotalEarning] = useState([]);
+  const [totalPayouts, setTotalPayouts] = useState([]);
+
+  console.log(patientValue.data);
+
+  useEffect(() => {
+    const fetch = async () => {
+      patient();
+    };
+
+    if (patientValue.data) {
+      setPatients(patientValue.data.getStats.patientStats);
+      setDoctorStats(patientValue.data.getStats.doctorStats);
+      setAppointmentStats(patientValue.data.getStats.appointmentStats);
+      setsubscribers(patientValue.data.getStats.subscribers);
+      setTotalEarning(patientValue.data.getStats.totalEarnings);
+      setTotalPayouts(patientValue.data.getStats.totalPayout);
+    }
+    fetch();
+  }, [patient, patientValue.data]);
+
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
   const [timeframeOption, setTimeframeOption] = useState("");
 
-  const timeFrames = [
-    { id: 0, time: "One Day" },
-    { id: 1, time: "Five Days" },
-    { id: 2, time: "One Month" },
-    { id: 3, time: "Three Months" },
-    { id: 4, time: "One Year" },
-  ];
+  const totalDoc = doctorStats.activeDoctors + doctorStats.inactiveDoctors;
+  const totalPatient = patients.activePatients + patients.inactivePatients;
+  const totalSubscribers =
+    subscribers.totalActiveSubscribers + subscribers.totalInactiveSubscribers;
+  if (patientValue.loading) return <Loader />;
 
   return (
-    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between">
-      <Grid item md style={{ marginRight: "2rem" }}>
+    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
+      <Grid item container lg>
         <Grid container direction="column">
-          <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
+          <Grid item className={classes.chartCard} sx={{ marginBottom: "3em" }}>
             <Grid container direction="column">
               <Grid item className={classes.headerGrid}>
                 <Typography variant="h5">HCP Stats</Typography>
@@ -148,7 +155,7 @@ const DashboardCharts = () => {
                         <GroupIcon color="success" className={classes.groupIcon} />
                       </Grid>
                       <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                        <Typography variant="h1">3000</Typography>
+                        <Typography variant="h1">{patientValue.data && totalDoc}</Typography>
                       </Grid>
                       <Grid item style={{ marginRight: "0.5rem" }}>
                         <ArrowUpwardIcon color="success" />
@@ -166,37 +173,19 @@ const DashboardCharts = () => {
                 </Grid>
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
-              <Grid item container direction="column" className={classes.bottomChartGrid}>
-                <Grid item>
-                  <img src={chart2} alt="line graph" className={classes.chartImg} />
-                </Grid>
-                <Grid item>
-                  <Grid
-                    container
-                    justifyContent="space-evenly"
-                    className={classes.intervalButtonsGrid}
-                  >
-                    {timeFrames.map((timeFrame) => (
-                      <Grid item key={timeFrame.id}>
-                        <Chip
-                          label={timeFrame.time}
-                          color={timeFrame === timeFrame.id ? "success" : undefined}
-                          clickable
-                          className={`${classes.chip} ${
-                            selectedTimeframe === timeFrame.id ? classes.active : undefined
-                          }`}
-                          onClick={() => setSelectedTimeframe(timeFrame.id)}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Grid>
+              <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
+                <LineChart
+                  selectedTimeframe={selectedTimeframe}
+                  setSelectedTimeframe={setSelectedTimeframe}
+                  tooltipTitle={`${totalDoc} HCP`}
+                  doctorStats={doctorStats}
+                />
                 <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
                   <Grid item>
                     <Grid container direction="column">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          1800
+                          {patientValue.data && doctorStats.activeDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -220,7 +209,7 @@ const DashboardCharts = () => {
                     <Grid container direction="column" justifyContent="center">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          1200
+                          {patientValue.data && doctorStats.inactiveDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -275,9 +264,13 @@ const DashboardCharts = () => {
                   className={classes.overviewGrid}
                 >
                   <Grid item>
-                    <img
-                      src={circle}
-                      alt="A circle representing total earning and payout difference"
+                    <CircularProgressBar
+                      height="8rem"
+                      width="8rem"
+                      color={theme.palette.common.green}
+                      trailColor={theme.palette.common.red}
+                      value={patientValue.data && totalPayouts}
+                      strokeWidth={8}
                     />
                   </Grid>
                   <Grid item>
@@ -297,7 +290,7 @@ const DashboardCharts = () => {
                               >
                                 N
                               </span>
-                              700,000
+                              {patientValue.data && totalEarning}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -329,7 +322,7 @@ const DashboardCharts = () => {
                               >
                                 N
                               </span>
-                              600,000
+                              {patientValue.data && totalPayouts}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -367,7 +360,9 @@ const DashboardCharts = () => {
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
                           <Grid item>
-                            <Typography variant="h4">12</Typography>
+                            <Typography variant="h4">
+                              {patientValue.data && appointmentStats.totalUpcoming}
+                            </Typography>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -392,7 +387,9 @@ const DashboardCharts = () => {
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
                           <Grid item>
-                            <Typography variant="h4">24</Typography>
+                            <Typography variant="h4">
+                              {patientValue.data && appointmentStats.totalPast}
+                            </Typography>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -412,7 +409,7 @@ const DashboardCharts = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item md style={{ marginLeft: "2rem" }}>
+      <Grid item md>
         <Grid container direction="column" className={classes.chartCard}>
           <Grid item className={classes.headerGrid}>
             <Typography variant="h5">Patient Stats</Typography>
@@ -428,7 +425,7 @@ const DashboardCharts = () => {
                   <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                     <Grid container direction="column">
                       <Grid item>
-                        <Typography variant="h1">3000</Typography>
+                        <Typography variant="h1">{patientValue.data && totalPatient}</Typography>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -456,35 +453,22 @@ const DashboardCharts = () => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item className={classes.headerGrid}></Grid>
+          {/* <Grid item className={classes.headerGrid}></Grid> */}
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container direction="column" className={classes.bottomChartGrid}>
-            <Grid item>
-              <img src={chart2} alt="line graph" className={classes.chartImg} />
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-                {timeFrames.map((timeFrame) => (
-                  <Grid item key={timeFrame.id}>
-                    <Chip
-                      label={timeFrame.time}
-                      color={timeFrame === timeFrame.id ? "success" : undefined}
-                      clickable
-                      className={`${classes.chip} ${
-                        selectedTimeframe === timeFrame.id ? classes.active : undefined
-                      }`}
-                      onClick={() => setSelectedTimeframe(timeFrame.id)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+          <Grid item lg={5} direction="column" className={classes.bottomChartGrid}>
+            <LineChart
+              selectedTimeframe={selectedTimeframe}
+              setSelectedTimeframe={setSelectedTimeframe}
+              tooltipTitle={`${totalPatient} Patients`}
+              doctorStats={patients}
+            />
+
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
               <Grid item>
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      1700
+                      {patientValue.data && patients.activePatients}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -508,7 +492,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      700
+                      {patientValue.data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -536,32 +520,19 @@ const DashboardCharts = () => {
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container direction="column" className={classes.bottomChartGrid}>
-            <Grid item>
-              <img src={chart2} alt="line graph" className={classes.chartImg} />
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-                {timeFrames.map((timeFrame) => (
-                  <Grid item key={timeFrame.id}>
-                    <Chip
-                      label={timeFrame.time}
-                      color={timeFrame === timeFrame.id ? "success" : undefined}
-                      clickable
-                      className={`${classes.chip} ${
-                        selectedTimeframe === timeFrame.id ? classes.active : undefined
-                      }`}
-                      onClick={() => setSelectedTimeframe(timeFrame.id)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+            <LineChart
+              selectedTimeframe={selectedTimeframe}
+              setSelectedTimeframe={setSelectedTimeframe}
+              tooltipTitle={`${totalSubscribers} subscribers`}
+              doctorStats={subscribers}
+              type="subscriber"
+            />
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
               <Grid item>
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      900
+                      {patientValue.data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -585,7 +556,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      800
+                      {patientValue.data && subscribers.totalInactiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>

@@ -5,11 +5,12 @@ import { Avatar, Grid, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import imageUpload from "assets/images/imageUpload.svg";
-import DoneSharpIcon from "@mui/icons-material/DoneSharp";
+// import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PreviousButton from "components/Utilities/PreviousButton";
 
 const gender = "Female";
 const useStyles = makeStyles((theme) => ({
@@ -91,12 +92,12 @@ const useStyles = makeStyles((theme) => ({
 const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const theme = useTheme();
 
-  const redButton = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
   };
-
   const imageuploadContainer = [
     {
       value: "74.89KB, ",
@@ -139,12 +140,15 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid position="static" className={classes.containerGrid}>
+      <Grid item>
+        <PreviousButton path="/verification" />
+      </Grid>
       <Grid component="div">
         <Typography variant="h1"> HCP view</Typography>
       </Grid>
 
       <Grid container className={classes.parentGrid}>
-        <Grid item container className={classes.firstGrid} component="row">
+        <Grid item container className={classes.firstGrid}>
           <Grid container sx={{ maxWidth: "40%" }}>
             <Grid
               item
@@ -153,7 +157,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               sx={{ justifyContent: "space-between", alignItems: "center", minWidth: "60%" }}
             >
               <Grid item>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant="h6" color="secondary">
                   Date:
                 </Typography>
               </Grid>
@@ -228,7 +232,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item sm container spacing={2} className={classes.spacing}>
               {imageuploadContainer.map((img, index) => {
                 return (
-                  <Grid container direction="row" xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
+                  <Grid container item xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
                     <Grid item xs={3}>
                       <Avatar variant="square" src={imageUpload} />
                     </Grid>
@@ -236,7 +240,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                       <Grid>
                         <Typography variant="h6">{img.text}</Typography>
                       </Grid>
-                      <Grid item sm container direction="row">
+                      <Grid item sm container>
                         <Typography variant="h6">{img.value}</Typography>
                         <Typography variant="h6">{img.time}</Typography>
                       </Grid>
@@ -255,7 +259,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
         <Grid item sm container>
           <Grid item sx={{ margin: "auto 4rem auto auto" }}>
-            <CustomButton endIcon={<DoneSharpIcon />} title="Verify HCP" type={redButton} />
+            <CustomButton
+              title="Verify HCP"
+              width="100%"
+              type={buttonType}
+              // isSubmitting={isSubmitting}
+              // disabled={!(dirty || isValid)}
+            />
           </Grid>
         </Grid>
       </Grid>

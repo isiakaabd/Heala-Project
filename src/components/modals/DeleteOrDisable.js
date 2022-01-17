@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomButton from "components/Utilities/CustomButton";
 import { BsExclamationCircle } from "react-icons/bs";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 const useStyles = makeStyles((theme) => ({
   closeIcon: {
@@ -36,7 +37,17 @@ const style = {
   borderRadius: "1rem",
 };
 
-const DeleteOrDisable = ({ open, setOpen, title, confirmationMsg, btnValue, ...rest }) => {
+const DeleteOrDisable = ({
+  open,
+  setOpen,
+  title,
+  confirmationMsg,
+  btnValue,
+  type,
+  onConfirm,
+  onCancel,
+  ...rest
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -75,7 +86,14 @@ const DeleteOrDisable = ({ open, setOpen, title, confirmationMsg, btnValue, ...r
               />
             </Grid>
             <Grid item style={{ marginBottom: "4rem" }}>
-              <BsExclamationCircle size="10rem" color={theme.palette.warning.main} />
+              {type === "logout" ? (
+                <LogoutRoundedIcon
+                  sx={{ fontSize: "10rem", color: "red" }}
+                  color={theme.palette.warning.main}
+                />
+              ) : (
+                <BsExclamationCircle size="10rem" color={theme.palette.warning.main} />
+              )}
             </Grid>
             <Grid item style={{ marginBottom: "2rem" }}>
               <Typography variant="h2">{title}</Typography>
@@ -98,7 +116,10 @@ const DeleteOrDisable = ({ open, setOpen, title, confirmationMsg, btnValue, ...r
                   title={`Yes, ${btnValue}`}
                   type={disableButton}
                   width="100%"
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setOpen(false);
+                    onConfirm();
+                  }}
                 />
               </Grid>
             </Grid>
@@ -115,6 +136,9 @@ DeleteOrDisable.propTypes = {
   title: PropTypes.string.isRequired,
   confirmationMsg: PropTypes.string.isRequired,
   btnValue: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 export default DeleteOrDisable;

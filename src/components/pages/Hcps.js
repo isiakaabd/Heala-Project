@@ -1,40 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import NoData from "components/layouts/NoData";
+import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import Input from "@mui/material/Input";
-import Button from "@mui/material/Button";
+import { useQuery, useMutation } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
-import FormSelect from "components/Utilities/FormSelect";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import FormInput from "components/Utilities/FormInput";
 import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
-import { hcpsRows } from "components/Utilities/tableData";
-import Chip from "@mui/material/Chip";
-import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import displayPhoto from "assets/images/avatar.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import useFormInput from "components/hooks/useFormInput";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
+import { getDoctorsProfile } from "components/graphQL/useQuery";
+import { createDOctorProfile } from "components/graphQL/Mutation";
+import { timeConverter } from "components/Utilities/Time";
 
-const dates = ["Hello", "World", "Goodbye", "World"];
-const specializations = ["Dentistry", "Pediatry", "Optometry", "Pathology"];
-const hospitals = ["General Hospital, Lekki", "H-Medix", "X Lab"];
-const statusType = ["Active", "Blocked"];
+// const statusType = ["Active", "Blocked"];
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -57,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "0.5rem",
-      maxWidth: "7rem",
-      fontSize: ".85rem",
+      maxWidth: "12rem",
+      fontSize: "1rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -69,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
       },
 
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "0.85rem",
+        fontSize: ".85rem",
       },
 
       "& .MuiButton-endIcon": {
@@ -120,39 +111,136 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: "#F7F7FF",
   };
+  const [profiles, setProfiles] = useState("");
+  const doctorProfile = useQuery(getDoctorsProfile, { fetchPolicy: "cache-and-network" });
+  useEffect(() => {
+    if (doctorProfile.data) {
+      setProfiles(doctorProfile.data.doctorProfiles.profile);
+    }
+  }, [doctorProfile]);
 
   const [searchHcp, setSearchHcp] = useState("");
   const [openHcpFilter, setOpenHcpFilter] = useState(false);
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
-  // FIltering modals select states
-  const [selectedInput, handleSelectedInput] = useFormInput({
-    date: "",
-    specialization: "",
-    hospital: "",
-    status: "",
-  });
-
-  // Add new HCP modals input state
-  const [formInput, handleFormInput] = useFormInput({
+  const initialValues1 = {
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     specialization: "",
     hospital: "",
-  });
+    affliate: "",
+    image: "",
+    plan: "",
+  };
 
-  const { date, specialization, hospital, status } = selectedInput;
-  const { firstName, lastName, email, phoneNumber, hcpSpecialization, hcpHospital } = formInput;
+  const validationSchema1 = Yup.object({
+    affliate: Yup.string("Enter your affliate").required("Affliate is required"),
+    plan: Yup.string("Select your plan").required("Hlan is required"),
+    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
+    firstName: Yup.string("Enter your first Name").required("First name is required"),
+    lastName: Yup.string("Enter your last Name").required("Last name is required"),
+    specialization: Yup.string("Enter your specialization").required("Specialization is required"),
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    phoneNumber: Yup.number("Enter a valid email").required("Phone Number is required"),
+  });
+  const onSubmit1 = (values) => {
+    console.log(values);
+  };
+  const onSubmit = async (values) => {
+    const {
+      createdAt,
+      updatedAt,
+      firstName,
+      lastName,
+      gender,
+      phone,
+      email,
+      hospital,
+      dociId,
+      specialization,
+      dob,
+      cadre,
+      image,
+    } = values;
+    const correctDOB = timeConverter(dob);
+    await createDoc({
+      variables: {
+        dociId,
+        createdAt,
+        updatedAt,
+        firstName,
+        lastName,
+        gender,
+        phoneNumber: phone,
+        email,
+        hospital,
+        specialization,
+        dob: correctDOB,
+        cadre,
+        image,
+      },
+      refetchQueries: [{ query: getDoctorsProfile }],
+    });
+  };
+  const specializations = [
+    { key: "Dental", value: "Dental" },
+    { key: "Pediatry", value: "Pediatry" },
+    { key: "Optometry", value: "Optometry" },
+    { key: "Pathology", value: "Pathology" },
+  ];
+  const cadre = [
+    { key: "1", value: "1" },
+    { key: "2", value: "2" },
+    { key: "3", value: "3" },
+    { key: "4", value: "4" },
+    { key: "5", value: "5" },
+  ];
+  const gender = [
+    { key: "Male", value: "male" },
+    { key: "Female", value: "female" },
+  ];
+  // FIltering modals select state
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    specialization: "",
+    image: null,
+    cadre: "",
+    gender: "",
+    hospital: "",
+    phone: "",
+    dob: null,
+    dociId: "",
+  };
+  const validationSchema = Yup.object({
+    firstName: Yup.string("Enter your firstName").required("firstName is required"),
+    hospital: Yup.string("Enter your hosptial").required("hospital is required"),
+    dob: Yup.date("required").typeError(" Enter a valid DOB").required(" DOB required"),
+    dociId: Yup.string("Enter dociId").required("DociId required"),
+    gender: Yup.string("select your Gender").required("Select a gender"),
+    phone: Yup.number("Enter your Phone Number")
+      .typeError(" Enter a valid phone number")
+      .min(11, "min value is  11 digits")
+      .required("Phone number is required"),
+    lastName: Yup.string("Enter your lastName").required("LastName is required"),
+    image: Yup.string("Upload a single Image")
+      .typeError("Pick correct image")
+      .required("Image is required"),
+    specialization: Yup.string("select your Specialization").required("Specialization is required"),
+    cadre: Yup.string("select your Cadre").required("Cadre is required"),
+  });
+  const [createDoc] = useMutation(createDOctorProfile);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
+  if (doctorProfile.error) return <NoData error={doctorProfile.error.message} />;
   return (
-    <Grid container direction="column">
-      <Grid item container>
+    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid item container style={{ paddingBottom: "5rem" }}>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchHcp}
@@ -173,119 +261,123 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
       </Grid>
-      <Grid item container style={{ marginTop: "5rem" }}>
-        <EnhancedTable
-          headCells={hcpsHeadCells}
-          rows={hcpsRows}
-          page={page}
-          paginationLabel="Patients per page"
-          hasCheckbox={true}
-        >
-          {hcpsRows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
-
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
+      <Grid item container height="100%" direction="column">
+        {profiles.length > 0 ? (
+          <EnhancedTable
+            headCells={hcpsHeadCells}
+            rows={profiles}
+            page={page}
+            paginationLabel="Patients per page"
+            hasCheckbox={true}
+          >
+            {profiles
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.specialization}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {row.consultation}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {row.hospital}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Chip
-                      label={row.status}
-                      className={classes.badge}
-                      style={{
-                        background:
-                          row.status === "Active"
-                            ? theme.palette.common.lightGreen
-                            : theme.palette.common.lightRed,
-                        color:
-                          row.status === "Active"
-                            ? theme.palette.common.green
-                            : theme.palette.common.red,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`hcps/${row.id}`}
-                      endIcon={<ArrowForwardIosIcon />}
-                      onClick={() => {
-                        setSelectedSubMenu(3);
-                        setSelectedHcpMenu(0);
-                      }}
+                      {row.dociId}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.name}`}
+                            src={row.picture}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {row.firstName} {row.lastName}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
                     >
-                      View Profile
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </EnhancedTable>
+                      {row.specialization}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {row.consultation ? row.consultation : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {row.hospital ? row.hospital : "No Value"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Chip
+                        label={row.status ? row.status : "No Value"}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            row.status === "Active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            row.status === "Active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`hcps/${row._id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(3);
+                          setSelectedHcpMenu(0);
+                        }}
+                      >
+                        View HCP
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        ) : (
+          <NoData />
+        )}
       </Grid>
       {/* Filter Modal */}
       <Modals
@@ -294,106 +386,67 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         rowSpacing={5}
         handleClose={() => setOpenHcpFilter(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Date
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="date"
-                        options={dates}
-                        value={date}
-                        onChange={handleSelectedInput}
-                        placeholderText="Choose Date"
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, isValid, dirty }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column" gap={1}>
+                  <Grid item container rowSpacing={3}>
+                    <Grid item container>
+                      <FormikControl
+                        control="input"
+                        name="Date"
+                        label="Date"
+                        placeholder="Choose Date"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Specialization
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <FormSelect
-                        name="specialization"
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="select"
                         options={specializations}
-                        value={specialization}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select Specialization"
+                        name="Fspecialization"
+                        label="Specialization"
+                        placeholder="Select Specialization"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Hospital
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
-                        name="hospital"
-                        options={hospitals}
-                        value={hospital}
-                        onChange={handleSelectedInput}
-                        placeholderText="Choose hospital"
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="select"
+                        name="hospitals"
+                        options={specializations}
+                        label="Hospital"
+                        placeholder="Choose hospital"
                       />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item md>
-                <Grid container direction="column">
-                  <Grid item>
-                    <FormLabel component="legend" className={classes.FormLabel}>
-                      Status
-                    </FormLabel>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth style={{ height: "3rem" }}>
-                      <FormSelect
+                    </Grid>
+                    <Grid item container>
+                      <FormikControl
+                        control="input"
                         name="status"
-                        options={statusType}
-                        value={status}
-                        onChange={handleSelectedInput}
-                        placeholderText="Select Status"
+                        label="Select Status"
+                        placeholder="Choose hospital"
                       />
-                    </FormControl>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={() => setOpenHcpFilter(false)}
-              type="submit"
-              className={classes.searchFilterBtn}
-            >
-              Apply Filter
-            </Button>
-          </Grid>
-        </Grid>
+                <Grid item marginTop={3}>
+                  <CustomButton
+                    title="Apply Filter"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
       {/* ADD HCP MODAL */}
       <Modals
@@ -403,113 +456,151 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         height="90vh"
         handleClose={() => setOpenAddHcp(false)}
       >
-        <Grid item container direction="column">
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="First Name"
-                  labelId="firstName"
-                  id="firstName"
-                  name="firstName"
-                  value={firstName}
-                  onChange={handleFormInput}
-                  placeholder="Enter first name"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Last Name"
-                  labelId="lastName"
-                  id="lastName"
-                  name="lastName"
-                  value={lastName}
-                  onChange={handleFormInput}
-                  placeholder="Enter last name"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item style={{ margin: "3rem 0" }}>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  type="email"
-                  label="Email"
-                  labelId="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleFormInput}
-                  placeholder="Enter email"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Phone Number"
-                  labelId="phoneNumber"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={phoneNumber}
-                  onChange={handleFormInput}
-                  placeholder="Enter phone number"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container spacing={2}>
-              <Grid item md>
-                <FormInput
-                  label="Specialization"
-                  labelId="hcpSpecialization"
-                  id="hcpSpecialization"
-                  name="hcpSpecialization"
-                  value={hcpSpecialization}
-                  onChange={handleFormInput}
-                  placeholder="Enter specialization"
-                />
-              </Grid>
-              <Grid item md>
-                <FormInput
-                  label="Hospital"
-                  labelId="hcpHospital"
-                  id="hcpHospital"
-                  name="hcpHospital"
-                  value={hcpHospital}
-                  onChange={handleFormInput}
-                  placeholder="Enter hospital"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container>
-          <label htmlFor="contained-button-file">
-            <Input
-              accept="image/*"
-              id="contained-button-file"
-              multiple
-              type="file"
-              style={{ display: "none" }}
-            />
-            <Button variant="contained" component="span" className={classes.uploadBtn}>
-              Upload Photo
-            </Button>
-          </label>
-        </Grid>
-
-        <Grid item container xs={12}>
-          <Button
-            variant="contained"
-            onClick={() => setOpenAddHcp(false)}
-            type="submit"
-            className={classes.searchFilterBtn}
-            disableRipple
-          >
-            Add HCP
-          </Button>
-        </Grid>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
+            return (
+              <Form style={{ marginTop: "1rem" }}>
+                <Grid container direction="column" gap={2}>
+                  <Grid item container direction="column" gap={1}>
+                    <Grid item container>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="First Name"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="Enter first name"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="Last Name"
+                            id="lastName"
+                            name="lastName"
+                            placeholder="Enter last name"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="column" gap={2}>
+                      <Grid item container>
+                        <Grid container spacing={2}>
+                          <Grid item md>
+                            <FormikControl
+                              control="date"
+                              name="dob"
+                              label="DOB"
+                              setFieldValue={setFieldValue}
+                              setValues={setValues}
+                            />
+                          </Grid>
+                          <Grid item md>
+                            <Grid container direction="column">
+                              <FormikControl
+                                control="select"
+                                options={specializations}
+                                name="specialization"
+                                label="Specialization"
+                                placeholder="Specialization"
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container direction="column" gap={2}>
+                    <Grid item container>
+                      <Grid container spacing={2}>
+                        <Grid item md>
+                          <FormikControl
+                            control="select"
+                            label="Gender"
+                            id="gender"
+                            name="gender"
+                            options={gender}
+                            placeholder="Gender"
+                          />
+                        </Grid>
+                        <Grid item md>
+                          <FormikControl
+                            control="input"
+                            label="Phone Number"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter last Phone number"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="column" gap={2}>
+                      <Grid item container>
+                        <Grid container spacing={2}>
+                          <Grid item md>
+                            <FormikControl
+                              control="input"
+                              label="Hospital"
+                              id="hospital"
+                              name="hospital"
+                              placeholder="Enter hospital Name"
+                            />
+                          </Grid>
+                          <Grid item md>
+                            <Grid container direction="column">
+                              <FormikControl
+                                control="select"
+                                options={cadre}
+                                name="cadre"
+                                label="Cadre"
+                                placeholder="Select Cadre"
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container spacing={2} alignItems="center">
+                    <Grid item container md>
+                      <FormikControl
+                        control="file"
+                        name="image"
+                        label="Profile Pics"
+                        setFieldValue={setFieldValue}
+                      />
+                    </Grid>
+                    <Grid item md>
+                      <FormikControl
+                        control="input"
+                        label="Doci-ID"
+                        id="dociId"
+                        name="dociId"
+                        placeholder="Enter Doci ID"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item container>
+                    <CustomButton
+                      title="Add Partner"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
+                  </Grid>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
       </Modals>
     </Grid>
   );

@@ -1,24 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import Typography from "@mui/material/Typography";
+import PreviousButton from "components/Utilities/PreviousButton";
+
 import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
-import { viewRefferalHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import displayPhoto from "assets/images/avatar.png";
-import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
-import { Chip } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -72,35 +58,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Plan" },
-  { id: 2, value: "Consultation" },
-];
-
-const ViewReferral = () => {
+const ViewReferral = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
+  useEffect(() => {
+    setSelectedMenu(9);
+    setSelectedSubMenu(10);
 
-  const [searchMail, setSearchMail] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid container direction="column">
+      <Grid item style={{ marginBottom: "3rem" }}>
+        <PreviousButton path="/referrals" onClick={() => setSelectedSubMenu(0)} />
+      </Grid>
       <Grid item container style={{ paddingBottom: "5rem" }}>
-        <Grid item className={classes.searchGrid}>
+        <Typography variant="h2" className={classes.heading}>
+          Referral View
+        </Typography>
+        {/* <Grid item className={classes.searchGrid}>
           <Search
             value={searchMail}
             onChange={(e) => setSearchMail(e.target.value)}
             placeholder="Enter your email here..."
             height="5rem"
           />
-        </Grid>
-        <Grid item>
+        </Grid> */}
+        {/* <Grid item>
           <FilterList
             onClick={(event) => setAnchorEl(event.currentTarget)}
             open={open}
@@ -109,10 +93,10 @@ const ViewReferral = () => {
             title="Filter by"
             options={options}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       {/* The Search and Filter ends here */}
-      <Grid item container>
+      {/* <Grid item container>
         <EnhancedTable
           headCells={viewRefferalHeader}
           rows={rows}
@@ -213,9 +197,16 @@ const ViewReferral = () => {
             );
           })}
         </EnhancedTable>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
+};
+
+ViewReferral.propTypes = {
+  selectedMenu: PropTypes.number.isRequired,
+  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired,
 };
 
 export default ViewReferral;

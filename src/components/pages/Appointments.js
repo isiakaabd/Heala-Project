@@ -29,9 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Appointments = ({ setSelectedSubMenu }) => {
+const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+
   return (
     <Grid container justifyContent="space-between" className={classes.containerGrid}>
       <Grid
@@ -43,7 +44,10 @@ const Appointments = ({ setSelectedSubMenu }) => {
         lg
         md={6}
         sm={12}
-        onClick={() => setSelectedSubMenu(5)}
+        onClick={() => {
+          setSelectedSubMenu(5);
+          setSelectedAppointmentMenu(1);
+        }}
       >
         <Card title="Waiting List" background={theme.palette.common.lightGreen}>
           <CalendarIcon fill={theme.palette.common.green} />
@@ -54,11 +58,14 @@ const Appointments = ({ setSelectedSubMenu }) => {
         className={classes.parentGrid}
         component={Link}
         to="/appointments/consultation"
-        style={{ marginLeft: "2em", textDecoration: "none" }}
+        style={{ marginLeft: "2em", textDecoration: "none", visibility: "hidden" }}
         lg
         md={6}
         sm={12}
-        onClick={() => setSelectedSubMenu(5)}
+        onClick={() => {
+          setSelectedSubMenu(5);
+          setSelectedAppointmentMenu(2);
+        }}
       >
         <Card title="Consultation" background={theme.palette.common.lightRed}>
           <ConsultationIcon fill={theme.palette.common.red} />
@@ -70,6 +77,7 @@ const Appointments = ({ setSelectedSubMenu }) => {
 
 Appointments.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedAppointmentMenu: PropTypes.func.isRequired,
 };
 
 export default Appointments;

@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +45,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             className={classes.tableHeaderCell}
-            align={headCell.id === 1 ? "left" : "center"}
+            align="left"
             padding={headCell.disablePadding ? "none" : "normal"}
           >
             {headCell.label}

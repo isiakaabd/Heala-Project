@@ -6,13 +6,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const FormSelect = ({ value, onChange, placeholderText, options, ...rest }) => {
+const FormSelect = ({ startAdornment, value, onChange, placeholderText, options, ...rest }) => {
   return (
     <FormControl sx={{ width: "100%" }}>
       <Select
         value={value}
         onChange={onChange}
         displayEmpty
+        startAdornment={startAdornment}
         style={{ minHeight: 60 }}
         inputProps={{ "aria-label": "Select Referral Type" }}
         IconComponent={KeyboardArrowDownIcon}
@@ -33,9 +34,10 @@ const FormSelect = ({ value, onChange, placeholderText, options, ...rest }) => {
 
 FormSelect.propTypes = {
   options: PropTypes.array.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholderText: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholderText: PropTypes.string.isRequired,
+  startAdornment: PropTypes.element,
 };
 
 export default FormSelect;

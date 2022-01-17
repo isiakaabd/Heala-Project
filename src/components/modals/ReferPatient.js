@@ -1,180 +1,126 @@
-import React, { useState } from "react";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
+import React from "react";
 import PropTypes from "prop-types";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import CloseIcon from "@mui/icons-material/Close";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import FormSelect from "components/Utilities/FormSelect";
 import CustomButton from "components/Utilities/CustomButton";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
+import { Grid } from "@mui/material";
+import * as Yup from "yup";
+import { useMutation } from "@apollo/client";
+import { requestReferral } from "components/graphQL/Mutation";
+import { getRefferals } from "components/graphQL/useQuery";
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
+import { useTheme } from "@mui/material/styles";
+const checkbox2 = [{ key: "dentist", value: "dentist" }];
+const checkbox1 = [{ key: "hcp", value: "hcp" }];
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  height: "80vh",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  borderRadius: "1rem",
-};
+const validationSchema = Yup.object({
+  type: Yup.string("choose a referral").required("Referral is required"),
+  note: Yup.string("Enter your message").required("note is required"),
+  reason: Yup.string("State a reason").required("reason is required"),
+  specialization: Yup.string("select a specialization").required("specialization is required"),
+});
 
-const useStyles = makeStyles((theme) => ({
-  headerGridWrapper: {
-    padding: "1.5rem 2rem",
-    background: "rgb(251, 251, 251)",
-    borderRadius: "1rem",
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottom: `1px solid ${theme.palette.common.lightGrey}`,
-  },
-
-  closeIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "2rem",
-      cursor: "pointer",
-
-      "&:hover": {
-        color: theme.palette.common.red,
-      },
-    },
-  },
-}));
-
-const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const categoryOptions = ["First", "Second", "Third"];
-
-const ReferPatient = ({ open, setOpen }) => {
-  const classes = useStyles();
+const ReferPatient = ({ handleDialogClose, initialValues, type }) => {
+  const [referPatient] = useMutation(requestReferral);
   const theme = useTheme();
+  const onSubmit = async (values, onSubmitProps) => {
+    if (type === "refer") {
+      const { reason, patient, note, type, doctor, specialization } = values;
+      console.log(doctor, patient, type, reason, note, specialization);
 
-  const [referral, setReferral] = useState("");
-  const [category, setCategory] = useState("");
+      await referPatient({
+        variables: {
+          doctor: doctor,
+          patient: patient,
+          type: type,
+          reason: reason,
+          note: note,
+          specialization: specialization,
+        },
+        refetchQueries: [{ query: getRefferals }],
+      });
+    }
 
-  const buttonColorStyles = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
+    onSubmitProps.resetForm();
+    handleDialogClose();
+  };
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
   };
-
-  const handleClick = () => {
-    console.log("Clicked");
-
-    setOpen(false);
-  };
-
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={() => setOpen(false)}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnMount
     >
-      <Fade in={open}>
-        <Box sx={style}>
-          <Grid container column>
-            <Grid
-              item
-              container
-              justifyContent="space-between"
-              className={classes.headerGridWrapper}
-            >
-              <Grid item>
-                <Typography variant="h5">Refer Patient</Typography>
-              </Grid>
-              <Grid item>
-                <CloseIcon
-                  color="secondary"
-                  className={classes.closeIcon}
-                  onClick={() => setOpen(false)}
-                />
-              </Grid>
-            </Grid>
-            <Grid item container style={{ padding: "2rem 2rem 3rem" }}>
-              <Grid item md style={{ marginRight: "2rem" }}>
-                <Grid container direction="column">
-                  <Grid item>
-                    <Typography variant="body2" gutterBottom>
-                      Referral Type
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <FormSelect
-                      options={referralOptions}
-                      value={referral}
-                      onChange={(event) => setReferral(event.target.value)}
-                      placeholderText="Select type"
-                    />
-                  </Grid>
+      {({ isSubmitting, dirty, isValid }) => {
+        return (
+          <Form style={{ marginTop: "3rem" }}>
+            <Grid item container direction="column" gap={1}>
+              <Grid item container rowSpacing={2}>
+                <Grid item container>
+                  <FormikControl
+                    control="select"
+                    name="type"
+                    options={checkbox1}
+                    label="Referral Type"
+                    placeholder="Select Type"
+                  />
                 </Grid>
-              </Grid>
-              <Grid item md style={{ marginLeft: "2rem" }}>
-                <Grid container direction="column">
-                  <Grid item>
-                    <Typography variant="body2" gutterBottom>
-                      Category
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <FormSelect
-                      options={categoryOptions}
-                      value={category}
-                      onChange={(event) => setCategory(event.target.value)}
-                      placeholderText="Select Category"
-                    />
-                  </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="input"
+                    name="reason"
+                    label="Reason"
+                    placeholder="State Reason"
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="textarea"
+                    fLabel={false}
+                    name="note"
+                    label="Referral comment"
+                    minRows={3}
+                  />
+                </Grid>
+                <Grid item container>
+                  <FormikControl
+                    control="select"
+                    name="specialization"
+                    label="Specialization"
+                    placeholder="Select specialization"
+                    options={checkbox2}
+                  />
+                </Grid>
+                <Grid item xs={12} marginTop={5}>
+                  <CustomButton
+                    title="Search available HCP"
+                    width="100%"
+                    type={buttonType}
+                    isSubmitting={isSubmitting}
+                    disabled={!(dirty || isValid)}
+                  />
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item container direction="column" style={{ padding: "0 2rem 3rem" }}>
-              <Grid item>
-                <Typography variant="body1" gutterBottom>
-                  Referral Comment
-                </Typography>
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="outlined-multiline-static"
-                  aria-label="referral comment"
-                  multiline
-                  rows={7}
-                  fullWidth
-                  placeholder="Type your referral comment"
-                />
-              </Grid>
-            </Grid>
-            <Grid item container style={{ padding: "2rem 2rem 3rem" }}>
-              <CustomButton
-                disableRipple
-                title="Search available HCP"
-                type={buttonColorStyles}
-                endIcon={<SearchIcon sx={{ ml: 1 }} />}
-                width="100%"
-                onClick={handleClick}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </Fade>
-    </Modal>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
 ReferPatient.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+  handleDialogClose: PropTypes.func,
+  initialValues: PropTypes.object,
+  type: PropTypes.string,
 };
 
 export default ReferPatient;

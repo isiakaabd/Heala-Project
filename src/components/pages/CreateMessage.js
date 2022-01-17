@@ -5,9 +5,15 @@ import Typography from "@mui/material/Typography";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
+import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { CREATE_MESSAGE } from "components/graphQL/Mutation";
+import { useMutation } from "@apollo/client";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+// import { useFetch } from "components/customHook/useFetch";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -56,12 +62,45 @@ const useStyles = makeStyles((theme) => ({
 const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-
-  const redButton = {
-    background: theme.palette.error.main,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
+  const [createNewMessage] = useMutation(CREATE_MESSAGE);
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
   };
+  const initialValues = {
+    subject: "",
+    recipient: "",
+    textarea: "",
+  };
+
+  const validationSchema = Yup.object({
+    subject: Yup.string("Enter your subject").required("Subject is required"),
+    textarea: Yup.string("Enter your message").required("Message is required"),
+    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+  });
+  const onSubmit = async (values, onSubmitProps) => {
+    const id = localStorage.getItem("user_id");
+    console.log(values);
+    const { recipient, subject, textarea } = values;
+
+    try {
+      const { data } = await createNewMessage({
+        variables: {
+          sender: id,
+          recipient,
+          subject,
+          body: textarea,
+        },
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+    onSubmitProps.resetForm();
+  };
+
   useEffect(() => {
     setSelectedMenu(5);
     setSelectedSubMenu(6);
@@ -70,67 +109,104 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   }, [selectedMenu, selectedSubMenu]);
 
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/messages`} />
-      </Grid>
-      <Grid item container direction="column" alignItems="center">
-        <Grid item>
-          <Typography variant="h4" style={{ marginBottom: "3rem" }}>
-            Create New Message
-          </Typography>
-        </Grid>
-        <Grid item container direction="column" className={classes.gridWrapper}>
-          <Grid item style={{ marginBottom: "3rem" }}>
-            <Grid container alignItems="center">
-              <Grid item>
-                <Typography variant="body2" className={classes.heading}>
-                  Recipient:{" "}
-                </Typography>
-              </Grid>
-              <Grid item className={classes.inputGrid}>
-                <input className={classes.formInput} />
-              </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-          </Grid>
-          <Grid item style={{ marginBottom: "3rem" }}>
-            <Grid container alignItems="center">
-              <Grid item>
-                <Typography variant="body2" className={classes.heading}>
-                  Subject:{" "}
-                </Typography>
-              </Grid>
-              <Grid item className={classes.inputGrid}>
-                <input className={classes.formInput} />
-              </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-          </Grid>
-          <Grid item>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnMount
+    >
+      {({ isValid, isSubmitting, dirty }) => {
+        return (
+          <Form>
             <Grid container direction="column">
-              <Grid item>
-                <Typography variant="body2" className={classes.heading}>
-                  Message:{" "}
-                </Typography>
+              <Grid item style={{ marginBottom: "3rem" }}>
+                <PreviousButton path={`/messages`} />
               </Grid>
-              <Grid item style={{ height: "15rem" }}>
-                <textarea className={`${classes.formInput} ${classes.textArea}`} />
+              <Grid item container direction="column" alignItems="center">
+                <Grid item>
+                  <Typography variant="h4" style={{ marginBottom: "3rem" }}>
+                    Create New Message
+                  </Typography>
+                </Grid>
+                <Grid item container direction="column" className={classes.gridWrapper}>
+                  <Grid item style={{ marginBottom: "3rem" }}>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Recipient:
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.inputGrid}>
+                        <FormikControl
+                          control="input"
+                          id="message"
+                          name="recipient"
+                          variant="standard"
+                          className={classes.formInput}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Divider className={classes.divider} />
+                  </Grid>
+                  <Grid item style={{ marginBottom: "3rem" }}>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Subject:
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.inputGrid}>
+                        <FormikControl
+                          control="input"
+                          id="subject"
+                          name="subject"
+                          variant="standard"
+                          className={classes.formInput}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Divider className={classes.divider} />
+                  </Grid>
+                  <Grid item>
+                    <Grid container direction="column">
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Message:
+                        </Typography>
+                      </Grid>
+                      <Grid item style={{ height: "15rem" }}>
+                        <FormikControl
+                          control="textarea"
+                          id="textarea"
+                          name="textarea"
+                          variant="standard"
+                          fLabel={true}
+                        />
+                      </Grid>
+                    </Grid>
+                    {/* <Divider className={classes.divider} /> */}
+                  </Grid>
+                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                    <CustomButton
+                      title="Send Message"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                      // endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-            <Divider className={classes.divider} />
-          </Grid>
-          <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
-            <CustomButton
-              title="Send Message"
-              type={redButton}
-              endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+          </Form>
+        );
+      }}
+    </Formik>
   );
+
+  // );
 };
 
 CreateMessage.propTypes = {

@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
+import NoData from "components/layouts/NoData";
 import { makeStyles } from "@mui/styles";
-import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DisplayProfile from "components/Utilities/DisplayProfile";
-import displayPhoto from "assets/images/avatar.png";
-import { useTheme } from "@mui/material/styles";
-import { HiChat } from "react-icons/hi";
-import CallIcon from "@mui/icons-material/Call";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
+import { useQuery /*useMutation*/ } from "@apollo/client";
+import { doctor } from "components/graphQL/useQuery";
+// import { createAllery } from "components/graphQL/Mutation";
+import Loader from "components/Utilities/Loader";
+import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -27,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   badge: {
-    "&.css-157lt5z-MuiChip-root": {
-      fontSize: "1.3rem !important",
+    "&.MuiChip-root": {
+      fontSize: "1.3rem",
       //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   infoBadge: {
-    "&.css-1dl0kns-MuiChip-root": {
+    "&.MuiChip-root": {
       fontSize: "1.25rem",
       borderRadius: "1.5rem",
       color: theme.palette.common.green,
@@ -88,28 +87,46 @@ const HcpProfile = (props) => {
     selectedMenu,
     setSelectedMenu,
     selectedSubMenu,
+    chatMediaActive,
     setSelectedSubMenu,
     selectedHcpMenu,
     setSelectedHcpMenu,
+    setChatMediaActive,
   } = props;
   const classes = useStyles();
-  const theme = useTheme();
 
   const { hcpId } = useParams();
 
-  const greenButton = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
-  };
+  const [doctorProfile, setDoctorProfile] = useState("");
+  // const profile = useQuery(createAllery, {
+  //   variables: {
+  //     id: hcpId,
+  //   },
+  // });
 
+  const profile = useQuery(doctor, {
+    variables: {
+      id: hcpId,
+    },
+  });
+  console.log(profile);
   useEffect(() => {
+    if (profile.data) {
+      setDoctorProfile(profile.data.doctorProfile);
+    }
+  }, [profile.data, hcpId]);
+
+  useLayoutEffect(() => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
     setSelectedHcpMenu(1);
+    setChatMediaActive(false);
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
+
+  if (profile.loading) return <Loader />;
+  if (profile.error) return <NoData error={profile.error.message} />;
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -117,13 +134,21 @@ const HcpProfile = (props) => {
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       {/* Display photo and profile name grid */}
-      <DisplayProfile
-        fullName="Raphael Igbinedion"
-        displayPhoto={displayPhoto}
-        medicalTitle="Medical ID"
-        statusId={132467}
-        specialization="Dentistry"
-      />
+      <Grid item>
+        <DisplayProfile
+          fullName={`${doctorProfile.firstName} ${doctorProfile.lastName}`}
+          displayPhoto={doctorProfile.picture}
+          medicalTitle="Medical ID"
+          statusId={doctorProfile._id}
+          specialization={
+            doctorProfile.specialization ? doctorProfile.specialization : "Not assigned"
+          }
+          chatPath={`/hcps/${hcpId}/profile/chat`}
+          callPath={`/hcps/${hcpId}/profile/call`}
+          videoPath={`/hcps/${hcpId}/profile/video`}
+          setChatMediaActive={setChatMediaActive}
+        />
+      </Grid>
       {/* PERSONAL INFO SECTION */}
       <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
         {/* GENDER GRID */}
@@ -139,7 +164,7 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="Male" className={classes.infoBadge} />
+              <Chip variant="outlined" label={doctorProfile.gender} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -156,7 +181,13 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Date of Birth</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="7/11/1995" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label={
+                  doctorProfile.dob ? dateMoment(doctorProfile.dob) : <span>DOB not Provided</span>
+                }
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -175,10 +206,14 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Email Address</Typography>
             </Grid>
             <Grid item>
-              <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                <span>raphaeligbinedion@yahoo.com</span>
-                <ArrowForwardIosIcon className={classes.linkIcon} />
-              </a>
+              {doctorProfile.email ? (
+                <a href={`mailto:${doctorProfile.email}`} className={classes.link}>
+                  <span>{doctorProfile.email}</span>
+                  <ArrowForwardIosIcon className={classes.linkIcon} />
+                </a>
+              ) : (
+                <span className={classes.link}>No Email Address</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -195,11 +230,18 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Phone Number</Typography>
             </Grid>
             <Grid item>
-              <a href="tel:+2347086937133" className={classes.link}>
-                <span>08123456789</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-              {/* <Chip variant="outlined" label="08123456789" className={classes.infoBadge} /> */}
+              {doctorProfile.phoneNumber ? (
+                <a href={doctorProfile.phoneNumber} className={classes.link}>
+                  <span>{doctorProfile.phoneNumber} </span>
+                  <IoCopy
+                    className={classes.linkIcon}
+                    size={12.5}
+                    style={{ marginLeft: "1.2rem" }}
+                  />
+                </a>
+              ) : (
+                <span className={classes.link}>No Phone Number</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -218,38 +260,18 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Hospital</Typography>
             </Grid>
             <Grid item>
-              <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                <span>Federal Teaching Hospital, Abakaliki</span>
-                <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
-              </a>
+              {doctorProfile.hospital ? (
+                <a href={doctorProfile.email} className={classes.link}>
+                  <span>{doctorProfile.hospital}</span>
+                  <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
+                </a>
+              ) : (
+                <span className={classes.link}>No Hospital attached</span>
+              )}
             </Grid>
           </Grid>
         </Grid>
         {/* PLACEHOLDER GRID */}
-        <Grid
-          item
-          md
-          className={classes.cardGrid}
-          style={{ marginLeft: "2rem", visibility: "hidden" }}
-        >
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Phone Number</Typography>
-            </Grid>
-            <Grid item>
-              <a href="tel:+2347086937133" className={classes.link}>
-                <span>08123456789</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-            </Grid>
-          </Grid>
-        </Grid>
       </Grid>
     </Grid>
   );
@@ -259,9 +281,11 @@ HcpProfile.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
   selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  chatMediaActive: PropTypes.bool.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
+  setChatMediaActive: PropTypes.func.isRequired,
 };
 
 export default HcpProfile;

@@ -6,6 +6,7 @@ import { makeStyles } from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
+import { Stack } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   closeIcon: {
@@ -27,7 +28,7 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 500,
-    height: height,
+    height,
     bgcolor: "background.paper",
     borderRadius: "2rem",
     p: 4,
@@ -35,16 +36,21 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
 
   const classes = useStyles();
   return (
-    <div>
+    <Stack>
       <Modal
         open={isOpen}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
         <Box sx={style}>
-          <Grid container rowSpacing={rowSpacing ? rowSpacing : 3} className={classes.modal}>
-            <Grid item container justifyContent="space-between" alignItems="center">
+          <Grid
+            container
+            rowSpacing={rowSpacing ? rowSpacing : 4}
+            className={classes.modal}
+            flexDirection="column"
+          >
+            <Grid item container justifyContent="space-between" alignItems="center" flex="2">
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
               </Grid>
@@ -60,13 +66,13 @@ const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, heigh
           </Grid>
         </Box>
       </Modal>
-    </div>
+    </Stack>
   );
 };
 Modals.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
   height: PropTypes.string,
@@ -74,7 +80,7 @@ Modals.propTypes = {
 };
 
 Modals.defaultProps = {
-  height: "80vh",
+  height: "85vh",
 };
 
 export default Modals;
