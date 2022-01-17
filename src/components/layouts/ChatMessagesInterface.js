@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import MicIcon from "@mui/icons-material/Mic";
 import { makeStyles } from "@mui/styles";
-import ChatInterfaceHeading from "components/layouts/ChatInterfaceHeading";
+import ChatInterfaceHeading from "../layouts/ChatInterfaceHeading";
 import SendIcon from "@mui/icons-material/Send";
 import Search from "components/Utilities/Search";
 

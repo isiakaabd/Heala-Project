@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import Loader from "components/Utilities/Loader";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import chart1 from "assets/images/chart1.png";
@@ -12,6 +13,8 @@ import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import "chartjs-plugin-style";
+import { useLazyQuery } from "@apollo/client";
+import { dashboard } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -99,16 +102,40 @@ const DashboardCharts = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const [patient, patientValue] = useLazyQuery(dashboard);
+  const [patients, setPatients] = useState([]);
+  const [doctorStats, setDoctorStats] = useState([]);
+  const [appointmentStats, setAppointmentStats] = useState([]);
+  const [subscribers, setsubscribers] = useState([]);
+  const [totalEarning, setTotalEarning] = useState([]);
+  const [totalPayouts, setTotalPayouts] = useState([]);
+
+  console.log(patientValue.data);
+
+  useEffect(() => {
+    const fetch = async () => {
+      patient();
+    };
+
+    if (patientValue.data) {
+      setPatients(patientValue.data.getStats.patientStats);
+      setDoctorStats(patientValue.data.getStats.doctorStats);
+      setAppointmentStats(patientValue.data.getStats.appointmentStats);
+      setsubscribers(patientValue.data.getStats.subscribers);
+      setTotalEarning(patientValue.data.getStats.totalEarnings);
+      setTotalPayouts(patientValue.data.getStats.totalPayout);
+    }
+    fetch();
+  }, [patient, patientValue.data]);
+
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
   const [timeframeOption, setTimeframeOption] = useState("");
 
-  const timeFrames = [
-    { id: 0, time: "One Day" },
-    { id: 1, time: "Five Days" },
-    { id: 2, time: "One Month" },
-    { id: 3, time: "Three Months" },
-    { id: 4, time: "One Year" },
-  ];
+  const totalDoc = doctorStats.activeDoctors + doctorStats.inactiveDoctors;
+  const totalPatient = patients.activePatients + patients.inactivePatients;
+  const totalSubscribers =
+    subscribers.totalActiveSubscribers + subscribers.totalInactiveSubscribers;
+  if (patientValue.loading) return <Loader />;
 
   return (
     <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
@@ -128,7 +155,7 @@ const DashboardCharts = () => {
                         <GroupIcon color="success" className={classes.groupIcon} />
                       </Grid>
                       <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                        <Typography variant="h1">3000</Typography>
+                        <Typography variant="h1">{patientValue.data && totalDoc}</Typography>
                       </Grid>
                       <Grid item style={{ marginRight: "0.5rem" }}>
                         <ArrowUpwardIcon color="success" />
@@ -148,17 +175,17 @@ const DashboardCharts = () => {
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
                 <LineChart
-                  timeFrames={timeFrames}
                   selectedTimeframe={selectedTimeframe}
                   setSelectedTimeframe={setSelectedTimeframe}
-                  tooltipTitle="1800 HCPs"
+                  tooltipTitle={`${totalDoc} HCP`}
+                  doctorStats={doctorStats}
                 />
                 <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
                   <Grid item>
                     <Grid container direction="column">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          1800
+                          {patientValue.data && doctorStats.activeDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -182,7 +209,7 @@ const DashboardCharts = () => {
                     <Grid container direction="column" justifyContent="center">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          1200
+                          {patientValue.data && doctorStats.inactiveDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -242,7 +269,7 @@ const DashboardCharts = () => {
                       width="8rem"
                       color={theme.palette.common.green}
                       trailColor={theme.palette.common.red}
-                      value={65}
+                      value={patientValue.data && totalPayouts}
                       strokeWidth={8}
                     />
                   </Grid>
@@ -263,7 +290,7 @@ const DashboardCharts = () => {
                               >
                                 N
                               </span>
-                              700,000
+                              {patientValue.data && totalEarning}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -295,7 +322,7 @@ const DashboardCharts = () => {
                               >
                                 N
                               </span>
-                              600,000
+                              {patientValue.data && totalPayouts}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -333,7 +360,9 @@ const DashboardCharts = () => {
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
                           <Grid item>
-                            <Typography variant="h4">12</Typography>
+                            <Typography variant="h4">
+                              {patientValue.data && appointmentStats.totalUpcoming}
+                            </Typography>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -358,7 +387,9 @@ const DashboardCharts = () => {
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
                           <Grid item>
-                            <Typography variant="h4">24</Typography>
+                            <Typography variant="h4">
+                              {patientValue.data && appointmentStats.totalPast}
+                            </Typography>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -394,7 +425,7 @@ const DashboardCharts = () => {
                   <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                     <Grid container direction="column">
                       <Grid item>
-                        <Typography variant="h1">3000</Typography>
+                        <Typography variant="h1">{patientValue.data && totalPatient}</Typography>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -426,10 +457,10 @@ const DashboardCharts = () => {
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item lg={5} direction="column" className={classes.bottomChartGrid}>
             <LineChart
-              timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
-              tooltipTitle="1800 Patients"
+              tooltipTitle={`${totalPatient} Patients`}
+              doctorStats={patients}
             />
 
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
@@ -437,7 +468,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      1700
+                      {patientValue.data && patients.activePatients}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -461,7 +492,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      700
+                      {patientValue.data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -490,17 +521,18 @@ const DashboardCharts = () => {
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container direction="column" className={classes.bottomChartGrid}>
             <LineChart
-              timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
-              tooltipTitle="900 Subscribers"
+              tooltipTitle={`${totalSubscribers} subscribers`}
+              doctorStats={subscribers}
+              type="subscriber"
             />
             <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
               <Grid item>
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      900
+                      {patientValue.data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -524,7 +556,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      800
+                      {patientValue.data && subscribers.totalInactiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>

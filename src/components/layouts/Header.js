@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import { makeStyles } from "@mui/styles";
-import HeaderContents from "components/layouts/HeaderContents";
+import HeaderContents from "../layouts/HeaderContents";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

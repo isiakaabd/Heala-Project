@@ -120,7 +120,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
-  const { loading, data } = useQuery(getMessage);
+  const { loading, data, error } = useQuery(getMessage);
 
   useEffect(() => {
     if (data && data.getMessages.messages) {
@@ -136,6 +136,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;
   else {
     return (
@@ -182,7 +183,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row._id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">

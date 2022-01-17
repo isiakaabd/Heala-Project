@@ -215,7 +215,7 @@ const Subscription = () => {
     active: theme.palette.primary.dark,
   };
   const [plan, setPlan] = useState([]);
-  const { loading, data } = useQuery(getPlans);
+  const { loading, data, error } = useQuery(getPlans);
 
   useEffect(() => {
     if (data && data.getPlans.plan) {
@@ -223,7 +223,7 @@ const Subscription = () => {
     }
   }, [data]);
   if (loading) return <Loader />;
-
+  if (error) return <NoData error={error.message} />;
   const initialValues = {
     name: "",
     amount: "",

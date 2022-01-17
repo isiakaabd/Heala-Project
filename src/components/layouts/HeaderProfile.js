@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 // import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.png";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import Notifications from "components/layouts/Notifications";
+import Notifications from "../layouts/Notifications";
 import IconButton from "@mui/material/IconButton";
 // import { useSelector } from "react-redux";
 // import { UserProfile } from "components/graphQL/useQuery";
