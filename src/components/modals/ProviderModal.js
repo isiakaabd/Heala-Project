@@ -44,8 +44,9 @@ export const ProviderModal = ({
           userTypeId: type,
         },
       });
-      console.log(values);
     }
+    onSubmitProps.resetForm();
+    handleDialogClose();
   };
   const buttonType = {
     background: theme.palette.common.black,
