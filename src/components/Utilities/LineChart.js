@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
@@ -28,16 +28,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, tooltipTitle }) => {
+const LineChart = ({
+  selectedTimeframe,
+  setSelectedTimeframe,
+  tooltipTitle,
+  doctorStats,
+  type,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const [results, setResults] = useState([]);
+  useEffect(() => {
+    let result =
+      type === "subscriber"
+        ? doctorStats &&
+          Object.keys(doctorStats)
+            .map((key) => doctorStats[key])
+            .filter((element) => {
+              return element !== undefined;
+            })
+        : doctorStats &&
+          Object.keys(doctorStats)
+            .map((key) => doctorStats[key].count)
+            .filter((element) => {
+              return element !== undefined;
+            });
+    setResults(result);
+
+    // setResults(result);
+  }, [doctorStats, type]);
+
   const data = {
-    labels: ["0", "500", "1000", "1500", "2000", "2500"],
+    labels: ["0", ".4", "0.6", "1.2", "1.6", "2"],
     datasets: [
       {
         label: "Active",
-        data: ["200", "700", "500", "1200", "1000", "1400"],
+        data: results,
         fill: false,
         borderColor: theme.palette.common.green,
         pointBackgroundColor: theme.palette.common.green,
@@ -49,7 +76,7 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
       },
       {
         label: "Inactive",
-        data: ["300", "200", "100", "700", "500", "400"],
+        data: results,
         fill: false,
         borderColor: theme.palette.common.red,
         pointBackgroundColor: theme.palette.common.red,
@@ -61,7 +88,7 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
       },
     ],
   };
-
+  console.log(results);
   const options = {
     locale: "fr",
     scales: {
@@ -124,19 +151,26 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
       </Grid>
       <Grid item container>
         <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-          {timeFrames.map((timeFrame) => (
-            <Grid item key={timeFrame.id}>
-              <Chip
-                label={timeFrame.time}
-                color={timeFrame === timeFrame.id ? "success" : undefined}
-                clickable
-                className={`${classes.chip} ${
-                  selectedTimeframe === timeFrame.id ? classes.active : undefined
-                }`}
-                onClick={() => setSelectedTimeframe(timeFrame.id)}
-              />
-            </Grid>
-          ))}
+          {doctorStats &&
+            Object.keys(doctorStats)
+              .filter((timeFrame) => timeFrame != "activeDoctors" && timeFrame != "inactiveDoctors")
+              .filter(
+                (timeFrame) => timeFrame != "activePatients" && timeFrame != "inactivePatients",
+              )
+
+              .map((timeFrame) => (
+                <Grid item key={timeFrame.id}>
+                  <Chip
+                    label={timeFrame}
+                    color={timeFrame === timeFrame.id ? "success" : undefined}
+                    clickable
+                    className={`${classes.chip} ${
+                      selectedTimeframe === timeFrame.id ? classes.active : undefined
+                    }`}
+                    onClick={() => setSelectedTimeframe(timeFrame.id)}
+                  />
+                </Grid>
+              ))}
         </Grid>
       </Grid>
     </Grid>
@@ -144,10 +178,12 @@ const LineChart = ({ timeFrames, selectedTimeframe, setSelectedTimeframe, toolti
 };
 
 LineChart.propTypes = {
-  timeFrames: PropTypes.array.isRequired,
-  selectedTimeframe: PropTypes.number.isRequired,
-  setSelectedTimeframe: PropTypes.func.isRequired,
-  tooltipTitle: PropTypes.string.isRequired,
+  timeFrames: PropTypes.array,
+  selectedTimeframe: PropTypes.number,
+  setSelectedTimeframe: PropTypes.func,
+  tooltipTitle: PropTypes.string,
+  type: PropTypes.string,
+  doctorStats: PropTypes.object,
 };
 
 export default LineChart;

@@ -233,11 +233,11 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
     cadre: Yup.string("select your Cadre").required("Cadre is required"),
   });
-  const [createDoc, docProfile] = useMutation(createDOctorProfile);
+  const [createDoc] = useMutation(createDOctorProfile);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  if (docProfile.error) return <NoData error={docProfile.error.message} />;
+  if (doctorProfile.error) return <NoData error={doctorProfile.error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container style={{ paddingBottom: "5rem" }}>

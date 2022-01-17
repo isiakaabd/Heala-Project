@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import HeaderProfile from "./HeaderProfile";
@@ -8,6 +8,8 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useLazyQuery } from "@apollo/client";
+import { getPatients, DoctorCount } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -188,6 +190,18 @@ const HeaderText = (props) => {
 
   const classes = useStyles();
   const theme = useTheme();
+  const [patient, patientContent] = useLazyQuery(getPatients, { fetchPolicy: "cache-first" });
+  const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      patient();
+      doctor();
+      if (patientContent.data) setProfiles(patientContent.data.profiles.data);
+    };
+    fetch();
+  }, [doctor, patient, patientContent.data, doctorContent.data]);
 
   const { pathname } = useLocation();
 
@@ -236,7 +250,13 @@ const HeaderText = (props) => {
           />
         );
       }
-      return <CustomHeaderText title="Patients" total={24} path="patients" />;
+      return (
+        <CustomHeaderText
+          title="Patients"
+          total={patientContent.loading ? "Loading" : profiles.length}
+          path="patients"
+        />
+      );
     case 2:
       if (selectedSubMenu === 3) {
         return (
@@ -267,7 +287,13 @@ const HeaderText = (props) => {
           />
         );
       }
-      return <CustomHeaderText title="HCPs" total={352} path="hcps" />;
+      return (
+        <CustomHeaderText
+          title="HCPs"
+          total={doctorContent.data && doctorContent.data.DoctorCount}
+          path="hcps"
+        />
+      );
     case 3:
       return <CustomHeaderText title="Partners" total={24} path="partners" />;
 

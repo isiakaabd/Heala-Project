@@ -298,8 +298,10 @@ export const deleteDoctor = gql`
   }
 `;
 export const addPartner = gql`
-  mutation addPartner($name: String!, $category: String!, $email: String!) {
-    addPartner(data: { name: $name, category: $category, email: $email }) {
+  mutation addPartner($name: String!, $category: String!, $email: String!, $logoImageUrl: String!) {
+    addPartner(
+      data: { name: $name, category: $category, email: $email, logoImageUrl: $logoImageUrl }
+    ) {
       partner {
         _id
         name

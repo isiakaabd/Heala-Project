@@ -1,13 +1,14 @@
-import React from "react";
-import { TableRow, Grid, TableCell, Button, Avatar, Chip } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
 import displayPhoto from "assets/images/avatar.png";
-import { availabilityRows } from "components/Utilities/tableData";
+import { useLazyQuery } from "@apollo/client";
+import { dashboard } from "components/graphQL/useQuery";
+import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -48,81 +49,100 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AvailabilityTable = () => {
+  const [patient, patientValue] = useLazyQuery(dashboard);
+  const [avaliablity, setAvaliablity] = useState([]);
+
+  console.log(avaliablity);
+  useEffect(() => {
+    const fetch = async () => {
+      patient();
+    };
+
+    if (patientValue.data) {
+      setAvaliablity(patientValue.data); //.getStats.patientStats
+    }
+    fetch();
+  }, [patient, patientValue.data]);
+
   const classes = useStyles();
   const theme = useTheme();
 
   const { page, rowsPerPage } = useSelector((state) => state.tables);
+  if (patientValue.data) {
+    return (
+      <Grid container height="100%">
+        <Grid item sx={{ flexGrow: 1 }}>
+          <Typography variant="h4">Availability Table</Typography>
+        </Grid>
+        <Grid item container direction="column" height="100%">
+          {avaliablity.length > 0 ? (
+            <EnhancedTable
+              headCells={availabilityHeadCells}
+              rows={avaliablity}
+              page={page}
+              paginationLabel="List per page"
+              title="Availability Calendar"
+              hasCheckbox={false}
+            >
+              {avaliablity
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-  return (
-    <Grid container>
-      <EnhancedTable
-        headCells={availabilityHeadCells}
-        rows={availabilityRows}
-        page={page}
-        paginationLabel="List per page"
-        title="Availability Calendar"
-        hasCheckbox={false}
-      >
-        {availabilityRows
-          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          .map((row, index) => {
-            const labelId = `enhanced-table-checkbox-${index}`;
-
-            return (
-              <TableRow hover tabIndex={-1} key={row.id}>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.grey }}
-                >
-                  {row.id}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "left",
-                    }}
-                  >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  {row.specialization}
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <Chip
-                    label={row.time}
-                    className={classes.badge}
-                    style={{
-                      background: theme.palette.common.lightGreen,
-                      color: theme.palette.common.green,
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    component={Link}
-                    to="/availability/userId"
-                  >
-                    View Details
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-      </EnhancedTable>
-    </Grid>
-  );
+                  return (
+                    <TableRow hover tabIndex={-1} key={row.id}>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey }}
+                      >
+                        {row._id}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            textAlign: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {row.specialization}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Chip
+                          label={row.time}
+                          className={classes.badge}
+                          style={{
+                            background: theme.palette.common.lightGreen,
+                            color: theme.palette.common.green,
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          ) : (
+            <NoData />
+          )}
+        </Grid>
+      </Grid>
+    );
+  } else return null;
 };
 
 export default AvailabilityTable;

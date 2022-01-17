@@ -49,6 +49,37 @@ export const getSinglePlan = gql`
     }
   }
 `;
+export const DoctorCount = gql`
+  query DoctorCount {
+    DoctorCount
+  }
+`;
+export const dashboard = gql`
+  query getStats {
+    getStats {
+      patientStats
+      doctorStats
+      totalEarnings
+      totalPayout
+      appointmentStats
+      subscribers
+      availabilityCalendar {
+        _id
+        doctor
+        dates {
+          day
+          available
+          times {
+            start
+            stop
+          }
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 export const getMessage = gql`
   query getMessages {

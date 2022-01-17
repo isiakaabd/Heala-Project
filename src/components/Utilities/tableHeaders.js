@@ -347,7 +347,6 @@ export const availabilityHeadCells = [
   { id: 1, label: "Name" },
   { id: 2, label: "Category" },
   { id: 3, label: "Available Time" },
-  { id: 4, label: "" },
 ];
 
 export const hcpsHeadCells = [

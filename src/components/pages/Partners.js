@@ -142,6 +142,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Partners = () => {
   const classes = useStyles();
+  // const [disableUser] = useMutation(deleteDoctor);
   const theme = useTheme();
   const buttonType = {
     background: theme.palette.common.black,
@@ -186,9 +187,7 @@ const Partners = () => {
   });
   const validationSchema1 = Yup.object({
     name: Yup.string("Enter your name").required("name is required"),
-    image: Yup.string("Upload a single Image")
-      .typeError("Pick correct image")
-      .required("Image is required"),
+    image: Yup.string("Upload a single Image").required("Image is required"),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
@@ -200,17 +199,31 @@ const Partners = () => {
   const onSubmit2 = (values) => {
     console.log(values);
   };
-  const onSubmit1 = async (values) => {
+  const onConfirm = async () => {
+    // try {
+    //   await disableUser({
+    //     variables: { id: hcpId },
+    //     refetchQueries: [{ query: getDoctorsProfile }],
+    //   });
+    //   history.push("/hcps");
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // console.log(values);
+  };
+  const onSubmit1 = async (values, onSubmitProps) => {
     const { name, email, specialization, image } = values;
     await addPartners({
       variables: {
         name,
         email,
         category: specialization,
-        image,
+        logoImageUrl: image,
       },
       refetchQueries: [{ query: getPartners }],
     });
+    setOpenAddPartner(false);
+    onSubmitProps.resetForm();
   };
 
   const [searchPartner, setSearchPartner] = useState("");
@@ -557,7 +570,7 @@ const Partners = () => {
         setOpen={setOpenDeletePartner}
         title="Delete Partner"
         btnValue="delete"
-        onConfirm={() => console.log("confirmed")}
+        onConfirm={onConfirm}
         confirmationMsg="delete partner"
       />
     </Grid>
