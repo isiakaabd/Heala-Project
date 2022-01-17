@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { payoutHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";

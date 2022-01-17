@@ -13,7 +13,7 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";

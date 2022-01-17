@@ -6,7 +6,7 @@ import Badge from "@mui/material/Badge";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 // import { useTheme } from "@mui/material/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "../layouts/Notifications";
 import IconButton from "@mui/material/IconButton";

@@ -11,7 +11,8 @@ import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import { rows } from "components/Utilities/DataHeader";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -19,6 +20,9 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
 import AddIcon from "@mui/icons-material/Add";
+import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
+import { getProviders /*getSingleProvider*/ } from "components/graphQL/useQuery";
+import { deletProvider } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -71,47 +75,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  redBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightGrey,
-      color: "white",
-
-      "&:hover": {
-        background: theme.palette.common.lightGrey,
-        color: "white",
-      },
-    },
-  },
-  greenBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
-
-      "&:hover": {
-        background: theme.palette.success.light,
-        color: "#fff",
-      },
-    },
-  },
-
-  tableCell: {
-    "&.MuiTableCell-root": {
-      fontSize: "1.25rem",
-    },
-  },
-
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.6rem !important",
-      height: "3rem",
-      borderRadius: "1.3rem",
-    },
-  },
-  "&.MuiButton-root": {
-    ...theme.typography.btn,
-    background: theme.palette.common.black,
-    width: "100%",
-  },
   tableBtn: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
@@ -135,7 +98,40 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  redBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightRed,
+      color: theme.palette.common.red,
 
+      "&:hover": {
+        background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+  greenBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
+        color: "#fff",
+      },
+    },
+  },
+  badge: {
+    "&.MuiChip-root": {
+      fontSize: "1.6rem !important",
+      height: "3rem",
+      borderRadius: "1.3rem",
+    },
+  },
+  "&.MuiButton-root": {
+    ...theme.typography.btn,
+    background: theme.palette.common.black,
+    width: "100%",
+  },
   checkbox: {
     "& .MuiSvgIcon-root": {
       fontSize: 28,
@@ -148,6 +144,23 @@ const useStyles = makeStyles((theme) => ({
 
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
+  const provider = useQuery(getProviders);
+  const [id, setId] = useState(null);
+  const [deleteModal, setdeleteModal] = useState(false);
+  const [deleteProvider] = useMutation(deletProvider);
+  // const [singleProvider] = useLazyQuery(getSingleProvider);
+  const handleDeleteOpenDialog = (id) => {
+    setId(id);
+    setdeleteModal(true);
+  };
+  const [providers, setProviders] = useState([]);
+
+  useEffect(() => {
+    if (provider.data) {
+      setProviders(provider.data.getProviders.provider);
+    }
+  }, [provider.data]);
+
   const theme = useTheme();
   const handleDialogOpen = () => {
     setIsOpen(true);
@@ -165,7 +178,18 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const initialValues = {
     name: "",
     type: "",
-    description: "",
+    image: "",
+  };
+
+  const onConfirm = async () => {
+    try {
+      await deleteProvider({
+        variables: { id },
+        refetchQueries: [{ query: getProviders }],
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   //   openDeletePartner
@@ -187,11 +211,27 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     setIsOpen(false);
     setEditId(null);
   };
+  // handleEditOpenDialog = useCallback(async (id) => {
+  //   setEdit(true);
+  //   setEditId(id);
+
+  //   // console.log(4);
+  //   // try {
+  //   //   console.log(editId);
+  //   //   console.log(data);
+  //   // } catch (err) {
+  //   //   console.log(err);
+  //   // }
+  // });
+
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
-    console.log(id);
   };
+
+  // setSingleData();
+
+  // const [singleData, setSingleData] = useState("");
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -230,15 +270,15 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           {pendingHeader.length > 0 ? (
             <EnhancedTable
               headCells={partnersHeadCells2}
-              rows={rows}
+              rows={providers}
               page={page}
               paginationLabel="Patients per page"
               hasCheckbox={true}
             >
-              {rows
+              {providers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const isItemSelected = isSelected(row._id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -270,11 +310,9 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar sx={{ width: 24, height: 24 }}>H</Avatar>
+                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.firstName} {row.lastName}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -282,18 +320,36 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                       >
-                        {row.category}
+                        {row.category ? row.category : "No value"}
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.button}`}
-                          endIcon={<EditIcon color="secondary" />}
-                          onClick={() => handleEditOpenDialog(row.id)}
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                          }}
                         >
-                          action
-                        </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            onClick={() => handleEditOpenDialog(row._id)}
+                            endIcon={<EditIcon color="success" />}
+                          >
+                            Edit Provider
+                          </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Delete Provider
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -335,6 +391,15 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           //   setSingleData={setSingleData}
         />
       </Modals>
+
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete Provider"
+        onConfirm={onConfirm}
+        confirmationMsg="delete provider"
+        btnValue="Delete"
+      />
     </>
   );
 };

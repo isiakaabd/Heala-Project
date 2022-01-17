@@ -16,7 +16,7 @@ import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { emailHeader } from "components/Utilities/tableHeaders";

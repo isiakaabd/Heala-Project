@@ -13,7 +13,7 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
 import { Avatar, Button } from "@mui/material";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";

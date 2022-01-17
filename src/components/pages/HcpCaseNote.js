@@ -8,7 +8,7 @@ import { getConsultation } from "components/graphQL/useQuery";
 import { dateMoment } from "components/Utilities/Time";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";

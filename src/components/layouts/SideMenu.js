@@ -7,7 +7,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
-import logo from "assets/images/logo.png";
+import logo from "assets/images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
 import { useActions } from "components/hooks/useActions";
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logoWrapper: {
     paddingTop: "3em",
-    paddingBottom: "5em",
+    paddingBottom: "2em",
     paddingLeft: "7em",
   },
   logout: {
@@ -155,7 +155,7 @@ const SideMenu = (props) => {
     <>
       <aside className={classes.aside}>
         <div className={classes.logoWrapper}>
-          <img src={logo} alt="logo" width={40} height={40} />
+          <img src={logo} alt="logo" width={60} height={60} />
         </div>
         <List>
           {menus.map((menu) => (

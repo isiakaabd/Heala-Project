@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-import { pendingHeader } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import NoData from "components/layouts/NoData";
 import { Grid, TableRow, TableCell, Alert } from "@mui/material";
@@ -12,7 +11,6 @@ import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
-import { rows } from "components/Utilities/DataHeader";
 import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -22,6 +20,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import Modals from "components/Utilities/Modal";
 import { UserTypeModal } from "components/modals/UserTypeModal";
+import { useQuery, useMutation } from "@apollo/client";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { getUserTypes } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
+import { deleteUserType } from "components/graphQL/Mutation";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -115,6 +119,28 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  redBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightRed,
+      color: theme.palette.common.red,
+
+      "&:hover": {
+        background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+  greenBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
+        color: "#fff",
+      },
+    },
+  },
 
   checkbox: {
     "& .MuiSvgIcon-root": {
@@ -135,10 +161,34 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
+  const [deleteUser] = useMutation(deleteUserType);
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
+  const handleDeleteOpenDialog = (id) => {
+    setId(id);
+    setdeleteModal(true);
+  };
+  const onConfirm = async () => {
+    try {
+      await deleteUser({
+        variables: { id },
+        refetchQueries: [{ query: getUserTypes }],
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  const [id, setId] = useState(null);
+  const [deleteModal, setdeleteModal] = useState(false);
+  const usertype = useQuery(getUserTypes);
+  const [userType, setUsertypes] = useState([]);
 
+  useEffect(() => {
+    if (usertype.data) {
+      setUsertypes(usertype.data.getUserTypes.userType);
+    }
+  }, [usertype.data]);
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const initialValues = {
@@ -169,6 +219,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     setEdit(true);
     setEditId(id);
   };
+  if (usertype.loading) return <Loader />;
+  if (usertype.error) return <NoData error={usertype.error.message} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -203,18 +255,18 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           </Grid>
         </Grid>
         <Grid item container height="100%" direction="column">
-          {pendingHeader.length > 0 ? (
+          {userType.length > 0 ? (
             <EnhancedTable
               headCells={partnersHeadCells2}
-              rows={rows}
+              rows={userType}
               page={page}
               paginationLabel="Patients per page"
               hasCheckbox={true}
             >
-              {rows
+              {userType
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const isItemSelected = isSelected(row._id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -246,11 +298,9 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar sx={{ width: 24, height: 24 }}>H</Avatar>
+                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.firstName} {row.lastName}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -258,18 +308,37 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                       >
-                        {row.category}
+                        {row.category ? row.category : "No Value"}
                       </TableCell>
+
                       <TableCell align="center" className={classes.tableCell}>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.button}`}
-                          endIcon={<EditIcon color="secondary" />}
-                          onClick={() => handleEditOpenDialog(row.id)}
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                          }}
                         >
-                          action
-                        </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            onClick={() => handleEditOpenDialog(row._id)}
+                            endIcon={<EditIcon color="success" />}
+                          >
+                            Edit UserType
+                          </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Delete UserType
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -310,6 +379,15 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           //   setSingleData={setSingleData}
         />
       </Modals>
+
+      <DeleteOrDisable
+        open={deleteModal}
+        setOpen={setdeleteModal}
+        title="Delete UserTypes"
+        onConfirm={onConfirm}
+        confirmationMsg="delete usertypes"
+        btnValue="Delete"
+      />
     </>
   );
 };

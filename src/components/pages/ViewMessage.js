@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({

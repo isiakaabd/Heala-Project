@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { messagesHeadCells } from "components/Utilities/tableHeaders";
 import { Avatar, Button, Checkbox, Grid } from "@mui/material";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";

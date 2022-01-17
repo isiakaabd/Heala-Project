@@ -12,7 +12,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import people from "assets/images/login-page-photo.png";
 import loginBackground from "assets/images/login-background.svg";
-import logo from "assets/images/logo-white.png";
+import logo from "assets/images/logo.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { useActions } from "components/hooks/useActions";

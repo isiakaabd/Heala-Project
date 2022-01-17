@@ -15,7 +15,7 @@ import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link, useLocation } from "react-router-dom";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { waitingListRows } from "components/Utilities/tableData";
 

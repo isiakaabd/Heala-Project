@@ -19,7 +19,7 @@ import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPartners } from "components/graphQL/useQuery";
-import { addPartner /*addPartnerCategory*/ } from "components/graphQL/Mutation";
+import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import Loader from "components/Utilities/Loader";
@@ -143,6 +143,7 @@ const useStyles = makeStyles((theme) => ({
 const Partners = () => {
   const classes = useStyles();
   // const [disableUser] = useMutation(deleteDoctor);
+  const [addPartnerCat] = useMutation(addPartnerCategory);
   const theme = useTheme();
   const buttonType = {
     background: theme.palette.common.black,
@@ -196,8 +197,16 @@ const Partners = () => {
   const onSubmit = (values) => {
     console.log(values);
   };
-  const onSubmit2 = (values) => {
+  const onSubmit2 = async (values, onSubmitProps) => {
+    const { category } = values;
     console.log(values);
+    await addPartnerCat({
+      variables: {
+        name: category,
+      },
+    });
+    setAddPartnerCategory(false);
+    onSubmitProps.resetForm();
   };
   const onConfirm = async () => {
     // try {
@@ -234,10 +243,17 @@ const Partners = () => {
 
   const specializations = [
     { key: "Diagnostics", value: "diagnostics" },
-    { key: "Dental", value: "Dental" },
-    { key: "Pediatry", value: "Pediatry" },
-    { key: "Optometry", value: "Optometry" },
-    { key: "Pathology", value: "Pathology" },
+    { key: "Dental", value: "dental" },
+    { key: "Pediatry", value: "pediatry" },
+    { key: "Optometry", value: "optometry" },
+    { key: "Pathology", value: "pathology" },
+  ];
+  const specializations5 = [
+    { key: "Diagnostics", value: "diagnostics" },
+    { key: "Dental", value: "dental" },
+    { key: "Pediatry", value: "pediatry" },
+    { key: "Optometry", value: "optometry" },
+    { key: "Pathology", value: "pathology" },
   ];
 
   const { loading, error, data } = useQuery(getPartners);
@@ -536,13 +552,13 @@ const Partners = () => {
           {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
-                <Grid container direction="column" gap={4}>
+                <Grid container direction="column" gap={3}>
                   <Grid item container>
                     <Grid item container direction="column" gap={1}>
                       <Grid item container>
                         <FormikControl
                           control="select"
-                          options={specializations}
+                          options={specializations5}
                           name="category"
                           label="Category"
                           placeholder="Specialization"

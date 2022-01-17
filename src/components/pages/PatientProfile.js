@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DisplayProfile from "components/Utilities/DisplayProfile";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IoCopy } from "react-icons/io5";

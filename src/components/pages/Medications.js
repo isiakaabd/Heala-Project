@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import PreviousButton from "components/Utilities/PreviousButton";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getMedications } from "components/graphQL/useQuery";

@@ -2,35 +2,15 @@ import React from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-import { Grid, Button, Input } from "@mui/material";
+import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import { makeStyles } from "@mui/styles";
-// import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
-// import { getPlans } from "components/graphQL/useQuery";
+import { addProvider } from "components/graphQL/Mutation";
+import { getProviders } from "components/graphQL/useQuery";
 // import { getSinglePlan } from "components/graphQL/useQuery";
-// import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
-const useStyles = makeStyles((theme) => ({
-  uploadBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: "#f2f2f2",
-      boxShadow: "none",
-      color: theme.palette.common.black,
-      textAlign: "left",
 
-      "&:hover": {
-        background: "#f2f3f3",
-        boxShadow: "none",
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
-    },
-  },
-}));
 export const ProviderModal = ({
   handleDialogClose,
   type,
@@ -40,9 +20,7 @@ export const ProviderModal = ({
   initialValues,
 }) => {
   const theme = useTheme();
-  //   const [createPlan] = useMutation(CREATE_PLAN, {
-  //     refetchQueries: [{ query: getPlans }],
-  //   });
+  const [createProvider] = useMutation(addProvider, { refetchQueries: [{ query: getProviders }] });
   //   const [updatePlan] = useMutation(UPDATE_PLAN);
 
   //   const single = useQuery(getSinglePlan, {
@@ -50,19 +28,24 @@ export const ProviderModal = ({
   //       id: editId,
   //     },
   //   });
-  const classes = useStyles();
   const validationSchema = Yup.object({
     name: Yup.string("Enter your Name").required("Name is required"),
     type: Yup.string("Select your type").required("Type is required"),
+    image: Yup.string("Upload a single Image").required("Image is required"),
   });
-  const checkbox1 = [
-    { key: "create", value: "create" },
-    { key: "update", value: "update" },
-    { key: "read", value: "read" },
-    { key: "delete", value: "delete" },
-  ];
+  const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];
   const onSubmit = async (values, onSubmitProps) => {
-    console.log(values);
+    if (type === "add") {
+      const { name, type, image } = values;
+      await createProvider({
+        variables: {
+          name,
+          icon: image,
+          userTypeId: type,
+        },
+      });
+      console.log(values);
+    }
   };
   const buttonType = {
     background: theme.palette.common.black,
@@ -78,7 +61,7 @@ export const ProviderModal = ({
       validateOnChange={false}
       validateOnMount
     >
-      {({ isSubmitting, dirty, isValid }) => {
+      {({ isSubmitting, dirty, isValid, setFieldValue }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -100,39 +83,19 @@ export const ProviderModal = ({
                     label="User Types"
                   />
                 </Grid>
-                <Grid item container>
-                  <FormikControl
-                    control="input"
-                    placeholder="Enter your Description"
-                    name="description"
-                    label="Description"
-                  />
-                </Grid>
+
                 <Grid item md display="flex" alignItems="center">
-                  <Grid
-                    container
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    gap={1}
-                  >
-                    <label htmlFor="contained-button-file">
-                      <Input
-                        accept="image/*"
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        name="image"
-                        style={{ display: "none" }}
-                      />
-                      <Button variant="contained" component="span" className={classes.uploadBtn}>
-                        Upload Photo
-                      </Button>
-                    </label>
+                  <Grid item container md>
+                    <FormikControl
+                      control="file"
+                      name="image"
+                      label="Upload Your Logo"
+                      setFieldValue={setFieldValue}
+                    />
                   </Grid>
                 </Grid>
 
-                <Grid item xs={12} marginTop={10}>
+                <Grid item xs={12}>
                   <CustomButton
                     title={type === "edit" ? "Save Provider" : "Add Provider"}
                     width="100%"

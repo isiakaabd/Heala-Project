@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";

@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import DisplayProfile from "components/Utilities/DisplayProfile";
 import PreviousButton from "components/Utilities/PreviousButton";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
