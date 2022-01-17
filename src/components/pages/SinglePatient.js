@@ -10,7 +10,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";

@@ -50,7 +50,7 @@ import PendingPayout from "components/pages/PendingPayout";
 import CircularChart from "components/Utilities/CircularChart";
 import WhiteLabel from "components/pages/WhiteLabel";
 import Providers from "components/pages/Providers";
-import UserTypes from "./UserTypes";
+import UserTypes from "components/pages/UserTypes";
 // import { useSelector } from "react-redux";
 // import { useActions } from "components/hooks/useActions";
 // import { UserProfile } from "components/graphQL/useQuery";

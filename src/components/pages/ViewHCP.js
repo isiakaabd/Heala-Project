@@ -5,7 +5,7 @@ import { Avatar, Grid, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import imageUpload from "assets/images/imageUpload.svg";
 // import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";

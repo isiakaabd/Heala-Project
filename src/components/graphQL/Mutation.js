@@ -330,6 +330,67 @@ export const addPartnerCategory = gql`
     }
   }
 `;
+export const addProvider = gql`
+  mutation createProvider($name: String!, $icon: String!, $userTypeId: String!) {
+    createProvider(data: { name: $name, icon: $icon, userTypeId: $userTypeId }) {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+      }
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const deletProvider = gql`
+  mutation deleteProvider($id: String!) {
+    deleteProvider(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const deleteUserType = gql`
+  mutation deleteUserType($id: String!) {
+    deleteUserType(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const createUserType = gql`
+  mutation createUserType($name: String!, $icon: String!) {
+    createUserType(data: { name: $name, icon: $icon }) {
+      userType {
+        _id
+        name
+        icon
+        createdAt
+        updatedAt
+      }
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const createAllery = gql`
   mutation createAllergy(
     $food: String!

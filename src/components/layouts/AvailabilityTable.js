@@ -5,7 +5,7 @@ import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { useLazyQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
 import NoData from "components/layouts/NoData";

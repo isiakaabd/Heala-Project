@@ -8,7 +8,7 @@ import { deleteAppointment } from "components/graphQL/Mutation";
 import Divider from "@mui/material/Divider";
 import CustomButton from "components/Utilities/CustomButton";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.png";
+import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";

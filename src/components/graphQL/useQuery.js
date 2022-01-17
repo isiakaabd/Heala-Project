@@ -371,6 +371,20 @@ export const getUserDetails = gql`
     }
   }
 `;
+export const getProviders = gql`
+  query getProviders {
+    getProviders {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const getPartners = gql`
   query getPartners {
     getPartners {
@@ -422,6 +436,31 @@ export const getDoctorPatients = gql`
         _id
         doctor
         patient
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getSingleProvider = gql`
+  query getProvider($id: ID!) {
+    getProvider(id: $id) {
+      _id
+      name
+      icon
+      userTypeId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getUserTypes = gql`
+  query getUserTypes {
+    getUserTypes {
+      userType {
+        _id
+        name
+        icon
         createdAt
         updatedAt
       }
