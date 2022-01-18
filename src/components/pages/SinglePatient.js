@@ -44,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
       minWidth: "20rem",
 
       "&:hover": {
-        background: "#fcfcfc",
+        background: "#fff",
+        border: "1px solid #ebebeb",
       },
 
       "&:active": {

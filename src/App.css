@@ -82,7 +82,7 @@ body {
 }
 
 .MuiSelect-select {
-  padding: 10px !important;
+  padding: 0 26px 0 10px !important;
 }
 
 

@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
   logoWrapper: {
     paddingTop: "3em",
     paddingBottom: "2em",
-    paddingLeft: "7em",
+    paddingLeft: "1em",
   },
   logout: {
     "&.MuiListItemButton-root": {
@@ -155,7 +155,7 @@ const SideMenu = (props) => {
     <>
       <aside className={classes.aside}>
         <div className={classes.logoWrapper}>
-          <img src={logo} alt="logo" width={60} height={60} />
+          <img src={logo} alt="logo" />
         </div>
         <List>
           {menus.map((menu) => (
