@@ -100,7 +100,11 @@ const Login = () => {
     try {
       const { email, password, authType } = values;
       if (isMounted) {
-        const { data } = await loginInfo({ variables: { email, password, authType } });
+        const { data } = await loginInfo({
+          variables: {
+            data: { email, password, authType },
+          },
+        });
 
         loginUser({
           data: data,

@@ -537,6 +537,7 @@ const Routes = (props) => {
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
       />
 
       <PrivateRoute
