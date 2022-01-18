@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import { dateMoment, timeMoment } from "components/Utilities/Time";
+import { dateMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
-import { Avatar, Button } from "@mui/material";
-import displayPhoto from "assets/images/avatar.svg";
+import { TableCell, Grid, Checkbox, TableRow, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -167,11 +162,10 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {/* {new Date(row.updatedAt)} */}
-                        {timeMoment(row.updatedAt)}
+                        {row.type}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <div
+                        {/* <div
                           style={{
                             height: "100%",
                             display: "flex",
@@ -186,7 +180,8 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
-                        </div>
+                        </div> */}
+                        {row.doctor}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -200,14 +195,14 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.reason}
+                        {row.patient}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.note}
+                        {row.status ? row.status : "No value"}
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
@@ -217,10 +212,9 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           component={Link}
                           to={`referrals/${row._id}`}
                           endIcon={<ArrowForwardIosIcon />}
-                          // onClick={() => {
-                          //   setSelectedSubMenu(10);
-                          // }}
-                          disabled
+                          onClick={() => {
+                            setSelectedSubMenu(10);
+                          }}
                         >
                           View Referral
                         </Button>
