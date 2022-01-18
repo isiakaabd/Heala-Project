@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReferralTab = ({ setSelectedSubMenu }) => {
+const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -215,13 +215,12 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          disabled
-                          // to={`hcps/${row._id}`}
+                          to={`referrals/${row._id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           // onClick={() => {
-                          //   setSelectedSubMenu(3);
-                          //   setSelectedHcpMenu(0);
+                          //   setSelectedSubMenu(10);
                           // }}
+                          disabled
                         >
                           View Referral
                         </Button>
@@ -241,6 +240,7 @@ const ReferralTab = ({ setSelectedSubMenu }) => {
 
 ReferralTab.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired,
 };
 
 export default ReferralTab;

@@ -2,202 +2,115 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+// import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import { makeStyles } from "@mui/styles";
+import displayPhoto from "assets/images/avatar.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
 
-import { makeStyles } from "@mui/styles";
-
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
+  parentGrid: {
+    background: "#fff",
+    borderRadius: "1rem",
+    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
   },
-  button: {
-    "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "13rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .css-9tj150-MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
+  gridWrapper: {
+    padding: "3rem 5rem",
   },
-
-  tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
-      fontSize: "1.25rem",
-    },
-  },
-
   badge: {
-    "&.css-1eelh6y-MuiChip-root": {
-      fontSize: "1.6rem !important",
-      height: "3rem",
-      borderRadius: "1.3rem",
+    "&.MuiChip-root": {
+      border: `1px solid ${theme.palette.common.lighterGrey} !important`,
+    },
+    "& .MuiChip-label": {
+      fontSize: "1.25rem",
+      color: theme.palette.common.green,
     },
   },
 }));
 
-const ViewReferral = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
 
   useEffect(() => {
     setSelectedMenu(9);
     setSelectedSubMenu(10);
-
-    // eslint-disable-next-line
+    //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path="/referrals" onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton path={`/referrals`} />
       </Grid>
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <Typography variant="h2" className={classes.heading}>
-          Referral View
-        </Typography>
-        {/* <Grid item className={classes.searchGrid}>
-          <Search
-            value={searchMail}
-            onChange={(e) => setSearchMail(e.target.value)}
-            placeholder="Enter your email here..."
-            height="5rem"
-          />
-        </Grid> */}
-        {/* <Grid item>
-          <FilterList
-            onClick={(event) => setAnchorEl(event.currentTarget)}
-            open={open}
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            title="Filter by"
-            options={options}
-          />
-        </Grid> */}
-      </Grid>
-      {/* The Search and Filter ends here */}
-      {/* <Grid item container>
-        <EnhancedTable
-          headCells={viewRefferalHeader}
-          rows={rows}
-          page={page}
-          paginationLabel="referral per page"
-          hasCheckbox={true}
+      <Grid item container direction="column" className={classes.parentGrid}>
+        <Grid item className={classes.gridWrapper}>
+          <Typography variant="h3">Appreciate message to Heala team</Typography>
+        </Grid>
+        <Divider />
+        {/*  sx={{ background: "red" }} */}
+        <Grid
+          container
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="no-wrap"
         >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
-
-            const labelId = `enhanced-table-checkbox-${index}`;
-
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell align="center" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                    }}
-                  >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {" "}
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {row.specialization}
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  color="secondary"
-                  style={{ color: theme.palette.common.grey }}
-                >
-                  {row.availableTime}
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label="send referral request"
-                    className={classes.badge}
-                    style={{
-                      background:
-                        row.status === "active"
-                          ? theme.palette.common.lightGreen
-                          : theme.palette.common.lightRed,
-                      color:
-                        row.status === "active"
-                          ? theme.palette.common.green
-                          : theme.palette.common.red,
-                      border: "none",
-                    }}
-                    variant="outlined"
-                  />
-                </TableCell>
-
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    to="/view"
-                    endIcon={<ArrowForwardIosIcon />}
-                  >
-                    View HCP profile
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </EnhancedTable>
-      </Grid> */}
+          <Grid item sx={{ background: "blue" }}>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="h5">Patient:</Typography>
+              </Grid>
+              <Grid item>
+                <Avatar src={displayPhoto} alt="Display photo of the sender" />
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">Chisom Atunke</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sx={{ background: "yellow" }} alignItems="center">
+            <Grid item container gap={2} align>
+              <Grid item>
+                <Typography variant="h5">Category</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">Dentistry</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item sx={{ background: "red" }}>
+            ssss
+          </Grid>
+          {/* <Grid item container alignItems="center">
+            <Grid item>
+              <Typography variant="h5">Patient:</Typography>
+            </Grid>
+            <Grid item>
+              <Avatar src={displayPhoto} alt="Display photo of the sender" />
+            </Grid>
+            <Grid item>
+              <Typography variant="h5">Chisom Atunke</Typography>
+            </Grid>
+          </Grid> */}
+          {/* <Grid item container alignItems="center">
+           
+          </Grid> */}
+        </Grid>
+        <Divider />
+        <Grid item className={classes.gridWrapper}>
+          <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+            I want to use this medium to thank Heala team for their relentless services to the world
+            and their provision of quality healthcare service. I want to use this medium to thank
+            Heala team for their relentless services to the world and their provision of quality
+            healthcare service. I want to use this medium to thank Heala team for their relentless
+            services to the world and their provision of quality healthcare service. I want to use
+            this medium to thank Heala team for their relentless services to the world and their
+            provision of quality healthcare service. I want to use this medium to thank Heala team
+            for their relentless services to the world and their provision of quality healthcare
+            service.
+          </Typography>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
