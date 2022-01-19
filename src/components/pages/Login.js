@@ -153,8 +153,9 @@ const Login = () => {
           </Grid>
         </Grid>
         <Grid item lg={6} sm={10} className={classes.rightParentGrid}>
-        <Grid item className={classes.logoAlign}>
-              <img src={logo} alt="Brand logo" className={classes.logo} /></Grid>
+          <Grid item className={classes.logoAlign}>
+            <img src={logo} alt="Brand logo" className={classes.logo} />
+          </Grid>
           {Object.keys(authError).length > 0 && (
             // state && (
             <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>

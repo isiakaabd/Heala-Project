@@ -18,13 +18,14 @@ export const SubscriptionModal = ({
   editId,
   setSingleData,
   initialValues,
+  singleData,
 }) => {
   const theme = useTheme();
   const [createPlan] = useMutation(CREATE_PLAN, {
     refetchQueries: [{ query: getPlans }],
   });
   const [updatePlan] = useMutation(UPDATE_PLAN);
-
+  console.log(singleData);
   const single = useQuery(getSinglePlan, {
     variables: {
       id: editId,
@@ -117,11 +118,12 @@ export const SubscriptionModal = ({
   };
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={type === "edit" ? singleData : initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnMount
+      enableReinitialize
     >
       {({ isSubmitting, dirty, isValid }) => {
         return (
@@ -195,5 +197,6 @@ SubscriptionModal.propTypes = {
   edit: PropTypes.bool,
   initialValues: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   validationSchema: PropTypes.object,
+  singleData: PropTypes.object,
   setSingleData: PropTypes.func,
 };

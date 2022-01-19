@@ -129,29 +129,6 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
     hover: "#fafafa",
     active: "#f4f4f4",
   };
-  // const [create] = useMutation(createReminder);
-  // const [getProf, { loading, error, data }] = useLazyQuery(getReminder);
-
-  // if (value.data) {
-  // console.log(data);
-  // }
-
-  // useEffect(() => {
-  //   const fetching = async () => {
-  //     try {
-  //       const value = await create();
-  //       const planetId = value.data.createReminder.reminder._id;
-  //       const z = getProf({ variables: { id: planetId } });
-  //       if (z) {
-  //         console.log(z);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  //   fetching();
-  // }, [create, getProf]);
-
   useLayoutEffect(() => {
     setChatMediaActive(false);
 
@@ -169,11 +146,11 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
         {/* Display photo and profile name grid */}
         <Grid item>
           <DisplayProfile
-            fullName="Raphael Igbinedion"
-            displayPhoto={displayPhoto}
+            fullName={`${patientProfile.firstName} ${patientProfile.lastName}`}
+            displayPhoto={patientProfile.image ? patientProfile.image : displayPhoto}
             medicalTitle="User ID"
             statusId={patientProfile._id}
-            status="Active"
+            status={patientProfile.status ? patientProfile.status : "No Value"}
             chatPath={`/patients/${patientId}/profile/chat`}
             callPath={`/patients/${patientId}/profile/call`}
             videoPath={`/patients/${patientId}/profile/video`}
@@ -245,10 +222,14 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
                 <Typography variant="h4">Email Address</Typography>
               </Grid>
               <Grid item>
-                <a href="mailto:raphaeligbinedion@yahoo.com" className={classes.link}>
-                  <span>raphaeligbinedion@yahoo.com</span>
-                  <ArrowForwardIosIcon className={classes.linkIcon} />
-                </a>
+                {patientProfile.email ? (
+                  <a href={`mailto:${patientProfile.email}`} className={classes.link}>
+                    <span>{patientProfile.email}</span>
+                    <ArrowForwardIosIcon className={classes.linkIcon} />
+                  </a>
+                ) : (
+                  <p className={classes.link}> No Email Provided</p>
+                )}
               </Grid>
             </Grid>
           </Grid>

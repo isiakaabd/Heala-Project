@@ -71,8 +71,8 @@ export const ProviderModal = ({
                   <FormikControl
                     control="input"
                     name="name"
-                    label="Name of plan"
-                    placeholder="Enter Plan Name"
+                    label="Name of Provider"
+                    placeholder="Enter Provider Name"
                   />
                 </Grid>
                 <Grid item container>
