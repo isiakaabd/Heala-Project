@@ -181,6 +181,7 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   };
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
+  const [singleData, setSingleData] = useState();
   const usertype = useQuery(getUserTypes);
   const [userType, setUsertypes] = useState([]);
 
@@ -376,7 +377,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           editId={editId}
           setAlert={setAlert}
           initialValues={initialValues}
-          //   setSingleData={setSingleData}
+          setSingleData={setSingleData}
+          singleData={singleData}
         />
       </Modals>
 

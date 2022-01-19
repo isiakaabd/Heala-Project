@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import { addProvider } from "components/graphQL/Mutation";
-import { getProviders } from "components/graphQL/useQuery";
-// import { getSinglePlan } from "components/graphQL/useQuery";
-import { useMutation } from "@apollo/client";
+import { addProvider, editprovider } from "components/graphQL/Mutation";
+import { getUserType, getProviders } from "components/graphQL/useQuery";
+import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 
@@ -15,19 +14,32 @@ export const ProviderModal = ({
   handleDialogClose,
   type,
   setAlert,
-  editId,
   setSingleData,
   initialValues,
+  editId,
+  singleData,
 }) => {
   const theme = useTheme();
   const [createProvider] = useMutation(addProvider, { refetchQueries: [{ query: getProviders }] });
-  //   const [updatePlan] = useMutation(UPDATE_PLAN);
+  const [editProvider] = useMutation(editprovider, { refetchQueries: [{ query: getProviders }] });
 
-  //   const single = useQuery(getSinglePlan, {
-  //     variables: {
-  //       id: editId,
-  //     },
-  //   });
+  const single = useQuery(getUserType, {
+    variables: {
+      id: editId,
+    },
+  });
+
+  useEffect(() => {
+    if (single.data) {
+      setSingleData({
+        name: single.data.getProvider.name,
+        type: single.data.getProvider.userTypeId,
+        image: single.data.getProvider.icon,
+        id: single.data.getProvider._id,
+      });
+    }
+  }, [single.data, setSingleData]);
+
   const validationSchema = Yup.object({
     name: Yup.string("Enter your Name").required("Name is required"),
     type: Yup.string("Select your type").required("Type is required"),
@@ -45,6 +57,17 @@ export const ProviderModal = ({
         },
       });
     }
+    if (type === "edit") {
+      const { name, type, image, id } = values;
+      await editProvider({
+        variables: {
+          id,
+          name,
+          icon: image,
+          userTypeId: type,
+        },
+      });
+    }
     onSubmitProps.resetForm();
     handleDialogClose();
   };
@@ -56,11 +79,12 @@ export const ProviderModal = ({
   };
   return (
     <Formik
-      initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnMount
+      initialValues={type === "edit" ? singleData : initialValues}
+      enableReinitialize
     >
       {({ isSubmitting, dirty, isValid, setFieldValue }) => {
         return (
@@ -75,6 +99,7 @@ export const ProviderModal = ({
                     placeholder="Enter Provider Name"
                   />
                 </Grid>
+                <div style={{ display: "none" }} name="id" />
                 <Grid item container>
                   <FormikControl
                     control="select"
@@ -122,5 +147,6 @@ ProviderModal.propTypes = {
   edit: PropTypes.bool,
   initialValues: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   validationSchema: PropTypes.object,
+  singleData: PropTypes.object,
   setSingleData: PropTypes.func,
 };

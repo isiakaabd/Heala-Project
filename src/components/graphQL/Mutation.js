@@ -1,22 +1,57 @@
 import { gql } from "@apollo/client";
 
-// export const Login_USER = gql`
-//   mutation login($email: EmailAddress!, $password: String!, $authType: String!) {
-//     login(data: { email: $email, password: $password, authType: $authType }) {
-//       account {
-//         access_token
-//         dociId
-//         _id
-//         refresh_token
-//       }
-//       errors {
-//         field
-//         message
-//       }
+// mutation updateProvider($data: updateProviderInput!) {
+//   updateProvider(data: $data) {
+//     provider {
+//       _id
+//       name
+//       icon
+//       userTypeId
+//       createdAt
+//       updatedAt
+//     }
+//     errors {
+//       field
+//       message
 //     }
 //   }
-// `;
+// }
 
+export const editUserType = gql`
+  mutation updateUserType($id: String!, $name: String, $icon: String!) {
+    updateUserType(data: { id: $id, name: $name, icon: $icon }) {
+      userType {
+        _id
+        name
+        icon
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const editprovider = gql`
+  mutation updateProvider($id: String!, $name: String, $icon: String) {
+    updateProvider(data: { id: $id, name: $name, icon: $icon }) {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const Login_USER = gql`
   mutation Login($data: LoginUserInput!) {
     login(data: $data) {
