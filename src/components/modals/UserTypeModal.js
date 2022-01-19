@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import { useMutation } from "@apollo/client";
-import { getUserTypes } from "components/graphQL/useQuery";
-import { createUserType } from "components/graphQL/Mutation";
+import { useMutation, useQuery } from "@apollo/client";
+import { getUserTypes, getUserType } from "components/graphQL/useQuery";
+import { createUserType, editUserType } from "components/graphQL/Mutation";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 
@@ -15,6 +15,7 @@ export const UserTypeModal = ({
   type,
   setAlert,
   editId,
+  singleData,
   setSingleData,
   initialValues,
 }) => {
@@ -22,6 +23,25 @@ export const UserTypeModal = ({
   const [createType] = useMutation(createUserType, {
     refetchQueries: [{ query: getUserTypes }],
   });
+  const [editType] = useMutation(editUserType, {
+    refetchQueries: [{ query: getUserTypes }],
+  });
+
+  const single = useQuery(getUserType, {
+    variables: {
+      id: editId,
+    },
+  });
+
+  useEffect(() => {
+    if (single.data) {
+      setSingleData({
+        name: single.data.getUserType.name,
+        image: single.data.getUserType.icon,
+        id: single.data.getUserType._id,
+      });
+    }
+  }, [single.data, setSingleData]);
   //   const [updatePlan] = useMutation(UPDATE_PLAN);
 
   //   const single = useQuery(getSinglePlan, {
@@ -43,6 +63,16 @@ export const UserTypeModal = ({
         console.log(err);
       }
     }
+    if (type === "edit") {
+      const { name, image, id } = values;
+      await editType({
+        variables: {
+          id,
+          name,
+          icon: image,
+        },
+      });
+    }
 
     onSubmitProps.resetForm();
     handleDialogClose();
@@ -55,7 +85,8 @@ export const UserTypeModal = ({
   };
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={type === "edit" ? singleData : initialValues}
+      enableReinitialize
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
@@ -111,5 +142,6 @@ UserTypeModal.propTypes = {
   edit: PropTypes.bool,
   initialValues: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   validationSchema: PropTypes.object,
+  singleData: PropTypes.object,
   setSingleData: PropTypes.func,
 };

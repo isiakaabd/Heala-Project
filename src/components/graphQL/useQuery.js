@@ -54,6 +54,17 @@ export const DoctorCount = gql`
     DoctorCount
   }
 `;
+export const getUserType = gql`
+  query getUserType($id: ID!) {
+    getUserType(id: $id) {
+      _id
+      name
+      icon
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const dashboard = gql`
   query getStats {
     getStats {
@@ -449,6 +460,7 @@ export const getSingleProvider = gql`
     }
   }
 `;
+
 export const getCategory = gql`
   query getProvider($id: ID!) {
     getProvider(id: $id) {

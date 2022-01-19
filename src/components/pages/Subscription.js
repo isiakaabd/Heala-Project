@@ -210,7 +210,7 @@ const Subscription = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-  console.log(singleData);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,

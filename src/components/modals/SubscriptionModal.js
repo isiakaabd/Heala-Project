@@ -118,11 +118,11 @@ export const SubscriptionModal = ({
   };
   return (
     <Formik
-      initialValues={type === "edit" ? singleData : initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnMount
+      initialValues={type === "edit" ? singleData : initialValues}
       enableReinitialize
     >
       {({ isSubmitting, dirty, isValid }) => {

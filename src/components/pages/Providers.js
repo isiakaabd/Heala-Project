@@ -226,12 +226,12 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 
   const handleEditOpenDialog = (id) => {
     setEdit(true);
+    console.log(id);
+
     setEditId(id);
   };
 
-  // setSingleData();
-
-  // const [singleData, setSingleData] = useState("");
+  const [singleData, setSingleData] = useState();
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -388,7 +388,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           editId={editId}
           setAlert={setAlert}
           initialValues={initialValues}
-          //   setSingleData={setSingleData}
+          singleData={singleData}
+          setSingleData={setSingleData}
         />
       </Modals>
 
