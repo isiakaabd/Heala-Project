@@ -35,7 +35,6 @@ export const UserTypeModal = ({
   });
 
   const onSubmit = async (values, onSubmitProps) => {
-    console.log(values);
     const { name, image } = values;
     if (type == "add") {
       try {
@@ -71,8 +70,8 @@ export const UserTypeModal = ({
                   <FormikControl
                     control="input"
                     name="name"
-                    label="Name of plan"
-                    placeholder="Enter Plan Name"
+                    label="Name of UserType"
+                    placeholder="Enter UserType Name"
                   />
                 </Grid>
                 <Grid item md display="flex" alignItems="center">

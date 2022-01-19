@@ -217,10 +217,9 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           component={Link}
                           to={`referrals/${row._id}`}
                           endIcon={<ArrowForwardIosIcon />}
-                          // onClick={() => {
-                          //   setSelectedSubMenu(10);
-                          // }}
-                          disabled
+                          onClick={() => {
+                            setSelectedSubMenu(10);
+                          }}
                         >
                           View Referral
                         </Button>

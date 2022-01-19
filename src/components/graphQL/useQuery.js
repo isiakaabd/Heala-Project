@@ -443,6 +443,13 @@ export const getDoctorPatients = gql`
   }
 `;
 export const getSingleProvider = gql`
+  query getPartnerCategories {
+    getPartnerCategories {
+      data
+    }
+  }
+`;
+export const getCategory = gql`
   query getProvider($id: ID!) {
     getProvider(id: $id) {
       _id

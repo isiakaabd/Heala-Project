@@ -179,6 +179,8 @@ const Subscription = () => {
     setdeleteModal(true);
   };
   const handleEditOpenDialog = (id) => {
+    console.log(id);
+
     setEdit(true);
     setEditId(id);
   };
@@ -208,7 +210,7 @@ const Subscription = () => {
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
-
+  console.log(singleData);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -402,7 +404,8 @@ const Subscription = () => {
           type="edit"
           editId={editId}
           setAlert={setAlert}
-          initialValues={singleData}
+          // initialValues={singleData}
+          singleData={singleData}
           setSingleData={setSingleData}
         />
       </Modals>

@@ -18,7 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
-import { getPartners } from "components/graphQL/useQuery";
+import { getPartners, getSingleProvider } from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
@@ -255,14 +255,25 @@ const Partners = () => {
     { key: "Optometry", value: "optometry" },
     { key: "Pathology", value: "pathology" },
   ];
-
+  const [categoryDatas, setCategoryDatas] = useState([]);
   const { loading, error, data } = useQuery(getPartners);
+  const categoryData = useQuery(getSingleProvider);
   const [partner, setPartners] = useState([]);
+  console.log(categoryDatas);
+
   useEffect(() => {
     if (data) {
       setPartners(data.getPartners.data);
     }
-  }, [data]);
+    if (categoryData) {
+      const value = categoryData.data.getPartnerCategories.data;
+      setCategoryDatas(
+        value.map((i) => {
+          return { key: i, value: i };
+        }),
+      );
+    }
+  }, [data, categoryData]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -464,7 +475,7 @@ const Partners = () => {
           validateOnChange={false}
           validateOnMount
         >
-          {({ isSubmitting, isValid, dirty, setFieldValue, setValues, values, errors }) => {
+          {({ isSubmitting, isValid, dirty, setFieldValue }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid container direction="column" gap={4}>
@@ -496,10 +507,10 @@ const Partners = () => {
                         <Grid item container>
                           <FormikControl
                             control="select"
-                            options={specializations}
+                            options={categoryDatas}
                             name="specialization"
                             label="Category"
-                            placeholder="Specialization"
+                            placeholder="Category"
                           />
                         </Grid>
                       </Grid>
