@@ -49,9 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   logo: {
-    position: "absolute",
-    top: "10%",
-    left: "30%",
+    position: "relative",
+    textAlign: "center",
+    minWidth: "250px !important",
   },
   rightParentGrid: {
     width: "100%",
@@ -59,7 +59,17 @@ const useStyles = makeStyles((theme) => ({
     background: `url(${loginBackground}) no-repeat`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    padding: "5rem 15rem",
+    padding: "5rem 8rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  logoAlign: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "center",
+    alignItems: "center",
   },
   link: {
     textDecoration: "none",
@@ -136,16 +146,15 @@ const Login = () => {
   return (
     <>
       <Grid container className={classes.gridContainer}>
-        <Grid item lg={5} className={classes.leftParentGrid}>
+        <Grid item lg={6} className={classes.leftParentGrid}>
           <Grid item container direction="column" className={classes.peopleImgWrapper}>
             <Grid item className={classes.overlay}></Grid>
             <Grid item className={classes.peopleBgImage}></Grid>
-            <Grid item>
-              <img src={logo} alt="Brand logo" className={classes.logo} />
-            </Grid>
           </Grid>
         </Grid>
-        <Grid item lg={7} sm={10} className={classes.rightParentGrid}>
+        <Grid item lg={6} sm={10} className={classes.rightParentGrid}>
+        <Grid item className={classes.logoAlign}>
+              <img src={logo} alt="Brand logo" className={classes.logo} /></Grid>
           {Object.keys(authError).length > 0 && (
             // state && (
             <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>

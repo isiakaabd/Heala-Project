@@ -2,12 +2,12 @@ import { createTheme } from "@mui/material/styles";
 
 const dark = "#4F4F4F";
 const grey = "#757886";
-const red = "#ED3237";
-const lightRed = "#FEF8F7";
+const red = "#3e5ea9";
+const lightRed = "#f7f7f7";
 const lightGrey = "#CCCCCC";
 const lighterGrey = "F2F2F2";
-const green = "#3EA584";
-const lightGreen = "#ECF6F3";
+const green = "#2dd39e";
+const lightGreen = "#f7f7f7";
 const gold = "rgb(243, 173, 83)";
 const black = "#2D2F39";
 const disable = "#cccccc";
@@ -114,8 +114,8 @@ export const muiTheme = createTheme({
     cardGridWrapper: {
       height: "100%",
       padding: "5rem 3rem",
-      borderRadius: 10,
-      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+      borderRadius: 20,
+      boxShadow: "-1px 11px 30px 0px #e0e0e03b",
     },
 
     cardParentGrid: {
@@ -157,6 +157,7 @@ export const muiTheme = createTheme({
       styleOverrides: {
         badge: {
           top: "-.9rem",
+          background: "#FF0000",
         },
       },
     },

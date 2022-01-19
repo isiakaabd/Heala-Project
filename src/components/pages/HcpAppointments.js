@@ -53,7 +53,6 @@ const HcpAppointments = (props) => {
   const theme = useTheme();
   const [appointment, setAppointment] = useState([]);
   const { loading, data } = useQuery(getAllAppointment);
-  console.log;
 
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {

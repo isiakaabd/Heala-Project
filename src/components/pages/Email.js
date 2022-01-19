@@ -173,7 +173,14 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     <>
       <Grid container direction="column" height="100%" flexWrap="nowrap">
         {response ? (
-          <Grid item width={300} margin="auto" justifyContent="center" alignItems="center">
+          <Grid
+            item
+            width={300}
+            margin="auto"
+            justifyContent="center"
+            alignItems="center"
+            textAlign="center"
+          >
             <Alert severity="success">
               <Typography variant="h1">{response}</Typography>
             </Alert>

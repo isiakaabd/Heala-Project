@@ -152,7 +152,7 @@ export const referralHeader = [
   },
   {
     id: 1,
-    label: "Type",
+    label: "Time",
   },
   {
     id: 2,
@@ -166,11 +166,11 @@ export const referralHeader = [
 
   {
     id: 8,
-    label: "Patient's Name",
+    label: "Reason",
   },
   {
     id: 18,
-    label: "Status",
+    label: "Note",
   },
   {
     id: 6,
