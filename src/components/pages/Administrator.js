@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
+import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 import { useTheme } from "@mui/material/styles";
 import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
@@ -14,7 +16,6 @@ import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
-import { rows } from "components/Utilities/DataHeader";
 import { adminHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
@@ -25,7 +26,9 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import PreviousButton from "components/Utilities/PreviousButton";
 import AddIcon from "@mui/icons-material/Add";
-
+import { useQuery } from "@apollo/client";
+import { findAccounts } from "components/graphQL/useQuery";
+//
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -142,6 +145,7 @@ const useStyles = makeStyles((theme) => ({
 const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const { loading, data, error } = useQuery(findAccounts);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -162,6 +166,17 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     role: "",
     name: "",
   };
+  const [admins, setAdmins] = useState();
+  useEffect(() => {
+    try {
+      if (data) {
+        setAdmins(data.accounts.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [data]);
+
   const optionss = [
     {
       label: "option 1",
@@ -221,6 +236,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" rowSpacing={1}>
@@ -256,99 +273,101 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={adminHeader}
-            rows={rows}
+            rows={admins}
             page={page}
             paginationLabel="admin per page"
             hasCheckbox={true}
           >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+            {admins
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-
-                  <TableCell align="center" className={classes.tableCell}>
-                    <Grid
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "left",
-                        paddingLeft: "5rem",
-                      }}
-                    >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {row.firstName} {row.lastName}
-                      </span>
-                    </Grid>
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    {row.category}
-                  </TableCell>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
 
-                  <TableCell align="left" className={classes.tableCell}>
-                    <Grid
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Grid
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "left",
+                          paddingLeft: "5rem",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={admins.image ? admins.image : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {row.firstName ? `${row.firstName} ${row.lastName}` : "no Value"}
+                        </span>
+                      </Grid>
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.button} ${classes.greenBtn}`}
-                        endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                      {row.role}
+                    </TableCell>
+
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Grid
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
                       >
-                        Edit plan
-                      </Button>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={classes.button}
-                        to="/view"
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        view admin
-                      </Button>
-                    </Grid>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.button} ${classes.greenBtn}`}
+                          endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                        >
+                          Edit plan
+                        </Button>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={classes.button}
+                          to="/view"
+                          endIcon={<ArrowForwardIosIcon />}
+                        >
+                          view admin
+                        </Button>
+                      </Grid>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             )
           </EnhancedTable>
         </Grid>

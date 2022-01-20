@@ -19,8 +19,8 @@ import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getMedications } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
 import { dateMoment } from "components/Utilities/Time";
+import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
