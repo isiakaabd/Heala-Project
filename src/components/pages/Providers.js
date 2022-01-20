@@ -210,24 +210,11 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const handleDialogClose = async () => {
     setIsOpen(false);
     setEditId(null);
+    setSingleData();
   };
-  // handleEditOpenDialog = useCallback(async (id) => {
-  //   setEdit(true);
-  //   setEditId(id);
-
-  //   // console.log(4);
-  //   // try {
-  //   //   console.log(editId);
-  //   //   console.log(data);
-  //   // } catch (err) {
-  //   //   console.log(err);
-  //   // }
-  // });
 
   const handleEditOpenDialog = (id) => {
     setEdit(true);
-    console.log(id);
-
     setEditId(id);
   };
 

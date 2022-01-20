@@ -215,6 +215,7 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const handleDialogClose = async () => {
     setIsOpen(false);
     setEditId(null);
+    setSingleData();
   };
   const handleEditOpenDialog = (id) => {
     setEdit(true);

@@ -253,8 +253,8 @@ const Management = () => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.black }}
                     >
-                      <Grid container justifyContent="space-between" gap={1} alignItems="center">
-                        {newPerm.map((i) => {
+                      <Grid container justifyContent="flex-start" gap={1} alignItems="center">
+                        {data.map((i) => {
                           return <Chip label={i} key={i} className={classes.badge} />;
                         })}
                       </Grid>
@@ -264,15 +264,14 @@ const Management = () => {
                       scope="row"
                       align="center"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                      style={{ color: theme.palette.common.black, minWidth: "15rem" }}
                     >
-                      <Grid container justifyContent="space-between" gap={1} alignItems="center">
-                        {data.map((i) => {
+                      <Grid container justifyContent="flex-start" gap={1} alignItems="center">
+                        {newPerm.map((i) => {
                           return <Chip label={i} key={i} className={classes.badge} />;
                         })}
                       </Grid>
                     </TableCell>
-
                     <TableCell align="center" className={classes.tableCell}>
                       <div
                         style={{
