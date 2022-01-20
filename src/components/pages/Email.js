@@ -4,13 +4,20 @@ import * as Yup from "yup";
 import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Modals from "components/Utilities/Modal";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import Alert from "@mui/material/Alert";
+import {
+  TableRow,
+  TableCell,
+  Checkbox,
+  Button,
+  Chip,
+  Avatar,
+  Grid,
+  Typography,
+} from "@mui/material";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
@@ -20,15 +27,11 @@ import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { emailHeader } from "components/Utilities/tableHeaders";
-import Chip from "@mui/material/Chip";
-import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
-import Alert from "@mui/material/Alert";
-import { Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 const genderType = [
