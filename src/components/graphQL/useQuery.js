@@ -204,6 +204,21 @@ export const getRoles = gql`
     }
   }
 `;
+export const findAccounts = gql`
+  query findAccounts {
+    accounts {
+      data {
+        _id
+        email
+        dociId
+        createdAt
+        updatedAt
+        isEmailVerified
+        role
+      }
+    }
+  }
+`;
 export const getConsultation = gql`
   query getConsultation($id: ID!) {
     getConsultation(id: $id) {
