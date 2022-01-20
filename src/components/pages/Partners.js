@@ -259,26 +259,30 @@ const Partners = () => {
   const { loading, error, data } = useQuery(getPartners);
   const categoryData = useQuery(getSingleProvider);
   const [partner, setPartners] = useState([]);
-  console.log(categoryDatas);
 
   useEffect(() => {
     if (data) {
       setPartners(data.getPartners.data);
     }
-    if (categoryData) {
-      const value = categoryData.data.getPartnerCategories.data;
-      setCategoryDatas(
-        value.map((i) => {
-          return { key: i, value: i };
-        }),
-      );
+    try {
+      if (categoryData && categoryData.data) {
+        const value = categoryData.data.getPartnerCategories.data;
+        setCategoryDatas(
+          value.map((i) => {
+            return { key: i, value: i };
+          }),
+        );
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, [data, categoryData]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  if (error) return <NoData error={error.message} />;
+  if (error || categoryData.error)
+    return <NoData error={error.message || categoryData.error.message} />;
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

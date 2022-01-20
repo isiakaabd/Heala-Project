@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import { Grid } from "@mui/material";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import React, { useState, useEffect } from "react";
+import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
+import Loader from "components/Utilities/Loader";
 import Search from "components/Utilities/Search";
-import Chip from "@mui/material/Chip";
+import NoData from "components/layouts/NoData";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { roleHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -23,6 +19,8 @@ import Modals from "components/Utilities/Modal";
 import { RoleModal } from "components/modals/RoleModal";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { useQuery } from "@apollo/client";
+import { getRoles } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -159,6 +157,13 @@ const Management = () => {
   const handleEditDialogCloses = () => {
     setEdit(false);
   };
+  const [rolesManagements, setRolesManagements] = useState([]);
+  const { loading, data, error } = useQuery(getRoles);
+  useEffect(() => {
+    if (data) {
+      setRolesManagements(data.getRoles.role);
+    }
+  }, [data]);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -176,7 +181,8 @@ const Management = () => {
     "permission 3": false,
     "permission 4": true,
   };
-
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" rowSpacing={1}>
@@ -206,105 +212,99 @@ const Management = () => {
         <Grid item container style={{ marginTop: "5rem" }}>
           <EnhancedTable
             headCells={roleHeader}
-            rows={rows}
+            rows={rolesManagements}
             sx={{ textAlign: "center" }}
             page={page}
             paginationLabel="subscription per page"
             hasCheckbox={true}
           >
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+            {rolesManagements
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
 
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.black }}
+                const labelId = `enhanced-table-checkbox-${index}`;
+                const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
+                const newPerm = [...new Set(row.permissions.map((i) => i.split(":")[1]))];
+                console.log(newPerm);
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    {row.roleName}
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="center"
-                    className={classes.tableCell}
-                    // style={{ textAlign: "center !important" }}
-                  >
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      // spacing={2}
-                      style={{
-                        maxWidth: "25rem",
-                        display: "inline-flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      {row.permission.map((per) => {
-                        return (
-                          <Grid item xs={6} key={per}>
-                            <Chip label={per} className={classes.badge} />
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </TableCell>
+                      <Grid container justifyContent="space-between" gap={1} alignItems="center">
+                        {newPerm.map((i) => {
+                          return <Chip label={i} key={i} className={classes.badge} />;
+                        })}
+                      </Grid>
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="center"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      <Grid container justifyContent="space-between" gap={1} alignItems="center">
+                        {data.map((i) => {
+                          return <Chip label={i} key={i} className={classes.badge} />;
+                        })}
+                      </Grid>
+                    </TableCell>
 
-                  <TableCell align="center" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.tableBtn} ${classes.greenBtn}`}
-                        onClick={handleEditDialogOpens}
-                        endIcon={<EditIcon color="success" />}
+                    <TableCell align="center" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
                       >
-                        Edit role
-                      </Button>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        onClick={handleDeleteOpenDialog}
-                        endIcon={<DeleteIcon color="error" />}
-                      >
-                        Delete role
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.greenBtn}`}
+                          onClick={handleEditDialogOpens}
+                          endIcon={<EditIcon color="success" />}
+                        >
+                          Edit role
+                        </Button>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          onClick={handleDeleteOpenDialog}
+                          endIcon={<DeleteIcon color="error" />}
+                        >
+                          Delete role
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </EnhancedTable>
         </Grid>
       </Grid>

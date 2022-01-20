@@ -189,6 +189,21 @@ export const getRefferals = gql`
     }
   }
 `;
+export const getRoles = gql`
+  query getRoles {
+    getRoles {
+      role {
+        _id
+        name
+        permissions
+        editable
+        description
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const getConsultation = gql`
   query getConsultation($id: ID!) {
     getConsultation(id: $id) {

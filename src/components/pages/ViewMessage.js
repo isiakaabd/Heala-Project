@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
+import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
