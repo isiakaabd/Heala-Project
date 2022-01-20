@@ -18,6 +18,7 @@ export const PermissionModal = ({
   handleDialogClose,
   editId,
   setSinglePermission,
+  singlePermission,
 }) => {
   const theme = useTheme();
   const buttonType = {
@@ -96,7 +97,8 @@ export const PermissionModal = ({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={type === "edit" ? singlePermission : initialValues}
+      enableReinitialize
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
@@ -149,5 +151,6 @@ PermissionModal.propTypes = {
   editId: PropTypes.string,
   options: PropTypes.array.isRequired,
   initialValues: PropTypes.object.isRequired,
+  singlePermission: PropTypes.object.isRequired,
   validationSchema: PropTypes.object.isRequired,
 };

@@ -28,6 +28,7 @@ import { useQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
+import NoData from "components/layouts/NoData";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -112,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
 const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
-  const [singlePermission, setSinglePermission] = useState("");
+  const [singlePermission, setSinglePermission] = useState();
   const checkbox = [
     { key: "create", value: "create" },
     { key: "update", value: "update" },
@@ -157,6 +158,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const [editId, setEditId] = useState(null);
   const handleEditCloseDialog = useCallback(() => {
     setIsEdit(false);
+    setSinglePermission("");
   }, []);
   const [editDetails] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
@@ -199,7 +201,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
     active: theme.palette.primary.dark,
   };
 
-  const { loading, data } = useQuery(getPermissions);
+  const { loading, data, error } = useQuery(getPermissions);
   const [deletPlan] = useMutation(DELETE_PERMISSION);
 
   useEffect(() => {
@@ -215,7 +217,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   }, [permission, data]);
 
   if (loading) return <Loader />;
-  console.log(permission);
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       {alert && Object.keys(alert).length > 0 && (
@@ -262,7 +264,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                 const isItemSelected = isSelected(row._id, selectedRows);
 
                 const labelId = `enhanced-table-checkbox-${index}`;
-
+                const data = row.name.split(":")[0];
+                const newPerm = row.description.split(":")[1];
                 return (
                   <TableRow
                     hover
@@ -294,7 +297,23 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         }}
                       >
                         <Grid item xs={6}>
-                          <Chip label={row.name} className={classes.badge} />
+                          <Chip label={newPerm} className={classes.badge} />
+                        </Grid>
+                      </Grid>
+                    </TableCell>
+                    <TableCell id={labelId} scope="row" align="left" className={classes.tableCell}>
+                      <Grid
+                        container
+                        rowSpacing={2}
+                        style={{
+                          maxWidth: "25rem",
+                          display: "inline-flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Grid item xs={6}>
+                          <Chip label={data} className={classes.badge} />
                         </Grid>
                       </Grid>
                     </TableCell>
@@ -304,7 +323,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         style={{
                           height: "100%",
                           display: "flex",
-                          alignItems: "center",
+                          alignItems: "left",
                           justifyContent: "space-around",
                         }}
                       >
@@ -414,7 +433,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
           handleDialogClose={handleEditCloseDialog}
           type="edit"
           options={checkbox}
-          initialValues={singlePermission}
+          singlePermission={singlePermission}
           editId={editId}
           validationSchema={validationSchema}
           setAlert={setAlert}
