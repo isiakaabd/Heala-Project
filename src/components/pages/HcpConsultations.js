@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getConsultations } from "components/graphQL/useQuery";
+import { getDocConsult } from "components/graphQL/useQuery";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TableRow from "@mui/material/TableRow";
@@ -93,7 +93,12 @@ const HcpConsultations = (props) => {
 
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
-  const { loading, data } = useQuery(getConsultations);
+  const { loading, data, error } = useQuery(getDocConsult, {
+    variables: {
+      id: hcpId,
+      orderBy: "-createdAt",
+    },
+  });
 
   useEffect(() => {
     if (data && data.getConsultations.data) {
@@ -108,23 +113,17 @@ const HcpConsultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+
+  if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;
   return (
-    <Grid container direction="column" height="100%">
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column" height="100%" gap={2}>
+      <Grid item>
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
-      {consultations.filter((i) => i.doctor == hcpId).length > 0 ? (
+      {consultations.length > 0 ? (
         <>
-          <Grid
-            item
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            style={{ paddingBottom: "5rem" }}
-            height="100%"
-            direction="column"
-          >
+          <Grid item container justifyContent="space-between" alignItems="center">
             <Grid item>
               <Typography variant="h2">Consultations</Typography>
             </Grid>
@@ -146,7 +145,6 @@ const HcpConsultations = (props) => {
                   const isItemSelected = isSelected(row.id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  localStorage.setItem("hcp", row._id);
                   return (
                     <TableRow
                       hover
@@ -185,7 +183,7 @@ const HcpConsultations = (props) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.firstName}</span>
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>

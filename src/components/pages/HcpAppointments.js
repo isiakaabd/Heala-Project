@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Alert, Typography } from "@mui/material";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { useQuery, useMutation } from "@apollo/client";
-import { getAllAppointment /*findProfile*/ } from "components/graphQL/useQuery";
+import { getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
 import Divider from "@mui/material/Divider";
 import CustomButton from "components/Utilities/CustomButton";
@@ -52,7 +52,12 @@ const HcpAppointments = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [appointment, setAppointment] = useState([]);
-  const { loading, data } = useQuery(getAllAppointment);
+  const { loading, data } = useQuery(getDOCAppoint, {
+    variables: {
+      id: hcpId,
+      orderBy: "-createdAt",
+    },
+  });
 
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
@@ -86,7 +91,15 @@ const HcpAppointments = (props) => {
       await deleteAppointments({
         variables: { id },
 
-        refetchQueries: [{ query: getAllAppointment }],
+        refetchQueries: [
+          {
+            query: getDOCAppoint,
+            variables: {
+              id: hcpId,
+              orderBy: "-createdAt",
+            },
+          },
+        ],
       });
       setAlert({
         message: "appointment deleted successfully",
@@ -120,7 +133,7 @@ const HcpAppointments = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
   if (loading) return <Loader />;
-
+  console.log(data);
   return (
     <>
       <Grid container direction="column" height="100%">
@@ -136,7 +149,7 @@ const HcpAppointments = (props) => {
         <Grid item>
           <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
         </Grid>
-        {appointment.filter((i) => i.doctor == hcpId).length > 0 ? (
+        {appointment.length > 0 ? (
           appointment.map((appoint) => (
             <Grid
               item
@@ -145,7 +158,7 @@ const HcpAppointments = (props) => {
               key={appoint._id}
               className={classes.parentGridWrapper}
             >
-              <Grid item style={{ marginBottom: "3rem" }}>
+              <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
                 <Typography variant="h2">HCP Appointments</Typography>
               </Grid>
               <Grid item style={{ maxWidth: "40rem", padding: "4rem 5rem" }}>
@@ -190,10 +203,13 @@ const HcpAppointments = (props) => {
                     </Typography>
                   </Grid>
                   <Grid item style={{ marginRight: "2rem" }}>
-                    <Avatar src={displayPhoto} alt="Display Photo of the patient" />
+                    <Avatar
+                      src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
+                      alt="Display Photo of the patient"
+                    />
                   </Grid>
                   <Grid item>
-                    <Typography variant="body1">{appoint.patientName}</Typography>
+                    <Typography variant="body1">{`${appoint.patientData.firstName} ${appoint.patientData.lastName}`}</Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -206,7 +222,9 @@ const HcpAppointments = (props) => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body2">{appoint.details}</Typography>
+                    <Typography variant="body2">
+                      {appoint.details ? appoint.details : "No Value"}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -248,9 +266,9 @@ const HcpAppointments = (props) => {
       <DeleteOrDisable
         open={deleteModal}
         setOpen={setdeleteModal}
-        title="Delete Plan"
+        title="Delete Appointment"
         onConfirm={onConfirm}
-        confirmationMsg="delete plan"
+        confirmationMsg="delete Appointment"
         btnValue="Delete"
       />
     </>

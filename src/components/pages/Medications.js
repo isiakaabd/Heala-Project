@@ -18,7 +18,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getMedications } from "components/graphQL/useQuery";
+import { myMedic } from "components/graphQL/useQuery";
 import { dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
@@ -48,13 +48,18 @@ const Medications = (props) => {
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [medications, setMedications] = useState([]);
-  const getMedic = useQuery(getMedications);
+  const medic = useQuery(myMedic, {
+    variables: {
+      id: patientId,
+      orderBy: "-createdAt",
+    },
+  });
 
   useEffect(() => {
-    if (getMedic.data) {
-      setMedications(getMedic.data.getMedications.medication);
+    if (medic.data) {
+      setMedications(medic.data.getMedications.medication);
     }
-  }, [getMedic.data]);
+  }, [medic.data]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -63,110 +68,105 @@ const Medications = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  if (getMedic.loading) return <Loader />;
-  if (getMedic.error) return <NoData error={getMedic.error.message} />;
-  if (medications) {
-    return (
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item>
-          <PreviousButton
-            path={`/patients/${patientId}`}
-            onClick={() => setSelectedPatientMenu(0)}
-          />
-        </Grid>
-        {medications.filter((i) => i.patient == patientId).length > 0 ? (
-          <Grid item container height="100%" direction="column" gap={2}>
-            <Grid item>
-              <Typography variant="h2">Medications</Typography>
-            </Grid>
-            <EnhancedTable
-              headCells={medicationsHeadCells}
-              rows={medications}
-              page={page}
-              paginationLabel="List per page"
-              hasCheckbox={true}
-            >
-              {medications
-                .filter((i) => i.patient == patientId)
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+  if (medic.loading) return <Loader />;
+  if (medic.error) return <NoData error={medic.error.message} />;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.grey }}
-                      >
-                        {dateMoment(row.createdAt)}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ maxWidth: "20rem" }}
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ maxWidth: "20rem" }}
-                      >
-                        {row.interval}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ maxWidth: "20rem" }}
-                      >
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "left",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${row.caregiver}`}
-                              src={displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.caregiver}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <NoData />
-        )}
+  return (
+    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid item>
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
-    );
-  }
+      {medications.length > 0 ? (
+        <Grid item container height="100%" direction="column" gap={2}>
+          <Grid item>
+            <Typography variant="h2">Medications</Typography>
+          </Grid>
+          <EnhancedTable
+            headCells={medicationsHeadCells}
+            rows={medications}
+            page={page}
+            paginationLabel="List per page"
+            hasCheckbox={true}
+          >
+            {medications
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {dateMoment(row.createdAt)}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
+                    >
+                      {row.name}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
+                    >
+                      {row.type ? row.type : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
+                    >
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "left",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${row.caregiver}`}
+                            src={displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.caregiver}</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </EnhancedTable>
+        </Grid>
+      ) : (
+        <NoData />
+      )}
+    </Grid>
+  );
 };
 
 Medications.propTypes = {

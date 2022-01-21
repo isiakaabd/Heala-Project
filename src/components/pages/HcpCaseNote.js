@@ -4,8 +4,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { useQuery } from "@apollo/client";
-import { getConsultation } from "components/graphQL/useQuery";
-import { dateMoment } from "components/Utilities/Time";
+import { getConsult } from "components/graphQL/useQuery";
+import { dateMoment, timeMoment } from "components/Utilities/Time";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
@@ -96,7 +96,6 @@ const HcpCaseNotes = (props) => {
 
   const { hcpId, rowId } = useParams();
 
-  console.log(rowId);
   const [consult, setConsult] = useState([]);
   useEffect(() => {
     setSelectedMenu(2);
@@ -106,11 +105,12 @@ const HcpCaseNotes = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
 
-  const consultations = useQuery(getConsultation, {
+  const consultations = useQuery(getConsult, {
     variables: {
       id: rowId,
     },
   });
+  console.log(consultations.data);
   useEffect(() => {
     if (consultations.data) {
       setConsult(consultations.data.getConsultation);
@@ -159,7 +159,7 @@ const HcpCaseNotes = (props) => {
                       <TimerIcon fill={theme.palette.common.red} />
                     </Grid>
                     <Grid item>
-                      <Typography variant="body1">{consult.time}</Typography>
+                      <Typography variant="body1">{timeMoment(consult.date)}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>

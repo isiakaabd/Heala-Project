@@ -82,14 +82,16 @@ const Consultations = (props) => {
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  const { loading, data, error } = useQuery(getConsultations, {
+    variables: {
+      id: patientId,
+      orderBy: "-createdAt",
+    },
+  });
+
   const [consultations, setConsultations] = useState([]);
-  const { loading, data, error } = useQuery(getConsultations);
-  // const cd = useQuery(c, { variables: { id: "61c90cb9ce9b310013d0b694" } });
-
-  // console.log(cd);
-
   useEffect(() => {
-    if (data && data.getConsultations.data) {
+    if (data) {
       setConsultations(data.getConsultations.data);
       patientConsultation(data);
     }
@@ -186,12 +188,12 @@ const Consultations = (props) => {
                     >
                       {row.description}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Button
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`/patients/${row._id}/consultations/case-note`}
+                        to={`/patients/${patientId}/consultations/case-note/${row._id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
                           setSelectedSubMenu(2);

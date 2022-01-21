@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
@@ -9,8 +8,9 @@ import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
+import NoData from "components/layouts/NoData";
 import { useQuery } from "@apollo/client";
-import { findProfile, getConsultation } from "components/graphQL/useQuery";
+import { getConsult } from "components/graphQL/useQuery";
 import { dateMoment, timeMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
 
@@ -63,7 +63,7 @@ const CaseNotes = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const { patientId } = useParams();
+  const { patientId, rowId } = useParams();
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
@@ -71,32 +71,20 @@ const CaseNotes = (props) => {
     setSelectedScopedMenu(1);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
-  const [caseNoteState, setCaseNoteState] = useState([]);
-  const { consultation } = useSelector((state) => state.patient);
-  const [doctor, setDoctor] = useState("");
-  const consultations = useQuery(getConsultation, {
+  const [caseNoteState, setCaseNoteState] = useState();
+
+  const consultations = useQuery(getConsult, {
     variables: {
-      id: patientId,
+      id: rowId,
     },
   });
   useEffect(() => {
-    const x = consultation.getConsultations.data.filter((i) => i._id === patientId);
-    setDoctor(x[0].doctor);
-  }, [consultation.getConsultations.data, patientId]);
-
-  const doctorProfile = useQuery(findProfile, {
-    variables: {
-      id: doctor,
-    },
-  });
-
-  //
-
-  useEffect(() => {
-    if (consultations.data && consultations.data.getConsultation) {
+    if (consultations.data) {
       setCaseNoteState(consultations.data.getConsultation);
     }
-  }, [consultations, caseNoteState.data]);
+  }, [consultations, rowId]);
+
+  if (consultations.error) return <NoData error={consultations.error.message} />;
 
   if (consultations.loading) return <Loader />;
 
@@ -198,9 +186,12 @@ const CaseNotes = (props) => {
                     </Grid>
                     <Grid item>
                       <Typography variant="body1">
-                        {doctorProfile.data
+                        {/* {doctorProfile.data
                           ? doctorProfile.data.firstName
-                          : "No Care Giver assigned"}
+                          :
+                          " */}
+                        No Care Giver assigned
+                        {/* "}  */}
                       </Typography>
                     </Grid>
                   </Grid>

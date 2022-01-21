@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import { Typography, Grid, TableRow, TableCell, Checkbox } from "@mui/material";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import NoData from "components/layouts/NoData";
 import { dateMoment } from "components/Utilities/Time";
@@ -15,11 +11,10 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { prescriptionsRows } from "components/Utilities/tableData";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getMedications } from "components/graphQL/useQuery";
+import { getConsultations } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
@@ -54,17 +49,22 @@ const Prescriptions = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
 
-  const [medications, setMedications] = useState([]);
-  const getMedic = useQuery(getMedications);
+  const { loading, error, data } = useQuery(getConsultations, {
+    variables: {
+      id: patientId,
+      orderBy: "-createdAt",
+    },
+  });
 
-  console.log(medications);
+  const [consultations, setConsultations] = useState([]);
   useEffect(() => {
-    if (getMedic.data) {
-      setMedications(getMedic.data.getMedications.medication);
+    if (data && data.getConsultations.data) {
+      setConsultations(data.getConsultations.data);
     }
-  }, [getMedic.data]);
-  if (getMedic.loading) return <Loader />;
-  if (getMedic.error) return <NoData error={getMedic.error.message} />;
+  }, [data, consultations]);
+
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <Grid container direction="column" flexWrap="nowrap" height="100%" gap={2}>
       <Grid item>
@@ -73,17 +73,17 @@ const Prescriptions = (props) => {
       <Grid item>
         <Typography variant="h2">Prescriptions</Typography>
       </Grid>
-      {medications.filter((i) => i.patient == patientId).length < 0 ? (
+      {consultations.length > 0 ? (
         <Grid item container height="100%">
           <EnhancedTable
             headCells={prescriptionsHeadCells}
-            rows={prescriptionsRows}
+            rows={consultations}
             page={page}
             paginationLabel="List per page"
             hasCheckbox={true}
           >
-            {medications
-              .filter((i) => i.patient == patientId)
+            {consultations
+
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row.id, selectedRows);
@@ -110,21 +110,21 @@ const Prescriptions = (props) => {
                       />
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
                       {dateMoment(row.updatedAt)}
                     </TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
                       style={{ maxWidth: "20rem" }}
                     >
-                      {row.details ? row.details : "No Value"}
+                      {row.description ? row.description : "No Value"}
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      {row.dosage}
+                    <TableCell align="left" className={classes.tableCell}>
+                      {row.treatment.dosage}
                     </TableCell>
                   </TableRow>
                 );
