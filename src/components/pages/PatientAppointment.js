@@ -20,7 +20,7 @@ import { deleteAppointment } from "components/graphQL/Mutation";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery, useMutation } from "@apollo/client";
-import { getAppoint } from "components/graphQL/useQuery";
+import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -35,7 +35,9 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import Loader from "components/Utilities/Loader";
+import { timeConverter, timeMoment } from "components/Utilities/Time";
 
+import { updateAppointment } from "components/graphQL/Mutation";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -105,6 +107,7 @@ const filterOptions = [
 ];
 
 const PatientAppointment = (props) => {
+  const [updateAppoint] = useMutation(updateAppointment);
   const {
     selectedMenu,
     selectedSubMenu,
@@ -115,6 +118,18 @@ const PatientAppointment = (props) => {
   } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
   const [alert, setAlert] = useState(null);
+  const [editId, setEditid] = useState(null);
+  const [doctorId, setDoctorId] = useState(null);
+  const handleDelete = (id) => {
+    setId(id);
+    setdeleteModal(true);
+  };
+
+  const handleSchedule = (id, doctor) => {
+    setIsPatients(true);
+    setEditid(id);
+    setDoctorId(doctor);
+  };
   const onConfirm = async () => {
     try {
       await deleteAppointments({
@@ -151,9 +166,11 @@ const PatientAppointment = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [isPatient, setIsPatient] = useState(false);
+  const [isPatients, setIsPatients] = useState(false);
   const [id, setId] = useState(null);
   const handlePatientOpen = () => setIsPatient(true);
   const handlePatientClose = () => setIsPatient(false);
+  const handlePatientCloses = () => setIsPatients(false);
   const { patientId } = useParams();
   const [patientAppointment, setPatientAppointment] = useState([]);
   const initialValues = {
@@ -162,6 +179,9 @@ const PatientAppointment = (props) => {
     date: "",
     plan: "",
   };
+  const initialValues1 = {
+    date: "",
+  };
 
   const validationSchema = Yup.object({
     date: Yup.string("Enter your affliate").required("Date is required"),
@@ -169,8 +189,40 @@ const PatientAppointment = (props) => {
     gender: Yup.string("Select your gender").required("Gender is required"),
     status: Yup.string("Select your status").required("Status is required"),
   });
+  const validationSchema1 = Yup.object({
+    date: Yup.string("select date and time ").required("Date  and time is required"),
+  });
   const onSubmit = (values) => {
+    // const { date } = values;
+    // let d = timeConverter(date);
+
     console.log(values);
+  };
+  const onSubmit1 = async (values) => {
+    const { date } = values;
+
+    const timeValue = timeMoment(date);
+    const dateValue = timeConverter(date);
+    await updateAppoint({
+      variables: { id: editId, date: dateValue, time: timeValue, doctor: doctorId },
+      refetchQueries: [
+        {
+          query: getAppoint,
+          variables: {
+            id: patientId,
+            orderBy: "-createdAt",
+          },
+        },
+        {
+          query: getDOCAppoint,
+          variables: {
+            id: doctorId,
+            orderBy: "-createdAt",
+          },
+        },
+      ],
+    });
+    handlePatientCloses();
   };
   const { loading, data, error } = useQuery(getAppoint, {
     variables: {
@@ -195,12 +247,6 @@ const PatientAppointment = (props) => {
     setSelectedPatientMenu(2);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  const handleDelete = (id) => {
-    console.log(id);
-
-    setId(id);
-    setdeleteModal(true);
-  };
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -343,6 +389,7 @@ const PatientAppointment = (props) => {
                             disableRipple
                             className={`${classes.tableBtn} ${classes.greenBtn}`}
                             endIcon={<AssignmentIcon color="success" />}
+                            onClick={() => handleSchedule(row._id, row.doctor)}
                           >
                             Reschedule
                           </Button>
@@ -368,6 +415,53 @@ const PatientAppointment = (props) => {
           <NoData />
         )}
       </Grid>
+
+      <Modals
+        isOpen={isPatients}
+        title="Reschedule Appointment"
+        rowSpacing={5}
+        height="90vh"
+        handleClose={handlePatientCloses}
+      >
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, dirty, isValid, setFieldValue }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column" gap={2}>
+                  <Grid item container>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="time"
+                          name="date"
+                          label="Date"
+                          placeholder="Choose Date and Time"
+                          setFieldValue={setFieldValue}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                    <CustomButton
+                      title="Reschedule Appointment"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
+                  </Grid>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Modals>
 
       <Modals
         isOpen={isPatient}
