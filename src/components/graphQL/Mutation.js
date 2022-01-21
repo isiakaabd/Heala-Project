@@ -179,6 +179,33 @@ export const DELETE_PERMISSION = gql`
     }
   }
 `;
+export const updateAppointment = gql`
+  mutation updateAppointment(
+    $id: String!
+    $doctor: String!
+    $patient: String
+    $date: String!
+    $time: String
+  ) {
+    updateAppointment(
+      data: { id: $id, doctor: $doctor, patient: $patient, date: $date, time: $time }
+    ) {
+      appointment {
+        _id
+        doctor
+        patient
+        date
+        time
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 
 // message
 export const CREATE_MESSAGE = gql`
