@@ -20,7 +20,7 @@ import { deleteAppointment } from "components/graphQL/Mutation";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery, useMutation } from "@apollo/client";
-import { getAllAppointment } from "components/graphQL/useQuery";
+import { getAppoint } from "components/graphQL/useQuery";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -119,8 +119,15 @@ const PatientAppointment = (props) => {
     try {
       await deleteAppointments({
         variables: { id },
-
-        refetchQueries: [{ query: getAllAppointment }],
+        refetchQueries: [
+          {
+            query: getAppoint,
+            variables: {
+              id: patientId,
+              orderBy: "-createdAt",
+            },
+          },
+        ],
       });
       setAlert({
         message: "appointment deleted successfully",
@@ -165,7 +172,14 @@ const PatientAppointment = (props) => {
   const onSubmit = (values) => {
     console.log(values);
   };
-  const { loading, data, error } = useQuery(getAllAppointment);
+  const { loading, data, error } = useQuery(getAppoint, {
+    variables: {
+      id: patientId,
+      orderBy: "-createdAt",
+    },
+  });
+
+  console.log(data);
   useEffect(() => {
     if (data) {
       setPatientAppointment(data.getAppointments.data);
@@ -182,6 +196,8 @@ const PatientAppointment = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
   const handleDelete = (id) => {
+    console.log(id);
+
     setId(id);
     setdeleteModal(true);
   };
@@ -234,7 +250,7 @@ const PatientAppointment = (props) => {
             onClick={() => setSelectedPatientMenu(0)}
           />
         </Grid>
-        {patientAppointment.filter((i) => i.patient == patientId).length > 0 ? (
+        {patientAppointment.length > 0 ? (
           <>
             <Grid item container justifyContent="space-between" alignItems="center">
               <Grid item>
@@ -258,7 +274,7 @@ const PatientAppointment = (props) => {
                 hasCheckbox={true}
               >
                 {patientAppointment
-                  .filter((i) => i.patient == patientId)
+
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row._id, selectedRows);
@@ -300,25 +316,28 @@ const PatientAppointment = (props) => {
                           >
                             <span style={{ marginRight: "1rem" }}>
                               <Avatar
-                                alt={`Display Photo of ${row.name}`}
-                                src={displayPhoto}
+                                alt={`Display Photo of ${row.doctorData.firstName}`}
+                                src={row.doctorData.picture ? row.doctorData.picture : displayPhoto}
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
-                            <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {`${row.doctorData.firstName} 
+                             ${row.doctorData.lastName}`}
+                            </span>
                           </div>
                         </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
+                        <TableCell align="left" className={classes.tableCell}>
                           {row.date}
                         </TableCell>
                         <TableCell
-                          align="center"
+                          align="left"
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                         >
                           {row.time}
                         </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
+                        <TableCell align="left" className={classes.tableCell}>
                           <Button
                             variant="contained"
                             disableRipple
@@ -328,7 +347,7 @@ const PatientAppointment = (props) => {
                             Reschedule
                           </Button>
                         </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
+                        <TableCell align="left" className={classes.tableCell}>
                           <Button
                             variant="contained"
                             disableRipple

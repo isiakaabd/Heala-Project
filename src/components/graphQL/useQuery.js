@@ -130,8 +130,8 @@ export const getSinglePermissions = gql`
   }
 `;
 export const getConsultations = gql`
-  query getConsultations {
-    getConsultations {
+  query getConsultations($id: ID!, $orderBy: String!) {
+    getConsultations(filterBy: { patient: $id }, orderBy: $orderBy) {
       data {
         _id
         doctor
@@ -146,14 +146,73 @@ export const getConsultations = gql`
     }
   }
 `;
+export const getDocConsult = gql`
+  query getConsultations($id: ID!) {
+    getConsultations(filterBy: { doctor: $id }) {
+      data {
+        _id
+        doctor
+        patient
+        ailment
+        severity
+        description
 
-//   const userQuery = gql`query User { user { id } }`;
-// const stuffQuery = gql`query SomeOtherStuff($id: ID) { someOtherStuff(id: $id){ stuff } }`;
-
-// export default compose(
-//   graphql(userQuery, { name: 'userData' })
-//   graphql(stuffQuery, { name: 'stuffData', options: ({userData:{id}={}}) => ({variables: {id}}) }),
-// )(YourComponent)
+        treatment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const getConsult = gql`
+  query getConsultation($id: ID!) {
+    getConsultation(id: $id) {
+      _id
+      doctor
+      patient
+      ailment
+      severity
+      description
+      treatment
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getAppoint = gql`
+  query getAppointments($id: ID!, $orderBy: String!) {
+    getAppointments(filterBy: { patient: $id }, orderBy: $orderBy) {
+      data {
+        _id
+        doctor
+        patient
+        date
+        time
+        createdAt
+        updatedAt
+        patientData
+        doctorData
+      }
+    }
+  }
+`;
+export const getDOCAppoint = gql`
+  query getAppointments($id: ID!, $orderBy: String!) {
+    getAppointments(filterBy: { doctor: $id }, orderBy: $orderBy) {
+      data {
+        _id
+        doctor
+        patient
+        date
+        time
+        createdAt
+        updatedAt
+        patientData
+        doctorData
+      }
+    }
+  }
+`;
 
 export const findProfile = gql`
   query findProfile($id: ID!) {
@@ -167,6 +226,23 @@ export const findProfile = gql`
       genotype
       gender
       phoneNumber
+    }
+  }
+`;
+export const myMedic = gql`
+  query getMyMedications($id: ID!, $orderBy: String!) {
+    getMedications(filterBy: { patient: $id }, orderBy: $orderBy) {
+      medication {
+        _id
+        name
+        interval
+        createdAt
+
+        updatedAt
+        doctor
+        dosage
+        patient
+      }
     }
   }
 `;

@@ -314,7 +314,6 @@ export const consultationsHeadCells = [
   { id: 101, label: "Date" },
   { id: 102, label: "Description" },
   { id: 103, label: "" },
-  { id: 104, label: "" },
 ];
 
 // Patients > Prescription Route Table
