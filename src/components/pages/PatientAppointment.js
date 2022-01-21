@@ -20,7 +20,7 @@ import { deleteAppointment } from "components/graphQL/Mutation";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery, useMutation } from "@apollo/client";
-import { getAppoint } from "components/graphQL/useQuery";
+import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -210,6 +210,13 @@ const PatientAppointment = (props) => {
           query: getAppoint,
           variables: {
             id: patientId,
+            orderBy: "-createdAt",
+          },
+        },
+        {
+          query: getDOCAppoint,
+          variables: {
+            id: doctorId,
             orderBy: "-createdAt",
           },
         },
