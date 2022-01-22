@@ -380,6 +380,7 @@ const HeaderText = (props) => {
             subTitle={pathname === "/settings/administrator" ? "Administrator" : "Management"}
             scopedMenu={0}
             scopedSubMenu={0}
+            subSubTitle={selectedPatientMenu === 1 ? "Edit Management" : "dd"}
           />
         );
       }

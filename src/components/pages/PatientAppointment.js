@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Modals from "components/Utilities/Modal";
 import NoData from "components/layouts/NoData";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import CustomButton from "components/Utilities/CustomButton";
+import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import {
@@ -22,7 +21,7 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery, useMutation } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-import { consultationsHeadCells as appointmentsHeadCells } from "components/Utilities/tableHeaders";
+import { consultationsHeadCells2 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
@@ -36,7 +35,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import Loader from "components/Utilities/Loader";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
-
+import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -192,12 +191,6 @@ const PatientAppointment = (props) => {
   const validationSchema1 = Yup.object({
     date: Yup.string("select date and time ").required("Date  and time is required"),
   });
-  const onSubmit = (values) => {
-    // const { date } = values;
-    // let d = timeConverter(date);
-
-    console.log(values);
-  };
   const onSubmit1 = async (values) => {
     const { date } = values;
 
@@ -224,6 +217,13 @@ const PatientAppointment = (props) => {
     });
     handlePatientCloses();
   };
+  const onSubmit = (values) => {
+    // const { date } = values;
+    // let d = timeConverter(date);
+
+    console.log(values);
+  };
+
   const { loading, data, error } = useQuery(getAppoint, {
     variables: {
       id: patientId,
@@ -280,16 +280,16 @@ const PatientAppointment = (props) => {
   if (loading) return <Loader />;
   return (
     <>
+      {alert && Object.keys(alert).length > 0 && (
+        <Alert
+          variant="filled"
+          severity={alert.type}
+          sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
+        >
+          {alert.message}
+        </Alert>
+      )}
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        {alert && Object.keys(alert).length > 0 && (
-          <Alert
-            variant="filled"
-            severity={alert.type}
-            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
-          >
-            {alert.message}
-          </Alert>
-        )}
         <Grid item>
           <PreviousButton
             path={`/patients/${patientId}`}
@@ -313,7 +313,7 @@ const PatientAppointment = (props) => {
             </Grid>
             <Grid item container height="100%" direction="column">
               <EnhancedTable
-                headCells={appointmentsHeadCells}
+                headCells={consultationsHeadCells2}
                 rows={patientAppointment}
                 page={page}
                 paginationLabel="Patients per page"

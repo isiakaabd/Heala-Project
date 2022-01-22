@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { Grid, TableRow, TableCell } from "@mui/material";
 import CustomButton from "components/Utilities/CustomButton";
 import Checkbox from "@mui/material/Checkbox";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { signup } from "components/graphQL/Mutation";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -26,8 +26,8 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import PreviousButton from "components/Utilities/PreviousButton";
 import AddIcon from "@mui/icons-material/Add";
-import { useQuery } from "@apollo/client";
-import { findAccounts } from "components/graphQL/useQuery";
+import { useQuery, useMutation } from "@apollo/client";
+import { findAdmin } from "components/graphQL/useQuery";
 //
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -145,7 +145,10 @@ const useStyles = makeStyles((theme) => ({
 const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { loading, data, error } = useQuery(findAccounts);
+  const [addAdminUser] = useMutation(signup);
+  const { loading, data, error } = useQuery(findAdmin);
+  console.log(data);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -154,9 +157,9 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   };
 
   const specializations = [
-    { key: "Dentistry", value: "Dentistry" },
-    { key: "Pediatry", value: "Pediatry" },
-    { key: "Optometry", value: "Optometry" },
+    { key: "admin", value: "admin" },
+    { key: "user", value: "user" },
+    { key: "super", value: "Optometry" },
     { key: "Pathology", value: "Pathology" },
   ];
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
@@ -166,10 +169,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     role: "",
     name: "",
   };
-  const [admins, setAdmins] = useState();
+  const [admins, setAdmins] = useState([]);
+
   useEffect(() => {
     try {
       if (data) {
+        console.log(data);
+
         setAdmins(data.accounts.data);
       }
     } catch (err) {
@@ -200,25 +206,33 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     console.log(values);
   };
   const initialValues1 = {
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
-    checkbox: [],
   };
 
   const validationSchema1 = Yup.object({
-    checkbox: Yup.array().min(1, "Add atleast a permission"),
     password: Yup.string()
       .required("password is required")
       .min(8, "Password is too short - should be 8 chars minimum."),
-    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
-    firstName: Yup.string("Enter your first Name").required("First name is required"),
-    lastName: Yup.string("Enter your last Name").required("Last name is required"),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
   });
-  const onSubmit1 = (values) => {
-    console.log(values);
+  const onSubmit1 = (values, onSubmitProps) => {
+    const { email, password } = values;
+    try {
+      addAdminUser({
+        variables: {
+          email,
+          password,
+          role: "admin",
+          authType: "normal",
+        },
+        refetchQueries: [{ query: findAdmin }],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    handleDialogClose();
+    onSubmitProps.resetForm();
   };
 
   const [searchMail, setSearchMail] = useState("");
@@ -240,7 +254,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   if (error) return <NoData error={error.message} />;
   return (
     <>
-      <Grid container direction="column" rowSpacing={1}>
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
@@ -270,106 +284,100 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container style={{ marginTop: "5rem" }}>
-          <EnhancedTable
-            headCells={adminHeader}
-            rows={admins}
-            page={page}
-            paginationLabel="admin per page"
-            hasCheckbox={true}
-          >
-            {admins
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
+        <Grid item container height="100%" direction="column">
+          {admins.length > 0 ? (
+            <EnhancedTable
+              headCells={adminHeader}
+              rows={admins}
+              page={page}
+              paginationLabel="admin per page"
+              hasCheckbox={true}
+            >
+              {admins
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "left",
-                          paddingLeft: "5rem",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={admins.image ? admins.image : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {row.firstName ? `${row.firstName} ${row.lastName}` : "no Value"}
-                        </span>
-                      </Grid>
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      {row.role}
-                    </TableCell>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
 
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-around",
-                        }}
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Grid
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={admins.image ? admins.image : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.firstName ? `${row.firstName} ${row.lastName}` : "no Value"}
+                          </span>
+                        </Grid>
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
                       >
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.button} ${classes.greenBtn}`}
-                          endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                        {row.role}
+                      </TableCell>
+
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Grid
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                          }}
                         >
-                          Edit plan
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={classes.button}
-                          to="/view"
-                          endIcon={<ArrowForwardIosIcon />}
-                        >
-                          view admin
-                        </Button>
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            )
-          </EnhancedTable>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.button} ${classes.greenBtn}`}
+                            endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                          >
+                            Edit Admin
+                          </Button>
+                        </Grid>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              )
+            </EnhancedTable>
+          ) : (
+            <NoData />
+          )}
         </Grid>
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
@@ -436,66 +444,27 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           {({ isValid, isSubmitting, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
+                <Grid item container direction="column" gap={2}>
                   <Grid item>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          labelId="firstName"
-                          label="firstName"
-                          id="firstName"
-                          name="firstName"
-                          placeholder="Enter first name"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          label="Last Name"
-                          labelId="lastName"
-                          id="lastName"
-                          name="lastName"
-                          placeholder="Enter last name"
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item style={{ margin: "3rem 0" }}>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          label="Email"
-                          labelId="email"
-                          id="email"
-                          placeholder="Enter email"
-                          name="email"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          label="Password"
-                          labelId="password"
-                          type="password"
-                          id="password"
-                          name="password"
-                          placeholder="Enter Password"
-                        />
-                      </Grid>
-                    </Grid>
+                    <FormikControl
+                      control="input"
+                      label="Email"
+                      id="email"
+                      placeholder="Enter email"
+                      name="email"
+                    />
                   </Grid>
                   <Grid item>
-                    <Grid item container direction="column" xs={12}>
-                      <FormikControl
-                        control="checkbox"
-                        formlabel="Role"
-                        name="checkbox"
-                        options={optionss}
-                      />
-                    </Grid>
+                    <FormikControl
+                      control="input"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder="Enter Password"
+                    />
                   </Grid>
+
                   <Grid item container xs={12} marginTop={5}>
                     <CustomButton
                       title="Add Admin"

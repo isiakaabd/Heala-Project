@@ -20,6 +20,7 @@ const Header = (props) => {
     selectedMenu,
     selectedSubMenu,
     selectedPatientMenu,
+    selectedManagementMenu,
     selectedHcpMenu,
     waitingListMenu,
     selectedAppointmentMenu,
@@ -35,6 +36,7 @@ const Header = (props) => {
           selectedMenu={selectedMenu}
           selectedSubMenu={selectedSubMenu}
           selectedPatientMenu={selectedPatientMenu}
+          selectedManagementMenu={selectedManagementMenu}
           selectedHcpMenu={selectedHcpMenu}
           waitingListMenu={waitingListMenu}
           selectedAppointmentMenu={selectedAppointmentMenu}
@@ -53,6 +55,7 @@ Header.propTypes = {
   waitingListMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,
+  selectedManagementMenu: PropTypes.number.isRequired,
 };
 
 export default Header;

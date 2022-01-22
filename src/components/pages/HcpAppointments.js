@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid, Alert, Typography } from "@mui/material";
+import Modals from "components/Utilities/Modal";
+import { timeConverter, timeMoment } from "components/Utilities/Time";
+import * as Yup from "yup";
+import { updateAppointment } from "components/graphQL/Mutation";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
 import { useQuery, useMutation } from "@apollo/client";
-import { getDOCAppoint } from "components/graphQL/useQuery";
+import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
 import Divider from "@mui/material/Divider";
 import CustomButton from "components/Utilities/CustomButton";
@@ -52,13 +58,16 @@ const HcpAppointments = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [appointment, setAppointment] = useState([]);
+  const [updateAppoint] = useMutation(updateAppointment);
   const { loading, data } = useQuery(getDOCAppoint, {
     variables: {
       id: hcpId,
       orderBy: "-createdAt",
     },
   });
-
+  const initialValues1 = {
+    date: "",
+  };
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
     if (data) {
@@ -83,7 +92,14 @@ const HcpAppointments = (props) => {
     hover: theme.palette.success.light,
     active: theme.palette.success.dark,
   };
+  const [patientId, setPatientId] = useState(null);
+  const handleSchedule = (id, patient) => {
+    setIsPatients(true);
+    setEditid(id);
+    setPatientId(patient);
+  };
   const [id, setId] = useState(null);
+  const [isPatients, setIsPatients] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [alert, setAlert] = useState(null);
   const onConfirm = async () => {
@@ -119,12 +135,54 @@ const HcpAppointments = (props) => {
       console.log(error);
     }
   };
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
+  };
+  const handlePatientCloses = () => setIsPatients(false);
   const redButton = {
     background: theme.palette.common.lightRed,
     hover: theme.palette.error.light,
     active: theme.palette.error.dark,
   };
+  const validationSchema1 = Yup.object({
+    date: Yup.string("select date and time ").required("Date  and time is required"),
+  });
+  const [editId, setEditid] = useState(null);
+  const onSubmit1 = async (values) => {
+    const { date } = values;
 
+    const timeValue = timeMoment(date);
+    const dateValue = timeConverter(date);
+    await updateAppoint({
+      variables: {
+        id: editId,
+        date: dateValue,
+        time: timeValue,
+        doctor: hcpId,
+        patient: patientId,
+      },
+      refetchQueries: [
+        {
+          query: getAppoint,
+          variables: {
+            id: patientId,
+            orderBy: "-createdAt",
+          },
+        },
+        {
+          query: getDOCAppoint,
+          variables: {
+            id: hcpId,
+            orderBy: "-createdAt",
+          },
+        },
+      ],
+    });
+    handlePatientCloses();
+  };
   useEffect(() => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
@@ -132,8 +190,8 @@ const HcpAppointments = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+
   if (loading) return <Loader />;
-  console.log(data);
   return (
     <>
       <Grid container direction="column" height="100%">
@@ -237,6 +295,7 @@ const HcpAppointments = (props) => {
                       type={greenButton}
                       height="3.5rem"
                       textColorOnHover="#fff"
+                      onClick={() => handleSchedule(appoint._id, appoint.patient)}
                       textColor={theme.palette.common.green}
                       endIcon={<AssignmentIcon color="success" />}
                       borderRadius="3rem"
@@ -271,6 +330,53 @@ const HcpAppointments = (props) => {
         confirmationMsg="delete Appointment"
         btnValue="Delete"
       />
+
+      <Modals
+        isOpen={isPatients}
+        title="Reschedule Appointment"
+        rowSpacing={5}
+        height="90vh"
+        handleClose={handlePatientCloses}
+      >
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+        >
+          {({ isSubmitting, dirty, isValid, setFieldValue }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column" gap={2}>
+                  <Grid item container>
+                    <Grid container spacing={2}>
+                      <Grid item md>
+                        <FormikControl
+                          control="time"
+                          name="date"
+                          label="Date"
+                          placeholder="Choose Date and Time"
+                          setFieldValue={setFieldValue}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                    <CustomButton
+                      title="Reschedule Appointment"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
+                  </Grid>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Modals>
     </>
   );
 };

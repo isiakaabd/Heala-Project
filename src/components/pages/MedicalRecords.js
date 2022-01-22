@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Chip } from "@mui/material";
+import { Grid, Typography, Chip, Avatar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { calculateBMI } from "components/Utilities/bMI";
-import { getProfile, getAllergies } from "components/graphQL/useQuery";
+import { getProfile, findAllergies, getLabResult } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 
@@ -55,21 +55,24 @@ const MedicalRecords = (props) => {
   const [patientProfile, setPatientProfile] = useState(undefined);
 
   const [patients, { loading, data, error }] = useLazyQuery(getProfile);
-  const [alergy, allergyResult] = useLazyQuery(getAllergies);
+  const [alergy, allergyResult] = useLazyQuery(findAllergies, { variables: { id: patientId } });
+  const [labResult, labResults] = useLazyQuery(getLabResult, { variables: { id: patientId } });
   const [alergies, setAlergies] = useState([]);
-
+  const [lab, setLab] = useState([]);
+  console.log(lab);
   useEffect(() => {
-    const fetching = async () => {
+    (async () => {
       try {
         patients({ variables: { profileId: patientId } });
         alergy();
+        labResult();
         setAlergies(allergyResult.data.findAllergies.allergies);
+        setLab(labResults.data.getLabResults.lab);
       } catch (err) {
         console.error(err);
       }
-    };
-    fetching();
-  }, [alergy, patients, patientId, allergyResult.data]);
+    })();
+  }, [alergy, patients, patientId, labResult, allergyResult.data, labResults.data]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -225,18 +228,16 @@ const MedicalRecords = (props) => {
               </Grid>
               <Grid item>
                 <Grid container justifyContent="space-around">
-                  {alergies && alergies.filter((i) => i.profile == patientId) > 0 ? (
-                    alergies
-                      .filter((i) => i.profile == patientId)
-                      .map((alergy) => (
-                        <Grid item key={alergy.profile} className={classes.allergies}>
-                          <Chip
-                            variant="outlined"
-                            label={alergy.food}
-                            className={classes.infoBadge}
-                          />
-                        </Grid>
-                      ))
+                  {alergies.length > 0 ? (
+                    alergies.map((alergy) => (
+                      <Grid item key={alergy._id} className={classes.allergies}>
+                        <Chip
+                          variant="outlined"
+                          label={alergy.food}
+                          className={classes.infoBadge}
+                        />
+                      </Grid>
+                    ))
                   ) : (
                     <Chip
                       variant="outlined"
@@ -263,7 +264,25 @@ const MedicalRecords = (props) => {
                 <Typography variant="h4">Lab Results</Typography>
               </Grid>
               <Grid item>
-                <Chip variant="outlined" label="no value" className={classes.infoBadge} />
+                <Grid container justifyContent="space-around">
+                  {lab.length > 0 ? (
+                    lab.map((alergy) => (
+                      <Grid item key={alergy._id} className={classes.allergies}>
+                        <Avatar
+                          src={alergy.url}
+                          sx={{ width: "4rem", height: "4rem" }}
+                          // className={classes.infoBadge}
+                        />
+                      </Grid>
+                    ))
+                  ) : (
+                    <Avatar
+                      variant="outlined"
+                      label="No Allergy for this Patient"
+                      className={classes.infoBadge}
+                    />
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

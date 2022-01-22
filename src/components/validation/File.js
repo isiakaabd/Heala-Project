@@ -36,6 +36,7 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
   const [preview, setPreview] = useState("");
   const [progress, setProgress] = useState();
   const classes = useStyles();
+
   const uploadImage = async (file) => {
     try {
       const form = new FormData();
@@ -60,12 +61,9 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
 
   const onChange = async (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreview(reader.result);
-    };
     const files = await uploadImage(file);
+    setPreview(files);
+
     setFieldValue(name, files);
   };
   const fileRef = useRef(null);
