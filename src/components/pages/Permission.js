@@ -175,7 +175,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
 
   const onConfirm = async () => {
     try {
-      const { data } = await deletPlan({ variables: { id: deleteId } });
+      const { data } = await deletPlan({
+        variables: { id: deleteId },
+        refetchQueries: [{ query: getPermissions }],
+      });
       setAlert({
         message: data.deletePermission.message,
         type: "success",
@@ -211,11 +214,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const [permission, setPermission] = useState([]);
 
   useEffect(() => {
-    if (data && data.getPermissions.permission) {
+    if (data) {
       setPermission(data.getPermissions.permission);
     }
   }, [permission, data]);
-
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (

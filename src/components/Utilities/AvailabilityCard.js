@@ -13,28 +13,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AvailabilityCard = ({ day, time }) => {
+const AvailabilityCard = ({ availability }) => {
   const classes = useStyles();
+
+  const date = (time) => {
+    if (time < 12) return `${time}:AM`;
+    if (time > 12) {
+      let newTime = +time - 12;
+      return `${newTime}:PM`;
+    } else return `${time} Noon`;
+  };
+  console.log(availability.dates);
   return (
     <Grid container direction="column" className={classes.cardGrid}>
       <Grid item style={{ padding: "3rem 10rem" }}>
-        <Grid container>
-          <Grid item style={{ marginRight: "4rem" }}>
-            <Typography variant="body1">Day: </Typography>
+        <Grid container gap={2}>
+          <Grid item>
+            <Typography variant="body1">Day:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body1">{day}</Typography>
+            <Typography variant="body1">{availability.dates[0].day} </Typography>
           </Grid>
         </Grid>
       </Grid>
       <Divider />
       <Grid item style={{ padding: "3rem 10rem" }}>
-        <Grid container>
+        <Grid item>
           <Grid item style={{ marginRight: "4rem" }}>
             <Typography variant="body1">Time: </Typography>
           </Grid>
-          <Grid item>
-            <Typography variant="body1">{time}</Typography>
+          <Grid container>
+            {availability.dates[0].times.map((time, index) => {
+              return (
+                <>
+                  <Grid container diection="column" gap={2} alignItems="center">
+                    <Grid item>
+                      <Grid item>
+                        <Typography variant="body1">Start</Typography>
+                      </Grid>
+                      <Divider />
+                      <Grid item>
+                        <Typography variant="body1">{date(time.start)}</Typography>
+                      </Grid>
+                    </Grid>
+                    <Divider />
+                    <Grid item gap={2}>
+                      <Grid item>
+                        <Typography variant="body1">Stop</Typography>
+                      </Grid>
+                      <Divider />
+                      <Grid item>
+                        <Typography variant="body1">{date(time.stop)}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              );
+            })}
           </Grid>
         </Grid>
       </Grid>
@@ -42,8 +77,9 @@ const AvailabilityCard = ({ day, time }) => {
   );
 };
 AvailabilityCard.propTypes = {
-  day: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
+  day: PropTypes.string,
+  time: PropTypes.string,
+  availability: PropTypes.string,
 };
 
 export default AvailabilityCard;

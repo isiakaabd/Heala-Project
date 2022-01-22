@@ -51,6 +51,7 @@ import CircularChart from "components/Utilities/CircularChart";
 import WhiteLabel from "components/pages/WhiteLabel";
 import Providers from "components/pages/Providers";
 import UserTypes from "components/pages/UserTypes";
+import EditManagement from "components/pages/EditManagement";
 // import { useSelector } from "react-redux";
 // import { useActions } from "components/hooks/useActions";
 // import { UserProfile } from "components/graphQL/useQuery";
@@ -71,6 +72,7 @@ const Routes = (props) => {
     setSelectedAppointmentMenu,
     chatMediaActive,
     setChatMediaActive,
+    setSelectedManagementMenu,
     selectedScopedMenu,
     setSelectedScopedMenu,
   } = props;
@@ -593,6 +595,15 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
         selectedSubMenu={selectedSubMenu}
       />
+      <PrivateRoute
+        path="/settings/management/:editId"
+        component={EditManagement}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu}
+      />
     </Switch>
   );
   // }
@@ -615,6 +626,7 @@ Routes.propTypes = {
   setSelectedAppointmentMenu: PropTypes.func.isRequired,
   setChatMediaActive: PropTypes.func.isRequired,
   setSelectedScopedMenu: PropTypes.func.isRequired,
+  setSelectedManagementMenu: PropTypes.func.isRequired,
 };
 
 export default Routes;

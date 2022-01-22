@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
 import Loader from "components/Utilities/Loader";
+import PropTypes from "prop-types";
 import Search from "components/Utilities/Search";
 import NoData from "components/layouts/NoData";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -19,8 +20,10 @@ import Modals from "components/Utilities/Modal";
 import { RoleModal } from "components/modals/RoleModal";
 import PreviousButton from "components/Utilities/PreviousButton";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { getRoles } from "components/graphQL/useQuery";
+import { deleteRole } from "components/graphQL/Mutation";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -40,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
       textTransform: "none",
       borderRadius: "2rem",
       display: "flex",
+      width: "100%",
       alignItems: "center",
       padding: "1rem",
       maxWidth: "15rem",
@@ -66,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiButton-root": {
       ...theme.typography.btn,
       height: "3rem",
+      width: "100% !important",
       fontSize: "1.25rem",
       borderRadius: "2rem",
       boxShadow: "none",
@@ -89,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiButton-root": {
       background: theme.palette.common.lightRed,
       color: theme.palette.common.red,
+      width: "100%",
 
       "&:hover": {
         background: theme.palette.error.light,
@@ -111,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
     "&.css-1tykg82-MuiTableCell-root": {
       fontSize: "1.25rem",
       textAlign: "center !important",
+      width: "100%",
     },
   },
 
@@ -132,31 +139,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Management = () => {
+const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [deleteRoles] = useMutation(deleteRole);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [searchMail, setSearchMail] = useState("");
-  const [edit, setEdit] = useState(false);
+  // const [edit, setEdit] = useState(false);
+  const [id, setId] = useState(false);
+
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
   const handleDialogClose = () => {
     setIsOpen(false);
   };
-  const handleDeleteOpenDialog = () => {
+  const handleDeleteOpenDialog = (id) => {
     setdeleteModal(true);
+    setId(id);
   };
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  const handleEditDialogOpens = () => {
-    setEdit(true);
+  // const handleEditDialogOpens = () => {
+  //   setEdit(true);
+  // };
+  const onConfirm = async () => {
+    deleteRoles({ variables: { id }, refetchQueries: [{ query: getRoles }] });
   };
-  const handleEditDialogCloses = () => {
-    setEdit(false);
-  };
+
   const [rolesManagements, setRolesManagements] = useState([]);
   const { loading, data, error } = useQuery(getRoles);
   useEffect(() => {
@@ -175,17 +187,12 @@ const Management = () => {
     "permission 3": false,
     "permission 4": true,
   };
-  const checkbox1 = {
-    "permission 1": true,
-    "permission 2": true,
-    "permission 3": false,
-    "permission 4": true,
-  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (
     <>
-      <Grid container direction="column" rowSpacing={1}>
+      <Grid container direction="column" gap={2}>
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
@@ -209,7 +216,7 @@ const Management = () => {
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container style={{ marginTop: "5rem" }}>
+        <Grid item container>
           <EnhancedTable
             headCells={roleHeader}
             rows={rolesManagements}
@@ -225,8 +232,11 @@ const Management = () => {
 
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
-                const newPerm = [...new Set(row.permissions.map((i) => i.split(":")[1]))];
-                console.log(newPerm);
+                const dataLength = data.length - 5;
+                const newData = [...data.slice(0, 5), `+${dataLength}`];
+
+                // const newPerm = [...new Set(row.permissions.map((i) => i.split(":")[1]))];
+                // console.log(newPerm);
                 return (
                   <TableRow
                     hover
@@ -249,44 +259,58 @@ const Management = () => {
                     <TableCell
                       id={labelId}
                       scope="row"
-                      align="center"
+                      align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                      style={{ color: theme.palette.common.black, minWidth: "10rem" }}
                     >
-                      <Grid container justifyContent="flex-start" gap={1} alignItems="center">
-                        {data.map((i) => {
-                          return <Chip label={i} key={i} className={classes.badge} />;
-                        })}
-                      </Grid>
+                      {row.name}
                     </TableCell>
                     <TableCell
                       id={labelId}
                       scope="row"
                       align="center"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.black, minWidth: "15rem" }}
+                      style={{ color: theme.palette.common.black }}
                     >
                       <Grid container justifyContent="flex-start" gap={1} alignItems="center">
-                        {newPerm.map((i) => {
+                        {newData.map((i) => {
                           return <Chip label={i} key={i} className={classes.badge} />;
                         })}
                       </Grid>
                     </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                    <TableCell align="left" className={classes.tableCell}>
                       <div
                         style={{
                           height: "100%",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-around",
+                          justifyContent: "space-between",
+                          minWidth: "25rem",
+                          gap: "1rem",
                         }}
                       >
-                        <Button
+                        {/* <Button
                           variant="contained"
                           disableRipple
                           className={`${classes.tableBtn} ${classes.greenBtn}`}
                           onClick={handleEditDialogOpens}
                           endIcon={<EditIcon color="success" />}
+                
+                        >
+                          Edit role
+                        </Button> */}
+
+                        <Button
+                          variant="contained"
+                          className={`${classes.tableBtn} ${classes.greenBtn}`}
+                          component={Link}
+                          to={`/settings/management/${row._id}`}
+                          endIcon={<EditIcon color="success" />}
+                          onClick={() => {
+                            setSelectedSubMenu(12);
+                            // setSelectedManagementMenu(0);
+                          }}
+                          disabled
                         >
                           Edit role
                         </Button>
@@ -294,8 +318,9 @@ const Management = () => {
                           variant="contained"
                           disableRipple
                           className={`${classes.tableBtn} ${classes.redBtn}`}
-                          onClick={handleDeleteOpenDialog}
+                          onClick={() => handleDeleteOpenDialog(row._id)}
                           endIcon={<DeleteIcon color="error" />}
+                          // sx={{padding:"2rem"}}
                         >
                           Delete role
                         </Button>
@@ -313,15 +338,15 @@ const Management = () => {
       </Modals>
 
       {/* Edit */}
-      <Modals isOpen={edit} title="Edit role" handleClose={handleEditDialogCloses}>
+      {/* <Modals isOpen={edit} title="Edit role" handleClose={handleEditDialogCloses}>
         <RoleModal handleDialogClose={handleEditDialogCloses} type="edit" checkbox={checkbox1} />
-      </Modals>
+      </Modals> */}
       {/* delete modal */}
       <DeleteOrDisable
         open={deleteModal}
         setOpen={setdeleteModal}
         title="Delete Role"
-        onConfirm={() => console.log("confirmed")}
+        onConfirm={onConfirm}
         confirmationMsg="delete role"
         btnValue="Delete"
       />
@@ -330,3 +355,8 @@ const Management = () => {
 };
 
 export default Management;
+
+Management.propTypes = {
+  setSelectedSubMenu: PropTypes.func.isRequired,
+  setSelectedManagementMenu: PropTypes.func.isRequired,
+};

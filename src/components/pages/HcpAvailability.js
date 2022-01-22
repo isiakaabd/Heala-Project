@@ -1,13 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import AvailabilityCard from "components/Utilities/AvailabilityCard";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getAvailability } from "components/graphQL/useQuery";
+import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 
 const HcpAvailability = (props) => {
+  const [availabiltyArray, setAvailabiltyArray] = useState([]);
   const { hcpId } = useParams();
+  const { loading, data, error } = useQuery(getAvailability, {
+    variables: {
+      id: hcpId,
+    },
+  });
+  useEffect(() => {
+    if (data) setAvailabiltyArray(data.getAvailabilities.availability);
+  }, [data]);
 
   const {
     selectedMenu,
@@ -25,6 +38,8 @@ const HcpAvailability = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -33,31 +48,15 @@ const HcpAvailability = (props) => {
       <Grid item style={{ marginBottom: "3rem" }}>
         <Typography variant="h2">HCP Availability</Typography>
       </Grid>
-      <Grid item>
-        <Grid container style={{ marginBottom: "5rem" }}>
-          <Grid item md style={{ marginRight: "2rem" }}>
-            <AvailabilityCard day="Monday" time="9:00AM - 3:00PM" />
-          </Grid>
-          <Grid item md style={{ marginLeft: "2rem" }}>
-            <AvailabilityCard day="Tuesday" time="9:00AM - 3:00PM" />
-          </Grid>
-        </Grid>
-        <Grid container style={{ marginBottom: "5rem" }}>
-          <Grid item md style={{ marginRight: "2rem" }}>
-            <AvailabilityCard day="Wednesday" time="9:00AM - 3:00PM" />
-          </Grid>
-          <Grid item md style={{ marginLeft: "2rem" }}>
-            <AvailabilityCard day="Thursday" time="9:00AM - 3:00PM" />
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item md style={{ marginRight: "2rem" }}>
-            <AvailabilityCard day="Friday" time="9:00AM - 3:00PM" />
-          </Grid>
-          <Grid item md style={{ marginLeft: "2rem" }}>
-            <AvailabilityCard day="Saturday" time="9:00AM - 3:00PM" />
-          </Grid>
-        </Grid>
+      <Grid item container>
+        {availabiltyArray.map((availability, index) => {
+          console.log(availability);
+          return (
+            <Grid item key={index} md style={{ marginRight: "2rem" }}>
+              <AvailabilityCard availability={availability} />
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );

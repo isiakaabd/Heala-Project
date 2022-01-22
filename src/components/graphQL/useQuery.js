@@ -6,18 +6,20 @@ export const doctor = gql`
       _id
       firstName
       lastName
-      picture
-      dociId
-      dob
-      image
-      cadre
-      specialization
       gender
       phoneNumber
       createdAt
       updatedAt
       email
       hospital
+      specialization
+      dob
+      cadre
+      picture
+      provider
+      consultations
+      status
+      dociId
     }
   }
 `;
@@ -226,6 +228,11 @@ export const findProfile = gql`
       genotype
       gender
       phoneNumber
+      provider
+      plan
+      status
+      consultations
+      createdAt
     }
   }
 `;
@@ -249,7 +256,7 @@ export const myMedic = gql`
 
 export const getRefferals = gql`
   query getReferrals {
-    getReferrals {
+    getReferrals(orderBy: "-createdAt") {
       referral {
         _id
         doctor
@@ -295,6 +302,48 @@ export const findAccounts = gql`
     }
   }
 `;
+export const findAdmin = gql`
+  query findAccounts {
+    accounts(orderBy: "-createdAt", filterBy: { role: "admin" }) {
+      data {
+        _id
+        role
+        email
+        dociId
+        createdAt
+        updatedAt
+        role
+        isActive
+      }
+    }
+  }
+`;
+export const findAllergies = gql`
+  query findAllergies($id: String!) {
+    findAllergies(filterBy: { profile: $id }) {
+      allergies {
+        _id
+        medication
+        severity
+        food
+      }
+    }
+  }
+`;
+export const getLabResult = gql`
+  query getLabResults($id: ID!) {
+    getLabResults(filterBy: { patient: $id }) {
+      lab {
+        _id
+        url
+        partner
+        doctor
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const getConsultation = gql`
   query getConsultation($id: ID!) {
     getConsultation(id: $id) {
@@ -310,24 +359,6 @@ export const getConsultation = gql`
     }
   }
 `;
-// export const c = gql`
-//   query getConsultation($id: ID!, $authorId: ID!) {
-//     getConsultation(id: $id) {
-//       patient @client @export(as: "authorId")
-//     }
-//     profile(id: $authorId) {
-//       _id
-//       firstName
-//       lastName
-//       height
-//       weight
-//       bloodGroup
-//       genotype
-//       gender
-//       phoneNumber
-//     }
-//   }
-// `;
 
 export const getMyEarnings = gql`
   query getMyEarnings {
@@ -355,6 +386,11 @@ export const getPatients = gql`
         genotype
         gender
         phoneNumber
+        provider
+        plan
+        status
+        consultations
+        createdAt
       }
     }
   }
@@ -366,18 +402,20 @@ export const getDoctorsProfile = gql`
         _id
         firstName
         lastName
-        picture
-        dociId
-        dob
-        hospital
-        image
-        cadre
-        specialization
         gender
         phoneNumber
         createdAt
         updatedAt
         email
+        hospital
+        specialization
+        dob
+        cadre
+        picture
+        provider
+        consultations
+        status
+        dociId
       }
     }
   }
@@ -395,6 +433,11 @@ export const getProfile = gql`
       genotype
       gender
       phoneNumber
+      provider
+      plan
+      status
+      consultations
+      createdAt
     }
   }
 `;
@@ -453,6 +496,29 @@ export const getMedications = gql`
         updatedAt
         dosage
         patient
+      }
+    }
+  }
+`;
+export const getAvailability = gql`
+  query getAvailabilities($id: String!) {
+    getAvailabilities(filterBy: { doctor: $id }) {
+      availability {
+        _id
+        createdAt
+        updatedAt
+        dates {
+          day
+          available
+          times {
+            start
+            stop
+          }
+        }
+      }
+      errors {
+        field
+        message
       }
     }
   }

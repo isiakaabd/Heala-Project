@@ -5,7 +5,7 @@ import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
-import { getUserType, getProviders } from "components/graphQL/useQuery";
+import { getProviders, getCategory } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
@@ -23,7 +23,7 @@ export const ProviderModal = ({
   const [createProvider] = useMutation(addProvider, { refetchQueries: [{ query: getProviders }] });
   const [editProvider] = useMutation(editprovider, { refetchQueries: [{ query: getProviders }] });
 
-  const single = useQuery(getUserType, {
+  const single = useQuery(getCategory, {
     variables: {
       id: editId,
     },

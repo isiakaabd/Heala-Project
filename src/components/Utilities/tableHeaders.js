@@ -315,6 +315,13 @@ export const consultationsHeadCells = [
   { id: 102, label: "Description" },
   { id: 103, label: "" },
 ];
+export const consultationsHeadCells2 = [
+  { id: 100, label: "Name" },
+  { id: 101, label: "Date" },
+  { id: 102, label: "Description" },
+  { id: 103, label: "" },
+  { id: 139, label: "" },
+];
 
 // Patients > Prescription Route Table
 export const prescriptionsHeadCells = [

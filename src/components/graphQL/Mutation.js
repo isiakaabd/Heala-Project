@@ -179,6 +179,18 @@ export const DELETE_PERMISSION = gql`
     }
   }
 `;
+export const deleteRole = gql`
+  mutation deleteRole($id: String!) {
+    deleteRole(data: { id: $id }) {
+      count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const updateAppointment = gql`
   mutation updateAppointment(
     $id: String!
@@ -445,6 +457,21 @@ export const deleteUserType = gql`
   mutation deleteUserType($id: String!) {
     deleteUserType(data: { id: $id }) {
       count
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const signup = gql`
+  mutation signup($authType: String!, $email: EmailAddress!, $password: String!, $role: String) {
+    signup(data: { authType: $authType, email: $email, password: $password, role: $role }) {
+      account {
+        _id
+        email
+      }
       message
       errors {
         field

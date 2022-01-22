@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import displayPhoto from "assets/images/avatar.svg";
 import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
@@ -313,8 +314,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       >
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
-                            alt={`Display Photo of ${row.name}`}
-                            src={row.picture}
+                            alt={`Display Photo of ${row.firstName}`}
+                            src={row.picture ? row.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -331,7 +332,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       {row.specialization}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {row.consultation ? row.consultation : "No Value"}
+                      {row.consultations ? row.consultations : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
