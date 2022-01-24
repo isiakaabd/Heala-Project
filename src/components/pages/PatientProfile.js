@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import Loader from "components/Utilities/Loader";
 import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
+import { dateMoment } from "components/Utilities/Time";
 import NoData from "components/layouts/NoData";
 import { Typography, Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",
     borderRadius: "1rem",
-    padding: "4rem",
+    padding: "1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -42,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     background: "#fff",
     borderRadius: "1rem",
-    padding: "4rem 5rem",
-    height: "16.1rem",
+    padding: "2rem 2.5rem",
+    height: "10.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -75,8 +76,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   buttonsGridWrapper: {
-    marginTop: "5rem !important",
-    height: "16.1rem",
+    marginTop: "2rem !important",
+    height: "8.1rem",
+    alignItems: "center",
   },
 }));
 
@@ -138,8 +140,8 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   if (profile.error) return <NoData error={profile.error.message} />;
 
   return (
-    <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column">
+      <Grid item sx={{ paddingBottom: ".6rem" }}>
         <PreviousButton path={`/patients/${patientId}`} />
       </Grid>
       {/* Display photo and profile name grid */}
@@ -148,7 +150,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
           fullName={`${patientProfile.firstName} ${patientProfile.lastName}`}
           displayPhoto={patientProfile.image ? patientProfile.image : displayPhoto}
           medicalTitle="User ID"
-          statusId={patientProfile._id}
+          statusId={patientProfile && patientProfile.dociId.split("-")[1]}
           status={patientProfile.status ? patientProfile.status : "No Value"}
           chatPath={`/patients/${patientId}/profile/chat`}
           callPath={`/patients/${patientId}/profile/call`}
@@ -157,7 +159,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
         {/* GENDER GRID */}
         <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
           <Grid
@@ -195,19 +197,63 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
             alignItems="center"
           >
             <Grid item>
-              <Typography variant="h4">GenoType</Typography>
+              <Typography variant="h4">Provider</Typography>
             </Grid>
             <Grid item>
               <Chip
                 variant="outlined"
-                label={patientProfile.genotype}
+                label={patientProfile.provider}
                 className={classes.infoBadge}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+        {/* EMAIL ADDRESS GRID */}
+        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+          <Grid
+            container
+            direction="column"
+            style={{ height: "100%" }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography variant="h4">Created At</Typography>
+            </Grid>
+            <Grid item>
+              <Chip
+                variant="outlined"
+                label={dateMoment(patientProfile.createdAt)}
+                className={classes.infoBadge}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* DATE OF BIRTH GRID */}
+        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          <Grid
+            container
+            direction="column"
+            style={{ height: "100%" }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography variant="h4">Verified</Typography>
+            </Grid>
+            <Grid item>
+              <Chip
+                variant="outlined"
+                label={patientProfile.isEmailVerified ? patientProfile.isEmailVerified : "No Value"}
+                className={classes.infoBadge}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
         {/* EMAIL ADDRESS GRID */}
         <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
           <Grid

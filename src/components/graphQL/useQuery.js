@@ -26,7 +26,7 @@ export const doctor = gql`
 
 export const getPlans = gql`
   query getPlans {
-    getPlans {
+    getPlans(orderBy: "-createdAt") {
       plan {
         _id
         name
@@ -96,7 +96,7 @@ export const dashboard = gql`
 
 export const getMessage = gql`
   query getMessages {
-    getMessages {
+    getMessages(orderBy: "-createdAt") {
       messages {
         _id
         recipient
@@ -222,6 +222,7 @@ export const findProfile = gql`
       _id
       firstName
       lastName
+      dociId
       height
       weight
       bloodGroup
@@ -272,9 +273,25 @@ export const getRefferals = gql`
     }
   }
 `;
+export const getRefferal = gql`
+  query getReferral($id: ID!) {
+    getReferral(id: $id) {
+      _id
+      doctor
+      patient
+      type
+      reason
+      note
+      specialization
+      testType
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const getRoles = gql`
   query getRoles {
-    getRoles {
+    getRoles(orderBy: "-createdAt") {
       role {
         _id
         name
@@ -284,6 +301,32 @@ export const getRoles = gql`
         createdAt
         updatedAt
       }
+    }
+  }
+`;
+export const getRole = gql`
+  query getRole($id: ID!) {
+    getRole(id: $id) {
+      _id
+      name
+      permissions
+      editable
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const getAMessage = gql`
+  query getMessage($id: ID!) {
+    getMessage(id: $id) {
+      _id
+      recipient
+      subject
+      sender
+      createdAt
+      updatedAt
+      body
     }
   }
 `;
@@ -380,13 +423,14 @@ export const getPatients = gql`
         _id
         firstName
         lastName
+        provider
         height
         weight
         bloodGroup
+        dociId
         genotype
         gender
         phoneNumber
-        provider
         plan
         status
         consultations
@@ -427,6 +471,7 @@ export const getProfile = gql`
       _id
       firstName
       lastName
+      dociId
       height
       weight
       bloodGroup
@@ -613,12 +658,13 @@ export const getReminder = gql`
   }
 `;
 export const getDoctorPatients = gql`
-  query getDoctorPatients {
-    getDoctorPatients {
+  query getDoctorPatients($id: String!) {
+    getDoctorPatients(filterBy: { doctor: $id }) {
       data {
         _id
         doctor
         patient
+
         createdAt
         updatedAt
       }

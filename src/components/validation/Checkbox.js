@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-// import { CheckboxWithLabel } from "formik-material-ui";
 import { FormLabel, FormControl, Box, FormGroup, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
@@ -17,11 +16,11 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "center",
       width: "100%",
       padding: "2rem 0",
-      border: "1px solid #E0E0E0",
+      // border: "1px solid #E0E0E0",
       borderRadius: ".4rem",
-      "&:active": {
-        border: "2px solid black",
-      },
+      // "&:active": {
+      //   border: "2px solid black",
+      // },
     },
   },
 }));

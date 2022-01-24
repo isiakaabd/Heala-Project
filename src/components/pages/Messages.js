@@ -122,6 +122,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const [message, setMessage] = useState([]);
   const { loading, data, error } = useQuery(getMessage);
 
+  console.log(data);
   useEffect(() => {
     if (data && data.getMessages.messages) {
       setMessage(data.getMessages.messages);
@@ -238,7 +239,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {timeMoment(row.time)}
+                        {timeMoment(row.createdAt)}
                       </TableCell>
                       <TableCell>
                         <Button

@@ -152,25 +152,25 @@ export const referralHeader = [
   },
   {
     id: 1,
-    label: "Time",
+    label: "Referral ID",
   },
   {
     id: 2,
-    label: "Name",
+    label: "Doctor",
   },
 
   {
     id: 3,
-    label: "Category",
+    label: "Patient",
   },
 
   {
     id: 8,
-    label: "Reason",
+    label: "Type",
   },
   {
     id: 18,
-    label: "Note",
+    label: "Category",
   },
   {
     id: 6,
@@ -282,6 +282,16 @@ export const pendingHeader2 = [
   {
     id: 5,
     label: "Bank",
+  },
+];
+export const editManagement = [
+  {
+    id: 0,
+    label: "Endpoints",
+  },
+  {
+    id: 1,
+    label: "Operations",
   },
 ];
 export const viewRefferalHeader = [

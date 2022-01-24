@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",
     borderRadius: "1rem",
-    padding: "4rem",
+    padding: "2rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 

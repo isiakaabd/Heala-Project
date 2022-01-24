@@ -588,14 +588,17 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
+        exact
         path="/settings/management"
         component={Management}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedSubMenu={selectedSubMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu}
       />
       <PrivateRoute
+        exact
         path="/settings/management/:editId"
         component={EditManagement}
         selectedMenu={selectedMenu}

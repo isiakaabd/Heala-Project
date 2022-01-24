@@ -17,8 +17,6 @@ import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import { adminHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -321,25 +319,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
-                        <Grid
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "left",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src={admins.image ? admins.image : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.firstName ? `${row.firstName} ${row.lastName}` : "no Value"}
-                          </span>
-                        </Grid>
+                        {row.email}
                       </TableCell>
                       <TableCell
                         id={labelId}

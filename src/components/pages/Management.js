@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
 import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 import PropTypes from "prop-types";
 import Search from "components/Utilities/Search";
-import NoData from "components/layouts/NoData";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -139,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
+const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelectedScopedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [deleteRoles] = useMutation(deleteRole);
@@ -175,7 +175,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
     if (data) {
       setRolesManagements(data.getRoles.role);
     }
-  }, [data]);
+  }, [data, rolesManagements]);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -194,7 +194,13 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
     <>
       <Grid container direction="column" gap={2}>
         <Grid item>
-          <PreviousButton path="/settings" />
+          <PreviousButton
+            path="/settings"
+            onClick={() => {
+              setSelectedSubMenu(12);
+              setSelectedManagementMenu(0);
+            }}
+          />
         </Grid>
         <Grid item container>
           <Grid item className={classes.searchGrid}>
@@ -231,12 +237,12 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
                 const isItemSelected = isSelected(row.id, selectedRows);
 
                 const labelId = `enhanced-table-checkbox-${index}`;
-                const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
-                const dataLength = data.length - 5;
-                const newData = [...data.slice(0, 5), `+${dataLength}`];
-
-                // const newPerm = [...new Set(row.permissions.map((i) => i.split(":")[1]))];
-                // console.log(newPerm);
+                let newData;
+                if (row.permissions) {
+                  const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
+                  const dataLength = data.length - 5;
+                  newData = [...data.slice(0, 5), `+${dataLength}`];
+                }
                 return (
                   <TableRow
                     hover
@@ -273,9 +279,10 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
                       style={{ color: theme.palette.common.black }}
                     >
                       <Grid container justifyContent="flex-start" gap={1} alignItems="center">
-                        {newData.map((i) => {
-                          return <Chip label={i} key={i} className={classes.badge} />;
-                        })}
+                        {newData &&
+                          newData.map((i) => {
+                            return <Chip label={i} key={i} className={classes.badge} />;
+                          })}
                       </Grid>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
@@ -308,9 +315,8 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu }) => {
                           endIcon={<EditIcon color="success" />}
                           onClick={() => {
                             setSelectedSubMenu(12);
-                            // setSelectedManagementMenu(0);
+                            setSelectedManagementMenu(1);
                           }}
-                          disabled
                         >
                           Edit role
                         </Button>
@@ -359,4 +365,5 @@ export default Management;
 Management.propTypes = {
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedManagementMenu: PropTypes.func.isRequired,
+  setSelectedScopedMenu: PropTypes.func.isRequired,
 };

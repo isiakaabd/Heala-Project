@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
-import { getPlans } from "components/graphQL/useQuery";
-import { getSinglePlan } from "components/graphQL/useQuery";
+import { getSinglePlan, getPlans, getUserTypes } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
@@ -24,8 +23,10 @@ export const SubscriptionModal = ({
   const [createPlan] = useMutation(CREATE_PLAN, {
     refetchQueries: [{ query: getPlans }],
   });
-  const [updatePlan] = useMutation(UPDATE_PLAN);
-  console.log(singleData);
+  const [updatePlan] = useMutation(UPDATE_PLAN, {
+    refetchQueries: [{ query: getPlans }],
+  });
+
   const single = useQuery(getSinglePlan, {
     variables: {
       id: editId,
@@ -53,9 +54,24 @@ export const SubscriptionModal = ({
       });
     }
   }, [single.data, setSingleData]);
+  const [dropDown, setDropDown] = useState([]);
+  const userType = useQuery(getUserTypes);
+  useEffect(() => {
+    if (userType.data) {
+      const data = userType.data.getUserTypes.userType;
+      setDropDown(
+        data &&
+          data.map((i) => {
+            return { key: i.name, value: i.name };
+          }),
+      );
+    }
+  }, [userType.data]);
 
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description, duration, provider } = values;
+    console.log(provider);
+
     if (type === "edit") {
       try {
         await updatePlan({
@@ -156,9 +172,10 @@ export const SubscriptionModal = ({
                 </Grid>
                 <Grid item container>
                   <FormikControl
-                    control="input"
+                    control="select"
                     placeholder="Enter Provider"
                     name="provider"
+                    options={dropDown}
                     label="Provider"
                   />
                 </Grid>

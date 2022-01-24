@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
-import { dateMoment, timeMoment } from "components/Utilities/Time";
+import { dateMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -87,12 +87,12 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [referral, setReferral] = useState([]);
   const [searchMail, setSearchMail] = useState("");
   const { loading, data, error } = useQuery(getRefferals);
+  const [referral, setReferral] = useState([]);
 
   useEffect(() => {
-    if (data && data.getReferrals.referral) {
+    if (data) {
       setReferral(data.getReferrals.referral);
     }
   }, [referral, data]);
@@ -168,7 +168,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         style={{ color: theme.palette.common.black }}
                       >
                         {/* {new Date(row.updatedAt)} */}
-                        {timeMoment(row.updatedAt)}
+                        {row.referralId ? row.referralId : "No Value"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -185,7 +185,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -193,21 +193,21 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.specialization}
+                        {row.patient}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.reason}
+                        {row.type}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.note}
+                        {row.type == "hcp" ? row.specialization : row.testType}
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
