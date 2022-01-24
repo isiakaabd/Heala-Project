@@ -185,6 +185,7 @@ const HeaderText = (props) => {
     selectedHcpMenu,
     waitingListMenu,
     selectedAppointmentMenu,
+    selectedManagementMenu,
     selectedScopedMenu,
   } = props;
 
@@ -195,12 +196,11 @@ const HeaderText = (props) => {
   const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    const fetch = async () => {
+    (async () => {
       patient();
       doctor();
       if (patientContent.data) setProfiles(patientContent.data.profiles.data);
-    };
-    fetch();
+    })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
 
   const { pathname } = useLocation();
@@ -378,9 +378,11 @@ const HeaderText = (props) => {
           <CustomSubHeaderText
             title="Settings"
             subTitle={pathname === "/settings/administrator" ? "Administrator" : "Management"}
-            scopedMenu={0}
-            scopedSubMenu={0}
-            subSubTitle={selectedPatientMenu === 1 ? "Edit Management" : "dd"}
+            scopedSubMenu={0} // okay
+            subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
+            scopedMenu={selectedManagementMenu}
+            // scopedMenu={selectedManagementMenu}
+            // scopedSubMenu={selectedManagementMenu}
           />
         );
       }
@@ -392,7 +394,8 @@ const HeaderText = (props) => {
             title="White Label"
             subTitle={pathname === "/label/provider" ? "Providers" : "User Types"}
             scopedMenu={0}
-            scopedSubMenu={0}
+            scopedSubMenu={selectedScopedMenu}
+            // scopedSubMenu={0}
           />
         );
       }
@@ -419,6 +422,7 @@ HeaderText.propTypes = {
   waitingListMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,
+  selectedManagementMenu: PropTypes.number.isRequired,
 };
 
 const HeaderContent = (props) => {
@@ -431,6 +435,7 @@ const HeaderContent = (props) => {
     selectedAppointmentMenu,
     selectedScopedMenu,
     data,
+    selectedManagementMenu,
   } = props;
   const classes = useStyles();
   return (
@@ -443,6 +448,7 @@ const HeaderContent = (props) => {
         waitingListMenu={waitingListMenu}
         selectedAppointmentMenu={selectedAppointmentMenu}
         selectedScopedMenu={selectedScopedMenu}
+        selectedManagementMenu={selectedManagementMenu}
       />
       <HeaderProfile data={data} />
     </Toolbar>
@@ -454,6 +460,7 @@ HeaderContent.propTypes = {
   selectedSubMenu: PropTypes.number.isRequired,
   selectedPatientMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
+  selectedManagementMenu: PropTypes.number.isRequired,
   waitingListMenu: PropTypes.number.isRequired,
   selectedAppointmentMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,

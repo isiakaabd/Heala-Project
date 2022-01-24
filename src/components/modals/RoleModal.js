@@ -6,8 +6,14 @@ import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
+import { addRole } from "components/graphQL/Mutation";
+import { getRoles } from "components/graphQL/useQuery";
+import { useMutation } from "@apollo/client";
 
-export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
+export const RoleModal = ({ handleDialogClose, type }) => {
+  const [createRole] = useMutation(addRole, {
+    refetchQueries: [{ query: getRoles }],
+  });
   const theme = useTheme();
   const buttonType = {
     background: theme.palette.common.black,
@@ -15,32 +21,29 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-  const optionss = [
-    {
-      label: "permission 1",
-      value: "permission 1",
-    },
-    {
-      label: "permission 2",
-      value: "permission 2",
-    },
-    {
-      label: "permission 3",
-      value: "permission 3",
-    },
-  ];
 
   const initialValues = {
     name: "",
-    checkbox: [],
+    description: "",
   };
 
   const validationSchema = Yup.object({
-    checkbox: Yup.array().min(1, "Add atleast a permission"),
     name: Yup.string("Enter your Name").required("Name is required"),
+    description: Yup.string("Enter your description").required("Description is required"),
   });
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const { name, description } = values;
+    if (type === "add") {
+      await createRole({
+        variables: {
+          name,
+          editable: true,
+          description,
+          permissions: [],
+        },
+      });
+    }
+    handleDialogClose();
   };
   return (
     <Formik
@@ -55,8 +58,8 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column">
               <Grid item container>
-                <Grid item container marginBottom={4}>
-                  <Grid container direction="column" gap={1}>
+                <Grid item container gap={2}>
+                  <Grid container direction="column" gap={2}>
                     <FormikControl
                       control="input"
                       name="name"
@@ -64,9 +67,17 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                       placeholder="Enter Plan Name"
                     />
                   </Grid>
+                  <Grid container direction="column">
+                    <FormikControl
+                      control="input"
+                      name="description"
+                      label=" Description"
+                      placeholder="Enter Description"
+                    />
+                  </Grid>
                 </Grid>
 
-                <Grid item container xs={12}>
+                {/* <Grid item container xs={12}>
                   <Grid item container direction="column" gap={1}>
                     <FormikControl
                       control="checkbox"
@@ -75,7 +86,7 @@ export const RoleModal = ({ handleDialogClose, type, checkbox }) => {
                       options={optionss}
                     />
                   </Grid>
-                </Grid>
+                </Grid> */}
               </Grid>
               <Grid item xs={12} marginTop={10}>
                 <CustomButton

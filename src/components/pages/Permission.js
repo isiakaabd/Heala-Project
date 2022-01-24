@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSelectedMenu }) => {
   const [singlePermission, setSinglePermission] = useState();
   const checkbox = [
     { key: "create", value: "create" },
@@ -208,7 +208,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const [deletPlan] = useMutation(DELETE_PERMISSION);
 
   useEffect(() => {
-    setSelectedSubMenu(0);
+    setSelectedMenu(11);
+    setSelectedSubMenu(12);
+
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
   const [permission, setPermission] = useState([]);
@@ -299,7 +301,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         }}
                       >
                         <Grid item xs={6}>
-                          <Chip label={newPerm} className={classes.badge} />
+                          <Chip label={data} className={classes.badge} />
                         </Grid>
                       </Grid>
                     </TableCell>
@@ -315,7 +317,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
                         }}
                       >
                         <Grid item xs={6}>
-                          <Chip label={data} className={classes.badge} />
+                          <Chip label={newPerm} className={classes.badge} />
                         </Grid>
                       </Grid>
                     </TableCell>

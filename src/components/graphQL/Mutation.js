@@ -115,8 +115,22 @@ export const DELETE_PLAN = gql`
   }
 `;
 export const UPDATE_PLAN = gql`
-  mutation updatePlan($id: String!, $name: String!, $amount: Float!, $description: String!) {
-    updatePlan(data: { id: $id, name: $name, amount: $amount, description: $description }) {
+  mutation updatePlan(
+    $id: String
+    $name: String
+    $amount: Float
+    $provider: String
+    $description: String
+  ) {
+    updatePlan(
+      data: {
+        id: $id
+        name: $name
+        amount: $amount
+        provider: $provider
+        description: $description
+      }
+    ) {
       plan {
         _id
         name
@@ -333,6 +347,59 @@ export const deleteAppointment = gql`
     deleteAppointment(data: { id: $id }) {
       count
       message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const addRole = gql`
+  mutation createRole(
+    $name: String!
+    $editable: Boolean
+    $description: String
+    $permissions: [String!]
+  ) {
+    createRole(
+      data: {
+        name: $name
+        editable: $editable
+        description: $description
+        permissions: $permissions
+      }
+    ) {
+      role {
+        _id
+        name
+        permissions
+        editable
+        description
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const editRole = gql`
+  mutation updateRole($id: String!, $name: String, $description: String, $permissions: [String!]) {
+    updateRole(
+      data: { id: $id, name: $name, permissions: $permissions, description: $description }
+    ) {
+      role {
+        _id
+        name
+        permissions
+        editable
+        description
+        createdAt
+        updatedAt
+      }
       errors {
         field
         message

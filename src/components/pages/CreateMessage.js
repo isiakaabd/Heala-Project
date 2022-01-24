@@ -7,12 +7,14 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 // import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { getMessage } from "components/graphQL/useQuery";
 // import { useFetch } from "components/customHook/useFetch";
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +64,10 @@ const useStyles = makeStyles((theme) => ({
 const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [createNewMessage] = useMutation(CREATE_MESSAGE);
+  let history = useHistory();
+  const [createNewMessage] = useMutation(CREATE_MESSAGE, {
+    refetchQueries: [{ query: getMessage }],
+  });
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -86,7 +91,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     const { recipient, subject, textarea } = values;
 
     try {
-      const { data } = await createNewMessage({
+      await createNewMessage({
         variables: {
           sender: id,
           recipient,
@@ -94,11 +99,11 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           body: textarea,
         },
       });
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
     onSubmitProps.resetForm();
+    history.push("/messages");
   };
 
   useEffect(() => {

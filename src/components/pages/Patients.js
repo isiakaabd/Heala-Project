@@ -147,7 +147,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   if (patient.loading) return <Loader />;
   if (patient.error) return <NoData error={patient.error.message} />;
-
+  console.log(profiles);
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -206,7 +206,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, textAlign: "left" }}
                       >
-                        {row._id}
+                        {row.dociId.split("-")[1]}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div

@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
-import { getProviders, getCategory } from "components/graphQL/useQuery";
+import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
@@ -28,6 +28,20 @@ export const ProviderModal = ({
       id: editId,
     },
   });
+  const [dropDown, setDropDown] = useState([]);
+  const userType = useQuery(getUserTypes);
+  useEffect(() => {
+    if (userType.data) {
+      const data = userType.data.getUserTypes.userType;
+      setDropDown(
+        data &&
+          data.map((i) => {
+            return { key: i.name, value: i.name };
+          }),
+      );
+    }
+  }, [userType.data]);
+  console.log(dropDown);
 
   useEffect(() => {
     if (single.data) {
@@ -45,7 +59,8 @@ export const ProviderModal = ({
     type: Yup.string("Select your type").required("Type is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
   });
-  const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];
+
+  // const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];
   const onSubmit = async (values, onSubmitProps) => {
     if (type === "add") {
       const { name, type, image } = values;
@@ -103,7 +118,7 @@ export const ProviderModal = ({
                 <Grid item container>
                   <FormikControl
                     control="select"
-                    options={checkbox1}
+                    options={dropDown}
                     placeholder="Select user types"
                     name="type"
                     label="User Types"
