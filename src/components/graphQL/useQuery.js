@@ -402,6 +402,42 @@ export const getConsultation = gql`
     }
   }
 `;
+export const getVerification = gql`
+  query getVerifications {
+    getVerifications {
+      verification {
+        _id
+        qualification
+        license
+        yearbook
+        alumni_association
+        reference
+        external_reference
+        status
+        createdAt
+        updatedAt
+        profileId
+      }
+    }
+  }
+`;
+export const verification = gql`
+  query getVerification($id: ID!) {
+    getVerification(id: $id) {
+      _id
+      qualification
+      license
+      yearbook
+      alumni_association
+      reference
+      external_reference
+      status
+      createdAt
+      updatedAt
+      profileId
+    }
+  }
+`;
 
 export const getMyEarnings = gql`
   query getMyEarnings {

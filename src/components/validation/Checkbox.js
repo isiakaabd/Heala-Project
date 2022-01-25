@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   checkboxContainer: {
     "&.MuiBox-root": {
       display: "flex",
-      justifyContent: "center",
+      justifyContent: "left",
       width: "100%",
       padding: "2rem 0",
       // border: "1px solid #E0E0E0",

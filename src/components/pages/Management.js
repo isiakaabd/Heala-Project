@@ -296,17 +296,6 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                           gap: "1rem",
                         }}
                       >
-                        {/* <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.greenBtn}`}
-                          onClick={handleEditDialogOpens}
-                          endIcon={<EditIcon color="success" />}
-                
-                        >
-                          Edit role
-                        </Button> */}
-
                         <Button
                           variant="contained"
                           className={`${classes.tableBtn} ${classes.greenBtn}`}

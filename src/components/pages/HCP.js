@@ -2,20 +2,16 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Alert from "@mui/material/Alert";
 import * as Yup from "yup";
-import { Grid, Typography } from "@mui/material";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, Button, Avatar, Typography, TableRow, TableCell, Checkbox } from "@mui/material";
+import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import NoData from "components/layouts/NoData";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import Modals from "components/Utilities/Modal";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import { HCPHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.svg";
 import { Link } from "react-router-dom";
@@ -24,6 +20,9 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Filter from "components/modals/Filter";
+import { dateMoment } from "components/Utilities/Time";
+import { useQuery } from "@apollo/client";
+import { getVerification } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -95,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const { loading, data, error } = useQuery(getVerification);
 
   const [response, setResponse] = useState("");
 
@@ -109,11 +109,22 @@ const HCP = ({ setSelectedSubMenu }) => {
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [respondData] = useState([]); //setRespondData
 
   const handleDialogOpen = () => {
     setIsOpen(true);
   };
+
+  const [respondData, setRespondData] = useState([]); //setRespondData
+  useEffect(() => {
+    try {
+      if (data) {
+        console.log(data.getVerifications.verification);
+        setRespondData(data.getVerifications.verification);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [data]);
 
   const initialValues = {
     Name: "",
@@ -139,7 +150,8 @@ const HCP = ({ setSelectedSubMenu }) => {
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
-
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -207,7 +219,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.entryDate}
+                        {dateMoment(row.createdAt)}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -233,9 +245,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.firstName} {row.lastName}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.profileId}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -250,7 +260,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to="/verification/view"
+                          to={`/verification/view/${row._id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => setSelectedSubMenu(8)}
                         >

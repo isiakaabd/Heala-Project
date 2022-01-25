@@ -172,8 +172,6 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   useEffect(() => {
     try {
       if (data) {
-        console.log(data);
-
         setAdmins(data.accounts.data);
       }
     } catch (err) {

@@ -286,6 +286,10 @@ export const pendingHeader2 = [
 ];
 export const editManagement = [
   {
+    id: 110,
+    label: "",
+  },
+  {
     id: 0,
     label: "Endpoints",
   },

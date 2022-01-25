@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import Loader from "components/Utilities/Loader";
+import NoData from "components/layouts/NoData";
 import PropTypes from "prop-types";
 import { Avatar, Grid, Typography, IconButton } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import clock from "assets/images/clock.svg";
 import date from "assets/images/date.svg";
@@ -11,6 +14,9 @@ import imageUpload from "assets/images/imageUpload.svg";
 import CustomButton from "components/Utilities/CustomButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PreviousButton from "components/Utilities/PreviousButton";
+import { dateMoment, timeMoment } from "components/Utilities/Time";
+import { useQuery } from "@apollo/client";
+import { verification } from "components/graphQL/useQuery";
 
 const gender = "Female";
 const useStyles = makeStyles((theme) => ({
@@ -91,6 +97,19 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const theme = useTheme();
+  const { viewId } = useParams();
+  const { loading, data, error } = useQuery(verification, { variables: { id: viewId } });
+  const [respondData, setRespondData] = useState([]); //setRespondData
+  useEffect(() => {
+    try {
+      if (data) {
+        setRespondData(data.getVerification);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [data]);
+  console.log(respondData);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -138,6 +157,8 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <Grid position="static" className={classes.containerGrid}>
       <Grid item>
@@ -165,7 +186,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                 <img src={date} alt="A clock icon" />
               </Grid>
               <Grid item>
-                <Typography variant="h6">7,July 2021</Typography>
+                <Typography variant="h6"> {dateMoment(respondData.updatedAt)}</Typography>
               </Grid>
             </Grid>
 
@@ -175,7 +196,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               </Grid>
               <Grid item>
                 <Typography variant="h6" component="span">
-                  3:30PM
+                  {timeMoment(respondData.updatedAt)}
                 </Typography>
               </Grid>
             </Grid>
@@ -183,8 +204,8 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
         </Grid>
 
         {/* second grid */}
-        <Grid container spacing={2}>
-          <Grid item sm container xs={5} spacing={2} sx={{ alignItems: "center" }}>
+        <Grid container flexWrap="nowrap" gap={3} alignItems="center">
+          <Grid container flexWrap="nowrap" alignItems="center" gap={2} flex item>
             <Grid item>
               <Typography variant="h6" color="text.secondary">
                 Patient:
@@ -194,10 +215,10 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Avatar src={displayPhoto} />
             </Grid>
             <Grid item>
-              <Typography variant="h5">Sule Muntari</Typography>
+              <Typography variant="h5">{respondData.profileId}</Typography>
             </Grid>
           </Grid>
-          <Grid item sm container spacing={2} xs={12} sx={{ alignItems: "center" }}>
+          <Grid container gap={2} item>
             <Grid item>
               <Typography variant="h5">Medical ID:</Typography>
             </Grid>
@@ -205,7 +226,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Typography variant="h5">217878</Typography>
             </Grid>
           </Grid>
-          <Grid item sm container spacing={2} xs={12} sx={{ alignItems: "center" }}>
+          <Grid container gap={2} item>
             <Grid item>
               <Typography variant="h6">Gender:</Typography>
             </Grid>

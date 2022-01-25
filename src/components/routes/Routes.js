@@ -551,7 +551,7 @@ const Routes = (props) => {
       <PrivateRoute path="/plans" component={Subscription} />
 
       <PrivateRoute
-        path="/verification/view"
+        path="/verification/view/:viewId"
         component={ViewHCP}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}

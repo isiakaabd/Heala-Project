@@ -76,17 +76,6 @@ export const RoleModal = ({ handleDialogClose, type }) => {
                     />
                   </Grid>
                 </Grid>
-
-                {/* <Grid item container xs={12}>
-                  <Grid item container direction="column" gap={1}>
-                    <FormikControl
-                      control="checkbox"
-                      formlabel="Role"
-                      name="checkbox"
-                      options={optionss}
-                    />
-                  </Grid>
-                </Grid> */}
               </Grid>
               <Grid item xs={12} marginTop={10}>
                 <CustomButton
