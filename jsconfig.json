@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+      "baseUrl": "src"
+    },
+    "include": ["src", "Subscription.js", "helpers", "accessToken.js", "layouts"]
+}
+  
