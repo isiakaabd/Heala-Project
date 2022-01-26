@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
-// import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "../layouts/Notifications";
 import IconButton from "@mui/material/IconButton";
-// import { useSelector } from "react-redux";
-// import { UserProfile } from "components/graphQL/useQuery";
+import { findAccounts } from "components/graphQL/useQuery";
+import { useLazyQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   role: {
@@ -28,9 +27,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HeaderProfile = () => {
+  const email = localStorage.getItem("email");
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [profileAcc, setProfileAcc] = useState([]);
+  const [profile, { data, loading }] = useLazyQuery(findAccounts, {
+    variables: { email },
+  });
   const classes = useStyles();
+  useEffect(() => {
+    (async () => {
+      profile();
+      if (data && data.accounts.data) {
+        setProfileAcc(data.accounts.data[0]);
+      }
+    })();
+  }, [profile, email, data]);
 
   function notificationsLabel(count) {
     if (count === 0) {
@@ -41,7 +52,7 @@ const HeaderProfile = () => {
     }
     return `${count} notifications`;
   }
-  // const { id } = useSelector((state) => state.auth);
+  if (loading) return <p style={{ display: "hidden" }}>Loading</p>;
 
   return (
     <header>
@@ -53,12 +64,13 @@ const HeaderProfile = () => {
           <Grid container direction="column" justifyContent="center">
             <Grid item>
               <Typography variant="body1" className={classes.name}>
-                {/* {loading ? "Admin" : error ? "Admin" : email} */} email
+                {/* {loading ? "Admin" : error ? "Admin" : email} */}
+                {profileAcc && profileAcc.role}
               </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
-                {/* {loading ? "Admin" : error ? "Admin" : email} */} email
+                {profileAcc && profileAcc.email}
               </Typography>
             </Grid>
           </Grid>

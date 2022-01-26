@@ -23,6 +23,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
 import { getProviders /*getSingleProvider*/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
+import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -217,8 +218,9 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     setEdit(true);
     setEditId(id);
   };
-
   const [singleData, setSingleData] = useState();
+  if (provider.loading) return <Loader />;
+  if (provider.error) return <NoData error={provider.error.message} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

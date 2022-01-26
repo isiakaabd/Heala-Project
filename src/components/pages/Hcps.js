@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import Loader from "components/Utilities/Loader";
 import displayPhoto from "assets/images/avatar.svg";
 import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
@@ -238,6 +239,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  if (doctorProfile.loading) return <Loader />;
   if (doctorProfile.error) return <NoData error={doctorProfile.error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

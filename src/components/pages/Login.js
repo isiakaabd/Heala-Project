@@ -124,7 +124,9 @@ const Login = () => {
           },
         });
         if (data) {
-          setAccessToken(data.login.account.refresh_token);
+          const { email, access_token } = data.login.account;
+          setAccessToken(access_token);
+          localStorage.setItem("email", email);
           history.push("/");
         }
       }
@@ -138,11 +140,7 @@ const Login = () => {
     onSubmitProps.resetForm();
     return () => (isMounted = false);
   };
-  // if (isAuthenticated) {
-  //   alert(11);
 
-  //   return <Redirect to="/dashboard" />;
-  // }
   return (
     <>
       <Grid container className={classes.gridContainer}>

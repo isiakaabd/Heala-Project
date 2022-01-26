@@ -88,7 +88,7 @@ const LineChart = ({
       },
     ],
   };
-  console.log(results);
+
   const options = {
     locale: "fr",
     scales: {
@@ -159,7 +159,7 @@ const LineChart = ({
               )
 
               .map((timeFrame) => (
-                <Grid item key={timeFrame.id}>
+                <Grid item key={timeFrame}>
                   <Chip
                     label={timeFrame}
                     color={timeFrame === timeFrame.id ? "success" : undefined}
@@ -183,7 +183,7 @@ LineChart.propTypes = {
   setSelectedTimeframe: PropTypes.func,
   tooltipTitle: PropTypes.string,
   type: PropTypes.string,
-  doctorStats: PropTypes.object,
+  doctorStats: PropTypes.array,
 };
 
 export default LineChart;

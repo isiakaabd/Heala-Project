@@ -50,7 +50,6 @@ const HcpAvailability = (props) => {
       </Grid>
       <Grid item container>
         {availabiltyArray.map((availability, index) => {
-          console.log(availability);
           return (
             <Grid item key={index} md style={{ marginRight: "2rem" }}>
               <AvailabilityCard availability={availability} />
