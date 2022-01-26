@@ -25,8 +25,6 @@ const ReferPatient = ({ handleDialogClose, initialValues, type }) => {
   const onSubmit = async (values, onSubmitProps) => {
     if (type === "refer") {
       const { reason, patient, note, type, doctor, specialization } = values;
-      console.log(doctor, patient, type, reason, note, specialization);
-
       await referPatient({
         variables: {
           doctor: doctor,

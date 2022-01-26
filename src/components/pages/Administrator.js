@@ -145,7 +145,6 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
   const { loading, data, error } = useQuery(findAdmin);
-  console.log(data);
 
   const buttonType = {
     background: theme.palette.common.black,

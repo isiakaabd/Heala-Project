@@ -70,7 +70,6 @@ export const SubscriptionModal = ({
 
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description, duration, provider } = values;
-    console.log(provider);
 
     if (type === "edit") {
       try {
