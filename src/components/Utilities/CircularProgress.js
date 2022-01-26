@@ -47,7 +47,7 @@ export const CircularProgressBar = ({
 };
 
 CircularProgressBar.propTypes = {
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
   color: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,

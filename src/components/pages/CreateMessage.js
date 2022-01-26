@@ -87,7 +87,6 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
-    console.log(values);
     const { recipient, subject, textarea } = values;
 
     try {

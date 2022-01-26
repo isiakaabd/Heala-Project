@@ -41,7 +41,6 @@ export const ProviderModal = ({
       );
     }
   }, [userType.data]);
-  console.log(dropDown);
 
   useEffect(() => {
     if (single.data) {

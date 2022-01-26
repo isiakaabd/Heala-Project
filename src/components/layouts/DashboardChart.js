@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
+import NoData from "components/layouts/NoData";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Loader from "components/Utilities/Loader";
@@ -110,8 +111,6 @@ const DashboardCharts = () => {
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
 
-  console.log(patientValue.data);
-
   useEffect(() => {
     const fetch = async () => {
       patient();
@@ -136,6 +135,7 @@ const DashboardCharts = () => {
   const totalSubscribers =
     subscribers.totalActiveSubscribers + subscribers.totalInactiveSubscribers;
   if (patientValue.loading) return <Loader />;
+  if (patientValue.error) return <NoData error={patientValue.error.message} />;
 
   return (
     <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
@@ -455,7 +455,7 @@ const DashboardCharts = () => {
           <Divider color={theme.palette.common.lighterGrey} />
           {/* <Grid item className={classes.headerGrid}></Grid> */}
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item lg={5} direction="column" className={classes.bottomChartGrid}>
+          <Grid item lg={5} className={classes.bottomChartGrid}>
             <LineChart
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}

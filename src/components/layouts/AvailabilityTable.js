@@ -51,15 +51,13 @@ const useStyles = makeStyles((theme) => ({
 const AvailabilityTable = () => {
   const [patient, patientValue] = useLazyQuery(dashboard);
   const [avaliablity, setAvaliablity] = useState([]);
-
-  console.log(avaliablity);
   useEffect(() => {
     const fetch = async () => {
       patient();
     };
 
     if (patientValue.data) {
-      setAvaliablity(patientValue.data); //.getStats.patientStats
+      setAvaliablity(patientValue.data);
     }
     fetch();
   }, [patient, patientValue.data]);

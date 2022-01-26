@@ -331,16 +331,20 @@ export const getAMessage = gql`
   }
 `;
 export const findAccounts = gql`
-  query findAccounts {
-    accounts {
+  query findAccounts($email: EmailAddress!) {
+    accounts(orderBy: "-createdAt", filterBy: { email: $email }) {
       data {
         _id
+        role
         email
         dociId
         createdAt
         updatedAt
         isEmailVerified
-        role
+        providerId
+        userTypeId
+        isActive
+        authType
       }
     }
   }

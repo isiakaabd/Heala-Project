@@ -45,7 +45,7 @@ const ResponsiveHolder = styled.div`
 
 const LineGraph = ({ data }) => {
   const [chartMode, setChartMode] = useState("FIVE_DAYS");
-  console.log(data);
+
   return (
     <ResponsiveHolder>
       <LineChart

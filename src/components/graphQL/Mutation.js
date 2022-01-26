@@ -62,6 +62,7 @@ export const Login_USER = gql`
         access_token
         refresh_token
         role
+        email
       }
       errors {
         message
