@@ -51,7 +51,18 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
   }, [referral, data]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
-  const { specialization, doctor, patient, type, reason, note, testType, createdAt } = referral;
+  const {
+    specialization,
+    doctor,
+    patient,
+    referrals,
+    type,
+    reason,
+    note,
+    testType,
+    createdAt,
+    // eslint-disable-next-line
+  } = referral;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -114,7 +125,7 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">12344</Typography>
+                <Typography variant="h5">{referrals ? referrals : "No Value"}</Typography>
               </Grid>
             </Grid>
           </Grid>

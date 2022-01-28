@@ -153,7 +153,6 @@ const Login = () => {
             <img src={logo} alt="Brand logo" className={classes.logo} />
           </Grid>
           {Object.keys(authError).length > 0 && (
-            
             <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>
               {authError.message}
             </Alert>

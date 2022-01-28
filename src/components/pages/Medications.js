@@ -70,7 +70,7 @@ const Medications = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
   if (medic.loading) return <Loader />;
   if (medic.error) return <NoData error={medic.error.message} />;
-
+  console.log(medic.data);
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
@@ -132,7 +132,14 @@ const Medications = (props) => {
                       className={classes.tableCell}
                       style={{ maxWidth: "20rem" }}
                     >
-                      {row.type ? row.type : "No Value"}
+                      {row.dosage ? row.dosage : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
+                    >
+                      {row.interval ? row.interval : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -154,7 +161,7 @@ const Medications = (props) => {
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.caregiver}</span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                       </div>
                     </TableCell>
                   </TableRow>

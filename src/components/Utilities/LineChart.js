@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Chip from "@mui/material/Chip";
+import { Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";

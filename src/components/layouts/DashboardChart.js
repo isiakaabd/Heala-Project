@@ -19,11 +19,6 @@ import { useLazyQuery } from "@apollo/client";
 import { dashboard, getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
-  parentGrid: {
-    "&.MuiGrid-root": {
-      // maxWidth: "42rem",
-    },
-  },
   chartCard: {
     background: "#fff",
     borderRadius: "1rem",

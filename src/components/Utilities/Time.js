@@ -3,7 +3,6 @@ export const dateMoment = (dateString) => {
   return moment(dateString).utc().format("DD-MM-YYYY");
 };
 export const timeMoment = (dateString) => {
-  console.log(moment(dateString).format("hh:mm A"));
   return moment(dateString).format("hh:mm A");
 };
 

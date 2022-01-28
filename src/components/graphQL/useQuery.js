@@ -155,6 +155,9 @@ export const getConsultations = gql`
         discomfortLevel
         firstNotice
         doctor
+        type
+        status
+        contactMedium
         diagnosis {
           ailment
           severity
@@ -185,7 +188,7 @@ export const getDocConsult = gql`
         patient
         ailment
         severity
-        descripti
+        description
         treatment
         createdAt
         updatedAt
