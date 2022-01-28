@@ -99,9 +99,7 @@ const Login = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").required("Email is required"),
-    password: Yup.string()
-      .required("password is required")
-      .min(8, "Password is too short - should be 8 chars minimum."),
+    password: Yup.string().required("password is required"),
   });
 
   const onSubmit = async (values, onSubmitProps) => {
@@ -155,7 +153,7 @@ const Login = () => {
             <img src={logo} alt="Brand logo" className={classes.logo} />
           </Grid>
           {Object.keys(authError).length > 0 && (
-            // state && (
+            
             <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>
               {authError.message}
             </Alert>

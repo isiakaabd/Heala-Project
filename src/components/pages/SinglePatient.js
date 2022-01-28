@@ -194,15 +194,14 @@ const SinglePatient = (props) => {
           {/* Display photo and profile name grid */}
           <Grid item>
             <Grid container alignItems="center">
-              {patientProfile.image ? (
-                <Grid item style={{ marginRight: "2rem" }}>
-                  <Avatar
-                    alt={patientProfile.firstName}
-                    src={displayPhoto}
-                    sx={{ width: 50, height: 50 }}
-                  />
-                </Grid>
-              ) : null}
+              <Grid item style={{ marginRight: "2rem" }}>
+                <Avatar
+                  alt={patientProfile.firstName}
+                  src={patientProfile.image ? patientProfile.image : displayPhoto}
+                  sx={{ width: 50, height: 50 }}
+                />
+              </Grid>
+
               <Grid item>
                 <Typography variant="h2">
                   {patientProfile.firstName} {patientProfile.lastName}

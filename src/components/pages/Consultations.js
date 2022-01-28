@@ -130,13 +130,10 @@ const Consultations = (props) => {
             hasCheckbox={true}
           >
             {consultations
-              .filter((i) => i.patient == patientId)
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row._id, selectedRows);
-
                 const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
                   <TableRow
                     hover

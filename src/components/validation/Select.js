@@ -58,7 +58,7 @@ const Selects = (props) => {
       <Field name={name} as={Formiks} label={label}>
         <MenuItem value="">{placeholder}</MenuItem>
         {options.map((option) => (
-          <MenuItem key={option.key} value={option.key}>
+          <MenuItem key={option.key} value={option.value}>
             {option.key}
           </MenuItem>
         ))}

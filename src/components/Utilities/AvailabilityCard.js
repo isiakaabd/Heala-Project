@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { makeStyles } from "@mui/styles";
-
+import { hours } from "components/Utilities/Time";
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
     background: "#fff",
@@ -16,14 +16,6 @@ const useStyles = makeStyles((theme) => ({
 const AvailabilityCard = ({ availability }) => {
   const classes = useStyles();
 
-  const date = (time) => {
-    if (time < 12) return `${time}:AM`;
-    if (time > 12) {
-      let newTime = +time - 12;
-      return `${newTime}:PM`;
-    } else return `${time} Noon`;
-  };
-  console.log(availability.dates);
   return (
     <Grid container direction="column" className={classes.cardGrid}>
       <Grid item style={{ padding: "3rem 10rem" }}>
@@ -53,7 +45,7 @@ const AvailabilityCard = ({ availability }) => {
                       </Grid>
                       <Divider />
                       <Grid item>
-                        <Typography variant="body1">{date(time.start)}</Typography>
+                        <Typography variant="body1">{hours(time.start)}</Typography>
                       </Grid>
                     </Grid>
                     <Divider />
@@ -63,7 +55,7 @@ const AvailabilityCard = ({ availability }) => {
                       </Grid>
                       <Divider />
                       <Grid item>
-                        <Typography variant="body1">{date(time.stop)}</Typography>
+                        <Typography variant="body1">{hours(time.stop)}</Typography>
                       </Grid>
                     </Grid>
                   </Grid>
