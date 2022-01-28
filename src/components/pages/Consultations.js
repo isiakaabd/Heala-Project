@@ -89,6 +89,8 @@ const Consultations = (props) => {
     },
   });
 
+  console.log(data);
+
   const [consultations, setConsultations] = useState([]);
   useEffect(() => {
     if (data) {
@@ -153,6 +155,9 @@ const Consultations = (props) => {
                         }}
                       />
                     </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {dateMoment(row.createdAt)}
+                    </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
@@ -172,18 +177,38 @@ const Consultations = (props) => {
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                        <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {dateMoment(row.createdAt)}
+                      <Grid container gap={1}>
+                        {row.symptoms
+                          ? row.symptoms.map((i) => {
+                              return <p key={i.name}>{i.name}</p>;
+                            })
+                          : "No Value"}
+                      </Grid>
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      {row.description}
+                      {row.contactMedium ? row.contactMedium : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                    >
+                      {row.type ? row.type : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                    >
+                      {row.status ? row.status : "No Value"}
                     </TableCell>
                     <TableCell align="left">
                       <Button

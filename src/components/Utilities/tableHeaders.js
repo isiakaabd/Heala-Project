@@ -324,9 +324,12 @@ export const viewRefferalHeader = [
 
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
-  { id: 100, label: "Name" },
-  { id: 101, label: "Date" },
-  { id: 102, label: "Description" },
+  { id: 100, label: "Date" },
+  { id: 101, label: "Doctor" },
+  { id: 102, label: "Symptoms" },
+  { id: 105, label: "Contact" },
+  { id: 133, label: "Type" },
+  { id: 1232, label: "Status" },
   { id: 103, label: "" },
 ];
 export const consultationsHeadCells2 = [
@@ -346,10 +349,11 @@ export const prescriptionsHeadCells = [
 
 // Patients > Medications Route Table
 export const medicationsHeadCells = [
-  { id: 300, label: "Date Prescribed" },
-  { id: 301, label: "Medication Name" },
-  { id: 302, label: "Prescription Types" },
-  { id: 303, label: "Caregiver" },
+  { id: 300, label: "Date" },
+  { id: 301, label: "Drug" },
+  { id: 302, label: "Dosage" },
+  { id: 309, label: "Interval" },
+  { id: 303, label: "Doctor" },
 ];
 
 // ------------------------------------

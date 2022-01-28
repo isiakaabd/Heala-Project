@@ -92,7 +92,7 @@ const AvailabilityTable = () => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow hover tabIndex={-1} key={row.id}>
+                    <TableRow hover tabIndex={-1} key={row._id}>
                       <TableCell
                         id={labelId}
                         scope="row"

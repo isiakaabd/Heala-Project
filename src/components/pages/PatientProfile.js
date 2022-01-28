@@ -18,7 +18,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ReferPatient from "components/modals/ReferPatient";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams, useHistory } from "react-router-dom";
-import { useQuery, useMutation /*useLazyQuery*/ } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
 import { getPatients, getProfile } from "components/graphQL/useQuery";
 
@@ -82,7 +82,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
-  // const client = useApolloClient();
   const { patientId } = useParams();
   const profile = useQuery(getProfile, {
     variables: {
