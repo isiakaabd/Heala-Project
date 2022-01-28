@@ -193,7 +193,7 @@ const PatientAppointment = (props) => {
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
-
+    console.log(date);
     const timeValue = timeMoment(date);
     const dateValue = timeConverter(date);
     await updateAppoint({
@@ -231,7 +231,6 @@ const PatientAppointment = (props) => {
     },
   });
 
-  console.log(data);
   useEffect(() => {
     if (data) {
       setPatientAppointment(data.getAppointments.data);
@@ -324,9 +323,7 @@ const PatientAppointment = (props) => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row._id, selectedRows);
-
                     const labelId = `enhanced-table-checkbox-${index}`;
-
                     return (
                       <TableRow
                         hover
@@ -381,7 +378,7 @@ const PatientAppointment = (props) => {
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                         >
-                          {row.time}
+                          {/* {hours(}row.time) */} {row.time}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
                           <Button

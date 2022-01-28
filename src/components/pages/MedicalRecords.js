@@ -9,7 +9,6 @@ import { calculateBMI } from "components/Utilities/bMI";
 import { getProfile, findAllergies, getLabResult } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
-
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",
@@ -31,6 +30,23 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1.35rem",
       borderRadius: "1.5rem",
       color: theme.palette.common.green,
+    },
+  },
+  link: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: "1.25rem",
+    color: theme.palette.common.green,
+    border: `1px solid ${theme.palette.common.lightGrey}`,
+    padding: ".75rem",
+    borderRadius: "1.5rem",
+    textDecoration: "none",
+  },
+  linkIcon: {
+    "&.MuiSvgIcon-root": {
+      fontSize: "1.25rem",
+      color: theme.palette.common.green,
+      marginLeft: "1.2rem",
     },
   },
 
@@ -266,13 +282,17 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Grid container justifyContent="space-around">
                   {lab.length > 0 ? (
-                    lab.map((alergy) => (
-                      <Grid item key={alergy._id} className={classes.allergies}>
-                        <Avatar
-                          src={alergy.url}
-                          sx={{ width: "4rem", height: "4rem" }}
-                          // className={classes.infoBadge}
-                        />
+                    lab.map((alergy, index) => (
+                      <Grid item key={alergy._id}>
+                        <a
+                          rel="noreferrer"
+                          key={alergy._id}
+                          className={classes.link}
+                          href={alergy.url}
+                          target="_blank"
+                        >
+                          <span>{`Lab Result 0${index + 1}`}</span>
+                        </a>
                       </Grid>
                     ))
                   ) : (

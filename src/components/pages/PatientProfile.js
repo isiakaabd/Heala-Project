@@ -20,7 +20,7 @@ import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation /*useLazyQuery*/ } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
-import { getProfile, getPatients } from "components/graphQL/useQuery";
+import { getPatients, getProfile } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -43,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     background: "#fff",
     borderRadius: "1rem",
-    padding: "2rem 2.5rem",
-    height: "10.1rem",
+    padding: "4rem 5rem",
+    height: "16.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -76,9 +76,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   buttonsGridWrapper: {
-    marginTop: "2rem !important",
-    height: "8.1rem",
-    alignItems: "center",
+    marginTop: "5rem !important",
+    height: "16.1rem",
   },
 }));
 

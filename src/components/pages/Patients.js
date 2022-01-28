@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 import NoData from "components/layouts/NoData";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
@@ -147,7 +146,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   if (patient.loading) return <Loader />;
   if (patient.error) return <NoData error={patient.error.message} />;
-  console.log(profiles);
+
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -180,6 +179,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  console.log(row);
+
                   return (
                     <TableRow
                       hover
@@ -206,7 +207,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, textAlign: "left" }}
                       >
-                        {row.dociId.split("-")[1]}
+                        {row.dociId && row.dociId.split("-")[1]}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -219,7 +220,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`Display Photo of ${row.firstName}`}
-                              src={displayPhoto}
+                              src={row.image ? row.image : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>

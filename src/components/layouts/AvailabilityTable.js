@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import { useLazyQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
+import { hours } from "components/Utilities/Time";
 import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,23 +53,26 @@ const AvailabilityTable = () => {
   const [patient, patientValue] = useLazyQuery(dashboard);
   const [avaliablity, setAvaliablity] = useState([]);
   useEffect(() => {
-    const fetch = async () => {
+    (async () => {
       patient();
-    };
+    })();
 
     if (patientValue.data) {
-      setAvaliablity(patientValue.data);
+      setAvaliablity(patientValue.data.getStats.availabilityCalendar);
     }
-    fetch();
   }, [patient, patientValue.data]);
 
   const classes = useStyles();
   const theme = useTheme();
 
   const { page, rowsPerPage } = useSelector((state) => state.tables);
+
+  if (patientValue.loading) return null;
+  if (patientValue.error) return null;
+
   if (patientValue.data) {
     return (
-      <Grid container height="100%">
+      <Grid container height="100%" gap={2}>
         <Grid item sx={{ flexGrow: 1 }}>
           <Typography variant="h4">Availability Table</Typography>
         </Grid>
@@ -114,21 +118,31 @@ const AvailabilityTable = () => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {row.specialization}
+                        {row.specialization ? row.specialization : "No Value"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Chip
-                          label={row.time}
-                          className={classes.badge}
-                          style={{
-                            background: theme.palette.common.lightGreen,
-                            color: theme.palette.common.green,
-                          }}
-                        />
+                        <Grid container gap={1}>
+                          {row.dates &&
+                            row.dates.map((times) => {
+                              return times.times.map((time, index) => {
+                                return (
+                                  <Chip
+                                    key={index}
+                                    label={`${hours(time.start)} - ${hours(time.stop)} `}
+                                    className={classes.badge}
+                                    style={{
+                                      background: theme.palette.common.lightGreen,
+                                      color: theme.palette.common.green,
+                                    }}
+                                  />
+                                );
+                              });
+                            })}
+                        </Grid>
                       </TableCell>
                     </TableRow>
                   );

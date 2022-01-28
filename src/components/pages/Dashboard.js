@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import FormikControl from "components/validation/FormikControl";
 import { Grid, Typography } from "@mui/material";
@@ -6,8 +6,24 @@ import DashboardCharts from "components/layouts/DashboardChart";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import AvailabilityTable from "components/layouts/AvailabilityTable";
+import { getUserTypes } from "components/graphQL/useQuery";
+import { useQuery } from "@apollo/client";
 
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
+  const [dropDown, setDropDown] = useState([]);
+  const { data } = useQuery(getUserTypes);
+  useEffect(() => {
+    if (data) {
+      const datas = data.getUserTypes.userType;
+      setDropDown(
+        datas &&
+          datas.map((i) => {
+            return { key: i.name, value: i.name };
+          }),
+      );
+    }
+  }, [data]);
+
   const initialValues = {
     stats: "",
   };
@@ -23,10 +39,8 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-  const specializations = [
-    { key: "Heala stats", value: "Heala stats" },
-    { key: "Evergreen Stats", value: "Evergreen Stats" },
-  ];
+
+
   return (
     <Grid container direction="column">
       <Grid item container alignItems="center">
@@ -47,7 +61,7 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
                   <Grid item container>
                     <FormikControl
                       control="select"
-                      options={specializations}
+                      options={dropDown}
                       name="stats"
                       placeholder="All Stats"
                     />

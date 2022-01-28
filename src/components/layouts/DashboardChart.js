@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
+import { Formik, Form } from "formik";
+import FormikControl from "components/validation/FormikControl";
 import NoData from "components/layouts/NoData";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -9,13 +11,12 @@ import { useTheme } from "@mui/material/styles";
 import chart1 from "assets/images/chart1.png";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import FormSelect from "components/Utilities/FormSelect";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import "chartjs-plugin-style";
 import { useLazyQuery } from "@apollo/client";
-import { dashboard } from "components/graphQL/useQuery";
+import { dashboard, getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -97,43 +98,67 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const selectOptions = ["One day", "Five Days", "One Month", "Three Months", "One Year"];
+const selectOptions = [
+  { key: "One day", value: "1" },
+  { key: "Five Days", value: "5" },
+  { key: "One Month", value: "30" },
+  { key: "Three Months", value: "90" },
+  { key: "One Year", value: "365" },
+];
 
 const DashboardCharts = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const initialValues = {
+    finance: "",
+  };
 
   const [patient, patientValue] = useLazyQuery(dashboard);
+  const [stats] = useLazyQuery(getEarningStats);
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [appointmentStats, setAppointmentStats] = useState([]);
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
+  // const [stat, setStat] = useState([]);
+  // const [state, setState] = useState(false);
+  // const change = async (value) => {
+  //   await stats({ variables: { q: value } });
+  // };
 
   useEffect(() => {
-    const fetch = async () => {
+    (async () => {
       patient();
-    };
+      // stats();
+    })();
 
     if (patientValue.data) {
-      setPatients(patientValue.data.getStats.patientStats);
-      setDoctorStats(patientValue.data.getStats.doctorStats);
-      setAppointmentStats(patientValue.data.getStats.appointmentStats);
-      setsubscribers(patientValue.data.getStats.subscribers);
-      setTotalEarning(patientValue.data.getStats.totalEarnings);
-      setTotalPayouts(patientValue.data.getStats.totalPayout);
+      const {
+        patientStats,
+        doctorStats,
+        appointmentStats,
+        subscribers,
+        totalEarnings,
+        totalPayout,
+      } = patientValue.data.getStats;
+      setPatients(patientStats);
+      setDoctorStats(doctorStats);
+      setAppointmentStats(appointmentStats);
+      setsubscribers(subscribers);
+      setTotalEarning(totalEarnings);
+      setTotalPayouts(totalPayout);
     }
-    fetch();
   }, [patient, patientValue.data]);
 
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
-  const [timeframeOption, setTimeframeOption] = useState("");
-
-  const totalDoc = doctorStats.activeDoctors + doctorStats.inactiveDoctors;
-  const totalPatient = patients.activePatients + patients.inactivePatients;
-  const totalSubscribers =
-    subscribers.totalActiveSubscribers + subscribers.totalInactiveSubscribers;
+  // const [timeframeOption, setTimeframeOption] = useState("");
+  const { activeDoctors, inactiveDoctors } = doctorStats;
+  const { activePatients, inactivePatients } = patients;
+  const { totalActiveSubscribers, totalInactiveSubscribers } = subscribers;
+  const totalDoc = activeDoctors + inactiveDoctors;
+  const totalPatient = activePatients + inactivePatients;
+  const totalSubscribers = totalActiveSubscribers + totalInactiveSubscribers;
   if (patientValue.loading) return <Loader />;
   if (patientValue.error) return <NoData error={patientValue.error.message} />;
 
@@ -235,110 +260,122 @@ const DashboardCharts = () => {
           </Grid>
           <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
             <Grid container direction="column">
-              <Grid item>
-                <Grid
-                  container
-                  justifyContent="space-between"
-                  alignItems="center"
-                  className={classes.headerGrid}
-                >
-                  <Grid item>
-                    <Typography variant="h5">Financial Stats</Typography>
-                  </Grid>
-                  <Grid item>
-                    <FormSelect
-                      placeholderText="Select days"
-                      options={selectOptions}
-                      value={timeframeOption}
-                      onChange={(event) => setTimeframeOption(event.target.value)}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider color={theme.palette.common.lighterGrey} />
-              </Grid>
-              <Grid item>
-                <Grid
-                  container
-                  justifyContent="space-between"
-                  alignItems="center"
-                  className={classes.overviewGrid}
-                >
-                  <Grid item>
-                    <CircularProgressBar
-                      height="8rem"
-                      width="8rem"
-                      color={theme.palette.common.green}
-                      trailColor={theme.palette.common.red}
-                      value={patientValue.data && totalPayouts}
-                      strokeWidth={8}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Grid container>
-                      <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
-                        <TrendingDownIcon color="success" />
-                      </Grid>
-                      <Grid item style={{ marginLeft: "1rem" }}>
-                        <Grid container direction="column">
-                          <Grid item>
-                            <Typography variat="h3">
-                              <span
-                                style={{
-                                  textDecoration: "line-through",
-                                  textDecorationStyle: "double",
-                                }}
-                              >
-                                N
-                              </span>
-                              {patientValue.data && totalEarning}
-                            </Typography>
+              <>
+                <Formik initialValues={initialValues} validateOnChange={true}>
+                  {({ handleChange, setFieldValue, values }) => {
+                    return (
+                      <Form style={{ marginTop: "3rem" }} onBlur={() => stats()}>
+                        <Grid item>
+                          <Grid
+                            container
+                            justifyContent="space-between"
+                            alignItems="center"
+                            className={classes.headerGrid}
+                          >
+                            <Grid item>
+                              <Typography variant="h5">Financial Stats</Typography>
+                            </Grid>
+                            <Grid item>
+                              <FormikControl
+                                control="select"
+                                placeholder="Select days"
+                                options={selectOptions}
+                                // onChange={change}
+                                // onChange={stats({ variables: { q: values } })}
+                                name="finance"
+                              />
+                            </Grid>
                           </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total earnings
-                            </Typography>
+                          <Divider color={theme.palette.common.lighterGrey} />
+                        </Grid>
+                      </Form>
+                    );
+                  }}
+                </Formik>
+                <Grid item>
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    alignItems="center"
+                    className={classes.overviewGrid}
+                  >
+                    <Grid item>
+                      <CircularProgressBar
+                        height="8rem"
+                        width="8rem"
+                        color={theme.palette.common.green}
+                        trailColor={theme.palette.common.red}
+                        value={patientValue.data && totalPayouts}
+                        strokeWidth={8}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Grid container>
+                        <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
+                          <TrendingDownIcon color="success" />
+                        </Grid>
+                        <Grid item style={{ marginLeft: "1rem" }}>
+                          <Grid container direction="column">
+                            <Grid item>
+                              <Typography variat="h3">
+                                <span
+                                  style={{
+                                    textDecoration: "line-through",
+                                    textDecorationStyle: "double",
+                                  }}
+                                >
+                                  N
+                                </span>
+                                {patientValue.data && totalEarning}
+                              </Typography>
+                            </Grid>
+                            <Grid item>
+                              <Typography
+                                variant="body2"
+                                style={{ color: theme.palette.common.lightGrey }}
+                              >
+                                Total earnings
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item>
+                      <Grid container>
+                        <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
+                          <TrendingUpIcon color="error" />
+                        </Grid>
+                        <Grid item style={{ marginLeft: "1rem" }}>
+                          <Grid container direction="column">
+                            <Grid item>
+                              <Typography variat="h3">
+                                <span
+                                  style={{
+                                    textDecoration: "line-through",
+                                    textDecorationStyle: "double",
+                                  }}
+                                >
+                                  N
+                                </span>
+                                {patientValue.data && totalPayouts}
+                              </Typography>
+                            </Grid>
+                            <Grid item>
+                              <Typography
+                                variant="body2"
+                                style={{ color: theme.palette.common.lightGrey }}
+                              >
+                                Total payouts
+                              </Typography>
+                            </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item>
-                    <Grid container>
-                      <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
-                        <TrendingUpIcon color="error" />
-                      </Grid>
-                      <Grid item style={{ marginLeft: "1rem" }}>
-                        <Grid container direction="column">
-                          <Grid item>
-                            <Typography variat="h3">
-                              <span
-                                style={{
-                                  textDecoration: "line-through",
-                                  textDecorationStyle: "double",
-                                }}
-                              >
-                                N
-                              </span>
-                              {patientValue.data && totalPayouts}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total payouts
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
                 </Grid>
-              </Grid>
+              </>
             </Grid>
           </Grid>
           <Grid item>

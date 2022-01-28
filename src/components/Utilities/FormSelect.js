@@ -23,8 +23,8 @@ const FormSelect = ({ startAdornment, value, onChange, placeholderText, options,
           <Typography>{placeholderText}</Typography>
         </MenuItem>
         {options.map((option, index) => (
-          <MenuItem key={index} value={option} style={{ fontSize: "1.25rem" }}>
-            {option}
+          <MenuItem key={option.value} value={option.value} style={{ fontSize: "1.25rem" }}>
+            {option.key}
           </MenuItem>
         ))}
       </Select>

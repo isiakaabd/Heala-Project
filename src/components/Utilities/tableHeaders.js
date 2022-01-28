@@ -330,9 +330,9 @@ export const consultationsHeadCells = [
   { id: 103, label: "" },
 ];
 export const consultationsHeadCells2 = [
-  { id: 100, label: "Name" },
+  { id: 100, label: "Doctor" },
   { id: 101, label: "Date" },
-  { id: 102, label: "Description" },
+  { id: 102, label: "Time" },
   { id: 103, label: "" },
   { id: 139, label: "" },
 ];

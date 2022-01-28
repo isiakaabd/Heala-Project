@@ -5,6 +5,7 @@ import Chip from "@mui/material/Chip";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";
+// import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   intervalButtonsGrid: {
@@ -37,34 +38,45 @@ const LineChart = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [actives, setActives] = useState([]);
+  // const [results, setResults] = useState([]);
+  const [inActives, setInActives] = useState([]);
+  // const [times, setTimes] = useState([]);
 
-  const [results, setResults] = useState([]);
   useEffect(() => {
-    let result =
-      type === "subscriber"
-        ? doctorStats &&
-          Object.keys(doctorStats)
-            .map((key) => doctorStats[key])
-            .filter((element) => {
-              return element !== undefined;
-            })
-        : doctorStats &&
-          Object.keys(doctorStats)
-            .map((key) => doctorStats[key].count)
-            .filter((element) => {
-              return element !== undefined;
-            });
-    setResults(result);
+    // setTimes(
+    //   doctorStats &&
+    //     Object.keys(doctorStats)
+    //       .map((key) => dateMoment(doctorStats[key].date))
+    //       .filter((element) => {
+    //         return dateMoment(element) !== undefined;
+    //       }),
+    // );
 
-    // setResults(result);
+    setInActives(
+      doctorStats &&
+        Object.keys(doctorStats)
+          .map((key) => doctorStats[key].inactiveCount)
+          .filter((element) => {
+            return element !== undefined;
+          }),
+    );
+    setActives(
+      doctorStats &&
+        Object.keys(doctorStats)
+          .map((key) => doctorStats[key].activeCount)
+          .filter((element) => {
+            return element !== undefined;
+          }),
+    );
   }, [doctorStats, type]);
 
   const data = {
-    labels: ["0", ".4", "0.6", "1.2", "1.6", "2"],
+    labels: ["ONEDAY", "FIVEDAYS", "ONEMONTH", "THREEMOS", "ONEYEAR"],
     datasets: [
       {
         label: "Active",
-        data: results,
+        data: actives,
         fill: false,
         borderColor: theme.palette.common.green,
         pointBackgroundColor: theme.palette.common.green,
@@ -76,7 +88,7 @@ const LineChart = ({
       },
       {
         label: "Inactive",
-        data: results,
+        data: inActives,
         fill: false,
         borderColor: theme.palette.common.red,
         pointBackgroundColor: theme.palette.common.red,
@@ -97,6 +109,7 @@ const LineChart = ({
         grid: {
           color: "rgba(0, 0, 0, 0.12)",
           borderDash: [5, 8],
+          display: true,
         },
       },
       x: {
@@ -143,7 +156,6 @@ const LineChart = ({
 
     return tooltipTitleColor;
   }
-
   return (
     <Grid item container>
       <Grid item container sx={{ maxWidth: "100%" }}>
@@ -157,7 +169,10 @@ const LineChart = ({
               .filter(
                 (timeFrame) => timeFrame != "activePatients" && timeFrame != "inactivePatients",
               )
-
+              .filter(
+                (timeFrame) =>
+                  timeFrame != "totalActiveSubscribers" && timeFrame != "totalInactiveSubscribers",
+              )
               .map((timeFrame) => (
                 <Grid item key={timeFrame}>
                   <Chip

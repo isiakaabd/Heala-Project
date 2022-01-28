@@ -93,6 +93,16 @@ export const dashboard = gql`
     }
   }
 `;
+export const getEarningStats = gql`
+  query getEarningStats($q: String) {
+    getEarningStats(q: $q) {
+      totalEarnings
+      totalPayout
+      earningData
+      payoutData
+    }
+  }
+`;
 
 export const getMessage = gql`
   query getMessages {
@@ -136,12 +146,30 @@ export const getConsultations = gql`
     getConsultations(filterBy: { patient: $id }, orderBy: $orderBy) {
       data {
         _id
-        doctor
         patient
-        ailment
-        severity
+        consultationOwner
+        symptoms {
+          name
+        }
         description
-        treatment
+        discomfortLevel
+        firstNotice
+        doctor
+        diagnosis {
+          ailment
+          severity
+        }
+        doctorNote
+        prescription {
+          drugName
+          dosageQuantity
+          dosage
+          dosageFrequency {
+            day
+            duration
+          }
+          mode
+        }
         createdAt
         updatedAt
       }
@@ -157,8 +185,7 @@ export const getDocConsult = gql`
         patient
         ailment
         severity
-        description
-
+        descripti
         treatment
         createdAt
         updatedAt
@@ -170,12 +197,30 @@ export const getConsult = gql`
   query getConsultation($id: ID!) {
     getConsultation(id: $id) {
       _id
-      doctor
       patient
-      ailment
-      severity
+      consultationOwner
+      symptoms {
+        name
+      }
       description
-      treatment
+      discomfortLevel
+      firstNotice
+      doctor
+      diagnosis {
+        ailment
+        severity
+      }
+      doctorNote
+      prescription {
+        drugName
+        dosageQuantity
+        dosage
+        dosageFrequency {
+          day
+          duration
+        }
+        mode
+      }
       createdAt
       updatedAt
     }
@@ -222,7 +267,6 @@ export const findProfile = gql`
       _id
       firstName
       lastName
-      dociId
       height
       weight
       bloodGroup
@@ -231,9 +275,11 @@ export const findProfile = gql`
       phoneNumber
       provider
       plan
+      dociId
       status
       consultations
       createdAt
+      image
     }
   }
 `;
@@ -463,7 +509,6 @@ export const getPatients = gql`
         _id
         firstName
         lastName
-        provider
         height
         weight
         bloodGroup
@@ -471,10 +516,12 @@ export const getPatients = gql`
         genotype
         gender
         phoneNumber
+        provider
         plan
         status
         consultations
         createdAt
+        image
       }
     }
   }
@@ -511,7 +558,6 @@ export const getProfile = gql`
       _id
       firstName
       lastName
-      dociId
       height
       weight
       bloodGroup
@@ -521,8 +567,10 @@ export const getProfile = gql`
       provider
       plan
       status
+      dociId
       consultations
       createdAt
+      image
     }
   }
 `;
