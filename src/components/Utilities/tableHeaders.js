@@ -325,11 +325,11 @@ export const viewRefferalHeader = [
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
   { id: 100, label: "Date" },
-  { id: 101, label: "Doctor" },
+  { id: 101, label: "Patient" },
   { id: 102, label: "Symptoms" },
   { id: 105, label: "Contact" },
   { id: 133, label: "Type" },
-  { id: 1232, label: "Status" },
+  // { id: 1232, label: "Status" },
   { id: 103, label: "" },
 ];
 export const consultationsHeadCells2 = [

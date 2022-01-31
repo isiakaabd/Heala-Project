@@ -180,16 +180,34 @@ export const getConsultations = gql`
   }
 `;
 export const getDocConsult = gql`
-  query getConsultations($id: ID!) {
+  query getConsultations($id: String!) {
     getConsultations(filterBy: { doctor: $id }) {
       data {
         _id
-        doctor
         patient
-        ailment
-        severity
+        consultationOwner
+        symptoms {
+          name
+        }
         description
-        treatment
+        discomfortLevel
+        firstNotice
+        doctor
+        diagnosis {
+          ailment
+          severity
+        }
+        doctorNote
+        prescription {
+          drugName
+          dosageQuantity
+          dosage
+          dosageFrequency {
+            day
+            duration
+          }
+          mode
+        }
         createdAt
         updatedAt
       }
