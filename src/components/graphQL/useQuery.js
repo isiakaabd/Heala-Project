@@ -79,6 +79,7 @@ export const dashboard = gql`
       availabilityCalendar {
         _id
         doctor
+        doctorData
         dates {
           day
           available
@@ -524,8 +525,21 @@ export const getMyEarnings = gql`
   }
 `;
 export const getPatients = gql`
-  query findProfiles {
-    profiles {
+  query findProfiles(
+    $gender: String
+    $firstName: String
+    $bloodGroup: String
+    $phoneNumber: String
+  ) {
+    profiles(
+      filterBy: {
+        gender: $gender
+        firstName: $firstName
+        bloodGroup: $bloodGroup
+        phoneNumber: $phoneNumber
+      }
+      orderBy: "-createdAt"
+    ) {
       data {
         _id
         firstName
@@ -548,8 +562,20 @@ export const getPatients = gql`
   }
 `;
 export const getDoctorsProfile = gql`
-  query doctorProfiles {
-    doctorProfiles {
+  query doctorProfiles(
+    $hospital: String
+    $specialization: String
+    $cadre: String
+    $phoneNumber: String
+  ) {
+    doctorProfiles(
+      filterBy: {
+        hospital: $hospital
+        specialization: $specialization
+        phoneNumber: $phoneNumber
+        cadre: $cadre
+      }
+    ) {
       profile {
         _id
         firstName

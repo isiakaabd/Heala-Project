@@ -157,7 +157,7 @@ const HCP = ({ setSelectedSubMenu }) => {
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
           {response ? (
-            <Grid item width={300} margin="auto" justifyContent="left" alignItems="center">
+            <Grid item width={300} margin="0 auto" justifyContent="left" alignItems="center">
               <Alert severity="success">
                 <Typography variant="h1">{response}</Typography>
               </Alert>

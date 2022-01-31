@@ -69,6 +69,7 @@ const AvailabilityTable = () => {
 
   if (patientValue.loading) return null;
   if (patientValue.error) return null;
+  console.log(patientValue.data);
 
   if (patientValue.data) {
     return (
