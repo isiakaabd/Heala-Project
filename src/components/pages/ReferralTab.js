@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import { TableRow, Grid, Checkbox, TableCell } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
@@ -96,6 +93,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       setReferral(data.getReferrals.referral);
     }
   }, [referral, data]);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 

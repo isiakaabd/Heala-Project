@@ -84,12 +84,10 @@ const HcpConsultations = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-  // const { hcpConsultation } = useActions();
 
   const { hcpId } = useParams();
 
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
-  // const { consultation } = useSelector((state) => state.hcp);
 
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
@@ -164,6 +162,10 @@ const HcpConsultations = (props) => {
                           }}
                         />
                       </TableCell>
+
+                      <TableCell align="left" className={classes.tableCell}>
+                        {dateMoment(row.createdAt)}
+                      </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
@@ -183,11 +185,21 @@ const HcpConsultations = (props) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.firstName}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
                         </div>
                       </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {dateMoment(row.createdAt)}
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      >
+                        <Grid container gap={1}>
+                          {row.symptoms
+                            ? row.symptoms.map((i) => {
+                                return <p key={i.name}>{i.name}</p>;
+                              })
+                            : "No Value"}
+                        </Grid>
                       </TableCell>
                       <TableCell
                         align="left"
@@ -196,7 +208,14 @@ const HcpConsultations = (props) => {
                       >
                         {row.description}
                       </TableCell>
-                      <TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      >
+                        {row.type ? row.type : "No Value"}
+                      </TableCell>
+                      <TableCell align="left">
                         <Button
                           variant="contained"
                           className={classes.button}

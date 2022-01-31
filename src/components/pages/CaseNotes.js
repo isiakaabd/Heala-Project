@@ -8,10 +8,10 @@ import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import NoData from "components/layouts/NoData";
 import { useQuery } from "@apollo/client";
 import { getConsult } from "components/graphQL/useQuery";
 import { dateMoment, timeMoment } from "components/Utilities/Time";
+import NoData from "components/layouts/NoData";
 import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
