@@ -108,7 +108,13 @@ const useStyles = makeStyles((theme) => ({
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-
+  const cadre = [
+    { key: "1", value: "1" },
+    { key: "2", value: "2" },
+    { key: "3", value: "3" },
+    { key: "4", value: "4" },
+    { key: "5", value: "5" },
+  ];
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -128,29 +134,28 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
   const initialValues1 = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    specialization: "",
     hospital: "",
-    affliate: "",
-    image: "",
-    plan: "",
+    specialization: "",
+    phone: "",
+    cadre: "",
   };
 
   const validationSchema1 = Yup.object({
-    affliate: Yup.string("Enter your affliate").required("Affliate is required"),
-    plan: Yup.string("Select your plan").required("Hlan is required"),
-    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
-    firstName: Yup.string("Enter your first Name").required("First name is required"),
-    lastName: Yup.string("Enter your last Name").required("Last name is required"),
-    specialization: Yup.string("Enter your specialization").required("Specialization is required"),
-    email: Yup.string().email("Enter a valid email").required("Email is required"),
-    phoneNumber: Yup.number("Enter a valid email").required("Phone Number is required"),
+    hospital: Yup.string("Enter your hospital"),
+    specialization: Yup.string("Enter your specialization"),
+    phone: Yup.number("Enter a valid email").typeError("Enter a current Number"),
+    cadre: Yup.string("Enter your Cadre"),
   });
-  const onSubmit1 = (values) => {
+  const onSubmit1 = async (values) => {
     console.log(values);
+    const { hospital, specialization, phone, cadre } = values;
+    await doctorProfile.refetch({
+      hospital,
+      specialization,
+      phoneNumber: phone,
+      cadre,
+    });
+    setOpenHcpFilter(false);
   };
   const onSubmit = async (values) => {
     const {
@@ -194,13 +199,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     { key: "Optometry", value: "Optometry" },
     { key: "Pathology", value: "Pathology" },
   ];
-  const cadre = [
-    { key: "1", value: "1" },
-    { key: "2", value: "2" },
-    { key: "3", value: "3" },
-    { key: "4", value: "4" },
-    { key: "5", value: "5" },
-  ];
+
   const gender = [
     { key: "Male", value: "male" },
     { key: "Female", value: "female" },
@@ -243,7 +242,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   if (doctorProfile.error) return <NoData error={doctorProfile.error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
+      <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchHcp}
@@ -404,35 +403,34 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     <Grid item container>
                       <FormikControl
                         control="input"
-                        name="Date"
-                        label="Date"
-                        placeholder="Choose Date"
+                        name="hospital"
+                        label="Hospital"
+                        placeholder="Enter Hospital"
                       />
                     </Grid>
                     <Grid item container>
                       <FormikControl
                         control="select"
                         options={specializations}
-                        name="Fspecialization"
+                        name="specialization"
                         label="Specialization"
                         placeholder="Select Specialization"
                       />
                     </Grid>
                     <Grid item container>
                       <FormikControl
-                        control="select"
-                        name="hospitals"
-                        options={specializations}
-                        label="Hospital"
-                        placeholder="Choose hospital"
+                        control="input"
+                        name="phone"
+                        label="Phone Number"
+                        placeholder="Enter Phone Number"
                       />
                     </Grid>
                     <Grid item container>
                       <FormikControl
                         control="input"
-                        name="status"
-                        label="Select Status"
-                        placeholder="Choose hospital"
+                        name="cadre"
+                        label="Enter Cadre"
+                        placeholder="Enter Cadre"
                       />
                     </Grid>
                   </Grid>

@@ -144,7 +144,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
-  const { loading, data, error } = useQuery(findAdmin);
+  const { loading, data, error, refetch } = useQuery(findAdmin);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -154,25 +154,21 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   };
 
   const specializations = [
-    { key: "admin", value: "admin" },
-    { key: "user", value: "user" },
-    { key: "super", value: "Optometry" },
-    { key: "Pathology", value: "Pathology" },
+    { key: "Doctor", value: "doctor" },
+    { key: "Super-admin", value: "super-admin" },
   ];
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const initialValues = {
+    email: "",
     role: "",
-    name: "",
   };
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
     try {
-      if (data) {
-        setAdmins(data.accounts.data);
-      }
+      if (data) setAdmins(data.accounts.data);
     } catch (err) {
       console.log(err);
     }
@@ -194,11 +190,16 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   ];
 
   const validationSchema = Yup.object({
-    role: Yup.string("Select your role").required("Role is required"),
-    name: Yup.string("Enter your name").required("Name is required"),
+    email: Yup.string().email("Enter a valid email"),
+    role: Yup.string("Select your role"),
   });
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const { email, role } = values;
+    await refetch({
+      email,
+      role,
+    });
+    handleDialogClose();
   };
   const initialValues1 = {
     email: "",
@@ -211,10 +212,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       .min(8, "Password is too short - should be 8 chars minimum."),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
   });
-  const onSubmit1 = (values, onSubmitProps) => {
+  const onSubmit1 = async (values, onSubmitProps) => {
     const { email, password } = values;
     try {
-      addAdminUser({
+      await addAdminUser({
         variables: {
           email,
           password,
@@ -226,7 +227,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     } catch (err) {
       console.log(err);
     }
-    handleDialogClose();
+    handleAdminClose();
     onSubmitProps.resetForm();
   };
 
@@ -373,9 +374,9 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     <Grid item xs={6} marginBottom={4}>
                       <FormikControl
                         control="input"
-                        name="name"
-                        label="Admin Name"
-                        placeholder="Select Name"
+                        name="email"
+                        label="Admin Email"
+                        placeholder="Enter Admin Email"
                       />
                     </Grid>
                     <Grid item xs={6}>

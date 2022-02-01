@@ -163,6 +163,7 @@ const SinglePatient = (props) => {
       id: patientId,
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-only",
   });
   useEffect(() => {
     if (profile.data) {

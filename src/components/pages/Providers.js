@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { ProviderModal } from "components/modals/ProviderModal";
+import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-import { pendingHeader } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import NoData from "components/layouts/NoData";
 import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
@@ -19,6 +19,8 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import Modals from "components/Utilities/Modal";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import AddIcon from "@mui/icons-material/Add";
 import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
 import { getProviders /*getSingleProvider*/ } from "components/graphQL/useQuery";
@@ -202,18 +204,38 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   }, [selectedMenu, selectedSubMenu]);
   const [searchHcp, setSearchHcp] = useState("");
   const [editId, setEditId] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpens, setIsOpens] = useState(false);
   const handleEditCloseDialog = () => {
     setEdit(false);
   };
   const [alert, setAlert] = useState(null);
   const [edit, setEdit] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const handleDialogClose = async () => {
     setIsOpen(false);
     setEditId(null);
     setSingleData();
   };
 
+  const handleDialogOpens1 = () => setIsOpens(true);
+  const initialValues1 = {
+    name: "",
+    userTypeId: "",
+  };
+  const onSubmit1 = async (values) => {
+    const { name, userTypeId } = values;
+    await provider.refetch({
+      name,
+      userTypeId,
+    });
+    handleDialogCloses();
+  };
+  const validationSchema1 = Yup.object({
+    name: Yup.string("Enter your hospital"),
+    userTypeId: Yup.string("Enter your userTypeId"),
+  });
+
+  const handleDialogCloses = () => setIsOpens(false);
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
@@ -243,7 +265,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             />
           </Grid>
           <Grid item className={classes.filterBtnGrid}>
-            <FilterList title="Filter partner" />
+            <FilterList title="Filter partner" onClick={handleDialogOpens1} />
             {/* onClick={() => setOpenHcpFilter(true)} */}
           </Grid>
           <Grid item>
@@ -256,7 +278,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           </Grid>
         </Grid>
         <Grid item container height="100%" direction="column">
-          {pendingHeader.length > 0 ? (
+          {providers.length > 0 ? (
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={providers}
@@ -390,6 +412,55 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
         confirmationMsg="delete provider"
         btnValue="Delete"
       />
+
+      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validationSchema={validationSchema1}
+          validateOnChange={false}
+          validateOnMount
+          validateOnBlur
+        >
+          {({ isSubmitting, isValid, dirty }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container direction="column">
+                  <Grid item container>
+                    <FormikControl
+                      control="input"
+                      name="name"
+                      label="Hospital Name"
+                      placeholder="Enter Hospital Name"
+                    />
+                  </Grid>
+                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                    <Grid container>
+                      <Grid item container>
+                        <FormikControl
+                          control="input"
+                          name="userTypeId"
+                          label="User Type"
+                          placeholder="Enter User Type"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <CustomButton
+                      title="Apply Filter"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                    />
+                  </Grid>
+                </Grid>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Modals>
     </>
   );
 };

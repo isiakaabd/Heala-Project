@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
 import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
-import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import PropTypes from "prop-types";
+import NoData from "components/layouts/NoData";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import Modals from "components/Utilities/Modal";
 import Search from "components/Utilities/Search";
@@ -25,19 +25,9 @@ import { useQuery } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
 
 const genderType = [
-  { key: "Male", value: "Male" },
-  { key: "Female", value: "Female" },
-  { key: "Prefer not to say", value: "Prefer not to say" },
-];
-const plans = [
-  { key: "Plan 1", value: "Plan 1" },
-  { key: "Plan 2", value: "Plan 2" },
-  { key: "Plan 3", value: "Plan 3" },
-  { key: "Plan 4", value: "Plan 4" },
-];
-const statusType = [
-  { key: "Active", value: "Active" },
-  { key: "Blocked", value: "Blocked" },
+  { key: "Male", value: "0" },
+  { key: "Female", value: "1" },
+  { key: "Prefer not to say", value: "2" },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -106,23 +96,30 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const theme = useTheme();
 
   const initialValues = {
-    hospital: "",
-    plan: "",
-    specialization: "",
+    name: "",
+    bloodGroup: "",
+    phone: "",
     gender: "",
   };
 
   const validationSchema = Yup.object({
-    hospital: Yup.string("Enter your hospital").required("Hospital is required"),
-    status: Yup.string("Select your status").required("Status is required"),
-    gender: Yup.string("Select your gender").required("Gender is required"),
-    specialization: Yup.string("Enter your specialization").required("Specialization is required"),
+    name: Yup.string("Enter your hospital"),
+    bloodGroup: Yup.string("ENter your bloodGroup"),
+    gender: Yup.string("Select your gender"),
+    phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
-  const onSubmit = (values) => {
-    console.log(values);
-  };
   const patient = useQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
+  const onSubmit = async (values) => {
+    const { name, gender, bloodGroup, phone } = values;
+    await patient.refetch({
+      gender,
+      firstName: name,
+      bloodGroup,
+      phoneNumber: phone,
+    });
+    handleDialogClose();
+  };
   useEffect(() => {
     if (patient.data && patient.data.profiles.data) {
       setProfiles(patient.data.profiles.data);
@@ -150,7 +147,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+        <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchPatient}
@@ -179,8 +176,17 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log(row);
-
+                  const {
+                    dociId,
+                    firstName,
+                    lastName,
+                    plan,
+                    provider,
+                    image,
+                    consultations,
+                    _id,
+                    status,
+                  } = row;
                   return (
                     <TableRow
                       hover
@@ -207,7 +213,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, textAlign: "left" }}
                       >
-                        {row.dociId && row.dociId.split("-")[1]}
+                        {dociId && dociId.split("-")[1]}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -219,36 +225,34 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of ${row.firstName}`}
-                              src={row.image ? row.image : displayPhoto}
+                              alt={`Display Photo of ${firstName}`}
+                              src={image ? image : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {`${row.firstName} ${row.lastName}`}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {row.plan ? row.plan : "No Value"}
-                      </TableCell>
-                      <TableCell align="left" textAlign="left" className={classes.tableCell}>
-                        {row.provider ? row.provider : "No Value"}
+                        {plan ? plan : "No Value"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {row.consultations ? row.consultations : "No Value"}
+                        {provider ? provider : "No Value"}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {consultations ? consultations : "No Value"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Chip
-                          label={row.status ? row.status : "No value"}
+                          label={status ? status : "No value"}
                           className={classes.badge}
                           style={{
                             background:
-                              row.status == "Active"
+                              status == "Active"
                                 ? theme.palette.common.lightGreen
                                 : theme.palette.common.lightRed,
                             color:
-                              row.status == "Active"
+                              status == "Active"
                                 ? theme.palette.common.green
                                 : theme.palette.common.red,
                           }}
@@ -259,7 +263,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`patients/${row._id}`}
+                          to={`patients/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => {
                             setSelectedSubMenu(2);
@@ -296,18 +300,17 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       <Grid item md>
                         <FormikControl
                           control="input"
-                          name="hospital"
-                          label="Hospital"
-                          placeholder="Enter hospital"
+                          name="name"
+                          label="First Name"
+                          placeholder="Enter First Name"
                         />
                       </Grid>
                       <Grid item md>
                         <FormikControl
-                          control="select"
-                          options={plans}
-                          name="plan"
-                          label="Plan"
-                          placeholder="Select plan"
+                          control="input"
+                          name="bloodGroup"
+                          label="Blood Group"
+                          placeholder="Enter Blood Group"
                         />
                       </Grid>
                     </Grid>
@@ -325,11 +328,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       </Grid>
                       <Grid item md>
                         <FormikControl
-                          control="select"
-                          options={statusType}
-                          name="specialization"
-                          label="Specialization"
-                          placeholder="Select Specialization"
+                          control="input"
+                          name="phone"
+                          label="Phone Number"
+                          placeholder="Enter Phone Number"
                         />
                       </Grid>
                     </Grid>
