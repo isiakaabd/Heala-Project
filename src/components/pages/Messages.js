@@ -121,8 +121,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
   const { loading, data, error } = useQuery(getMessage);
-
   console.log(data);
+
   useEffect(() => {
     if (data && data.getMessages.messages) {
       setMessage(data.getMessages.messages);
@@ -174,22 +174,22 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
               {message
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const { recipient, subject, createdAt, _id } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -212,12 +212,12 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of ${row.sender}`}
+                              alt={`Display Photo of ${recipient}`}
                               src={displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.sender}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{recipient}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -225,28 +225,28 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         className={classes.tableCell}
                         style={{ maxWidth: "15rem" }}
                       >
-                        {row.subject}
+                        {subject}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {dateMoment(row.createdAt)}
+                        {dateMoment(createdAt)}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {timeMoment(row.createdAt)}
+                        {timeMoment(createdAt)}
                       </TableCell>
                       <TableCell>
                         <Button
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`messages/${row._id}`}
+                          to={`messages/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => setSelectedSubMenu(6)}
                         >

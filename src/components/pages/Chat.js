@@ -1,167 +1,236 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { Grid, Typography, Divider } from "@mui/material";
+import { useParams } from "react-router-dom";
+import CustomButton from "components/Utilities/CustomButton";
+import PreviousButton from "components/Utilities/PreviousButton";
+import FormikControl from "components/validation/FormikControl";
+import { useTheme } from "@mui/material/styles";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import Search from "components/Utilities/Search";
-import ChatItem from "components/layouts/ChatItem";
-import ChatMessagesInterface from "components/layouts/ChatMessagesInterface";
-import photo1 from "assets/images/photo1.png";
-import photo2 from "assets/images/photo2.png";
-import photo3 from "assets/images/photo3.png";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { CREATE_MESSAGE } from "components/graphQL/Mutation";
+import { useMutation } from "@apollo/client";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { getMessage } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
-  parentGridContainer: {
-    height: "100vh",
-    position: "relative",
-    overflow: "hidden",
-  },
-  leftParentGrid: {
-    borderRight: `1px solid ${theme.palette.common.lightGrey}`,
-    padding: "2rem 0 0",
-    position: "fixed",
-    zIndex: 3,
-    background: "#fff",
-    width: "51.6rem",
-    height: "100%",
-    overflow: "hidden",
-    overflowY: "scroll",
-
-    "&::-webkit-scrollbar": {
-      width: ".85rem",
-    },
-
-    "&::-webkit-scrollbar-track": {
-      boxShadow: "inset 0 0 1rem rgba(0, 0, 0, 0.2)",
-    },
-
-    "&::-webkit-scrollbar-thumb": {
-      borderRadius: ".5rem",
-      background: theme.palette.common.lightGrey,
-
-      "&:active": {
-        background: "rgba(0, 0, 0, 0.2)",
-      },
+  gridWrapper: {
+    "&.MuiGrid-item": {
+      borderRadius: "1rem",
+      background: "#fff",
+      padding: "2rem 4rem",
+      maxWidth: "60rem !important",
+      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.1)",
     },
   },
-  rightParentGrid: {
-    height: "100%",
+  inputGrid: {
+    flex: 1,
+    alignItems: "center",
+  },
+  heading: {
+    "&.MuiTypography-root": {
+      color: theme.palette.common.grey,
+      //   fontSize: "1rem"
+    },
+  },
+  formInput: {
     width: "100%",
-    background: "rgb(245, 245, 245)",
-    paddingLeft: "51.6rem",
-    overflow: "hidden",
-    overflowY: "scroll",
+    height: "100%",
+    fontSize: "1.5rem",
+    padding: ".5rem 1rem",
+    border: "none",
+    background: "transparent",
+    color: theme.palette.common.grey,
 
-    "&::-webkit-scrollbar": {
-      width: "1rem",
-    },
-
-    "&::-webkit-scrollbar-track": {
-      boxShadow: "inset 0 0 1rem rgba(0, 0, 0, 0.2)",
-    },
-
-    "&::-webkit-scrollbar-thumb": {
-      borderRadius: ".5rem",
-      background: theme.palette.common.lightGrey,
-
-      "&:active": {
-        background: "rgba(0, 0, 0, 0.2)",
-      },
+    "&:focus": {
+      outline: "none",
     },
   },
-  contactIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "8rem",
-      color: theme.palette.common.lightGrey,
-    },
+  textArea: {
+    border: "1px solid rgba(0, 0, 0, 0.03)",
+    resize: "none",
+    borderRadius: "0.5rem",
   },
-  searchInput: {
-    "&.MuiOutlinedInput-root": {
-      background: "rgb(239, 239, 239)",
-      borderRadius: "20rem",
+  divider: {
+    "&.MuiDivider-root": {
+      borderColor: "rgba(0, 0, 0, 0.03)",
     },
   },
 }));
 
-const Chat = ({ chatMediaActive, setChatMediaActive }) => {
-  const chatLists = [
-    {
-      id: 0,
-      name: "Dr. Halima",
-      photo: photo1,
-      time: "12:36 AM",
-      message: "Hello, we have reviewed your records",
-    },
-    {
-      id: 1,
-      name: "Dr. Charles Agbor",
-      photo: photo2,
-      time: "12:36 AM",
-      message: "Hello, we have reviewed your records",
-    },
-    {
-      id: 2,
-      name: "Dr. Philip Igbinedion",
-      photo: photo3,
-      time: "12:45 PM",
-      message: "Hello, we have reviewed your records",
-    },
-    {
-      id: 3,
-      name: "Dr. Philip Igbinedion",
-      photo: photo3,
-      time: "12:45 PM",
-      message: "Hello, we have reviewed your records",
-    },
-    {
-      id: 4,
-      name: "Dr. Philip Igbinedion",
-      photo: photo3,
-      time: "12:45 PM",
-      message: "Hello, we have reviewed your records",
-    },
-  ];
-
+const Chat = ({
+  setSelectedSubMenu,
+  setSelectedMenu,
+  selectedSubMenu,
+  selectedMenu,
+  setSelectedPatientMenu,
+  setSelectedScopedMenu,
+}) => {
+  const { patientId } = useParams();
   const classes = useStyles();
+  const theme = useTheme();
+  let history = useHistory();
+  const [createNewMessage] = useMutation(CREATE_MESSAGE, {
+    refetchQueries: [{ query: getMessage }],
+  });
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
+  };
+  const initialValues = {
+    subject: "",
+    recipient: patientId,
+    textarea: "",
+  };
+
+  const validationSchema = Yup.object({
+    subject: Yup.string("Enter your subject").required("Subject is required"),
+    textarea: Yup.string("Enter your message").required("Message is required"),
+    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+  });
+  const onSubmit = async (values, onSubmitProps) => {
+    const id = localStorage.getItem("user_id");
+    const { recipient, subject, textarea } = values;
+
+    try {
+      await createNewMessage({
+        variables: {
+          sender: id,
+          recipient,
+          subject,
+          body: textarea,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    onSubmitProps.resetForm();
+    history.push(`/patients/${patientId}/profile`);
+    setSelectedScopedMenu(0);
+  };
 
   useEffect(() => {
-    setChatMediaActive(true);
-
-    // eslint-disable-next-line
-  }, [chatMediaActive]);
+    setSelectedMenu(1);
+    setSelectedSubMenu(2);
+    setSelectedPatientMenu(1);
+    setSelectedScopedMenu(3);
+    //   eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu]);
 
   return (
-    <Grid container className={classes.parentGridContainer}>
-      <Grid item className={classes.leftParentGrid}>
-        <Grid container direction="column">
-          <Grid item style={{ marginBottom: "2rem" }}>
-            <AccountCircleIcon className={classes.contactIcon} />
-          </Grid>
-          <Grid item style={{ marginBottom: "2rem", paddingLeft: "2rem", paddingRight: "2rem" }}>
-            <Search
-              placeholder="Search messages..."
-              className={classes.searchInput}
-              onChange={() => console.log("changed")}
-            />
-          </Grid>
-          <Grid item>
-            {chatLists.map((list) => (
-              <ChatItem key={list.id} chatList={list} />
-            ))}
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item className={classes.rightParentGrid}>
-        <ChatMessagesInterface setChatMediaActive={setChatMediaActive} />
-      </Grid>
-    </Grid>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnMount
+    >
+      {({ isValid, isSubmitting, dirty }) => {
+        return (
+          <Form>
+            <Grid container direction="column">
+              <Grid item style={{ marginBottom: "3rem" }}>
+                <PreviousButton
+                  path={`/patients/${patientId}/profile`}
+                  onClick={() => setSelectedScopedMenu(0)}
+                />
+              </Grid>
+              <Grid item container direction="column" alignItems="center">
+                <Grid item>
+                  <Typography variant="h4" style={{ marginBottom: "3rem" }}>
+                    Create New Message
+                  </Typography>
+                </Grid>
+                <Grid item container direction="column" className={classes.gridWrapper}>
+                  <Grid item>
+                    <Grid item container alignItems="center" sx={{ gap: "0!important" }}>
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Recipient:
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.inputGrid}>
+                        <FormikControl
+                          control="input"
+                          id="message"
+                          name="recipient"
+                          variant="standard"
+                          className={classes.formInput}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Divider className={classes.divider} />
+                  </Grid>
+                  <Grid item>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Subject:
+                        </Typography>
+                      </Grid>
+                      <Grid item className={classes.inputGrid}>
+                        <FormikControl
+                          control="input"
+                          id="subject"
+                          name="subject"
+                          variant="standard"
+                          className={classes.formInput}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Divider className={classes.divider} />
+                  </Grid>
+                  <Grid item>
+                    <Grid container direction="column">
+                      <Grid item>
+                        <Typography variant="body2" className={classes.heading}>
+                          Message:
+                        </Typography>
+                      </Grid>
+                      <Grid item style={{ height: "15rem" }}>
+                        <FormikControl
+                          control="textarea"
+                          id="textarea"
+                          name="textarea"
+                          variant="standard"
+                          fLabel={true}
+                        />
+                      </Grid>
+                    </Grid>
+                    {/* <Divider className={classes.divider} /> */}
+                  </Grid>
+                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                    <CustomButton
+                      title="Send Message"
+                      width="100%"
+                      type={buttonType}
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                      // endIcon={<ArrowForwardIosIcon style={{ fontSize: "1.5rem" }} />}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
 Chat.propTypes = {
-  chatMediaActive: PropTypes.bool.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  chatMediaActive: PropTypes.bool,
+  setChatMediaActive: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedMenu: PropTypes.func,
+  selectedSubMenu: PropTypes.func,
+  selectedMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func,
 };
 
 export default Chat;

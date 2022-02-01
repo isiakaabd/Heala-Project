@@ -81,9 +81,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
+const PatientProfile = ({
+  chatMediaActive,
+  setChatMediaActive,
+  setSelectedSubMenu,
+  selectedMenu,
+  setSelectedPatientMenu,
+  setSelectedScopedMenu,
+}) => {
   const { patientId } = useParams();
-  const profile = useQuery(getProfile, {
+  const { loading, data, error } = useQuery(getProfile, {
     variables: {
       profileId: patientId,
     },
@@ -94,10 +101,10 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
   const theme = useTheme();
   const [patientProfile, setPatientProfile] = useState("");
   useEffect(() => {
-    if (profile.data && profile.data.profile) {
-      setPatientProfile(profile.data.profile);
+    if (data) {
+      setPatientProfile(data.profile);
     }
-  }, [profile.data, patientId]);
+  }, [data, patientId]);
   const handleDialogOpen = () => setIsOpen(true);
   const initialValues = {
     referral: "",
@@ -134,9 +141,22 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
 
     // eslint-disable-next-line
   }, [chatMediaActive]);
-  if (profile.loading) return <Loader />;
-  if (profile.error) return <NoData error={profile.error.message} />;
 
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+  const {
+    firstName,
+    lastName,
+    dociId,
+    status,
+    gender,
+    image,
+    createdAt,
+    provider,
+    phoneNumber,
+    isEmailVerified,
+    email,
+  } = patientProfile;
   return (
     <Grid container direction="column">
       <Grid item sx={{ paddingBottom: ".6rem" }}>
@@ -145,15 +165,17 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
       {/* Display photo and profile name grid */}
       <Grid item>
         <DisplayProfile
-          fullName={`${patientProfile.firstName} ${patientProfile.lastName}`}
-          displayPhoto={patientProfile.image ? patientProfile.image : displayPhoto}
+          fullName={`${firstName} ${lastName}`}
+          displayPhoto={image ? image : displayPhoto}
           medicalTitle="User ID"
-          statusId={patientProfile && patientProfile.dociId.split("-")[1]}
-          status={patientProfile.status ? patientProfile.status : "No Value"}
+          statusId={dociId && dociId.split("-")[1]}
+          status={status ? status : "No Value"}
           chatPath={`/patients/${patientId}/profile/chat`}
           callPath={`/patients/${patientId}/profile/call`}
           videoPath={`/patients/${patientId}/profile/video`}
           setChatMediaActive={setChatMediaActive}
+          setSelectedSubMenu={setSelectedSubMenu}
+          selectedMenu={selectedMenu}
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
@@ -173,13 +195,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
             <Grid item>
               <Chip
                 variant="outlined"
-                label={
-                  patientProfile.gender == 0
-                    ? "Male"
-                    : patientProfile.gender == 1
-                    ? "Female"
-                    : "Prefer not to say"
-                }
+                label={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
                 className={classes.infoBadge}
               />
             </Grid>
@@ -198,11 +214,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
               <Typography variant="h4">Provider</Typography>
             </Grid>
             <Grid item>
-              <Chip
-                variant="outlined"
-                label={patientProfile.provider}
-                className={classes.infoBadge}
-              />
+              <Chip variant="outlined" label={provider} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -223,7 +235,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
             <Grid item>
               <Chip
                 variant="outlined"
-                label={dateMoment(patientProfile.createdAt)}
+                label={dateMoment(createdAt)}
                 className={classes.infoBadge}
               />
             </Grid>
@@ -244,7 +256,7 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
             <Grid item>
               <Chip
                 variant="outlined"
-                label={patientProfile.isEmailVerified ? patientProfile.isEmailVerified : "No Value"}
+                label={isEmailVerified ? isEmailVerified : "No Value"}
                 className={classes.infoBadge}
               />
             </Grid>
@@ -265,9 +277,9 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
               <Typography variant="h4">Email Address</Typography>
             </Grid>
             <Grid item>
-              {patientProfile.email ? (
-                <a href={`mailto:${patientProfile.email}`} className={classes.link}>
-                  <span>{patientProfile.email}</span>
+              {email ? (
+                <a href={`mailto:${email}`} className={classes.link}>
+                  <span>{email}</span>
                   <ArrowForwardIosIcon className={classes.linkIcon} />
                 </a>
               ) : (
@@ -289,8 +301,8 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
               <Typography variant="h4">Phone Number</Typography>
             </Grid>
             <Grid item>
-              <a href={`tel:+234${patientProfile.phoneNumber}`} className={classes.link}>
-                <span>{patientProfile.phoneNumber}</span>
+              <a href={`tel:+234${phoneNumber}`} className={classes.link}>
+                <span>{phoneNumber}</span>
                 <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
               </a>
             </Grid>
@@ -340,8 +352,12 @@ const PatientProfile = ({ chatMediaActive, setChatMediaActive }) => {
 };
 
 PatientProfile.propTypes = {
-  chatMediaActive: PropTypes.bool.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  chatMediaActive: PropTypes.bool,
+  setChatMediaActive: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  selectedMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func,
 };
 
 export default PatientProfile;

@@ -1,8 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Typography from "@mui/material/Typography";
+import { Typography, Toolbar } from "@mui/material";
 import HeaderProfile from "./HeaderProfile";
-import Toolbar from "@mui/material/Toolbar";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -227,7 +226,13 @@ const HeaderText = (props) => {
             subTitle="Patient View"
             scopedMenu={selectedPatientMenu}
             scopedSubMenu={selectedScopedMenu}
-            scopedSubTitle={selectedScopedMenu === 1 ? "Case Note" : ""}
+            scopedSubTitle={
+              selectedScopedMenu === 1
+                ? "Case Note"
+                : selectedScopedMenu === 3
+                ? "Create Message"
+                : ""
+            }
             titleColor={
               selectedPatientMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
             }

@@ -1,16 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
+import { Typography, Chip, Avatar, Grid } from "@mui/material";
 import CustomButton from "./CustomButton";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { HiChat } from "react-icons/hi";
-import CallIcon from "@mui/icons-material/Call";
-import VideocamIcon from "@mui/icons-material/Videocam";
+// import CallIcon from "@mui/icons-material/Call";
+// import VideocamIcon from "@mui/icons-material/Videocam";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -28,22 +26,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DisplayProfile = (props) => {
+const DisplayProfile = ({
+  fullName,
+  displayPhoto,
+  medicalTitle,
+  statusId,
+  specialization,
+  status,
+  chatPath,
+  callPath,
+  videoPath,
+  setChatMediaActive,
+  setSelectedSubMenu,
+  selectedMenu,
+  setSelectedPatientMenu,
+  setSelectedScopedMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-
-  const {
-    fullName,
-    displayPhoto,
-    medicalTitle,
-    statusId,
-    specialization,
-    status,
-    chatPath,
-    callPath,
-    videoPath,
-    setChatMediaActive,
-  } = props;
+  const { patientId } = useParams();
 
   const greenButton = {
     background: theme.palette.success.main,
@@ -123,11 +124,12 @@ const DisplayProfile = (props) => {
               title="Chat"
               type={greenButton}
               component={Link}
-              to={chatPath}
-              onClick={() => setChatMediaActive(true)}
+              to={`/patients/${patientId}/profile/chat`}
+              // onClick={() => setChatMediaActive(true)}
+              onClick={() => setSelectedSubMenu(6)}
             />
           </Grid>
-          <Grid item style={{ marginRight: "2rem" }}>
+          {/* <Grid item style={{ marginRight: "2rem" }}>
             <CustomButton
               endIcon={<CallIcon />}
               title="Call"
@@ -136,8 +138,8 @@ const DisplayProfile = (props) => {
               component={Link}
               to={callPath}
             />
-          </Grid>
-          <Grid item>
+          </Grid> */}
+          {/* <Grid item>
             <CustomButton
               endIcon={<VideocamIcon />}
               title="Video"
@@ -146,7 +148,7 @@ const DisplayProfile = (props) => {
               component={Link}
               to={videoPath}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
@@ -154,16 +156,20 @@ const DisplayProfile = (props) => {
 };
 
 DisplayProfile.propTypes = {
-  fullName: PropTypes.string.isRequired,
-  displayPhoto: PropTypes.string.isRequired,
-  medicalTitle: PropTypes.string.isRequired,
+  fullName: PropTypes.string,
+  displayPhoto: PropTypes.string,
+  medicalTitle: PropTypes.string,
   statusId: PropTypes.string,
   specialization: PropTypes.string,
   status: PropTypes.string,
-  chatPath: PropTypes.string.isRequired,
-  callPath: PropTypes.string.isRequired,
-  videoPath: PropTypes.string.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  chatPath: PropTypes.string,
+  callPath: PropTypes.string,
+  videoPath: PropTypes.string,
+  setChatMediaActive: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  selectedMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func,
 };
 
 export default DisplayProfile;
