@@ -131,22 +131,15 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
+        exact
         path="/patients/:patientId/profile/chat"
         component={Chat}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
-
-      <PrivateRoute
-        path="/patients/:patientId/profile/call"
-        component={PhoneCall}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
-
-      <PrivateRoute
-        path="/patients/:patientId/profile/video"
-        component={VideoCall}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu}
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />

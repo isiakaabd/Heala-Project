@@ -4,7 +4,6 @@ import { Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";
-// import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   intervalButtonsGrid: {
@@ -43,15 +42,6 @@ const LineChart = ({
   // const [times, setTimes] = useState([]);
 
   useEffect(() => {
-    // setTimes(
-    //   doctorStats &&
-    //     Object.keys(doctorStats)
-    //       .map((key) => dateMoment(doctorStats[key].date))
-    //       .filter((element) => {
-    //         return dateMoment(element) !== undefined;
-    //       }),
-    // );
-
     setInActives(
       doctorStats &&
         Object.keys(doctorStats)
@@ -134,6 +124,8 @@ const LineChart = ({
         usePointStyle: true,
         callbacks: {
           title: (context) => {
+            console.log(context);
+            console.log(tooltipTitle);
             return tooltipTitle;
           },
           label: (context) => {

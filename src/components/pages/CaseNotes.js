@@ -50,17 +50,16 @@ const caseNotes = [
   },
 ];
 
-const CaseNotes = (props) => {
-  const {
-    selectedMenu,
-    selectedSubMenu,
-    setSelectedMenu,
-    selectedScopedMenu,
-    setSelectedSubMenu,
-    selectedPatientMenu,
-    setSelectedPatientMenu,
-    setSelectedScopedMenu,
-  } = props;
+const CaseNotes = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  selectedScopedMenu,
+  setSelectedSubMenu,
+  selectedPatientMenu,
+  setSelectedPatientMenu,
+  setSelectedScopedMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const { patientId, rowId } = useParams();
