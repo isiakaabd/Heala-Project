@@ -324,8 +324,11 @@ export const myMedic = gql`
 `;
 
 export const getRefferals = gql`
-  query getReferrals {
-    getReferrals(orderBy: "-createdAt") {
+  query getReferrals($doctor: String, $specialization: String, $patient: String) {
+    getReferrals(
+      filterBy: { doctor: $doctor, specialization: $specialization, patient: $patient }
+      orderBy: "-createdAt"
+    ) {
       referral {
         _id
         doctor
@@ -418,8 +421,8 @@ export const findAccounts = gql`
   }
 `;
 export const findAdmin = gql`
-  query findAccounts {
-    accounts(orderBy: "-createdAt", filterBy: { role: "admin" }) {
+  query findAccounts($role: String, $email: String) {
+    accounts(filterBy: { role: $role, email: $email }, orderBy: "-createdAt") {
       data {
         _id
         role
@@ -735,8 +738,8 @@ export const getUserDetails = gql`
   }
 `;
 export const getProviders = gql`
-  query getProviders {
-    getProviders {
+  query getProviders($name: String, $userTypeId: String) {
+    getProviders(filterBy: { name: $name, userTypeId: $userTypeId }) {
       provider {
         _id
         name
