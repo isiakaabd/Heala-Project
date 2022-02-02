@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
-import { Formik, Form } from "formik";
-import FormikControl from "components/validation/FormikControl";
 import NoData from "components/layouts/NoData";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Loader from "components/Utilities/Loader";
+import FormSelect from "components/Utilities/FormSelect";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import chart1 from "assets/images/chart1.png";
@@ -104,31 +103,22 @@ const selectOptions = [
 const DashboardCharts = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const initialValues = {
-    finance: "",
-  };
 
-  const [patient, patientValue] = useLazyQuery(dashboard);
-  const [stats] = useLazyQuery(getEarningStats);
+  const [patient, { data, error, loading }] = useLazyQuery(dashboard);
+  const [stats, { data: earningData }] = useLazyQuery(getEarningStats);
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [appointmentStats, setAppointmentStats] = useState([]);
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
-  // const [stat, setStat] = useState([]);
-  // const [state, setState] = useState(false);
-  // const change = async (value) => {
-  //   await stats({ variables: { q: value } });
-  // };
 
   useEffect(() => {
     (async () => {
       patient();
-      // stats();
     })();
 
-    if (patientValue.data) {
+    if (data) {
       const {
         patientStats,
         doctorStats,
@@ -136,7 +126,7 @@ const DashboardCharts = () => {
         subscribers,
         totalEarnings,
         totalPayout,
-      } = patientValue.data.getStats;
+      } = data.getStats;
       setPatients(patientStats);
       setDoctorStats(doctorStats);
       setAppointmentStats(appointmentStats);
@@ -144,18 +134,39 @@ const DashboardCharts = () => {
       setTotalEarning(totalEarnings);
       setTotalPayouts(totalPayout);
     }
-  }, [patient, patientValue.data]);
-
+  }, [patient, data]);
+  const returnpercent = (a, b) => {
+    return (+b / +a).toFixed(2) * 100;
+  };
+  const financialPercent = (a, b) => {
+    return Math.round((a / (b + a)) * 100);
+  };
+  const financialValue = financialPercent(totalEarning, totalPayouts);
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
-  // const [timeframeOption, setTimeframeOption] = useState("");
+  const [finances, setFinances] = useState(financialValue);
   const { activeDoctors, inactiveDoctors } = doctorStats;
   const { activePatients, inactivePatients } = patients;
-  const { totalActiveSubscribers, totalInactiveSubscribers } = subscribers;
   const totalDoc = activeDoctors + inactiveDoctors;
   const totalPatient = activePatients + inactivePatients;
-  const totalSubscribers = totalActiveSubscribers + totalInactiveSubscribers;
-  if (patientValue.loading) return <Loader />;
-  if (patientValue.error) return <NoData error={patientValue.error.message} />;
+  const patientPercentage = returnpercent(activePatients, inactivePatients);
+  const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
+  const [form, setForm] = useState("");
+  const onChange = async (e) => {
+    // await stats(e.target.value);
+    setForm(e.target.value);
+    // stats();
+  };
+  useEffect(() => {
+    stats({ variables: { form } });
+    if (earningData) {
+      const { totalEarnings, totalPayout } = earningData.getEarningStats;
+      const value = financialPercent(totalEarnings, totalPayout);
+      setFinances(value);
+    }
+  }, [form, stats, earningData]);
+
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
 
   return (
     <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
@@ -175,14 +186,14 @@ const DashboardCharts = () => {
                         <GroupIcon color="success" className={classes.groupIcon} />
                       </Grid>
                       <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                        <Typography variant="h1">{patientValue.data && totalDoc}</Typography>
+                        <Typography variant="h1">{data && totalDoc}</Typography>
                       </Grid>
                       <Grid item style={{ marginRight: "0.5rem" }}>
                         <ArrowUpwardIcon color="success" />
                       </Grid>
                       <Grid item>
                         <Typography variant="body2" style={{ color: theme.palette.success.main }}>
-                          2.76%
+                          {`${doctorPercentage} %`}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -197,7 +208,6 @@ const DashboardCharts = () => {
                 <LineChart
                   selectedTimeframe={selectedTimeframe}
                   setSelectedTimeframe={setSelectedTimeframe}
-                  tooltipTitle={`${totalDoc} HCP`}
                   doctorStats={doctorStats}
                 />
                 <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
@@ -205,7 +215,7 @@ const DashboardCharts = () => {
                     <Grid container direction="column">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          {patientValue.data && doctorStats.activeDoctors}
+                          {doctorStats && doctorStats.activeDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -229,7 +239,7 @@ const DashboardCharts = () => {
                     <Grid container direction="column" justifyContent="center">
                       <Grid item>
                         <Typography variant="h3" gutterBottom>
-                          {patientValue.data && doctorStats.inactiveDoctors}
+                          {doctorStats && doctorStats.inactiveDoctors}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -256,37 +266,29 @@ const DashboardCharts = () => {
           <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
             <Grid container direction="column">
               <>
-                <Formik initialValues={initialValues} validateOnChange={true}>
-                  {({ handleChange, setFieldValue, values }) => {
-                    return (
-                      <Form style={{ marginTop: "3rem" }} onBlur={() => stats()}>
-                        <Grid item>
-                          <Grid
-                            container
-                            justifyContent="space-between"
-                            alignItems="center"
-                            className={classes.headerGrid}
-                          >
-                            <Grid item>
-                              <Typography variant="h5">Financial Stats</Typography>
-                            </Grid>
-                            <Grid item>
-                              <FormikControl
-                                control="select"
-                                placeholder="Select days"
-                                options={selectOptions}
-                                // onChange={change}
-                                // onChange={stats({ variables: { q: values } })}
-                                name="finance"
-                              />
-                            </Grid>
-                          </Grid>
-                          <Divider color={theme.palette.common.lighterGrey} />
-                        </Grid>
-                      </Form>
-                    );
-                  }}
-                </Formik>
+                <Grid item>
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    alignItems="center"
+                    className={classes.headerGrid}
+                  >
+                    <Grid item>
+                      <Typography variant="h5">Financial Stats</Typography>
+                    </Grid>
+                    <Grid item>
+                      <FormSelect
+                        placeholder="Select days"
+                        value={form}
+                        onChange={onChange}
+                        options={selectOptions}
+                        name="finance"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Divider color={theme.palette.common.lighterGrey} />
+                </Grid>
+
                 <Grid item>
                   <Grid
                     container
@@ -300,7 +302,7 @@ const DashboardCharts = () => {
                         width="8rem"
                         color={theme.palette.common.green}
                         trailColor={theme.palette.common.red}
-                        value={patientValue.data && totalPayouts}
+                        value={finances}
                         strokeWidth={8}
                       />
                     </Grid>
@@ -321,7 +323,7 @@ const DashboardCharts = () => {
                                 >
                                   N
                                 </span>
-                                {patientValue.data && totalEarning}
+                                {data && totalEarning}
                               </Typography>
                             </Grid>
                             <Grid item>
@@ -353,7 +355,7 @@ const DashboardCharts = () => {
                                 >
                                   N
                                 </span>
-                                {patientValue.data && totalPayouts}
+                                {data && totalPayouts}
                               </Typography>
                             </Grid>
                             <Grid item>
@@ -393,7 +395,7 @@ const DashboardCharts = () => {
                         <Grid container direction="column">
                           <Grid item>
                             <Typography variant="h4">
-                              {patientValue.data && appointmentStats.totalUpcoming}
+                              {data && appointmentStats.totalUpcoming}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -420,7 +422,7 @@ const DashboardCharts = () => {
                         <Grid container direction="column">
                           <Grid item>
                             <Typography variant="h4">
-                              {patientValue.data && appointmentStats.totalPast}
+                              {appointmentStats && appointmentStats.totalPast}
                             </Typography>
                           </Grid>
                           <Grid item>
@@ -457,7 +459,7 @@ const DashboardCharts = () => {
                   <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                     <Grid container direction="column">
                       <Grid item>
-                        <Typography variant="h1">{patientValue.data && totalPatient}</Typography>
+                        <Typography variant="h1">{totalPatient}</Typography>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -474,7 +476,7 @@ const DashboardCharts = () => {
                   </Grid>
                   <Grid item>
                     <Typography variant="body2" style={{ color: theme.palette.success.main }}>
-                      2.76%
+                      {`${patientPercentage} %`}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -491,7 +493,6 @@ const DashboardCharts = () => {
             <LineChart
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
-              tooltipTitle={`${totalPatient} Patients`}
               doctorStats={patients}
             />
 
@@ -500,7 +501,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      {patientValue.data && patients.activePatients}
+                      {data && patients.activePatients}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -524,7 +525,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      {patientValue.data && subscribers.totalActiveSubscribers}
+                      {data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -555,7 +556,6 @@ const DashboardCharts = () => {
             <LineChart
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
-              tooltipTitle={`${totalSubscribers} subscribers`}
               doctorStats={subscribers}
               type="subscriber"
             />
@@ -564,7 +564,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      {patientValue.data && subscribers.totalActiveSubscribers}
+                      {data && subscribers.totalActiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -588,7 +588,7 @@ const DashboardCharts = () => {
                 <Grid container direction="column" justifyContent="center">
                   <Grid item>
                     <Typography variant="h3" gutterBottom>
-                      {patientValue.data && subscribers.totalInactiveSubscribers}
+                      {data && subscribers.totalInactiveSubscribers}
                     </Typography>
                   </Grid>
                   <Grid item>

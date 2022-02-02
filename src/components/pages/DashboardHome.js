@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { useLazyQuery } from "@apollo/client";
+import { dashboard, getEarningStats } from "components/graphQL/useQuery";
 import { H1, H3, H5, P } from "components/Utilities/Texts";
 import Card from "@mui/material/Card";
 import peopleIcon from "assets/images/people.svg";
@@ -44,11 +45,7 @@ const DashboardHome = () => {
             </div>
 
             <div className="" style={{ width: "100%" }}>
-              <LineGraph
-                // width={500}
-                // height={250}
-                data={graphData}
-              />
+              <LineGraph data={graphData} />
             </div>
             {/* <div
               style={{
