@@ -50,28 +50,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AvailabilityTable = () => {
-  const [patient, patientValue] = useLazyQuery(dashboard);
+  const [patient, { loading, data, error }] = useLazyQuery(dashboard);
   const [avaliablity, setAvaliablity] = useState([]);
   useEffect(() => {
     (async () => {
       patient();
     })();
 
-    if (patientValue.data) {
-      setAvaliablity(patientValue.data.getStats.availabilityCalendar);
+    if (data) {
+      setAvaliablity(data.getStats.availabilityCalendar);
     }
-  }, [patient, patientValue.data]);
+  }, [patient, data]);
 
   const classes = useStyles();
   const theme = useTheme();
 
   const { page, rowsPerPage } = useSelector((state) => state.tables);
 
-  if (patientValue.loading) return null;
-  if (patientValue.error) return null;
-  console.log(patientValue.data);
+  if (loading) return null;
+  if (error) return null;
 
-  if (patientValue.data) {
+  if (data) {
     return (
       <Grid container height="100%" gap={2}>
         <Grid item sx={{ flexGrow: 1 }}>

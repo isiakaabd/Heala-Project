@@ -27,13 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LineChart = ({
-  selectedTimeframe,
-  setSelectedTimeframe,
-  tooltipTitle,
-  doctorStats,
-  type,
-}) => {
+const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [actives, setActives] = useState([]);
@@ -61,12 +55,13 @@ const LineChart = ({
   }, [doctorStats, type]);
 
   const data = {
-    labels: ["ONEDAY", "FIVEDAYS", "ONEMONTH", "THREEMOS", "ONEYEAR"],
+    labels: ["ONE DAY", "FIVE DAYS", "ONE MONTH", "THREE MONTHS", "ONE YEAR"],
     datasets: [
       {
         label: "Active",
         data: actives,
         fill: false,
+        cursor: "pointer",
         borderColor: theme.palette.common.green,
         pointBackgroundColor: theme.palette.common.green,
         pointBorderColor: "#fff",
@@ -112,9 +107,10 @@ const LineChart = ({
       tooltip: {
         backgroundColor: "#fff",
         titleColor: colorItem,
+        onHover: hover,
         bodyColor: theme.palette.common.lightGrey,
-        titleAlign: "center",
-        bodyAlign: "center",
+        titleAlign: "left",
+        bodyAlign: "left",
         borderColor: "rgba(0, 0, 0, 0.05)",
         borderWidth: 2,
         displayColors: true,
@@ -123,25 +119,22 @@ const LineChart = ({
         yAlign: "bottom",
         usePointStyle: true,
         callbacks: {
-          title: (context) => {
-            console.log(context);
-            console.log(tooltipTitle);
-            return tooltipTitle;
-          },
-          label: (context) => {
-            return new Date().toString().slice(0, 21);
-          },
           labelPointStyle: (context) => {
             return {
               pointStyle: "triangle",
               rotation: 0,
+              cursor: "pointer",
             };
           },
         },
       },
     },
   };
+  function hover(event, chartElement) {
+    console.log(event);
 
+    event.target.style.cursor = chartElement[0] ? "pointer" : "default";
+  }
   function colorItem(tooltipItem) {
     const tooltipTitleColor = tooltipItem.tooltip.labelColors[0].backgroundColor;
 
@@ -187,7 +180,6 @@ LineChart.propTypes = {
   timeFrames: PropTypes.array,
   selectedTimeframe: PropTypes.number,
   setSelectedTimeframe: PropTypes.func,
-  tooltipTitle: PropTypes.string,
   type: PropTypes.string,
   doctorStats: PropTypes.array,
 };
