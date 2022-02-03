@@ -11,9 +11,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
-import { useQuery /*useMutation*/ } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
-// import { createAllery } from "components/graphQL/Mutation";
 import Loader from "components/Utilities/Loader";
 import { dateMoment } from "components/Utilities/Time";
 
@@ -104,17 +103,16 @@ const HcpProfile = (props) => {
   //   },
   // });
 
-  const profile = useQuery(doctor, {
+  const { loading, error, data } = useQuery(doctor, {
     variables: {
       id: hcpId,
     },
   });
-  console.log(profile);
   useEffect(() => {
-    if (profile.data) {
-      setDoctorProfile(profile.data.doctorProfile);
+    if (data) {
+      setDoctorProfile(data.doctorProfile);
     }
-  }, [profile.data, hcpId]);
+  }, [data, hcpId]);
 
   useLayoutEffect(() => {
     setSelectedMenu(2);
@@ -125,8 +123,8 @@ const HcpProfile = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
 
-  if (profile.loading) return <Loader />;
-  if (profile.error) return <NoData error={profile.error.message} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
 
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -144,9 +142,10 @@ const HcpProfile = (props) => {
             doctorProfile.specialization ? doctorProfile.specialization : "Not assigned"
           }
           chatPath={`/hcps/${hcpId}/profile/chat`}
-          callPath={`/hcps/${hcpId}/profile/call`}
-          videoPath={`/hcps/${hcpId}/profile/video`}
           setChatMediaActive={setChatMediaActive}
+          setSelectedSubMenu={setSelectedSubMenu}
+          selectedMenu={selectedMenu}
+          type="doctor"
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
@@ -278,14 +277,14 @@ const HcpProfile = (props) => {
 };
 
 HcpProfile.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  chatMediaActive: PropTypes.bool.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  chatMediaActive: PropTypes.bool,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
+  setChatMediaActive: PropTypes.func,
 };
 
 export default HcpProfile;

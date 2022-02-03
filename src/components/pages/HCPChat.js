@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography, Divider } from "@mui/material";
+import { useParams } from "react-router-dom";
+
+import Loader from "components/Utilities/Loader";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
-import Divider from "@mui/material/Divider";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { getMessage, getProfile } from "components/graphQL/useQuery";
+import { getMessage, doctor } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputGrid: {
     flex: 1,
+    alignItems: "center",
   },
   heading: {
     "&.MuiTypography-root": {
@@ -59,31 +61,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const HCPChat = ({
+  setSelectedSubMenu,
+  setSelectedMenu,
+  selectedSubMenu,
+  selectedMenu,
+  setSelectedHcpMenu,
+  setSelectedScopedMenu,
+}) => {
+  const { hcpId } = useParams();
+
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
-  const [fetchUser, { data }] = useLazyQuery(getProfile);
-
+  const { data, loading } = useQuery(doctor, { variables: { id: hcpId } });
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
+  const [profile, setprofile] = useState("");
+  const { firstName, lastName } = profile;
+
+  const initialValues = {
+    subject: "",
+    recipient: `${firstName} ${lastName} ` || "",
+    textarea: "",
+  };
+
+  useEffect(() => {
+    if (data) {
+      setprofile(data.doctorProfile);
+    }
+  }, [data]);
 
   const validationSchema = Yup.object({
     subject: Yup.string("Enter your subject").required("Subject is required"),
     textarea: Yup.string("Enter your message").required("Message is required"),
     recipient: Yup.string("Enter your recipient").required("recipients is required"),
   });
-
-  const [recipientValue, setRecipientvalue] = useState("");
-  const [recipient, setRecipient] = useState("");
-  const { firstName, lastName, _id } = recipient;
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
     const { subject, textarea } = values;
@@ -92,7 +112,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       await createNewMessage({
         variables: {
           sender: id,
-          recipient: _id,
+          recipient: hcpId,
           subject,
           body: textarea,
         },
@@ -101,28 +121,19 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       console.log(error);
     }
     onSubmitProps.resetForm();
-    history.push("/messages");
+    history.push(`/hcps/${hcpId}/profile`);
+
+    setSelectedScopedMenu(0);
   };
 
   useEffect(() => {
-    fetchUser({ variables: { profileId: recipientValue } });
-    if (data) {
-      setRecipient(data.profile);
-    }
-  }, [recipientValue, fetchUser, data]);
-  const initialValues = {
-    subject: "",
-    recipient: recipient ? `${firstName} ${lastName} ` : "",
-    textarea: "",
-  };
-
-  useEffect(() => {
-    setSelectedMenu(5);
-    setSelectedSubMenu(6);
-
-    // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
-
+    setSelectedMenu(2);
+    setSelectedSubMenu(3);
+    setSelectedHcpMenu(1);
+    setSelectedScopedMenu(3);
+    //   eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu]);
+  if (loading) return <Loader />;
   return (
     <Formik
       initialValues={initialValues}
@@ -132,12 +143,15 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       validateOnMount
       enableReinitialize
     >
-      {({ isValid, isSubmitting, dirty, values }) => {
+      {({ isValid, isSubmitting, dirty }) => {
         return (
-          <Form onChange={setRecipientvalue(values.recipient)}>
+          <Form>
             <Grid container direction="column">
               <Grid item style={{ marginBottom: "3rem" }}>
-                <PreviousButton path={`/messages`} />
+                <PreviousButton
+                  path={`/hcps/${hcpId}/profile`}
+                  onClick={() => setSelectedScopedMenu(0)}
+                />
               </Grid>
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
@@ -146,8 +160,8 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                   </Typography>
                 </Grid>
                 <Grid item container direction="column" className={classes.gridWrapper}>
-                  <Grid item style={{ marginBottom: "3rem" }}>
-                    <Grid container alignItems="center">
+                  <Grid item>
+                    <Grid item container alignItems="center" sx={{ gap: "0!important" }}>
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
                           Recipient:
@@ -158,6 +172,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                           control="input"
                           id="message"
                           name="recipient"
+                          disabled
                           variant="standard"
                           className={classes.formInput}
                         />
@@ -165,7 +180,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     </Grid>
                     <Divider className={classes.divider} />
                   </Grid>
-                  <Grid item style={{ marginBottom: "3rem" }}>
+                  <Grid item>
                     <Grid container alignItems="center">
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
@@ -221,15 +236,17 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       }}
     </Formik>
   );
-
-  // );
 };
 
-CreateMessage.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+HCPChat.propTypes = {
+  chatMediaActive: PropTypes.bool,
+  setChatMediaActive: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedMenu: PropTypes.func,
+  selectedSubMenu: PropTypes.number,
+  selectedMenu: PropTypes.number,
+  setSelectedHcpMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func,
 };
 
-export default CreateMessage;
+export default HCPChat;

@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     "&.MuiTypography-root": {
       color: theme.palette.common.grey,
-      marginRight: "2rem",
+      // marginRight: "2rem",
     },
   },
 }));
@@ -59,7 +59,7 @@ const HcpAppointments = (props) => {
   const theme = useTheme();
   const [appointment, setAppointment] = useState([]);
   const [updateAppoint] = useMutation(updateAppointment);
-  const { loading, data } = useQuery(getDOCAppoint, {
+  const { loading, data, error } = useQuery(getDOCAppoint, {
     variables: {
       id: hcpId,
       orderBy: "-createdAt",
@@ -192,6 +192,7 @@ const HcpAppointments = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
   if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" height="100%">
@@ -207,6 +208,9 @@ const HcpAppointments = (props) => {
         <Grid item>
           <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
         </Grid>
+        <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
+          <Typography variant="h2">HCP Appointments</Typography>
+        </Grid>
         {appointment.length > 0 ? (
           appointment.map((appoint) => (
             <Grid
@@ -216,14 +220,11 @@ const HcpAppointments = (props) => {
               key={appoint._id}
               className={classes.parentGridWrapper}
             >
-              <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
-                <Typography variant="h2">HCP Appointments</Typography>
-              </Grid>
-              <Grid item style={{ maxWidth: "40rem", padding: "4rem 5rem" }}>
-                <Grid container alignItems="center" justifyContent="space-between">
+              <Grid item container style={{ maxWidth: "60rem", padding: "4rem 5rem" }}>
+                <Grid item container alignItems="center" justifyContent="space-between">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
-                      Date:{" "}
+                      Consultation Date:
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -254,13 +255,13 @@ const HcpAppointments = (props) => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item style={{ padding: "2rem 5rem" }}>
-                <Grid container alignItems="center">
+                <Grid container gap={2} alignItems="center">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Patient:
                     </Typography>
                   </Grid>
-                  <Grid item style={{ marginRight: "2rem" }}>
+                  <Grid item>
                     <Avatar
                       src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
                       alt="Display Photo of the patient"

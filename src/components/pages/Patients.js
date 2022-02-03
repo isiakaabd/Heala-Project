@@ -108,11 +108,11 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     gender: Yup.string("Select your gender"),
     phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
-  const patient = useQuery(getPatients);
+  const { loading, error, data, refetch } = useQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
   const onSubmit = async (values) => {
     const { name, gender, bloodGroup, phone } = values;
-    await patient.refetch({
+    await refetch({
       gender,
       firstName: name,
       bloodGroup,
@@ -121,10 +121,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     handleDialogClose();
   };
   useEffect(() => {
-    if (patient.data && patient.data.profiles.data) {
-      setProfiles(patient.data.profiles.data);
+    if (data && data.profiles.data) {
+      setProfiles(data.profiles.data);
     }
-  }, [patient.data]);
+  }, [data]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -141,8 +141,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     disabled: theme.palette.common.black,
   };
 
-  if (patient.loading) return <Loader />;
-  if (patient.error) return <NoData error={patient.error.message} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
 
   return (
     <>
