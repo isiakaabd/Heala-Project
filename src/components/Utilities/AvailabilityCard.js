@@ -41,23 +41,12 @@ const AvailabilityCard = ({ availability }) => {
                   <Grid container diection="column" gap={2} alignItems="center">
                     <Grid item>
                       <Grid item>
-                        <Typography variant="body1">Start</Typography>
-                      </Grid>
-                      <Divider />
-                      <Grid item>
-                        <Typography variant="body1">{hours(time.start)}</Typography>
+                        <Typography variant="body1">{`${hours(time.start)} - ${hours(
+                          time.stop,
+                        )}`}</Typography>
                       </Grid>
                     </Grid>
                     <Divider />
-                    <Grid item gap={2}>
-                      <Grid item>
-                        <Typography variant="body1">Stop</Typography>
-                      </Grid>
-                      <Divider />
-                      <Grid item>
-                        <Typography variant="body1">{hours(time.stop)}</Typography>
-                      </Grid>
-                    </Grid>
                   </Grid>
                 </>
               );
