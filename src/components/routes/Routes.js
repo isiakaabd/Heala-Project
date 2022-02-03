@@ -42,8 +42,7 @@ import Administrator from "components/pages/Administrator";
 import Management from "components/pages/Management";
 import Permission from "components/pages/Permission";
 import Chat from "components/pages/Chat";
-import PhoneCall from "components/pages/PhoneCall";
-import VideoCall from "components/pages/VideoCall";
+import HCPChat from "components/pages/HCPChat";
 import CreateEmail from "components/pages/CreateEmail";
 import ViewMail from "components/pages/ViewMail";
 import PendingPayout from "components/pages/PendingPayout";
@@ -252,22 +251,15 @@ const Routes = (props) => {
       />
 
       <PrivateRoute
+        exact
         path="/hcps/:hcpId/profile/chat"
-        component={Chat}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
-
-      <PrivateRoute
-        path="/hcps/:hcpId/profile/call"
-        component={PhoneCall}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
-
-      <PrivateRoute
-        path="/hcps/:hcpId/profile/video"
-        component={VideoCall}
+        component={HCPChat}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu}
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />

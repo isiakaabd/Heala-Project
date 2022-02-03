@@ -280,7 +280,6 @@ const HeaderText = (props) => {
           <CustomSubHeaderText
             scopedMenu={selectedHcpMenu}
             scopedSubMenu={selectedScopedMenu}
-            scopedSubTitle={selectedScopedMenu === 2 ? "Case Note" : ""}
             subSubTitle={
               selectedHcpMenu === 1
                 ? "HCP Profile"
@@ -295,6 +294,13 @@ const HeaderText = (props) => {
                 : selectedHcpMenu === 6
                 ? "Consultations"
                 : "White Label"
+            }
+            scopedSubTitle={
+              selectedScopedMenu === 2
+                ? "Case Note"
+                : selectedScopedMenu === 3
+                ? "Create Message"
+                : ""
             }
             title="HCPs"
             subTitle="HCP View"

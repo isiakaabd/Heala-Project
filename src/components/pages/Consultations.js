@@ -89,8 +89,6 @@ const Consultations = (props) => {
     },
   });
 
-  console.log(data);
-
   const [consultations, setConsultations] = useState([]);
   useEffect(() => {
     if (data) {

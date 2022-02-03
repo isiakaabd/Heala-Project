@@ -6,8 +6,6 @@ import CustomButton from "./CustomButton";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { HiChat } from "react-icons/hi";
-// import CallIcon from "@mui/icons-material/Call";
-// import VideocamIcon from "@mui/icons-material/Videocam";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,18 +31,17 @@ const DisplayProfile = ({
   statusId,
   specialization,
   status,
-  chatPath,
-  callPath,
-  videoPath,
-  setChatMediaActive,
+
   setSelectedSubMenu,
   selectedMenu,
+  setSelectedHcpMenu,
+  type,
   setSelectedPatientMenu,
   setSelectedScopedMenu,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { patientId } = useParams();
+  const { patientId, hcpId } = useParams();
 
   const greenButton = {
     background: theme.palette.success.main,
@@ -124,7 +121,11 @@ const DisplayProfile = ({
               title="Chat"
               type={greenButton}
               component={Link}
-              to={`/patients/${patientId}/profile/chat`}
+              to={
+                type !== "doctor"
+                  ? `/patients/${patientId}/profile/chat`
+                  : `/hcps/${hcpId}/profile/chat`
+              }
               // onClick={() => setChatMediaActive(true)}
               onClick={() => setSelectedSubMenu(6)}
             />
@@ -163,13 +164,13 @@ DisplayProfile.propTypes = {
   specialization: PropTypes.string,
   status: PropTypes.string,
   chatPath: PropTypes.string,
-  callPath: PropTypes.string,
-  videoPath: PropTypes.string,
+  type: PropTypes.string,
   setChatMediaActive: PropTypes.func,
   setSelectedSubMenu: PropTypes.func,
-  selectedMenu: PropTypes.func,
+  selectedMenu: PropTypes.number,
   setSelectedPatientMenu: PropTypes.func,
   setSelectedScopedMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
 };
 
 export default DisplayProfile;

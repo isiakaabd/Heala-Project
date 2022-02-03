@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
+import Loader from "components/Utilities/Loader";
 import { useParams } from "react-router-dom";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
@@ -9,10 +10,10 @@ import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { getMessage } from "components/graphQL/useQuery";
+import { getMessage, getProfile } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -74,17 +75,27 @@ const Chat = ({
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
+  const { data, loading } = useQuery(getProfile, { variables: { profileId: patientId } });
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
+  const [profile, setprofile] = useState("");
+  const { firstName, lastName } = profile;
+
   const initialValues = {
     subject: "",
-    recipient: patientId,
+    recipient: `${firstName} ${lastName} ` || "",
     textarea: "",
   };
+
+  useEffect(() => {
+    if (data) {
+      setprofile(data.profile);
+    }
+  }, [data]);
 
   const validationSchema = Yup.object({
     subject: Yup.string("Enter your subject").required("Subject is required"),
@@ -93,13 +104,13 @@ const Chat = ({
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
-    const { recipient, subject, textarea } = values;
+    const { subject, textarea } = values;
 
     try {
       await createNewMessage({
         variables: {
           sender: id,
-          recipient,
+          recipient: patientId,
           subject,
           body: textarea,
         },
@@ -119,7 +130,7 @@ const Chat = ({
     setSelectedScopedMenu(3);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu]);
-
+  if (loading) return <Loader />;
   return (
     <Formik
       initialValues={initialValues}
@@ -127,6 +138,7 @@ const Chat = ({
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnMount
+      enableReinitialize
     >
       {({ isValid, isSubmitting, dirty }) => {
         return (
@@ -157,6 +169,7 @@ const Chat = ({
                           control="input"
                           id="message"
                           name="recipient"
+                          disabled
                           variant="standard"
                           className={classes.formInput}
                         />
