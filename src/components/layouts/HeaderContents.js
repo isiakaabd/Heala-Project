@@ -5,6 +5,7 @@ import HeaderProfile from "./HeaderProfile";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { findAccounts } from "components/graphQL/useQuery";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useLazyQuery } from "@apollo/client";
@@ -188,8 +189,21 @@ const HeaderText = (props) => {
     selectedScopedMenu,
   } = props;
 
-  const classes = useStyles();
   const theme = useTheme();
+  const email = localStorage.getItem("email");
+  const [profileAcc, setProfileAcc] = useState([]);
+  const [profile, { data }] = useLazyQuery(findAccounts, {
+    variables: { email },
+  });
+  const classes = useStyles();
+  useEffect(() => {
+    (async () => {
+      profile();
+      if (data) {
+        setProfileAcc(data.accounts.data[0]);
+      }
+    })();
+  }, [profile, email, data]);
   const [patient, patientContent] = useLazyQuery(getPatients, { fetchPolicy: "cache-first" });
   const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
   const [profiles, setProfiles] = useState([]);
@@ -212,9 +226,7 @@ const HeaderText = (props) => {
             Welcome,
           </Typography>
           <Typography variant="h3" color="primary" className={classes.name}>
-            {/* {data ? data.account.email :  */}
-            Admin
-            {/* } */}
+            {profileAcc && profileAcc.role}
           </Typography>
         </div>
       );

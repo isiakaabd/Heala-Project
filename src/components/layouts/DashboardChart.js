@@ -160,6 +160,8 @@ const DashboardCharts = () => {
     stats({ variables: { form } });
     if (earningData) {
       const { totalEarnings, totalPayout } = earningData.getEarningStats;
+      setTotalEarning(totalEarnings);
+      setTotalPayouts(totalPayout);
       const value = financialPercent(totalEarnings, totalPayout);
       setFinances(value);
     }
@@ -323,7 +325,7 @@ const DashboardCharts = () => {
                                 >
                                   N
                                 </span>
-                                {data && totalEarning}
+                                {totalEarning}
                               </Typography>
                             </Grid>
                             <Grid item>
