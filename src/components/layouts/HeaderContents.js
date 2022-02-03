@@ -424,7 +424,7 @@ const HeaderText = (props) => {
             Welcome,
           </Typography>
           <Typography variant="h3" color="primary" className={classes.name}>
-            Emmanuel Chukwu
+            {profileAcc && profileAcc.role}
           </Typography>
         </div>
       );
