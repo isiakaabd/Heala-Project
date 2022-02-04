@@ -13,7 +13,7 @@ import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { getMessage, getProfile } from "components/graphQL/useQuery";
+import { getMessage, getProfile, doctor } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -67,6 +67,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     refetchQueries: [{ query: getMessage }],
   });
   const [fetchUser, { data }] = useLazyQuery(getProfile);
+  const [fetchDoc, { data: doctorProfile }] = useLazyQuery(doctor);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -86,30 +87,39 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const { firstName, lastName, _id } = recipient;
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
-    const { subject, textarea } = values;
-
+    const { subject, textarea, recipient } = values;
+    console.log(subject, recipient);
     try {
       await createNewMessage({
         variables: {
           sender: id,
-          recipient: _id,
+          recipient: _id ? _id : recipient,
           subject,
           body: textarea,
         },
       });
+
+      history.push("/messages");
     } catch (error) {
       console.log(error);
     }
     onSubmitProps.resetForm();
-    history.push("/messages");
   };
 
   useEffect(() => {
-    fetchUser({ variables: { profileId: recipientValue } });
-    if (data) {
-      setRecipient(data.profile);
-    }
-  }, [recipientValue, fetchUser, data]);
+    (async () => {
+      fetchUser({ variables: { profileId: recipientValue } });
+      if (data) {
+        console.log(data);
+        setRecipient(data.profile);
+      } else {
+        fetchDoc({ variables: { id: recipientValue } });
+        if (doctorProfile) {
+          setRecipient(doctorProfile.doctorProfile);
+        }
+      }
+    })();
+  }, [recipientValue, fetchUser, doctorProfile, fetchDoc, data]);
   const initialValues = {
     subject: "",
     recipient: recipient ? `${firstName} ${lastName} ` : "",
@@ -161,6 +171,11 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                           variant="standard"
                           className={classes.formInput}
                         />
+                        {/* {error && (
+                          <Typography variant="h6" className={classes.heading}>
+                            Error fetching Recipient
+                          </Typography>
+                        )} */}
                       </Grid>
                     </Grid>
                     <Divider className={classes.divider} />
