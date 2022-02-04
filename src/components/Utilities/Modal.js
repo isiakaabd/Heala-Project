@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Modals = ({ isOpen, handleClose, title, color, children, rowSpacing, height }) => {
+const Modals = ({ isOpen, handleClose, width, title, color, children, rowSpacing, height }) => {
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 500,
+    width: width ? width : 500,
     height,
     bgcolor: "background.paper",
     borderRadius: "2rem",
@@ -76,6 +76,7 @@ Modals.propTypes = {
   title: PropTypes.string.isRequired,
   color: PropTypes.string,
   height: PropTypes.string,
+  width: PropTypes.string,
   rowSpacing: PropTypes.number,
 };
 
