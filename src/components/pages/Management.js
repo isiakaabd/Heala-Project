@@ -27,7 +27,7 @@ import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
+    "&.MuiGrid-root": {
       flex: 1,
       marginRight: "5rem",
     },

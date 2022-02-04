@@ -121,7 +121,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
   const { loading, data, error } = useQuery(getMessage);
-  console.log(data);
+
 
   useEffect(() => {
     if (data && data.getMessages.messages) {
