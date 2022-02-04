@@ -52,6 +52,7 @@ export const RoleModal = ({ handleDialogClose, type }) => {
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnMount
+      enableReinitialize
     >
       {({ isSubmitting, dirty, isValid }) => {
         return (
