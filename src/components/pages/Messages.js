@@ -122,7 +122,6 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const [message, setMessage] = useState([]);
   const { loading, data, error } = useQuery(getMessage);
 
-
   useEffect(() => {
     if (data && data.getMessages.messages) {
       setMessage(data.getMessages.messages);
