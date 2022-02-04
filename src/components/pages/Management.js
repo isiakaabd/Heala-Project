@@ -241,7 +241,9 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                 if (row.permissions) {
                   const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
                   const dataLength = data.length - 5;
-                  newData = [...data.slice(0, 5), `+${dataLength}`];
+                  newData = [...data.slice(0, 5), dataLength ? `+${dataLength}` : null].filter(
+                    (i) => i !== null,
+                  );
                 }
                 return (
                   <TableRow
@@ -315,7 +317,6 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                           className={`${classes.tableBtn} ${classes.redBtn}`}
                           onClick={() => handleDeleteOpenDialog(row._id)}
                           endIcon={<DeleteIcon color="error" />}
-                          // sx={{padding:"2rem"}}
                         >
                           Delete role
                         </Button>

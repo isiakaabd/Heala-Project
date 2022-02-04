@@ -153,11 +153,12 @@ const EditManagement = ({ setSelectedSubMenu }) => {
   const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
   useEffect(() => {
     if (data) {
-      const { name, description } = data.getRole;
+      const { name, description, permissions } = data.getRole;
+      console.log(permissions);
       setRole({
         name,
         description,
-        permissions: [],
+        permissions,
       });
     }
   }, [data]);
