@@ -140,7 +140,19 @@ const HcpConsultations = (props) => {
               {consultations
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  // eslint-disable-next-line
+                  const {
+                    _id,
+                    createdAt,
+                    name,
+                    patient,
+                    symptoms,
+                    status,
+                    type,
+                    description,
+                    // eslint-disable-next-line
+                  } = row;
+                  const isItemSelected = isSelected(row._id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -149,12 +161,12 @@ const HcpConsultations = (props) => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -164,7 +176,7 @@ const HcpConsultations = (props) => {
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
-                        {dateMoment(row.createdAt)}
+                        {dateMoment(createdAt)}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -180,12 +192,12 @@ const HcpConsultations = (props) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of ${row.name}`}
+                              alt={`Display Photo of ${name}`}
                               src={displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.patient}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{patient}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -194,8 +206,8 @@ const HcpConsultations = (props) => {
                         style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                       >
                         <Grid container gap={1}>
-                          {row.symptoms
-                            ? row.symptoms.map((i) => {
+                          {symptoms
+                            ? symptoms.map((i) => {
                                 return <p key={i.name}>{i.name}</p>;
                               })
                             : "No Value"}
@@ -206,21 +218,28 @@ const HcpConsultations = (props) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                       >
-                        {row.description}
+                        {description}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                       >
-                        {row.type ? row.type : "No Value"}
+                        {type ? type : "No Value"}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      >
+                        {status ? status : "No Value"}
                       </TableCell>
                       <TableCell align="left">
                         <Button
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`/hcps/${hcpId}/consultations/case-notes/${row._id}`}
+                          to={`/hcps/${hcpId}/consultations/case-notes/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => {
                             setSelectedSubMenu(2);
@@ -228,7 +247,7 @@ const HcpConsultations = (props) => {
                             setSelectedScopedMenu(2);
                           }}
                         >
-                          View Case Note
+                          View Details
                         </Button>
                       </TableCell>
                     </TableRow>

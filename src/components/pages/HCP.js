@@ -118,7 +118,6 @@ const HCP = ({ setSelectedSubMenu }) => {
   useEffect(() => {
     try {
       if (data) {
-        console.log(data.getVerifications.verification);
         setRespondData(data.getVerifications.verification);
       }
     } catch (err) {
@@ -144,7 +143,7 @@ const HCP = ({ setSelectedSubMenu }) => {
     setIsOpen(false);
   };
   const checkbox = [
-    { key: "select an option", value: " " },
+    { key: "select an option", value: "" },
     { key: "create", value: "create" },
     { key: "update", value: "update" },
     { key: "read", value: "read" },

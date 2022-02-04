@@ -21,3 +21,18 @@ export const hours = (z) => {
     return `${newTime} PM`;
   } else return `${time} Noon`;
 };
+
+export const daily = (value) => {
+  let result = "";
+  if (value == 1) result = "daily";
+  else result = `${value} days`;
+  return result;
+};
+export const duration = (value) => {
+  let result = "";
+  if (value == 1) result = "once";
+  if (value == 2) result = "twice";
+  if (value == 3) result = "thrice";
+  else if (value > 3) result = `${value} times`;
+  return result;
+};

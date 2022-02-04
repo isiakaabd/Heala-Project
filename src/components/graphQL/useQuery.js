@@ -173,6 +173,7 @@ export const getConsultations = gql`
           mode
         }
         createdAt
+        referralId
         updatedAt
       }
     }
@@ -185,6 +186,7 @@ export const getDocConsult = gql`
         _id
         patient
         consultationOwner
+        contactMedium
         symptoms {
           name
         }
@@ -209,6 +211,8 @@ export const getDocConsult = gql`
         }
         createdAt
         updatedAt
+        referralId
+        status
       }
     }
   }
@@ -219,6 +223,8 @@ export const getConsult = gql`
       _id
       patient
       consultationOwner
+      contactMedium
+      status
       symptoms {
         name
       }
@@ -243,6 +249,8 @@ export const getConsult = gql`
       }
       createdAt
       updatedAt
+      type
+      referralId
     }
   }
 `;
@@ -252,6 +260,7 @@ export const getAppoint = gql`
       data {
         _id
         doctor
+        type
         patient
         date
         time
@@ -465,6 +474,7 @@ export const getConsultation = gql`
     getConsultation(id: $id) {
       _id
       doctor
+      status
       patient
       ailment
       severity
