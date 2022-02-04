@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import {Grid,Typography,IconButton,Avatar} from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
-import CallEndIcon from "@mui/icons-material/CallEnd";
+import {VideocamOutlinedIcon,CallEnd} from "@mui/icons-material";
 import { BsMic } from "react-icons/bs";
 import avatar from "assets/images/avatar-big.png";
 
