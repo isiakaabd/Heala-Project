@@ -240,7 +240,7 @@ const HeaderText = (props) => {
             scopedSubMenu={selectedScopedMenu}
             scopedSubTitle={
               selectedScopedMenu === 1
-                ? "Case Note"
+                ? "Consultation Details"
                 : selectedScopedMenu === 3
                 ? "Create Message"
                 : ""

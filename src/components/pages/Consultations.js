@@ -221,7 +221,7 @@ const Consultations = (props) => {
                           setSelectedScopedMenu(1);
                         }}
                       >
-                        View Case Note
+                        View Details
                       </Button>
                     </TableCell>
                   </TableRow>

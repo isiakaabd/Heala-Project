@@ -5,11 +5,17 @@ import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { Grid, Typography, Button, Alert, Chip } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Alert,
+  Chip,
+} from "@mui/material";
 import Modals from "components/Utilities/Modal";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
 import AddIcon from "@mui/icons-material/Add";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";

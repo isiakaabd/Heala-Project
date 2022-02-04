@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography } from "@mui/material";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, Typography, TableRow, TableCell, Avatar, Checkbox } from "@mui/material";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { pendingHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";

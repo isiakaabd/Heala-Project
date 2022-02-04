@@ -4,13 +4,12 @@ import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
-import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
+import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getConsult } from "components/graphQL/useQuery";
-import { dateMoment, timeMoment } from "components/Utilities/Time";
+import { dateMoment } from "components/Utilities/Time";
 import NoData from "components/layouts/NoData";
 import Loader from "components/Utilities/Loader";
 
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     "&.MuiTypography-root": {
       color: theme.palette.common.grey,
-      marginRight: "2rem",
+      // marginRight: "2rem",
     },
   },
 }));
@@ -72,34 +71,41 @@ const CaseNotes = ({
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
   const [caseNoteState, setCaseNoteState] = useState([]);
 
-  const consultations = useQuery(getConsult, {
+  const { loading, data, error } = useQuery(getConsult, {
     variables: {
       id: rowId,
     },
   });
+
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
+  };
   console.log(caseNoteState);
 
   useEffect(() => {
-    if (consultations.data) {
-      setCaseNoteState(consultations.data.getConsultation);
+    if (data) {
+      setCaseNoteState(data.getConsultation);
     }
-  }, [consultations, rowId]);
+  }, [data, rowId]);
 
-  if (consultations.error) return <NoData error={consultations.error.message} />;
+  if (error) return <NoData error={error.message} />;
 
-  if (consultations.loading) return <Loader />;
+  if (loading) return <Loader />;
 
-  const { prescriptions, diagnosis, doctor } = caseNoteState;
+  const { diagnosis } = caseNoteState;
   return (
-    <Grid container direction="column" style={{ paddingBottom: "5rem" }}>
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column" gap={2}>
+      <Grid item>
         <PreviousButton
           path={`/patients/${patientId}/consultations`}
           onClick={() => setSelectedPatientMenu(0)}
         />
       </Grid>
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <Typography variant="h2">Case Note</Typography>
+      <Grid item>
+        <Typography variant="h2">Consultation Details</Typography>
       </Grid>
       {caseNotes.map((casenote) => (
         <Grid
@@ -109,115 +115,222 @@ const CaseNotes = ({
           key={casenote.id}
           className={classes.parentGridWrapper}
         >
-          <Grid item style={{ maxWidth: "40rem", padding: "4rem 5rem" }}>
-            <Grid container alignItems="center" justifyContent="space-between">
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container gap={2}>
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
-                  Date:{" "}
+                  Consultation Date:
                 </Typography>
               </Grid>
               <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1.5rem" }}>
-                    <CalendarIcon fill={theme.palette.common.lightGrey} height={14} width={10} />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{dateMoment(caseNoteState.createdAt)}</Typography>
-                  </Grid>
-                </Grid>
+                <Typography variant="body1">{dateMoment(caseNoteState.createdAt)}</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Referral ID:
+                </Typography>
               </Grid>
               <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1.5rem" }}>
-                    <TimerIcon fill={theme.palette.common.red} />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{timeMoment(caseNoteState.createdAt)}</Typography>
-                  </Grid>
-                </Grid>
+                <Typography variant="body1">31234</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Consultation ID:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">31234</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Status:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Chip
+                  variant="contained"
+                  label={diagnosis ? diagnosis.severity : "Pending"}
+                  className={classes.infoBadge}
+                />
               </Grid>
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item style={{ padding: "4rem 5rem" }}>
-            <Grid container justifyContent="space-between" alignItems="center">
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container gap={1}>
               <Grid item>
-                <Grid container>
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Name of illness:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1" color={theme.palette.common.red}>
-                      {caseNoteState.ailment}
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <Typography variant="body1" className={classes.title}>
+                  Doctor:
+                </Typography>
               </Grid>
               <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Severity:{" "}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Chip
-                      variant="contained"
-                      label={diagnosis ? diagnosis.severity : "No Value"}
-                      className={classes.infoBadge}
-                    />
-                  </Grid>
-                </Grid>
+                <Avatar
+                  alt="Display Photo of Caregiver"
+                  src={casenote.photo}
+                  sx={{ width: 30, height: 30, marginRight: "1rem" }}
+                />
               </Grid>
               <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Caregiver:{" "}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Avatar
-                      alt="Display Photo of Caregiver"
-                      src={casenote.photo}
-                      sx={{ width: 30, height: 30, marginRight: "1rem" }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">
-                      {doctor ? doctor : "No Care Giver assigned"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <Typography variant="body1">Funsho Williams</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Contact:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Chat</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Type:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Instant</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Owner:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Dependant</Typography>
               </Grid>
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item style={{ padding: "4rem 5rem" }}>
-            <Grid container direction="column">
+
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container gap={2}>
               <Grid item>
-                <Typography variant="body1">Treatment</Typography>
+                <Typography variant="body1" className={classes.title}>
+                  Symptoms:
+                </Typography>
               </Grid>
-              <Grid item container gap={3}>
-                <Grid item>
-                  {prescriptions &&
-                    Object.keys(prescriptions.dosageFrequency).map((i) => (
-                      <Typography variant="body2" key={i}>
-                        {i}
-                      </Typography>
-                    ))}
-                </Grid>
-                <Grid item>
-                  {prescriptions &&
-                    Object.values(prescriptions.dosageFrequency).map((i) => (
-                      <Typography variant="body2" key={i}>
-                        {i}
-                      </Typography>
-                    ))}
-                </Grid>
+              <Grid item>
+                <Typography variant="body1">Cough</Typography>
               </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Severity:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Mild</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  First Notice:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Last Week</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Discomfort:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">6/20</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container direction="column" gap={3}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Description:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  note
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container direction="column" gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Doctors Note:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  This is doctor note
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid
+            item
+            container
+            style={{ padding: "4rem 3rem" }}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Grid item container sx={{ width: "20%" }}>
+              <CustomButton title="View Prescription" width="100%" type={buttonType} />
             </Grid>
           </Grid>
         </Grid>
