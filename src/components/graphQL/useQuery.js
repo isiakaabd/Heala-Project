@@ -99,6 +99,8 @@ export const getEarningStats = gql`
     getEarningStats(q: $q) {
       totalEarnings
       totalPayout
+      earningData
+      payoutData
     }
   }
 `;
@@ -260,7 +262,6 @@ export const getAppoint = gql`
       data {
         _id
         doctor
-        type
         patient
         date
         time
@@ -409,7 +410,7 @@ export const getAMessage = gql`
   }
 `;
 export const findAccounts = gql`
-  query findAccounts($email: EmailAddress!) {
+  query findAccounts($email: EmailAddress) {
     accounts(orderBy: "-createdAt", filterBy: { email: $email }) {
       data {
         _id
@@ -423,6 +424,15 @@ export const findAccounts = gql`
         userTypeId
         isActive
         authType
+      }
+    }
+  }
+`;
+export const verifiedEmail = gql`
+  query findAccounts($dociId: String) {
+    accounts(filterBy: { dociId: $dociId }) {
+      data {
+        isEmailVerified
       }
     }
   }
@@ -629,6 +639,42 @@ export const getProfile = gql`
       consultations
       createdAt
       image
+    }
+  }
+`;
+export const getProfileByDociId = gql`
+  query findProfiles($dociId: String) {
+    profiles(filterBy: { dociId: $dociId }) {
+      data {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        dociId
+        genotype
+        gender
+        phoneNumber
+        provider
+        plan
+        status
+        consultations
+        createdAt
+        image
+      }
+      pageInfo {
+        totalDocs
+        limit
+        offset
+        hasPrevPage
+        hasNextPage
+        page
+        totalPages
+        pagingCounter
+        prevPage
+        nextPage
+      }
     }
   }
 `;
@@ -846,6 +892,38 @@ export const getUserTypes = gql`
         icon
         createdAt
         updatedAt
+      }
+    }
+  }
+`;
+export const getUsertypess = gql`
+  query getUserTypeProviders($userTypeId: String) {
+    getUserTypeProviders(filterBy: { userTypeId: $userTypeId }) {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+        userTypeData {
+          name
+          icon
+          createdAt
+          updatedAt
+        }
+      }
+      pageInfo {
+        totalDocs
+        limit
+        offset
+        hasPrevPage
+        hasNextPage
+        page
+        totalPages
+        pagingCounter
+        prevPage
+        nextPage
       }
     }
   }

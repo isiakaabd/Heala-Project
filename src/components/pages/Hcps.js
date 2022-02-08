@@ -252,12 +252,12 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
         <Grid item className={classes.filterBtnGrid}>
-          <FilterList onClick={() => setOpenHcpFilter(true)} title="Filter HCPs" />
+          <FilterList onClick={() => setOpenHcpFilter(true)} title="Filter Doctors" />
         </Grid>
         <Grid item>
           <CustomButton
             endIcon={<AddIcon />}
-            title="Add HCP"
+            title="Add Doctor"
             type={buttonType}
             onClick={() => setOpenAddHcp(true)}
           />
@@ -275,7 +275,18 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             {profiles
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row._id, selectedRows);
+                const {
+                  _id,
+                  dociId,
+                  firstName,
+                  hospital,
+                  status,
+                  specialization,
+                  consultations,
+                  picture,
+                  lastName,
+                } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -283,12 +294,12 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row._id}
+                    key={_id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -303,7 +314,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
                     >
-                      {row.dociId}
+                      {dociId && dociId.split("-")[1]}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -315,13 +326,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       >
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
-                            alt={`Display Photo of ${row.firstName}`}
-                            src={row.picture ? row.picture : displayPhoto}
+                            alt={`Display Photo of ${firstName}`}
+                            src={picture ? picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
                         <span style={{ fontSize: "1.25rem" }}>
-                          {row.firstName} {row.lastName}
+                          {firstName} {lastName}
                         </span>
                       </div>
                     </TableCell>
@@ -330,29 +341,29 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {row.specialization}
+                      {specialization}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {row.consultations ? row.consultations : "No Value"}
+                      {consultations ? consultations : 0}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {row.hospital ? row.hospital : "No Value"}
+                      {hospital ? hospital : "No Hospital"}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <Chip
-                        label={row.status ? row.status : "No Value"}
+                        label={status ? status : "No Status"}
                         className={classes.badge}
                         style={{
                           background:
-                            row.status === "Active"
+                            status === "Active"
                               ? theme.palette.common.lightGreen
                               : theme.palette.common.lightRed,
                           color:
-                            row.status === "Active"
+                            status === "Active"
                               ? theme.palette.common.green
                               : theme.palette.common.red,
                         }}
@@ -363,14 +374,14 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`hcps/${row._id}`}
+                        to={`hcps/${_id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
                           setSelectedSubMenu(3);
                           setSelectedHcpMenu(0);
                         }}
                       >
-                        View HCP
+                        View Doctor
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -449,10 +460,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           }}
         </Formik>
       </Modals>
-      {/* ADD HCP MODAL */}
+      {/* ADD Doctor MODAL */}
       <Modals
         isOpen={openAddHcp}
-        title="Add HCP"
+        title="Add Doctor"
         rowSpacing={5}
         height="90vh"
         handleClose={() => setOpenAddHcp(false)}

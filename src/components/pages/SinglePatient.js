@@ -11,6 +11,7 @@ import Card from "components/Utilities/Card";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
+import NoData from "components/layouts/NoData";
 import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
@@ -158,18 +159,21 @@ const SinglePatient = (props) => {
     doctor: localStorage.getItem("user_id"),
   };
   const [patientProfile, setPatientProfile] = useState("");
-  const profile = useQuery(findProfile, {
+  const { loading, error, data } = useQuery(findProfile, {
     variables: {
       id: patientId,
     },
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-only",
   });
+  console.log(data);
+
   useEffect(() => {
-    if (profile.data) {
-      setPatientProfile(profile.data.profile);
+    if (data) {
+      localStorage.setItem("userDociId", data.profile.dociId);
+      setPatientProfile(data.profile);
     }
-  }, [profile.data, patientId]);
+  }, [data, patientId]);
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
@@ -184,7 +188,8 @@ const SinglePatient = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  if (profile.loading) return <Loader />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   else {
     return (
       <Grid container direction="column" className={classes.gridContainer} gap={2}>

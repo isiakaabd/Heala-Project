@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
@@ -9,105 +9,121 @@ import { makeStyles } from "@mui/styles";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
-import FormControl from "@mui/material/FormControl";
+import { useLazyQuery } from "@apollo/client";
+import { financialPercent, selectOptions } from "components/Utilities/Time";
+import { getEarningStats } from "components/graphQL/useQuery";
 import FormSelect from "components/Utilities/FormSelect";
-import DateRangeTwoToneIcon from "@mui/icons-material/DateRangeTwoTone";
-
-const Finance = ({ setSelectedSubMenu }) => {
-  const useStyles = makeStyles((theme) => ({
-    cardContainer: {
-      "&.MuiCard-root": {
-        width: "100%",
-        height: "15.8rem",
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-        background: "white",
-        marginRight: "5rem",
-        "&:hover": {
-          boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-          cursor: "pointer",
-        },
-        "&:active": {
-          background: "#fafafa",
-        },
-        "& .MuiCardContent-root .MuiTypography-h5": {
-          textDecoration: "none !important",
-          textTransform: "uppercase",
-        },
-      },
-    },
-
-    iconWrapper: {
-      width: 60,
-      height: 60,
-      borderRadius: "50%",
+const useStyles = makeStyles((theme) => ({
+  cardContainer: {
+    "&.MuiCard-root": {
+      width: "100%",
+      height: "15.8rem",
       display: "flex",
       justifyContent: "center",
-      alignItems: "center",
-    },
-    cardGrid: {
-      justifyContent: "center",
-      alignItems: "center",
-      height: "25.8rem",
-    },
-    flexContainer: {
-      justifyContent: "space-between",
-      alignItems: "center",
-      margin: "auto",
-      width: "100%",
-
-      padding: "2rem 4rem",
-      "&:first-child": {
-        borderBottom: ".5px solid #F8F8F8",
-      },
-    },
-    lightGreen: {
-      color: theme.palette.common.green,
-    },
-
-    lightRed: {
-      color: theme.palette.common.red,
-    },
-    mainContainer: {
       flexDirection: "column",
-      width: "100%",
+      alignItems: "center",
       background: "white",
-      borderRadius: "2rem",
-      boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-    },
-    parentGrid: {
-      textDecoration: "none",
-      width: "24.7rem",
-      color: theme.palette.primary.main,
-      "&.MuiGrid-item": {
-        ...theme.typography.cardParentGrid,
-        minWidth: "20rem",
-
-        "&:hover": {
-          background: "#fcfcfc",
-        },
-
-        "&:active": {
-          background: "#fafafa",
-        },
+      marginRight: "5rem",
+      "&:hover": {
+        boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+        cursor: "pointer",
+      },
+      "&:active": {
+        background: "#fafafa",
+      },
+      "& .MuiCardContent-root .MuiTypography-h5": {
+        textDecoration: "none !important",
+        textTransform: "uppercase",
       },
     },
+  },
 
-    cardIcon: {
-      "&.MuiSvgIcon-root": {
-        fontSize: "3rem",
+  iconWrapper: {
+    width: 60,
+    height: 60,
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardGrid: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "25.8rem",
+  },
+  flexContainer: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: "auto",
+    width: "100%",
+
+    padding: "2rem 4rem",
+    "&:first-child": {
+      borderBottom: ".5px solid #F8F8F8",
+    },
+  },
+  lightGreen: {
+    color: theme.palette.common.green,
+  },
+
+  lightRed: {
+    color: theme.palette.common.red,
+  },
+  mainContainer: {
+    flexDirection: "column",
+    width: "100%",
+    background: "white",
+    borderRadius: "2rem",
+    boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+  },
+  parentGrid: {
+    textDecoration: "none",
+    width: "24.7rem",
+    color: theme.palette.primary.main,
+    "&.MuiGrid-item": {
+      ...theme.typography.cardParentGrid,
+      minWidth: "20rem",
+
+      "&:hover": {
+        background: "#fcfcfc",
+      },
+
+      "&:active": {
+        background: "#fafafa",
       },
     },
-  }));
+  },
 
+  cardIcon: {
+    "&.MuiSvgIcon-root": {
+      fontSize: "3rem",
+    },
+  },
+}));
+const Finance = ({ setSelectedSubMenu }) => {
+  const [form, setForm] = useState("");
+  const [totalEarning, setTotalEarning] = useState([]);
+  const [totalPayouts, setTotalPayouts] = useState([]);
+  const financialValue = financialPercent(totalEarning, totalPayouts);
+  const [finances, setFinances] = useState(financialValue);
+  const onChange = async (e) => {
+    setForm(e.target.value);
+  };
+
+  const [stats, { data }] = useLazyQuery(getEarningStats);
   const theme = useTheme();
-
+  useEffect(() => {
+    stats({ variables: { form } });
+    if (data) {
+      const { totalEarnings, totalPayout } = data.getEarningStats;
+      setTotalEarning(totalEarnings);
+      setTotalPayouts(totalPayout);
+      const value = financialPercent(totalEarnings, totalPayout);
+      setFinances(value);
+    }
+  }, [form, stats, data]);
+  console.log(data);
   const classes = useStyles();
-  const options = ["1", "2", "3"];
-  const [finance, setFinance] = useState("");
-
   return (
     <Stack position="static" className={classes.containerGrid} spacing={3}>
       <Grid container component="div" className={classes.mainContainer}>
@@ -117,7 +133,7 @@ const Finance = ({ setSelectedSubMenu }) => {
               Earning
             </Typography>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <FormControl sx={{ width: 200 }}>
               <FormSelect
                 options={options}
@@ -129,6 +145,15 @@ const Finance = ({ setSelectedSubMenu }) => {
                 placeholderText="Last 30 days"
               />
             </FormControl>
+          </Grid> */}
+          <Grid item>
+            <FormSelect
+              placeholder="Select days"
+              value={form}
+              onChange={onChange}
+              options={selectOptions}
+              name="finance"
+            />
           </Grid>
         </Grid>
 
@@ -140,7 +165,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                 width="17rem"
                 color={theme.palette.common.green}
                 trailColor={theme.palette.common.red}
-                value={65}
+                value={finances}
                 strokeWidth={8}
               />
             </Grid>
@@ -170,7 +195,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                   >
                     N{""}
                   </span>
-                  700,000
+                  {totalEarning}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -208,7 +233,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                   >
                     N{""}
                   </span>
-                  700,000
+                  {totalPayouts}
                 </Typography>
                 <Typography
                   variant="body2"

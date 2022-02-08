@@ -204,7 +204,6 @@ const Prescriptions = (props) => {
             </>
           );
         })}
-        <Divider />
         <Grid
           item
           container

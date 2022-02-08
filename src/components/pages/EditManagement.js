@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import Loader from "components/Utilities/Loader";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useSelector } from "react-redux";
 import NoData from "components/layouts/NoData";
@@ -20,8 +19,7 @@ import CustomButton from "components/Utilities/CustomButton";
 import { editRole } from "components/graphQL/Mutation";
 import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
-import { useActions } from "components/hooks/useActions";
-import { TableRow, TableCell, Checkbox } from "@mui/material";
+import { TableRow, TableCell } from "@mui/material";
 
 const optionss = [
   { label: "get", value: "account:get" },
@@ -148,13 +146,12 @@ const useStyles = makeStyles((theme) => ({
 const EditManagement = ({ setSelectedSubMenu }) => {
   let history = useHistory();
   const { editId } = useParams();
-  const { setSelectedRows } = useActions();
   const [role, setRole] = useState("");
   const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
-      console.log(permissions);
+
       setRole({
         name,
         description,
@@ -236,13 +233,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                 </Grid>
 
                 <Grid item container>
-                  <EnhancedTable
-                    headCells={editManagement}
-                    rows={ro}
-                    // page={page}
-                    // paginationLabel="payout per page"
-                    hasCheckbox={false}
-                  >
+                  <EnhancedTable headCells={editManagement} rows={ro} hasCheckbox={false}>
                     {ro.map((row, index) => {
                       const isItemSelected = isSelected(row.id, selectedRows);
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -256,18 +247,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                           key={row.name}
                           selected={isItemSelected}
                         >
-                          <TableCell role="checkbox" sx={{ padding: "0 5rem" }}>
-                            <Checkbox
-                              onClick={() =>
-                                handleSelectedRows(row.id, selectedRows, setSelectedRows)
-                              }
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </TableCell>
+                          <TableCell role="checkbox" sx={{ padding: "0 5rem" }}></TableCell>
                           <TableCell
                             id={labelId}
                             scope="row"

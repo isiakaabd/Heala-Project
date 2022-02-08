@@ -122,9 +122,10 @@ const Login = () => {
           },
         });
         if (data) {
-          const { email, access_token } = data.login.account;
+          const { email, access_token, userTypeId } = data.login.account;
           setAccessToken(access_token);
           localStorage.setItem("email", email);
+          localStorage.setItem("userTypeId", userTypeId);
           history.push("/");
         }
       }

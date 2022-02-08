@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
+import { timeMoment, dateMoment } from "components/Utilities/Time";
+import Loader from "components/Utilities/Loader";
 import TableRow from "@mui/material/TableRow";
+import { useQuery } from "@apollo/client";
+import { getEarningStats } from "components/graphQL/useQuery";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { payoutHeader } from "components/Utilities/tableHeaders";
 import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
@@ -93,6 +96,17 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  const { loading, data, error } = useQuery(getEarningStats);
+  const [payout, setPayout] = useState([]);
+  console.log(payout);
+
+  useEffect(() => {
+    if (data) {
+      setPayout(data.getEarningStats.payoutData.data);
+    }
+  }, [payout, data]);
+  if (loading) return <Loader />;
+  if (error) return <noData error={error.message} />;
 
   return (
     <Grid container direction="column" rowSpacing={2}>
@@ -117,14 +131,15 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
       <Grid item container>
         <EnhancedTable
           headCells={payoutHeader}
-          rows={rows}
+          rows={payout}
           page={page}
           paginationLabel="payout per page"
           hasCheckbox={true}
         >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
-
+          {payout.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+            const { amount, createdAt, doctorData, status, _id } = row;
+            const { firstName, picture, lastName, specialization } = doctorData[0];
+            const isItemSelected = isSelected(_id, selectedRows);
             const labelId = `enhanced-table-checkbox-${index}`;
 
             return (
@@ -133,12 +148,12 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                 role="checkbox"
                 aria-checked={isItemSelected}
                 tabIndex={-1}
-                key={row.id}
+                key={_id}
                 selected={isItemSelected}
               >
                 <TableCell padding="checkbox">
                   <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                    onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                     color="primary"
                     checked={isItemSelected}
                     inputProps={{
@@ -149,11 +164,11 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                 <TableCell
                   id={labelId}
                   scope="row"
-                  align="center"
+                  align="left"
                   className={classes.tableCell}
                   style={{ color: theme.palette.common.black }}
                 >
-                  {row.entryDate}
+                  {dateMoment(createdAt)}
                 </TableCell>
                 <TableCell
                   id={labelId}
@@ -162,9 +177,9 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                   className={classes.tableCell}
                   style={{ color: theme.palette.common.black }}
                 >
-                  {row.time}
+                  {timeMoment(createdAt)}
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
+                <TableCell align="left" className={classes.tableCell}>
                   <div
                     style={{
                       height: "100%",
@@ -173,36 +188,38 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src={picture ? picture : displayPhoto}
+                        sx={{ width: 24, height: 24 }}
+                      />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
+                      {firstName} {lastName}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  {row.medical}
+                <TableCell align="left" className={classes.tableCell}>
+                  {specialization}
                 </TableCell>
                 <TableCell
-                  align="center"
+                  align="left"
                   className={classes.tableCell}
                   style={{ color: theme.palette.common.red }}
                 >
-                  {row.amount}
+                  {amount}
                 </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
+                <TableCell align="left" className={classes.tableCell}>
                   <Chip
-                    label={row.status}
+                    label={status}
                     className={classes.badge}
                     style={{
                       background:
-                        row.status === "active"
+                        status === "active"
                           ? theme.palette.common.lightGreen
                           : theme.palette.common.lightRed,
                       color:
-                        row.status === "active"
-                          ? theme.palette.common.green
-                          : theme.palette.common.red,
+                        status === "active" ? theme.palette.common.green : theme.palette.common.red,
                     }}
                   />
                 </TableCell>

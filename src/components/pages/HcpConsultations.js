@@ -3,15 +3,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import Avatar from "@mui/material/Avatar";
+import { Avatar, Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import NoData from "components/layouts/NoData";
@@ -86,9 +80,7 @@ const HcpConsultations = (props) => {
   const theme = useTheme();
 
   const { hcpId } = useParams();
-
   const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
-
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
   const { loading, data, error } = useQuery(getDocConsult, {

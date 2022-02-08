@@ -93,7 +93,7 @@ const HcpPatients = (props) => {
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item>
-        <Typography variant="h2">HCP Patients</Typography>
+        <Typography variant="h2">Doctor Patients</Typography>
       </Grid>
       <Grid item container direction="column" height="100%">
         {profiles.length > 0 ? (
@@ -171,7 +171,7 @@ const HcpPatients = (props) => {
                         to={`/hcps/${hcpId}/profile`}
                         endIcon={<ArrowForwardIosIcon />}
                       >
-                        View HCP Profile
+                        View Doctor Profile
                       </Button>
                     </TableCell>
                   </TableRow>

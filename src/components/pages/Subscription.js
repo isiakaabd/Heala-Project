@@ -224,6 +224,8 @@ const Subscription = () => {
       setPlan(data.getPlans.plan);
     }
   }, [data]);
+  console.log(data);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   const initialValues = {

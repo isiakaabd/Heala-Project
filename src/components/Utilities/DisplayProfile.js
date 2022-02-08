@@ -31,13 +31,8 @@ const DisplayProfile = ({
   statusId,
   specialization,
   status,
-
   setSelectedSubMenu,
-  selectedMenu,
-  setSelectedHcpMenu,
   type,
-  setSelectedPatientMenu,
-  setSelectedScopedMenu,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -71,7 +66,7 @@ const DisplayProfile = ({
                   <Grid item style={{ marginRight: "3rem" }}>
                     <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
                       <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span>{" "}
-                      {statusId}
+                      {statusId && statusId.split("-")[1]}
                     </Typography>
                   </Grid>
                   {specialization ? (
@@ -118,7 +113,7 @@ const DisplayProfile = ({
           <Grid item style={{ marginRight: "2rem" }}>
             <CustomButton
               endIcon={<HiChat />}
-              title="Chat"
+              title="Message"
               type={greenButton}
               component={Link}
               to={
@@ -126,30 +121,9 @@ const DisplayProfile = ({
                   ? `/patients/${patientId}/profile/chat`
                   : `/hcps/${hcpId}/profile/chat`
               }
-              // onClick={() => setChatMediaActive(true)}
               onClick={() => setSelectedSubMenu(6)}
             />
           </Grid>
-          {/* <Grid item style={{ marginRight: "2rem" }}>
-            <CustomButton
-              endIcon={<CallIcon />}
-              title="Call"
-              type={greenButton}
-              onClick={() => setChatMediaActive(true)}
-              component={Link}
-              to={callPath}
-            />
-          </Grid> */}
-          {/* <Grid item>
-            <CustomButton
-              endIcon={<VideocamIcon />}
-              title="Video"
-              type={greenButton}
-              onClick={() => setChatMediaActive(true)}
-              component={Link}
-              to={videoPath}
-            />
-          </Grid> */}
         </Grid>
       </Grid>
     </Grid>

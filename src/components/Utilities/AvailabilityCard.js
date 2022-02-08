@@ -1,8 +1,6 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+import { Grid, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { hours } from "components/Utilities/Time";
 const useStyles = makeStyles((theme) => ({
@@ -18,8 +16,8 @@ const AvailabilityCard = ({ availability }) => {
 
   return (
     <Grid container direction="column" className={classes.cardGrid}>
-      <Grid item style={{ padding: "3rem 10rem" }}>
-        <Grid container gap={2}>
+      <Grid item style={{ padding: "2rem" }}>
+        <Grid container justifyContent="center" gap={2}>
           <Grid item>
             <Typography variant="body1">Day:</Typography>
           </Grid>
@@ -29,21 +27,33 @@ const AvailabilityCard = ({ availability }) => {
         </Grid>
       </Grid>
       <Divider />
-      <Grid item style={{ padding: "3rem 10rem" }}>
-        <Grid item>
-          <Grid item style={{ marginRight: "4rem" }}>
+      <Grid item style={{ padding: "2rem" }}>
+        <Grid item container justifyContent="center">
+          <Grid item>
             <Typography variant="body1">Time: </Typography>
           </Grid>
           <Grid container>
             {availability.dates[0].times.map((time, index) => {
               return (
                 <>
-                  <Grid container diection="column" gap={2} alignItems="center">
+                  <Grid
+                    container
+                    diection="column"
+                    gap={2}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
                     <Grid item>
-                      <Grid item>
-                        <Typography variant="body1">{`${hours(time.start)} - ${hours(
-                          time.stop,
-                        )}`}</Typography>
+                      <Grid item container gap={2}>
+                        <Grid item>
+                          <Typography variant="body1">{`${hours(time.start)}`}</Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography variant="body1">-</Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography variant="body1">{`${hours(time.start)}`} </Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
                     <Divider />

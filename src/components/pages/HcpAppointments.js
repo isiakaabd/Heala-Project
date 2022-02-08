@@ -209,7 +209,7 @@ const HcpAppointments = (props) => {
           <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
         </Grid>
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
-          <Typography variant="h2">HCP Appointments</Typography>
+          <Typography variant="h2">Doctor Appointments</Typography>
         </Grid>
         {appointment.length > 0 ? (
           appointment.map((appoint) => (

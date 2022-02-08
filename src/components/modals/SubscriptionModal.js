@@ -5,7 +5,7 @@ import FormikControl from "components/validation/FormikControl";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
-import { getSinglePlan, getPlans, getUserTypes } from "components/graphQL/useQuery";
+import { getSinglePlan, getPlans, getUsertypess } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
@@ -55,18 +55,23 @@ export const SubscriptionModal = ({
     }
   }, [single.data, setSingleData]);
   const [dropDown, setDropDown] = useState([]);
-  const userType = useQuery(getUserTypes);
+
+  const { data } = useQuery(getUsertypess, {
+    variables: {
+      userTypeId: "61ed2354e6091400135e3d94",
+    },
+  });
   useEffect(() => {
-    if (userType.data) {
-      const data = userType.data.getUserTypes.userType;
+    if (data) {
+      const datas = data.getUserTypeProviders.provider;
       setDropDown(
-        data &&
-          data.map((i) => {
-            return { key: i.name, value: i.name };
+        datas &&
+          datas.map((i) => {
+            return { key: i.name, value: i._id };
           }),
       );
     }
-  }, [userType.data]);
+  }, [data]);
 
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description, duration, provider } = values;
