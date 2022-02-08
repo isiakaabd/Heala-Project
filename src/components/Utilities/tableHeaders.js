@@ -106,19 +106,23 @@ export const HCPHeader = [
   },
   {
     id: 8,
-    label: "Type",
+    label: "First Name",
   },
   {
     id: 1,
-    label: "Name",
+    label: "Last Name",
   },
   {
     id: 2,
-    label: "Medical ID",
+    label: "Degree",
   },
 
   {
     id: 4,
+    label: "Year",
+  },
+  {
+    id: 40,
     label: "",
   },
 ];
@@ -138,7 +142,7 @@ export const financeHeader = [
 
   {
     id: 3,
-    label: "Subscription Plan",
+    label: "Specialization",
   },
   {
     id: 4,
@@ -219,7 +223,7 @@ export const payoutHeader = [
 
   {
     id: 3,
-    label: "Medical ID",
+    label: "Specialization",
   },
   {
     id: 4,
@@ -391,7 +395,7 @@ export const partnersHeadCells = [
 ];
 export const partnersHeadCells2 = [
   { id: 0, label: "Provider" },
-  { id: 1, label: "Category" },
+  // { id: 1, label: "Category" },
   { id: 2, label: "" },
 ];
 

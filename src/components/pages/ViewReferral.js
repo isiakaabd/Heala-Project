@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const { referralId } = useParams();
+  console.log(referralId);
+
   const { loading, data, error } = useQuery(getRefferal, { variables: { id: referralId } });
   useEffect(() => {
     setSelectedMenu(9);

@@ -3,6 +3,7 @@ import { Grid, Typography, Divider } from "@mui/material";
 import NoData from "components/layouts/NoData";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { financialPercent, returnpercent } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
 import FormSelect from "components/Utilities/FormSelect";
 import { makeStyles } from "@mui/styles";
@@ -13,6 +14,7 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
+import { selectOptions } from "components/Utilities/Time";
 import "chartjs-plugin-style";
 import { useLazyQuery } from "@apollo/client";
 import { dashboard, getEarningStats } from "components/graphQL/useQuery";
@@ -92,14 +94,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const selectOptions = [
-  { key: "One day", value: "1" },
-  { key: "Five Days", value: "5" },
-  { key: "One Month", value: "30" },
-  { key: "Three Months", value: "90" },
-  { key: "One Year", value: "365" },
-];
-
 const DashboardCharts = () => {
   const classes = useStyles();
   const theme = useTheme();
@@ -135,12 +129,7 @@ const DashboardCharts = () => {
       setTotalPayouts(totalPayout);
     }
   }, [patient, data]);
-  const returnpercent = (a, b) => {
-    return (+b / +a).toFixed(2) * 100;
-  };
-  const financialPercent = (a, b) => {
-    return Math.round((a / (b + a)) * 100);
-  };
+
   const financialValue = financialPercent(totalEarning, totalPayouts);
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
   const [finances, setFinances] = useState(financialValue);
@@ -152,9 +141,7 @@ const DashboardCharts = () => {
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
   const [form, setForm] = useState("");
   const onChange = async (e) => {
-    // await stats(e.target.value);
     setForm(e.target.value);
-    // stats();
   };
   useEffect(() => {
     stats({ variables: { form } });

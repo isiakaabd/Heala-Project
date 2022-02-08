@@ -36,3 +36,18 @@ export const duration = (value) => {
   else if (value > 3) result = `${value} times`;
   return result;
 };
+
+export const returnpercent = (a, b) => {
+  return (+b / +a).toFixed(2) * 100;
+};
+export const financialPercent = (a, b) => {
+  return Math.round((a / (b + a)) * 100);
+};
+
+export const selectOptions = [
+  { key: "One day", value: "1" },
+  { key: "Five Days", value: "5" },
+  { key: "One Month", value: "30" },
+  { key: "Three Months", value: "90" },
+  { key: "One Year", value: "365" },
+];

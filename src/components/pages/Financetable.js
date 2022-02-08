@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TableRow from "@mui/material/TableRow";
+import { timeMoment, dateMoment } from "components/Utilities/Time";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -17,7 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useQuery } from "@apollo/client";
-import { getMyEarnings } from "components/graphQL/useQuery";
+import { getEarningStats } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 
@@ -84,14 +85,16 @@ const useStyles = makeStyles((theme) => ({
 const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { loading, data } = useQuery(getMyEarnings);
-
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+
+  const { loading, data, error } = useQuery(getEarningStats);
   const [earning, setEarning] = useState([]);
+  console.log(data);
+
   useEffect(() => {
-    if (data && data.getMyEarnings.data) {
-      setEarning(data.getMyEarnings.data);
+    if (data) {
+      setEarning(data.getEarningStats.earningData.data);
     }
   }, [earning, data]);
   useEffect(() => {
@@ -99,120 +102,122 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     setSelectedSubMenu(9);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+
   if (loading) return <Loader />;
-  if (earning) {
-    return (
-      <Grid container direction="column" rowSpacing={2} sx={{ height: "100%" }}>
-        <Grid item>
-          <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
-        </Grid>
-        {earning.length > 0 ? (
-          <>
-            <Grid item container alignItems="center" columnGap={1}>
+  if (error) return <noData error={error.message} />;
+
+  return (
+    <Grid container direction="column" gap={2} height="100%">
+      <Grid item>
+        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
+      </Grid>
+      {earning ? (
+        <>
+          <Grid item container gap={1} alignItems="center">
+            <Grid item>
               <Typography noWrap variant="h1" component="div" color="#2D2F39">
                 Earnings table
               </Typography>
-              <Grid item className={classes.iconWrapper}>
-                <TrendingDownIcon color="success" className={classes.cardIcon} />
-              </Grid>
             </Grid>
+            <Grid item className={classes.iconWrapper}>
+              <TrendingDownIcon color="success" className={classes.cardIcon} />
+            </Grid>
+          </Grid>
 
-            <Grid item container>
-              <EnhancedTable
-                headCells={financeHeader}
-                rows={earning}
-                page={page}
-                paginationLabel="finance per page"
-                hasCheckbox={true}
-              >
-                {earning
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const isItemSelected = isSelected(row._id, selectedRows);
+          <Grid item container>
+            <EnhancedTable
+              headCells={financeHeader}
+              rows={earning}
+              page={page}
+              paginationLabel="finance per page"
+              hasCheckbox={true}
+            >
+              {earning
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const { doctorData, createdAt, balance } = row;
+                  const { firstName, picture, lastName, specialization } = doctorData[0];
+                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row._id}
-                        selected={isItemSelected}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
-                            }
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="center"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
+                        {dateMoment(createdAt)}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {timeMoment(createdAt)}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
                         >
-                          {row.entryDate}
-                        </TableCell>
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="left"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
-                        >
-                          {row.time}
-                        </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
-                          <div
-                            style={{
-                              height: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <span style={{ marginRight: "1rem" }}>
-                              <Avatar
-                                alt="Remy Sharp"
-                                src={displayPhoto}
-                                sx={{ width: 24, height: 24 }}
-                              />
-                            </span>
-                            <span style={{ fontSize: "1.25rem" }}>
-                              {row.firstName} {row.lastName}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
-                          {row.planName}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.red }}
-                        >
-                          {row.amount}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </EnhancedTable>
-            </Grid>
-          </>
-        ) : (
-          <NoData />
-        )}
-      </Grid>
-    );
-  } else return null;
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={firstName ? firstName : "image"}
+                              src={doctorData ? picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData && `${firstName} ${lastName}`}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {specialization ? specialization : "No Value"}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {balance.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          </Grid>
+        </>
+      ) : (
+        <NoData />
+      )}
+    </Grid>
+  );
 };
 
 Financetable.propTypes = {

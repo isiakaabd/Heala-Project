@@ -99,6 +99,8 @@ export const getEarningStats = gql`
     getEarningStats(q: $q) {
       totalEarnings
       totalPayout
+      earningData
+      payoutData
     }
   }
 `;

@@ -95,6 +95,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { loading, data, error } = useQuery(getVerification);
+  console.log(data);
 
   const [response, setResponse] = useState("");
 
@@ -151,6 +152,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   ];
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
+
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -188,7 +190,8 @@ const HCP = ({ setSelectedSubMenu }) => {
               {respondData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const { createdAt, qualification, _id, type, profileId } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -198,12 +201,12 @@ const HCP = ({ setSelectedSubMenu }) => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -218,7 +221,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {dateMoment(row.createdAt)}
+                        {dateMoment(createdAt)}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -227,7 +230,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.type}
+                        {type}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -244,22 +247,26 @@ const HCP = ({ setSelectedSubMenu }) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.profileId}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{profileId}</span>
                         </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {qualification && qualification.degree}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
-                        {row.medical}
+                        {qualification && dateMoment(qualification.year)}
                       </TableCell>
+
                       <TableCell>
                         <Button
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`/verification/view/${row._id}`}
+                          to={`/verification/view/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => setSelectedSubMenu(8)}
                         >

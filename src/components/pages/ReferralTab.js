@@ -173,24 +173,30 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 {referral
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id, selectedRows);
-
+                    const {
+                      _id,
+                      createdAt,
+                      type,
+                      referralId,
+                      doctor,
+                      patient,
+                      specialization,
+                      testType,
+                    } = row;
+                    const isItemSelected = isSelected(_id, selectedRows);
                     const labelId = `enhanced-table-checkbox-${index}`;
-
                     return (
                       <TableRow
                         hover
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row._id}
+                        key={_id}
                         selected={isItemSelected}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
-                            }
+                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -205,7 +211,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          {dateMoment(row.createdAt)}
+                          {dateMoment(createdAt)}
                         </TableCell>
                         <TableCell
                           id={labelId}
@@ -214,8 +220,8 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          {/* {new Date(row.updatedAt)} */}
-                          {row.referralId ? row.referralId : "No Value"}
+                          {/* {new Date(updatedAt)} */}
+                          {referralId ? referralId : "No Value"}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
                           <div
@@ -232,7 +238,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
-                            <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                            <span style={{ fontSize: "1.25rem" }}>{doctor}</span>
                           </div>
                         </TableCell>
                         <TableCell
@@ -240,21 +246,21 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          {row.patient}
+                          {patient}
                         </TableCell>
                         <TableCell
                           align="left"
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          {row.type}
+                          {type}
                         </TableCell>
                         <TableCell
                           align="left"
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          {row.type == "hcp" ? row.specialization : row.testType}
+                          {type == "hcp" ? specialization : testType}
                         </TableCell>
 
                         <TableCell align="left" className={classes.tableCell}>
@@ -262,7 +268,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                             variant="contained"
                             className={classes.button}
                             component={Link}
-                            to={`referrals/${row._id}`}
+                            to={`referrals/${_id}`}
                             endIcon={<ArrowForwardIosIcon />}
                             onClick={() => {
                               setSelectedSubMenu(10);
