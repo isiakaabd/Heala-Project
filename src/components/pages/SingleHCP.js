@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
 import CustomButton from "components/Utilities/CustomButton";
 import { useQuery, useMutation } from "@apollo/client";
 import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
@@ -169,8 +167,8 @@ const SingleHCP = (props) => {
   if (profile.loading) return <Loader />;
   return (
     <>
-      <Grid container direction="column" className={classes.gridContainer}>
-        <Grid item style={{ marginBottom: "3rem" }}>
+      <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
+        <Grid item>
           <PreviousButton path={`/hcps`} onClick={() => setSelectedSubMenu(0)} />
         </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>

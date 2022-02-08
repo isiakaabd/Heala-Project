@@ -61,7 +61,6 @@ const AvailabilityTable = () => {
       setAvaliablity(data.getStats.availabilityCalendar);
     }
   }, [patient, data]);
-  console.log(avaliablity);
   const classes = useStyles();
   const theme = useTheme();
 

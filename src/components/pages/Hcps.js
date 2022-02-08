@@ -119,7 +119,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: "#F7F7FF",
   };
   const [profiles, setProfiles] = useState("");
   const doctorProfile = useQuery(getDoctorsProfile, { fetchPolicy: "cache-and-network" });
@@ -592,10 +591,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     <Grid item md>
                       <FormikControl
                         control="input"
-                        label="Doci-ID"
+                        label="Heala-ID"
                         id="dociId"
                         name="dociId"
-                        placeholder="Enter Doci ID"
+                        placeholder="Enter Heala ID"
                       />
                     </Grid>
                   </Grid>

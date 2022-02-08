@@ -50,10 +50,12 @@ const DisplayProfile = ({
       justifyContent="space-between"
       alignItems="center"
       className={classes.gridsWrapper}
+      rowSpacing={2}
+      sx={{ width: "100%" }}
     >
       <Grid item>
-        <Grid container alignItems="center">
-          <Grid item style={{ marginRight: "2rem" }}>
+        <Grid container width="100%" gap={2} alignItems="center" rowSpacing={2}>
+          <Grid item>
             <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
           </Grid>
           <Grid item>
@@ -66,7 +68,7 @@ const DisplayProfile = ({
                   <Grid item style={{ marginRight: "3rem" }}>
                     <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
                       <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span>{" "}
-                      {statusId && statusId.split("-")[1]}
+                      {statusId}
                     </Typography>
                   </Grid>
                   {specialization ? (
@@ -109,7 +111,7 @@ const DisplayProfile = ({
       </Grid>
       {/* Action Buttons grid */}
       <Grid item>
-        <Grid container alignItems="center">
+        <Grid container alignItems="center" rowSpacing={2}>
           <Grid item style={{ marginRight: "2rem" }}>
             <CustomButton
               endIcon={<HiChat />}

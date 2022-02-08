@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "4rem 5rem",
-    height: "16.1rem",
+    width: "100%",
+    minHeight: "16.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -138,17 +139,17 @@ const HcpProfile = (props) => {
     dob,
   } = doctorProfile;
   return (
-    <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column" gap={3} width="100%">
+      <Grid item>
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       {/* Display photo and profile name grid */}
-      <Grid item>
+      <Grid item container>
         <DisplayProfile
           fullName={`${firstName} ${lastName}`}
           displayPhoto={picture}
           medicalTitle="Medical ID"
-          statusId={dociId}
+          statusId={dociId && dociId.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
@@ -158,9 +159,9 @@ const HcpProfile = (props) => {
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid item container justifyContent="space-between" gap={5} sx={{ width: "100%" }}>
         {/* GENDER GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid item md className={classes.cardGrid}>
           <Grid
             container
             direction="column"
@@ -177,7 +178,7 @@ const HcpProfile = (props) => {
           </Grid>
         </Grid>
         {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+        <Grid item md className={classes.cardGrid}>
           <Grid
             container
             direction="column"
@@ -198,9 +199,9 @@ const HcpProfile = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid item container justifyContent="space-between" gap={5}>
         {/* EMAIL ADDRESS GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid item md className={classes.cardGrid}>
           <Grid
             container
             direction="column"
@@ -224,7 +225,7 @@ const HcpProfile = (props) => {
           </Grid>
         </Grid>
         {/* PhONE NUMBER GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+        <Grid item md className={classes.cardGrid}>
           <Grid
             container
             direction="column"
@@ -252,9 +253,9 @@ const HcpProfile = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid item container justifyContent="space-between">
         {/* HOSPITAL GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid item md className={classes.cardGrid}>
           <Grid
             container
             direction="column"
