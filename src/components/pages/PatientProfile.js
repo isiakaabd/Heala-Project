@@ -170,8 +170,8 @@ const PatientProfile = ({
     email,
   } = patientProfile;
   return (
-    <Grid container direction="column">
-      <Grid item sx={{ paddingBottom: ".6rem" }}>
+    <Grid container direction="column" gap={2}>
+      <Grid item>
         <PreviousButton path={`/patients/${patientId}`} />
       </Grid>
       {/* Display photo and profile name grid */}
