@@ -41,17 +41,17 @@ const HcpAvailability = (props) => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column" gap={2}>
+      <Grid item>
         <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
-      <Grid item style={{ marginBottom: "3rem" }}>
+      <Grid item>
         <Typography variant="h2">HCP Availability</Typography>
       </Grid>
-      <Grid item container>
+      <Grid item container gap={3}>
         {availabiltyArray.map((availability, index) => {
           return (
-            <Grid item key={index} md style={{ marginRight: "2rem" }}>
+            <Grid item key={index}>
               <AvailabilityCard availability={availability} />
             </Grid>
           );

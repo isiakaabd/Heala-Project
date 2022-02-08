@@ -234,17 +234,17 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {plan ? plan : "No Value"}
+                        {plan ? plan : "No Plan"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {provider ? provider : "No Value"}
+                        {provider ? provider : "No Provider"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {consultations ? consultations : "No Value"}
+                        {consultations ? consultations : 0}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Chip
-                          label={status ? status : "No value"}
+                          label={status ? status : "No Status"}
                           className={classes.badge}
                           style={{
                             background:

@@ -61,7 +61,7 @@ const AvailabilityTable = () => {
       setAvaliablity(data.getStats.availabilityCalendar);
     }
   }, [patient, data]);
-
+  console.log(avaliablity);
   const classes = useStyles();
   const theme = useTheme();
 
@@ -89,10 +89,10 @@ const AvailabilityTable = () => {
               {avaliablity
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+                  const { _id, doctor, dates } = row;
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
-                    <TableRow hover tabIndex={-1} key={row._id}>
+                    <TableRow hover tabIndex={-1} key={_id}>
                       <TableCell
                         id={labelId}
                         scope="row"
@@ -100,7 +100,7 @@ const AvailabilityTable = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {row._id}
+                        {_id}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -118,16 +118,19 @@ const AvailabilityTable = () => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{doctor}</span>
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {row.specialization ? row.specialization : "No Value"}
+                        {dates &&
+                          dates.map((times) => {
+                            return times.day;
+                          })}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Grid container gap={1}>
-                          {row.dates &&
-                            row.dates.map((times) => {
+                          {dates &&
+                            dates.map((times) => {
                               return times.times.map((time, index) => {
                                 return (
                                   <Chip

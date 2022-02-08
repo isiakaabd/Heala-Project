@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Chip, Avatar } from "@mui/material";
+import { Grid, Typography, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
@@ -296,11 +296,7 @@ const MedicalRecords = (props) => {
                       </Grid>
                     ))
                   ) : (
-                    <Avatar
-                      variant="outlined"
-                      label="No Allergy for this Patient"
-                      className={classes.infoBadge}
-                    />
+                    <Chip variant="outlined" label="No Lab Result" className={classes.infoBadge} />
                   )}
                 </Grid>
               </Grid>

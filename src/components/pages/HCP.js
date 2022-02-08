@@ -263,7 +263,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                           endIcon={<ArrowForwardIosIcon />}
                           onClick={() => setSelectedSubMenu(8)}
                         >
-                          View HCP
+                          View Doctor
                         </Button>
                       </TableCell>
                     </TableRow>

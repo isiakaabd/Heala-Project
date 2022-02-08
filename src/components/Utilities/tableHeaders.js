@@ -325,7 +325,7 @@ export const viewRefferalHeader = [
 // Patient > Consultation Route Table
 export const consultationsHeadCells = [
   { id: 100, label: "Date" },
-  { id: 101, label: "Doctor" },
+  { id: 101, label: "Patients" },
   { id: 102, label: "Symptoms" },
   { id: 105, label: "Contact" },
   { id: 133, label: "Type" },
@@ -367,9 +367,9 @@ export const waitingHeadCells = [
 ];
 
 export const availabilityHeadCells = [
-  { id: 0, label: "HCP ID" },
+  { id: 0, label: "Doctor ID" },
   { id: 1, label: "Name" },
-  { id: 2, label: "Category" },
+  { id: 2, label: "Day" },
   { id: 3, label: "Available Time" },
 ];
 
@@ -403,7 +403,7 @@ export const messagesHeadCells = [
   { id: 3, label: "Time" },
   { id: 4, label: "" },
 ];
-// HCP Patients HEADCELLS
+// Doctor Patients HEADCELLS
 export const hcpPatientsHeadCells = [
   { id: 0, label: "User ID" },
   { id: 1, label: "Patient Name" },

@@ -13,11 +13,11 @@ import SettingsIcon from "@mui/icons-material/Settings";
 export const menus = [
   { id: 0, title: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
   { id: 1, title: "Patients", icon: GroupIcon, path: "/patients" },
-  { id: 2, title: "HCPs", icon: PersonAddAlt1Icon, path: "/hcps" },
+  { id: 2, title: "Doctors", icon: PersonAddAlt1Icon, path: "/hcps" },
   { id: 3, title: "Partners", icon: GroupsIcon, path: "/partners" },
   { id: 5, title: "Messages", icon: BsChatDotsFill, path: "/messages" },
   { id: 6, title: "Emails", icon: EmailIcon, path: "/email" },
-  { id: 7, title: "HCP Verification", icon: VerifiedIcon, path: "/verification" },
+  { id: 7, title: "Doctor Verification", icon: VerifiedIcon, path: "/verification" },
   { id: 12, title: "White Label", icon: LoopIcon, path: "/label" },
   { id: 8, title: "Finance", icon: PaymentsIcon, path: "/finance" },
   { id: 9, title: "Referrals", icon: LoopIcon, path: "/referrals" },

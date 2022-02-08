@@ -20,7 +20,7 @@ import DisablePatient from "components/modals/DeleteOrDisable";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
-import { getPatients, getProfile } from "components/graphQL/useQuery";
+import { getPatients, getProfile, verifiedEmail } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -86,25 +86,38 @@ const PatientProfile = ({
   setChatMediaActive,
   setSelectedSubMenu,
   selectedMenu,
-  setSelectedPatientMenu,
-  setSelectedScopedMenu,
 }) => {
   const { patientId } = useParams();
+  const doci = localStorage.getItem("userDociId");
   const { loading, data, error } = useQuery(getProfile, {
     variables: {
       profileId: patientId,
     },
   });
+  const { data: emailStatus, loading: emailLoading } = useQuery(verifiedEmail, {
+    variables: {
+      dociId: doci,
+    },
+  });
+
   const [disableUser] = useMutation(deleteProfile);
 
   const classes = useStyles();
   const theme = useTheme();
   const [patientProfile, setPatientProfile] = useState("");
+  const [emailStat, setEmailStat] = useState(false);
+
+  useEffect(() => {
+    if (emailStatus) {
+      setEmailStat(emailStatus.accounts.data[0].isEmailVerified);
+    }
+  }, [emailStatus]);
   useEffect(() => {
     if (data) {
       setPatientProfile(data.profile);
     }
   }, [data, patientId]);
+
   const handleDialogOpen = () => setIsOpen(true);
   const initialValues = {
     referral: "",
@@ -142,7 +155,7 @@ const PatientProfile = ({
     // eslint-disable-next-line
   }, [chatMediaActive]);
 
-  if (loading) return <Loader />;
+  if (loading || emailLoading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   const {
     firstName,
@@ -154,7 +167,6 @@ const PatientProfile = ({
     createdAt,
     provider,
     phoneNumber,
-    isEmailVerified,
     email,
   } = patientProfile;
   return (
@@ -256,7 +268,7 @@ const PatientProfile = ({
             <Grid item>
               <Chip
                 variant="outlined"
-                label={isEmailVerified ? isEmailVerified : "No Value"}
+                label={emailStat == "false" ? "Not Verified" : "Verified"}
                 className={classes.infoBadge}
               />
             </Grid>

@@ -6,19 +6,25 @@ import DashboardCharts from "components/layouts/DashboardChart";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import AvailabilityTable from "components/layouts/AvailabilityTable";
-import { getUserTypes } from "components/graphQL/useQuery";
+import { getUsertypess } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
+  // const userTypeId = localStorage.getItem("userTypeId");
   const [dropDown, setDropDown] = useState([]);
-  const { data } = useQuery(getUserTypes);
+  const { data } = useQuery(getUsertypess, {
+    variables: {
+      userTypeId: "61ed2354e6091400135e3d94",
+    },
+  });
   useEffect(() => {
     if (data) {
-      const datas = data.getUserTypes.userType;
+      console.log(data);
+      const datas = data.getUserTypeProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
-            return { key: i.name, value: i.name };
+            return { key: i.name, value: i._id };
           }),
       );
     }

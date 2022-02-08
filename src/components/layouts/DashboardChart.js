@@ -177,7 +177,7 @@ const DashboardCharts = () => {
           <Grid item className={classes.chartCard} sx={{ marginBottom: "3em" }}>
             <Grid container direction="column">
               <Grid item className={classes.headerGrid}>
-                <Typography variant="h5">HCP Stats</Typography>
+                <Typography variant="h5">Doctor Stats</Typography>
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item>

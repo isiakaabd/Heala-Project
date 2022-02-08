@@ -125,7 +125,18 @@ const HcpProfile = (props) => {
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
-
+  const {
+    dociId,
+    picture,
+    firstName,
+    lastName,
+    specialization,
+    email,
+    hospital,
+    phoneNumber,
+    gender,
+    dob,
+  } = doctorProfile;
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -134,13 +145,11 @@ const HcpProfile = (props) => {
       {/* Display photo and profile name grid */}
       <Grid item>
         <DisplayProfile
-          fullName={`${doctorProfile.firstName} ${doctorProfile.lastName}`}
-          displayPhoto={doctorProfile.picture}
+          fullName={`${firstName} ${lastName}`}
+          displayPhoto={picture}
           medicalTitle="Medical ID"
-          statusId={doctorProfile._id}
-          specialization={
-            doctorProfile.specialization ? doctorProfile.specialization : "Not assigned"
-          }
+          statusId={dociId}
+          specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
           setSelectedSubMenu={setSelectedSubMenu}
@@ -163,7 +172,7 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label={doctorProfile.gender} className={classes.infoBadge} />
+              <Chip variant="outlined" label={gender} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -182,9 +191,7 @@ const HcpProfile = (props) => {
             <Grid item>
               <Chip
                 variant="outlined"
-                label={
-                  doctorProfile.dob ? dateMoment(doctorProfile.dob) : <span>DOB not Provided</span>
-                }
+                label={dob ? dateMoment(dob) : <span>DOB not Provided</span>}
                 className={classes.infoBadge}
               />
             </Grid>
@@ -205,9 +212,9 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Email Address</Typography>
             </Grid>
             <Grid item>
-              {doctorProfile.email ? (
-                <a href={`mailto:${doctorProfile.email}`} className={classes.link}>
-                  <span>{doctorProfile.email}</span>
+              {email ? (
+                <a href={`mailto:${email}`} className={classes.link}>
+                  <span>{email}</span>
                   <ArrowForwardIosIcon className={classes.linkIcon} />
                 </a>
               ) : (
@@ -229,9 +236,9 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Phone Number</Typography>
             </Grid>
             <Grid item>
-              {doctorProfile.phoneNumber ? (
-                <a href={doctorProfile.phoneNumber} className={classes.link}>
-                  <span>{doctorProfile.phoneNumber} </span>
+              {phoneNumber ? (
+                <a href={phoneNumber} className={classes.link}>
+                  <span>{phoneNumber} </span>
                   <IoCopy
                     className={classes.linkIcon}
                     size={12.5}
@@ -259,9 +266,9 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Hospital</Typography>
             </Grid>
             <Grid item>
-              {doctorProfile.hospital ? (
-                <a href={doctorProfile.email} className={classes.link}>
-                  <span>{doctorProfile.hospital}</span>
+              {hospital ? (
+                <a href={email} className={classes.link}>
+                  <span>{hospital}</span>
                   <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
                 </a>
               ) : (

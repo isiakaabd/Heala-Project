@@ -101,7 +101,7 @@ const SingleHCP = (props) => {
   const cards1 = [
     {
       id: 1,
-      title: "HCP Profile",
+      title: "Doctor Profile",
       background: theme.palette.common.lightRed,
       path: "profile",
       icon: UserIcon,
@@ -195,7 +195,7 @@ const SingleHCP = (props) => {
               <Grid item>
                 <CustomButton
                   endIcon={<PersonRemoveIcon />}
-                  title="Disable HCP"
+                  title="Disable Doctor"
                   onClick={() => setOpenDisableDoctor(true)}
                   type={trasparentButton}
                   textColor={theme.palette.common.red}
@@ -247,9 +247,9 @@ const SingleHCP = (props) => {
       <DisablePatient
         open={openDisableDoctor}
         setOpen={setOpenDisableDoctor}
-        title="Delete HCP"
+        title="Delete Doctor"
         btnValue="delete"
-        confirmationMsg="delete HCP"
+        confirmationMsg="delete Doctor"
         onConfirm={onConfirm}
       />
     </>

@@ -282,9 +282,9 @@ const HeaderText = (props) => {
             scopedSubMenu={selectedScopedMenu}
             subSubTitle={
               selectedHcpMenu === 1
-                ? "HCP Profile"
+                ? "Doctor Profile"
                 : selectedHcpMenu === 2
-                ? "HCP Appointments"
+                ? "Doctor Appointments"
                 : selectedHcpMenu === 3
                 ? "Availability"
                 : selectedHcpMenu === 4
@@ -302,8 +302,8 @@ const HeaderText = (props) => {
                 ? "Create Message"
                 : ""
             }
-            title="HCPs"
-            subTitle="HCP View"
+            title="Doctors"
+            subTitle="Doctor View"
             titleColor={
               selectedHcpMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
             }
@@ -312,7 +312,7 @@ const HeaderText = (props) => {
       }
       return (
         <CustomHeaderText
-          title="HCPs"
+          title="Doctors"
           total={doctorContent.data && doctorContent.data.DoctorCount}
           path="hcps"
         />
@@ -361,14 +361,14 @@ const HeaderText = (props) => {
       if (selectedSubMenu === 8) {
         return (
           <CustomSubHeaderText
-            title="HCP Verification"
+            title="Doctor Verification"
             scopedMenu={0}
             scopedSubMenu={0}
-            subTitle="HCP View"
+            subTitle="Doctor View"
           />
         );
       }
-      return <CustomHeaderTitle title="HCP Verification" path="verification" />;
+      return <CustomHeaderTitle title="Doctor Verification" path="verification" />;
     case 8:
       if (selectedSubMenu === 9) {
         return (
