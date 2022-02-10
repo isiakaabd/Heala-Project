@@ -186,9 +186,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           container
           style={{ padding: "2rem 3rem" }}
           alignItems="center"
-          justifyContent="space-between"
+          // justifyContent="space-between"
           width="100%"
-          // gap={12}
+          gap={12}
           sx={{ flexWrap: "nowrap" }}
         >
           <Grid item>
