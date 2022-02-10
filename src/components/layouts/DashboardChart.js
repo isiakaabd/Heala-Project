@@ -4,7 +4,7 @@ import NoData from "components/layouts/NoData";
 import Loader from "components/Utilities/Loader";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { financialPercent, returnpercent } from "components/Utilities/Time";
+import { financialPercent, returnpercent, formatNumber } from "components/Utilities/Time";
 import FormSelect from "components/Utilities/FormSelect";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -311,7 +311,7 @@ const DashboardCharts = () => {
                                 >
                                   N
                                 </span>
-                                {totalEarning}
+                                {formatNumber(totalEarning)}
                               </Typography>
                             </Grid>
                             <Grid item>
@@ -343,7 +343,7 @@ const DashboardCharts = () => {
                                 >
                                   N
                                 </span>
-                                {data && totalPayouts}
+                                {formatNumber(totalPayouts)}
                               </Typography>
                             </Grid>
                             <Grid item>

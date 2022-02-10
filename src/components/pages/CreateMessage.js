@@ -67,8 +67,14 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     refetchQueries: [{ query: getMessage }],
   });
   const [recipientValue, setRecipientvalue] = useState("");
-  const { data, refetch, error } = useQuery(getProfileByDociId);
-  const { data: doctorProfile, refetch: refetch2 } = useQuery(getDoctorByDociId);
+  const { data, refetch, error } = useQuery(getProfileByDociId, {
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
+  const { data: doctorProfile, refetch: refetch2 } = useQuery(getDoctorByDociId, {
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -85,7 +91,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   const [recipient, setRecipient] = useState("");
   const { firstName, lastName, _id } = recipient.length > 0 && recipient[0];
-
+  console.log(recipient);
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
     const { subject, textarea, recipient } = values;
@@ -110,10 +116,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     async (e) => {
       setRecipientvalue(e);
       await refetch({
-        dociId: `DOCI-${e}`,
+        dociId: `DOCI-${e.toUpperCase()}`,
       });
       if ((data && data.profiles.data.length < 1) || error) {
-        await refetch2({ dociId: `DOCI-${e}` });
+        await refetch2({ dociId: `DOCI-${e.toUpperCase()}` });
       }
     },
     [refetch, refetch2, data, error],

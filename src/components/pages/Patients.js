@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  // const inputRef = createRef();
 
   const initialValues = {
     name: "",
@@ -130,10 +131,18 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
+  const onChange = async (e) => {
+    setSearchPatient(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
+  };
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   const handleDialogClose = () => setIsOpen(false);
-
+  // useEffect(() => {
+  //   inputRef.current.focus();
+  // }, [inputRef]);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -151,9 +160,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchPatient}
-              onChange={(e) => setSearchPatient(e.target.value)}
-              placeholder="Type to search patients..."
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Type to search patients by Heala ID e.g 7NE6ELLO "
               height="5rem"
+              // ref={inputRef}
             />
           </Grid>
           <Grid item>

@@ -182,14 +182,20 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const usertype = useQuery(getUserTypes);
+  const { loading, data, error, refetch } = useQuery(getUserTypes);
+  const onChange = async (e) => {
+    setSearchHcp(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ recipient: e });
+  };
   const [userType, setUsertypes] = useState([]);
 
   useEffect(() => {
-    if (usertype.data) {
-      setUsertypes(usertype.data.getUserTypes.userType);
+    if (data) {
+      setUsertypes(data.getUserTypes.userType);
     }
-  }, [usertype.data]);
+  }, [data]);
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const initialValues = {
@@ -240,8 +246,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     setEdit(true);
     setEditId(id);
   };
-  if (usertype.loading) return <Loader />;
-  if (usertype.error) return <NoData error={usertype.error.message} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -258,8 +264,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchHcp}
-              placeholder="Type to search partners..."
-              onChange={(e) => setSearchHcp(e.target.value)}
+              placeholder="Type to search User types..."
+              onChange={(e) => onChange(e.target.value)}
               height="5rem"
             />
           </Grid>

@@ -162,15 +162,18 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  // const handleEditDialogOpens = () => {
-  //   setEdit(true);
-  // };
   const onConfirm = async () => {
     deleteRoles({ variables: { id }, refetchQueries: [{ query: getRoles }] });
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const { loading, data, error } = useQuery(getRoles);
+  const { loading, data, error, refetch } = useQuery(getRoles);
+  const onChange = async (e) => {
+    setSearchMail(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ name: e });
+  };
   useEffect(() => {
     if (data) {
       setRolesManagements(data.getRoles.role);
@@ -206,8 +209,8 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Type to search plans..."
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Type to search roles by role..."
               height="5rem"
             />
           </Grid>

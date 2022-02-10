@@ -120,10 +120,16 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
-  const { loading, data, error } = useQuery(getMessage);
+  const { loading, data, error, refetch } = useQuery(getMessage);
+  const onChange = async (e) => {
+    setSearchMessage(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ recipient: e });
+  };
 
   useEffect(() => {
-    if (data && data.getMessages.messages) {
+    if (data) {
       setMessage(data.getMessages.messages);
     }
   }, [message, data]);
@@ -145,8 +151,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMessage}
-              onChange={(e) => setSearchMessage(e.target.value)}
-              placeholder="Type to search Messages..."
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Type to search Messages by recipient e.g 61e5d7ebbe7d97001467f6fe"
               height="5rem"
             />
           </Grid>

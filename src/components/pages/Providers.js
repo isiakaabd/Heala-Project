@@ -147,7 +147,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
-  const provider = useQuery(getProviders);
+  const { data, error, loading, refetch } = useQuery(getProviders);
+
+  const onChange = async (e) => {
+    setSearchHcp(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ name: e });
+  };
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [deleteProvider] = useMutation(deletProvider);
@@ -159,10 +166,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [providers, setProviders] = useState([]);
 
   useEffect(() => {
-    if (provider.data) {
-      setProviders(provider.data.getProviders.provider);
+    if (data) {
+      setProviders(data.getProviders.provider);
     }
-  }, [provider.data]);
+  }, [data]);
 
   const theme = useTheme();
   const handleDialogOpen = () => {
@@ -224,7 +231,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   };
   const onSubmit1 = async (values) => {
     const { name, userTypeId } = values;
-    await provider.refetch({
+    await refetch({
       name,
       userTypeId,
     });
@@ -241,8 +248,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     setEditId(id);
   };
   const [singleData, setSingleData] = useState();
-  if (provider.loading) return <Loader />;
-  if (provider.error) return <NoData error={provider.error.message} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -259,8 +266,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchHcp}
-              placeholder="Type to search partners..."
-              onChange={(e) => setSearchHcp(e.target.value)}
+              placeholder="Type to search Providers by Hospital name e.g Lagoon Hospital"
+              onChange={(e) => onChange(e.target.value)}
               height="5rem"
             />
           </Grid>

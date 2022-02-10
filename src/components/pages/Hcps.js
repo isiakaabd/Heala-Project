@@ -120,13 +120,19 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
+  const { data, error, loading, refetch } = useQuery(getDoctorsProfile);
+  const onChange = async (e) => {
+    setSearchHcp(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
+  };
   const [profiles, setProfiles] = useState("");
-  const doctorProfile = useQuery(getDoctorsProfile, { fetchPolicy: "cache-and-network" });
   useEffect(() => {
-    if (doctorProfile.data) {
-      setProfiles(doctorProfile.data.doctorProfiles.profile);
+    if (data) {
+      setProfiles(data.doctorProfiles.profile);
     }
-  }, [doctorProfile]);
+  }, [data]);
 
   const [searchHcp, setSearchHcp] = useState("");
   const [openHcpFilter, setOpenHcpFilter] = useState(false);
@@ -148,7 +154,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const onSubmit1 = async (values) => {
     console.log(values);
     const { hospital, specialization, phone, cadre } = values;
-    await doctorProfile.refetch({
+    await refetch({
       hospital,
       specialization,
       phoneNumber: phone,
@@ -203,7 +209,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     { key: "Male", value: "male" },
     { key: "Female", value: "female" },
   ];
-  // FIltering modals select state
+
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -237,16 +243,16 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  if (doctorProfile.loading) return <Loader />;
-  if (doctorProfile.error) return <NoData error={doctorProfile.error.message} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
             value={searchHcp}
-            onChange={(e) => setSearchHcp(e.target.value)}
-            placeholder="Type to search HCPs..."
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
             height="5rem"
           />
         </Grid>
