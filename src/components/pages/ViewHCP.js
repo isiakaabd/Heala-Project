@@ -189,9 +189,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           justifyContent="space-between"
           width="100%"
           // gap={12}
-          sx={{ flexWrap: "nowrap", background: "blue" }}
+          sx={{ flexWrap: "nowrap" }}
         >
-          <Grid item sx={{ background: "green" }}>
+          <Grid item>
             <Grid item container gap={2} alignItems="center">
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
