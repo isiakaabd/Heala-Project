@@ -169,7 +169,7 @@ const HCP = ({ setSelectedSubMenu }) => {
               <Search
                 value={searchMail}
                 onChange={(e) => setSearchMail(e.target.value)}
-                placeholder="Type to search HCPs..."
+                placeholder="Type to search Doctors..."
                 height="5rem"
               />
             </Grid>

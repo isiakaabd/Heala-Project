@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
 import NoData from "components/layouts/NoData";
+import Loader from "components/Utilities/Loader";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { financialPercent, returnpercent } from "components/Utilities/Time";
-import Loader from "components/Utilities/Loader";
 import FormSelect from "components/Utilities/FormSelect";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -16,7 +16,7 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import { selectOptions } from "components/Utilities/Time";
 import "chartjs-plugin-style";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery, NetworkStatus } from "@apollo/client";
 import { dashboard, getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
@@ -99,13 +99,18 @@ const DashboardCharts = () => {
   const theme = useTheme();
 
   const [patient, { data, error, loading }] = useLazyQuery(dashboard);
-  const [stats, { data: earningData }] = useLazyQuery(getEarningStats);
+  // eslint-disable-next-line
+  const { data: earningData, error: statError, networkStatus, refetch } = useQuery(
+    getEarningStats,
+    { variables: { q: "365" }, notifyOnNetworkStatusChange: true },
+  );
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [appointmentStats, setAppointmentStats] = useState([]);
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
+  console.log(totalEarning);
 
   useEffect(() => {
     (async () => {
@@ -113,20 +118,11 @@ const DashboardCharts = () => {
     })();
 
     if (data) {
-      const {
-        patientStats,
-        doctorStats,
-        appointmentStats,
-        subscribers,
-        totalEarnings,
-        totalPayout,
-      } = data.getStats;
+      const { patientStats, doctorStats, appointmentStats, subscribers } = data.getStats;
       setPatients(patientStats);
       setDoctorStats(doctorStats);
       setAppointmentStats(appointmentStats);
       setsubscribers(subscribers);
-      setTotalEarning(totalEarnings);
-      setTotalPayouts(totalPayout);
     }
   }, [patient, data]);
 
@@ -142,9 +138,9 @@ const DashboardCharts = () => {
   const [form, setForm] = useState("");
   const onChange = async (e) => {
     setForm(e.target.value);
+    await refetch({ q: e.target.value });
   };
   useEffect(() => {
-    stats({ variables: { form } });
     if (earningData) {
       const { totalEarnings, totalPayout } = earningData.getEarningStats;
       setTotalEarning(totalEarnings);
@@ -152,10 +148,13 @@ const DashboardCharts = () => {
       const value = financialPercent(totalEarnings, totalPayout);
       setFinances(value);
     }
-  }, [form, stats, earningData]);
+  }, [earningData, form, refetch]);
+  if (networkStatus === NetworkStatus.refetch) return <Loader />;
 
+  //return setTotalEarning(0);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
+  if (statError) return null;
 
   return (
     <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
@@ -182,7 +181,7 @@ const DashboardCharts = () => {
                       </Grid>
                       <Grid item>
                         <Typography variant="body2" style={{ color: theme.palette.success.main }}>
-                          {`${doctorPercentage} %`}
+                          {`${doctorPercentage.toFixed(0)} %`}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -217,7 +216,7 @@ const DashboardCharts = () => {
                               variant="body2"
                               style={{ color: theme.palette.common.lightGrey }}
                             >
-                              Total active HCPs
+                              Total active Doctors
                             </Typography>
                           </Grid>
                         </Grid>
@@ -241,7 +240,7 @@ const DashboardCharts = () => {
                               variant="body2"
                               style={{ color: theme.palette.common.lightGrey }}
                             >
-                              Total inactive HCPs
+                              Total inactive Doctors
                             </Typography>
                           </Grid>
                         </Grid>
@@ -465,7 +464,7 @@ const DashboardCharts = () => {
                   </Grid>
                   <Grid item>
                     <Typography variant="body2" style={{ color: theme.palette.success.main }}>
-                      {`${patientPercentage} %`}
+                      {`${patientPercentage.toFixed(0)} %`}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -476,7 +475,6 @@ const DashboardCharts = () => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          {/* <Grid item className={classes.headerGrid}></Grid> */}
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item lg={5} className={classes.bottomChartGrid}>
             <LineChart

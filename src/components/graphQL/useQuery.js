@@ -643,37 +643,22 @@ export const getProfile = gql`
   }
 `;
 export const getProfileByDociId = gql`
-  query findProfiles($dociId: String) {
+  query findProfiles($dociId: String!) {
     profiles(filterBy: { dociId: $dociId }) {
       data {
         _id
         firstName
         lastName
-        height
-        weight
-        bloodGroup
-        dociId
-        genotype
-        gender
-        phoneNumber
-        provider
-        plan
-        status
-        consultations
-        createdAt
-        image
       }
-      pageInfo {
-        totalDocs
-        limit
-        offset
-        hasPrevPage
-        hasNextPage
-        page
-        totalPages
-        pagingCounter
-        prevPage
-        nextPage
+    }
+  }
+`;
+export const getDoctorByDociId = gql`
+  query doctorProfiles($dociId: String!) {
+    doctorProfiles(filterBy: { dociId: $dociId }) {
+      profile {
+        firstName
+        lastName
       }
     }
   }

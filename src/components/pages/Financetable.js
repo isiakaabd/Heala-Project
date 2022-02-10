@@ -104,7 +104,7 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
   }, [selectedMenu, selectedSubMenu]);
 
   if (loading) return <Loader />;
-  if (error) return <noData error={error.message} />;
+  if (error) return <NoData error={error.message} />;
 
   return (
     <Grid container direction="column" gap={2} height="100%">

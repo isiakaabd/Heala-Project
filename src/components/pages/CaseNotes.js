@@ -102,7 +102,6 @@ const CaseNotes = ({
   if (error) return <NoData error={error.message} />;
   const {
     prescription,
-
     type,
     consultationOwner,
     referralId,

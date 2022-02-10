@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -10,10 +10,10 @@ import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { CREATE_MESSAGE } from "components/graphQL/Mutation";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { getMessage, getProfile, doctor } from "components/graphQL/useQuery";
+import { getMessage, getProfileByDociId, getDoctorByDociId } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -66,8 +66,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
-  const [fetchUser, { data }] = useLazyQuery(getProfile);
-  const [fetchDoc, { data: doctorProfile }] = useLazyQuery(doctor);
+  const [recipientValue, setRecipientvalue] = useState("");
+  const { data, refetch, error } = useQuery(getProfileByDociId);
+  const { data: doctorProfile, refetch: refetch2 } = useQuery(getDoctorByDociId);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -82,9 +83,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     recipient: Yup.string("Enter your recipient").required("recipients is required"),
   });
 
-  const [recipientValue, setRecipientvalue] = useState("");
   const [recipient, setRecipient] = useState("");
-  const { firstName, lastName, _id } = recipient;
+  const { firstName, lastName, _id } = recipient.length > 0 && recipient[0];
+
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
     const { subject, textarea, recipient } = values;
@@ -105,21 +106,33 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     }
     onSubmitProps.resetForm();
   };
+  const onChange = useCallback(
+    async (e) => {
+      setRecipientvalue(e);
+      await refetch({
+        dociId: `DOCI-${e}`,
+      });
+      if ((data && data.profiles.data.length < 1) || error) {
+        await refetch2({ dociId: `DOCI-${e}` });
+      }
+    },
+    [refetch, refetch2, data, error],
+  );
 
   useEffect(() => {
     (async () => {
-      fetchUser({ variables: { profileId: recipientValue } });
-      if (data) {
-        console.log(data);
-        setRecipient(data.profile);
-      } else {
-        fetchDoc({ variables: { id: recipientValue } });
-        if (doctorProfile) {
-          setRecipient(doctorProfile.doctorProfile);
-        }
+      if (data && data.profiles.data.length > 0) {
+        setRecipient(data.profiles.data);
       }
     })();
-  }, [recipientValue, fetchUser, doctorProfile, fetchDoc, data]);
+  }, [data, recipientValue, onChange]);
+  useEffect(() => {
+    (async () => {
+      if (doctorProfile && doctorProfile.doctorProfiles.profile.length > 0) {
+        setRecipient(doctorProfile.doctorProfiles.profile);
+      }
+    })();
+  }, [doctorProfile, onChange, recipientValue]);
   const initialValues = {
     subject: "",
     recipient: recipient ? `${firstName} ${lastName} ` : "",
@@ -145,6 +158,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       {({ isValid, isSubmitting, dirty, values }) => {
         return (
           <Form onChange={setRecipientvalue(values.recipient)}>
+            {/* /*setRecipientvalue(values.recipient)*/}
             <Grid container direction="column">
               <Grid item style={{ marginBottom: "3rem" }}>
                 <PreviousButton path={`/messages`} />
@@ -167,15 +181,11 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                         <FormikControl
                           control="input"
                           id="message"
+                          onBlur={() => onChange(values.recipient)}
                           name="recipient"
                           variant="standard"
                           className={classes.formInput}
                         />
-                        {/* {error && (
-                          <Typography variant="h6" className={classes.heading}>
-                            Error fetching Recipient
-                          </Typography>
-                        )} */}
                       </Grid>
                     </Grid>
                     <Divider className={classes.divider} />

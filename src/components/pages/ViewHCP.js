@@ -3,94 +3,49 @@ import { useTheme } from "@mui/material/styles";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 import PropTypes from "prop-types";
-import { Avatar, Grid, Typography, IconButton } from "@mui/material";
+import { Grid, Typography, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import clock from "assets/images/clock.svg";
-import date from "assets/images/date.svg";
-import displayPhoto from "assets/images/avatar.svg";
-import imageUpload from "assets/images/imageUpload.svg";
-// import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PreviousButton from "components/Utilities/PreviousButton";
-import { dateMoment, timeMoment } from "components/Utilities/Time";
+import { dateMoment } from "components/Utilities/Time";
 import { useQuery } from "@apollo/client";
 import { verification } from "components/graphQL/useQuery";
 
-const gender = "Female";
 const useStyles = makeStyles((theme) => ({
-  containerGrid: {
-    background: "#fbfbfb !important ",
-    color: "black !important",
-    marginLeft: 0,
-  },
-  lightGreen: {
-    color: theme.palette.common.green,
+  parentGridWrapper: {
+    background: "#fff",
+    borderRadius: "1rem",
+    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
+
+    "&:not(:last-of-type)": {
+      marginBottom: "5rem",
+    },
   },
 
-  lightRed: {
-    color: theme.palette.common.red,
+  infoBadge: {
+    "&.MuiChip-root": {
+      fontSize: "1.5rem",
+      borderRadius: "1.5rem",
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+    },
   },
-  firstGrid: {
+  link: {
     display: "flex",
-    // marginRight: "6.3rem",
-    justifyContent: "flex-start",
     alignItems: "center",
-    fontSize: "1.6rem",
-    lineHeight: "2.4rem",
-    paddingLeft: "6.3rem",
-  },
-  imageGrid: {
-    width: "2.4rem",
-    height: "2.4rem",
-    background: " #FEF8F7",
-    borderRadius: ".5rem",
-    display: "grid",
-    placeContent: "center",
-  },
-  center: {
-    alignItems: "center",
+    fontSize: "1.25rem",
+    color: theme.palette.common.green,
+    border: `1px solid ${theme.palette.common.lightGrey}`,
+    padding: ".75rem",
+    borderRadius: "1.5rem",
+    textDecoration: "none",
   },
 
-  "img .MuiAvatar-img.css-1pqm26d-MuiAvatar-img": {
-    width: "1rem",
-    "& img": {
-      objectFit: "contain",
-      width: "30%",
-    },
-    ".css-1pqm26d-MuiAvatar-img": {
-      objectFit: "contain",
-      width: "30%",
-      height: "30%",
-    },
-  },
-  date: {
-    background: "#FEF8F7",
-    // width: "2.4rem",
-  },
-  spacing: {
-    margin: "0 !important",
-    width: "100% !important",
-  },
-  parentGrid: {
-    marginTop: "4.6rem",
-    borderRadius: "2rem",
-    maxWidth: "94.6rem",
-    background: "white",
-    overflow: "hidden",
-    boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
-    "& > *": {
-      borderBottom: ".5px solid #F8F8F8",
-      padding: " 0 0 0 6.3rem !important",
-      minHeight: "8.3rem",
-      "&:hover": {
-        background: "#fafafa",
-        cursor: "pointer",
-      },
-      "&:last-child": {
-        borderBottom: "none",
-      },
+  title: {
+    "&.MuiTypography-root": {
+      color: theme.palette.common.grey,
+      // marginRight: "2rem",
     },
   },
 }));
@@ -100,6 +55,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, { variables: { id: viewId } });
   const [respondData, setRespondData] = useState([]); //setRespondData
+
   useEffect(() => {
     try {
       if (data) {
@@ -109,7 +65,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
       console.log(err);
     }
   }, [data]);
-  console.log(respondData);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -117,38 +72,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-  const imageuploadContainer = [
-    {
-      value: "74.89KB, ",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-    {
-      value: "74.89KB, ",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-    {
-      value: "74.89KB",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-    {
-      value: "74.89KB, ",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-    {
-      value: "74.89KB, ",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-    {
-      value: "74.89KB",
-      time: "Oct 17",
-      text: "X-ray Scan Result",
-    },
-  ];
   const classes = useStyles();
 
   useEffect(() => {
@@ -159,133 +82,369 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   }, [selectedMenu, selectedSubMenu]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
+  // eslint-disable-next-line
+  const {
+    profileId,
+    createdAt,
+    qualification,
+    license,
+    yearbook,
+    alumni_association,
+    reference,
+    // eslint-disable-next-line
+  } = respondData;
   return (
-    <Grid position="static" className={classes.containerGrid}>
+    <Grid container direction="column" gap={2}>
       <Grid item>
         <PreviousButton path="/verification" />
       </Grid>
-      <Grid component="div">
-        <Typography variant="h1"> HCP view</Typography>
-      </Grid>
-
-      <Grid container className={classes.parentGrid}>
-        <Grid item container className={classes.firstGrid}>
-          <Grid container sx={{ maxWidth: "40%" }}>
-            <Grid
-              item
-              sm
-              container
-              sx={{ justifyContent: "space-between", alignItems: "center", minWidth: "60%" }}
-            >
+      <Grid item></Grid>
+      <Grid item container direction="column" className={classes.parentGridWrapper}>
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          justifyContent="space-between"
+          width="100%"
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
               <Grid item>
-                <Typography variant="h6" color="secondary">
+                <Typography variant="body1" className={classes.title}>
+                  Patient:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{profileId ? profileId : "No Doctor"}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Medical ID:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">2145</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Gender:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">Female</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
                   Date:
                 </Typography>
               </Grid>
-              <Grid item className={classes.imageGrid}>
-                <img src={date} alt="A clock icon" />
-              </Grid>
               <Grid item>
-                <Typography variant="h6"> {dateMoment(respondData.updatedAt)}</Typography>
-              </Grid>
-            </Grid>
-
-            <Grid item sm container sx={{ justifyContent: "space-around", alignItems: "center" }}>
-              <Grid item className={classes.imageGrid}>
-                <img src={clock} className={classes.date} alt="A time icon " />
-              </Grid>
-              <Grid item>
-                <Typography variant="h6" component="span">
-                  {timeMoment(respondData.updatedAt)}
+                <Typography variant="body1" className={classes.title}>
+                  {dateMoment(createdAt)}
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-
-        {/* second grid */}
-        <Grid container flexWrap="nowrap" gap={3} alignItems="center">
-          <Grid container flexWrap="nowrap" alignItems="center" gap={2} flex item>
-            <Grid item>
-              <Typography variant="h6" color="text.secondary">
-                Patient:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Avatar src={displayPhoto} />
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">{respondData.profileId}</Typography>
-            </Grid>
-          </Grid>
-          <Grid container gap={2} item>
-            <Grid item>
-              <Typography variant="h5">Medical ID:</Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">217878</Typography>
-            </Grid>
-          </Grid>
-          <Grid container gap={2} item>
-            <Grid item>
-              <Typography variant="h6">Gender:</Typography>
-            </Grid>
-            <Grid item>
-              <Typography
-                variant="h6"
-                className={gender === "Female" ? classes.lightRed : classes.lightGreen}
-              >
-                {gender}
-              </Typography>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          justifyContent="space-between"
+          width="100%"
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  File Upload:
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        {/* third grid */}
-
-        <Grid container>
-          <Grid item xs={5} sm={12} component="div">
-            <Typography variant="h6" color="text.secondary" sx={{ padding: "2rem 0" }}>
-              File Uploads:
-            </Typography>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          justifyContent="space-between"
+          width="100%"
+          // gap={12}
+          sx={{ flexWrap: "nowrap", background: "blue" }}
+        >
+          <Grid item sx={{ background: "green" }}>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Qualification
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
-
-          <Grid container>
-            <Grid item sm container spacing={2} className={classes.spacing}>
-              {imageuploadContainer.map((img, index) => {
-                return (
-                  <Grid container item xs={4} key={index} sx={{ paddingBottom: "2rem" }}>
-                    <Grid item xs={3}>
-                      <Avatar variant="square" src={imageUpload} />
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Grid>
-                        <Typography variant="h6">{img.text}</Typography>
-                      </Grid>
-                      <Grid item sm container>
-                        <Typography variant="h6">{img.value}</Typography>
-                        <Typography variant="h6">{img.time}</Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                );
-              })}
+          <Grid item container width="60%" alignItems="center" gap={4} justifyContent="flex-start">
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Degree:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">
+                    {qualification ? qualification.degree : "No Value"}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="space-around">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Year:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">{dateMoment(createdAt)}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              {qualification ? (
+                <a
+                  href={qualification.image}
+                  rel="noreferrer"
+                  target="_blank"
+                  className={classes.link}
+                >
+                  <span>Qualification PNG</span>
+                </a>
+              ) : (
+                <p className={classes.link}> No QUalification</p>
+              )}
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid item sm container>
-          <Grid item sx={{ margin: "auto 4rem auto auto" }}>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          width="100%"
+          gap={12}
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  License
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container width="60%" alignItems="center" gap={4} justifyContent="flex-start">
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Number:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">{license ? license.number : "No Value"}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="space-around">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Type:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">{license ? license.type : "No Value"}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              {license ? (
+                <a href={license.image} rel="noreferrer" target="_blank" className={classes.link}>
+                  <span>license PNG</span>
+                </a>
+              ) : (
+                <p className={classes.link}> No license</p>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          width="100%"
+          gap={12}
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  YearBook
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container width="60%" alignItems="center" gap={4} justifyContent="flex-start">
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Year:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">
+                    {yearbook ? yearbook.graduation_year : "No Value"}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              {yearbook ? (
+                <a href={yearbook.image} rel="noreferrer" target="_blank" className={classes.link}>
+                  <span>yearbook PNG</span>
+                </a>
+              ) : (
+                <p className={classes.link}> No yearbook</p>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          // justifyContent="space-between"
+          width="100%"
+          gap={12}
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Alumni
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container width="60%" gap={3} alignItems="center" justifyContent="flex-start">
+            <Grid item>
+              {alumni_association ? (
+                <a
+                  href={alumni_association.image}
+                  rel="noreferrer"
+                  target="_blank"
+                  className={classes.link}
+                >
+                  <span>{alumni_association.facebook_group_name}</span>
+                </a>
+              ) : (
+                <p className={classes.link}> No alumni association</p>
+              )}
+            </Grid>
+            <Grid item>
+              {alumni_association ? (
+                <a
+                  href={alumni_association.image}
+                  rel="noreferrer"
+                  target="_blank"
+                  className={classes.link}
+                >
+                  <span>{alumni_association.instagram_handle}</span>
+                </a>
+              ) : (
+                <p className={classes.link}> No alumni association</p>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 3rem" }}
+          alignItems="center"
+          // justifyContent="space-between"
+          width="100%"
+          gap={12}
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item>
+            <Grid item container gap={2} alignItems="center">
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  References
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container width="60%" alignItems="center" justifyContent="flex-start">
+            <Grid item>
+              <Grid container gap={2} alignItems="center" justifyContent="space-around">
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Ref ID:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">
+                    {reference ? reference.reference_code : "No Value"}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "4rem 3rem" }}
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <Grid item container sx={{ width: "20%" }}>
             <CustomButton
               title="Verify HCP"
               width="100%"
               type={buttonType}
-              // isSubmitting={isSubmitting}
-              // disabled={!(dirty || isValid)}
+              // onClick={handleDialogOpen}
             />
           </Grid>
         </Grid>

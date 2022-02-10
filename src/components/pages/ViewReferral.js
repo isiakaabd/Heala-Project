@@ -36,8 +36,6 @@ const useStyles = makeStyles((theme) => ({
 const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const { referralId } = useParams();
-  console.log(referralId);
-
   const { loading, data, error } = useQuery(getRefferal, { variables: { id: referralId } });
   useEffect(() => {
     setSelectedMenu(9);
@@ -66,8 +64,8 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     // eslint-disable-next-line
   } = referral;
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
+    <Grid container direction="column" gap={2}>
+      <Grid item>
         <PreviousButton path={`/referrals`} />
       </Grid>
       <Grid

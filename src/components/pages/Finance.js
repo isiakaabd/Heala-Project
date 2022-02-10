@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import NoData from "components/layouts/NoData";
+import Loader from "components/Utilities/Loader";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -9,7 +11,7 @@ import { makeStyles } from "@mui/styles";
 import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { financialPercent, selectOptions } from "components/Utilities/Time";
 import { getEarningStats } from "components/graphQL/useQuery";
 import FormSelect from "components/Utilities/FormSelect";
@@ -102,18 +104,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Finance = ({ setSelectedSubMenu }) => {
   const [form, setForm] = useState("");
+  const { data, error, loading, refetch } = useQuery(getEarningStats, {
+    variables: { q: "365" },
+  });
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
   const financialValue = financialPercent(totalEarning, totalPayouts);
   const [finances, setFinances] = useState(financialValue);
   const onChange = async (e) => {
     setForm(e.target.value);
+    await refetch({ q: e.target.value });
   };
 
-  const [stats, { data }] = useLazyQuery(getEarningStats);
   const theme = useTheme();
   useEffect(() => {
-    stats({ variables: { form } });
     if (data) {
       const { totalEarnings, totalPayout } = data.getEarningStats;
       setTotalEarning(totalEarnings);
@@ -121,9 +125,11 @@ const Finance = ({ setSelectedSubMenu }) => {
       const value = financialPercent(totalEarnings, totalPayout);
       setFinances(value);
     }
-  }, [form, stats, data]);
-  console.log(data);
+  }, [form, data]);
   const classes = useStyles();
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+
   return (
     <Stack position="static" className={classes.containerGrid} spacing={3}>
       <Grid container component="div" className={classes.mainContainer}>
@@ -133,19 +139,6 @@ const Finance = ({ setSelectedSubMenu }) => {
               Earning
             </Typography>
           </Grid>
-          {/* <Grid item>
-            <FormControl sx={{ width: 200 }}>
-              <FormSelect
-                options={options}
-                startAdornment={
-                  <DateRangeTwoToneIcon sx={{ fontSize: "3rem !important" }} color="secondary" />
-                }
-                value={finance}
-                onChange={(event) => setFinance(event.target.value)}
-                placeholderText="Last 30 days"
-              />
-            </FormControl>
-          </Grid> */}
           <Grid item>
             <FormSelect
               placeholder="Select days"
