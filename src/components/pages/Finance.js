@@ -139,7 +139,6 @@ const Finance = ({ setSelectedSubMenu }) => {
               Earning
             </Typography>
           </Grid>
-
           <Grid item>
             <FormSelect
               placeholder="Select days"

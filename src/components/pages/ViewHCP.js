@@ -6,8 +6,6 @@ import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-// import displayPhoto from "assets/images/avatar.svg";
-// import DoneSharpIcon from "@mui/icons-material/DoneSharp";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { dateMoment } from "components/Utilities/Time";
@@ -57,7 +55,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, { variables: { id: viewId } });
   const [respondData, setRespondData] = useState([]); //setRespondData
-  console.log(respondData);
 
   useEffect(() => {
     try {
@@ -75,7 +72,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-
   const classes = useStyles();
 
   useEffect(() => {
