@@ -152,7 +152,12 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-
+  const onChange = async (e) => {
+    setSearchMail(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ role: e });
+  };
   const specializations = [
     { key: "Doctor", value: "doctor" },
     { key: "Super-admin", value: "super-admin" },
@@ -258,8 +263,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Type to search referrals..."
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Type to search referrals by role..."
               height="5rem"
             />
           </Grid>

@@ -1,4 +1,5 @@
 import moment from "moment";
+
 export const dateMoment = (dateString) => {
   return moment(dateString).utc().format("DD-MM-YYYY");
 };
@@ -51,3 +52,20 @@ export const selectOptions = [
   { key: "Three Months", value: "90" },
   { key: "One Year", value: "365" },
 ];
+export const formatNumber = (num) => {
+  return new Intl.NumberFormat().format(num);
+};
+export const unformat = (amount, locale) => {
+  let thousandSeparator = Intl.NumberFormat(locale)
+    .format(11111)
+    .replace(/\p{Number}/gu, "");
+  let decimalSeparator = Intl.NumberFormat(locale)
+    .format(1.1)
+    .replace(/\p{Number}/gu, "");
+
+  return parseFloat(
+    amount
+      .replace(new RegExp("\\" + thousandSeparator, "g"), "")
+      .replace(new RegExp("\\" + decimalSeparator), ","),
+  );
+};

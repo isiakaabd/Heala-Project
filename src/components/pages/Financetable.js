@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TableRow from "@mui/material/TableRow";
-import { timeMoment, dateMoment } from "components/Utilities/Time";
+import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import TableCell from "@mui/material/TableCell";
 import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -205,7 +205,7 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
-                        {balance.toFixed(2)}
+                        {formatNumber(balance.toFixed(2))}
                       </TableCell>
                     </TableRow>
                   );

@@ -142,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Partners = () => {
   const classes = useStyles();
-  // const [disableUser] = useMutation(deleteDoctor);
+
   const [addPartnerCat] = useMutation(addPartnerCategory);
   const theme = useTheme();
   const buttonType = {
@@ -199,7 +199,7 @@ const Partners = () => {
   };
   const onSubmit2 = async (values, onSubmitProps) => {
     const { category } = values;
-    console.log(values);
+
     await addPartnerCat({
       variables: {
         name: category,
@@ -242,24 +242,23 @@ const Partners = () => {
   const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
 
   const specializations = [
-    { key: "Diagnostics", value: "diagnostics" },
-    { key: "Dental", value: "dental" },
-    { key: "Pediatry", value: "pediatry" },
-    { key: "Optometry", value: "optometry" },
-    { key: "Pathology", value: "pathology" },
+    { key: "Diagnostics", value: "Diagnostics" },
+    { key: "Pharmacy", value: "Pharmacy" },
   ];
   const specializations5 = [
-    { key: "Diagnostics", value: "diagnostics" },
-    { key: "Dental", value: "dental" },
-    { key: "Pediatry", value: "pediatry" },
-    { key: "Optometry", value: "optometry" },
-    { key: "Pathology", value: "pathology" },
+    { key: "Diagnostics", value: "Pharmacy" },
+    { key: "Pharmacy", value: "dental" },
   ];
   const [categoryDatas, setCategoryDatas] = useState([]);
-  const { loading, error, data } = useQuery(getPartners);
+  const { loading, error, data, refetch } = useQuery(getPartners);
   const categoryData = useQuery(getSingleProvider);
   const [partner, setPartners] = useState([]);
-
+  const onChange = async (e) => {
+    setSearchPartner(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
+  };
   useEffect(() => {
     if (data) {
       setPartners(data.getPartners.data);
@@ -290,8 +289,8 @@ const Partners = () => {
         <Grid item className={classes.searchGrid} gap={2}>
           <Search
             value={searchPartner}
-            onChange={(e) => setSearchPartner(e.target.value)}
-            placeholder="Type to search Patients..."
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Type to search Partner..."
             height="5rem"
           />
         </Grid>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loader from "components/Utilities/Loader";
-import { Grid, Button, Alert, TableRow, TableCell } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, Checkbox, Button, Alert, TableRow, TableCell } from "@mui/material";
+import { formatNumber } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
@@ -27,14 +27,9 @@ const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
       flex: 1,
-      marginRight: "5rem",
     },
   },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
+
   FormLabel: {
     "&.MuiFormLabel-root": {
       ...theme.typography.FormLabel,
@@ -179,8 +174,6 @@ const Subscription = () => {
     setdeleteModal(true);
   };
   const handleEditOpenDialog = (id) => {
-    console.log(id);
-
     setEdit(true);
     setEditId(id);
   };
@@ -217,14 +210,18 @@ const Subscription = () => {
     active: theme.palette.primary.dark,
   };
   const [plan, setPlan] = useState([]);
-  const { loading, data, error } = useQuery(getPlans);
-
+  const { loading, data, error, refetch } = useQuery(getPlans);
+  const onChange = async (e) => {
+    setSearchMail(e);
+    if (e == "") {
+      refetch();
+    } else refetch({ amount: Number(e) });
+  };
   useEffect(() => {
-    if (data && data.getPlans.plan) {
+    if (data) {
       setPlan(data.getPlans.plan);
     }
   }, [data]);
-  console.log(data);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
@@ -249,17 +246,17 @@ const Subscription = () => {
           </Alert>
         )}
 
-        <Grid item container style={{ paddingBottom: "5rem" }}>
+        <Grid item container gap={3}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Type to search plans..."
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Type to search plans by Amount..."
               height="5rem"
             />
           </Grid>
 
-          <Grid item className={classes.filterBtnGrid}>
+          <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
               title="Create new plan"
@@ -282,7 +279,8 @@ const Subscription = () => {
               {plan
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const { _id, amount, description, provider, duration, name } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow
@@ -290,12 +288,12 @@ const Subscription = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -310,7 +308,7 @@ const Subscription = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.name}
+                        {name}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -319,7 +317,7 @@ const Subscription = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
-                        {row.amount}
+                        {formatNumber(amount)}
                       </TableCell>
 
                       <TableCell
@@ -327,21 +325,21 @@ const Subscription = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                       >
-                        {row.description}
+                        {description}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                       >
-                        {row.provider}
+                        {provider}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                       >
-                        {row.duration}
+                        {duration}
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
@@ -356,7 +354,7 @@ const Subscription = () => {
                           <Button
                             variant="contained"
                             disableRipple
-                            onClick={() => handleEditOpenDialog(row._id)}
+                            onClick={() => handleEditOpenDialog(_id)}
                             className={`${classes.tableBtn} ${classes.greenBtn}`}
                             endIcon={<EditIcon color="success" />}
                           >
@@ -365,7 +363,7 @@ const Subscription = () => {
                           <Button
                             variant="contained"
                             disableRipple
-                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            onClick={() => handleDeleteOpenDialog(_id)}
                             className={`${classes.tableBtn} ${classes.redBtn}`}
                             to="/view"
                             endIcon={<DeleteIcon color="error" />}

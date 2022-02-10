@@ -12,7 +12,7 @@ import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
 import { useQuery } from "@apollo/client";
-import { financialPercent, selectOptions } from "components/Utilities/Time";
+import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 import { getEarningStats } from "components/graphQL/useQuery";
 import FormSelect from "components/Utilities/FormSelect";
 const useStyles = makeStyles((theme) => ({
@@ -188,7 +188,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                   >
                     N{""}
                   </span>
-                  {totalEarning}
+                  {formatNumber(totalEarning)}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -226,7 +226,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                   >
                     N{""}
                   </span>
-                  {totalPayouts}
+                  {formatNumber(totalPayouts)}
                 </Typography>
                 <Typography
                   variant="body2"

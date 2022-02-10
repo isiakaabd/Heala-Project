@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
+import { formatNumber } from "components/Utilities/Time";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
@@ -48,7 +49,7 @@ export const SubscriptionModal = ({
       setSingleData({
         description: single.data.getPlan.description,
         name: single.data.getPlan.name,
-        amount: Number(single.data.getPlan.amount),
+        amount: formatNumber(Number(single.data.getPlan.amount)),
         duration: single.data.getPlan.duration,
         provider: single.data.getPlan.provider,
       });
@@ -130,6 +131,7 @@ export const SubscriptionModal = ({
     handleDialogClose();
     onSubmitProps.resetForm();
   };
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -145,7 +147,7 @@ export const SubscriptionModal = ({
       initialValues={type === "edit" ? singleData : initialValues}
       enableReinitialize
     >
-      {({ isSubmitting, dirty, isValid }) => {
+      {({ isSubmitting, dirty, values, isValid }) => {
         return (
           <Form style={{ marginTop: "3rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -161,8 +163,11 @@ export const SubscriptionModal = ({
                 <Grid item container>
                   <FormikControl
                     control="input"
-                    placeholder="Enter Amount"
                     name="amount"
+                    // value={values.amount !== "" ? formatNumber(values.amount) : values.amount}
+                    // value={values.amount}
+                    placeholder="Enter Amount"
+                    // onChange={() => handlechange(setFieldValue, values)} //
                     label="Amount"
                   />
                 </Grid>

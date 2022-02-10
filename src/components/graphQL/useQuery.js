@@ -25,8 +25,8 @@ export const doctor = gql`
 `;
 
 export const getPlans = gql`
-  query getPlans {
-    getPlans(orderBy: "-createdAt") {
+  query getPlans($amount: Float) {
+    getPlans(filterBy: { amount: $amount }, orderBy: "-createdAt") {
       plan {
         _id
         name
@@ -106,8 +106,8 @@ export const getEarningStats = gql`
 `;
 
 export const getMessage = gql`
-  query getMessages {
-    getMessages(orderBy: "-createdAt") {
+  query getMessages($recipient: String) {
+    getMessages(filterBy: { recipient: $recipient }, orderBy: "-createdAt") {
       messages {
         _id
         recipient
@@ -332,9 +332,9 @@ export const myMedic = gql`
 `;
 
 export const getRefferals = gql`
-  query getReferrals($doctor: String, $specialization: String, $patient: String) {
+  query getReferrals($doctor: String, $id: String, $specialization: String, $patient: String) {
     getReferrals(
-      filterBy: { doctor: $doctor, specialization: $specialization, patient: $patient }
+      filterBy: { doctor: $doctor, _id: $id, specialization: $specialization, patient: $patient }
       orderBy: "-createdAt"
     ) {
       referral {
@@ -369,8 +369,8 @@ export const getRefferal = gql`
   }
 `;
 export const getRoles = gql`
-  query getRoles {
-    getRoles(orderBy: "-createdAt") {
+  query getRoles($name: String) {
+    getRoles(filterBy: { name: $name }, orderBy: "-createdAt") {
       role {
         _id
         name
@@ -551,6 +551,7 @@ export const getPatients = gql`
     $firstName: String
     $bloodGroup: String
     $phoneNumber: String
+    $dociId: String
   ) {
     profiles(
       filterBy: {
@@ -558,6 +559,7 @@ export const getPatients = gql`
         firstName: $firstName
         bloodGroup: $bloodGroup
         phoneNumber: $phoneNumber
+        dociId: $dociId
       }
       orderBy: "-createdAt"
     ) {
@@ -588,12 +590,14 @@ export const getDoctorsProfile = gql`
     $specialization: String
     $cadre: String
     $phoneNumber: String
+    $dociId: String
   ) {
     doctorProfiles(
       filterBy: {
         hospital: $hospital
         specialization: $specialization
         phoneNumber: $phoneNumber
+        dociId: $dociId
         cadre: $cadre
       }
     ) {
