@@ -16,7 +16,7 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import { selectOptions } from "components/Utilities/Time";
 import "chartjs-plugin-style";
-import { useLazyQuery, useQuery, NetworkStatus } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { dashboard, getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +100,7 @@ const DashboardCharts = () => {
 
   const [patient, { data, error, loading }] = useLazyQuery(dashboard);
   // eslint-disable-next-line
-  const { data: earningData, error: statError, networkStatus, refetch } = useQuery(
+  const { data: earningData, error: statError, refetch } = useQuery(
     getEarningStats,
     { variables: { q: "365" }, notifyOnNetworkStatusChange: true },
   );
@@ -149,9 +149,6 @@ const DashboardCharts = () => {
       setFinances(value);
     }
   }, [earningData, form, refetch]);
-  if (networkStatus === NetworkStatus.refetch) return <Loader />;
-
-  //return setTotalEarning(0);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   if (statError) return null;

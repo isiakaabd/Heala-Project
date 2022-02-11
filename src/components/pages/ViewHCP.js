@@ -57,12 +57,8 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const [respondData, setRespondData] = useState([]); //setRespondData
 
   useEffect(() => {
-    try {
-      if (data) {
-        setRespondData(data.getVerification);
-      }
-    } catch (err) {
-      console.log(err);
+    if (data) {
+      setRespondData(data.getVerification);
     }
   }, [data]);
 
@@ -113,7 +109,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item container gap={2} alignItems="center">
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
-                  Patient:
+                  Doctor:
                 </Typography>
               </Grid>
               <Grid item>

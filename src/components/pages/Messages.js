@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
 const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-
+  const [pageInfo, setPageInfo] = useState([]);
   const greenButtonType = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
@@ -131,10 +131,14 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   useEffect(() => {
     if (data) {
       setMessage(data.getMessages.messages);
+      setPageInfo(data.getMessages.pageInfo);
     }
   }, [message, data]);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   useEffect(() => {
@@ -142,6 +146,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;
   else {
@@ -174,10 +180,18 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
               rows={message}
               page={page}
               paginationLabel="Message per page"
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {message
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const { recipient, subject, createdAt, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);

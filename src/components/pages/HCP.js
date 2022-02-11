@@ -95,10 +95,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { loading, data, error } = useQuery(getVerification);
-  console.log(data);
-
   const [response, setResponse] = useState("");
-
   const validationSchema = Yup.object({
     Name: Yup.string("Enter your Permission").required("select an option"),
     Specialization: Yup.string("Enter your Permission").required("select an option"),
@@ -190,7 +187,7 @@ const HCP = ({ setSelectedSubMenu }) => {
               {respondData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, qualification, _id, type, profileId } = row;
+                  const { createdAt, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -223,15 +220,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                       >
                         {dateMoment(createdAt)}
                       </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {type}
-                      </TableCell>
+
                       <TableCell align="left" className={classes.tableCell}>
                         <div
                           style={{
@@ -242,13 +231,24 @@ const HCP = ({ setSelectedSubMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt="Remy Sharp"
-                              src={displayPhoto}
+                              alt={`image of ${doctorData.firstName}`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{profileId}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData && doctorData.firstName}
+                          </span>
                         </div>
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {doctorData.lastName}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         {qualification && qualification.degree}

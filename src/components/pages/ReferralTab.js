@@ -180,11 +180,20 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     createdAt,
                     type,
                     referralId,
-                    doctor,
-                    patient,
                     specialization,
                     testType,
+                    doctorData,
+                    patientData,
                   } = row;
+                  console.log(patientData);
+                  console.log(_id);
+                  // const { firstName, lastName, picture } = doctorData;
+                  // const {
+                  //   firstName: patientName,
+                  //   lastName: patientLastName,
+                  //   picture: patientImage,
+                  // } = patientData;
+
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -235,21 +244,45 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt="Remy Sharp"
-                              src={displayPhoto}
+                              alt={`image of ${
+                                doctorData ? doctorData.firstName : "placeholder Display Image"
+                              }`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{doctor}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData
+                              ? `${doctorData.firstName} ${doctorData.lastName}`
+                              : "No Doctor"}
+                          </span>
                         </div>
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {patient}
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={`image of ${
+                                patientData ? patientData.firstName : "placeholder Display Image"
+                              }`}
+                              src={patientData ? patientData.picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {patientData
+                              ? `${patientData.firstName} ${patientData.lastName}`
+                              : "No Patient"}
+                          </span>
+                        </div>
                       </TableCell>
+
                       <TableCell
                         align="left"
                         className={classes.tableCell}
