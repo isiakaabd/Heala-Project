@@ -142,6 +142,7 @@ const useStyles = makeStyles((theme) => ({
 const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelectedScopedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [pageInfo, setPageInfo] = useState([]);
   const [deleteRoles] = useMutation(deleteRole);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
@@ -159,7 +160,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
     setdeleteModal(true);
     setId(id);
   };
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const onConfirm = async () => {
@@ -177,6 +178,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   useEffect(() => {
     if (data) {
       setRolesManagements(data.getRoles.role);
+      setPageInfo(data.getRoles.pageInfo);
     }
   }, [data, rolesManagements]);
   const buttonType = {
@@ -190,7 +192,11 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
     "permission 3": false,
     "permission 4": true,
   };
-
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (
@@ -229,16 +235,22 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
           <EnhancedTable
             headCells={roleHeader}
             rows={rolesManagements}
-            sx={{ textAlign: "center" }}
-            page={page}
             paginationLabel="subscription per page"
+            page={page}
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {rolesManagements
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
-
+                const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 let newData;
                 if (row.permissions) {

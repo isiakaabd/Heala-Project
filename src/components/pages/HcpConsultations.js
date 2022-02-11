@@ -78,12 +78,13 @@ const HcpConsultations = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
+  const [pageInfo, setPageInfo] = useState([]);
   const { hcpId } = useParams();
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
-  const { loading, data, error } = useQuery(getDocConsult, {
+
+  const { loading, data, error, refetch } = useQuery(getDocConsult, {
     variables: {
       id: hcpId,
       orderBy: "-createdAt",
@@ -93,8 +94,12 @@ const HcpConsultations = (props) => {
   useEffect(() => {
     if (data && data.getConsultations.data) {
       setConsultations(data.getConsultations.data);
+      setPageInfo(data.getConsultations.pageInfo);
     }
   }, [data, hcpId]);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
 
   useEffect(() => {
     setSelectedMenu(2);
@@ -103,6 +108,8 @@ const HcpConsultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;
@@ -125,27 +132,34 @@ const HcpConsultations = (props) => {
             <EnhancedTable
               headCells={consultationsHeadCells}
               rows={consultationsRows}
-              page={page}
               paginationLabel="Patients per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {consultations
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   // eslint-disable-next-line
                   const {
                     _id,
                     createdAt,
-                    name,
-                    patient,
                     symptoms,
                     status,
                     type,
                     description,
+                    patientData,
+
                     // eslint-disable-next-line
                   } = row;
                   const isItemSelected = isSelected(row._id, selectedRows);
-
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow
@@ -184,12 +198,14 @@ const HcpConsultations = (props) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of ${name}`}
-                              src={displayPhoto}
+                              alt={`Display Photo of ${patientData.firstName}`}
+                              src={patientData.picture ? patientData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{patient}</span>
+                          <span
+                            style={{ fontSize: "1.25rem" }}
+                          >{`${patientData.firstName} ${patientData.lastName}`}</span>
                         </div>
                       </TableCell>
                       <TableCell

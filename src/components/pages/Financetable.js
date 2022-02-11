@@ -90,8 +90,6 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
   const { loading, data, error } = useQuery(getEarningStats);
   const [earning, setEarning] = useState([]);
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       setEarning(data.getEarningStats.earningData.data);

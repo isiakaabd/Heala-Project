@@ -94,7 +94,8 @@ const useStyles = makeStyles((theme) => ({
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { loading, data, error } = useQuery(getVerification);
+  const [pageInfo, setPageInfo] = useState([]);
+  const { loading, data, error, refetch } = useQuery(getVerification);
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
     Name: Yup.string("Enter your Permission").required("select an option"),
@@ -103,7 +104,7 @@ const HCP = ({ setSelectedSubMenu }) => {
     Status: Yup.string("Enter your Permission").required("select an option"),
   });
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -113,10 +114,13 @@ const HCP = ({ setSelectedSubMenu }) => {
   };
 
   const [respondData, setRespondData] = useState([]); //setRespondData
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   useEffect(() => {
     try {
       if (data) {
         setRespondData(data.getVerifications.verification);
+        setPageInfo(data.getVerifications.pageInfo);
       }
     } catch (err) {
       console.log(err);
@@ -147,6 +151,9 @@ const HCP = ({ setSelectedSubMenu }) => {
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
@@ -180,12 +187,20 @@ const HCP = ({ setSelectedSubMenu }) => {
             <EnhancedTable
               headCells={HCPHeader}
               rows={respondData}
-              page={page}
               paginationLabel="verification per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {respondData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const { createdAt, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);

@@ -26,8 +26,9 @@ export const doctor = gql`
 `;
 
 export const getPlans = gql`
-  query getPlans($amount: Float) {
-    getPlans(filterBy: { amount: $amount }, orderBy: "-createdAt") {
+  ${PageInfo}
+  query getPlans($amount: Float, $page: Int) {
+    getPlans(filterBy: { amount: $amount }, page: $page, orderBy: "-createdAt") {
       plan {
         _id
         name
@@ -37,6 +38,9 @@ export const getPlans = gql`
         duration
         createdAt
         updatedAt
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -95,9 +99,10 @@ export const dashboard = gql`
     }
   }
 `;
+// ${PageInfo}
 export const getEarningStats = gql`
-  query getEarningStats($q: String) {
-    getEarningStats(q: $q) {
+  query getEarningStats($q: String, $page: Int) {
+    getEarningStats(q: $q, page: $page) {
       totalEarnings
       totalPayout
       earningData
@@ -105,6 +110,9 @@ export const getEarningStats = gql`
     }
   }
 `;
+// pageInfo {
+//   ...pageDetails
+// }
 
 export const getMessage = gql`
   ${PageInfo}
@@ -126,14 +134,18 @@ export const getMessage = gql`
   }
 `;
 export const getPermissions = gql`
-  query getPermissions {
-    getPermissions {
+  ${PageInfo}
+  query getPermissions($page: Int) {
+    getPermissions(page: $page) {
       permission {
         _id
         name
         description
         createdAt
         updatedAt
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -148,8 +160,9 @@ export const getSinglePermissions = gql`
   }
 `;
 export const getConsultations = gql`
-  query getConsultations($id: ID!, $orderBy: String!) {
-    getConsultations(filterBy: { patient: $id }, orderBy: $orderBy) {
+  ${PageInfo}
+  query getConsultations($id: ID!, $orderBy: String!, $page: Int) {
+    getConsultations(filterBy: { patient: $id }, orderBy: $orderBy, page: $page) {
       data {
         _id
         patient
@@ -164,6 +177,8 @@ export const getConsultations = gql`
         type
         status
         contactMedium
+        doctorData
+        patientData
         diagnosis {
           ailment
           severity
@@ -183,12 +198,16 @@ export const getConsultations = gql`
         referralId
         updatedAt
       }
+      pageInfo {
+        ...pageDetails
+      }
     }
   }
 `;
 export const getDocConsult = gql`
-  query getConsultations($id: String!) {
-    getConsultations(filterBy: { doctor: $id }) {
+  ${PageInfo}
+  query getConsultations($id: String!, $page: Int) {
+    getConsultations(filterBy: { doctor: $id }, page: $page) {
       data {
         _id
         patient
@@ -217,9 +236,13 @@ export const getDocConsult = gql`
           mode
         }
         createdAt
+        patientData
         updatedAt
         referralId
         status
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -262,8 +285,9 @@ export const getConsult = gql`
   }
 `;
 export const getAppoint = gql`
-  query getAppointments($id: ID!, $orderBy: String!) {
-    getAppointments(filterBy: { patient: $id }, orderBy: $orderBy) {
+  ${PageInfo}
+  query getAppointments($id: ID!, $orderBy: String, $page: Int) {
+    getAppointments(filterBy: { patient: $id }, page: $page, orderBy: $orderBy) {
       data {
         _id
         doctor
@@ -274,6 +298,9 @@ export const getAppoint = gql`
         updatedAt
         patientData
         doctorData
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -319,28 +346,39 @@ export const findProfile = gql`
   }
 `;
 export const myMedic = gql`
-  query getMyMedications($id: ID!, $orderBy: String!) {
-    getMedications(filterBy: { patient: $id }, orderBy: $orderBy) {
+  ${PageInfo}
+  query getMyMedications($id: ID!, $orderBy: String!, $page: Int) {
+    getMedications(filterBy: { patient: $id }, page: $page, orderBy: $orderBy) {
       medication {
         _id
         name
         interval
         createdAt
-
         updatedAt
         doctor
         dosage
         patient
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
 `;
 
 export const getRefferals = gql`
-  query getReferrals($doctor: String, $id: String, $specialization: String, $patient: String) {
+  ${PageInfo}
+  query getReferrals(
+    $doctor: String
+    $id: String
+    $page: Int
+    $specialization: String
+    $patient: String
+  ) {
     getReferrals(
       filterBy: { doctor: $doctor, _id: $id, specialization: $specialization, patient: $patient }
       orderBy: "-createdAt"
+      page: $page
     ) {
       referral {
         _id
@@ -355,6 +393,9 @@ export const getRefferals = gql`
         updatedAt
         doctorData
         patientData
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -378,8 +419,9 @@ export const getRefferal = gql`
   }
 `;
 export const getRoles = gql`
-  query getRoles($name: String) {
-    getRoles(filterBy: { name: $name }, orderBy: "-createdAt") {
+  ${PageInfo}
+  query getRoles($name: String, $page: Int) {
+    getRoles(filterBy: { name: $name }, page: $page, orderBy: "-createdAt") {
       role {
         _id
         name
@@ -388,6 +430,9 @@ export const getRoles = gql`
         description
         createdAt
         updatedAt
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -419,8 +464,9 @@ export const getAMessage = gql`
   }
 `;
 export const findAccounts = gql`
-  query findAccounts($email: EmailAddress) {
-    accounts(orderBy: "-createdAt", filterBy: { email: $email }) {
+  ${PageInfo}
+  query findAccounts($email: EmailAddress, $page: Int) {
+    accounts(orderBy: "-createdAt", page: $page, filterBy: { email: $email }) {
       data {
         _id
         role
@@ -433,6 +479,9 @@ export const findAccounts = gql`
         userTypeId
         isActive
         authType
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -447,8 +496,9 @@ export const verifiedEmail = gql`
   }
 `;
 export const findAdmin = gql`
-  query findAccounts($role: String, $email: String) {
-    accounts(filterBy: { role: $role, email: $email }, orderBy: "-createdAt") {
+  ${PageInfo}
+  query findAccounts($role: String, $email: String, $page: Int) {
+    accounts(filterBy: { role: $role, email: $email }, page: $page, orderBy: "-createdAt") {
       data {
         _id
         role
@@ -458,6 +508,9 @@ export const findAdmin = gql`
         updatedAt
         role
         isActive
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -505,8 +558,9 @@ export const getConsultation = gql`
   }
 `;
 export const getVerification = gql`
-  query getVerifications {
-    getVerifications {
+  ${PageInfo}
+  query getVerifications($page: Int) {
+    getVerifications(page: $page) {
       verification {
         _id
         qualification
@@ -520,6 +574,9 @@ export const getVerification = gql`
         doctorData
         updatedAt
         profileId
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -693,6 +750,7 @@ export const getDoctorByDociId = gql`
   }
 `;
 export const getMedication = gql`
+  ${PageInfo}
   query getMedication($id: ID!) {
     getMedication(id: $id) {
       medication {
@@ -806,8 +864,12 @@ export const getUserDetails = gql`
   }
 `;
 export const getProviders = gql`
-  query getProviders($name: String, $userTypeId: String) {
-    getProviders(filterBy: { name: $name, userTypeId: $userTypeId }) {
+  query getProviders($name: String, $userTypeId: String, $page: Int) {
+    getProviders(
+      filterBy: { name: $name, userTypeId: $userTypeId }
+      page: $page
+      orderBy: "-createdAt"
+    ) {
       provider {
         _id
         name
@@ -815,6 +877,9 @@ export const getProviders = gql`
         userTypeId
         createdAt
         updatedAt
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -864,15 +929,18 @@ export const getReminder = gql`
   }
 `;
 export const getDoctorPatients = gql`
-  query getDoctorPatients($id: String!) {
-    getDoctorPatients(filterBy: { doctor: $id }) {
+  ${PageInfo}
+  query getDoctorPatients($id: String!, $page: Int) {
+    getDoctorPatients(filterBy: { doctor: $id }, page: $page) {
       data {
         _id
         doctor
         patient
-
         createdAt
         updatedAt
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }

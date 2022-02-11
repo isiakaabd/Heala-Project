@@ -77,10 +77,6 @@ const EnhancedTable = (props) => {
     setSelectedRows([]);
   };
 
-  // const handleChangePage = (event, page) => {
-  //   setPage(page + 1);
-  // };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     // setPageNumber(0);

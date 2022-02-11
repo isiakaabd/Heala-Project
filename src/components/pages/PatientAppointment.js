@@ -116,6 +116,7 @@ const PatientAppointment = (props) => {
     setSelectedPatientMenu,
   } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
+  const [pageInfo, setPageInfo] = useState([]);
   const [alert, setAlert] = useState(null);
   const [editId, setEditid] = useState(null);
   const [doctorId, setDoctorId] = useState(null);
@@ -193,7 +194,6 @@ const PatientAppointment = (props) => {
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
-    console.log(date);
     const timeValue = timeMoment(date);
     const dateValue = timeConverter(date);
     await updateAppoint({
@@ -224,7 +224,7 @@ const PatientAppointment = (props) => {
     console.log(values);
   };
 
-  const { loading, data, error } = useQuery(getAppoint, {
+  const { loading, data, error, refetch } = useQuery(getAppoint, {
     variables: {
       id: patientId,
       orderBy: "-createdAt",
@@ -234,10 +234,15 @@ const PatientAppointment = (props) => {
   useEffect(() => {
     if (data) {
       setPatientAppointment(data.getAppointments.data);
+      setPageInfo(data.getAppointments.pageInfo);
     }
   }, [data, patientId]);
 
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   useEffect(() => {
@@ -275,6 +280,8 @@ const PatientAppointment = (props) => {
     { key: "Active", value: "Active" },
     { key: "Blocked", value: "Blocked" },
   ];
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (error) return <NoData error={error.message} />;
   if (loading) return <Loader />;
   return (
@@ -314,13 +321,20 @@ const PatientAppointment = (props) => {
               <EnhancedTable
                 headCells={consultationsHeadCells2}
                 rows={patientAppointment}
-                page={page}
                 paginationLabel="Patients per page"
+                page={page}
+                limit={limit}
+                totalPages={totalPages}
+                totalDocs={totalDocs}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                hasNextPage={hasNextPage}
+                hasPrevPage={hasPrevPage}
+                handleChangePage={fetchMoreFunc}
                 hasCheckbox={true}
               >
                 {patientAppointment
-
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row._id, selectedRows);
                     const labelId = `enhanced-table-checkbox-${index}`;

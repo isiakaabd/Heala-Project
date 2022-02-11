@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Loader from "components/Utilities/Loader";
 import { Grid, Checkbox, Button, Alert, TableRow, TableCell } from "@mui/material";
+import Loader from "components/Utilities/Loader";
 import { formatNumber } from "components/Utilities/Time";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -156,6 +156,7 @@ const Subscription = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [alert, setAlert] = useState(null);
+  const [pageInfo, setPageInfo] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deletePlan] = useMutation(DELETE_PLAN);
   const [id, setId] = useState(null);
@@ -199,7 +200,10 @@ const Subscription = () => {
       console.log(error.message);
     }
   };
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
+  const { selectedRows } = useSelector((state) => state.tables);
+
   const { setSelectedRows } = useActions();
 
   const [searchMail, setSearchMail] = useState("");
@@ -220,6 +224,7 @@ const Subscription = () => {
   useEffect(() => {
     if (data) {
       setPlan(data.getPlans.plan);
+      setPageInfo(data.getPlans.pageInfo);
     }
   }, [data]);
 
@@ -232,7 +237,11 @@ const Subscription = () => {
     duration: "",
     provider: "",
   };
-
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <>
       <Grid container direction="column" flexWrap="nowrap" gap={2} height="100%">
@@ -272,12 +281,20 @@ const Subscription = () => {
             <EnhancedTable
               headCells={subscriptionHeader}
               rows={plan}
-              page={page}
               paginationLabel="subscription per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {plan
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const { _id, amount, description, provider, duration, name } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
