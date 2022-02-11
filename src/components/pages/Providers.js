@@ -147,6 +147,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
+  const [pageInfo, setPageInfo] = useState([]);
   const { data, error, loading, refetch } = useQuery(getProviders);
 
   const onChange = async (e) => {
@@ -156,6 +157,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     } else refetch({ name: e });
   };
   const [id, setId] = useState(null);
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   const [deleteModal, setdeleteModal] = useState(false);
   const [deleteProvider] = useMutation(deletProvider);
   // const [singleProvider] = useLazyQuery(getSingleProvider);
@@ -168,6 +170,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   useEffect(() => {
     if (data) {
       setProviders(data.getProviders.provider);
+      setPageInfo(data.getProviders.pageInfo);
     }
   }, [data]);
 
@@ -182,7 +185,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     disabled: theme.palette.common.black,
   };
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const initialValues = {
@@ -242,12 +245,16 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     userTypeId: Yup.string("Enter your userTypeId"),
   });
 
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   const handleDialogCloses = () => setIsOpens(false);
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
   };
   const [singleData, setSingleData] = useState();
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (
@@ -289,12 +296,20 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={providers}
-              page={page}
               paginationLabel="Patients per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {providers
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id, selectedRows);
 

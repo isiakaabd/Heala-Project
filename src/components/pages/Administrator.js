@@ -145,6 +145,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
   const { loading, data, error, refetch } = useQuery(findAdmin);
+  const [pageInfo, setPageInfo] = useState([]);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -162,7 +166,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     { key: "Doctor", value: "doctor" },
     { key: "Super-admin", value: "super-admin" },
   ];
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const initialValues = {
@@ -172,10 +176,9 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
-    try {
-      if (data) setAdmins(data.accounts.data);
-    } catch (err) {
-      console.log(err);
+    if (data) {
+      setAdmins(data.accounts.data);
+      setPageInfo(data.accounts.pageInfo);
     }
   }, [data]);
 
@@ -243,6 +246,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const handleDialogOpen = () => setIsOpen(true);
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   useEffect(() => {
     setSelectedMenu(11);
@@ -290,12 +295,20 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
             <EnhancedTable
               headCells={adminHeader}
               rows={admins}
-              page={page}
               paginationLabel="admin per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {admins
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id, selectedRows);
 

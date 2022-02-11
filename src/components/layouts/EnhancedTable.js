@@ -67,7 +67,8 @@ const EnhancedTable = (props) => {
     setRowsPerPage,
   } = props;
   const [pagnumber, setPageNumber] = useState(page - 1);
-
+  console.log(pagnumber);
+  console.log(+pagnumber);
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((selected) => selected.id);

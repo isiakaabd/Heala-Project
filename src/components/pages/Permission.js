@@ -120,6 +120,7 @@ const useStyles = makeStyles((theme) => ({
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
 const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSelectedMenu }) => {
   const [singlePermission, setSinglePermission] = useState();
+
   const checkbox = [
     { key: "create", value: "create" },
     { key: "update", value: "update" },
@@ -156,7 +157,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   const classes = useStyles();
   const theme = useTheme();
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [deleteModal, setdeleteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -209,8 +210,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-
-  const { loading, data, error } = useQuery(getPermissions);
+  const [pageInfo, setPageInfo] = useState([]);
+  const { loading, data, error, refetch } = useQuery(getPermissions);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   const [deletPlan] = useMutation(DELETE_PERMISSION);
 
   useEffect(() => {
@@ -224,8 +228,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   useEffect(() => {
     if (data) {
       setPermission(data.getPermissions.permission);
+      setPageInfo(data.getPermissions.pageInfo);
     }
   }, [permission, data]);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   return (
@@ -264,12 +271,20 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
           <EnhancedTable
             headCells={PermissionHeader}
             rows={Permission}
-            page={page}
             paginationLabel="permission per page"
+            page={page}
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {permission
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row._id, selectedRows);
 

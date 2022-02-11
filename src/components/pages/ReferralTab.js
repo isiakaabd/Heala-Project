@@ -84,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const handleDialogOpen = () => setIsOpen(true);
+  const [pageInfo, setPageInfo] = useState([]);
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const buttonType = {
@@ -132,7 +133,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     handleDialogClose();
   };
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const { data, loading, error, refetch } = useQuery(getRefferals);
@@ -141,8 +142,14 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   useEffect(() => {
     if (data) {
       setReferral(data.getReferrals.referral);
+      setPageInfo(data.getReferrals.pageInfo);
     }
   }, [data]);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
@@ -167,13 +174,21 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
+              paginationLabel="referral per page"
               rows={referral}
               page={page}
-              paginationLabel="referral per page"
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
               {referral
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const {
                     _id,
@@ -185,14 +200,6 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     doctorData,
                     patientData,
                   } = row;
-                  console.log(patientData);
-                  console.log(_id);
-                  // const { firstName, lastName, picture } = doctorData;
-                  // const {
-                  //   firstName: patientName,
-                  //   lastName: patientLastName,
-                  //   picture: patientImage,
-                  // } = patientData;
 
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Loader from "components/Utilities/Loader";
 import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
+import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import Modals from "components/Utilities/Modal";
