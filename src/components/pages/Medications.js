@@ -42,24 +42,27 @@ const Medications = (props) => {
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
+  const [pageInfo, setPageInfo] = useState([]);
   const { patientId } = useParams();
 
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [medications, setMedications] = useState([]);
-  const medic = useQuery(myMedic, {
+  const { loading, error, data, refetch } = useQuery(myMedic, {
     variables: {
       id: patientId,
       orderBy: "-createdAt",
     },
   });
-
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   useEffect(() => {
-    if (medic.data) {
-      setMedications(medic.data.getMedications.medication);
+    if (data) {
+      setMedications(data.getMedications.medication);
+      setPageInfo(data.getMedications.pageInfo);
     }
-  }, [medic.data]);
+  }, [data]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -68,9 +71,11 @@ const Medications = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  if (medic.loading) return <Loader />;
-  if (medic.error) return <NoData error={medic.error.message} />;
-  console.log(medic.data);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
@@ -84,12 +89,20 @@ const Medications = (props) => {
           <EnhancedTable
             headCells={medicationsHeadCells}
             rows={medications}
+            paginationLabel="Medication per page"
             page={page}
-            paginationLabel="List per page"
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {medications
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;

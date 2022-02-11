@@ -6,7 +6,7 @@ import NoData from "components/layouts/NoData";
 import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { consultationsHeadCells } from "components/Utilities/tableHeaders";
+import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
@@ -75,14 +75,15 @@ const Consultations = (props) => {
     setSelectedPatientMenu,
     setSelectedScopedMenu,
   } = props;
+  const [pageInfo, setPageInfo] = useState([]);
   const classes = useStyles();
   const theme = useTheme();
   const { patientConsultation } = useActions();
   const { patientId } = useParams();
 
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const { loading, data, error } = useQuery(getConsultations, {
+  const { loading, data, error, refetch } = useQuery(getConsultations, {
     variables: {
       id: patientId,
       orderBy: "-createdAt",
@@ -94,9 +95,13 @@ const Consultations = (props) => {
     if (data) {
       setConsultations(data.getConsultations.data);
       patientConsultation(data);
+      setPageInfo(data.getConsultations.pageInfo);
     }
   }, [data, consultations, patientConsultation]);
-
+  console.log(consultations);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
@@ -104,6 +109,8 @@ const Consultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
@@ -120,18 +127,27 @@ const Consultations = (props) => {
           <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
         </Grid>
       </Grid>
-      {consultations.filter((i) => i.patient == patientId).length > 0 ? (
+      {consultations.length > 0 ? (
         <Grid item container direction="column" height="100%">
           <EnhancedTable
-            headCells={consultationsHeadCells}
+            headCells={consultationsHeadCells4}
             rows={consultations}
-            page={page}
             paginationLabel="Patients per page"
+            page={page}
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {consultations
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
+                const { doctorData } = row;
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
@@ -170,12 +186,16 @@ const Consultations = (props) => {
                       >
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
-                            alt={`Display Photo of ${row.name}`}
-                            src={displayPhoto}
+                            alt={`Display Photo of ${doctorData.firstName}`}
+                            src={doctorData.picture ? doctorData.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {doctorData.firstName
+                            ? `${doctorData.firstName} ${doctorData.lastName}`
+                            : "No Doctor"}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>

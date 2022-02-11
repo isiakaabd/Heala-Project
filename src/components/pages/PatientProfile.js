@@ -226,7 +226,11 @@ const PatientProfile = ({
               <Typography variant="h4">Provider</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label={provider} className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label={provider ? provider : "No Provider"}
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>

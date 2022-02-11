@@ -154,20 +154,16 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   const handleDialogClose = () => setIsOpen(false);
-  // useEffect(() => {
-  //   inputRef.current.focus();
-  // }, [inputRef]);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
-  console.log(page);
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

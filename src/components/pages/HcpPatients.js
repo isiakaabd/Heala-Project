@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Loader from "components/Utilities/Loader";
 import Grid from "@mui/material/Grid";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const HcpPatients = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-
+  const [pageInfo, setPageInfo] = useState([]);
   const {
     selectedMenu,
     selectedSubMenu,
@@ -70,7 +71,7 @@ const HcpPatients = (props) => {
   const { hcpId } = useParams();
 
   const { setSelectedRows } = useActions();
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
 
   useEffect(() => {
     setSelectedMenu(2);
@@ -79,14 +80,23 @@ const HcpPatients = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
-  const patient = useQuery(getDoctorPatients, { variables: { id: hcpId } });
+  const { loading, error, data, refetch } = useQuery(getDoctorPatients, {
+    variables: { id: hcpId },
+  });
   const [profiles, setProfiles] = useState([]);
   useEffect(() => {
-    if (patient.data && patient.data.getDoctorPatients.data) {
-      setProfiles(patient.data.getDoctorPatients.data);
+    if (data) {
+      setProfiles(data.getDoctorPatients.data);
+      setPageInfo(data.getDoctorPatients.pageInfo);
     }
-  }, [patient.data]);
-
+  }, [data]);
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
@@ -100,13 +110,21 @@ const HcpPatients = (props) => {
           <EnhancedTable
             headCells={hcpPatientsHeadCells}
             rows={profiles}
-            page={page}
             paginationLabel="List Per Page"
+            page={page}
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {profiles
 
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row.id, selectedRows);
 

@@ -185,16 +185,16 @@ const Prescriptions = (props) => {
               >
                 <Grid item container alignItems="center" justifyContent="space-between" gap={2}>
                   <Grid item>
-                    <Typography variant="h5">Panadol</Typography>
+                    <Typography variant="body1">Panadol</Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5">500mg</Typography>
+                    <Typography variant="body1">500mg</Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5">Twice Daily</Typography>
+                    <Typography variant="body1">Twice Daily</Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5">Oral</Typography>
+                    <Typography variant="body1">Oral</Typography>
                   </Grid>
                   {/* );
               })} */}
