@@ -330,14 +330,6 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
-                      >
-                        {row.category ? row.category : "No Value"}
-                      </TableCell>
-
                       <TableCell align="center" className={classes.tableCell}>
                         <div
                           style={{

@@ -108,6 +108,8 @@ const useStyles = makeStyles((theme) => ({
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [pageInfo, setPageInfo] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   const cadre = [
     { key: "1", value: "1" },
     { key: "2", value: "2" },
@@ -121,16 +123,22 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     active: theme.palette.primary.dark,
   };
   const { data, error, loading, refetch } = useQuery(getDoctorsProfile);
+
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+
   const onChange = async (e) => {
     setSearchHcp(e);
     if (e == "") {
       refetch();
-    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
+    } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
   };
   const [profiles, setProfiles] = useState("");
   useEffect(() => {
     if (data) {
       setProfiles(data.doctorProfiles.profile);
+      setPageInfo(data.doctorProfiles.pageInfo);
     }
   }, [data]);
 
@@ -241,7 +249,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   });
   const [createDoc] = useMutation(createDOctorProfile);
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
@@ -273,12 +282,20 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <EnhancedTable
             headCells={hcpsHeadCells}
             rows={profiles}
+            paginationLabel="Doctors per page"
             page={page}
-            paginationLabel="Patients per page"
+            limit={limit}
+            totalPages={totalPages}
+            totalDocs={totalDocs}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            hasNextPage={hasNextPage}
+            hasPrevPage={hasPrevPage}
+            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
           >
             {profiles
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const {
                   _id,

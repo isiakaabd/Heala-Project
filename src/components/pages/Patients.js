@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
 
 const genderType = [
@@ -110,9 +110,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
   const { loading, error, data, refetch } = useQuery(getPatients);
+  const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
+  console.log(data);
   const onSubmit = async (values) => {
     const { name, gender, bloodGroup, phone } = values;
+    if (!gender) return;
+
     await refetch({
       gender,
       firstName: name,
@@ -121,22 +125,32 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     });
     handleDialogClose();
   };
+  const [pageInfo, setPageInfo] = useState([]);
   useEffect(() => {
-    if (data && data.profiles.data) {
+    if (data) {
+      setPageInfo(data.profiles.pageInfo);
       setProfiles(data.profiles.data);
     }
   }, [data]);
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const [rowsPerPage, setRowsPerPage] = useState(0);
+  const { selectedRows } = useSelector((state) => state.tables);
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const [searchPatient, setSearchPatient] = useState("");
   const onChange = async (e) => {
     setSearchPatient(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
+    if (e == " ") {
+      console.log(searchPatient);
+      fetchUser();
+    } else refetch(e === "" ? null : { dociId: `HEALA-${e.toUpperCase()}` });
   };
+
+  const fetchMoreFunc = (e, newPage) => {
+    refetch({ page: newPage });
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   const handleDialogClose = () => setIsOpen(false);
@@ -153,6 +167,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
+  console.log(page);
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -163,7 +178,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
               onChange={(e) => onChange(e.target.value)}
               placeholder="Type to search patients by Heala ID e.g 7NE6ELLO "
               height="5rem"
-              // ref={inputRef}
             />
           </Grid>
           <Grid item>
@@ -177,115 +191,126 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             <EnhancedTable
               headCells={patientsHeadCells}
               rows={profiles}
-              page={page}
               paginationLabel="Patients per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
-              {profiles
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  const {
-                    dociId,
-                    firstName,
-                    lastName,
-                    plan,
-                    provider,
-                    image,
-                    consultations,
-                    _id,
-                    status,
-                  } = row;
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
+              {(rowsPerPage > 0
+                ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                : profiles
+              ).map((row, index) => {
+                console.log(row);
+
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                const {
+                  dociId,
+                  firstName,
+                  lastName,
+                  plan,
+                  provider,
+                  image,
+                  consultations,
+                  _id,
+                  status,
+                } = row;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey, textAlign: "left" }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.grey, textAlign: "left" }}
+                      {dociId && dociId.split("-")[1]}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
+                        }}
                       >
-                        {dociId && dociId.split("-")[1]}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "left",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${firstName}`}
-                              src={image ? image : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {plan ? plan : "No Plan"}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {provider ? provider : "No Provider"}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {consultations ? consultations : 0}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <Chip
-                          label={status ? status : "No Status"}
-                          className={classes.badge}
-                          style={{
-                            background:
-                              status == "Active"
-                                ? theme.palette.common.lightGreen
-                                : theme.palette.common.lightRed,
-                            color:
-                              status == "Active"
-                                ? theme.palette.common.green
-                                : theme.palette.common.red,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          component={Link}
-                          to={`patients/${_id}`}
-                          endIcon={<ArrowForwardIosIcon />}
-                          onClick={() => {
-                            setSelectedSubMenu(2);
-                            setSelectedPatientMenu(0);
-                          }}
-                        >
-                          View Profile
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${firstName}`}
+                            src={image ? image : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {plan ? plan : "No Plan"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {provider ? provider : "No Provider"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {consultations ? consultations : 0}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Chip
+                        label={status ? status : "No Status"}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            status == "Active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            status == "Active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`patients/${_id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(2);
+                          setSelectedPatientMenu(0);
+                        }}
+                      >
+                        View Profile
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </EnhancedTable>
           ) : (
             <NoData />

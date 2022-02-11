@@ -1,22 +1,5 @@
 import { gql } from "@apollo/client";
 
-// mutation updateProvider($data: updateProviderInput!) {
-//   updateProvider(data: $data) {
-//     provider {
-//       _id
-//       name
-//       icon
-//       userTypeId
-//       createdAt
-//       updatedAt
-//     }
-//     errors {
-//       field
-//       message
-//     }
-//   }
-// }
-
 export const editUserType = gql`
   mutation updateUserType($id: String!, $name: String, $icon: String!) {
     updateUserType(data: { id: $id, name: $name, icon: $icon }) {

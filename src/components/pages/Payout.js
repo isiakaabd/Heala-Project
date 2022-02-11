@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
-import TableRow from "@mui/material/TableRow";
 import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Chip from "@mui/material/Chip";
 import PreviousButton from "components/Utilities/PreviousButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -98,7 +93,6 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   }, [selectedMenu, selectedSubMenu]);
   const { loading, data, error } = useQuery(getEarningStats);
   const [payout, setPayout] = useState([]);
-  console.log(payout);
 
   useEffect(() => {
     if (data) {

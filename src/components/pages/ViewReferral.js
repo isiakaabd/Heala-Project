@@ -63,6 +63,8 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     createdAt,
     // eslint-disable-next-line
   } = referral;
+  console.log(referral);
+
   return (
     <Grid container direction="column" gap={2}>
       <Grid item>

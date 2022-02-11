@@ -305,4 +305,4 @@ SinglePatient.propTypes = {
   setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
-export default SinglePatient;
+export default React.memo(SinglePatient);

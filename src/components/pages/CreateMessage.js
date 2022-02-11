@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
-import Divider from "@mui/material/Divider";
+import { Divider, Grid, Typography } from "@mui/material";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
@@ -91,7 +89,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   const [recipient, setRecipient] = useState("");
   const { firstName, lastName, _id } = recipient.length > 0 && recipient[0];
-  console.log(recipient);
+
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
     const { subject, textarea, recipient } = values;
@@ -116,10 +114,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     async (e) => {
       setRecipientvalue(e);
       await refetch({
-        dociId: `DOCI-${e.toUpperCase()}`,
+        dociId: `HEALA-${e.toUpperCase()}`,
       });
       if ((data && data.profiles.data.length < 1) || error) {
-        await refetch2({ dociId: `DOCI-${e.toUpperCase()}` });
+        await refetch2({ dociId: `HEALA-${e.toUpperCase()}` });
       }
     },
     [refetch, refetch2, data, error],

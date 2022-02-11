@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { PageInfo } from "./fragment";
 
 export const doctor = gql`
   query doctorProfile($id: ID!) {
@@ -106,8 +107,9 @@ export const getEarningStats = gql`
 `;
 
 export const getMessage = gql`
-  query getMessages($recipient: String) {
-    getMessages(filterBy: { recipient: $recipient }, orderBy: "-createdAt") {
+  ${PageInfo}
+  query getMessages($recipient: String, $page: Int) {
+    getMessages(filterBy: { recipient: $recipient }, page: $page, orderBy: "-createdAt") {
       messages {
         _id
         recipient
@@ -116,6 +118,9 @@ export const getMessage = gql`
         createdAt
         updatedAt
         body
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
@@ -348,6 +353,8 @@ export const getRefferals = gql`
         testType
         createdAt
         updatedAt
+        doctorData
+        patientData
       }
     }
   }
@@ -365,6 +372,8 @@ export const getRefferal = gql`
       testType
       createdAt
       updatedAt
+      doctorData
+      patientData
     }
   }
 `;
@@ -508,6 +517,7 @@ export const getVerification = gql`
         external_reference
         status
         createdAt
+        doctorData
         updatedAt
         profileId
       }
@@ -525,6 +535,7 @@ export const verification = gql`
       reference
       external_reference
       status
+      doctorData
       createdAt
       updatedAt
       profileId
@@ -545,13 +556,16 @@ export const getMyEarnings = gql`
     }
   }
 `;
+
 export const getPatients = gql`
+  ${PageInfo}
   query findProfiles(
     $gender: String
     $firstName: String
     $bloodGroup: String
     $phoneNumber: String
     $dociId: String
+    $page: Int
   ) {
     profiles(
       filterBy: {
@@ -562,6 +576,7 @@ export const getPatients = gql`
         dociId: $dociId
       }
       orderBy: "-createdAt"
+      page: $page
     ) {
       data {
         _id
@@ -581,16 +596,22 @@ export const getPatients = gql`
         createdAt
         image
       }
+      pageInfo {
+        ...pageDetails
+      }
     }
   }
 `;
+
 export const getDoctorsProfile = gql`
+  ${PageInfo}
   query doctorProfiles(
     $hospital: String
     $specialization: String
     $cadre: String
     $phoneNumber: String
     $dociId: String
+    $page: Int
   ) {
     doctorProfiles(
       filterBy: {
@@ -600,6 +621,7 @@ export const getDoctorsProfile = gql`
         dociId: $dociId
         cadre: $cadre
       }
+      page: $page
     ) {
       profile {
         _id
@@ -619,6 +641,9 @@ export const getDoctorsProfile = gql`
         consultations
         status
         dociId
+      }
+      pageInfo {
+        ...pageDetails
       }
     }
   }
