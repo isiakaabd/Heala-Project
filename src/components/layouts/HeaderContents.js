@@ -207,6 +207,7 @@ const HeaderText = (props) => {
   const [patient, patientContent] = useLazyQuery(getPatients, { fetchPolicy: "cache-first" });
   const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
   const [profiles, setProfiles] = useState([]);
+  console.log(profiles);
 
   useEffect(() => {
     (async () => {

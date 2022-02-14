@@ -48,22 +48,24 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     if (data) {
       setReferral(data.getReferral);
     }
-  }, [referral, data]);
+  }, [data]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
   const {
     specialization,
-    doctor,
-    patient,
     referrals,
     type,
     reason,
     note,
     testType,
     createdAt,
+    patientData,
+    doctorData,
     // eslint-disable-next-line
   } = referral;
-  console.log(referral);
+  // const { firstName, lastName, picture } = doctorData;
+  // const { firstName: patientName, lastName: patientLastName, picture: patientImage } =
+  //   referral && patientData;
 
   return (
     <Grid container direction="column" gap={2}>
@@ -97,10 +99,17 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                 </Typography>
               </Grid>
               <Grid item>
-                <Avatar src={displayPhoto} alt="Display photo of the sender" />
+                <Avatar
+                  src={patientData && patientData.picture ? patientData.picture : displayPhoto}
+                  alt={`Display photo of the  ${
+                    patientData ? patientData.firstName : "placeholder"
+                  }`}
+                />
               </Grid>
               <Grid item>
-                <Typography variant="h5">{patient}</Typography>
+                <Typography variant="h5">
+                  {patientData ? `${patientData.firstName} ${patientData.lastName}` : "No Patient"}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -112,10 +121,15 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                 </Typography>
               </Grid>
               <Grid item>
-                <Avatar src={displayPhoto} alt="Display photo of the sender" />
+                <Avatar
+                  src={doctorData && doctorData.picture ? doctorData.picture : displayPhoto}
+                  alt={`Display photo of the doctor ${doctorData ? doctorData.firstName : ""}`}
+                />
               </Grid>
               <Grid item>
-                <Typography variant="h5">{doctor}</Typography>
+                <Typography variant="h5">
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
