@@ -200,7 +200,12 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     doctorData,
                     patientData,
                   } = row;
-
+                  const { firstName, lastName, picture } = doctorData;
+                  const {
+                    firstName: patientName,
+                    lastName: patientLastName,
+                    picture: patientImage,
+                  } = patientData;
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -252,16 +257,14 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                doctorData ? doctorData.firstName : "placeholder Display Image"
+                                firstName ? firstName : "placeholder Display Image"
                               }`}
-                              src={doctorData ? doctorData.picture : displayPhoto}
+                              src={picture ? picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData
-                              ? `${doctorData.firstName} ${doctorData.lastName}`
-                              : "No Doctor"}
+                            {firstName ? `${firstName} ${lastName}` : "No Doctor"}
                           </span>
                         </div>
                       </TableCell>
@@ -276,16 +279,14 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                patientData ? patientData.firstName : "placeholder Display Image"
+                                patientName ? patientName : "placeholder Display Image"
                               }`}
-                              src={patientData ? patientData.picture : displayPhoto}
+                              src={patientImage ? patientImage : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {patientData
-                              ? `${patientData.firstName} ${patientData.lastName}`
-                              : "No Patient"}
+                            {patientName ? `${patientName} ${patientLastName}` : "No Patient"}
                           </span>
                         </div>
                       </TableCell>
