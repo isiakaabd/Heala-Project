@@ -15,8 +15,7 @@ const CardStyle = styled.div`
   border-radius: 10px;
   box-shadow: 0px 5px 19px rgba(13, 2, 78, 0.08);
 `;
-
-export const Card = ({ title, width, children }) => {
+const Card = ({ title, width, children }) => {
   return (
     <CardStyle width={width} className="p-4 cursor-pointer">
       <div className="bg-gray-800 border-blue-300 border-b-2 pr-4">
@@ -28,7 +27,7 @@ export const Card = ({ title, width, children }) => {
     </CardStyle>
   );
 };
-
+export default Card;
 Card.propTypes = {
   title: PropTypes.string.isRequired,
   width: PropTypes.width,
