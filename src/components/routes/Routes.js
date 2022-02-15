@@ -2,58 +2,55 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "components/routes/PrivateRoute";
-import HCPVerification from "components/pages/HCP";
-import ViewHCP from "components/pages/ViewHCP";
-import Earnings from "components/pages/Financetable";
-import Appointments from "components/pages/Appointments";
-import Patients from "components/pages/Patients";
-import Hcps from "components/pages/Hcps";
-import SingleHCP from "components/pages/SingleHCP";
-import HcpProfile from "components/pages/HcpProfile";
-import HcpAppointments from "components/pages/HcpAppointments";
-import HcpPatients from "components/pages/HcpPatients";
-import HcpAvailability from "components/pages/HcpAvailability";
-import HcpEarnings from "components/pages/HcpEarnings";
-import HcpConsultation from "components/pages/HcpConsultations";
-import HcpCaseNote from "components/pages/HcpCaseNote";
-import Dashboard from "components/pages/Dashboard";
-import PatientProfile from "components/pages/PatientProfile";
-import Consultations from "components/pages/Consultations";
-import PatientAppointments from "components/pages/PatientAppointment";
-import Prescriptions from "components/pages/Prescriptions";
-import MedicalRecords from "components/pages/MedicalRecords";
-import CaseNotes from "components/pages/CaseNotes";
-import Medications from "components/pages/Medications";
-import SinglePatient from "components/pages/SinglePatient";
-import Partners from "components/pages/Partners";
-import WaitingList from "components/pages/WaitingList";
-import WaitingListDetails from "components/pages/WaitingListDetails";
-import Messages from "components/pages/Messages";
-import CreateMessage from "components/pages/CreateMessage";
-import ViewMessage from "components/pages/ViewMessage";
-import Email from "components/pages/Email";
-import Finance from "components/pages/Finance";
-import Payout from "components/pages/Payout";
-import ReferralTab from "components/pages/ReferralTab";
-import Subscription from "components/pages/Subscription";
-import ViewReferral from "components/pages/ViewReferral";
-import Settings from "components/pages/Settings";
-import Administrator from "components/pages/Administrator";
-import Management from "components/pages/Management";
-import Permission from "components/pages/Permission";
-import Chat from "components/pages/Chat";
-import HCPChat from "components/pages/HCPChat";
-import CreateEmail from "components/pages/CreateEmail";
-import ViewMail from "components/pages/ViewMail";
-import PendingPayout from "components/pages/PendingPayout";
-import CircularChart from "components/Utilities/CircularChart";
-import WhiteLabel from "components/pages/WhiteLabel";
-import Providers from "components/pages/Providers";
-import UserTypes from "components/pages/UserTypes";
-import EditManagement from "components/pages/EditManagement";
-// import { useSelector } from "react-redux";
-// import { useActions } from "components/hooks/useActions";
-// import { UserProfile } from "components/graphQL/useQuery";
+import { CircularChart } from "components/Utilities";
+import {
+  ViewHCP,
+  Chat,
+  Patients,
+  Subscription,
+  Hcps,
+  SingleHCP,
+  Appointments,
+  HcpEarnings,
+  HcpAvailability,
+  HcpPatients,
+  HcpAppointments,
+  HcpProfile,
+  Medications,
+  SinglePatient,
+  CaseNotes,
+  MedicalRecords,
+  Prescriptions,
+  PatientAppointment,
+  Email,
+  Consultations,
+  PatientProfile,
+  Dashboard,
+  HcpCaseNote,
+  HcpConsultations,
+  ViewMessage,
+  CreateMessage,
+  Messages,
+  WaitingListDetails,
+  WaitingList,
+  Permission,
+  Management,
+  Administrator,
+  ViewReferral,
+  Settings,
+  ReferralTab,
+  Partners,
+  Finance,
+  Payout,
+  HCPChat,
+  CreateEmail,
+  ViewMail,
+  EditManagement,
+  PendingPayout,
+  WhiteLabel,
+  UserTypes,
+  Providers,
+} from "components/pages";
 
 const Routes = (props) => {
   const {
@@ -75,20 +72,9 @@ const Routes = (props) => {
     selectedScopedMenu,
     setSelectedScopedMenu,
   } = props;
-  // const { id } = useSelector((state) => state.auth);
-  // const { data, loading, error } = UserProfile(id);
-  // const { refreshAuth, userDetail } = useActions();
 
-  // useEffect(() => {
-  //   if (data) {
-  //     userDetail(data.account);
-  //   }
-  // }, [data]);
-  // if (loading) return <div>Loading</div>;
-  // else {
   return (
     <Switch>
-      {/* <Route path="/dashboard" exact render={() => <h1>Hello World</h1>} /> */}
       <PrivateRoute
         path={["/", "/dashboard"]}
         exact
@@ -170,7 +156,7 @@ const Routes = (props) => {
 
       <PrivateRoute
         path="/patients/:patientId/appointments"
-        component={PatientAppointments}
+        component={PatientAppointment}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         selectedSubMenu={selectedSubMenu}
@@ -322,7 +308,7 @@ const Routes = (props) => {
       <PrivateRoute
         exact
         path="/hcps/:hcpId/consultations"
-        component={HcpConsultation}
+        component={HcpConsultations}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         selectedHcpMenu={selectedHcpMenu}
@@ -437,12 +423,12 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
         component={Email}
       />
-      <PrivateRoute
+      {/* <PrivateRoute
         exact
         path="/verification"
         component={HCPVerification}
         setSelectedSubMenu={setSelectedSubMenu}
-      />
+      /> */}
 
       <PrivateRoute
         exact
@@ -488,7 +474,7 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
       />
 
-      <PrivateRoute
+      {/* <PrivateRoute
         exact
         path="/finance/earnings"
         component={Earnings}
@@ -496,7 +482,7 @@ const Routes = (props) => {
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-      />
+      /> */}
 
       <PrivateRoute
         exact

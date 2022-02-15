@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Alert from "@mui/material/Alert";
 import * as Yup from "yup";
-import { Grid, Button, Avatar, Typography, TableRow, TableCell, Checkbox } from "@mui/material";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import {
+  Grid,
+  Alert,
+  Button,
+  Avatar,
+  Typography,
+  TableRow,
+  TableCell,
+  Checkbox,
+} from "@mui/material";
+import { Loader, Search, Modals, FilterList } from "components/Utilities";
+import { EnhancedTable, NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
-import Modals from "components/Utilities/Modal";
 import { useTheme } from "@mui/material/styles";
+import Filter from "components/modals/Filter";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import displayPhoto from "assets/images/avatar.svg";
@@ -19,7 +24,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Filter from "components/modals/Filter";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery } from "@apollo/client";
 import { getVerification } from "components/graphQL/useQuery";

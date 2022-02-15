@@ -23,9 +23,6 @@ const sectionStyles = {
 };
 
 const App = () => {
-  // const { refreshAuth, userDetail } = useActions();
-  // const { id } = useSelector((state) => state.auth);
-
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
 
@@ -74,7 +71,6 @@ const App = () => {
                     display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
                   }}
                 >
-                  {/* {!chatMediaActive && ( */}
                   <SideMenu
                     selectedMenu={selectedMenu}
                     setSelectedMenu={setSelectedMenu}

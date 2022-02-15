@@ -2,27 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
+import {
+  Loader,
+  Button,
+  Modals,
+  PreviousButton,
+  CustomButton,
+  Search,
+  FilterList,
+} from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
-import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
-import { Grid, TableRow, TableCell } from "@mui/material";
-import CustomButton from "components/Utilities/CustomButton";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
 import { signup } from "components/graphQL/Mutation";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
-import Button from "@mui/material/Button";
 import { adminHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
-import PreviousButton from "components/Utilities/PreviousButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useQuery, useMutation } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
@@ -30,15 +30,10 @@ import { findAdmin } from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
+      flexGrow: 1,
     },
   },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
+
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
@@ -264,7 +259,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
-        <Grid item container>
+        <Grid item container flexWrap="nowrap" gap={2}>
           <Grid item className={classes.searchGrid}>
             <Search
               value={searchMail}
@@ -273,7 +268,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               height="5rem"
             />
           </Grid>
-          <Grid item className={classes.filterBtnGrid}>
+          <Grid item>
             <FilterList
               onClick={handleDialogOpen}
               title="Filter Administrator"

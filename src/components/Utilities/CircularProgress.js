@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Grid } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Grid, Box } from "@mui/material";
 import { ReactComponent as Circular } from "assets/images/circular.svg";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";

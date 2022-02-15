@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { Grid } from "@mui/material";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
-import Card from "components/Utilities/Card";
+import { Card } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
