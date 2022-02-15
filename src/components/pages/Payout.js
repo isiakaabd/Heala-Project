@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import NoData from "components/layouts/NoData";
 import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
@@ -82,7 +83,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   const classes = useStyles();
   const theme = useTheme();
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   useEffect(() => {
@@ -91,137 +92,158 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const { loading, data, error } = useQuery(getEarningStats);
+  const { loading, data, error, refetch } = useQuery(getEarningStats);
+  const fetchMoreFunc = (_, newPage) => {
+    refetch({ page: newPage });
+  };
   const [payout, setPayout] = useState([]);
-
+  const [pageInfo, setPageInfo] = useState([]);
   useEffect(() => {
     if (data) {
+      setPageInfo(data.getEarningStats.payoutData.PageInfo);
       setPayout(data.getEarningStats.payoutData.data);
     }
-  }, [payout, data]);
+  }, [data]);
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
   if (error) return <noData error={error.message} />;
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
         <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-
-      <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
-        <Grid item>
-          <Grid item container alignItems="center">
-            <Typography noWrap variant="h1" component="div" color="#2D2F39">
-              Payout table
-            </Typography>
-            <Grid item className={classes.iconWrapper} marginLeft="1rem">
-              <TrendingUpIcon color="success" className={classes.cardIcon} />
+      {payout.length > 0 ? (
+        <>
+          <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
+            <Grid item>
+              <Grid item container alignItems="center">
+                <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                  Payout table
+                </Typography>
+                <Grid item className={classes.iconWrapper} marginLeft="1rem">
+                  <TrendingUpIcon color="success" className={classes.cardIcon} />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Grid>
+          <Grid item container>
+            <EnhancedTable
+              headCells={payoutHeader}
+              rows={payout}
+              paginationLabel="payout per page"
+              page={+page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
+              hasCheckbox={true}
+            >
+              {payout
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const { amount, createdAt, doctorData, status, _id } = row;
+                  const { firstName, picture, lastName, specialization } = doctorData[0];
+                  const isItemSelected = isSelected(_id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-      {/* The Search and Filter ends here */}
-      <Grid item container>
-        <EnhancedTable
-          headCells={payoutHeader}
-          rows={payout}
-          page={page}
-          paginationLabel="payout per page"
-          hasCheckbox={true}
-        >
-          {payout.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const { amount, createdAt, doctorData, status, _id } = row;
-            const { firstName, picture, lastName, specialization } = doctorData[0];
-            const isItemSelected = isSelected(_id, selectedRows);
-            const labelId = `enhanced-table-checkbox-${index}`;
-
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={_id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {dateMoment(createdAt)}
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {timeMoment(createdAt)}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar
-                        alt="Remy Sharp"
-                        src={picture ? picture : displayPhoto}
-                        sx={{ width: 24, height: 24 }}
-                      />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {firstName} {lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  {specialization}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {amount}
-                </TableCell>
-                <TableCell align="left" className={classes.tableCell}>
-                  <Chip
-                    label={status}
-                    className={classes.badge}
-                    style={{
-                      background:
-                        status === "active"
-                          ? theme.palette.common.lightGreen
-                          : theme.palette.common.lightRed,
-                      color:
-                        status === "active" ? theme.palette.common.green : theme.palette.common.red,
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </EnhancedTable>
-      </Grid>
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {dateMoment(createdAt)}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {timeMoment(createdAt)}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={picture ? picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {firstName} {lastName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {specialization}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {amount}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Chip
+                          label={status}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === "active"
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === "active"
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          </Grid>
+        </>
+      ) : (
+        <NoData />
+      )}
     </Grid>
   );
 };

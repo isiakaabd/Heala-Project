@@ -19,7 +19,6 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   });
   useEffect(() => {
     if (data) {
-      console.log(data);
       const datas = data.getUserTypeProviders.provider;
       setDropDown(
         datas &&
