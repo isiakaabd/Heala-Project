@@ -246,7 +246,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${doctorData.firstName}`}
+                              alt={`image of ${doctorData && doctorData.firstName}`}
                               src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
@@ -263,7 +263,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {doctorData.lastName}
+                        {doctorData && doctorData.lastName}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         {qualification && qualification.degree}

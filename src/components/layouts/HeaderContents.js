@@ -204,16 +204,15 @@ const HeaderText = (props) => {
       }
     })();
   }, [profile, email, data]);
-  const [patient, patientContent] = useLazyQuery(getPatients, { fetchPolicy: "cache-first" });
+  const [patient, patientContent] = useLazyQuery(getPatients);
   const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
   const [profiles, setProfiles] = useState([]);
-  console.log(profiles);
 
   useEffect(() => {
     (async () => {
       patient();
       doctor();
-      if (patientContent.data) setProfiles(patientContent.data.profiles.data);
+      if (patientContent.data) setProfiles(patientContent.data.profiles.pageInfo.totalDocs);
     })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
 
@@ -271,7 +270,7 @@ const HeaderText = (props) => {
       return (
         <CustomHeaderText
           title="Patients"
-          total={patientContent.loading ? "Loading" : profiles.length}
+          total={patientContent.loading ? "Loading" : profiles}
           path="patients"
         />
       );

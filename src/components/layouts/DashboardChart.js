@@ -100,17 +100,16 @@ const DashboardCharts = () => {
 
   const [patient, { data, error, loading }] = useLazyQuery(dashboard);
   // eslint-disable-next-line
-  const { data: earningData, error: statError, refetch } = useQuery(
-    getEarningStats,
-    { variables: { q: "365" }, notifyOnNetworkStatusChange: true },
-  );
+  const { data: earningData, error: statError, refetch } = useQuery(getEarningStats, {
+    variables: { q: "365" },
+    notifyOnNetworkStatusChange: true,
+  });
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [appointmentStats, setAppointmentStats] = useState([]);
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
-  console.log(totalEarning);
 
   useEffect(() => {
     (async () => {

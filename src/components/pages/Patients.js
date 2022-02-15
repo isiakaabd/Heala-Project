@@ -112,7 +112,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const { loading, error, data, refetch } = useQuery(getPatients);
   const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
-  console.log(data);
   const onSubmit = async (values) => {
     const { name, gender, bloodGroup, phone } = values;
     if (!gender) return;
@@ -142,7 +141,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const onChange = async (e) => {
     setSearchPatient(e);
     if (e == " ") {
-      console.log(searchPatient);
       fetchUser();
     } else refetch(e === "" ? null : { dociId: `HEALA-${e.toUpperCase()}` });
   };
@@ -203,8 +201,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 : profiles
               ).map((row, index) => {
-                console.log(row);
-
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const {

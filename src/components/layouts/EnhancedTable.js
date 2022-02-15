@@ -63,11 +63,11 @@ const EnhancedTable = (props) => {
     handleChangePage,
     hasNextPage,
     hasPrevPage,
-
     setRowsPerPage,
   } = props;
-  const [pagnumber, setPageNumber] = useState(page - 1);
-
+  const number = page && Number(page - 1);
+  const [pagnumber, setPageNumber] = useState(number);
+  console.log(limit, page, pagnumber);
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((selected) => selected.id);
@@ -181,7 +181,7 @@ const EnhancedTable = (props) => {
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={totalDocs}
-          rowsPerPage={limit}
+          rowsPerPage={+limit}
           page={pagnumber}
           labelRowsPerPage={paginationLabel}
           onPageChange={handleChangePage}

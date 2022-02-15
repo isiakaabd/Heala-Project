@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import TableRow from "@mui/material/TableRow";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
-import TableCell from "@mui/material/TableCell";
-import Checkbox from "@mui/material/Checkbox";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
-import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -85,14 +81,21 @@ const useStyles = makeStyles((theme) => ({
 const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
-  const { loading, data, error } = useQuery(getEarningStats);
+  const [pageInfo, setPageInfo] = useState([]);
+  const { loading, data, error, refetch } = useQuery(getEarningStats);
   const [earning, setEarning] = useState([]);
+  const fetchMoreFunc = (_, newPage) => {
+    refetch({ page: newPage });
+  };
+
   useEffect(() => {
     if (data) {
+      console.log(data);
+
       setEarning(data.getEarningStats.earningData.data);
+      setPageInfo(data.getEarningStats.earningData.PageInfo);
     }
   }, [earning, data]);
   useEffect(() => {
@@ -101,15 +104,17 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
-
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  console.log(page, limit);
   return (
     <Grid container direction="column" gap={2} height="100%">
       <Grid item>
         <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      {earning ? (
+      {earning.length > 0 ? (
         <>
           <Grid item container gap={1} alignItems="center">
             <Grid item>
@@ -126,88 +131,94 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
             <EnhancedTable
               headCells={financeHeader}
               rows={earning}
-              page={page}
               paginationLabel="finance per page"
+              page={+page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
-              {earning
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const { doctorData, createdAt, balance } = row;
-                  const { firstName, picture, lastName, specialization } = doctorData[0];
-                  const isItemSelected = isSelected(row._id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {earning.map((row, index) => {
+                const { doctorData, createdAt, balance } = row;
+                const { firstName, picture, lastName, specialization } = doctorData[0];
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
+                      {dateMoment(createdAt)}
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      {timeMoment(createdAt)}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
                       >
-                        {dateMoment(createdAt)}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {timeMoment(createdAt)}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={firstName ? firstName : "image"}
-                              src={doctorData ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData && `${firstName} ${lastName}`}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {specialization ? specialization : "No Value"}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.red }}
-                      >
-                        {formatNumber(balance.toFixed(2))}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={firstName ? firstName : "image"}
+                            src={doctorData ? picture : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {doctorData && `${firstName} ${lastName}`}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {specialization ? specialization : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.red }}
+                    >
+                      {formatNumber(balance.toFixed(2))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </EnhancedTable>
           </Grid>
         </>
