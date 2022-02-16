@@ -23,6 +23,7 @@ import {
   Prescriptions,
   PatientAppointment,
   Email,
+  HCP,
   Consultations,
   PatientProfile,
   Dashboard,
@@ -423,12 +424,12 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
         component={Email}
       />
-      {/* <PrivateRoute
+      <PrivateRoute
         exact
         path="/verification"
-        component={HCPVerification}
+        component={HCP}
         setSelectedSubMenu={setSelectedSubMenu}
-      /> */}
+      />
 
       <PrivateRoute
         exact
