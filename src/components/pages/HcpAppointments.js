@@ -336,7 +336,7 @@ const HcpAppointments = (props) => {
         isOpen={isPatients}
         title="Reschedule Appointment"
         rowSpacing={5}
-        height="90vh"
+        height="auto"
         handleClose={handlePatientCloses}
       >
         <Formik

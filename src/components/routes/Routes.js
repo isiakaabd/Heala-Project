@@ -50,6 +50,10 @@ import {
   WhiteLabel,
   UserTypes,
   Providers,
+  HCP,
+  Financetable
+  
+
 } from "components/pages";
 
 const Routes = (props) => {
@@ -71,6 +75,7 @@ const Routes = (props) => {
     setSelectedManagementMenu,
     selectedScopedMenu,
     setSelectedScopedMenu,
+    
   } = props;
 
   return (
@@ -432,8 +437,8 @@ const Routes = (props) => {
 
       <PrivateRoute
         exact
-        path="/verification/view"
-        component={ViewHCP}
+        path="/verification"
+        component={HCP}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
@@ -474,15 +479,15 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
       />
 
-      {/* <PrivateRoute
+      <PrivateRoute
         exact
         path="/finance/earnings"
-        component={Earnings}
+        component={Financetable}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-      /> */}
+      />
 
       <PrivateRoute
         exact

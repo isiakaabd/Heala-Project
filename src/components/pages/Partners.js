@@ -246,8 +246,8 @@ const Partners = () => {
     { key: "Pharmacy", value: "Pharmacy" },
   ];
   const specializations5 = [
-    { key: "Diagnostics", value: "Pharmacy" },
-    { key: "Pharmacy", value: "dental" },
+    { key: "Diagnostics", value: "Diagnostics" },
+    { key: "Pharmacy", value: "Pharmacy" },
   ];
   const [categoryDatas, setCategoryDatas] = useState([]);
   const { loading, error, data, refetch } = useQuery(getPartners);
@@ -297,14 +297,14 @@ const Partners = () => {
         <Grid item className={classes.actionBtnGrid}>
           <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
-        <Grid item className={classes.actionBtnGrid}>
+        {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
             title="Add  Partner Category"
             type={redButton}
             onClick={() => setAddPartnerCategory(true)}
           />
-        </Grid>
+        </Grid> */}
         <Grid item>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
@@ -510,7 +510,8 @@ const Partners = () => {
                         <Grid item container>
                           <FormikControl
                             control="select"
-                            options={categoryDatas}
+                            options={ [{ key: "Diagnostics", value: "Diagnostics" },
+                            { key: "Pharmacy", value: "Pharmacy" }]}
                             name="specialization"
                             label="Category"
                             placeholder="Category"

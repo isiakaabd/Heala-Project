@@ -584,6 +584,8 @@ export const createDOctorProfile = gql`
     $dob: String!
     $cadre: String!
     $image: String!
+    $providerId: String
+
   ) {
     createDoctorProfile(
       data: {
@@ -597,6 +599,8 @@ export const createDOctorProfile = gql`
         dob: $dob
         cadre: $cadre
         image: $image
+        providerId:$providerId
+
       }
     ) {
       profile {

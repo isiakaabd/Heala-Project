@@ -81,7 +81,7 @@ Modals.propTypes = {
 };
 
 Modals.defaultProps = {
-  height: "85vh",
+  height: "auto",
 };
 
 export default Modals;

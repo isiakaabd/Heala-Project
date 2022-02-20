@@ -163,10 +163,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     console.log(values);
     const { hospital, specialization, phone, cadre } = values;
     await refetch({
-      hospital,
       specialization,
-      phoneNumber: phone,
-      cadre,
     });
     setOpenHcpFilter(false);
   };
@@ -202,20 +199,21 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         dob: correctDOB,
         cadre,
         image,
+        providerId: "61db6f8968b248001aec4fcb",
       },
       refetchQueries: [{ query: getDoctorsProfile }],
     });
+    setOpenAddHcp(false)
+
   };
   const specializations = [
-    { key: "Dental", value: "Dental" },
-    { key: "Pediatry", value: "Pediatry" },
-    { key: "Optometry", value: "Optometry" },
-    { key: "Pathology", value: "Pathology" },
+    { key: "diagnostics", value: "diagnostics" },
+    { key: "pharmacy", value: "pharmacy" },
   ];
 
   const gender = [
-    { key: "Male", value: "male" },
-    { key: "Female", value: "female" },
+    { key: "Male", value: "Male" },
+    { key: "Female", value: "Female" },
   ];
 
   const initialValues = {
@@ -435,35 +433,11 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   <Grid item container rowSpacing={3}>
                     <Grid item container>
                       <FormikControl
-                        control="input"
-                        name="hospital"
-                        label="Hospital"
-                        placeholder="Enter Hospital"
-                      />
-                    </Grid>
-                    <Grid item container>
-                      <FormikControl
                         control="select"
                         options={specializations}
                         name="specialization"
                         label="Specialization"
                         placeholder="Select Specialization"
-                      />
-                    </Grid>
-                    <Grid item container>
-                      <FormikControl
-                        control="input"
-                        name="phone"
-                        label="Phone Number"
-                        placeholder="Enter Phone Number"
-                      />
-                    </Grid>
-                    <Grid item container>
-                      <FormikControl
-                        control="input"
-                        name="cadre"
-                        label="Enter Cadre"
-                        placeholder="Enter Cadre"
                       />
                     </Grid>
                   </Grid>
@@ -487,7 +461,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         isOpen={openAddHcp}
         title="Add Doctor"
         rowSpacing={5}
-        height="90vh"
+        height="auto"
         handleClose={() => setOpenAddHcp(false)}
       >
         <Formik
@@ -623,7 +597,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   </Grid>
                   <Grid item container>
                     <CustomButton
-                      title="Add Partner"
+                      title="Add Doctor"
                       width="100%"
                       type={buttonType}
                       isSubmitting={isSubmitting}

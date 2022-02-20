@@ -27,7 +27,6 @@ import { getPatients } from "components/graphQL/useQuery";
 const genderType = [
   { key: "Male", value: "0" },
   { key: "Female", value: "1" },
-  { key: "Prefer not to say", value: "2" },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -114,13 +113,11 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const [profiles, setProfiles] = useState([]);
   const onSubmit = async (values) => {
     const { name, gender, bloodGroup, phone } = values;
+    console.log(gender,'gggg')
     if (!gender) return;
 
     await refetch({
       gender,
-      firstName: name,
-      bloodGroup,
-      phoneNumber: phone,
     });
     handleDialogClose();
   };
@@ -322,47 +319,21 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
-                  <Grid item>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          name="name"
-                          label="First Name"
-                          placeholder="Enter First Name"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          name="bloodGroup"
-                          label="Blood Group"
-                          placeholder="Enter Blood Group"
-                        />
-                      </Grid>
-                    </Grid>
+                <Grid item>
+
+                  <FormikControl
+                    control="select"
+                    options={genderType}
+                    name="gender"
+                    label="Filter by Gender"
+                    placeholder="Filter by Gender"
+                  />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="select"
-                          options={genderType}
-                          name="gender"
-                          label="Gender"
-                          placeholder="Choose gender"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          name="phone"
-                          label="Phone Number"
-                          placeholder="Enter Phone Number"
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+
+
                   <Grid item>
                     <CustomButton
                       title="Apply Filter"

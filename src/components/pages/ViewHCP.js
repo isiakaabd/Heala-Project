@@ -119,6 +119,8 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     doctorData,
     // eslint-disable-next-line
   } = respondData;
+
+  console.log(respondData,'docD')
   return (
     <Grid container direction="column" gap={2}>
       <Grid item>
