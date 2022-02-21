@@ -160,8 +160,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     cadre: Yup.string("Enter your Cadre"),
   });
   const onSubmit1 = async (values) => {
-    console.log(values);
-    const { hospital, specialization, phone, cadre } = values;
+    const { specialization } = values;
     await refetch({
       specialization,
     });
@@ -203,8 +202,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       },
       refetchQueries: [{ query: getDoctorsProfile }],
     });
-    setOpenAddHcp(false)
-
+    setOpenAddHcp(false);
   };
   const specializations = [
     { key: "diagnostics", value: "diagnostics" },

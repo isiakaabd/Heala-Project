@@ -100,11 +100,7 @@ const DashboardCharts = () => {
 
   const [patient, { data, error, loading }] = useLazyQuery(dashboard);
   // eslint-disable-next-line
-  const {
-    data: earningData,
-    error: statError,
-    refetch,
-  } = useQuery(getEarningStats, {
+  const { data: earningData, error: statError, refetch } = useQuery(getEarningStats, {
     variables: { q: "365" },
     notifyOnNetworkStatusChange: true,
   });

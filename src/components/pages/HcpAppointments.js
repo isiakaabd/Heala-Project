@@ -65,9 +65,6 @@ const HcpAppointments = (props) => {
       orderBy: "-createdAt",
     },
   });
-  const initialValues1 = {
-    date: "",
-  };
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
     if (data) {
@@ -147,10 +144,14 @@ const HcpAppointments = (props) => {
     hover: theme.palette.error.light,
     active: theme.palette.error.dark,
   };
+
+  const [editId, setEditid] = useState(null);
+  const initialValues1 = {
+    date: "",
+  };
   const validationSchema1 = Yup.object({
     date: Yup.string("select date and time ").required("Date  and time is required"),
   });
-  const [editId, setEditid] = useState(null);
   const onSubmit1 = async (values) => {
     const { date } = values;
 

@@ -23,6 +23,7 @@ import {
   Prescriptions,
   PatientAppointment,
   Email,
+  HCP,
   Consultations,
   PatientProfile,
   Dashboard,
@@ -50,10 +51,7 @@ import {
   WhiteLabel,
   UserTypes,
   Providers,
-  HCP,
-  Financetable
-  
-
+  Financetable,
 } from "components/pages";
 
 const Routes = (props) => {
@@ -75,7 +73,6 @@ const Routes = (props) => {
     setSelectedManagementMenu,
     selectedScopedMenu,
     setSelectedScopedMenu,
-    
   } = props;
 
   return (
@@ -428,12 +425,12 @@ const Routes = (props) => {
         setSelectedSubMenu={setSelectedSubMenu}
         component={Email}
       />
-      {/* <PrivateRoute
+      <PrivateRoute
         exact
         path="/verification"
-        component={HCPVerification}
+        component={HCP}
         setSelectedSubMenu={setSelectedSubMenu}
-      /> */}
+      />
 
       <PrivateRoute
         exact

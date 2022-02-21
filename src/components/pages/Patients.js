@@ -112,8 +112,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
   const onSubmit = async (values) => {
-    const { name, gender, bloodGroup, phone } = values;
-    console.log(gender,'gggg')
+    const { gender } = values;
     if (!gender) return;
 
     await refetch({
@@ -319,20 +318,18 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid item container direction="column">
-                <Grid item>
-
-                  <FormikControl
-                    control="select"
-                    options={genderType}
-                    name="gender"
-                    label="Filter by Gender"
-                    placeholder="Filter by Gender"
-                  />
+                  <Grid item>
+                    <FormikControl
+                      control="select"
+                      options={genderType}
+                      name="gender"
+                      label="Filter by Gender"
+                      placeholder="Filter by Gender"
+                    />
                   </Grid>
                   <br></br>
                   <br></br>
                   <br></br>
-
 
                   <Grid item>
                     <CustomButton

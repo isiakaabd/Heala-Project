@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
+import * as Yup from "yup";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
 import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
-import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 
 export const ProviderModal = ({

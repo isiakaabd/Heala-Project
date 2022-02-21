@@ -1,11 +1,8 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
+import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
 import PropTypes from "prop-types";
-import Select from "@mui/material/Select";
-import { MenuItem, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
