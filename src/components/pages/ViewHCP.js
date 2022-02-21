@@ -120,7 +120,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     // eslint-disable-next-line
   } = respondData;
   return (
-    <Grid container direction="column" gap={2}>
+    <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
       <Grid item>
         <PreviousButton path="/verification" />
       </Grid>
@@ -384,6 +384,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             style={{ height: "100%" }}
             justifyContent="space-between"
             alignItems="flex-start"
+            gap={2}
           >
             <Grid item>
               <Typography variant="h4">Reference ID</Typography>

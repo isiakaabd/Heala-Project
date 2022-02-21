@@ -53,26 +53,26 @@ import {
   Providers,
 } from "components/pages";
 
-const Routes = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
-    selectedHcpMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu,
-    setSelectedHcpMenu,
-    waitingListMenu,
-    setWaitingListMenu,
-    selectedAppointmentMenu,
-    setSelectedAppointmentMenu,
-    chatMediaActive,
-    setChatMediaActive,
-    setSelectedManagementMenu,
-    selectedScopedMenu,
-    setSelectedScopedMenu,
-  } = props;
+const Routes = ({
+  selectedMenu,
+  setSelectedMenu,
+  selectedSubMenu,
+  selectedPatientMenu,
+  selectedHcpMenu,
+  setSelectedSubMenu,
+  setSelectedPatientMenu,
+  setSelectedHcpMenu,
+  waitingListMenu,
+  setWaitingListMenu,
+  selectedAppointmentMenu,
+  setSelectedAppointmentMenu,
+  chatMediaActive,
+  setChatMediaActive,
+  setSelectedManagementMenu,
+  selectedScopedMenu,
+  setSelectedScopedMenu,
+} ) => {
+
 
   return (
     <Switch>
