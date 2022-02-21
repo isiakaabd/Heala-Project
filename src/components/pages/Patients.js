@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
-import Modals from "components/Utilities/Modal";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
+import { Modals, FilterList, Loader, Search, CustomButton } from "components/Utilities";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -108,7 +104,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     gender: Yup.string("Select your gender"),
     phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
-  const { loading, error, data, refetch } = useQuery(getPatients);
+  const { loading, error, data, refetch } = useQuery(getPatients, {
+    notifyOnNetworkStatusChange: true,
+  });
   const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
   const onSubmit = async (values) => {
