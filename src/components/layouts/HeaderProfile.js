@@ -9,7 +9,7 @@ import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "../layouts/Notifications";
 import IconButton from "@mui/material/IconButton";
-import { findAccounts } from "components/modals/useQuery";
+import { findAccounts } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
