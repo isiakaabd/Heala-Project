@@ -9,7 +9,7 @@ import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
-import { verification } from "components/graphQL/useQuery";
+import { verification } from "components/modals/useQuery";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";

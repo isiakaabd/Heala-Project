@@ -5,11 +5,11 @@ import HeaderProfile from "./HeaderProfile";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { findAccounts } from "components/graphQL/useQuery";
+import { findAccounts } from "components/modals/useQuery";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useLazyQuery } from "@apollo/client";
-import { getPatients, DoctorCount } from "components/graphQL/useQuery";
+import { getPatients, DoctorCount } from "components/modals/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
