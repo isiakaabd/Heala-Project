@@ -126,21 +126,22 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
       page: newPage,
-      updateQuery: (prev, { fetchMoreResult }) => {
-        console.log(prev);
-        console.log(fetchMoreResult);
-        // const x = {
-        //   pageinfo: { ...fetchMoreResult.doctorProfiles.pageInfo },
-        //   profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
-        // };
-        // console.log(x);
-        return {
-          doctorProfiles: {
-            ...fetchMoreResult.doctorProfiles.pageInfo,
-            profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
-          },
-        };
-      },
+
+      // updateQuery: (prev, { fetchMoreResult }) => {
+      //   console.log(prev);
+      //   console.log(fetchMoreResult);
+      //   // const x = {
+      //   //   pageinfo: { ...fetchMoreResult.doctorProfiles.pageInfo },
+      //   //   profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
+      //   // };
+      //   // console.log(x);
+      //   return {
+      //     doctorProfiles: {
+      //       ...fetchMoreResult.doctorProfiles.pageInfo,
+      //       profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
+      //     },
+      //   };
+      // },
     });
   };
 
