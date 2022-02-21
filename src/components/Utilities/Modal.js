@@ -1,12 +1,8 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import { Modal, Stack, Box, Typography, Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
-import { Stack } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   closeIcon: {

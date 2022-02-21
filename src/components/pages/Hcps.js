@@ -6,12 +6,9 @@ import displayPhoto from "assets/images/avatar.svg";
 import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, NetworkStatus } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
-import Modals from "components/Utilities/Modal";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import CustomButton from "components/Utilities/CustomButton";
+import { FilterList, Search, Modals, CustomButton } from "components/Utilities";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -122,10 +119,30 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const { data, error, loading, refetch } = useQuery(getDoctorsProfile);
-
+  const { data, error, loading, refetch, networkStatus, fetchMore } = useQuery(getDoctorsProfile, {
+    notifyOnNetworkStatusChange: true,
+  });
+  //const offset =
   const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
+    fetchMore({
+      page: newPage,
+
+      // updateQuery: (prev, { fetchMoreResult }) => {
+      //   console.log(prev);
+      //   console.log(fetchMoreResult);
+      //   // const x = {
+      //   //   pageinfo: { ...fetchMoreResult.doctorProfiles.pageInfo },
+      //   //   profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
+      //   // };
+      //   // console.log(x);
+      //   return {
+      //     doctorProfiles: {
+      //       ...fetchMoreResult.doctorProfiles.pageInfo,
+      //       profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
+      //     },
+      //   };
+      // },
+    });
   };
 
   const onChange = async (e) => {
@@ -248,7 +265,12 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
+  if (networkStatus === NetworkStatus.refetch) return "Refetching!";
+  console.log(networkStatus);
+  console.log(NetworkStatus);
+
   if (loading) return <Loader />;
+
   if (error) return <NoData error={error.message} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
