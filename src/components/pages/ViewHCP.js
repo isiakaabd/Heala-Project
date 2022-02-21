@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import Loader from "components/Utilities/Loader";
 import NoData from "components/layouts/NoData";
 import PropTypes from "prop-types";
+import CustomButton from "components/Utilities/CustomButton";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { dateMoment } from "components/Utilities/Time";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { verification } from "components/graphQL/useQuery";
+import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
+import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -93,22 +96,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, { variables: { id: viewId } });
   const [respondData, setRespondData] = useState([]);
-
-  useEffect(() => {
-    if (data) {
-      setRespondData(data.getVerification);
-    }
-  }, [data]);
-
-  const classes = useStyles();
-  useEffect(() => {
-    setSelectedMenu(7);
-    setSelectedSubMenu(8);
-
-    // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
   // eslint-disable-next-line
   const {
     createdAt,
@@ -117,8 +104,55 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     alumni_association,
     reference,
     doctorData,
+    status,
     // eslint-disable-next-line
   } = respondData;
+  const theme = useTheme();
+  const trasparentButton = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+    disabled: theme.palette.common.black,
+  };
+  useEffect(() => {
+    if (data) {
+      setRespondData(data.getVerification);
+    }
+  }, [data]);
+  const [verifyState, setVerifyState] = useState(status ? "Doctor Verified!!" : "Verify Doctor");
+  useEffect(() => {
+    if (status) {
+      setVerifyState("Doctor Verified!!");
+    }
+  }, [status]);
+  const [verify, { data: verifyData }] = useMutation(verifyHCP);
+  const [button, setButtonValue] = useState(status);
+
+  useEffect(() => {
+    if (verifyData && verifyData.verifyHCP.status) {
+      setVerifyState("Doctor Verified!!");
+      setButtonValue(verifyData.verifyHCP.status);
+    }
+  }, [verify, status, verifyState, verifyData]);
+
+  const handleVerifyDoctor = async () => {
+    await verify({
+      variables: {
+        id: viewId,
+      },
+    });
+  };
+  const classes = useStyles();
+  useEffect(() => {
+    setSelectedMenu(7);
+    setSelectedSubMenu(8);
+
+    // eslint-disable-next-line
+  }, [selectedMenu, selectedSubMenu]);
+
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error.message} />;
+  // eslint-disable-next-line
   return (
     <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
       <Grid item>
@@ -386,10 +420,10 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             alignItems="flex-start"
             gap={2}
           >
-            <Grid item>
+            <Grid item md>
               <Typography variant="h4">Reference ID</Typography>
             </Grid>
-            <Grid item container gap={2}>
+            <Grid item md container>
               <Grid item>
                 <Typography variant="h4" className={classes.link}>
                   {reference ? reference.reference_code : "No Reference"}
@@ -402,9 +436,23 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
         <Grid
           item
           md
-          style={{ marginLeft: "2rem", display: "hidden" }}
+          style={{ marginLeft: "2rem", visibility: "hidden" }}
           className={classes.cardGrid}
         ></Grid>
+      </Grid>
+      <Grid item container style={{ paddingTop: "2rem" }}>
+        <Grid item container justifyContent="center" className={classes.cardGrid}>
+          <Grid item>
+            <CustomButton
+              title={verifyState}
+              type={trasparentButton}
+              disabled={button}
+              onClick={handleVerifyDoctor}
+              width="100%"
+              // textColor={theme.palette.common.red}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

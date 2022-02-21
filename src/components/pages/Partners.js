@@ -151,11 +151,6 @@ const Partners = () => {
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-  const redButton = {
-    background: theme.palette.error.light,
-    hover: theme.palette.error.light,
-    active: theme.palette.error.dark,
-  };
 
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -246,10 +241,10 @@ const Partners = () => {
     { key: "Pharmacy", value: "Pharmacy" },
   ];
   const specializations5 = [
-    { key: "Diagnostics", value: "Pharmacy" },
-    { key: "Pharmacy", value: "dental" },
+    { key: "Diagnostics", value: "Diagnostics" },
+    { key: "Pharmacy", value: "Pharmacy" },
   ];
-  const [categoryDatas, setCategoryDatas] = useState([]);
+  const [setCategoryDatas] = useState([]);
   const { loading, error, data, refetch } = useQuery(getPartners);
   const categoryData = useQuery(getSingleProvider);
   const [partner, setPartners] = useState([]);
@@ -275,7 +270,7 @@ const Partners = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [data, categoryData]);
+  }, [data, categoryData, setCategoryDatas]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -297,14 +292,14 @@ const Partners = () => {
         <Grid item className={classes.actionBtnGrid}>
           <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
-        <Grid item className={classes.actionBtnGrid}>
+        {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
             title="Add  Partner Category"
             type={redButton}
             onClick={() => setAddPartnerCategory(true)}
           />
-        </Grid>
+        </Grid> */}
         <Grid item>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
@@ -510,7 +505,10 @@ const Partners = () => {
                         <Grid item container>
                           <FormikControl
                             control="select"
-                            options={categoryDatas}
+                            options={[
+                              { key: "Diagnostics", value: "Diagnostics" },
+                              { key: "Pharmacy", value: "Pharmacy" },
+                            ]}
                             name="specialization"
                             label="Category"
                             placeholder="Category"

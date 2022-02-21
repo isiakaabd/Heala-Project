@@ -17,6 +17,23 @@ export const editUserType = gql`
     }
   }
 `;
+export const verifyHCP = gql`
+  mutation verifyHCP($id: String) {
+    verifyHCP(data: { id: $id }) {
+      _id
+      qualification
+      license
+      yearbook
+      alumni_association
+      reference
+      external_reference
+      status
+      createdAt
+      updatedAt
+      profileId
+    }
+  }
+`;
 export const editprovider = gql`
   mutation updateProvider($id: String!, $name: String, $icon: String) {
     updateProvider(data: { id: $id, name: $name, icon: $icon }) {
@@ -584,6 +601,7 @@ export const createDOctorProfile = gql`
     $dob: String!
     $cadre: String!
     $image: String!
+    $providerId: String
   ) {
     createDoctorProfile(
       data: {
@@ -597,6 +615,7 @@ export const createDOctorProfile = gql`
         dob: $dob
         cadre: $cadre
         image: $image
+        providerId: $providerId
       }
     ) {
       profile {

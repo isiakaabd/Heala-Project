@@ -104,6 +104,16 @@ const DashboardCharts = () => {
     variables: { q: "365" },
     notifyOnNetworkStatusChange: true,
   });
+
+  const timeFrames = [
+    { id: 0, time: "Jan" },
+    { id: 1, time: "Mar" },
+    { id: 2, time: "May" },
+    { id: 3, time: "Jul" },
+    { id: 4, time: "Sept" },
+    { id: 5, time: "Nov" },
+    { id: 6, time: "Jan" },
+  ];
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [appointmentStats, setAppointmentStats] = useState([]);
@@ -181,6 +191,17 @@ const DashboardCharts = () => {
                         </Typography>
                       </Grid>
                     </Grid>
+                    <Grid
+                      item
+                      style={{
+                        marginLeft: "38%",
+                        marginTop: "-8%",
+                      }}
+                    >
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total Doctors
+                      </Typography>
+                    </Grid>
                   </Grid>
                   <Grid item>
                     <img src={chart1} alt="Arc chart" />
@@ -190,6 +211,7 @@ const DashboardCharts = () => {
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
                 <LineChart
+                  timeFrames={timeFrames}
                   selectedTimeframe={selectedTimeframe}
                   setSelectedTimeframe={setSelectedTimeframe}
                   doctorStats={doctorStats}
@@ -262,7 +284,7 @@ const DashboardCharts = () => {
                     </Grid>
                     <Grid item>
                       <FormSelect
-                        placeholder="Select days"
+                        placeholder="Select Months"
                         value={form}
                         onChange={onChange}
                         options={selectOptions}
@@ -437,15 +459,29 @@ const DashboardCharts = () => {
             <Grid container className={classes.overviewGrid} justifyContent="space-between">
               <Grid item>
                 <Grid container>
-                  <Grid item className={classes.groupIconGrid}>
-                    <GroupIcon color="success" className={classes.groupIcon} />
-                  </Grid>
                   <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                    <Grid container direction="column">
-                      <Grid item>
+                    <Grid container>
+                      <Grid item className={classes.groupIconGrid}>
+                        <GroupIcon color="success" className={classes.groupIcon} />
+                      </Grid>
+                      <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                         <Typography variant="h1">{totalPatient}</Typography>
                       </Grid>
+                      <Grid item style={{ marginRight: "0.5rem" }}>
+                        <ArrowUpwardIcon color="success" />
+                      </Grid>
                       <Grid item>
+                        <Typography variant="body2" style={{ color: theme.palette.success.main }}>
+                          {`${patientPercentage.toFixed(0)} %`}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        style={{
+                          marginLeft: "24%",
+                          marginTop: "-5%",
+                        }}
+                      >
                         <Typography
                           variant="body2"
                           style={{ color: theme.palette.common.lightGrey }}
@@ -454,14 +490,6 @@ const DashboardCharts = () => {
                         </Typography>
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid item style={{ marginRight: "0.5rem" }}>
-                    <ArrowUpwardIcon color="success" />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.success.main }}>
-                      {`${patientPercentage.toFixed(0)} %`}
-                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -474,6 +502,7 @@ const DashboardCharts = () => {
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item lg={5} className={classes.bottomChartGrid}>
             <LineChart
+              timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
               doctorStats={patients}
@@ -537,6 +566,7 @@ const DashboardCharts = () => {
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container direction="column" className={classes.bottomChartGrid}>
             <LineChart
+              timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
               setSelectedTimeframe={setSelectedTimeframe}
               doctorStats={subscribers}

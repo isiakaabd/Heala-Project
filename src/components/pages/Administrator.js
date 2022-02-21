@@ -422,7 +422,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         isOpen={isAdmin}
         title="Add Admin"
         rowSpacing={5}
-        height="90vh"
+        height="auto"
         handleClose={handleAdminClose}
       >
         <Formik

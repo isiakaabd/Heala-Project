@@ -51,28 +51,29 @@ import {
   WhiteLabel,
   UserTypes,
   Providers,
+  Financetable,
 } from "components/pages";
 
-const Routes = ({
-  selectedMenu,
-  setSelectedMenu,
-  selectedSubMenu,
-  selectedPatientMenu,
-  selectedHcpMenu,
-  setSelectedSubMenu,
-  setSelectedPatientMenu,
-  setSelectedHcpMenu,
-  waitingListMenu,
-  setWaitingListMenu,
-  selectedAppointmentMenu,
-  setSelectedAppointmentMenu,
-  chatMediaActive,
-  setChatMediaActive,
-  setSelectedManagementMenu,
-  selectedScopedMenu,
-  setSelectedScopedMenu,
-} ) => {
-
+const Routes = (props) => {
+  const {
+    selectedMenu,
+    setSelectedMenu,
+    selectedSubMenu,
+    selectedPatientMenu,
+    selectedHcpMenu,
+    setSelectedSubMenu,
+    setSelectedPatientMenu,
+    setSelectedHcpMenu,
+    waitingListMenu,
+    setWaitingListMenu,
+    selectedAppointmentMenu,
+    setSelectedAppointmentMenu,
+    chatMediaActive,
+    setChatMediaActive,
+    setSelectedManagementMenu,
+    selectedScopedMenu,
+    setSelectedScopedMenu,
+  } = props;
 
   return (
     <Switch>
@@ -433,8 +434,8 @@ const Routes = ({
 
       <PrivateRoute
         exact
-        path="/verification/view"
-        component={ViewHCP}
+        path="/verification"
+        component={HCP}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
@@ -475,15 +476,15 @@ const Routes = ({
         setSelectedSubMenu={setSelectedSubMenu}
       />
 
-      {/* <PrivateRoute
+      <PrivateRoute
         exact
         path="/finance/earnings"
-        component={Earnings}
+        component={Financetable}
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-      /> */}
+      />
 
       <PrivateRoute
         exact

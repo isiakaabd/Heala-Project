@@ -65,8 +65,6 @@ const HcpAppointments = (props) => {
       orderBy: "-createdAt",
     },
   });
-
-
   const [deleteAppointments] = useMutation(deleteAppointment);
   useEffect(() => {
     if (data) {
@@ -339,7 +337,7 @@ const HcpAppointments = (props) => {
         isOpen={isPatients}
         title="Reschedule Appointment"
         rowSpacing={5}
-        height="90vh"
+        height="auto"
         handleClose={handlePatientCloses}
       >
         <Formik

@@ -616,25 +616,8 @@ export const getMyEarnings = gql`
 
 export const getPatients = gql`
   ${PageInfo}
-  query findProfiles(
-    $gender: String
-    $firstName: String
-    $bloodGroup: String
-    $phoneNumber: String
-    $dociId: String
-    $page: Int
-  ) {
-    profiles(
-      filterBy: {
-        gender: $gender
-        firstName: $firstName
-        bloodGroup: $bloodGroup
-        phoneNumber: $phoneNumber
-        dociId: $dociId
-      }
-      orderBy: "-createdAt"
-      page: $page
-    ) {
+  query findProfiles($gender: String, $page: Int) {
+    profiles(filterBy: { gender: $gender }, orderBy: "-createdAt", page: $page) {
       data {
         _id
         firstName
@@ -662,24 +645,8 @@ export const getPatients = gql`
 
 export const getDoctorsProfile = gql`
   ${PageInfo}
-  query doctorProfiles(
-    $hospital: String
-    $specialization: String
-    $cadre: String
-    $phoneNumber: String
-    $dociId: String
-    $page: Int
-  ) {
-    doctorProfiles(
-      filterBy: {
-        hospital: $hospital
-        specialization: $specialization
-        phoneNumber: $phoneNumber
-        dociId: $dociId
-        cadre: $cadre
-      }
-      page: $page
-    ) {
+  query doctorProfiles($specialization: String, $page: Int) {
+    doctorProfiles(filterBy: { specialization: $specialization }, page: $page) {
       profile {
         _id
         firstName
