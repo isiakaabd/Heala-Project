@@ -245,7 +245,9 @@ const Partners = () => {
     { key: "Pharmacy", value: "Pharmacy" },
   ];
   const [setCategoryDatas] = useState([]);
-  const { loading, error, data, refetch } = useQuery(getPartners);
+  const { loading, error, data, refetch } = useQuery(getPartners, {
+    notifyOnNetworkStatusChange: true,
+  });
   const categoryData = useQuery(getSingleProvider);
   const [partner, setPartners] = useState([]);
   const onChange = async (e) => {

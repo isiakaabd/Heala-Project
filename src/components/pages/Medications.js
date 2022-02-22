@@ -53,6 +53,7 @@ const Medications = (props) => {
       id: patientId,
       orderBy: "-createdAt",
     },
+    notifyOnNetworkStatusChange: true,
   });
   const fetchMoreFunc = (e, newPage) => {
     refetch({ page: newPage });

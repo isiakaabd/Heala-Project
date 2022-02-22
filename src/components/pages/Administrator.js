@@ -139,9 +139,11 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
-  const { loading, data, error, refetch } = useQuery(findAdmin);
+  const { loading, data, error, refetch } = useQuery(findAdmin, {
+    notifyOnNetworkStatusChange: true,
+  });
   const [pageInfo, setPageInfo] = useState([]);
-  const fetchMoreFunc = (e, newPage) => {
+  const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
   };
 
@@ -305,7 +307,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               {admins
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const { _id, email, role } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -315,12 +318,12 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -330,7 +333,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>
-                        {row.email}
+                        {email}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -339,7 +342,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {row.role}
+                        {role}
                       </TableCell>
 
                       <TableCell align="left" className={classes.tableCell}>

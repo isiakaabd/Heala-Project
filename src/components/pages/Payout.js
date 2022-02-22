@@ -92,7 +92,9 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const { loading, data, error, refetch } = useQuery(getEarningStats);
+  const { loading, data, error, refetch } = useQuery(getEarningStats,{
+    notifyOnNetworkStatusChange:true
+  });
   const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
   };

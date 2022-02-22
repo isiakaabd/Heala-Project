@@ -148,7 +148,9 @@ const useStyles = makeStyles((theme) => ({
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState([]);
-  const { data, error, loading, refetch } = useQuery(getProviders);
+  const { data, error, loading, refetch } = useQuery(getProviders, {
+    notifyOnNetworkStatusChange: true,
+  });
 
   const onChange = async (e) => {
     setSearchHcp(e);

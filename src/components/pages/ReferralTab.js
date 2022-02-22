@@ -136,7 +136,9 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
-  const { data, loading, error, refetch } = useQuery(getRefferals);
+  const { data, loading, error, refetch } = useQuery(getRefferals, {
+    notifyOnNetworkStatusChange: true,
+  });
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {

@@ -99,7 +99,9 @@ const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getVerification);
+  const { loading, data, error, refetch } = useQuery(getVerification, {
+    notifyOnNetworkStatusChange: true,
+  });
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
     Name: Yup.string("Enter your Permission").required("select an option"),

@@ -89,6 +89,7 @@ const HcpConsultations = (props) => {
       id: hcpId,
       orderBy: "-createdAt",
     },
+    notifyOnNetworkStatusChange:true
   });
 
   useEffect(() => {
