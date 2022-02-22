@@ -82,6 +82,7 @@ const HcpPatients = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
   const { loading, error, data, refetch } = useQuery(getDoctorPatients, {
     variables: { id: hcpId },
+    notifyOnNetworkStatusChange: true,
   });
   const [profiles, setProfiles] = useState([]);
   useEffect(() => {

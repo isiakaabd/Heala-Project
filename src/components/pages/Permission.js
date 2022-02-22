@@ -211,7 +211,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPermissions);
+  const { loading, data, error, refetch } = useQuery(getPermissions,{
+    notifyOnNetworkStatusChange:true
+  });
   const fetchMoreFunc = (e, newPage) => {
     refetch({ page: newPage });
   };

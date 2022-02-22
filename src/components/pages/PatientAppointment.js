@@ -229,6 +229,7 @@ const PatientAppointment = (props) => {
       id: patientId,
       orderBy: "-createdAt",
     },
+    notifyOnNetworkStatusChange: true,
   });
 
   useEffect(() => {
