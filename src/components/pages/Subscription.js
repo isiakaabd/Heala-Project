@@ -214,7 +214,9 @@ const Subscription = () => {
     active: theme.palette.primary.dark,
   };
   const [plan, setPlan] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPlans);
+  const { loading, data, error, refetch } = useQuery(getPlans, {
+    notifyOnNetworkStatusChange: true,
+  });
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {

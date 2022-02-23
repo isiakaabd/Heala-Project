@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Typography } from "@mui/material";
 import WaitingListTable from "components/layouts/WaitingListTable";
 import PreviousButton from "components/Utilities/PreviousButton";
 

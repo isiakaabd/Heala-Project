@@ -168,7 +168,9 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getRoles);
+  const { loading, data, error, refetch } = useQuery(getRoles, {
+    notifyOnNetworkStatusChange: true,
+  });
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
@@ -194,7 +196,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   };
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const [rowsPerPage, setRowsPerPage] = useState(0);
-  const fetchMoreFunc = (e, newPage) => {
+  const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
   };
   if (loading) return <Loader />;
@@ -239,7 +241,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                 rows={rolesManagements}
                 paginationLabel="subscription per page"
                 page={+page}
-                limit={limit}
+                limit={+limit}
                 totalPages={totalPages}
                 totalDocs={totalDocs}
                 rowsPerPage={rowsPerPage}

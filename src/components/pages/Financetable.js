@@ -84,7 +84,9 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getEarningStats);
+  const { loading, data, error, refetch } = useQuery(getEarningStats, {
+    notifyOnNetworkStatusChange: true,
+  });
   const [earning, setEarning] = useState([]);
   const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
@@ -92,8 +94,6 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-
       setEarning(data.getEarningStats.earningData.data);
       setPageInfo(data.getEarningStats.earningData.PageInfo);
     }

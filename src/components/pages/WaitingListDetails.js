@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+import { Chip, Typography, Grid } from "@mui/material";
 import DisplayProfile from "components/Utilities/DisplayProfile";
 import PreviousButton from "components/Utilities/PreviousButton";
 import displayPhoto from "assets/images/avatar.svg";

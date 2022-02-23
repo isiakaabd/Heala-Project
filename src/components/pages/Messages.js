@@ -120,7 +120,9 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getMessage);
+  const { loading, data, error, refetch } = useQuery(getMessage, {
+    notifyOnNetworkStatusChange: true,
+  });
   const onChange = async (e) => {
     setSearchMessage(e);
     if (e == "") {
