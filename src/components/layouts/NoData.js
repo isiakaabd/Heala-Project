@@ -5,7 +5,9 @@ const NoData = ({ error }) => {
   return (
     <Grid container alignItems="center" direction="column" height="100%" justifyContent="center">
       <Grid item>
-        <Typography variant="h1">{error ? error : "No Data yet"}</Typography>
+        <Typography variant="h1">
+          {error ? error && error.networkError.result.errors[0].message : "No Data yet"}
+        </Typography>
       </Grid>
       <Grid item>
         <Typography variant="body2">

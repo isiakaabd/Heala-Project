@@ -92,8 +92,8 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const { loading, data, error, refetch } = useQuery(getEarningStats,{
-    notifyOnNetworkStatusChange:true
+  const { loading, data, error, refetch } = useQuery(getEarningStats, {
+    notifyOnNetworkStatusChange: true,
   });
   const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
@@ -108,7 +108,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   }, [data]);
   const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
-  if (error) return <noData error={error.message} />;
+  if (error) return <noData error={error} />;
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
   return (

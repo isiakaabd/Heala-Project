@@ -159,7 +159,7 @@ const DashboardCharts = () => {
     }
   }, [earningData, form, refetch]);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   if (statError) return null;
 
   return (

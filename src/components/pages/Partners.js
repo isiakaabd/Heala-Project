@@ -277,8 +277,7 @@ const Partners = () => {
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  if (error || categoryData.error)
-    return <NoData error={error.message || categoryData.error.message} />;
+  if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

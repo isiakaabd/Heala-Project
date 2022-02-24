@@ -128,7 +128,7 @@ const Finance = ({ setSelectedSubMenu }) => {
   }, [form, data]);
   const classes = useStyles();
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
 
   return (
     <Stack position="static" className={classes.containerGrid} spacing={3}>

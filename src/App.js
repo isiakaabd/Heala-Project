@@ -19,6 +19,7 @@ const sectionStyles = {
   paddingBottom: "5rem",
   minHeight: "100vh",
   width: "100%",
+
   backgroundColor: "#fbfbfb",
 };
 

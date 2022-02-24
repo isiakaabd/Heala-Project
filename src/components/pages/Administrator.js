@@ -254,7 +254,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   }, [selectedMenu, selectedSubMenu]);
 
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

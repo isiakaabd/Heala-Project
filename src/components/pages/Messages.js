@@ -150,7 +150,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   }, [selectedMenu, selectedSubMenu]);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const [rowsPerPage, setRowsPerPage] = useState(0);
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
     return (
