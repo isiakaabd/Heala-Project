@@ -96,7 +96,7 @@ const HcpCaseNotes = ({
       setConsult(data.getConsultation);
     }
   }, [data, rowId]);
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
 
   if (loading) return <Loader />;
   const {

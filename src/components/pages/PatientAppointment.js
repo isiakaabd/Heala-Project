@@ -283,7 +283,7 @@ const PatientAppointment = (props) => {
   ];
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const [rowsPerPage, setRowsPerPage] = useState(0);
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   return (
     <>

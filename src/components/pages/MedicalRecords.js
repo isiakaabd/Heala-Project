@@ -104,11 +104,8 @@ const MedicalRecords = (props) => {
   }, [data]);
 
   if (loading || allergyResult.loading) return <Loader />;
-  if (error || allergyResult.error)
-    return <NoData error={allergyResult.error.message || error.message} />;
+  if (error || allergyResult.error) return <NoData error={allergyResult.error || error} />;
   if (patientProfile) {
-    console.log(patientProfile);
-
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
         <Grid item style={{ marginBottom: "3rem" }}>

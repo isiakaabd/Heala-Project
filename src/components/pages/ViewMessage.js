@@ -50,7 +50,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
     }
   }, [message, data]);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   const { body, recipient, subject, sender } = message;
   return (
     <Grid container direction="column">

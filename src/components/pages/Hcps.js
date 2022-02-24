@@ -6,7 +6,7 @@ import displayPhoto from "assets/images/avatar.svg";
 import NoData from "components/layouts/NoData";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import { useQuery, useMutation, NetworkStatus } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import { FilterList, Search, Modals, CustomButton } from "components/Utilities";
 import AddIcon from "@mui/icons-material/Add";
@@ -119,29 +119,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const { data, error, loading, refetch, networkStatus, fetchMore } = useQuery(getDoctorsProfile, {
+  const { data, error, loading, refetch, fetchMore } = useQuery(getDoctorsProfile, {
     notifyOnNetworkStatusChange: true,
   });
   //const offset =
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
       page: newPage,
-
-      // updateQuery: (prev, { fetchMoreResult }) => {
-      //   console.log(prev);
-      //   console.log(fetchMoreResult);
-      //   // const x = {
-      //   //   pageinfo: { ...fetchMoreResult.doctorProfiles.pageInfo },
-      //   //   profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
-      //   // };
-      //   // console.log(x);
-      //   return {
-      //     doctorProfiles: {
-      //       ...fetchMoreResult.doctorProfiles.pageInfo,
-      //       profile: [...prev.doctorProfiles.profile, ...fetchMoreResult.doctorProfiles.profile],
-      //     },
-      //   };
-      // },
     });
   };
 
@@ -265,13 +249,9 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
-  if (networkStatus === NetworkStatus.refetch) return "Refetching!";
-  console.log(networkStatus);
-  console.log(NetworkStatus);
 
   if (loading) return <Loader />;
-
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container>

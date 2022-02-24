@@ -125,7 +125,7 @@ const HcpProfile = (props) => {
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
 
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   const {
     dociId,
     picture,

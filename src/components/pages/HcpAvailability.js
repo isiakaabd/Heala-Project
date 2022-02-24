@@ -39,7 +39,7 @@ const HcpAvailability = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2}>
       <Grid item>

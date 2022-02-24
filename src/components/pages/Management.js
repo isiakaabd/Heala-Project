@@ -200,7 +200,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
     refetch({ page: newPage });
   };
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <>
       <Grid container direction="column" gap={2}>

@@ -154,7 +154,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [rowsPerPage, setRowsPerPage] = useState(0);
 
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
 
   return (
     <>

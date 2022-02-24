@@ -156,7 +156,7 @@ const PatientProfile = ({
   }, [chatMediaActive]);
 
   if (loading || emailLoading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   const {
     firstName,
     lastName,
