@@ -12,8 +12,8 @@ import { CircularProgressBar } from "components/Utilities/CircularProgress";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
 import { useQuery } from "@apollo/client";
-import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 import { getEarningStats } from "components/graphQL/useQuery";
+import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 import FormSelect from "components/Utilities/FormSelect";
 const useStyles = makeStyles((theme) => ({
   cardContainer: {

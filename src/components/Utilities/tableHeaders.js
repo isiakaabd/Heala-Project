@@ -32,24 +32,15 @@ export const patientsHeadCells = [
 export const emailHeader = [
   {
     id: 0,
-    label: "Recipients",
+    label: "Date",
   },
   {
     id: 6,
-    label: "Subject",
+    label: "Email",
   },
   {
     id: 4,
-    label: "Entry Date",
-  },
-  {
-    id: 2,
-    label: "Plan",
-  },
-
-  {
-    id: 8,
-    label: "Email",
+    label: "Role",
   },
   {
     id: 9,
