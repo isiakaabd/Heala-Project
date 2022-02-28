@@ -2,31 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import NoData from "components/layouts/NoData";
+import Loader from "components/Utilities/Loader";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+
+import { dateMoment } from "components/Utilities/Time";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Modals from "components/Utilities/Modal";
-import Alert from "@mui/material/Alert";
-import {
-  TableRow,
-  TableCell,
-  Checkbox,
-  Button,
-  Chip,
-  Avatar,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { useQuery } from "@apollo/client";
+import { getEmailList } from "components/graphQL/useQuery";
+import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
-import { rows } from "components/Utilities/DataHeader";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -129,7 +122,15 @@ const useStyles = makeStyles((theme) => ({
 const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { rowsPerPage, selectedRows, page, emailData } = useSelector((state) => state.tables);
+  const { data, error, loading } = useQuery(getEmailList);
+  const [emails, setEmails] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setEmails(data.getEmailList.data);
+    }
+  }, [data]);
+  const { selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
   const [response, setResponse] = useState("");
@@ -171,6 +172,9 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
+
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error} />;
 
   return (
     <>
@@ -221,120 +225,94 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         {/* The Search and Filter ends here */}
 
         <Grid item container direction="column" height="100%">
-          {emailData && emailData.length > 0 ? (
+          {emails && emails.length > 0 ? (
             <EnhancedTable
               headCells={emailHeader}
-              rows={rows}
+              rows={emails}
               page={page}
               paginationLabel="email per page"
               hasCheckbox={true}
             >
-              {emailData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id, selectedRows);
+              {emails &&
+                emails
+                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const { _id, email, createdAt, role } = row;
+                    const isItemSelected = isSelected(_id, selectedRows);
 
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <Grid container>
-                          <Grid item container flex=".4" columnGap={1}>
-                            {row.name.slice(0, 3).map((item) => {
-                              return (
-                                <Grid item key={item}>
-                                  <Avatar
-                                    alt={item}
-                                    src={displayPhoto}
-                                    sx={{ width: 24, height: 24 }}
-                                  />
-                                </Grid>
-                              );
-                            })}
-                          </Grid>
-                          <Grid item container flex=".6" columnGap={2}>
-                            {row.name.slice(0, 3).map((item) => {
-                              return (
-                                <Grid key={item}>
-                                  <Typography>
-                                    {item.split("@").shift().toString().concat(",")}
-                                  </Typography>
-                                </Grid>
-                              );
-                            })}
-                          </Grid>
-                        </Grid>
-                      </TableCell>
-
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={_id}
+                        selected={isItemSelected}
                       >
-                        {row.message}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="center"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {row.entryData}
-                      </TableCell>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
 
-                      <TableCell
-                        align="center"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.red }}
-                      >
-                        {row.plan}
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <Chip
-                          label={row.email}
-                          variant="outlined"
-                          className={classes.chip}
-                          deleteIcon={<ArrowForwardIosIcon />}
-                          onClick={() => window.open(`mailto:${row.email}`, "_blank")}
-                          onDelete={() => console.log(" ")}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          component={Link}
-                          to={`email/${index}`}
-                          endIcon={<ArrowForwardIosIcon />}
-                          onClick={() => setSelectedSubMenu(7)}
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.black }}
                         >
-                          View mail
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                          {dateMoment(createdAt)}
+                        </TableCell>
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.black }}
+                        >
+                          {email}
+                        </TableCell>
+
+                        <TableCell
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.red }}
+                        >
+                          {role}
+                        </TableCell>
+                        {/* <TableCell align="left" className={classes.tableCell}>
+                          <Chip
+                            label={row.email}
+                            variant="outlined"
+                            className={classes.chip}
+                            deleteIcon={<ArrowForwardIosIcon />}
+                            onClick={() => window.open(`mailto:${row.email}`, "_blank")}
+                            onDelete={() => console.log(" ")}
+                          />
+                        </TableCell> */}
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            className={classes.button}
+                            component={Link}
+                            to={`email/${index}`}
+                            endIcon={<ArrowForwardIosIcon />}
+                            onClick={() => setSelectedSubMenu(7)}
+                          >
+                            View mail
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
             </EnhancedTable>
           ) : (
             <NoData />
