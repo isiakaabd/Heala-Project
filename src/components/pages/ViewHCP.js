@@ -151,7 +151,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   }, [selectedMenu, selectedSubMenu]);
 
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   // eslint-disable-next-line
   return (
     <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
@@ -246,7 +246,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                 </Grid>
                 <Grid item width="100%">
                   <Typography variant="h4">
-                    {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB "}{" "}
+                    {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
                   </Typography>
                 </Grid>
               </Grid>
@@ -270,11 +270,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid className={classes.link}>
                 {qualification ? qualification.degree : "No Value"}
               </Grid>
-              <Grid className={classes.link}>
-                {qualification
-                  ? qualification.year && dateMoment(qualification.year).slice(-4)
-                  : "No Value"}
-              </Grid>
+              {qualification && qualification.year && (
+                <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
+              )}
               {qualification ? (
                 <a
                   href={qualification.image}
@@ -379,7 +377,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
             <Grid item container gap={2}>
               <Grid item>
-                {alumni_association ? (
+                {alumni_association && alumni_association.facebook_group_name ? (
                   <a
                     href={alumni_association.image}
                     rel="noreferrer"
@@ -389,11 +387,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                     <span>{alumni_association.facebook_group_name}</span>
                   </a>
                 ) : (
-                  <p className={classes.link}> No alumni association</p>
+                  <p className={classes.link}> No facebook Alumni</p>
                 )}
               </Grid>
               <Grid item>
-                {alumni_association ? (
+                {alumni_association && alumni_association.instagram_handle ? (
                   <a
                     href={alumni_association.image}
                     rel="noreferrer"
@@ -403,7 +401,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                     <span>{alumni_association.instagram_handle}</span>
                   </a>
                 ) : (
-                  <p className={classes.link}> No alumni association</p>
+                  <p className={classes.link}> No Instagram Alumni</p>
                 )}
               </Grid>
             </Grid>
@@ -418,17 +416,21 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             style={{ height: "100%" }}
             justifyContent="space-between"
             alignItems="flex-start"
-            gap={2}
           >
-            <Grid item md>
+            <Grid item>
               <Typography variant="h4">Reference ID</Typography>
             </Grid>
-            <Grid item md container>
-              <Grid item>
+
+            <Grid item>
+              {reference && reference.reference_code ? (
                 <Typography variant="h4" className={classes.link}>
-                  {reference ? reference.reference_code : "No Reference"}
+                  {reference.reference_code}
                 </Typography>
-              </Grid>
+              ) : (
+                <Typography variant="h4" className={classes.link}>
+                  No Value
+                </Typography>
+              )}
             </Grid>
           </Grid>
         </Grid>

@@ -106,7 +106,7 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
   const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   console.log(page, limit);
   return (

@@ -189,7 +189,7 @@ const SinglePatient = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   else {
     return (
       <Grid container direction="column" className={classes.gridContainer} gap={2}>

@@ -79,7 +79,7 @@ const Prescriptions = (props) => {
   // }, [data, consultations]);
 
   // if (loading) return <Loader />;
-  // if (error) return <NoData error={error.message} />;
+  // if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" flexWrap="nowrap" height="100%" gap={2}>
       <Grid item>

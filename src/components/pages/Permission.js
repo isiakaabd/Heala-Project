@@ -236,7 +236,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <>
       {alert && Object.keys(alert).length > 0 && (

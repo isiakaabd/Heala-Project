@@ -258,7 +258,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [singleData, setSingleData] = useState();
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

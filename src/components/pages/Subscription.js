@@ -243,7 +243,7 @@ const Subscription = () => {
     refetch({ page: newPage });
   };
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <>
       <Grid container direction="column" flexWrap="nowrap" gap={2} height="100%">

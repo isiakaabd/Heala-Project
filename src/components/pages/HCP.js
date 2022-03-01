@@ -161,7 +161,7 @@ const HCP = ({ setSelectedSubMenu }) => {
     refetch({ page: newPage });
   };
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
 
   return (
     <>

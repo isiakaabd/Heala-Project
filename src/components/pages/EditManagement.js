@@ -188,7 +188,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
 
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>

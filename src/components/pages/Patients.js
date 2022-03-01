@@ -154,7 +154,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     disabled: theme.palette.common.black,
   };
   if (loading) return <Loader />;
-  if (error) return <NoData error={error.message} />;
+  if (error) return <NoData error={error} />;
 
   return (
     <>
