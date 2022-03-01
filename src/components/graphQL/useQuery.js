@@ -388,7 +388,6 @@ export const getRefferals = gql`
         reason
         note
         specialization
-        testType
         createdAt
         updatedAt
         doctorData
@@ -410,7 +409,6 @@ export const getRefferal = gql`
       reason
       note
       specialization
-      testType
       createdAt
       updatedAt
       doctorData
@@ -847,6 +845,21 @@ export const getProviders = gql`
       }
       pageInfo {
         ...pageDetails
+      }
+    }
+  }
+`;
+export const getEmailList = gql`
+  query getEmailList {
+    getEmailList(orderBy: "-createdAt") {
+      data {
+        _id
+        email
+        createdAt
+        updatedAt
+        profileData
+        role
+        email
       }
     }
   }

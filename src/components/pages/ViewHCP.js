@@ -98,12 +98,12 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const [respondData, setRespondData] = useState([]);
   // eslint-disable-next-line
   const {
-    createdAt,
     qualification,
     license,
     alumni_association,
     reference,
     doctorData,
+    yearbook,
     status,
     // eslint-disable-next-line
   } = respondData;
@@ -266,26 +266,30 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Typography variant="h4">Qualification</Typography>
             </Grid>
-            <Grid item container gap={2}>
-              <Grid className={classes.link}>
-                {qualification ? qualification.degree : "No Value"}
+            {qualification ? (
+              <Grid item container gap={2}>
+                {qualification?.degree && (
+                  <Grid className={classes.link}>{qualification.degree}</Grid>
+                )}
+                {qualification?.year && (
+                  <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
+                )}
+                {qualification?.image && (
+                  <a
+                    href={qualification.image}
+                    rel="noreferrer"
+                    target="_blank"
+                    className={classes.link}
+                  >
+                    <span>Qualification PNG</span>
+                  </a>
+                )}
               </Grid>
-              {qualification && qualification.year && (
-                <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
-              )}
-              {qualification ? (
-                <a
-                  href={qualification.image}
-                  rel="noreferrer"
-                  target="_blank"
-                  className={classes.link}
-                >
-                  <span>Qualification PNG</span>
-                </a>
-              ) : (
-                <p className={classes.link}> No QUalification</p>
-              )}
-            </Grid>
+            ) : (
+              <Grid item className={classes.link}>
+               Not Provided
+              </Grid>
+            )}
           </Grid>
         </Grid>
 
@@ -302,27 +306,32 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
             {license ? (
               <Grid item container gap={2}>
-                <Grid item>
-                  <Typography className={classes.link} variant="h4">
-                    {license ? license.number : "No Value"}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography className={classes.link} variant="h4">
-                    {license ? license.type : "No Value"}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <a href={license.image} rel="noreferrer" target="_blank" className={classes.link}>
-                    <span>IMG</span>
-                  </a>
-                </Grid>
+                {license.number && (
+                  <Grid item className={classes.link}>
+                    {license.number}
+                  </Grid>
+                )}
+                {license.type && (
+                  <Grid item className={classes.link}>
+                    {license.type}
+                  </Grid>
+                )}
+                {license.image && (
+                  <Grid item>
+                    <a
+                      href={license.image}
+                      rel="noreferrer"
+                      className={classes.link}
+                      target="_blank"
+                    >
+                      <span>IMG</span>
+                    </a>
+                  </Grid>
+                )}
               </Grid>
             ) : (
-              <Grid item>
-                <Typography className={classes.link} variant="h4">
-                  No License
-                </Typography>
+              <Grid item className={classes.link}>
+                Not Provided
               </Grid>
             )}
           </Grid>
@@ -340,27 +349,33 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Typography variant="h4">Year Book</Typography>
             </Grid>
-            <Grid item container gap={2}>
-              <Grid item>
-                <Typography variant="h4" className={classes.link}>
-                  {createdAt && dateMoment(createdAt).slice(-4)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                {qualification ? (
-                  <a
-                    href={qualification.image}
-                    rel="noreferrer"
-                    target="_blank"
-                    className={classes.link}
-                  >
-                    <span>Qualification PNG</span>
-                  </a>
-                ) : (
-                  <p className={classes.link}> No QUalification</p>
+            {yearbook ? (
+              <Grid item container gap={2}>
+                {yearbook.graduation_year && (
+                  <Grid item className={classes.link}>
+                    {yearbook.graduation_year.slice(0, 4)}
+                  </Grid>
+                )}
+                {yearbook.image && (
+                  <Grid item>
+                    <a
+                      href={yearbook.image}
+                      rel="noreferrer"
+                      target="_blank"
+                      className={classes.link}
+                    >
+                      <span>Qualification PNG</span>
+                    </a>
+                  </Grid>
                 )}
               </Grid>
-            </Grid>
+            ) : (
+              <Grid item>
+                <Typography className={classes.link} variant="h4">
+                Not Provided
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </Grid>
 
@@ -375,36 +390,38 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Typography variant="h4">Alumni</Typography>
             </Grid>
-            <Grid item container gap={2}>
-              <Grid item>
-                {alumni_association && alumni_association.facebook_group_name ? (
-                  <a
-                    href={alumni_association.image}
-                    rel="noreferrer"
-                    target="_blank"
-                    className={classes.link}
-                  >
-                    <span>{alumni_association.facebook_group_name}</span>
-                  </a>
-                ) : (
-                  <p className={classes.link}> No facebook Alumni</p>
+            {alumni_association?.facebook_group_name ? (
+              <Grid item container gap={2}>
+                {alumni_association.facebook_group_name && (
+                  <Grid item>
+                    <a
+                      href={alumni_association.image}
+                      rel="noreferrer"
+                      target="_blank"
+                      className={classes.link}
+                    >
+                      <span>{alumni_association.facebook_group_name}</span>
+                    </a>
+                  </Grid>
+                )}
+                {alumni_association.instagram_handle && (
+                  <Grid item>
+                    <a
+                      href={alumni_association.image}
+                      rel="noreferrer"
+                      target="_blank"
+                      className={classes.link}
+                    >
+                      <span>{alumni_association.instagram_handle}</span>
+                    </a>
+                  </Grid>
                 )}
               </Grid>
-              <Grid item>
-                {alumni_association && alumni_association.instagram_handle ? (
-                  <a
-                    href={alumni_association.image}
-                    rel="noreferrer"
-                    target="_blank"
-                    className={classes.link}
-                  >
-                    <span>{alumni_association.instagram_handle}</span>
-                  </a>
-                ) : (
-                  <p className={classes.link}> No Instagram Alumni</p>
-                )}
+            ) : (
+              <Grid item className={classes.link}>
+                Not Provided
               </Grid>
-            </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -420,18 +437,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Typography variant="h4">Reference ID</Typography>
             </Grid>
-
-            <Grid item>
-              {reference && reference.reference_code ? (
-                <Typography variant="h4" className={classes.link}>
-                  {reference.reference_code}
-                </Typography>
-              ) : (
-                <Typography variant="h4" className={classes.link}>
-                  No Value
-                </Typography>
-              )}
-            </Grid>
+            {reference?.reference_code ? (
+              <Grid item className={classes.link}>
+                {reference.reference_code}
+              </Grid>
+            ) : (
+              <Grid className={classes.link}>Not Provided</Grid>
+            )}
           </Grid>
         </Grid>
 
@@ -451,7 +463,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               disabled={button}
               onClick={handleVerifyDoctor}
               width="100%"
-              // textColor={theme.palette.common.red}
             />
           </Grid>
         </Grid>
