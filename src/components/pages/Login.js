@@ -147,7 +147,7 @@ const Login = () => {
             <Grid item className={classes.peopleBgImage}></Grid>
           </Grid>
         </Grid>
-        <Grid item lg={6} sm={10} className={classes.rightParentGrid}>
+        <Grid container item lg={6} sm={10} className={classes.rightParentGrid}>
           <Grid item className={classes.logoAlign}>
             <img src={logo} alt="Brand logo" className={classes.logo} />
           </Grid>
@@ -162,7 +162,8 @@ const Login = () => {
             onSubmit={onSubmit}
             validationSchema={validationSchema}
             validateOnChange={false}
-            validateOnMount
+            validateOnMount={false}
+            validateOnBlur={false}
           >
             {({ isSubmitting, isValid, dirty }) => {
               return (

@@ -345,7 +345,8 @@ const HcpAppointments = (props) => {
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, dirty, isValid, setFieldValue }) => {
             return (

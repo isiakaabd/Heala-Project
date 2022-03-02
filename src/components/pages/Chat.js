@@ -135,9 +135,10 @@ const Chat = ({
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
       enableReinitialize
     >
       {({ isValid, isSubmitting, dirty }) => {

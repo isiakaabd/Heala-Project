@@ -134,9 +134,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
     >
       {({ isSubmitting, isValid, dirty }) => {
         return (

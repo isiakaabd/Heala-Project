@@ -199,7 +199,8 @@ const EditManagement = ({ setSelectedSubMenu }) => {
         onSubmit={onSubmit}
         validationSchema={validationSchema}
         validateOnChange={false}
-        validateOnMount
+        validateOnMount={false}
+        validateOnBlur={false}
         enableReinitialize
       >
         {({ isSubmitting, dirty, isValid }) => {

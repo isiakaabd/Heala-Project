@@ -211,8 +211,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPermissions,{
-    notifyOnNetworkStatusChange:true
+  const { loading, data, error, refetch } = useQuery(getPermissions, {
+    notifyOnNetworkStatusChange: true,
   });
   const fetchMoreFunc = (e, newPage) => {
     refetch({ page: newPage });
@@ -388,7 +388,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, dirty, isValid }) => {
             return (

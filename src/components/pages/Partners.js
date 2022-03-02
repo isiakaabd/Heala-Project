@@ -402,9 +402,10 @@ const Partners = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validateOnBlur={false}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (
@@ -472,7 +473,8 @@ const Partners = () => {
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty, setFieldValue }) => {
             return (
@@ -560,7 +562,8 @@ const Partners = () => {
           onSubmit={onSubmit2}
           validationSchema={validationSchema2}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (

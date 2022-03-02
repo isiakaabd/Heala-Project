@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
-import NoData from "components/layouts/NoData";
-import Loader from "components/Utilities/Loader";
+import PropTypes from "prop-types";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { financialPercent, returnpercent, formatNumber } from "components/Utilities/Time";
@@ -16,8 +15,8 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import { selectOptions } from "components/Utilities/Time";
 import "chartjs-plugin-style";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { dashboard, getEarningStats } from "components/graphQL/useQuery";
+import { useQuery } from "@apollo/client";
+import { getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   chartCard: {
@@ -94,13 +93,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardCharts = () => {
+const DashboardCharts = ({ data }) => {
   const classes = useStyles();
   const theme = useTheme();
+  console.log(data);
 
-  const [patient, { data, error, loading }] = useLazyQuery(dashboard);
   // eslint-disable-next-line
-  const { data: earningData, error: statError, refetch } = useQuery(getEarningStats, {
+  const { data: earningData, refetch } = useQuery(getEarningStats, {
     variables: { q: "365" },
     notifyOnNetworkStatusChange: true,
   });
@@ -122,18 +121,12 @@ const DashboardCharts = () => {
   const [totalPayouts, setTotalPayouts] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      patient();
-    })();
-
-    if (data) {
-      const { patientStats, doctorStats, appointmentStats, subscribers } = data.getStats;
-      setPatients(patientStats);
-      setDoctorStats(doctorStats);
-      setAppointmentStats(appointmentStats);
-      setsubscribers(subscribers);
-    }
-  }, [patient, data]);
+    const { patientStats, doctorStats, appointmentStats, subscribers } = data?.getStats;
+    setPatients(patientStats);
+    setDoctorStats(doctorStats);
+    setAppointmentStats(appointmentStats);
+    setsubscribers(subscribers);
+  }, [data]);
 
   const financialValue = financialPercent(totalEarning, totalPayouts);
   const [selectedTimeframe, setSelectedTimeframe] = useState(0);
@@ -144,11 +137,12 @@ const DashboardCharts = () => {
   const totalPatient = activePatients + inactivePatients;
   const patientPercentage = returnpercent(activePatients, inactivePatients);
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
-  const [form, setForm] = useState("");
+  const [forms, setForms] = useState("");
   const onChange = async (e) => {
-    setForm(e.target.value);
+    setForms(e.target.value);
     await refetch({ q: e.target.value });
   };
+
   useEffect(() => {
     if (earningData) {
       const { totalEarnings, totalPayout } = earningData.getEarningStats;
@@ -157,13 +151,10 @@ const DashboardCharts = () => {
       const value = financialPercent(totalEarnings, totalPayout);
       setFinances(value);
     }
-  }, [earningData, form, refetch]);
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error} />;
-  if (statError) return null;
+  }, [earningData, refetch]);
 
   return (
-    <Grid container style={{ marginBottom: "5rem" }} justifyContent="space-between" spacing={3}>
+    <Grid container justifyContent="space-between" spacing={3}>
       <Grid item container lg>
         <Grid container direction="column">
           <Grid item className={classes.chartCard} sx={{ marginBottom: "3em" }}>
@@ -285,7 +276,7 @@ const DashboardCharts = () => {
                     <Grid item>
                       <FormSelect
                         placeholder="Select Months"
-                        value={form}
+                        value={forms}
                         onChange={onChange}
                         options={selectOptions}
                         name="finance"
@@ -628,4 +619,9 @@ const DashboardCharts = () => {
     </Grid>
   );
 };
+
+DashboardCharts.propTypes = {
+  data: PropTypes.object,
+};
+
 export default DashboardCharts;

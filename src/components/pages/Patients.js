@@ -307,10 +307,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validateOnBlur={false}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
-          validateOnBlur
+          validateOnMount={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (

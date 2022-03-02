@@ -88,9 +88,10 @@ export const UserTypeModal = ({
       initialValues={type === "edit" ? singleData : initialValues}
       enableReinitialize
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
     >
       {({ isSubmitting, dirty, isValid, setFieldValue }) => {
         return (

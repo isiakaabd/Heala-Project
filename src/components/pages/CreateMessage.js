@@ -156,7 +156,8 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
+      validateOnBlur={false}
       enableReinitialize
     >
       {({ isValid, isSubmitting, dirty, values }) => {
