@@ -73,8 +73,8 @@ export const getUserType = gql`
   }
 `;
 export const dashboard = gql`
-  query getStats($providerId: String) {
-    getStats(filterBy: { providerId: $providerId }) {
+  query getStats($providerId: String, $q: String) {
+    getStats(filterBy: { providerId: $providerId }, q: $q) {
       patientStats
       doctorStats
       totalEarnings

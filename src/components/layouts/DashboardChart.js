@@ -15,8 +15,6 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import LineChart from "components/Utilities/LineChart";
 import { selectOptions } from "components/Utilities/Time";
 import "chartjs-plugin-style";
-import { useQuery } from "@apollo/client";
-import { getEarningStats } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   chartCard: {
@@ -93,16 +91,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardCharts = ({ data }) => {
+const DashboardCharts = ({ data, refetch }) => {
   const classes = useStyles();
   const theme = useTheme();
   console.log(data);
-
-  // eslint-disable-next-line
-  const { data: earningData, refetch } = useQuery(getEarningStats, {
-    variables: { q: "365" },
-    notifyOnNetworkStatusChange: true,
-  });
 
   const timeFrames = [
     { id: 0, time: "Jan" },
@@ -121,11 +113,23 @@ const DashboardCharts = ({ data }) => {
   const [totalPayouts, setTotalPayouts] = useState([]);
 
   useEffect(() => {
-    const { patientStats, doctorStats, appointmentStats, subscribers } = data?.getStats;
+    const {
+      // eslint-disable-next-line
+      patientStats,
+      doctorStats,
+      appointmentStats,
+      subscribers,
+      totalEarnings,
+      totalPayout,
+    } = data?.getStats;
     setPatients(patientStats);
     setDoctorStats(doctorStats);
     setAppointmentStats(appointmentStats);
     setsubscribers(subscribers);
+    setTotalEarning(totalEarnings);
+    setTotalPayouts(totalPayout);
+    const value = financialPercent(totalEarnings, totalPayout);
+    setFinances(value);
   }, [data]);
 
   const financialValue = financialPercent(totalEarning, totalPayouts);
@@ -143,15 +147,11 @@ const DashboardCharts = ({ data }) => {
     await refetch({ q: e.target.value });
   };
 
-  useEffect(() => {
-    if (earningData) {
-      const { totalEarnings, totalPayout } = earningData.getEarningStats;
-      setTotalEarning(totalEarnings);
-      setTotalPayouts(totalPayout);
-      const value = financialPercent(totalEarnings, totalPayout);
-      setFinances(value);
-    }
-  }, [earningData, refetch]);
+  // useEffect(() => {
+  //   if (earningData) {
+
+  //   }
+  // }, [earningData, refetch]);
 
   return (
     <Grid container justifyContent="space-between" spacing={3}>
@@ -622,6 +622,7 @@ const DashboardCharts = ({ data }) => {
 
 DashboardCharts.propTypes = {
   data: PropTypes.object,
+  refetch: PropTypes.func,
 };
 
 export default DashboardCharts;

@@ -65,7 +65,7 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
       </Grid>
 
       <Grid item>
-        <DashboardCharts data={data} />
+        <DashboardCharts data={data} refetch={refetch} />
       </Grid>
       <AvailabilityTable data={data?.getStats.availabilityCalendar} />
     </Grid>
