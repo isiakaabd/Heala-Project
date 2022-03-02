@@ -424,7 +424,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (
@@ -469,7 +470,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           onSubmit={onSubmit}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
             return (

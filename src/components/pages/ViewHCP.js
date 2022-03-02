@@ -287,7 +287,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               </Grid>
             ) : (
               <Grid item className={classes.link}>
-               Not Provided
+                Not Provided
               </Grid>
             )}
           </Grid>
@@ -372,7 +372,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             ) : (
               <Grid item>
                 <Typography className={classes.link} variant="h4">
-                Not Provided
+                  Not Provided
                 </Typography>
               </Grid>
             )}

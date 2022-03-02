@@ -288,16 +288,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                         >
                           {role}
                         </TableCell>
-                        {/* <TableCell align="left" className={classes.tableCell}>
-                          <Chip
-                            label={row.email}
-                            variant="outlined"
-                            className={classes.chip}
-                            deleteIcon={<ArrowForwardIosIcon />}
-                            onClick={() => window.open(`mailto:${row.email}`, "_blank")}
-                            onDelete={() => console.log(" ")}
-                          />
-                        </TableCell> */}
+
                         <TableCell>
                           <Button
                             variant="contained"
@@ -324,9 +315,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validateOnBlur={false}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (

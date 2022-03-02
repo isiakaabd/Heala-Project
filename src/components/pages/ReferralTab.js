@@ -335,10 +335,10 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validateOnBlur={false}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
-          validateOnBlur
+          validateOnMount={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (

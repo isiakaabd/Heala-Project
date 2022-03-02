@@ -44,9 +44,10 @@ const Filter = (props) => {
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
     >
       {({ isSubmitting, dirty, isValid }) => {
         return (

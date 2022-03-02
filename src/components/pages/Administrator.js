@@ -378,9 +378,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validateOnBlur={false}
           validationSchema={validationSchema}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (
@@ -433,7 +434,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isValid, isSubmitting, dirty }) => {
             return (

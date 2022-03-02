@@ -100,9 +100,10 @@ export const PermissionModal = ({
       initialValues={type === "edit" ? singlePermission : initialValues}
       enableReinitialize
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
     >
       {({ isSubmitting, dirty, isValid }) => {
         return (

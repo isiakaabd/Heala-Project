@@ -49,9 +49,10 @@ export const RoleModal = ({ handleDialogClose, type }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
+      validateOnBlur={false}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnMount
+      validateOnMount={false}
       enableReinitialize
     >
       {({ isSubmitting, dirty, isValid }) => {

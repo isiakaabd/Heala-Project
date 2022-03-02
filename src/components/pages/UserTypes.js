@@ -415,8 +415,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
           onSubmit={onSubmit1}
           validationSchema={validationSchema1}
           validateOnChange={false}
-          validateOnMount
-          validateOnBlur
+          validateOnMount={false}
+          validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty }) => {
             return (

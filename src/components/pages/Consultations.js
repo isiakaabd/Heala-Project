@@ -98,8 +98,8 @@ const Consultations = (props) => {
       setPageInfo(data.getConsultations.pageInfo);
     }
   }, [data, consultations, patientConsultation]);
-  console.log(consultations);
-  const fetchMoreFunc = (e, newPage) => {
+
+  const fetchMoreFunc = (_, newPage) => {
     refetch({ page: newPage });
   };
   useEffect(() => {

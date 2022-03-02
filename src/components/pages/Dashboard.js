@@ -1,25 +1,29 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import FormikControl from "components/validation/FormikControl";
 import { Grid, Typography } from "@mui/material";
 import DashboardCharts from "components/layouts/DashboardChart";
-import * as Yup from "yup";
-import { Formik, Form } from "formik";
+import FormSelect from "components/Utilities/FormSelect";
 import AvailabilityTable from "components/layouts/AvailabilityTable";
 import { getUsertypess } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
-
+import { dashboard } from "components/graphQL/useQuery";
+import NoData from "components/layouts/NoData";
+import Loader from "components/Utilities/Loader";
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
-  // const userTypeId = localStorage.getItem("userTypeId");
+  const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
-  const { data } = useQuery(getUsertypess, {
+  const { data: da } = useQuery(getUsertypess, {
     variables: {
       userTypeId: "61ed2354e6091400135e3d94",
     },
   });
+
+  const { data, error, loading, refetch } = useQuery(dashboard, {
+    notifyOnNetworkStatusChange: true,
+  });
   useEffect(() => {
-    if (data) {
-      const datas = data.getUserTypeProviders.provider;
+    if (da) {
+      const datas = da.getUserTypeProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
@@ -27,17 +31,10 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
           }),
       );
     }
-  }, [data]);
-
-  const initialValues = {
-    stats: "",
-  };
-
-  const validationSchema = Yup.object({
-    stats: Yup.string("Select your stats").required("stats is required"),
-  });
-  const onSubmit = (values) => {
-    console.log(values);
+  }, [da]);
+  const onChange = async (e) => {
+    setForm(e.target.value);
+    await refetch({ providerId: e.target.value });
   };
   useLayoutEffect(() => {
     setChatMediaActive(false);
@@ -45,41 +42,32 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
     // eslint-disable-next-line
   }, [chatMediaActive]);
 
+  if (loading) return <Loader />;
+
+  if (error) return <NoData error={error} />;
+
   return (
     <Grid container direction="column">
       <Grid item container alignItems="center">
         <Grid item sx={{ flexGrow: 1 }}>
           <Typography variant="h1">Dashboard</Typography>
         </Grid>
+
         <Grid item>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-            validateOnChange={false}
-            validateOnMount
-          >
-            {({ isSubmitting, isValid, dirty }) => {
-              return (
-                <Form>
-                  <Grid item container>
-                    <FormikControl
-                      control="select"
-                      options={dropDown}
-                      name="stats"
-                      placeholder="All Stats"
-                    />
-                  </Grid>
-                </Form>
-              );
-            }}
-          </Formik>
+          <FormSelect
+            placeholder="All Stats"
+            value={form}
+            onChange={onChange}
+            options={dropDown}
+            name="finance"
+          />
         </Grid>
       </Grid>
+
       <Grid item>
-        <DashboardCharts />
+        <DashboardCharts data={data} refetch={refetch} />
       </Grid>
-      <AvailabilityTable />
+      <AvailabilityTable data={data?.getStats.availabilityCalendar} />
     </Grid>
   );
 };
