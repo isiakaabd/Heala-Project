@@ -39,7 +39,8 @@ export const duration = (value) => {
 };
 
 export const returnpercent = (a, b) => {
-  return (+b / +a).toFixed(2) * 100;
+  if(a===0|| typeof b!=="number") return false
+  return (Math.abs(b) / Math.abs(a)).toFixed(2) * 100;
 };
 export const financialPercent = (a, b) => {
   return Math.round((a / (b + a)) * 100);
