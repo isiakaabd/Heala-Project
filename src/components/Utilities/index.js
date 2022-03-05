@@ -17,3 +17,4 @@ export { default as PreviousButton } from "./PreviousButton";
 export { default as Search } from "./Search";
 export { default as SearchInput } from "./SearchInput";
 export { default as Backdrops } from "./Backdrop";
+export { default as CircularProgressBar } from "./CircularProgress";

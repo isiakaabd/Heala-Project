@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+import { Typography, Divider, Grid } from "@mui/material";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import FormSelect from "components/Utilities/FormSelect";
-import { CircularProgressBar } from "components/Utilities/CircularProgress";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { FormSelect, CircularProgressBar, PreviousButton } from "components/Utilities";
 
 const useStyles = makeStyles((theme) => ({
   chartCard: {

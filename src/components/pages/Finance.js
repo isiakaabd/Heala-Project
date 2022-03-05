@@ -8,7 +8,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { CircularProgressBar } from "components/Utilities/CircularProgress";
+import { CircularProgressBar } from "components/Utilities";
 import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
 import { useQuery } from "@apollo/client";

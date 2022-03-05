@@ -5,7 +5,7 @@ import { ReactComponent as Circular } from "assets/images/circular.svg";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-export const CircularProgressBar = ({
+const CircularProgressBar = ({
   value,
   color,
   height,
@@ -44,13 +44,13 @@ export const CircularProgressBar = ({
     </Box>
   );
 };
-
+export default CircularProgressBar;
 CircularProgressBar.propTypes = {
   value: PropTypes.number,
-  color: PropTypes.string.isRequired,
-  height: PropTypes.string.isRequired,
-  width: PropTypes.string.isRequired,
-  trailColor: PropTypes.string.isRequired,
+  color: PropTypes.string,
+  height: PropTypes.string,
+  width: PropTypes.string,
+  trailColor: PropTypes.string,
   strokeLinecap: PropTypes.string,
   strokeWidth: PropTypes.number,
 };
