@@ -151,11 +151,6 @@ const Login = () => {
           <Grid item className={classes.logoAlign}>
             <img src={logo} alt="Brand logo" className={classes.logo} />
           </Grid>
-          {Object.keys(authError).length > 0 && (
-            <Alert variant="filled" severity={authError.type} sx={{ justifyContent: "center" }}>
-              {authError.message}
-            </Alert>
-          )}
 
           <Formik
             initialValues={initialValues}
@@ -178,6 +173,17 @@ const Login = () => {
                       <Typography variant="h2" style={{ fontSize: "5rem" }}>
                         Sign into your account
                       </Typography>
+                    </Grid>
+                    <Grid item style={{ marginBottom: "2rem" }}>
+                      {Object.keys(authError).length > 0 && (
+                        <Alert
+                          variant="filled"
+                          severity={authError.type}
+                          sx={{ justifyContent: "center" }}
+                        >
+                          {authError.message}
+                        </Alert>
+                      )}
                     </Grid>
                     <Grid item style={{ marginBottom: "2rem" }}>
                       <Grid container direction="column">
