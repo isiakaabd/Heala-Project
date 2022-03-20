@@ -3,8 +3,7 @@ import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
-import FormLabel from "@mui/material/FormLabel";
-import Grid from "@mui/material/Grid";
+import { FormLabel, Grid } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   input: {

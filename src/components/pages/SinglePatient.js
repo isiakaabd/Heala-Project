@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Typography } from "@mui/material";
-import Modals from "components/Utilities/Modal";
+import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import Card from "components/Utilities/Card";
+import { Card, PreviousButton, Modals, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
@@ -22,7 +18,6 @@ import PropTypes from "prop-types";
 import ReferPatient from "components/modals/ReferPatient";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
 import { deleteProfile } from "components/graphQL/Mutation";
 
 const useStyles = makeStyles((theme) => ({

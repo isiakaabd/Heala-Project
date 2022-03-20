@@ -172,6 +172,7 @@ export const referralHeader = [
     label: "",
   },
 ];
+
 export const subscriptionHeader = [
   {
     id: 8,
