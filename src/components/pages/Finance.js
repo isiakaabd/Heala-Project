@@ -15,6 +15,7 @@ import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
 import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 import FormSelect from "components/Utilities/FormSelect";
+
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
     "&.MuiCard-root": {

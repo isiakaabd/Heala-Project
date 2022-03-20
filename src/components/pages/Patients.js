@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
+import { debounce } from "lodash";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import { Modals, FilterList, Loader, Search, CustomButton } from "components/Utilities";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -17,7 +18,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
 
 const genderType = [
@@ -104,17 +105,26 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     gender: Yup.string("Select your gender"),
     phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
-  const { loading, error, data, refetch } = useQuery(getPatients, {
-    notifyOnNetworkStatusChange: true,
-  });
-  const [fetchUser] = useLazyQuery(getPatients);
+  const [fetchpatient, { loading, error, data }] = useLazyQuery(getPatients);
+
+  // ), {
+  //   notifyOnNetworkStatusChange: true,
+  // });
+  useEffect(() => {
+    (async () => {
+      fetchpatient();
+    })();
+  }, [fetchpatient]);
+  // const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
   const onSubmit = async (values) => {
     const { gender } = values;
-    if (!gender) return;
+    // if (!gender) return;
 
-    await refetch({
-      gender,
+    fetchpatient({
+      variables: {
+        gender,
+      },
     });
     handleDialogClose();
   };
@@ -131,16 +141,25 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   const { setSelectedRows } = useActions();
 
-  const [searchPatient, setSearchPatient] = useState("");
-  const onChange = async (e) => {
-    setSearchPatient(e);
-    if (e == " ") {
-      fetchUser();
-    } else refetch(e === "" ? null : { dociId: `HEALA-${e.toUpperCase()}` });
-  };
+  //eslint-disable-next-line
+  const debouncer = useCallback(debounce(fetchpatient, 3000), []);
 
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
+  // const debouncedChangeHandler = useMemo(() => {
+  //   return debounce(onChange, 300);
+  // }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     debouncedChangeHandler.cancel();
+  //   };
+  // });
+
+  const fetchMoreFunc = async (e, newPage) => {
+    fetchpatient({
+      variables: {
+        page: newPage,
+      },
+    });
+    //refetch({ page: newPage });
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -162,8 +181,14 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
         <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
-              value={searchPatient}
-              onChange={(e) => onChange(e.target.value)}
+              // value={searchPatient}
+              onChange={(e) => {
+                let value = "";
+                if (value !== "") value = `HEALA-${value.toUpperCase()}`;
+                else value = "";
+                return debouncer({ variables: { dociId: value } });
+              }}
+              // onChange={debouncedChangeHandler}
               placeholder="Type to search patients by Heala ID e.g 7NE6ELLO "
               height="5rem"
             />
@@ -195,8 +220,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 : profiles
               ).map((row, index) => {
-                const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
                 const {
                   dociId,
                   firstName,
@@ -208,18 +231,20 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                   _id,
                   status,
                 } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
                     hover
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row._id}
+                    key={_id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{

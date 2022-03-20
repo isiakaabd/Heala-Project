@@ -18,7 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
-import { getPartners, getSingleProvider } from "components/graphQL/useQuery";
+import { getPartners, getSingleProvider, getUsertypess } from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
@@ -142,7 +142,23 @@ const useStyles = makeStyles((theme) => ({
 
 const Partners = () => {
   const classes = useStyles();
-
+  const [dropDown, setDropDown] = useState([]);
+  const { data: da, loading: load } = useQuery(getUsertypess, {
+    variables: {
+      userTypeId: "61ed2354e6091400135e3d94",
+    },
+  });
+  useEffect(() => {
+    if (da) {
+      const datas = da.getUserTypeProviders.provider;
+      setDropDown(
+        datas &&
+          datas.map((i) => {
+            return { key: i.name, value: i._id };
+          }),
+      );
+    }
+  }, [da]);
   const [addPartnerCat] = useMutation(addPartnerCategory);
   const theme = useTheme();
   const buttonType = {
@@ -174,6 +190,7 @@ const Partners = () => {
     email: "",
     specialization: "",
     image: null,
+    provider: "",
   };
   const initialValues2 = {
     category: "",
@@ -185,6 +202,7 @@ const Partners = () => {
     name: Yup.string("Enter your name").required("name is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
     email: Yup.string().email("Enter a valid email").required("Email is required"),
+    provider: Yup.string("select a provider"),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
   const [addPartners] = useMutation(addPartner);
@@ -216,13 +234,16 @@ const Partners = () => {
     // console.log(values);
   };
   const onSubmit1 = async (values, onSubmitProps) => {
-    const { name, email, specialization, image } = values;
+    const { name, email, specialization, provider, image } = values;
+    console.log(provider);
+
     await addPartners({
       variables: {
         name,
         email,
         category: specialization,
         logoImageUrl: image,
+        providerId: provider,
       },
       refetchQueries: [{ query: getPartners }],
     });
@@ -239,10 +260,12 @@ const Partners = () => {
   const specializations = [
     { key: "Diagnostics", value: "Diagnostics" },
     { key: "Pharmacy", value: "Pharmacy" },
+    { key: "Hospital", value: "Hospital" },
   ];
   const specializations5 = [
     { key: "Diagnostics", value: "Diagnostics" },
     { key: "Pharmacy", value: "Pharmacy" },
+    { key: "Hospital", value: "Hospital" },
   ];
   const [setCategoryDatas] = useState([]);
   const { loading, error, data, refetch } = useQuery(getPartners, {
@@ -260,25 +283,25 @@ const Partners = () => {
     if (data) {
       setPartners(data.getPartners.data);
     }
-    try {
-      if (categoryData && categoryData.data) {
-        const value = categoryData.data.getPartnerCategories.data;
-        setCategoryDatas(
-          value.map((i) => {
-            return { key: i, value: i };
-          }),
-        );
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   if (categoryData && categoryData.data) {
+    //     const value = categoryData.data.getPartnerCategories.data;
+    //     setCategoryDatas(
+    //       value.map((i) => {
+    //         return { key: i, value: i };
+    //       }),
+    //     );
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
   }, [data, categoryData, setCategoryDatas]);
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
-  if (loading) return <Loader />;
+  if (loading || load) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item container style={{ paddingBottom: "5rem" }}>
@@ -476,7 +499,8 @@ const Partners = () => {
           validateOnMount={false}
           validateOnBlur={false}
         >
-          {({ isSubmitting, isValid, dirty, setFieldValue }) => {
+          {({ isSubmitting, isValid, dirty, values, setFieldValue }) => {
+            console.log(values);
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid container direction="column" gap={4}>
@@ -504,20 +528,38 @@ const Partners = () => {
                           />
                         </Grid>
                       </Grid>
+
                       <Grid item container>
                         <Grid item container>
                           <FormikControl
                             control="select"
-                            options={[
-                              { key: "Diagnostics", value: "Diagnostics" },
-                              { key: "Pharmacy", value: "Pharmacy" },
-                            ]}
+                            options={
+                              [
+                                { key: "Diagnostics", value: "Diagnostics" },
+                                { key: "Pharmacy", value: "Pharmacy" },
+                                { key: "Hospital", value: "Hospital" },
+                              ] || ""
+                            }
                             name="specialization"
                             label="Category"
                             placeholder="Category"
                           />
                         </Grid>
                       </Grid>
+                      {values.specialization === "Hospital" ? (
+                        <Grid item container>
+                          <Grid item container>
+                            <FormikControl
+                              control="select"
+                              options={dropDown || ""}
+                              name="provider"
+                              label="Provider"
+                              id="provider"
+                              placeholder="select Provider"
+                            />
+                          </Grid>
+                        </Grid>
+                      ) : null}
                       <Grid item container direction="column" gap={2}>
                         <Grid item container>
                           <Grid container spacing={2}>
