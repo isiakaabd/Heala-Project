@@ -23,7 +23,7 @@ import { useQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -328,7 +328,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <NoData />
+          <EmptyTable headCells={referralHeader} paginationLabel="Referral  per page" />
         )}
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>

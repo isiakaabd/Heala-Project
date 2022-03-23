@@ -48,12 +48,16 @@ const App = () => {
         logout();
       } else {
         const { exp } = jwtDecode(token);
-
+        console.log(exp * 1000);
         if (Date.now() >= exp * 1000) {
           await logout_user();
+          console.log(111);
           setSelectedMenu(13);
           logout();
         } else {
+          console.log(222);
+          console.log(state);
+
           setAccessToken(token);
           setstate(false);
         }

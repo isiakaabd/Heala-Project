@@ -7,7 +7,7 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import { hours } from "components/Utilities/Time";
-import NoData from "components/layouts/NoData";
+import { EmptyTable } from "components/layouts";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,8 +64,8 @@ const AvailabilityTable = ({ data }) => {
       <Grid item sx={{ flexGrow: 1 }}>
         <Typography variant="h4">Availability Table</Typography>
       </Grid>
-      <Grid item container direction="column" height="100%">
-        {avaliablity && avaliablity.length > 0 ? (
+      {avaliablity && avaliablity.length > 0 ? (
+        <Grid item container direction="column" height="100%">
           <EnhancedTable
             headCells={availabilityHeadCells}
             rows={avaliablity}
@@ -139,10 +139,10 @@ const AvailabilityTable = ({ data }) => {
                 );
               })}
           </EnhancedTable>
-        ) : (
-          <NoData />
-        )}
-      </Grid>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
+      )}
     </Grid>
   );
 };

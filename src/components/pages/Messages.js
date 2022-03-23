@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { NoData, EnhancedTable } from "components/layouts";
+import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
 import { Link } from "react-router-dom";
 import { TableRow, TableCell } from "@mui/material";
 import { Loader, Search, CustomButton } from "components/Utilities";
@@ -119,6 +119,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const { loading, data, error, refetch } = useQuery(getMessage, {
     notifyOnNetworkStatusChange: true,
   });
+
   const onChange = async (e) => {
     setSearchMessage(e);
     if (e == "") {
@@ -171,8 +172,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             />
           </Grid>
         </Grid>
-        <Grid item container height="100%" direction="column">
-          {message.length > 0 ? (
+        {message.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={messagesHeadCells}
               rows={message}
@@ -191,7 +192,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
               {message
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { recipient, subject, createdAt, _id } = row;
+                  const { subject, createdAt, _id, recipientData } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -229,12 +230,20 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of ${recipient}`}
-                              src={displayPhoto}
+                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
+                              src={
+                                recipientData && recipientData.image
+                                  ? recipientData.image
+                                  : displayPhoto
+                              }
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{recipient}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {recipientData && recipientData.firstName
+                              ? `${recipientData.firstName} ${recipientData.lastName}`
+                              : "No Value"}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -274,10 +283,10 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                   );
                 })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
+        )}
       </Grid>
     );
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
@@ -108,7 +108,7 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   }, [data]);
   const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
-  if (error) return <noData error={error} />;
+  if (error) return <NoData error={error} />;
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
   return (
@@ -116,20 +116,21 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
       <Grid item>
         <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      {payout.length > 0 ? (
-        <>
-          <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
-            <Grid item>
-              <Grid item container alignItems="center">
-                <Typography noWrap variant="h1" component="div" color="#2D2F39">
-                  Payout table
-                </Typography>
-                <Grid item className={classes.iconWrapper} marginLeft="1rem">
-                  <TrendingUpIcon color="success" className={classes.cardIcon} />
-                </Grid>
+
+      <>
+        <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
+          <Grid item>
+            <Grid item container alignItems="center">
+              <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                Payout table
+              </Typography>
+              <Grid item className={classes.iconWrapper} marginLeft="1rem">
+                <TrendingUpIcon color="success" className={classes.cardIcon} />
               </Grid>
             </Grid>
           </Grid>
+        </Grid>
+        {payout.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={payoutHeader}
@@ -242,10 +243,10 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
                 })}
             </EnhancedTable>
           </Grid>
-        </>
-      ) : (
-        <NoData />
-      )}
+        ) : (
+          <EmptyTable headCells={payoutHeader} paginationLabel="Payout  per page" />
+        )}
+      </>
     </Grid>
   );
 };

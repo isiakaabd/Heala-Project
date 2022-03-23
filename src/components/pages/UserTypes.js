@@ -10,7 +10,7 @@ import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui
 import CustomButton from "components/Utilities/CustomButton";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -281,8 +281,8 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             />
           </Grid>
         </Grid>
-        <Grid item container height="100%" direction="column">
-          {userType.length > 0 ? (
+        {userType.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={userType}
@@ -363,10 +363,10 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                   );
                 })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+        )}
       </Grid>
       <Modals
         isOpen={isOpen}

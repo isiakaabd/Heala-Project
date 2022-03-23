@@ -3,7 +3,7 @@ import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { NoData } from "components/layouts";
+import { NoData, EmptyTable } from "components/layouts";
 import { debounce } from "lodash";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import { Modals, FilterList, Loader, Search, CustomButton } from "components/Utilities";
@@ -197,10 +197,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             <FilterList title="Filter Patients" width="15.2rem" onClick={handleDialogOpen} />
           </Grid>
         </Grid>
-        {/* The Search and Filter ends here */}
-
-        <Grid item container height="100%" direction="column">
-          {profiles.length > 0 ? (
+        {profiles.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={patientsHeadCells}
               rows={profiles}
@@ -323,10 +321,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 );
               })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
+        )}
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <Formik
