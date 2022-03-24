@@ -155,7 +155,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const [verifyState, setVerifyState] = useState(status ? "Doctor Verified!" : "Verify Doctor");
   useEffect(() => {
     if (status) {
-      setVerifyState("Doctor Verified!!");
+      setVerifyState("Doctor Verified!");
     }
   }, [status]);
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
