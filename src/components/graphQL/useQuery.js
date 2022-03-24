@@ -697,6 +697,36 @@ export const getProfile = gql`
     }
   }
 `;
+export const getMyEarningDoc = gql`
+  query getMyEarnings($doc: String) {
+    getMyEarnings(filterBy: { doctor: $doc }, page: 1) {
+      data {
+        _id
+        doctor
+        balance
+        doctorData
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        totalDocs
+        limit
+        offset
+        hasPrevPage
+        hasNextPage
+        page
+        totalPages
+        pagingCounter
+        prevPage
+        nextPage
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const getProfileByDociId = gql`
   query findProfiles($dociId: String!) {
     profiles(filterBy: { dociId: $dociId }) {
