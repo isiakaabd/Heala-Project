@@ -33,6 +33,7 @@ const App = () => {
 
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
+  console.log(state);
 
   // useEffect(() => {
   //   const token = localStorage.getItem("token");
@@ -42,13 +43,16 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setSelectedMenu(13);
+      logout();
+      return;
+    }
     (async () => {
-      if (!token) {
-        setSelectedMenu(13);
-        logout();
-      } else {
+      if (token && state) {
         const { exp } = jwtDecode(token);
-        console.log(exp * 1000);
+        setstate(false);
+        alert(2);
         if (Date.now() >= exp * 1000) {
           await logout_user();
           console.log(111);
@@ -59,13 +63,10 @@ const App = () => {
           console.log(state);
 
           setAccessToken(token);
-          setstate(false);
         }
       }
     })();
-
-    //eslint-disable-next-line
-  }, []);
+  }, [logout_user, state]);
 
   /* The selected SubMenu handles the visibility of the menu's sub. 0 is set as a buffer. so if you want to reset the submenu, just pass in 0 to the setSelectedSubMenu function. 1 is for the dashboard submenu, 2 for Patients and serially like that to the last menu items */
   const [selectedSubMenu, setSelectedSubMenu] = useState(0);
