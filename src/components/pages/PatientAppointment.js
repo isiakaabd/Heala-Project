@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modals from "components/Utilities/Modal";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 import CustomButton from "components/Utilities/CustomButton";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
@@ -303,21 +303,22 @@ const PatientAppointment = (props) => {
             onClick={() => setSelectedPatientMenu(0)}
           />
         </Grid>
-        {patientAppointment.length > 0 ? (
-          <>
-            <Grid item container justifyContent="space-between" alignItems="center">
-              <Grid item>
-                <Typography variant="h2">Appointments</Typography>
-              </Grid>
-              <Grid item>
-                <FilterList
-                  onClick={handlePatientOpen}
-                  options={filterOptions}
-                  title="Filter Appointments"
-                  width="18.7rem"
-                />
-              </Grid>
+
+        <>
+          <Grid item container justifyContent="space-between" alignItems="center">
+            <Grid item>
+              <Typography variant="h2">Appointments</Typography>
             </Grid>
+            <Grid item>
+              <FilterList
+                onClick={handlePatientOpen}
+                options={filterOptions}
+                title="Filter Appointments"
+                width="18.7rem"
+              />
+            </Grid>
+          </Grid>
+          {patientAppointment.length > 0 ? (
             <Grid item container height="100%" direction="column">
               <EnhancedTable
                 headCells={consultationsHeadCells2}
@@ -422,10 +423,13 @@ const PatientAppointment = (props) => {
                   })}
               </EnhancedTable>
             </Grid>
-          </>
-        ) : (
-          <NoData />
-        )}
+          ) : (
+            <EmptyTable
+              headCells={consultationsHeadCells2}
+              paginationLabel="Appointments per page"
+            />
+          )}
+        </>
       </Grid>
 
       <Modals

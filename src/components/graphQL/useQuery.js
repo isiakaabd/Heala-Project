@@ -32,6 +32,7 @@ export const getPlans = gql`
       plan {
         _id
         name
+        providerData
         amount
         description
         provider
@@ -50,6 +51,7 @@ export const getSinglePlan = gql`
     getPlan(id: $id) {
       name
       amount
+      providerData
       description
       provider
       duration
@@ -126,6 +128,7 @@ export const getMessage = gql`
         createdAt
         updatedAt
         body
+        recipientData
       }
       pageInfo {
         ...pageDetails
@@ -454,6 +457,7 @@ export const getAMessage = gql`
       _id
       recipient
       subject
+      recipientData
       sender
       createdAt
       updatedAt
@@ -829,6 +833,7 @@ export const getUserDetails = gql`
   }
 `;
 export const getProviders = gql`
+  ${PageInfo}
   query getProviders($name: String, $userTypeId: String, $page: Int) {
     getProviders(
       filterBy: { name: $name, userTypeId: $userTypeId }

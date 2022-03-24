@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
 import { makeStyles } from "@mui/styles";
-import Modals from "components/Utilities/Modal";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import CustomButton from "components/Utilities/CustomButton";
+import { FilterList, CustomButton, Modals, Search } from "components/Utilities";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
@@ -22,7 +19,7 @@ import { getPartners, getSingleProvider, getUsertypess } from "components/graphQ
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
-import Loader from "components/Utilities/Loader";
+import { Loader } from "components/Utilities";
 
 import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
@@ -333,13 +330,13 @@ const Partners = () => {
           />
         </Grid>
       </Grid>
-      <Grid item container height="100%" direction="column">
-        {partner.length > 0 ? (
+      {partner.length > 0 ? (
+        <Grid item container height="100%" direction="column">
           <EnhancedTable
             headCells={partnersHeadCells}
             rows={partner}
             page={page}
-            paginationLabel="Patients per page"
+            paginationLabel="Partner per page"
             hasCheckbox={true}
           >
             {partner
@@ -412,10 +409,10 @@ const Partners = () => {
                 );
               })}
           </EnhancedTable>
-        ) : (
-          <NoData />
-        )}
-      </Grid>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={partnersHeadCells} paginationLabel="Doctors per page" />
+      )}
       <Modals
         isOpen={openFilterPartner}
         title="Filter"

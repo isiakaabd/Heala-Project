@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Loader from "components/Utilities/Loader";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
-import NoData from "components/layouts/NoData";
-import Checkbox from "@mui/material/Checkbox";
+import { Grid, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+
+import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import Typography from "@mui/material/Typography";
@@ -106,8 +103,8 @@ const HcpPatients = (props) => {
       <Grid item>
         <Typography variant="h2">Doctor Patients</Typography>
       </Grid>
-      <Grid item container direction="column" height="100%">
-        {profiles.length > 0 ? (
+      {profiles.length > 0 ? (
+        <Grid item container direction="column" height="100%">
           <EnhancedTable
             headCells={hcpPatientsHeadCells}
             rows={profiles}
@@ -197,10 +194,10 @@ const HcpPatients = (props) => {
                 );
               })}
           </EnhancedTable>
-        ) : (
-          <NoData />
-        )}
-      </Grid>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
+      )}
     </Grid>
   );
 };

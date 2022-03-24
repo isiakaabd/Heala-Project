@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
+import { Loader } from "components/Utilities";
+import { NoData, EmptyTable } from "components/layouts";
 import PropTypes from "prop-types";
 import Search from "components/Utilities/Search";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -213,28 +213,27 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
             }}
           />
         </Grid>
-        {rolesManagements.length > 0 ? (
-          <>
-            <Grid item container>
-              <Grid item className={classes.searchGrid}>
-                <Search
-                  value={searchMail}
-                  onChange={(e) => onChange(e.target.value)}
-                  placeholder="Type to search roles by role..."
-                  height="5rem"
-                />
-              </Grid>
-
-              <Grid item>
-                <CustomButton
-                  endIcon={<AddIcon />}
-                  title="Add new role"
-                  type={buttonType}
-                  onClick={handleDialogOpen}
-                />
-              </Grid>
+        <>
+          <Grid item container>
+            <Grid item className={classes.searchGrid}>
+              <Search
+                value={searchMail}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder="Type to search roles by role..."
+                height="5rem"
+              />
             </Grid>
 
+            <Grid item>
+              <CustomButton
+                endIcon={<AddIcon />}
+                title="Add new role"
+                type={buttonType}
+                onClick={handleDialogOpen}
+              />
+            </Grid>
+          </Grid>
+          {rolesManagements.length > 0 ? (
             <Grid item container>
               <EnhancedTable
                 headCells={roleHeader}
@@ -348,10 +347,10 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                   })}
               </EnhancedTable>
             </Grid>
-          </>
-        ) : (
-          <NoData />
-        )}
+          ) : (
+            <EmptyTable headCells={roleHeader} paginationLabel="Admin  per page" />
+          )}
+        </>
       </Grid>
       {/* // modal */}
       <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>

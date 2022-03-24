@@ -4,7 +4,7 @@ import { ProviderModal } from "components/modals/ProviderModal";
 import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
 import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
 import CustomButton from "components/Utilities/CustomButton";
@@ -23,7 +23,7 @@ import Modals from "components/Utilities/Modal";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
-import { getProviders /*getSingleProvider*/ } from "components/graphQL/useQuery";
+import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
 import Loader from "components/Utilities/Loader";
 
@@ -293,12 +293,12 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             />
           </Grid>
         </Grid>
-        <Grid item container height="100%" direction="column">
-          {providers.length > 0 ? (
+        {providers.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={providers}
-              paginationLabel="Patients per page"
+              paginationLabel="Providers per page"
               page={page}
               limit={limit}
               totalPages={totalPages}
@@ -383,10 +383,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                   );
                 })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+        )}
       </Grid>
 
       <Modals

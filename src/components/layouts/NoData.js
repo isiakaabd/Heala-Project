@@ -3,7 +3,14 @@ import { Grid, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 const NoData = ({ error }) => {
   return (
-    <Grid container alignItems="center" direction="column" height="100%" justifyContent="center">
+    <Grid
+      container
+      alignItems="center"
+      direction="column"
+      height="100%"
+      width="100%"
+      justifyContent="center"
+    >
       <Grid item>
         <Typography variant="h1">
           {error ? error && error.networkError.result.errors[0].message : "No Data yet"}

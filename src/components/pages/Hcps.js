@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Loader from "components/Utilities/Loader";
 import displayPhoto from "assets/images/avatar.svg";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import { useQuery, useMutation } from "@apollo/client";
@@ -11,7 +11,6 @@ import { makeStyles } from "@mui/styles";
 import { FilterList, Search, Modals, CustomButton } from "components/Utilities";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
-import EnhancedTable from "components/layouts/EnhancedTable";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
@@ -275,8 +274,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
       </Grid>
-      <Grid item container height="100%" direction="column">
-        {profiles.length > 0 ? (
+      {profiles.length > 0 ? (
+        <Grid item container height="100%" direction="column">
           <EnhancedTable
             headCells={hcpsHeadCells}
             rows={profiles}
@@ -408,10 +407,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 );
               })}
           </EnhancedTable>
-        ) : (
-          <NoData />
-        )}
-      </Grid>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
+      )}
       {/* Filter Modal */}
       <Modals
         isOpen={openHcpFilter}

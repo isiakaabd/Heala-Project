@@ -12,7 +12,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import { Loader, Search, Modals, FilterList } from "components/Utilities";
-import { EnhancedTable, NoData } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import Filter from "components/modals/Filter";
@@ -188,8 +188,8 @@ const HCP = ({ setSelectedSubMenu }) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item height="100%" direction="column">
-          {respondData.length > 0 ? (
+        {respondData.length > 0 ? (
+          <Grid container item height="100%" direction="column">
             <EnhancedTable
               headCells={HCPHeader}
               rows={respondData}
@@ -298,10 +298,10 @@ const HCP = ({ setSelectedSubMenu }) => {
                   );
                 })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
+        )}
       </Grid>
       {/* Modal */}
       <Modals isOpen={isOpen} title="Filter" rowSpacing={2} handleClose={handleDialogClose}>

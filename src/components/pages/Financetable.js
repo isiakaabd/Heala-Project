@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
@@ -114,19 +114,19 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
       <Grid item>
         <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
       </Grid>
-      {earning.length > 0 ? (
-        <>
-          <Grid item container gap={1} alignItems="center">
-            <Grid item>
-              <Typography noWrap variant="h1" component="div" color="#2D2F39">
-                Earnings table
-              </Typography>
-            </Grid>
-            <Grid item className={classes.iconWrapper}>
-              <TrendingDownIcon color="success" className={classes.cardIcon} />
-            </Grid>
-          </Grid>
 
+      <>
+        <Grid item container gap={1} alignItems="center">
+          <Grid item>
+            <Typography noWrap variant="h1" component="div" color="#2D2F39">
+              Earnings table
+            </Typography>
+          </Grid>
+          <Grid item className={classes.iconWrapper}>
+            <TrendingDownIcon color="success" className={classes.cardIcon} />
+          </Grid>
+        </Grid>
+        {earning.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={financeHeader}
@@ -221,10 +221,10 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
               })}
             </EnhancedTable>
           </Grid>
-        </>
-      ) : (
-        <NoData />
-      )}
+        ) : (
+          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
+        )}
+      </>
     </Grid>
   );
 };

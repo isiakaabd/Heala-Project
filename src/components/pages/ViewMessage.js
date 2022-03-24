@@ -44,14 +44,12 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-
       setMessage(data.getMessage);
     }
   }, [message, data]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
-  const { body, recipient, subject, sender } = message;
+  const { body, recipientData, subject, sender } = message;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -65,13 +63,20 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
         <Grid item style={{ padding: "1.5rem 5rem" }}>
           <Grid container alignItems="center">
             <Grid item>
-              <Avatar src={displayPhoto} alt="Display photo of the sender" />
+              <Avatar
+                src={recipientData ? recipientData.image : displayPhoto}
+                alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
+              />
             </Grid>
             <Grid item style={{ margin: "0 3rem 0 1.5rem" }}>
-              <Typography variant="h5">{sender}</Typography>
+              <Typography variant="h5">
+                {recipientData
+                  ? `${recipientData.firstName} ${recipientData.lastName}`
+                  : "No Value"}
+              </Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label={recipient} className={classes.badge} />
+              <Chip variant="outlined" label={sender} className={classes.badge} />
             </Grid>
           </Grid>
         </Grid>

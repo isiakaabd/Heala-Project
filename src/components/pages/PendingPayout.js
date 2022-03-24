@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, TableRow, TableCell, Avatar, Checkbox } from "@mui/material";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
@@ -121,100 +121,106 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           />
         </Grid>
       </Grid>
+      {rows.length > 0 ? (
+        <Grid item container>
+          <EnhancedTable
+            headCells={pendingHeader}
+            rows={rows}
+            page={page}
+            paginationLabel="payout per page"
+            hasCheckbox={true}
+          >
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-      {/* The Search and Filter ends here */}
-      <Grid item container>
-        <EnhancedTable
-          headCells={pendingHeader}
-          rows={rows}
-          page={page}
-          paginationLabel="payout per page"
-          hasCheckbox={true}
-        >
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-            const isItemSelected = isSelected(row.id, selectedRows);
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-            const labelId = `enhanced-table-checkbox-${index}`;
-
-            return (
-              <TableRow
-                hover
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.id}
-                selected={isItemSelected}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
                 >
-                  {row.entryDate}
-                </TableCell>
-                <TableCell
-                  id={labelId}
-                  scope="row"
-                  align="left"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.black }}
-                >
-                  {row.medical}
-                </TableCell>
-                <TableCell align="center" className={classes.tableCell}>
-                  <div
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
-                    <span style={{ fontSize: "1.25rem" }}>
-                      {row.firstName} {row.lastName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {row.amount}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.red }}
-                >
-                  {row.account}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  className={classes.tableCell}
-                  style={{ color: theme.palette.common.green }}
-                >
-                  {row.bank}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </EnhancedTable>
-      </Grid>
+                    {row.entryDate}
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
+                  >
+                    {row.medical}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {row.firstName} {row.lastName}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.red }}
+                  >
+                    {row.amount}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.red }}
+                  >
+                    {row.account}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.green }}
+                  >
+                    {row.bank}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </EnhancedTable>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={pendingHeader} paginationLabel="Payout  per page" />
+      )}
     </Grid>
   );
 };
