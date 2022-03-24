@@ -16,7 +16,7 @@ import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
 import Search from "components/Utilities/Search";
 import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, EmptyTable } from "components/layouts";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -224,8 +224,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         </Grid>
         {/* The Search and Filter ends here */}
 
-        <Grid item container direction="column" height="100%">
-          {emails && emails.length > 0 ? (
+        {emails && emails.length > 0 ? (
+          <Grid item container direction="column" height="100%">
             <EnhancedTable
               headCells={emailHeader}
               rows={emails}
@@ -294,6 +294,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                             variant="contained"
                             className={classes.button}
                             component={Link}
+                            disabled
                             to={`email/${index}`}
                             endIcon={<ArrowForwardIosIcon />}
                             onClick={() => setSelectedSubMenu(7)}
@@ -305,10 +306,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                     );
                   })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
+        )}
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>

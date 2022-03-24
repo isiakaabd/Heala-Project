@@ -12,7 +12,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import CustomButton from "components/Utilities/CustomButton";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -223,6 +223,8 @@ const Subscription = () => {
       refetch();
     } else refetch({ amount: Number(e) });
   };
+  console.log(data);
+
   useEffect(() => {
     if (data) {
       setPlan(data.getPlans.plan);
@@ -278,8 +280,8 @@ const Subscription = () => {
         </Grid>
         {/* The Search and Filter ends here */}
 
-        <Grid item container height="100%" direction="column">
-          {plan.length > 0 ? (
+        {plan.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={subscriptionHeader}
               rows={plan}
@@ -298,7 +300,7 @@ const Subscription = () => {
               {plan
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { _id, amount, description, provider, duration, name } = row;
+                  const { _id, amount, description, providerData, duration, name } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -351,7 +353,7 @@ const Subscription = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
                       >
-                        {provider}
+                        {providerData ? providerData.name : "No Value"}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -395,10 +397,10 @@ const Subscription = () => {
                   );
                 })}
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={subscriptionHeader} paginationLabel="Subscription  per page" />
+        )}
       </Grid>
 
       {/* // modal */}

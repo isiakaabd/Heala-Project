@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
 import { signup } from "components/graphQL/Mutation";
-import { EnhancedTable, NoData } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { adminHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -287,8 +287,8 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container height="100%" direction="column">
-          {admins.length > 0 ? (
+        {admins.length > 0 ? (
+          <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={adminHeader}
               rows={admins}
@@ -369,10 +369,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                 })}
               )
             </EnhancedTable>
-          ) : (
-            <NoData />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={adminHeader} paginationLabel="Admin  per page" />
+        )}
       </Grid>
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <Formik

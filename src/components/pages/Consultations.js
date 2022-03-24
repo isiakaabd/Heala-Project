@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import NoData from "components/layouts/NoData";
 import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -250,7 +250,7 @@ const Consultations = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <NoData />
+        <EmptyTable headCells={consultationsHeadCells4} paginationLabel="Patients per page" />
       )}
     </Grid>
   );

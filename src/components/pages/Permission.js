@@ -34,7 +34,7 @@ import { useQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
-import NoData from "components/layouts/NoData";
+import { NoData, EmptyTable } from "components/layouts";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -269,117 +269,131 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
-        <Grid item container>
-          <EnhancedTable
-            headCells={PermissionHeader}
-            rows={Permission}
-            paginationLabel="permission per page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
-            handleChangePage={fetchMoreFunc}
-            hasCheckbox={true}
-          >
-            {permission
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row._id, selectedRows);
+        {Permission.length > 0 ? (
+          <Grid item container>
+            <EnhancedTable
+              headCells={PermissionHeader}
+              rows={Permission}
+              paginationLabel="permission per page"
+              page={page}
+              limit={limit}
+              totalPages={totalPages}
+              totalDocs={totalDocs}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+              handleChangePage={fetchMoreFunc}
+              hasCheckbox={true}
+            >
+              {permission
+                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row._id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
-                const data = row.name.split(":")[0];
-                const newPerm = row.description.split(":")[1];
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell id={labelId} scope="row" align="left" className={classes.tableCell}>
-                      <Grid
-                        container
-                        rowSpacing={2}
-                        style={{
-                          maxWidth: "25rem",
-                          display: "inline-flex",
-                          justifyContent: "left",
-                          alignItems: "center",
-                        }}
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  const data = row.name.split(":")[0];
+                  const newPerm = row.description.split(":")[1];
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
                       >
-                        <Grid item xs={6}>
-                          <Chip label={data} className={classes.badge} />
+                        <Grid
+                          container
+                          rowSpacing={2}
+                          style={{
+                            maxWidth: "25rem",
+                            display: "inline-flex",
+                            justifyContent: "left",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Grid item xs={6}>
+                            <Chip label={data} className={classes.badge} />
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </TableCell>
-                    <TableCell id={labelId} scope="row" align="left" className={classes.tableCell}>
-                      <Grid
-                        container
-                        rowSpacing={2}
-                        style={{
-                          maxWidth: "25rem",
-                          display: "inline-flex",
-                          justifyContent: "left",
-                          alignItems: "center",
-                        }}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
                       >
-                        <Grid item xs={6}>
-                          <Chip label={newPerm} className={classes.badge} />
+                        <Grid
+                          container
+                          rowSpacing={2}
+                          style={{
+                            maxWidth: "25rem",
+                            display: "inline-flex",
+                            justifyContent: "left",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Grid item xs={6}>
+                            <Chip label={newPerm} className={classes.badge} />
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                          justifyContent: "space-around",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          onClick={() => handleEditOpenDialog(row._id)}
-                          className={`${classes.tableBtn} ${classes.greenBtn}`}
-                          endIcon={<EditIcon color="success" />}
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                            justifyContent: "space-around",
+                          }}
                         >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          onClick={() => handleDeleteOpenDialog(row._id)}
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          to="/view"
-                          endIcon={<DeleteIcon color="error" />}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </EnhancedTable>
-        </Grid>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            onClick={() => handleEditOpenDialog(row._id)}
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            endIcon={<EditIcon color="success" />}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            to="/view"
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </EnhancedTable>
+          </Grid>
+        ) : (
+          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
+        )}
       </Grid>
 
       <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
