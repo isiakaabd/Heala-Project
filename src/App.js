@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
+import jwtDecode from "jwt-decode";
+import { LOGOUT_USER } from "components/graphQL/Mutation";
 import Loader from "components/Utilities/Loader";
 import { muiTheme } from "components/muiTheme";
+import { useMutation } from "@apollo/client";
+import { useActions } from "components/hooks/useActions";
 import Header from "components/layouts/Header";
 import SideMenu from "components/layouts/SideMenu";
 import Routes from "components/routes/Routes";
@@ -24,13 +28,39 @@ const sectionStyles = {
 };
 
 const App = () => {
+  const { logout } = useActions();
+  const [logout_user] = useMutation(LOGOUT_USER);
+
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   setAccessToken(token);
+  //   setstate(false);
+  // }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setAccessToken(token);
-    setstate(false);
+    (async () => {
+      if (!token) {
+        setSelectedMenu(13);
+        logout();
+      } else {
+        const { exp } = jwtDecode(token);
+
+        if (Date.now() >= exp * 1000) {
+          await logout_user();
+          setSelectedMenu(13);
+          logout();
+        } else {
+          setAccessToken(token);
+          setstate(false);
+        }
+      }
+    })();
+
+    //eslint-disable-next-line
   }, []);
 
   /* The selected SubMenu handles the visibility of the menu's sub. 0 is set as a buffer. so if you want to reset the submenu, just pass in 0 to the setSelectedSubMenu function. 1 is for the dashboard submenu, 2 for Patients and serially like that to the last menu items */

@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import Loader from "components/Utilities/Loader";
-import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
 import { dateMoment } from "components/Utilities/Time";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 import { Typography, Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
-import DisplayProfile from "components/Utilities/DisplayProfile";
+import { CustomButton, Loader, Modals, PreviousButton, DisplayProfile } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
