@@ -187,7 +187,7 @@ const Finance = ({ setSelectedSubMenu }) => {
                       textDecorationStyle: "double",
                     }}
                   >
-                    N{""}
+                    N
                   </span>
                   {formatNumber(totalEarning)}
                 </Typography>
