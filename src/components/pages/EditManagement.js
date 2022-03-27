@@ -159,6 +159,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
       });
     }
   }, [data]);
+  console.log('data',data)
   const [editRoles] = useMutation(editRole, { refetchQueries: [{ query: getRoles }] });
   const onSubmit = async (values) => {
     const { name, description, permissions } = values;
