@@ -8,7 +8,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LoopIcon from "@mui/icons-material/Loop";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
-import SettingsIcon from "@mui/icons-material/Settings";
+import SettingsIcon from "@mui/icons-material/Settings"; 
 
 export const menus = [
   { id: 0, title: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
