@@ -6,14 +6,14 @@ import CustomButton from "components/Utilities/CustomButton";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
-import { verification } from "components/graphQL/useQuery";
+import { verification, getVerification } from "components/graphQL/useQuery";
+import { rejectVerification } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
-import Modals from "components/Utilities/Modal";
+import { Modals, PreviousButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -100,6 +100,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, { variables: { id: viewId } });
   const [respondData, setRespondData] = useState([]);
+  const [reject] = useMutation(rejectVerification);
   const onConfirm = () => {
     setCancel(true);
   };
@@ -116,19 +117,24 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     reason: Yup.string("Enter Reason ").required("Reason is required"),
   });
   const onSubmit = async (values) => {
-    console.log(values);
+    const { reason } = values;
+
+    await reject({
+      variables: {
+        reason,
+        id: viewId,
+      },
+      refetchQueries: [
+        {
+          query: verification,
+          variables: { id: viewId },
+        },
+      ],
+    });
+    setCancel(false);
   };
   // eslint-disable-next-line
-  const {
-    qualification,
-    license,
-    alumni_association,
-    reference,
-    doctorData,
-    yearbook,
-    status,
-    // eslint-disable-next-line
-  } = respondData;
+
   const theme = useTheme();
   const darkButton = {
     background: theme.palette.primary.main,
@@ -143,23 +149,35 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   };
   const RedButton = {
     background: "#f8432b",
-    hover: 'red',
-    active:'red',
-    disabled: 'red',
+    hover: "red",
+    active: "red",
+    disabled: "red",
   };
   useEffect(() => {
     if (data) {
       setRespondData(data.getVerification);
     }
   }, [data]);
-  const [verifyState, setVerifyState] = useState(status ? "Doctor Verified!" : "Verify Doctor");
+  const [verifyState, setVerifyState] = useState(
+    respondData.status ? "Doctor Verified!" : "Verify Doctor",
+  );
   useEffect(() => {
-    if (status) {
+    if (respondData.status) {
       setVerifyState("Doctor Verified!");
     }
-  }, [status]);
+  }, [respondData.status]);
+  const {
+    qualification,
+    license,
+    alumni_association,
+    reference,
+    doctorData,
+    yearbook,
+    status,
+    // eslint-disable-next-line
+  } = respondData;
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
-  const [button, setButtonValue] = useState(status);
+  const [button, setButtonValue] = useState(respondData.status);
 
   useEffect(() => {
     if (verifyData && verifyData.verifyHCP.status) {
@@ -499,9 +517,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
             <Grid item>
               <CustomButton
-                title={"Reject Doctor"}
+                title="Reject Doctor"
                 type={RedButton}
-                disabled={button}
+                // disabled={button}
                 onClick={handleDialogOpen}
                 width="100%"
               />
@@ -546,7 +564,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                   </Grid>
                   <Grid item container sx={{ flexGrow: 1, marginTop: "10rem" }}>
                     <CustomButton
-                      title="Reject Deoctor"
+                      title="Reject Doctor"
                       type={trasparentButton}
                       width="100%"
                       isSubmitting={isSubmitting}

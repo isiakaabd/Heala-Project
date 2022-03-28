@@ -4,15 +4,14 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import jwtDecode from "jwt-decode";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
-import Loader from "components/Utilities/Loader";
+import { Loader } from "components/Utilities";
 import { muiTheme } from "components/muiTheme";
 import { useMutation } from "@apollo/client";
 import { useActions } from "components/hooks/useActions";
-import Header from "components/layouts/Header";
-import SideMenu from "components/layouts/SideMenu";
+import { Header, SideMenu } from "components/layouts";
 import Routes from "components/routes/Routes";
 import ScrollToView from "components/ScrollToView";
-import Login from "components/pages/Login";
+import { Login } from "components/pages";
 import { setAccessToken } from "./accessToken";
 import { useSelector } from "react-redux";
 
@@ -23,50 +22,35 @@ const sectionStyles = {
   paddingBottom: "5rem",
   minHeight: "100vh",
   width: "100%",
-
   backgroundColor: "#fbfbfb",
 };
 
 const App = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
   const [logout_user] = useMutation(LOGOUT_USER);
 
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
-  console.log(state);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   setAccessToken(token);
-  //   setstate(false);
-  // }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      setSelectedMenu(13);
-      logout();
-      return;
-    }
     (async () => {
-      if (token && state) {
+      if (token) {
         const { exp } = jwtDecode(token);
-        setstate(false);
-        alert(2);
-        if (Date.now() >= exp * 1000) {
-          await logout_user();
-          console.log(111);
-          setSelectedMenu(13);
+        if (token && Date.now() >= exp * 1000) {
           logout();
-        } else {
-          console.log(222);
-          console.log(state);
-
+        } else if (token && isAuthenticated && state) {
+          setstate(false);
+          setAccessToken(token);
+        } else if (token && isAuthenticated && !state) {
           setAccessToken(token);
         }
+      } else {
+        logout();
       }
     })();
-  }, [logout_user, state]);
+  }, [logout_user, state, isAuthenticated]);
 
   /* The selected SubMenu handles the visibility of the menu's sub. 0 is set as a buffer. so if you want to reset the submenu, just pass in 0 to the setSelectedSubMenu function. 1 is for the dashboard submenu, 2 for Patients and serially like that to the last menu items */
   const [selectedSubMenu, setSelectedSubMenu] = useState(0);
@@ -78,8 +62,7 @@ const App = () => {
   const [selectedScopedMenu, setSelectedScopedMenu] = useState(0);
   const [chatMediaActive, setChatMediaActive] = useState(false);
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
+  console.log(state);
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>

@@ -71,6 +71,14 @@ export const Login_USER = gql`
     }
   }
 `;
+export const rejectVerification = gql`
+  mutation rejectVerification($reason: String, $id: String) {
+    rejectVerification(data: { verificationId: $id, reason: $reason }) {
+      message
+      reason
+    }
+  }
+`;
 export const CREATE_PLAN = gql`
   mutation createPlan(
     $name: String!
