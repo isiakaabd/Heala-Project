@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import CustomButton from "components/Utilities/CustomButton";
+import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
+import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
-import { verification, getVerification } from "components/graphQL/useQuery";
+import { verification } from "components/graphQL/useQuery";
 import { rejectVerification } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
-import { Modals, PreviousButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import Success from "components/modals/Success";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -96,24 +96,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({
-  selectedMenu,
-  selectedSubMenu,
-  setSelectedMenu,
-  setSelectedSubMenu,
-}) => {
+const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
+  const history = useHistory();
   const [respondData, setRespondData] = useState([]);
   const [reject] = useMutation(rejectVerification);
   const onConfirm = () => {
     setCancel(true);
   };
-  const [modal, setModal] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleDialogCloses = () => setOpen(false);
+
   const [cancel, setCancel] = useState(false);
-  const handleDialogClose = () => setCancel(false);
+
   const handleDialogOpen = () => {
     setCancel(true);
   };
@@ -139,6 +137,12 @@ const ViewHCP = ({
       ],
     });
     setCancel(false);
+
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+      history.push("/verification");
+    }, 3000);
   };
   // eslint-disable-next-line
 
@@ -166,7 +170,7 @@ const ViewHCP = ({
     }
   }, [data]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor"
+    respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   useEffect(() => {
     if (respondData.status) {
@@ -194,11 +198,15 @@ const ViewHCP = ({
   }, [verify, status, verifyState, verifyData]);
 
   const handleVerifyDoctor = async () => {
-    await verify({
-      variables: {
-        id: viewId,
-      },
-    });
+    try {
+      await verify({
+        variables: {
+          id: viewId,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
   const classes = useStyles();
   useEffect(() => {
@@ -223,15 +231,16 @@ const ViewHCP = ({
           flexWrap="nowrap"
           width="100%"
           justifyContent="space-between"
+          gap={4}
           container
           alignItems="center"
           className={`${classes.cardGrid} ${classes.firstContainer}`}
         >
-          <Grid item container justifyContent="center" width="30%">
+          <Grid item container justifyContent="center" flex={1} height="100%">
             <Grid item>
               <Avatar
                 src={doctorData ? doctorData.picture : displayPhoto}
-                sx={{ minWidth: "150px", minHeight: "150px" }}
+                sx={{ minWidth: "150px", minHeight: "150px", marginRight: "2rem" }}
               />
             </Grid>
           </Grid>
@@ -243,22 +252,25 @@ const ViewHCP = ({
             gap={3}
             sx={{ height: "100%" }}
           >
-            <Grid container direction="row" justifyContent="space-around">
-              <Grid item>
+            <Grid
+              container
+              direction="row"
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1}>
                   <Grid item>
                     <Typography variant="body1">Doctor Name</Typography>
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.firstName} ${doctorData.lastName}`
-                        : "No Doctor"}
+                      {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1}>
                   <Grid item>
                     <Typography variant="body1">Hospital</Typography>
@@ -270,7 +282,7 @@ const ViewHCP = ({
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1}>
                   <Grid item>
                     <Typography variant="body1">Gender:</Typography>
@@ -283,36 +295,37 @@ const ViewHCP = ({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container direction="row" justifyContent="space-around">
-              <Grid item>
+            <Grid
+              container
+              direction="row"
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1}>
                   <Grid item>
                     <Typography variant="body1">Medical ID:</Typography>
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.dociId.split("-")[1]}`
-                        : "No ID "}{" "}
+                      {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1}>
                   <Grid item>
                     <Typography variant="body1">Specialization:</Typography>
                   </Grid>
                   <Grid item width="100%">
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.specialization}`
-                        : "No specialization "}
+                      {doctorData ? `${doctorData.specialization}` : "No specialization "}
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item xs={4} md={4}>
                 <Grid container direction="column" gap={1} width="100%">
                   <Grid item>
                     <Typography variant="body1">DOB:</Typography>
@@ -327,18 +340,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -355,9 +358,7 @@ const ViewHCP = ({
                     <Grid className={classes.link}>{qualification.degree}</Grid>
                   )}
                   {qualification?.year && (
-                    <Grid className={classes.link}>
-                      {dateMoment(qualification.year).slice(-4)}
-                    </Grid>
+                    <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
                   )}
                   {qualification?.image && (
                     <a
@@ -378,12 +379,7 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -427,18 +423,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -485,12 +471,7 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -536,18 +517,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            style={{ marginRight: " 2rem" }}
-            className={classes.cardGrid}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md style={{ marginRight: " 2rem" }} className={classes.cardGrid}>
             <Grid
               container
               direction="column"
@@ -576,13 +547,7 @@ const ViewHCP = ({
           ></Grid>
         </Grid>
         <Grid item container style={{ paddingTop: "2rem" }}>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            gap={2}
-            className={classes.cardGrid}
-          >
+          <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
             <Grid item>
               <CustomButton
                 title="Reject Verification"
@@ -645,6 +610,13 @@ const ViewHCP = ({
           }}
         </Formik>
       </Modals>
+      <Success
+        open={open}
+        handleDialogClose={handleDialogCloses}
+        title="Congratulations"
+        confirmationMsg=" Doctor successfully rejected"
+        btnValue="Continue"
+      />
     </>
   );
 };

@@ -17,7 +17,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Modals = ({ isOpen, handleClose, width, title, color, children, rowSpacing, height }) => {
+const Modals = ({
+  isOpen,
+  isClose,
+  handleClose,
+  width,
+  title,
+  color,
+  children,
+  rowSpacing,
+  height,
+}) => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -51,11 +61,13 @@ const Modals = ({ isOpen, handleClose, width, title, color, children, rowSpacing
                 <Typography variant="h3">{title}</Typography>
               </Grid>
               <Grid item>
-                <CloseIcon
-                  color={color ? color : "secondary"}
-                  className={classes.closeIcon}
-                  onClick={handleClose}
-                />
+                {!isClose ? (
+                  <CloseIcon
+                    color={color ? color : "secondary"}
+                    className={classes.closeIcon}
+                    onClick={handleClose}
+                  />
+                ) : null}
               </Grid>
             </Grid>
             {children}
@@ -67,9 +79,10 @@ const Modals = ({ isOpen, handleClose, width, title, color, children, rowSpacing
 };
 Modals.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  isClose: PropTypes.bool,
   handleClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   color: PropTypes.string,
   height: PropTypes.string,
   width: PropTypes.string,
