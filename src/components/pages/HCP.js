@@ -132,7 +132,7 @@ const HCP = ({ setSelectedSubMenu }) => {
       console.log(err);
     }
   }, [data]);
-
+  console.log(data);
   const initialValues = {
     Name: "",
     Date: "",

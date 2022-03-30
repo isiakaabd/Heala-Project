@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
-import { Loader } from "components/Utilities";
+import { NoData } from "components/layouts";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { CircularProgressBar, PreviousButton } from "components/Utilities";
+import { CircularProgressBar, Loader, PreviousButton, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
 import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
-import FormSelect from "components/Utilities/FormSelect";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {

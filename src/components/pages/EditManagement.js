@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography } from "@mui/material";
-import Loader from "components/Utilities/Loader";
 import { isSelected } from "helpers/isSelected";
 import { useSelector } from "react-redux";
-import NoData from "components/layouts/NoData";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import * as Yup from "yup";
@@ -12,14 +9,13 @@ import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, NoData } from "components/layouts";
 import { editManagement } from "components/Utilities/tableHeaders";
-import PreviousButton from "components/Utilities/PreviousButton";
-import CustomButton from "components/Utilities/CustomButton";
+import { PreviousButton, CustomButton, Loader } from "components/Utilities";
 import { editRole } from "components/graphQL/Mutation";
 import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
-import { TableRow, TableCell } from "@mui/material";
+import { TableRow, TableCell, Grid, Typography } from "@mui/material";
 
 const optionss = [
   { label: "get", value: "account:get" },
@@ -146,20 +142,33 @@ const useStyles = makeStyles((theme) => ({
 const EditManagement = ({ setSelectedSubMenu }) => {
   let history = useHistory();
   const { editId } = useParams();
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState([]);
+  const [arr, setArr] = useState([]);
+  const [opt, setOpt] = useState([]);
   const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
+  console.log(data);
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
-
-      setRole({
-        name,
-        description,
-        permissions,
+      const value = data.getRole.permissions;
+      const x = value.map((ar) => {
+        return ar.split(":")[0];
       });
+      const y = value.map((ar) => {
+        return ar.split(":")[1];
+      });
+      const mySet2 = new Set(x);
+      let array = [...mySet2];
+      const mySet = new Set(y);
+      let array2 = [...mySet];
+      setArr(array);
+      setOpt(array2);
+
+      setRole(value);
     }
   }, [data]);
-  console.log('data',data)
+
+  console.log(opt);
   const [editRoles] = useMutation(editRole, { refetchQueries: [{ query: getRoles }] });
   const onSubmit = async (values) => {
     const { name, description, permissions } = values;
@@ -235,8 +244,8 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                 </Grid>
 
                 <Grid item container>
-                  <EnhancedTable headCells={editManagement} rows={ro} hasCheckbox={false}>
-                    {ro.map((row, index) => {
+                  <EnhancedTable headCells={editManagement} rows={arr} hasCheckbox={false}>
+                    {arr.map((row, index) => {
                       const isItemSelected = isSelected(row.id, selectedRows);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -257,7 +266,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                             className={classes.tableCell}
                             style={{ color: theme.palette.common.black }}
                           >
-                            {row.name}
+                            {row}
                           </TableCell>
                           <TableCell
                             id={labelId}
@@ -266,13 +275,26 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                             className={classes.tableCell}
                             style={{ color: theme.palette.common.black }}
                           >
-                            {row.value}
+                            <FormikControl
+                              control="checkbox"
+                              name="permissions"
+                              options={optionss3}
+                            />
                           </TableCell>
                         </TableRow>
                       );
                     })}
                   </EnhancedTable>
                 </Grid>
+                {/* {arr.map((i, index) => {
+                  return (
+                    <Grid container key={index}>
+                      <Grid item>{i}</Grid>
+                      <Grid item>
+                      </Grid>
+                    </Grid>
+                  );
+                })} */}
               </Form>
             </>
           );

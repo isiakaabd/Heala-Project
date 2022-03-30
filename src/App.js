@@ -38,13 +38,18 @@ const App = () => {
     (async () => {
       if (token) {
         const { exp } = jwtDecode(token);
+
         if (token && Date.now() >= exp * 1000) {
           logout();
-        } else if (token && isAuthenticated && state) {
+          console.log(1);
+        }
+        if (token && isAuthenticated && state) {
           setstate(false);
+          console.log(2);
           setAccessToken(token);
         } else if (token && isAuthenticated && !state) {
           setAccessToken(token);
+          console.log(3);
         }
       } else {
         logout();

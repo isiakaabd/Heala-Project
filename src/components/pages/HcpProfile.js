@@ -1,19 +1,15 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
-import NoData from "components/layouts/NoData";
+import { Chip, Grid, Typography } from "@mui/material";
+import { NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
-import PreviousButton from "components/Utilities/PreviousButton";
-import DisplayProfile from "components/Utilities/DisplayProfile";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
+import { Loader, PreviousButton, DisplayProfile } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
@@ -109,6 +105,8 @@ const HcpProfile = (props) => {
       id: hcpId,
     },
   });
+  console.log(data);
+
   useEffect(() => {
     if (data) {
       setDoctorProfile(data.doctorProfile);
