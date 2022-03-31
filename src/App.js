@@ -38,21 +38,21 @@ const App = () => {
     (async () => {
       if (token) {
         const { exp } = jwtDecode(token);
-
-        if (token && Date.now() >= exp * 1000) {
+        const time = Date.now() >= exp * 1000;
+        if (token && time) {
           logout();
-          console.log(1);
         }
-        if (token && isAuthenticated && state) {
+        if (token && isAuthenticated && !time && state) {
           setstate(false);
           console.log(2);
           setAccessToken(token);
-        } else if (token && isAuthenticated && !state) {
+        } else if (token && isAuthenticated && !time && !state) {
           setAccessToken(token);
           console.log(3);
         }
       } else {
         logout();
+        setstate(false);
       }
     })();
   }, [logout_user, state, isAuthenticated]);
@@ -67,7 +67,6 @@ const App = () => {
   const [selectedScopedMenu, setSelectedScopedMenu] = useState(0);
   const [chatMediaActive, setChatMediaActive] = useState(false);
 
-  console.log(state);
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
