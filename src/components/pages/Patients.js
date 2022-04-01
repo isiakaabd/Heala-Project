@@ -117,6 +117,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   }, [fetchpatient]);
   // const [fetchUser] = useLazyQuery(getPatients);
   const [profiles, setProfiles] = useState([]);
+
+
   const onSubmit = async (values) => {
     const { gender } = values;
     // if (!gender) return;
@@ -136,7 +138,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     }
   }, [data]);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 
   const { setSelectedRows } = useActions();

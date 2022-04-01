@@ -244,7 +244,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                 </Grid>
 
                 <Grid item container>
-                  <EnhancedTable headCells={editManagement} rows={arr} hasCheckbox={false}>
+                  <EnhancedTable headCells={editManagement} rows={arr} type="editRole" hasCheckbox={false}>
                     {arr.map((row, index) => {
                       const isItemSelected = isSelected(row.id, selectedRows);
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -286,20 +286,12 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                     })}
                   </EnhancedTable>
                 </Grid>
-                {/* {arr.map((i, index) => {
-                  return (
-                    <Grid container key={index}>
-                      <Grid item>{i}</Grid>
-                      <Grid item>
-                      </Grid>
-                    </Grid>
-                  );
-                })} */}
+               
               </Form>
             </>
           );
         }}
-        {/* The Search and Filter ends here */}
+      
       </Formik>
     </Grid>
   );

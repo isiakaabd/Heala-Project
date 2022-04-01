@@ -45,29 +45,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedTable = (props) => {
+const EnhancedTable = ({
+  rows,
+  children,
+  totalDocs,
+  headCells,
+  paginationLabel,
+  title,
+  type,
+  limit,
+  totalPages,
+  hasCheckbox,
+  page,
+  handleChangePage,
+  hasNextPage,
+  hasPrevPage,
+  setRowsPerPage,
+  rowsPerPage,
+}) => {
   const classes = useStyles();
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
-  const {
-    rows,
-    children,
-    totalDocs,
-    headCells,
-    paginationLabel,
-    title,
-    limit,
-    totalPages,
-    hasCheckbox,
-    page,
-    handleChangePage,
-    hasNextPage,
-    hasPrevPage,
-    setRowsPerPage,
-  } = props;
+
   const number = page && Number(page - 1);
   const [pagnumber, setPageNumber] = useState(number);
-  console.log(limit, page, pagnumber);
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((selected) => selected.id);
@@ -80,13 +81,13 @@ const EnhancedTable = (props) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     // setPageNumber(0);
+    // setRowsPerPage(0);
   };
   const EnhancedTableAction = () => {
     const theme = useTheme();
 
     const handleFirstPageButtonClick = async (event) => {
       await handleChangePage(event, 1);
-      setPageNumber(0);
     };
 
     const handleBackButtonClick = async (event) => {
@@ -146,7 +147,7 @@ const EnhancedTable = (props) => {
   };
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = totalPages === page ? limit * totalPages - totalDocs : 0;
-  console.log(emptyRows);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -177,18 +178,20 @@ const EnhancedTable = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={totalDocs}
-          rowsPerPage={+limit}
-          page={pagnumber}
-          labelRowsPerPage={paginationLabel}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          className={classes.pagination}
-          ActionsComponent={EnhancedTableAction}
-        />
+        {type !== "editRole" ? (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15, { label: "All", value: -1 }]}
+            component="div"
+            count={totalDocs}
+            rowsPerPage={rowsPerPage}
+            page={pagnumber}
+            labelRowsPerPage={paginationLabel}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            className={classes.pagination}
+            ActionsComponent={EnhancedTableAction}
+          />
+        ) : null}
       </Paper>
     </Box>
   );
@@ -210,7 +213,9 @@ EnhancedTable.propTypes = {
   handleChangePage: PropTypes.func,
   setPageNumber: PropTypes.func,
   setRowsPerPage: PropTypes.func,
-  hasCheckbox: PropTypes.bool.isRequired,
+  hasCheckbox: PropTypes.bool,
+  rowsPerPage: PropTypes.number,
+  type: PropTypes.string,
 };
 
 export default EnhancedTable;
