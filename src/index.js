@@ -14,7 +14,7 @@ import {
 import { getAccessToken } from "./accessToken";
 
 const httpLink = createHttpLink({
-  uri: "https://api-staging.heala.io",
+  uri: "https://api.heala.io",
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {

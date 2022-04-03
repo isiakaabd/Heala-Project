@@ -104,9 +104,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const history = useHistory();
   const [respondData, setRespondData] = useState([]);
   const [reject] = useMutation(rejectVerification);
-  const onConfirm = () => {
-    setCancel(true);
-  };
+  // const onConfirm = () => {
+  //   setCancel(true);
+  // };
   const [open, setOpen] = useState(false);
   const handleDialogCloses = () => setOpen(false);
 
@@ -147,11 +147,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   // eslint-disable-next-line
 
   const theme = useTheme();
-  const darkButton = {
-    background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
-    active: theme.palette.primary.dark,
-  };
+  // const darkButton = {
+  //   background: theme.palette.primary.main,
+  //   hover: theme.palette.primary.light,
+  //   active: theme.palette.primary.dark,
+  // };
   const trasparentButton = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,

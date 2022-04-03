@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import CustomButton from "components/Utilities/CustomButton";
+import { Grid } from "@mui/material";
+import { CustomButton } from "components/Utilities";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
@@ -10,7 +10,7 @@ import { addRole } from "components/graphQL/Mutation";
 import { getRoles } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 
-export const RoleModal = ({ handleDialogClose, type }) => {
+const RoleModal = ({ handleDialogClose, type }) => {
   const [createRole] = useMutation(addRole, {
     refetchQueries: [{ query: getRoles }],
   });
@@ -95,7 +95,7 @@ export const RoleModal = ({ handleDialogClose, type }) => {
     </Formik>
   );
 };
-
+export default RoleModal;
 RoleModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
