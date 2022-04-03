@@ -5,7 +5,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-// import ChipInput from "material-ui-chip-input";
+import ChipInput from "material-ui-chip-input";
 import CustomButton from "components/Utilities/CustomButton";
 import PreviousButton from "components/Utilities/PreviousButton";
 import Divider from "@mui/material/Divider";
@@ -168,7 +168,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                             const { setFieldValue } = form;
                             return (
                               <ChipWrapper>
-                                {/* <ChipInput
+                                <ChipInput
                                   fullWidth
                                   {...field}
                                   name="name"
@@ -194,7 +194,7 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                                       setFieldValue(name, newArr);
                                     }
                                   }}
-                                /> */}
+                                />
                               </ChipWrapper>
                             );
                           }}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Loader from "components/Utilities/Loader";
-import CustomButton from "components/Utilities/CustomButton";
+import { Loader, CustomButton, Modals, PreviousButton } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -15,9 +14,9 @@ import {
   Alert,
   Chip,
 } from "@mui/material";
-import Modals from "components/Utilities/Modal";
+
 import AddIcon from "@mui/icons-material/Add";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { PermissionHeader } from "components/Utilities/tableHeaders";
@@ -27,9 +26,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { PermissionModal } from "components/modals/PermissionModal";
-import PreviousButton from "components/Utilities/PreviousButton";
-import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { PermissionModal, DeleteOrDisable } from "components/modals";
 import { useQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
@@ -160,7 +157,6 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [deleteModal, setdeleteModal] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
   const handleEditCloseDialog = useCallback(() => {
@@ -169,6 +165,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   }, []);
   const [editDetails] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   const [alert, setAlert] = useState(null);
   const handleDeleteOpenDialog = (id) => {

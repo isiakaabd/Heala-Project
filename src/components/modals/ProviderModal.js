@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CustomButton from "components/Utilities/CustomButton";
+import { CustomButton } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -10,7 +10,7 @@ import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQ
 import { useMutation, useQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 
-export const ProviderModal = ({
+const ProviderModal = ({
   handleDialogClose,
   type,
   setAlert,
@@ -153,7 +153,7 @@ export const ProviderModal = ({
     </Formik>
   );
 };
-
+export default ProviderModal;
 ProviderModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   setAlert: PropTypes.func,

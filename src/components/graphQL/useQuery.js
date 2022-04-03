@@ -619,7 +619,12 @@ export const getMyEarnings = gql`
 export const getPatients = gql`
   ${PageInfo}
   query findProfiles($gender: String, $page: Int, $dociId: String) {
-    profiles(filterBy: { gender: $gender, dociId: $dociId }, orderBy: "-createdAt", page: $page) {
+    profiles(
+      filterBy: { gender: $gender, dociId: $dociId }
+      first: 30
+      orderBy: "-createdAt"
+      page: $page
+    ) {
       data {
         _id
         firstName

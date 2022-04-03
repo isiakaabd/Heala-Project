@@ -14,6 +14,7 @@ const CustomButton = ({
   borderRadius,
   textColor,
   path,
+  role,
   type: { background, hover, active, disabled },
   isSubmitting,
   ...rest
@@ -71,7 +72,7 @@ const CustomButton = ({
       variant="contained"
       LinkComponent={Link}
       to={path ? path : ""}
-      type="submit"
+      type={role ? "button" : "submit"}
       endIcon={endIcon}
       className={classes.button}
       {...rest}
@@ -88,7 +89,7 @@ CustomButton.defaultProps = {
 
 CustomButton.propTypes = {
   endIcon: PropTypes.node,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   type: PropTypes.object,
   textColor: PropTypes.string,
   width: PropTypes.string,
@@ -97,6 +98,7 @@ CustomButton.propTypes = {
   textColorOnHover: PropTypes.string,
   path: PropTypes.string,
   isSubmitting: PropTypes.bool,
+  role: PropTypes.bool,
 };
 
 export default CustomButton;

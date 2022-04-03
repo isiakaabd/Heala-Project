@@ -10,7 +10,7 @@ import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { getSinglePermissions } from "components/graphQL/useQuery";
 
-export const PermissionModal = ({
+const PermissionModal = ({
   type,
   initialValues,
   validationSchema,
@@ -144,6 +144,7 @@ export const PermissionModal = ({
     </Formik>
   );
 };
+export default PermissionModal;
 PermissionModal.propTypes = {
   handleDialogClose: PropTypes.func.isRequired,
   setSinglePermission: PropTypes.func,

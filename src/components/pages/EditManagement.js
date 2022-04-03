@@ -4,77 +4,18 @@ import { isSelected } from "helpers/isSelected";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { EnhancedTable, NoData } from "components/layouts";
 import { editManagement } from "components/Utilities/tableHeaders";
-import { PreviousButton, CustomButton, Loader } from "components/Utilities";
+import { PreviousButton, CustomButton, Loader, Modals } from "components/Utilities";
 import { editRole } from "components/graphQL/Mutation";
 import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { TableRow, TableCell, Grid, Typography } from "@mui/material";
-
-const optionss = [
-  { label: "get", value: "account:get" },
-  { label: "get all", value: "account:get all" },
-  { label: "read", value: "account:read" },
-  { label: "delete", value: "account:delete" },
-  { label: "create", value: "account:create" },
-];
-const optionss2 = [
-  { label: "get", value: "illness:get" },
-  { label: "get all", value: "illness:get all" },
-  { label: "read", value: "illness:read" },
-  { label: "delete", value: "illness:delete" },
-  { label: "create", value: "illness:create" },
-];
-const optionss3 = [
-  { label: "get", value: "family:get" },
-  { label: "get all", value: "family:get all" },
-  { label: "read", value: "family:read" },
-  { label: "delete", value: "family:delete" },
-  { label: "create", value: "family:create" },
-];
-const optionss4 = [
-  { label: "get", value: "allergy:get" },
-  { label: "get all", value: "allergy:get all" },
-  { label: "read", value: "allergy:read" },
-  { label: "delete", value: "allergy:delete" },
-  { label: "create", value: "allergy:create" },
-];
-const optionss5 = [
-  { label: "get", value: "consultation:get" },
-  { label: "get all", value: "consultation:get all" },
-  { label: "read", value: "consultation:read" },
-  { label: "delete", value: "consultation:delete" },
-  { label: "create", value: "consultation:create" },
-];
-
-const ro = [
-  {
-    name: "Account",
-    value: <FormikControl control="checkbox" name="permissions" options={optionss} />,
-  },
-  {
-    name: "Illness",
-    value: <FormikControl control="checkbox" name="permissions" options={optionss2} />,
-  },
-  {
-    name: "Family",
-    value: <FormikControl control="checkbox" name="permissions" options={optionss3} />,
-  },
-  {
-    name: "Allergy",
-    value: <FormikControl control="checkbox" name="permissions" options={optionss4} />,
-  },
-  {
-    name: "Consultations",
-    value: <FormikControl control="checkbox" name="permissions" options={optionss5} />,
-  },
-];
+import AddIcon from "@mui/icons-material/Add";
 
 const useStyles = makeStyles((theme) => ({
   filterBtnGrid: {
@@ -142,37 +83,42 @@ const useStyles = makeStyles((theme) => ({
 const EditManagement = ({ setSelectedSubMenu }) => {
   let history = useHistory();
   const { editId } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleDialogOpen = () => setIsOpen(true);
   const [role, setRole] = useState([]);
-  const [arr, setArr] = useState([]);
-  const [opt, setOpt] = useState([]);
+  const [state, setState] = useState({
+    description: "",
+    name: "",
+  });
   const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
-  console.log(data);
+
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
-      const value = data.getRole.permissions;
-      const x = value.map((ar) => {
-        return ar.split(":")[0];
+      setState({
+        name,
+        description,
       });
-      const y = value.map((ar) => {
-        return ar.split(":")[1];
-      });
-      const mySet2 = new Set(x);
-      let array = [...mySet2];
-      const mySet = new Set(y);
-      let array2 = [...mySet];
-      setArr(array);
-      setOpt(array2);
 
-      setRole(value);
+      setRole(permissions === null ? [] : permissions);
     }
   }, [data]);
+  const handleDialogClose = () => setIsOpen(false);
+  const initialValues1 = {
+    name: "",
+    value: "",
+  };
 
-  console.log(opt);
+  const onSubmit1 = (values, onSubmitProps) => {
+    const { name, value } = values;
+    setRole([`${name}:${value}`, ...role]);
+    onSubmitProps.resetForm();
+  };
+
   const [editRoles] = useMutation(editRole, { refetchQueries: [{ query: getRoles }] });
   const onSubmit = async (values) => {
     const { name, description, permissions } = values;
-
+    console.log(values);
     await editRoles({
       variables: {
         id: editId,
@@ -184,10 +130,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
 
     history.push("/settings/management");
   };
-  const validationSchema = Yup.object({
-    name: Yup.string("Enter your Name").required("Name is required"),
-    description: Yup.string("Enter your description").required("Description is required"),
-  });
+
   const theme = useTheme();
   const classes = useStyles();
   const buttonType = {
@@ -196,112 +139,164 @@ const EditManagement = ({ setSelectedSubMenu }) => {
     active: theme.palette.primary.dark,
   };
   const { selectedRows } = useSelector((state) => state.tables);
+  const { name, description } = state;
+
+  const initialValues = {
+    permissions: role,
+    name,
+    description,
+  };
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid container direction="column" rowSpacing={2}>
-      <Grid item>
-        <PreviousButton path="/settings/management" onClick={() => setSelectedSubMenu(0)} />
-      </Grid>
-      <Formik
-        initialValues={role}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-        validateOnChange={false}
-        validateOnMount={false}
-        validateOnBlur={false}
-        enableReinitialize
-      >
-        {({ isSubmitting, dirty, isValid }) => {
-          return (
-            <>
-              <Form>
-                <Grid
-                  item
-                  container
-                  alignItems="center"
-                  justifyContent="space-between"
-                  style={{ paddingBottom: "3rem" }}
-                >
-                  <Grid item>
-                    <Grid item container alignItems="center">
-                      <Typography noWrap variant="h1" component="div" color="#2D2F39">
-                        User Permissions
-                      </Typography>
+    <>
+      <Grid container direction="column" rowSpacing={2}>
+        <Grid item>
+          <PreviousButton path="/settings/management" onClick={() => setSelectedSubMenu(0)} />
+        </Grid>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          // validationSchema={validationSchema}
+          validateOnChange={false}
+          validateOnMount={false}
+          validateOnBlur={false}
+          enableReinitialize
+        >
+          {({ isSubmitting, dirty, isValid, errors, values }) => {
+            console.log(values);
+            return (
+              <>
+                <Form>
+                  <Grid
+                    item
+                    container
+                    alignItems="center"
+                    justifyContent="space-between"
+                    style={{ paddingBottom: "3rem" }}
+                  >
+                    <Grid item>
+                      <Grid item container alignItems="center">
+                        <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                          User Permissions
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid item>
+                      <CustomButton
+                        endIcon={<AddIcon />}
+                        title="Add New Permission"
+                        type={buttonType}
+                        role
+                        onClick={handleDialogOpen}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomButton
+                        title="Save Permission"
+                        type={buttonType}
+                        isSubmitting={isSubmitting}
+                        maxWidth="100%"
+                        className={classes.btn}
+                      />
                     </Grid>
                   </Grid>
-                  <Grid item>
-                    <CustomButton
-                      title="Save Permission"
-                      type={buttonType}
-                      isSubmitting={isSubmitting}
-                      maxWidth="100%"
-                      disabled={!(dirty || isValid)}
-                      className={classes.btn}
+
+                  <Grid item container>
+                    <EnhancedTable
+                      headCells={editManagement}
+                      rows={role}
+                      type="editRole"
+                      hasCheckbox={false}
+                    >
+                      {role.map((row, index) => {
+                        const isItemSelected = isSelected(index, selectedRows);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={index}
+                            selected={isItemSelected}
+                          >
+                            <TableCell role="checkbox" sx={{ padding: "0 5rem" }}></TableCell>
+                            <TableCell
+                              id={labelId}
+                              scope="row"
+                              align="left"
+                              className={classes.tableCell}
+                              style={{ color: theme.palette.common.black }}
+                            >
+                              {row && row.split(":")[0]}
+                            </TableCell>
+                            <TableCell
+                              id={labelId}
+                              scope="row"
+                              align="left"
+                              className={classes.tableCell}
+                              style={{ color: theme.palette.common.black }}
+                            >
+                              <FormikControl
+                                control="check"
+                                name="permissions"
+                                label={row && row.split(":")[1]}
+                                value={row}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </EnhancedTable>
+                  </Grid>
+                </Form>
+              </>
+            );
+          }}
+        </Formik>
+      </Grid>
+      <Modals isOpen={isOpen} title="Add New Role" rowSpacing={5} handleClose={handleDialogClose}>
+        <Formik
+          initialValues={initialValues1}
+          onSubmit={onSubmit1}
+          validateOnChange={false}
+          validateOnMount={false}
+          validateOnBlur={false}
+        >
+          {({ isSubmitting, dirty, isValid }) => {
+            return (
+              <Form style={{ marginTop: "3rem" }}>
+                <Grid item container gap={4} direction="column">
+                  <Grid item container spacing={2}>
+                    <FormikControl
+                      control="input"
+                      name="name"
+                      label="Name"
+                      placeholder="Enter Plan Name"
+                    />
+                  </Grid>
+
+                  <Grid item container spacing={2}>
+                    <FormikControl
+                      control="input"
+                      name="value"
+                      label="Value"
+                      placeholder="Enter Value"
                     />
                   </Grid>
                 </Grid>
-
-                <Grid item container>
-                  <EnhancedTable headCells={editManagement} rows={arr} hasCheckbox={false}>
-                    {arr.map((row, index) => {
-                      const isItemSelected = isSelected(row.id, selectedRows);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.name}
-                          selected={isItemSelected}
-                        >
-                          <TableCell role="checkbox" sx={{ padding: "0 5rem" }}></TableCell>
-                          <TableCell
-                            id={labelId}
-                            scope="row"
-                            align="left"
-                            className={classes.tableCell}
-                            style={{ color: theme.palette.common.black }}
-                          >
-                            {row}
-                          </TableCell>
-                          <TableCell
-                            id={labelId}
-                            scope="row"
-                            align="left"
-                            className={classes.tableCell}
-                            style={{ color: theme.palette.common.black }}
-                          >
-                            <FormikControl
-                              control="checkbox"
-                              name="permissions"
-                              options={optionss3}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </EnhancedTable>
+                <Grid item container xs={12} marginTop={20}>
+                  <CustomButton title="Add New Role" width="100%" type={buttonType} />
                 </Grid>
-                {/* {arr.map((i, index) => {
-                  return (
-                    <Grid container key={index}>
-                      <Grid item>{i}</Grid>
-                      <Grid item>
-                      </Grid>
-                    </Grid>
-                  );
-                })} */}
               </Form>
-            </>
-          );
-        }}
-        {/* The Search and Filter ends here */}
-      </Formik>
-    </Grid>
+            );
+          }}
+        </Formik>
+      </Modals>
+    </>
   );
 };
 
