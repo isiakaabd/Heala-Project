@@ -35,7 +35,6 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    // /    (async () => {
     if (token) {
       const { exp } = jwtDecode(token);
       const time = Date.now() >= exp * 1000;
