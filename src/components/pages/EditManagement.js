@@ -16,7 +16,7 @@ import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { TableRow, TableCell, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { arrangeItems } from "../../helpers/func";
+// import { arrangeItems } from "../../helpers/func";
 
 const useStyles = makeStyles((theme) => ({
   filterBtnGrid: {
@@ -101,7 +101,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
         description,
       });
 
-      setRole(permissions === null ? [] : permissions));  arrangeItems(
+      setRole(permissions === null ? [] : permissions); //h);  arrangeItems(
     }
   }, [data]);
   const handleDialogClose = () => setIsOpen(false);
@@ -214,7 +214,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                       {role.map((row, index) => {
                         const isItemSelected = isSelected(index, selectedRows);
                         const labelId = `enhanced-table-checkbox-${index}`;
-                      
+
                         return (
                           <TableRow
                             hover

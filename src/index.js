@@ -15,7 +15,7 @@ import { getAccessToken } from "./accessToken";
 require("dotenv").config();
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_URI,
+  uri: process.env.REACT_APP_BASE_URI,
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
