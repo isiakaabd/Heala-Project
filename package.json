@@ -26,6 +26,7 @@
     "chartjs-plugin-style": "^0.5.0",
     "chokidar-cli": "^2.1.0",
     "date-fns": "^2.24.0",
+    "dotenv": "^16.0.0",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
     "formik-mui-lab": "^1.0.0-alpha.3",

@@ -38,16 +38,19 @@ const App = () => {
     if (token) {
       const { exp } = jwtDecode(token);
       const time = Date.now() >= exp * 1000;
-      console.log(time)
+      console.log(time);
       if (token && time) {
+        logout();
+        logout_user();
+      }
+      if (time) {
         logout();
         logout_user();
       }
       if (token && isAuthenticated && !time && state) {
         setstate(false);
-        logout();
         console.log(2);
-        logout_user();
+        // logout_user();
         setAccessToken(token);
       } else if (token && isAuthenticated && !time && !state) {
         setAccessToken(token);
