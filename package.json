@@ -98,6 +98,7 @@
     "eslint-plugin-react": "^7.21.5",
     "postcss": "^8.3.11",
     "prettier": "^2.2.0",
+    "react-error-overlay": "^6.0.9",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
   }
 }
