@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
-import { EnhancedTable, EmptyTable } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
@@ -12,11 +12,9 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, Loader } from "components/Utilities";
 import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {

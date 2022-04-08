@@ -195,7 +195,7 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   ];
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Enter a valid email"),
+    email: Yup.string().email("Enter a valid email").trim(),
     role: Yup.string("Select your role"),
   });
   const onSubmit = async (values) => {

@@ -98,9 +98,9 @@ const Chat = ({
   }, [data]);
 
   const validationSchema = Yup.object({
-    subject: Yup.string("Enter your subject").required("Subject is required"),
-    textarea: Yup.string("Enter your message").required("Message is required"),
-    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+    subject: Yup.string("Enter your subject").trim().required("Subject is required"),
+    textarea: Yup.string("Enter your message").trim().required("Message is required"),
+    recipient: Yup.string("Enter your recipient").trim().required("recipients is required"),
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");

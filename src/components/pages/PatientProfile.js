@@ -11,8 +11,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import ReferPatient from "components/modals/ReferPatient";
-import DisablePatient from "components/modals/DeleteOrDisable";
+import { DeleteOrDisable, ReferPatient } from "components/modals";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
@@ -350,7 +349,7 @@ const PatientProfile = ({
           <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
         </Modals>
 
-        <DisablePatient
+        <DeleteOrDisable
           open={openDisablePatient}
           setOpen={setOpenDisablePatient}
           title="Delete Partner"

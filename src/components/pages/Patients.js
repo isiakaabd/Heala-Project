@@ -100,9 +100,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string("Enter your hospital"),
-    bloodGroup: Yup.string("ENter your bloodGroup"),
-    gender: Yup.string("Select your gender"),
+    name: Yup.string("Enter your hospital").trim(),
+    bloodGroup: Yup.string("ENter your bloodGroup").trim(),
+    gender: Yup.string("Select your gender").trim(),
     phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
   });
   const [fetchpatient, { loading, error, data }] = useLazyQuery(getPatients);

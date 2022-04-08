@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { calculateBMI } from "components/Utilities/bMI";
 import { getProfile, findAllergies, getLabResult } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",

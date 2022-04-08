@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { CustomButton, PreviousButton } from "components/Utilities";
 import { Divider, Grid, Typography } from "@mui/material";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
@@ -82,9 +81,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   };
 
   const validationSchema = Yup.object({
-    subject: Yup.string("Enter your subject").required("Subject is required"),
-    textarea: Yup.string("Enter your message").required("Message is required"),
-    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+    subject: Yup.string("Enter your subject").trim().required("Subject is required"),
+    textarea: Yup.string("Enter your message").trim().required("Message is required"),
+    recipient: Yup.string("Enter your recipient").trim().required("recipients is required"),
   });
 
   const [recipient, setRecipient] = useState("");
@@ -93,7 +92,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
     const { subject, textarea, recipient } = values;
-    console.log(subject, recipient);
+
     try {
       await createNewMessage({
         variables: {

@@ -16,7 +16,7 @@ import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { TableRow, TableCell, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-// import { arrangeItems } from "../../helpers/func";
+import { arrangeItems } from "../../helpers/func";
 
 const useStyles = makeStyles((theme) => ({
   filterBtnGrid: {
@@ -101,7 +101,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
         description,
       });
 
-      setRole(permissions === null ? [] : permissions); //h);  arrangeItems(
+      setRole(permissions === null ? [] : arrangeItems(permissions)); //h);  arrangeItems(
     }
   }, [data]);
   const handleDialogClose = () => setIsOpen(false);
@@ -232,21 +232,26 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                               className={classes.tableCell}
                               style={{ color: theme.palette.common.black }}
                             >
-                              {row && row.split(":")[0]}
+                              {row.name}
                             </TableCell>
                             <TableCell
                               id={labelId}
                               scope="row"
                               align="left"
                               className={classes.tableCell}
-                              style={{ color: theme.palette.common.black }}
+                              style={{ color: theme.palette.common.black, display: "flex" }}
                             >
-                              <FormikControl
-                                control="check"
-                                name="permissions"
-                                label={row && row.split(":")[1]}
-                                value={row}
-                              />
+                              {row.value.map((i, index) => {
+                                return (
+                                  <FormikControl
+                                    control="check"
+                                    name="permissions"
+                                    label={i}
+                                    key={index}
+                                    value={`${row.name}:${i}}`}
+                                  />
+                                );
+                              })}
                             </TableCell>
                           </TableRow>
                         );

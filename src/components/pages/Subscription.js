@@ -194,7 +194,7 @@ const Subscription = () => {
         message: error.message,
         type: "danger",
       });
-      console.log(error.message);
+      console.error(error.message);
     }
   };
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
@@ -220,8 +220,6 @@ const Subscription = () => {
       refetch();
     } else refetch({ amount: Number(e) });
   };
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       setPlan(data.getPlans.plan);

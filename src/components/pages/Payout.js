@@ -6,7 +6,7 @@ import { timeMoment, dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
 import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeader } from "components/Utilities/tableHeaders";

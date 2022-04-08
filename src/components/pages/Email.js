@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import NoData from "components/layouts/NoData";
-import Loader from "components/Utilities/Loader";
+import { Loader, Modals, FilterList, Search, CustomButton } from "components/Utilities";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
 import { dateMoment } from "components/Utilities/Time";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Modals from "components/Utilities/Modal";
 import { useQuery } from "@apollo/client";
 import { getEmailList } from "components/graphQL/useQuery";
 import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import { EnhancedTable, EmptyTable } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -24,7 +19,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import CustomButton from "components/Utilities/CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 
 const genderType = [
@@ -159,8 +153,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
   };
 
   const validationSchema = Yup.object({
-    category: Yup.string("Select your category").required("Category is required"),
-    referral: Yup.string("Select your referral").required("Refferal is required"),
+    category: Yup.string("Select your category").trim().required("Category is required"),
+    referral: Yup.string("Select your referral").trim().required("Refferal is required"),
     date: Yup.string("Select date").required("Date is required"),
   });
   const onSubmit = (values) => {

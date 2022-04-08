@@ -12,8 +12,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import PreviousButton from "components/Utilities/PreviousButton";
-import CustomButton from "components/Utilities/CustomButton";
+import { CustomButton, PreviousButton } from "components/Utilities";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {

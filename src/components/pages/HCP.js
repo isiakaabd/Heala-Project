@@ -104,10 +104,10 @@ const HCP = ({ setSelectedSubMenu }) => {
   });
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
-    Name: Yup.string("Enter your Permission").required("select an option"),
-    Specialization: Yup.string("Enter your Permission").required("select an option"),
+    Name: Yup.string("Enter your Permission").trim().required("select an option"),
+    Specialization: Yup.string("Enter your Permission").trim().required("select an option"),
     Date: Yup.string("Enter your Permission").required("select an option"),
-    Status: Yup.string("Enter your Permission").required("select an option"),
+    Status: Yup.string("Enter your Permission").trim().required("select an option"),
   });
 
   const { selectedRows } = useSelector((state) => state.tables);

@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Typography, Grid } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 import CallEndIcon from "@mui/icons-material/CallEnd";
