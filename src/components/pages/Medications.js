@@ -9,13 +9,12 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, Loader } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { myMedic } from "components/graphQL/useQuery";
 import { dateMoment } from "components/Utilities/Time";
-import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {

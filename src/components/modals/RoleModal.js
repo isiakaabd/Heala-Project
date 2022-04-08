@@ -28,8 +28,8 @@ const RoleModal = ({ handleDialogClose, type }) => {
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string("Enter your Name").required("Name is required"),
-    description: Yup.string("Enter your description").required("Description is required"),
+    name: Yup.string("Enter your Name").trim().required("Name is required"),
+    description: Yup.string("Enter your description").trim().required("Description is required"),
   });
   const onSubmit = async (values) => {
     const { name, description } = values;

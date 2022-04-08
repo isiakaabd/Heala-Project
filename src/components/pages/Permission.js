@@ -137,9 +137,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission").required("permission is required"),
+    name: Yup.string("Enter your Permission").trim().required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category").required("Category is required"),
+    category: Yup.string("Select Category").trim().required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);

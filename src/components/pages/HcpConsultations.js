@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
 import { Avatar, Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
-import { NoData, EmptyTable } from "components/layouts";
+import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -17,9 +15,8 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import { consultationsRows } from "components/Utilities/tableData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, FilterList, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
-import Loader from "components/Utilities/Loader";
 import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({

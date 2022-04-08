@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Loader from "components/Utilities/Loader";
-import { Grid, TableRow, Checkbox, TableCell, Button } from "@mui/material";
-
-import { NoData, EmptyTable } from "components/layouts";
+import { Grid, Typography, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import EnhancedTable from "components/layouts/EnhancedTable";
-import Typography from "@mui/material/Typography";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -15,7 +11,7 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link, useParams } from "react-router-dom";
 import { handleSelectedRows } from "helpers/selectedRows";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 

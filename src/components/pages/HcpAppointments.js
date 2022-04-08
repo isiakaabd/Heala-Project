@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Alert, Typography } from "@mui/material";
-import Modals from "components/Utilities/Modal";
+import { Grid, Alert, Divider, Avatar, Typography } from "@mui/material";
+import { Modals, CustomButton, Loader, PreviousButton } from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
-import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { DeleteOrDisable } from "components/modals";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { useQuery, useMutation } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
-import Divider from "@mui/material/Divider";
-import CustomButton from "components/Utilities/CustomButton";
-import Avatar from "@mui/material/Avatar";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import Loader from "components/Utilities/Loader";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {

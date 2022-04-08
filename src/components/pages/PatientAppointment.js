@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Modals from "components/Utilities/Modal";
-import { NoData, EmptyTable } from "components/layouts";
-import CustomButton from "components/Utilities/CustomButton";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
+import { CustomButton, FilterList, Modals, PreviousButton, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
@@ -16,11 +15,9 @@ import {
   Avatar,
 } from "@mui/material";
 import { deleteAppointment } from "components/graphQL/Mutation";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
 import { useQuery, useMutation } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
-import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import { DeleteOrDisable } from "components/modals";
 import { consultationsHeadCells2 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -31,9 +28,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import Loader from "components/Utilities/Loader";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";

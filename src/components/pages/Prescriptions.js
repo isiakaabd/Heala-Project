@@ -1,20 +1,10 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Typography, Grid, Avatar, Divider } from "@mui/material";
-// import EnhancedTable from "components/layouts/EnhancedTable";
-// import NoData from "components/layouts/NoData";
-// import { dateMoment, timeMoment } from "components/Utilities/Time";
-// import { prescriptionsHeadCells } from "components/Utilities/tableHeaders";
-// import { useSelector } from "react-redux";
-// import { useActions } from "components/hooks/useActions";
-// import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton } from "components/Utilities/";
 import { useParams } from "react-router-dom";
-// import { useQuery } from "@apollo/client";
-// import { getConsultations } from "components/graphQL/useQuery";
-// import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {

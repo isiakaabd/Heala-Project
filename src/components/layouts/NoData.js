@@ -12,9 +12,10 @@ const NoData = ({ error }) => {
       justifyContent="center"
     >
       <Grid item>
-        <Typography variant="h1">
-          {error ? error && error.networkError.result.errors[0].message : "No Data yet"}
-        </Typography>
+        {error ? <Typography variant="h1">Something went Wrong...</Typography> : null}
+      </Grid>
+      <Grid item>
+        <Typography variant="h1">No Data Yet</Typography>
       </Grid>
       <Grid item>
         <Typography variant="body2">

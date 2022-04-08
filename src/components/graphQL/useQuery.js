@@ -48,7 +48,7 @@ export const getPlans = gql`
 `;
 export const getSinglePlan = gql`
   query getPlan($id: ID!) {
-    getPlan(id: $id, orderBy: "-createdAt") {
+    getPlan(id: $id) {
       name
       amount
       providerData
