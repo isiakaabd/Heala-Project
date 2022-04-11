@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Menu, MenuItem, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -53,11 +50,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Notifications = ({ anchorEl, setAnchorEl }) => {
+  const arr = Array(0);
   const classes = useStyles();
   const theme = useTheme();
-
+  console.log(anchorEl);
   const open = Boolean(anchorEl);
-
+  console.log(open);
   return (
     <Menu
       id="basic-menu"
@@ -69,34 +67,44 @@ const Notifications = ({ anchorEl, setAnchorEl }) => {
       }}
       classes={{ paper: classes.menu }}
     >
-      <Grid container justifyContent="space-between" style={{ padding: "1rem 1.5rem 1rem" }}>
+      <Grid
+        container
+        gap={2}
+        alignItems="center"
+        justifyContent="space-between"
+        style={{ padding: "1rem 1.5rem 1rem" }}
+      >
         <Grid item>
-          <Typography variant="body1">Notification</Typography>
+          <Typography variant="body1">
+            {arr.length > 0 ? "Notifications" : "No Notification"}
+          </Typography>
         </Grid>
         <Grid item>
           <CloseIcon className={classes.icon} onClick={() => setAnchorEl(null)} />
         </Grid>
       </Grid>
-      {Array(10)
-        .fill()
-        .map((val, i) => (
-          <MenuItem
-            key={i}
-            onClick={() => setAnchorEl(null)}
-            className={classes.menuItem}
-            disableRipple
-          >
-            <Typography variant="body2">
-              Raphael Igbinedion{" "}
-              <span style={{ color: theme.palette.common.grey }}>
-                accepted your referral request
-              </span>
-            </Typography>
-            <Typography variant="body2" color="secondary">
-              Just now
-            </Typography>
-          </MenuItem>
-        ))}
+      {arr.length > 0
+        ? Array(10)
+            .fill()
+            .map((val, i) => (
+              <MenuItem
+                key={i}
+                onClick={() => setAnchorEl(null)}
+                className={classes.menuItem}
+                disableRipple
+              >
+                <Typography variant="body2">
+                  Raphael Igbinedion{" "}
+                  <span style={{ color: theme.palette.common.grey }}>
+                    accepted your referral request
+                  </span>
+                </Typography>
+                <Typography variant="body2" color="secondary">
+                  Just now
+                </Typography>
+              </MenuItem>
+            ))
+        : null}
     </Menu>
   );
 };

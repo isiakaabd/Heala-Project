@@ -43,19 +43,21 @@ const App = () => {
         logout_user();
         setstate(false);
       }
-      if (time) {
-        logout();
+      if (!token && isAuthenticated) {
         setstate(false);
+        console.log(20);
         logout_user();
+        setAccessToken(token);
       }
       if (token && isAuthenticated && !time && state) {
         setstate(false);
         console.log(2);
-        // logout_user();
+        logout_user();
         setAccessToken(token);
       } else if (token && isAuthenticated && !time && !state) {
         setAccessToken(token);
         console.log(3);
+        setstate(false);
       }
     }
     // })();
