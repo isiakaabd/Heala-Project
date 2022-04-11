@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton, Loader } from "components/Utilities";
 import { useQuery } from "@apollo/client";
 import { getAMessage } from "components/graphQL/useQuery";
-import NoData from "components/layouts/NoData";
-import Loader from "components/Utilities/Loader";
+import { NoData } from "components/layouts";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({

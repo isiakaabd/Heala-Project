@@ -4,6 +4,7 @@ import { Typography, Grid } from "@mui/material";
 import { Modals, CustomButton } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import CheckCircleSharpIcon from "@mui/icons-material/CheckCircleSharp";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const Success = ({
   open,
@@ -13,6 +14,7 @@ const Success = ({
   btnValue,
   onConfirm,
   onCancel,
+  type,
   ...rest
 }) => {
   const theme = useTheme();
@@ -27,7 +29,11 @@ const Success = ({
     <Modals isOpen={open} title="" isClose rowSpacing={5} handleClose={handleDialogClose}>
       <Grid item container direction="column" rowSpacing={5} marginTop={2}>
         <Grid item container justifyContent="center">
-          <CheckCircleSharpIcon sx={{ fontSize: "15rem", color: "green" }} />
+          {type !== "fail" ? (
+            <CheckCircleSharpIcon sx={{ fontSize: "15rem", color: "green" }} />
+          ) : (
+            <CancelIcon sx={{ fontSize: "15rem", color: "red" }} />
+          )}
         </Grid>
         <Grid item container justifyContent="center">
           <Typography variant="h2">{title}</Typography>
@@ -52,8 +58,9 @@ Success.propTypes = {
   open: PropTypes.bool.isRequired,
   handleDialogClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  confirmationMsg: PropTypes.string.isRequired,
+  confirmationMsg: PropTypes.string,
   btnValue: PropTypes.string.isRequired,
+  type: PropTypes.string,
   onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
 };

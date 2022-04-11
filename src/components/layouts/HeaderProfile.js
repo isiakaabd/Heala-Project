@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
+import { Grid, Avatar, IconButton, Typography, Badge } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "../layouts/Notifications";
-import IconButton from "@mui/material/IconButton";
 import { findAccounts } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
 
@@ -64,7 +60,6 @@ const HeaderProfile = () => {
           <Grid container direction="column" justifyContent="center">
             <Grid item>
               <Typography variant="body1" className={classes.name}>
-                {/* {loading ? "Admin" : error ? "Admin" : email} */}
                 {profileAcc && profileAcc.role}
               </Typography>
             </Grid>
@@ -77,10 +72,10 @@ const HeaderProfile = () => {
         </Grid>
         <Grid item>
           <IconButton
-            aria-label={notificationsLabel(1)}
+            aria-label={notificationsLabel(0)}
             onClick={(event) => setAnchorEl(event.currentTarget)}
           >
-            <Badge badgeContent={1} color="error">
+            <Badge badgeContent={0} color="error">
               <NotificationsActiveIcon color="primary" fontSize="large" />
             </Badge>
           </IconButton>
