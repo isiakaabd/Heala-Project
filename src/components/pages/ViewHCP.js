@@ -613,8 +613,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
       <Success
         open={open}
         handleDialogClose={handleDialogCloses}
-        title="Congratulations"
-        confirmationMsg=" Doctor successfully rejected"
+        title=""
+        type="fail"
+        confirmationMsg=" Doctor Verification failed"
         btnValue="Continue"
       />
     </>
