@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
-import Modals from "components/Utilities/Modal";
-import NoData from "components/layouts/NoData";
-import Loader from "components/Utilities/Loader";
-import CustomButton from "components/Utilities/CustomButton";
+import { Modals, Loader, PreviousButton, CustomButton } from "components/Utilities";
+import { NoData } from "components/layouts";
 import { useQuery } from "@apollo/client";
 import { getConsult } from "components/graphQL/useQuery";
 import { dateMoment, duration, daily } from "components/Utilities/Time";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({

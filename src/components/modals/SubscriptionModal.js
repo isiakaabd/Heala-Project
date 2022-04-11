@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CustomButton from "components/Utilities/CustomButton";
+import { CustomButton } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { formatNumber } from "components/Utilities/Time";
@@ -34,14 +34,14 @@ export const SubscriptionModal = ({
     },
   });
   const validationSchema = Yup.object({
-    name: Yup.string("Enter your Name").required("Name is required"),
+    name: Yup.string("Enter your Name").trim().required("Name is required"),
     amount: Yup.number("Enter your Amount")
       .typeError(" Enter a valid amount")
       .min(0, "Min value is  1")
       .required("Amount is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
-    provider: Yup.string("Enter Provider").required("Provider is required"),
-    duration: Yup.string("Enter Duration").required("Duration is required"),
+    description: Yup.string("Enter Description").trim().required("Description is required"),
+    provider: Yup.string("Enter Provider").trim().required("Provider is required"),
+    duration: Yup.string("Enter Duration").trim().required("Duration is required"),
   });
 
   useEffect(() => {

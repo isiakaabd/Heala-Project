@@ -1,22 +1,26 @@
 export const arrangeItems = (array) => {
-  const finalArray = [];
+  let finalArray = [];
+  let n = 0;
+  let arrayValues = [];
+  let arrayObject = {};
+  arrayObject.name = undefined;
+
+  // array.sort();
   array.forEach((element) => {
     let container = element.split(":");
-    let elementKeys = container[0];
-    let elementValues = container[1];
-    if (finalArray.length != 0) {
-      finalArray.forEach((item) => {
-        if (item.includes(elementKeys)) {
-          let result =
-            item.slice(0, item.length - 1) + `, '${elementValues}'` + item.slice(item.length - 1);
-          finalArray[finalArray.indexOf(item)] = result;
-        } else if (finalArray.indexOf(item) == finalArray.length - 1) {
-          finalArray.push(`${elementKeys}:{'${elementValues}'}`);
-        }
-      });
+    if (arrayObject.name == container[0]) {
+      arrayValues.push(container[1]);
+      arrayObject.value = arrayValues;
     } else {
-      finalArray.push(`${elementKeys}:{${elementValues}}`);
+      finalArray[n] = arrayObject;
+      arrayValues = [];
+      arrayObject = {};
+      arrayObject.name = container[0];
+      arrayValues.push(container[1]);
+      arrayObject.value = arrayValues;
+      n += 1;
     }
   });
+  finalArray.shift();
   return finalArray;
 };

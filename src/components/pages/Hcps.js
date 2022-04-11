@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Loader from "components/Utilities/Loader";
 import displayPhoto from "assets/images/avatar.svg";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
 import { useQuery, useMutation } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
-import { FilterList, Search, Modals, CustomButton } from "components/Utilities";
+import { FilterList, Search, Loader, Modals, CustomButton } from "components/Utilities";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
@@ -154,10 +153,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   };
 
   const validationSchema1 = Yup.object({
-    hospital: Yup.string("Enter your hospital"),
-    specialization: Yup.string("Enter your specialization"),
+    hospital: Yup.string("Enter your hospital").trim(),
+    specialization: Yup.string("Enter your specialization").trim(),
     phone: Yup.number("Enter a valid email").typeError("Enter a current Number"),
-    cadre: Yup.string("Enter your Cadre"),
+    cadre: Yup.string("Enter your Cadre").trim(),
   });
   const onSubmit1 = async (values) => {
     const { specialization } = values;
@@ -227,21 +226,23 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     dociId: "",
   };
   const validationSchema = Yup.object({
-    firstName: Yup.string("Enter your firstName").required("firstName is required"),
-    hospital: Yup.string("Enter your hosptial").required("hospital is required"),
+    firstName: Yup.string("Enter your firstName").trim().required("firstName is required"),
+    hospital: Yup.string("Enter your hosptial").trim().required("hospital is required"),
     dob: Yup.date("required").typeError(" Enter a valid DOB").required(" DOB required"),
-    dociId: Yup.string("Enter dociId").required("DociId required"),
+    dociId: Yup.string("Enter dociId").trim().required("DociId required"),
     gender: Yup.string("select your Gender").required("Select a gender"),
     phone: Yup.number("Enter your Phone Number")
       .typeError(" Enter a valid phone number")
       .min(11, "min value is  11 digits")
       .required("Phone number is required"),
-    lastName: Yup.string("Enter your lastName").required("LastName is required"),
+    lastName: Yup.string("Enter your lastName").trim().required("LastName is required"),
     image: Yup.string("Upload a single Image")
       .typeError("Pick correct image")
       .required("Image is required"),
-    specialization: Yup.string("select your Specialization").required("Specialization is required"),
-    cadre: Yup.string("select your Cadre").required("Cadre is required"),
+    specialization: Yup.string("select your Specialization")
+      .trim()
+      .required("Specialization is required"),
+    cadre: Yup.string("select your Cadre").trim().required("Cadre is required"),
   });
   const [createDoc] = useMutation(createDOctorProfile);
 

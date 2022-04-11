@@ -96,8 +96,8 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Enter a valid email").required("Email is required"),
-    password: Yup.string().required("password is required"),
+    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+    password: Yup.string().trim().required("password is required"),
   });
 
   const onSubmit = async (values, onSubmitProps) => {

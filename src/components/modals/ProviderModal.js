@@ -13,7 +13,6 @@ import { useTheme } from "@mui/material/styles";
 const ProviderModal = ({
   handleDialogClose,
   type,
-  setAlert,
   setSingleData,
   initialValues,
   editId,
@@ -54,7 +53,7 @@ const ProviderModal = ({
   }, [single.data, setSingleData]);
 
   const validationSchema = Yup.object({
-    name: Yup.string("Enter your Name").required("Name is required"),
+    name: Yup.string("Enter your Name").trim().required("Name is required"),
     type: Yup.string("Select your type").required("Type is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
   });

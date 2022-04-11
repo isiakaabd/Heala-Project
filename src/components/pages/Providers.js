@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import { ProviderModal } from "components/modals";
 import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
 import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
-import { CustomButton, Search, Modals, FilterList } from "components/Utilities";
+import { CustomButton, Loader, Search, Modals, FilterList } from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeleteOrDisable } from "components/modals";
+import { DeleteOrDisable, ProviderModal } from "components/modals";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -22,7 +21,6 @@ import * as Yup from "yup";
 import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
-import Loader from "components/Utilities/Loader";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -240,8 +238,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     handleDialogCloses();
   };
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your hospital"),
-    userTypeId: Yup.string("Enter your userTypeId"),
+    name: Yup.string("Enter your hospital").trim(),
+    userTypeId: Yup.string("Enter your userTypeId").trim(),
   });
 
   const fetchMoreFunc = (e, newPage) => {

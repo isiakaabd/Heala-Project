@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Loader from "components/Utilities/Loader";
-import CustomButton from "components/Utilities/CustomButton";
 import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Modals from "components/Utilities/Modal";
 import PropTypes from "prop-types";
 import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
-import Search from "components/Utilities/Search";
-import FilterList from "components/Utilities/FilterList";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { CustomButton, Loader, Modals, FilterList, Search } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
@@ -23,7 +18,7 @@ import { useQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
-import { NoData, EmptyTable } from "components/layouts";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {

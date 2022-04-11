@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { NoData, EmptyTable } from "components/layouts";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
 import { makeStyles } from "@mui/styles";
-import { FilterList, CustomButton, Modals, Search } from "components/Utilities";
+import { FilterList, CustomButton, Loader, Modals, Search } from "components/Utilities";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -19,9 +18,8 @@ import { getPartners, getSingleProvider, getUsertypess } from "components/graphQ
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
-import { Loader } from "components/Utilities";
-
 import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
+
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -177,10 +175,12 @@ const Partners = () => {
   };
 
   const validationSchema = Yup.object({
-    Name: Yup.string("Select your Name").required("Name is required"),
-    cadre: Yup.string("Select your Cadre").required("Cadre is required"),
+    Name: Yup.string("Select your Name").trim().required("Name is required"),
+    cadre: Yup.string("Select your Cadre").trim().required("Cadre is required"),
     date: Yup.string("Date your hospital").required("Date is required"),
-    specialization: Yup.string("select your specialization").required("specialization is required"),
+    specialization: Yup.string("select your specialization")
+      .trim()
+      .required("specialization is required"),
   });
   const initialValues1 = {
     name: "",
@@ -193,13 +193,13 @@ const Partners = () => {
     category: "",
   };
   const validationSchema2 = Yup.object({
-    category: Yup.string("select your Category").required("Category is required"),
+    category: Yup.string("select your Category").trim().required("Category is required"),
   });
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your name").required("name is required"),
+    name: Yup.string("Enter your name").trim().required("name is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
-    email: Yup.string().email("Enter a valid email").required("Email is required"),
-    provider: Yup.string("select a provider"),
+    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+    provider: Yup.string("select a provider").trim(),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
   const [addPartners] = useMutation(addPartner);
