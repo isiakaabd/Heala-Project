@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
+import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import CustomButton from "components/Utilities/CustomButton";
+import { CustomButton } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import { CREATE_PERMISSION, UPDATE_PERMISSION } from "components/graphQL/Mutation";
