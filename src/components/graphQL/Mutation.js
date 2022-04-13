@@ -1,5 +1,40 @@
 import { gql } from "@apollo/client";
 
+export const updateUserProvider = gql`
+  mutation updateUserProvider($dociId: String, $providerId: String) {
+    updateUserProvider(data: { dociId: $dociId, providerId: $providerId }) {
+      profile {
+        _id
+        dociId
+        createdAt
+        updatedAt
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        genotype
+        gender
+        phoneNumber
+        image
+        providerId
+      }
+      account {
+        _id
+        email
+        dociId
+        createdAt
+        updatedAt
+        isEmailVerified
+        role
+        providerId
+        userTypeId
+        enrolleeNumber
+        isPasswordTemporary
+      }
+    }
+  }
+`;
 export const editUserType = gql`
   mutation updateUserType($id: String!, $name: String, $icon: String!) {
     updateUserType(data: { id: $id, name: $name, icon: $icon }) {

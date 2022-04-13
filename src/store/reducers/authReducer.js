@@ -6,13 +6,13 @@ const initialState = {
   healaID: null,
   id: localStorage.getItem("user_id"),
   userDetail: null,
-  isAuthenticated: localStorage.getItem("auth") ? true : false,
+  isAuthenticated: localStorage.getItem("dashboardAuth") ? true : false,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.LOGIN_SUCCESS:
-      localStorage.setItem("auth", true);
+      localStorage.setItem("dashboardAuth", true);
       localStorage.setItem("user_id", action.payload._id);
       localStorage.setItem("token", action.payload.access_token);
       return {
@@ -36,11 +36,12 @@ const authReducer = (state = initialState, action) => {
         // isAuthenticated: true,
       };
     case actionTypes.LOGIN_FAILURE:
-      localStorage.removeItem("auth");
+      localStorage.removeItem("dashboardAuth");
       localStorage.removeItem("user_id");
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       localStorage.removeItem("hcp");
+      localStorage.removeItem("dociId");
       return {
         ...state,
         loading: false,
@@ -48,13 +49,14 @@ const authReducer = (state = initialState, action) => {
         authError: action.payload,
       };
     case actionTypes.LOGOUT:
-      localStorage.removeItem("auth");
+      localStorage.removeItem("dashboardAuth");
       localStorage.removeItem("user_id");
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       localStorage.removeItem("hcp");
       localStorage.removeItem("role");
       localStorage.removeItem("userTypeId");
+      localStorage.removeItem("dociId");
       return {
         ...state,
         isAuthenticated: false,
