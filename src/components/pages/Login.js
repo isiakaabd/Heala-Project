@@ -120,10 +120,11 @@ const Login = () => {
           },
         });
         if (data) {
-          const { email, access_token, userTypeId } = data.login.account;
+          const { email, access_token, userTypeId, dociId } = data.login.account;
           setAccessToken(access_token);
           localStorage.setItem("email", email);
           localStorage.setItem("userTypeId", userTypeId);
+          localStorage.setItem("dociId", dociId);
           history.push("/");
         }
       }

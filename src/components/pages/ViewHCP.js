@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
 import { verification } from "components/graphQL/useQuery";
-import { rejectVerification } from "components/graphQL/Mutation";
+import { rejectVerification, updateUserProvider } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -101,17 +101,37 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
+
   const history = useHistory();
   const [respondData, setRespondData] = useState([]);
+
   const [reject] = useMutation(rejectVerification);
   // const onConfirm = () => {
   //   setCancel(true);
   // };
   const [open, setOpen] = useState(false);
+  const [updateState, setUpdateState] = useState("Update Provider");
+  const [update] = useMutation(updateUserProvider);
+  const [submit, setSubmit] = useState(false);
   const handleDialogCloses = () => setOpen(false);
-
+  const handleUpdateProVider = async (value) => {
+    try {
+      setSubmit(true);
+      await update({
+        variables: {
+          dociId: respondData && respondData.doctorData.dociId,
+          providerId: value,
+        },
+      });
+      setSubmit(false);
+      setUpdateState("Updated");
+    } catch (err) {
+      setSubmit(false);
+      console.log(err);
+    }
+  };
   const [cancel, setCancel] = useState(false);
-
+  console.log(respondData.dociId);
   const handleDialogOpen = () => {
     setCancel(true);
   };
@@ -529,13 +549,26 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid item>
                 <Typography variant="h4">Reference ID</Typography>
               </Grid>
+
               {reference?.reference_code ? (
-                <Grid item className={classes.link}>
-                  {reference.reference_code}
-                </Grid>
+                <>
+                  <Grid item className={classes.link}>
+                    {reference.reference_code}
+                  </Grid>
+                </>
               ) : (
                 <Grid className={classes.link}>Not Provided</Grid>
               )}
+              <Grid item sx={{ alignSelf: "center" }}>
+                <CustomButton
+                  title={updateState}
+                  type={trasparentButton}
+                  width="100%"
+                  isSubmitting={submit}
+                  onClick={() => handleUpdateProVider(reference?.reference_code)}
+                  disabled={updateState === "Updated"}
+                />
+              </Grid>
             </Grid>
           </Grid>
 
