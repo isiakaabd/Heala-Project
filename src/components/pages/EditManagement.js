@@ -84,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 const EditManagement = ({ setSelectedSubMenu }) => {
   let history = useHistory();
   const { editId } = useParams();
+  const [last, setLast] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogOpen = () => setIsOpen(true);
   const [role, setRole] = useState([]);
@@ -92,7 +93,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
     name: "",
   });
   const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
-
+  console.log(role);
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
@@ -100,7 +101,8 @@ const EditManagement = ({ setSelectedSubMenu }) => {
         name,
         description,
       });
-
+      console.log(permissions);
+      setLast(permissions);
       setRole(permissions === null ? [] : arrangeItems(permissions)); //h);  arrangeItems(
     }
   }, [data]);
@@ -112,14 +114,20 @@ const EditManagement = ({ setSelectedSubMenu }) => {
 
   const onSubmit1 = (values, onSubmitProps) => {
     const { name, value } = values;
-    setRole([`${name}:${value}`, ...role]);
+
+    const z = role.filter((i) => i.name === name);
+    const index = role.findIndex((object) => object.name === z[0].name);
+    const j = role[index];
+    j.value = [value, ...j.value];
+
+    setRole(role);
+    setLast([`${name}:${value}`, ...last]);
     onSubmitProps.resetForm();
   };
 
   const [editRoles] = useMutation(editRole, { refetchQueries: [{ query: getRoles }] });
   const onSubmit = async (values) => {
     const { name, description, permissions } = values;
-    console.log(values);
     await editRoles({
       variables: {
         id: editId,
@@ -143,7 +151,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
   const { name, description } = state;
 
   const initialValues = {
-    permissions: role,
+    permissions: last,
     name,
     description,
   };
@@ -248,7 +256,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                                     name="permissions"
                                     label={i}
                                     key={index}
-                                    value={`${row.name}:${i}}`}
+                                    value={`${row.name}:${i}`}
                                   />
                                 );
                               })}
