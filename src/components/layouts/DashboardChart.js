@@ -96,8 +96,6 @@ const useStyles = makeStyles((theme) => ({
 const DashboardCharts = ({ data, refetch }) => {
   const classes = useStyles();
   const theme = useTheme();
-  console.log(data);
-
   const timeFrames = [
     { id: 0, time: "Jan" },
     { id: 1, time: "Mar" },
