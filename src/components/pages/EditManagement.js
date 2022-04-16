@@ -174,41 +174,48 @@ const EditManagement = ({ setSelectedSubMenu }) => {
           enableReinitialize
         >
           {({ isSubmitting, values }) => {
-            console.log(values);
             return (
               <>
                 <Form>
                   <Grid
                     item
                     container
+                    flexWrap="nowrap"
                     alignItems="center"
-                    justifyContent="space-between"
                     style={{ paddingBottom: "3rem" }}
                   >
-                    <Grid item>
-                      <Grid item container alignItems="center">
-                        <Typography noWrap variant="h1" component="div" color="#2D2F39">
-                          User Permissions
-                        </Typography>
+                    <Grid item container alignItems="center">
+                      <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                        User Permissions
+                      </Typography>
+                    </Grid>
+
+                    <Grid
+                      item
+                      container
+                      gap={2}
+                      justifyContent="end"
+                      alignItems="center"
+                      justifySelf="flex-end"
+                    >
+                      <Grid item>
+                        <CustomButton
+                          endIcon={<AddIcon />}
+                          title="Add New Permission"
+                          type={buttonType}
+                          role
+                          onClick={handleDialogOpen}
+                        />
                       </Grid>
-                    </Grid>
-                    <Grid item>
-                      <CustomButton
-                        endIcon={<AddIcon />}
-                        title="Add New Permission"
-                        type={buttonType}
-                        role
-                        onClick={handleDialogOpen}
-                      />
-                    </Grid>
-                    <Grid item>
-                      <CustomButton
-                        title="Save Permission"
-                        type={buttonType}
-                        isSubmitting={isSubmitting}
-                        maxWidth="100%"
-                        className={classes.btn}
-                      />
+                      <Grid item>
+                        <CustomButton
+                          title="Save Permission"
+                          type={buttonType}
+                          isSubmitting={isSubmitting}
+                          maxWidth="100%"
+                          className={classes.btn}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
 
@@ -246,7 +253,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                               id={labelId}
                               scope="row"
                               align="left"
-                              className={classes.tableCell}
+                              //  className={classes.tableCell}
                               style={{ color: theme.palette.common.black, display: "flex" }}
                             >
                               {row.value.map((i, index) => {
