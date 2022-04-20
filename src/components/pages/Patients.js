@@ -215,10 +215,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
               handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
-              {(rowsPerPage > 0
-                ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                : profiles
-              ).map((row, index) => {
+              {
+              // (rowsPerPage > 0
+              //   ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              //   : profiles
+              // )
+              profiles.map((row, index) => {
+                console.log(row)
                 const {
                   dociId,
                   firstName,
