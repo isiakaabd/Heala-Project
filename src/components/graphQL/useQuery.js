@@ -621,7 +621,6 @@ export const getPatients = gql`
   query findProfiles($gender: String, $page: Int, $dociId: String) {
     profiles(
       filterBy: { gender: $gender, dociId: $dociId }
-      first: 30
       orderBy: "-createdAt"
       page: $page
     ) {
