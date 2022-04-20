@@ -120,9 +120,10 @@ const Login = () => {
           },
         });
         if (data) {
-          const { email, access_token, userTypeId, dociId } = data.login.account;
+          const { email, access_token, _id, userTypeId, dociId } = data.login.account;
           setAccessToken(access_token);
           localStorage.setItem("email", email);
+          localStorage.setItem("_id", _id);
           localStorage.setItem("userTypeId", userTypeId);
           localStorage.setItem("dociId", dociId);
           history.push("/");
@@ -192,6 +193,7 @@ const Login = () => {
                           label="Email address"
                           name="email"
                           type="email"
+                          autoFocus={true}
                           id="email"
                           placeholder="Enter your email"
                           hasStartIcon={false}

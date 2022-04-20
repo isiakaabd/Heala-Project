@@ -302,8 +302,10 @@ export const CREATE_MESSAGE = gql`
 `;
 
 export const LOGOUT_USER = gql`
-  mutation logout {
-    logout
+  mutation logout($user: String!, $deviceId: String) {
+    logout(data: { user: $user, deviceId: $deviceId }) {
+      result
+    }
   }
 `;
 export const getNewAccessToken = gql`

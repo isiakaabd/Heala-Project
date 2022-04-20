@@ -37,19 +37,13 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
 
   useEffect(() => {
     const doc = doctorStats.oneYear;
-    console.log(doctorStats.oneYear, "sss");
-    if (doc) {
-      if (doc.inactiveCount) {
-        const z = doc.inactiveCount.map((i) => i.count);
-        setInActives(z);
-      }
+    if (doc && doc.inactiveCount) {
+      const z = doc.inactiveCount.map((i) => i.count);
+      setInActives(z);
     }
-    if (doc) {
-      const z = doc.activeCount.map((i) => i.count);
-      setActives(z);
-    }
+    const z = doc && doc.activeCount.map((i) => i.count);
+    setActives(z);
   }, [doctorStats, type]);
-
   const data = {
     labels: ["ONE DAY", "FIVE DAYS", "ONE MONTH", "THREE MONTHS", "ONE YEAR"],
     datasets: [

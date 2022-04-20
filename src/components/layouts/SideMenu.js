@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import { List, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.svg";
@@ -128,7 +125,11 @@ const SideMenu = (props) => {
 
   const handleLogout = async () => {
     try {
-      await logout_user();
+      await logout_user({
+        variables: {
+          user: localStorage.getItem("user_id"),
+        },
+      });
       logout();
       setSelectedMenu(13);
     } catch (err) {
