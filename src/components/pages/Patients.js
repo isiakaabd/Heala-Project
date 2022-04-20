@@ -137,6 +137,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     }
   }, [data]);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  console.log(totalDocs, "jjj");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 
@@ -215,10 +216,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
               handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
             >
-              {(rowsPerPage > 0
-                ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                : profiles
-              ).map((row, index) => {
+              {profiles.map((row, index) => {
                 const {
                   dociId,
                   firstName,
