@@ -241,7 +241,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         style={{ color: theme.palette.common.black }}
                       >
                         {/* {new Date(updatedAt)} */}
-                        {referralId ? referralId : "No Value"}
+                        {_id ? _id : "No Value"}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div

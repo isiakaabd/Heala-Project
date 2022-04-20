@@ -139,6 +139,7 @@ const HcpEarnings = (props) => {
   useEffect(() => {
     if (data) {
       const { totalEarnings, totalPayout } = data.getEarningStats;
+
       setTotalEarning(totalEarnings);
       setTotalPayouts(totalPayout);
       const value = financialPercent(totalEarnings, totalPayout);

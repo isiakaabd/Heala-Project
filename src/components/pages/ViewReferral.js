@@ -60,6 +60,7 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     createdAt,
     patientData,
     doctorData,
+    _id
     // eslint-disable-next-line
   } = referral;
   // const { firstName, lastName, picture } = doctorData;
@@ -140,7 +141,7 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">{referrals ? referrals : "No Value"}</Typography>
+                <Typography variant="h5">{_id ? _id : "No Value"}</Typography>
               </Grid>
             </Grid>
           </Grid>
