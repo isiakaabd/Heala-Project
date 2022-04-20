@@ -96,8 +96,6 @@ const useStyles = makeStyles((theme) => ({
 const DashboardCharts = ({ data, refetch }) => {
   const classes = useStyles();
   const theme = useTheme();
-  console.log(data);
-
   const timeFrames = [
     { id: 0, time: "Jan" },
     { id: 1, time: "Mar" },
@@ -113,7 +111,7 @@ const DashboardCharts = ({ data, refetch }) => {
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
-
+  console.log(data);
   useEffect(() => {
     const {
       // eslint-disable-next-line
@@ -124,6 +122,7 @@ const DashboardCharts = ({ data, refetch }) => {
       totalEarnings,
       totalPayout,
     } = data?.getStats;
+    console.log(doctorStats);
     setPatients(patientStats);
     setDoctorStats(doctorStats);
     setAppointmentStats(appointmentStats);

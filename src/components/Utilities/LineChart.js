@@ -36,22 +36,18 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
   // const [times, setTimes] = useState([]);
 
   useEffect(() => {
-    setInActives(
-      doctorStats &&
-        Object.keys(doctorStats)
-          .map((key) => doctorStats[key].inactiveCount)
-          .filter((element) => {
-            return element !== undefined;
-          }),
-    );
-    setActives(
-      doctorStats &&
-        Object.keys(doctorStats)
-          .map((key) => doctorStats[key].activeCount)
-          .filter((element) => {
-            return element !== undefined;
-          }),
-    );
+    const doc = doctorStats.oneYear;
+    console.log(doctorStats.oneYear, "sss");
+    if (doc) {
+      if (doc.inactiveCount) {
+        const z = doc.inactiveCount.map((i) => i.count);
+        setInActives(z);
+      }
+    }
+    if (doc) {
+      const z = doc.activeCount.map((i) => i.count);
+      setActives(z);
+    }
   }, [doctorStats, type]);
 
   const data = {
@@ -157,8 +153,8 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
                 (timeFrame) =>
                   timeFrame != "totalActiveSubscribers" && timeFrame != "totalInactiveSubscribers",
               )
-              .map((timeFrame) => (
-                <Grid item key={timeFrame}>
+              .map((timeFrame, index) => (
+                <Grid item key={index}>
                   <Chip
                     label={timeFrame}
                     color={timeFrame === timeFrame.id ? "success" : undefined}

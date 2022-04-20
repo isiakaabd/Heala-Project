@@ -16,7 +16,7 @@ const Checkboxes = (props) => {
   const { name, label, value } = props;
 
   return (
-    <Grid container gap={1}>
+    <Grid item>
       <Form type="checkbox" label={label} name={name} value={value} />
     </Grid>
   );

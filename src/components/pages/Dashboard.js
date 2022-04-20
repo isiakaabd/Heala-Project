@@ -21,6 +21,7 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   const { data, error, loading, refetch } = useQuery(dashboard, {
     notifyOnNetworkStatusChange: true,
   });
+
   useEffect(() => {
     if (da) {
       const datas = da.getUserTypeProviders.provider;
