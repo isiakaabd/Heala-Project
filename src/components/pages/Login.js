@@ -193,6 +193,7 @@ const Login = () => {
                           label="Email address"
                           name="email"
                           type="email"
+                          autoFocus={true}
                           id="email"
                           placeholder="Enter your email"
                           hasStartIcon={false}

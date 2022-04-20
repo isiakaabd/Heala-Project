@@ -336,6 +336,7 @@ const Partners = () => {
             headCells={partnersHeadCells}
             rows={partner}
             page={page}
+            type="editRole"
             paginationLabel="Partner per page"
             hasCheckbox={true}
           >

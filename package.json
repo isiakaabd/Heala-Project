@@ -65,7 +65,11 @@
     "lint": "eslint --fix .",
     "lint-check": "eslint .",
     "eject": "react-scripts eject",
+<<<<<<< HEAD
     "start:react": "react-scripts start",
+=======
+    "start": "react-scripts start",
+>>>>>>> 6c05714259f4aff4764fb533582f8b011a9a002d
     "build:css-current": "postcss 'frontend/src/*.css' -d public",
     "build:css-works-for-me": "postcss frontend/src/*.css -d public"
   },

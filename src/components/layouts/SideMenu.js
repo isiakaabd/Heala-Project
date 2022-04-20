@@ -127,7 +127,7 @@ const SideMenu = (props) => {
     try {
       await logout_user({
         variables: {
-          user: localStorage.getItem("_id"),
+          user: localStorage.getItem("user_id"),
         },
       });
       logout();

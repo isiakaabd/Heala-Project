@@ -37,11 +37,11 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
 
   useEffect(() => {
     const doc = doctorStats.oneYear;
-    if (doc.inactiveCount) {
+    if (doc && doc.inactiveCount) {
       const z = doc.inactiveCount.map((i) => i.count);
       setInActives(z);
     }
-    const z = doc.activeCount.map((i) => i.count);
+    const z = doc && doc.activeCount.map((i) => i.count);
     setActives(z);
   }, [doctorStats, type]);
   const data = {
