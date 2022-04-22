@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import {
-  CustomButton,
-  Loader,
-  Modals,
-  PreviousButton,
-} from "components/Utilities";
+import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
-import { verification } from "components/graphQL/useQuery";
+import { verification } from "components/graphQL/useQuery"; //getCategory
 import {
   rejectVerification,
   updateDoctorProvider,
+  // updateUserProvider,
 } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
@@ -104,12 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({
-  selectedMenu,
-  selectedSubMenu,
-  setSelectedMenu,
-  setSelectedSubMenu,
-}) => {
+const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -144,7 +135,6 @@ const ViewHCP = ({
     }
   };
   const [cancel, setCancel] = useState(false);
-  console.log(respondData.dociId);
   const handleDialogOpen = () => {
     setCancel(true);
   };
@@ -189,13 +179,13 @@ const ViewHCP = ({
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
+    disabled: "#868686",
   };
   const RedButton = {
-    background: "#f8432b",
+    background: "red",
     hover: "red",
     active: "red",
-    disabled: "red",
+    disabled: "#FF8484",
   };
   useEffect(() => {
     if (data) {
@@ -203,7 +193,7 @@ const ViewHCP = ({
     }
   }, [data]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor"
+    respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   useEffect(() => {
     if (respondData.status) {
@@ -221,14 +211,14 @@ const ViewHCP = ({
     // eslint-disable-next-line
   } = respondData;
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
-  const [button, setButtonValue] = useState(respondData.status);
+  const [button, setButtonValue] = useState(respondData.status); //button
 
   useEffect(() => {
     if (verifyData && verifyData.verifyHCP.status) {
       setVerifyState("Doctor Verified!!");
       setButtonValue(verifyData.verifyHCP.status);
     }
-  }, [verify, status, verifyState, verifyData]);
+  }, [verify, status, button, verifyState, verifyData]);
 
   const handleVerifyDoctor = async () => {
     try {
@@ -301,9 +291,7 @@ const ViewHCP = ({
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.firstName} ${doctorData.lastName}`
-                        : "No Doctor"}
+                      {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -346,9 +334,7 @@ const ViewHCP = ({
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.dociId.split("-")[1]}`
-                        : "No ID "}{" "}
+                      {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -360,9 +346,7 @@ const ViewHCP = ({
                   </Grid>
                   <Grid item width="100%">
                     <Typography variant="h4">
-                      {doctorData
-                        ? `${doctorData.specialization}`
-                        : "No specialization "}
+                      {doctorData ? `${doctorData.specialization}` : "No specialization "}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -382,18 +366,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -410,9 +384,7 @@ const ViewHCP = ({
                     <Grid className={classes.link}>{qualification.degree}</Grid>
                   )}
                   {qualification?.year && (
-                    <Grid className={classes.link}>
-                      {dateMoment(qualification.year).slice(-4)}
-                    </Grid>
+                    <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
                   )}
                   {qualification?.image && (
                     <a
@@ -433,12 +405,7 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -482,18 +449,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -540,12 +497,7 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -591,18 +543,8 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "2rem" }}
-        >
-          <Grid
-            item
-            md
-            style={{ marginRight: " 2rem" }}
-            className={classes.cardGrid}
-          >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+          <Grid item md style={{ marginRight: " 2rem" }} className={classes.cardGrid}>
             <Grid
               container
               direction="column"
@@ -634,14 +576,8 @@ const ViewHCP = ({
                   type={trasparentButton}
                   width="100%"
                   isSubmitting={submit}
-                  onClick={() =>
-                    handleUpdateProVider(reference?.reference_code)
-                  }
-                  disabled={
-                    doctorData?.providerId === reference?.reference_code
-                      ? true
-                      : false
-                  }
+                  onClick={() => handleUpdateProVider(reference?.reference_code)}
+                  disabled={doctorData?.providerId === reference?.reference_code ? true : false}
                 />
               </Grid>
             </Grid>
@@ -655,18 +591,12 @@ const ViewHCP = ({
           ></Grid>
         </Grid>
         <Grid item container style={{ paddingTop: "2rem" }}>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            gap={2}
-            className={classes.cardGrid}
-          >
+          <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
             <Grid item>
               <CustomButton
                 title="Reject Verification"
                 type={RedButton}
-                // disabled={button}
+                disabled={!verifyState}
                 onClick={handleDialogOpen}
                 width="100%"
               />
@@ -675,7 +605,7 @@ const ViewHCP = ({
               <CustomButton
                 title={verifyState}
                 type={trasparentButton}
-                disabled={button}
+                disabled={verifyState}
                 onClick={handleVerifyDoctor}
                 width="100%"
               />

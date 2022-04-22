@@ -52,7 +52,6 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
   if (error) return <NoData error={error} />;
   const {
     specialization,
-    referrals,
     type,
     reason,
     note,
@@ -60,7 +59,7 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
     createdAt,
     patientData,
     doctorData,
-    _id
+    _id,
     // eslint-disable-next-line
   } = referral;
   // const { firstName, lastName, picture } = doctorData;

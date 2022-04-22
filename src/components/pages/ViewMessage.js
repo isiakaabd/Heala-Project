@@ -40,15 +40,12 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
   const [message, setMessage] = useState([]);
-
   useEffect(() => {
-    if (data) {
-      setMessage(data.getMessage);
-    }
+    if (data) setMessage(data.getMessage);
   }, [message, data]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
-  const { body, recipientData, subject, sender } = message;
+  const { body, recipientData, subject } = message;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -75,7 +72,11 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
               </Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label={sender} className={classes.badge} />
+              <Chip
+                variant="outlined"
+                label={recipientData ? recipientData.dociId : "No Hela ID"}
+                className={classes.badge}
+              />
             </Grid>
           </Grid>
         </Grid>

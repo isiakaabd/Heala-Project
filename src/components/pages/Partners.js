@@ -294,7 +294,7 @@ const Partners = () => {
     // }
   }, [data, categoryData, setCategoryDatas]);
 
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;

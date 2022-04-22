@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import NoData from "components/layouts/NoData";
 import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
-import FilterList from "components/Utilities/FilterList";
-import { EnhancedTable, EmptyTable } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -19,7 +17,7 @@ import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
+import { Loader, FilterList } from "components/Utilities";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -79,10 +77,11 @@ const Consultations = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const { patientConsultation } = useActions();
+  const { selectedRows } = useSelector((state) => state.tables);
+  const [consultations, setConsultations] = useState([]);
+  const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const { loading, data, error, refetch } = useQuery(getConsultations, {
     variables: {
       id: patientId,
@@ -90,7 +89,6 @@ const Consultations = (props) => {
     },
   });
 
-  const [consultations, setConsultations] = useState([]);
   useEffect(() => {
     if (data) {
       setConsultations(data.getConsultations.data);

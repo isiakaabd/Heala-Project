@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import { Card, PreviousButton, Modals, CustomButton, Loader } from "components/Utilities";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { Card, PreviousButton, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -15,7 +15,7 @@ import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.s
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import ReferPatient from "components/modals/ReferPatient";
+// import ReferPatient from "components/modals/ReferPatient";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
 import { deleteProfile } from "components/graphQL/Mutation";
@@ -140,19 +140,19 @@ const SinglePatient = (props) => {
     active: "#f4f4f4",
   };
 
-  const greenButton = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
-  };
-  const initialValues = {
-    type: "",
-    reason: "",
-    note: "",
-    specialization: "",
-    patient: patientId,
-    doctor: localStorage.getItem("user_id"),
-  };
+  // const greenButton = {
+  //   background: theme.palette.success.main,
+  //   hover: theme.palette.success.light,
+  //   active: theme.palette.success.dark,
+  // };
+  // const initialValues = {
+  //   type: "",
+  //   reason: "",
+  //   note: "",
+  //   specialization: "",
+  //   patient: patientId,
+  //   doctor: localStorage.getItem("user_id"),
+  // };
   const [patientProfile, setPatientProfile] = useState("");
   const { loading, error, data } = useQuery(findProfile, {
     variables: {
@@ -161,7 +161,6 @@ const SinglePatient = (props) => {
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-only",
   });
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -172,10 +171,10 @@ const SinglePatient = (props) => {
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
-  const handleDialogOpen = () => setIsOpen(true);
+  // const handleDialogOpen = () => setIsOpen(true);
 
-  const handleDialogClose = () => setIsOpen(false);
-  const [isOpen, setIsOpen] = useState(false);
+  // const handleDialogClose = () => setIsOpen(false);
+  // const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
@@ -222,14 +221,14 @@ const SinglePatient = (props) => {
                   onClick={() => setOpenDisablePatient(true)}
                 />
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <CustomButton
                   endIcon={<TrendingUpIcon />}
                   title="Refer Patient"
                   type={greenButton}
                   onClick={handleDialogOpen}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Grid>
         </Grid>
@@ -279,13 +278,13 @@ const SinglePatient = (props) => {
           onConfirm={onConfirm}
           confirmationMsg="disable Patient"
         />
-        <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
+        {/* <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
           <ReferPatient
             type="refer"
             handleDialogClose={handleDialogClose}
             initialValues={initialValues}
           />
-        </Modals>
+        </Modals> */}
       </Grid>
     );
   }

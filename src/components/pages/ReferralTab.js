@@ -191,7 +191,6 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     _id,
                     createdAt,
                     type,
-                    referralId,
                     specialization,
                     testType,
                     doctorData,
