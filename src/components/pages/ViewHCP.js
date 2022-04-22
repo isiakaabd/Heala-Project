@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
+import {
+  CustomButton,
+  Loader,
+  Modals,
+  PreviousButton,
+} from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
@@ -9,7 +14,10 @@ import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
 import { verification } from "components/graphQL/useQuery";
-import { rejectVerification, updateUserProvider } from "components/graphQL/Mutation";
+import {
+  rejectVerification,
+  updateDoctorProvider,
+} from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -96,7 +104,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const ViewHCP = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -111,7 +124,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   // };
   const [open, setOpen] = useState(false);
   const [updateState, setUpdateState] = useState("Update Provider");
-  const [update] = useMutation(updateUserProvider);
+  const [update] = useMutation(updateDoctorProvider);
   const [submit, setSubmit] = useState(false);
   const handleDialogCloses = () => setOpen(false);
   const handleUpdateProVider = async (value) => {
@@ -190,7 +203,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     }
   }, [data]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor",
+    respondData.status ? "Doctor Verified!" : "Verify Doctor"
   );
   useEffect(() => {
     if (respondData.status) {
@@ -239,7 +252,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   // eslint-disable-next-line
-  console.log(license, "update");
   return (
     <>
       <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
@@ -260,7 +272,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Avatar
                 src={doctorData ? doctorData.picture : displayPhoto}
-                sx={{ minWidth: "150px", minHeight: "150px", marginRight: "2rem" }}
+                sx={{
+                  minWidth: "150px",
+                  minHeight: "150px",
+                  marginRight: "2rem",
+                }}
               />
             </Grid>
           </Grid>
@@ -285,7 +301,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                      {doctorData
+                        ? `${doctorData.firstName} ${doctorData.lastName}`
+                        : "No Doctor"}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -328,7 +346,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                   </Grid>
                   <Grid item>
                     <Typography variant="h4">
-                      {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
+                      {doctorData
+                        ? `${doctorData.dociId.split("-")[1]}`
+                        : "No ID "}{" "}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -340,7 +360,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                   </Grid>
                   <Grid item width="100%">
                     <Typography variant="h4">
-                      {doctorData ? `${doctorData.specialization}` : "No specialization "}
+                      {doctorData
+                        ? `${doctorData.specialization}`
+                        : "No specialization "}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -360,8 +382,18 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginRight: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -378,7 +410,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                     <Grid className={classes.link}>{qualification.degree}</Grid>
                   )}
                   {qualification?.year && (
-                    <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
+                    <Grid className={classes.link}>
+                      {dateMoment(qualification.year).slice(-4)}
+                    </Grid>
                   )}
                   {qualification?.image && (
                     <a
@@ -399,7 +433,12 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
           </Grid>
 
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginLeft: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -443,8 +482,18 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginRight: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -491,7 +540,12 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
           </Grid>
 
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginLeft: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -537,8 +591,18 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md style={{ marginRight: " 2rem" }} className={classes.cardGrid}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            style={{ marginRight: " 2rem" }}
+            className={classes.cardGrid}
+          >
             <Grid
               container
               direction="column"
@@ -561,12 +625,23 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               )}
               <Grid item sx={{ alignSelf: "center" }}>
                 <CustomButton
-                  title={updateState}
+                  title={
+                    doctorData?.providerId === reference?.reference_code ||
+                    updateState === "Updated"
+                      ? "Updated"
+                      : "Update Provider"
+                  }
                   type={trasparentButton}
                   width="100%"
                   isSubmitting={submit}
-                  onClick={() => handleUpdateProVider(reference?.reference_code)}
-                  disabled={updateState === "Updated"}
+                  onClick={() =>
+                    handleUpdateProVider(reference?.reference_code)
+                  }
+                  disabled={
+                    doctorData?.providerId === reference?.reference_code
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
             </Grid>
@@ -580,7 +655,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           ></Grid>
         </Grid>
         <Grid item container style={{ paddingTop: "2rem" }}>
-          <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
+          <Grid
+            item
+            container
+            justifyContent="center"
+            gap={2}
+            className={classes.cardGrid}
+          >
             <Grid item>
               <CustomButton
                 title="Reject Verification"
