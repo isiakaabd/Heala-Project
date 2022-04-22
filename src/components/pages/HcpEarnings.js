@@ -124,7 +124,8 @@ const HcpEarnings = (props) => {
     variables: { doc: hcpId },
   });
 
-  console.log(datas);
+  // console.log(datas.getMyEarnings.data[0].balance, "kkk");
+  const [x, setX] = useState(0);
 
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
@@ -137,14 +138,19 @@ const HcpEarnings = (props) => {
 
   const theme = useTheme();
   useEffect(() => {
+    if (datas !== undefined) {
+      setX(datas.getMyEarnings.data[0].balance);
+    }
+
     if (data) {
       const { totalEarnings, totalPayout } = data.getEarningStats;
+
       setTotalEarning(totalEarnings);
       setTotalPayouts(totalPayout);
       const value = financialPercent(totalEarnings, totalPayout);
       setFinances(value);
     }
-  }, [form, data]);
+  }, [form, data, datas]);
   // const classes = useStyles();
 
   useEffect(() => {
@@ -154,6 +160,7 @@ const HcpEarnings = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  console.log(x, "jjj");
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -217,7 +224,7 @@ const HcpEarnings = (props) => {
                   >
                     N{""}
                   </span>
-                  {formatNumber(totalEarning)}
+                  {formatNumber(+x)}
                 </Typography>
                 <Typography
                   variant="body2"

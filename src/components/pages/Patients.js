@@ -137,6 +137,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     }
   }, [data]);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  console.log(totalDocs, "jjj");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 

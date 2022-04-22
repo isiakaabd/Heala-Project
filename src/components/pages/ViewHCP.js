@@ -9,7 +9,11 @@ import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
 import { verification } from "components/graphQL/useQuery"; //getCategory
-import { rejectVerification, updateUserProvider } from "components/graphQL/Mutation";
+import {
+  rejectVerification,
+  updateDoctorProvider,
+  // updateUserProvider,
+} from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -111,7 +115,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   // };
   const [open, setOpen] = useState(false);
   const [updateState, setUpdateState] = useState("Update Provider");
-  const [update] = useMutation(updateUserProvider);
+  const [update] = useMutation(updateDoctorProvider);
   const [submit, setSubmit] = useState(false);
   const handleDialogCloses = () => setOpen(false);
   const handleUpdateProVider = async (value) => {
@@ -238,7 +242,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   // eslint-disable-next-line
-  console.log(license, "update");
   return (
     <>
       <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
@@ -259,7 +262,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
             <Grid item>
               <Avatar
                 src={doctorData ? doctorData.picture : displayPhoto}
-                sx={{ minWidth: "150px", minHeight: "150px", marginRight: "2rem" }}
+                sx={{
+                  minWidth: "150px",
+                  minHeight: "150px",
+                  marginRight: "2rem",
+                }}
               />
             </Grid>
           </Grid>
@@ -560,12 +567,17 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               )}
               <Grid item sx={{ alignSelf: "center" }}>
                 <CustomButton
-                  title={updateState}
+                  title={
+                    doctorData?.providerId === reference?.reference_code ||
+                    updateState === "Updated"
+                      ? "Updated"
+                      : "Update Provider"
+                  }
                   type={trasparentButton}
                   width="100%"
                   isSubmitting={submit}
                   onClick={() => handleUpdateProVider(reference?.reference_code)}
-                  disabled={updateState === "Updated"}
+                  disabled={doctorData?.providerId === reference?.reference_code ? true : false}
                 />
               </Grid>
             </Grid>

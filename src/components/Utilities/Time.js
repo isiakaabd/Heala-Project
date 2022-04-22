@@ -42,6 +42,8 @@ export const returnpercent = (a, b) => {
   if (a === 0 || typeof b !== "number") return false;
   return (Math.abs(b) / Math.abs(a)).toFixed(2) * 100;
 };
+// month count (monthly increase)
+// current month / prev. month ...pending
 export const financialPercent = (a, b) => {
   return Math.round((a / (b + a)) * 100);
 };
