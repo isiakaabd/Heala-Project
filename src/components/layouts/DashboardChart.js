@@ -3,6 +3,7 @@ import { Grid, Typography, Divider } from "@mui/material";
 import PropTypes from "prop-types";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { ArrowDownwardOutlined } from "@mui/icons-material";
 import {
   financialPercent,
   returnpercent,
@@ -122,7 +123,6 @@ const DashboardCharts = ({ data, refetch }) => {
       totalEarnings,
       totalPayout,
     } = data?.getStats;
-    console.log(doctorStats);
     setPatients(patientStats);
     setDoctorStats(doctorStats);
     setAppointmentStats(appointmentStats);
@@ -175,7 +175,11 @@ const DashboardCharts = ({ data, refetch }) => {
                         <Typography variant="h1">{data && totalDoc}</Typography>
                       </Grid>
                       <Grid item style={{ marginRight: "0.5rem" }}>
-                        <ArrowUpwardIcon color="success" />
+                        {doctorPercentage < 1 ? (
+                          <ArrowDownwardOutlined color="error" />
+                        ) : (
+                          <ArrowUpwardIcon color="success" />
+                        )}
                       </Grid>
                       <Grid item>
                         <Typography variant="body2" style={{ color: theme.palette.success.main }}>
@@ -464,7 +468,11 @@ const DashboardCharts = ({ data, refetch }) => {
                         <Typography variant="h1">{totalPatient}</Typography>
                       </Grid>
                       <Grid item style={{ marginRight: "0.5rem" }}>
-                        <ArrowUpwardIcon color="success" />
+                        {patientPercentage < 1 ? (
+                          <ArrowDownwardOutlined color="error" />
+                        ) : (
+                          <ArrowUpwardIcon color="success" />
+                        )}
                       </Grid>
                       <Grid item>
                         <Typography variant="body2" style={{ color: theme.palette.success.main }}>
