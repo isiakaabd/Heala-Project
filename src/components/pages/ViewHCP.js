@@ -200,7 +200,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   const [process, setProcess] = useState(undefined);
-  console.log(ref);
+  console.log(verifyState, respondData.status);
   useEffect(() => {
     if (ref) {
       get({
@@ -619,7 +619,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title="Reject Verification"
                 type={RedButton}
-                disabled={!verifyState}
+                disabled={verifyState !== "Doctor Verified!"}
                 onClick={handleDialogOpen}
                 width="100%"
               />
@@ -628,7 +628,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title={verifyState}
                 type={trasparentButton}
-                disabled={verifyState}
+                disabled={verifyState === "Doctor Verified!"}
                 onClick={handleVerifyDoctor}
                 width="100%"
               />
