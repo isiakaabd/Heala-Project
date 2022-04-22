@@ -220,7 +220,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     if (respondData.status) {
       setVerifyState("Doctor Verified!");
     }
-  }, [respondData.status]);
+  }, [verifyState, respondData.status]);
   const {
     qualification,
     license,
