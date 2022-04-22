@@ -157,81 +157,88 @@ const Prescriptions = (props) => {
             </Grid>
           </Grid>
           <Divider />
-          <Grid
-            container
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-            flexWrap="no-wrap"
-            padding=" 2rem 0"
-            width="90%"
-            margin="auto"
-          >
-            <Grid
-              item
-              container
-              alignItems="center"
-              className={classes.item}
-              justifyContent="space-between"
-              gap={2}
-            >
-              <Grid item>
-                <Typography variant="h5">Drugs</Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="h5">Dosage</Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="h5">Frequency</Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="h5">Mode</Typography>
-              </Grid>
-              {/* );
-            })} */}
-            </Grid>
-          </Grid>
-          <Divider />
-          {pre.map((i, index) => {
-            return (
-              <>
+
+          {pre && pre.length > 0 && (
+            <>
+              <Grid
+                container
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                flexWrap="no-wrap"
+                padding=" 2rem 0"
+                width="90%"
+                margin="auto"
+              >
                 <Grid
+                  item
                   container
-                  flexDirection="row"
                   alignItems="center"
+                  className={classes.item}
                   justifyContent="space-between"
-                  flexWrap="no-wrap"
-                  padding=" 2rem 0"
-                  width="90%"
-                  margin="auto"
-                  key={index}
+                  gap={2}
                 >
+                  <Grid item>
+                    <Typography variant="h5">Drugs</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h5">Dosage</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h5">Frequency</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h5">Mode</Typography>
+                  </Grid>
+                  {/* );
+            })} */}
+                </Grid>
+              </Grid>
+              <Divider />
+            </>
+          )}
+          {pre &&
+            pre.length > 0 &&
+            pre.map((i, index) => {
+              return (
+                <>
                   <Grid
-                    item
                     container
-                    className={classes.item}
+                    flexDirection="row"
                     alignItems="center"
                     justifyContent="space-between"
-                    gap={2}
+                    flexWrap="no-wrap"
+                    padding=" 2rem 0"
+                    width="90%"
+                    margin="auto"
+                    key={index}
                   >
-                    <Grid item>
-                      <Typography variant="body1">{i.drugName}</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body1">{i.dosage}</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body1">{`${i.dosageFrequency.day}day / ${i.dosageFrequency.duration}duration`}</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body1">{i.mode}</Typography>
+                    <Grid
+                      item
+                      container
+                      className={classes.item}
+                      alignItems="center"
+                      justifyContent="space-between"
+                      gap={2}
+                    >
+                      <Grid item>
+                        <Typography variant="body1">{i.drugName}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="body1">{i.dosage}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="body1">{`${i.dosageFrequency.day}day / ${i.dosageFrequency.duration}duration`}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="body1">{i.mode}</Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Divider />
-              </>
-            );
-          })}
+                  <Divider />
+                </>
+              );
+            })}
           <Grid
             item
             container

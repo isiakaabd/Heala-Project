@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
-import { useQuery, useMutation } from "@apollo/client";
-import { verification } from "components/graphQL/useQuery"; //getCategory
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { verification, getCategory } from "components/graphQL/useQuery"; //
 import {
   rejectVerification,
   updateDoctorProvider,
@@ -114,6 +114,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   //   setCancel(true);
   // };
   const [open, setOpen] = useState(false);
+
   const [updateState, setUpdateState] = useState("Update Provider");
   const [update] = useMutation(updateDoctorProvider);
   const [submit, setSubmit] = useState(false);
@@ -187,14 +188,34 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     active: "red",
     disabled: "#FF8484",
   };
+  const [ref, setRef] = useState(null);
+  const [get, { data: da }] = useLazyQuery(getCategory);
   useEffect(() => {
     if (data) {
       setRespondData(data.getVerification);
+      setRef(data.getVerification.reference.reference_code);
     }
-  }, [data]);
+  }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
     respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
+  const [process, setProcess] = useState(undefined);
+  console.log(ref);
+  useEffect(() => {
+    if (ref) {
+      get({
+        variables: {
+          id: ref,
+        },
+      });
+    }
+    if (da && da.getProvider !== null) {
+      setProcess(da?.getProvider.name);
+    } else {
+      setProcess(undefined);
+    }
+  }, [ref, da, get]);
+
   useEffect(() => {
     if (respondData.status) {
       setVerifyState("Doctor Verified!");
@@ -559,27 +580,29 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               {reference?.reference_code ? (
                 <>
                   <Grid item className={classes.link}>
-                    {reference.reference_code}
+                    {process ? process : reference?.reference_code}
                   </Grid>
                 </>
               ) : (
                 <Grid className={classes.link}>Not Provided</Grid>
               )}
-              <Grid item sx={{ alignSelf: "center" }}>
-                <CustomButton
-                  title={
-                    doctorData?.providerId === reference?.reference_code ||
-                    updateState === "Updated"
-                      ? "Updated"
-                      : "Update Provider"
-                  }
-                  type={trasparentButton}
-                  width="100%"
-                  isSubmitting={submit}
-                  onClick={() => handleUpdateProVider(reference?.reference_code)}
-                  disabled={doctorData?.providerId === reference?.reference_code ? true : false}
-                />
-              </Grid>
+              {reference?.reference_code && (
+                <Grid item sx={{ alignSelf: "center" }}>
+                  <CustomButton
+                    title={
+                      doctorData?.providerId === reference?.reference_code ||
+                      updateState === "Updated"
+                        ? "Updated"
+                        : "Update Provider"
+                    }
+                    type={trasparentButton}
+                    width="100%"
+                    isSubmitting={submit}
+                    onClick={() => handleUpdateProVider(reference?.reference_code)}
+                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Grid>
 
