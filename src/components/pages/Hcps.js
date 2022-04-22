@@ -295,7 +295,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             {profiles
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                console.log(row)
                 const {
                   _id,
                   dociId,
