@@ -117,7 +117,7 @@ const HcpCaseNotes = ({
       <Grid container direction="column" gap={2}>
         <Grid item>
           <PreviousButton
-            path={`/Doctor/${hcpId}/consultations`}
+            path={`/hcps/${hcpId}/consultations`}
             onClick={() => setSelectedHcpMenu(6)}
           />
         </Grid>
@@ -470,38 +470,42 @@ const HcpCaseNotes = ({
             </Grid>
             <Divider color={theme.palette.common.lighterGrey} />
 
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item>
-                <Typography variant="body1" className={classes.title}>
-                  Drug
-                </Typography>
-              </Grid>
+            {prescription && (
+              <>
+                <Grid
+                  item
+                  container
+                  style={{ padding: "2rem 3rem" }}
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ flexWrap: "nowrap" }}
+                >
+                  <Grid item>
+                    <Typography variant="body1" className={classes.title}>
+                      Drug
+                    </Typography>
+                  </Grid>
 
-              <Grid item>
-                <Typography variant="body1" className={classes.title}>
-                  Dosage
-                </Typography>
-              </Grid>
+                  <Grid item>
+                    <Typography variant="body1" className={classes.title}>
+                      Dosage
+                    </Typography>
+                  </Grid>
 
-              <Grid item>
-                <Typography variant="body1" className={classes.title}>
-                  Frequency
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="body1" className={classes.title}>
-                  Mode
-                </Typography>
-              </Grid>
-            </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
+                  <Grid item>
+                    <Typography variant="body1" className={classes.title}>
+                      Frequency
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body1" className={classes.title}>
+                      Mode
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Divider color={theme.palette.common.lighterGrey} />
+              </>
+            )}
             {prescription &&
               prescription.map((i, index) => {
                 return (
