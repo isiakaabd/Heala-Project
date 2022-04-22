@@ -9,10 +9,8 @@ import {
   IconButton,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TablePagination,
-  TableRow,
   Paper,
 } from "@mui/material";
 import PropTypes from "prop-types";
@@ -146,7 +144,7 @@ const EnhancedTable = ({
     hasNextPage: PropTypes.bool,
   };
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = totalPages === page ? limit * totalPages - totalDocs : 0;
+  // const emptyRows = totalPages === page ? limit * totalPages - totalDocs : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -164,7 +162,7 @@ const EnhancedTable = ({
             />
             <TableBody>
               {children}
-
+              {/* 
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -174,7 +172,7 @@ const EnhancedTable = ({
                 >
                   <TableCell colSpan={10} />
                 </TableRow>
-              )}
+              )} */}
             </TableBody>
           </Table>
         </TableContainer>

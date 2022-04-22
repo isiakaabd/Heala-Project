@@ -4,14 +4,13 @@ import { dateMoment } from "components/Utilities/Time";
 import { NoData } from "components/layouts";
 import { Typography, Grid, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { CustomButton, Loader, Modals, PreviousButton, DisplayProfile } from "components/Utilities";
+import { CustomButton, Loader, PreviousButton, DisplayProfile } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import { DeleteOrDisable, ReferPatient } from "components/modals";
+import { DeleteOrDisable } from "components/modals";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
@@ -113,15 +112,15 @@ const PatientProfile = ({
     }
   }, [data, patientId]);
 
-  const handleDialogOpen = () => setIsOpen(true);
-  const initialValues = {
-    referral: "",
-    category: "",
-    textarea: "",
-  };
+  // const handleDialogOpen = () => setIsOpen(true);
+  // const initialValues = {
+  //   referral: "",
+  //   category: "",
+  //   textarea: "",
+  // };
 
-  const handleDialogClose = () => setIsOpen(false);
-  const [isOpen, setIsOpen] = useState(false);
+  // const handleDialogClose = () => setIsOpen(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const onConfirm = async () => {
     try {
@@ -133,11 +132,11 @@ const PatientProfile = ({
   };
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
-  const greenButton = {
-    background: theme.palette.success.main,
-    hover: theme.palette.success.light,
-    active: theme.palette.success.dark,
-  };
+  // const greenButton = {
+  //   background: theme.palette.success.main,
+  //   hover: theme.palette.success.light,
+  //   active: theme.palette.success.dark,
+  // };
 
   const trasparentButton = {
     background: "transparent",
@@ -336,18 +335,18 @@ const PatientProfile = ({
             onClick={() => setOpenDisablePatient(true)}
           />
         </Grid>
-        <Grid item style={{ marginLeft: "2rem" }}>
+        {/* <Grid item style={{ marginLeft: "2rem" }}>
           <CustomButton
             endIcon={<TrendingUpIcon />}
             title="Refer Patient"
             type={greenButton}
             onClick={handleDialogOpen}
           />
-        </Grid>
+        </Grid> */}
 
-        <Modals isOpen={isOpen} title="Add Admin" handleClose={handleDialogClose}>
+        {/* <Modals isOpen={isOpen} title="Add Admin" handleClose={handleDialogClose}>
           <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
-        </Modals>
+        </Modals> */}
 
         <DeleteOrDisable
           open={openDisablePatient}

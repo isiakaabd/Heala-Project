@@ -323,7 +323,7 @@ export const consultationsHeadCells = [
   { id: 100, label: "Date" },
   { id: 101, label: "Patients" },
   { id: 102, label: "Symptoms" },
-  { id: 105, label: "Contact" },
+  { id: 105, label: "Description" },
   { id: 133, label: "Type" },
   { id: 1232, label: "Status" },
   { id: 103, label: "" },

@@ -132,7 +132,7 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={patientProfile.height}
+                  label={patientProfile.height ? patientProfile.height : "No Height"}
                   className={classes.infoBadge}
                 />
               </Grid>
@@ -153,7 +153,7 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={patientProfile.weight}
+                  label={patientProfile.weight ? patientProfile.weight : "No Weight"}
                   className={classes.infoBadge}
                 />
               </Grid>
@@ -176,7 +176,7 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={patientProfile.bloodGroup}
+                  label={patientProfile.bloodGroup ? patientProfile.bloodGroup : "No Blood Group"}
                   className={classes.infoBadge}
                 />
               </Grid>
@@ -197,7 +197,7 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={patientProfile.genotype}
+                  label={patientProfile.genotype ? patientProfile.genotype : "No Genotype"}
                   className={classes.infoBadge}
                 />
               </Grid>
@@ -220,7 +220,7 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={calculateBMI(patientProfile.height, patientProfile.weight)}
+                  label={calculateBMI(patientProfile.height, patientProfile.weight).toFixed(2)}
                   className={classes.infoBadge}
                 />
               </Grid>

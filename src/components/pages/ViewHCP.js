@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation } from "@apollo/client";
-import { verification } from "components/graphQL/useQuery";
+import { verification } from "components/graphQL/useQuery"; //getCategory
 import { rejectVerification, updateUserProvider } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
@@ -131,7 +131,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     }
   };
   const [cancel, setCancel] = useState(false);
-  console.log(respondData.dociId);
   const handleDialogOpen = () => {
     setCancel(true);
   };
@@ -176,13 +175,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
+    disabled: "#868686",
   };
   const RedButton = {
-    background: "#f8432b",
+    background: "red",
     hover: "red",
     active: "red",
-    disabled: "red",
+    disabled: "#FF8484",
   };
   useEffect(() => {
     if (data) {
@@ -208,14 +207,14 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     // eslint-disable-next-line
   } = respondData;
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
-  const [button, setButtonValue] = useState(respondData.status);
+  const [button, setButtonValue] = useState(respondData.status); //button
 
   useEffect(() => {
     if (verifyData && verifyData.verifyHCP.status) {
       setVerifyState("Doctor Verified!!");
       setButtonValue(verifyData.verifyHCP.status);
     }
-  }, [verify, status, verifyState, verifyData]);
+  }, [verify, status, button, verifyState, verifyData]);
 
   const handleVerifyDoctor = async () => {
     try {
@@ -585,7 +584,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title="Reject Verification"
                 type={RedButton}
-                // disabled={button}
+                disabled={!verifyState}
                 onClick={handleDialogOpen}
                 width="100%"
               />
@@ -594,7 +593,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title={verifyState}
                 type={trasparentButton}
-                disabled={button}
+                disabled={verifyState}
                 onClick={handleVerifyDoctor}
                 width="100%"
               />

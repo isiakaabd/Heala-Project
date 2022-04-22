@@ -191,7 +191,7 @@ const HcpAppointments = (props) => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" height="100%">
+      <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
