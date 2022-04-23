@@ -619,7 +619,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title="Reject Verification"
                 type={RedButton}
-                disabled={verifyState !== "Doctor Verified!"}
+                // disabled={verifyState !== "Doctor Verified!"}
                 onClick={handleDialogOpen}
                 width="100%"
               />
