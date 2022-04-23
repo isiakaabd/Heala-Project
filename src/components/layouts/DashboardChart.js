@@ -188,7 +188,7 @@ const DashboardCharts = ({ data, refetch }) => {
                           }}
                           variant="body2"
                         >
-                          {doctorPercentage ? `${doctorPercentage.toFixed(0)} %` : 0}
+                          {doctorPercentage ? `${Math.abs(doctorPercentage.toFixed(0))} %` : 0}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -486,7 +486,7 @@ const DashboardCharts = ({ data, refetch }) => {
                             color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
                           }}
                         >
-                          {patientPercentage ? `${patientPercentage.toFixed(0)} %` : 0}
+                          {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
                         </Typography>
                       </Grid>
                       <Grid

@@ -13,7 +13,6 @@ import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
-import { consultationsRows } from "components/Utilities/tableData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { PreviousButton, FilterList, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
@@ -129,7 +128,7 @@ const HcpConsultations = (props) => {
         <Grid item>
           <EnhancedTable
             headCells={consultationsHeadCells}
-            rows={consultationsRows}
+            rows={consultations}
             paginationLabel="Consultations per page"
             page={page}
             limit={limit}
@@ -152,7 +151,7 @@ const HcpConsultations = (props) => {
                   symptoms,
                   status,
                   type,
-                  description,
+                  contactMedium,
                   patientData,
 
                   // eslint-disable-next-line
@@ -224,7 +223,7 @@ const HcpConsultations = (props) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
                     >
-                      {description}
+                      {contactMedium}
                     </TableCell>
                     <TableCell
                       align="left"
