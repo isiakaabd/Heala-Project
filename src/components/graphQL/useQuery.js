@@ -980,6 +980,32 @@ export const getCategory = gql`
     }
   }
 `;
+
+// (user: $user);
+// ($user: String);
+export const getNotifications = gql`
+  query getNotifications {
+    getNotifications {
+      data {
+        user
+        content
+        itemId
+        ticker
+        title
+        seen
+        tag
+        useSound
+        role
+        saveNotification
+        previewImageUri
+        previewImageUriThumbnail
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const getUserTypes = gql`
   query getUserTypes {
     getUserTypes {
