@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "5rem",
     },
   },
+  item: {
+    justifyContent: "space-between",
+    "&.MuiGrid-root > *": {
+      flex: 1,
+    },
+  },
 
   infoBadge: {
     "&.MuiChip-root": {
@@ -215,7 +221,7 @@ const HcpCaseNotes = ({
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
+              <Grid item gap={1}>
                 <Grid item container gap={2} alignItems="center">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
@@ -230,7 +236,7 @@ const HcpCaseNotes = ({
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid item container gap={2} alignItems="center">
+                <Grid item container gap={1} alignItems="center">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Owner:
@@ -244,7 +250,7 @@ const HcpCaseNotes = ({
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid item container gap={2} alignItems="center">
+                <Grid item container gap={1} alignItems="center">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Type:
@@ -261,24 +267,25 @@ const HcpCaseNotes = ({
             <Grid
               item
               container
+              className={classes.item}
               style={{ padding: "2rem 3rem" }}
               alignItems="center"
               justifyContent="space-between"
               sx={{ flexWrap: "nowrap" }}
             >
-              <Grid item container gap={2}>
+              <Grid item container>
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Symptoms:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Grid container gap={1}>
+                  <Grid container>
                     {symptoms ? (
                       symptoms.map((symptom, index) => {
                         return (
                           <Typography key={index} variant="body1">
-                            {symptom.name}
+                            {symptom.name + ","}
                           </Typography>
                         );
                       })
@@ -288,7 +295,7 @@ const HcpCaseNotes = ({
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item container gap={2}>
+              <Grid item container>
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Severity:
