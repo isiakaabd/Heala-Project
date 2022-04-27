@@ -39,8 +39,10 @@ export const duration = (value) => {
 };
 
 export const returnpercent = (a, b) => {
-  //% Increase/Decrease = (present m(onth total - past month total) / past month total × 100
-  return ((b - a) / a) * 100;
+  //% Increase/Decrease = (present m(onth total - past month total) / past month total × 100\\
+  let x = b - a;
+  let y = x / a;
+  return y;
 };
 // month count (monthly increase)
 // current month / prev. month ...pending
@@ -69,6 +71,6 @@ export const unformat = (amount, locale) => {
   return parseFloat(
     amount
       .replace(new RegExp("\\" + thousandSeparator, "g"), "")
-      .replace(new RegExp("\\" + decimalSeparator), ","),
+      .replace(new RegExp("\\" + decimalSeparator), ",")
   );
 };

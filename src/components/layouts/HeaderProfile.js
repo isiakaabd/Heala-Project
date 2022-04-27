@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Notifications from "../layouts/Notifications";
-import { findAccounts, getNotifications } from "components/graphQL/useQuery";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { findAccounts } from "components/graphQL/useQuery";
+import { useLazyQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   role: {
@@ -24,20 +24,11 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderProfile = () => {
   const email = localStorage.getItem("email");
-  // const id = localStorage.getItem("_id");
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileAcc, setProfileAcc] = useState([]);
-  const [notifications, setNotifications] = useState([]);
   const [profile, { data, loading }] = useLazyQuery(findAccounts, {
     variables: { email },
   });
-  const { data: notData } = useQuery(
-    getNotifications,
-    // , {
-    // variables: { user: id },
-    // }
-  );
-
   const classes = useStyles();
   useEffect(() => {
     (async () => {
@@ -47,11 +38,6 @@ const HeaderProfile = () => {
       }
     })();
   }, [profile, email, data]);
-  useEffect(() => {
-    if (notData) {
-      setNotifications(notData.getNotifications.data);
-    }
-  }, [notData]);
 
   function notificationsLabel(count) {
     if (count === 0) {
@@ -86,19 +72,14 @@ const HeaderProfile = () => {
         </Grid>
         <Grid item>
           <IconButton
-            aria-label={notificationsLabel(notifications && notifications.length)}
+            aria-label={notificationsLabel(0)}
             onClick={(event) => setAnchorEl(event.currentTarget)}
           >
-            <Badge badgeContent={notifications && notifications.length} color="error">
+            <Badge badgeContent={0} color="error">
               <NotificationsActiveIcon color="primary" fontSize="large" />
             </Badge>
           </IconButton>
-          <Notifications
-            anchorEl={anchorEl}
-            Notifications={notifications}
-            setNotifications={setNotifications}
-            setAnchorEl={setAnchorEl}
-          />
+          <Notifications anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
         </Grid>
       </Grid>
     </header>

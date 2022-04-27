@@ -15,7 +15,7 @@ import { getAccessToken } from "./accessToken";
 // require("dotenv").config();
 
 const httpLink = createHttpLink({
-  uri: "https://api.heala.io/",
+  uri: "https://api-staging.heala.io/",
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {

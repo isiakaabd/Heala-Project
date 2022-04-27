@@ -1,9 +1,11 @@
 import React from "react";
-import { Field, ErrorMessage } from "formik";
-import { TextError } from "components/Utilities/TextError";
-import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
+import { Field, ErrorMessage } from "formik";
+import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
+
+import Typography from "@mui/material/Typography";
+import { TextError } from "components/Utilities/TextError";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -70,6 +72,35 @@ Selects.propTypes = {
   name: PropTypes.string.isRequired,
   options: PropTypes.array.isRequired,
   placeholder: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+export const CustomSelect = (props) => {
+  const { value, options, name, onChange, onBlur, placeholder } = props;
+  const classes = useStyles();
+  return (
+    <Grid container direction="column" gap={1}>
+      <FormControl fullWidth>
+        <Select
+          name={name}
+          displayEmpty
+          onBlur={onBlur}
+          value={value}
+          onChange={onChange}
+          className={classes.select}
+        >
+          <MenuItem value="">
+            <Typography>{placeholder}</Typography>
+          </MenuItem>
+          {options.map((option) => (
+            <MenuItem key={option.key} value={option.value}>
+              {option.key}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+  );
 };
 
 export default Selects;

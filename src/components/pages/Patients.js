@@ -1,162 +1,91 @@
 import React, { useState, useEffect, useCallback } from "react";
-import FormikControl from "components/validation/FormikControl";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import PropTypes from "prop-types";
-import { NoData, EmptyTable } from "components/layouts";
 import { debounce } from "lodash";
-import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
-import { Modals, FilterList, Loader, Search, CustomButton } from "components/Utilities";
-import EnhancedTable from "components/layouts/EnhancedTable";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { patientsHeadCells } from "components/Utilities/tableHeaders";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import displayPhoto from "assets/images/avatar.svg";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useLazyQuery } from "@apollo/client";
+import { NoData, EmptyTable } from "components/layouts";
+import {
+  Button,
+  Avatar,
+  Chip,
+  Checkbox,
+  TableCell,
+  TableRow,
+  Grid,
+} from "@mui/material";
+
+import Filter from "components/Forms/Filters";
+import { useTheme } from "@mui/material/styles";
+import { isSelected } from "helpers/isSelected";
+import displayPhoto from "assets/images/avatar.svg";
+import { Loader, Search } from "components/Utilities";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
-import { useLazyQuery } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
-
-const genderType = [
-  { key: "Male", value: "0" },
-  { key: "Female", value: "1" },
-];
-
-const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  button: {
-    "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "10rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-
-  tableCell: {
-    "&.MuiTableCell-root": {
-      fontSize: "1.25rem",
-      textAlign: "left",
-    },
-  },
-
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem !important",
-      height: "2.7rem",
-
-      borderRadius: "1.3rem",
-    },
-  },
-  searchFilterBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-}));
+import { useStyles } from "../../styles/patientsPageStyles";
+import EnhancedTable from "components/layouts/EnhancedTable";
+import { ClearFiltersBtn } from "components/Buttons/ClearFiltersBtn";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { patientsHeadCells } from "components/Utilities/tableHeaders";
+import {
+  genderType,
+  patientsPageDefaultFilterValues,
+  planFilterBy,
+  providerFilterBy,
+  statusFilterBy,
+} from "../../helpers/mockData";
+import {
+  onGenderValueChange,
+  resetFilters,
+} from "../../helpers/filterHelperFunctions";
 
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  // const inputRef = createRef();
 
-  const initialValues = {
-    name: "",
-    bloodGroup: "",
-    phone: "",
-    gender: "",
-  };
+  const [fetchPatient, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getPatients);
 
-  const validationSchema = Yup.object({
-    name: Yup.string("Enter your hospital").trim(),
-    bloodGroup: Yup.string("ENter your bloodGroup").trim(),
-    gender: Yup.string("Select your gender").trim(),
-    phone: Yup.number("Enter your specialization").typeError("Enter a current Number"),
-  });
-  const [fetchpatient, { loading, error, data }] = useLazyQuery(getPatients);
-
-  // ), {
-  //   notifyOnNetworkStatusChange: true,
-  // });
   useEffect(() => {
-    (async () => {
-      fetchpatient();
-    })();
-  }, [fetchpatient]);
-  // const [fetchUser] = useLazyQuery(getPatients);
+    fetchPatient();
+  }, [fetchPatient]);
+
   const [profiles, setProfiles] = useState([]);
 
-  const onSubmit = async (values) => {
-    const { gender } = values;
-    // if (!gender) return;
+  const [filterValues, setFilterValues] = React.useState(
+    patientsPageDefaultFilterValues
+  );
 
-    fetchpatient({
-      variables: {
-        gender,
-      },
-    });
-    handleDialogClose();
-  };
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    page: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+    limit: 5,
+    totalDocs: 0,
+  });
+
   useEffect(() => {
     if (data) {
       setPageInfo(data.profiles.pageInfo);
       setProfiles(data.profiles.data);
     }
   }, [data]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  console.log(totalDocs, "jjj");
+
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } =
+    pageInfo;
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 
   const { setSelectedRows } = useActions();
 
   //eslint-disable-next-line
-  const debouncer = useCallback(debounce(fetchpatient, 3000), []);
-
-  // const debouncedChangeHandler = useMemo(() => {
-  //   return debounce(onChange, 300);
-  // }, []);
-  // useEffect(() => {
-  //   return () => {
-  //     debouncedChangeHandler.cancel();
-  //   };
-  // });
+  const debouncer = useCallback(debounce(fetchPatient, 3000), []);
 
   const fetchMoreFunc = async (e, newPage) => {
-    fetchpatient({
+    fetchPatient({
       variables: {
         page: newPage,
       },
@@ -164,24 +93,39 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     //refetch({ page: newPage });
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const handleDialogOpen = () => setIsOpen(true);
-  const handleDialogClose = () => setIsOpen(false);
+  useEffect(() => {
+    if (data) {
+      const _profile =
+        rowsPerPage > 0
+          ? (data?.profiles?.data || []).slice(
+              page * rowsPerPage,
+              page * rowsPerPage + rowsPerPage
+            )
+          : data?.profiles?.data;
+      setPageInfo(data?.profiles?.pageInfo);
+      setProfiles(_profile || []);
+    }
+  }, [data]);
 
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
-  };
-  if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item container>
-          <Grid item className={classes.searchGrid}>
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
+        <Grid
+          item
+          container
+          spacing={2}
+          className={classes.searchFilterContainer}
+        >
+          {/*  ======= SEARCH INPUT(S) ==========*/}
+          <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
             <Search
               // value={searchPatient}
               onChange={(e) => {
@@ -191,15 +135,83 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 return debouncer({ variables: { dociId: value } });
               }}
               // onChange={debouncedChangeHandler}
-              placeholder="Type to search patients by Heala ID e.g 7NE6ELLO "
+              placeholder="Search by ID e.g 7NE6ELLO "
               height="5rem"
             />
           </Grid>
-          <Grid item>
-            <FilterList title="Filter Patients" width="15.2rem" onClick={handleDialogOpen} />
+          {/* ========= FILTERS =========== */}
+          <Grid item container spacing={2}>
+            {/* FILTER BY GENDER */}
+            <Grid item>
+              <Filter
+                onHandleChange={(e) =>
+                  onGenderValueChange(
+                    e,
+                    "gender",
+                    filterValues,
+                    setFilterValues,
+                    fetchPatient,
+                    variables,
+                    refetch
+                  )
+                }
+                options={genderType}
+                name="gender"
+                placeholder="By gender"
+                value={filterValues.gender}
+              />
+            </Grid>
+            {/* FILTER BY STATUS */}
+            <Grid item>
+              <Filter
+                onHandleChange={(e) => console.log(e)}
+                options={statusFilterBy}
+                name="status"
+                placeholder="By status"
+                value={filterValues.status}
+              />
+            </Grid>
+            {/* FILTER BY PROVIDER */}
+            <Grid item>
+              <Filter
+                onHandleChange={(e) => console.log(e)}
+                options={providerFilterBy}
+                name="status"
+                placeholder="By provider"
+                value={filterValues.provider}
+              />
+            </Grid>
+            {/* FILTER BY PLAN */}
+            <Grid item>
+              <Filter
+                onHandleChange={(e) => console.log(e)}
+                options={planFilterBy}
+                name="status"
+                placeholder="By plan"
+                value={filterValues.plan}
+              />
+            </Grid>
+            {/* ==== CLEAR FILTERS BUTTON ===== */}
+            <Grid item>
+              <ClearFiltersBtn
+                title="Clear filters"
+                onHandleClick={() => {
+                  console.log("reset filter values", setFilterValues);
+                  resetFilters(
+                    setFilterValues,
+                    patientsPageDefaultFilterValues,
+                    variables,
+                    fetchPatient
+                  );
+                }}
+              />
+            </Grid>
           </Grid>
         </Grid>
-        {profiles.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : profiles.length > 0 ? (
+          /* ================= PATIENTS TABLE ================= */
           <Grid item container height="100%" direction="column">
             <EnhancedTable
               headCells={patientsHeadCells}
@@ -222,7 +234,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                 //   : profiles
                 // )
                 profiles.map((row, index) => {
-                  console.log(row);
                   const {
                     dociId,
                     firstName,
@@ -247,7 +258,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -260,7 +277,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.grey, textAlign: "left" }}
+                        style={{
+                          color: theme.palette.common.grey,
+                          textAlign: "left",
+                        }}
                       >
                         {dociId && dociId.split("-")[1]}
                       </TableCell>
@@ -279,7 +299,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
+                          <span
+                            style={{ fontSize: "1.25rem" }}
+                          >{`${firstName} ${lastName}`}</span>
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
@@ -297,11 +319,11 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                           className={classes.badge}
                           style={{
                             background:
-                              status == "Active"
+                              status === "Active"
                                 ? theme.palette.common.lightGreen
                                 : theme.palette.common.lightRed,
                             color:
-                              status == "Active"
+                              status === "Active"
                                 ? theme.palette.common.green
                                 : theme.palette.common.red,
                           }}
@@ -329,50 +351,12 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
+          <EmptyTable
+            headCells={patientsHeadCells}
+            paginationLabel="Patients per page"
+          />
         )}
       </Grid>
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validateOnBlur={false}
-          validationSchema={validationSchema}
-          validateOnChange={false}
-          validateOnMount={false}
-        >
-          {({ isSubmitting, isValid, dirty }) => {
-            return (
-              <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
-                  <Grid item>
-                    <FormikControl
-                      control="select"
-                      options={genderType}
-                      name="gender"
-                      label="Filter by Gender"
-                      placeholder="Filter by Gender"
-                    />
-                  </Grid>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-
-                  <Grid item>
-                    <CustomButton
-                      title="Apply Filter"
-                      width="100%"
-                      type={buttonType}
-                      isSubmitting={isSubmitting}
-                      disabled={!(dirty || isValid)}
-                    />
-                  </Grid>
-                </Grid>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Modals>
     </>
   );
 };

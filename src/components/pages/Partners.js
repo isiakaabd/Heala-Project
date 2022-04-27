@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import FormikControl from "components/validation/FormikControl";
+import { Formik, Form } from "formik";
 import { makeStyles } from "@mui/styles";
-import { FilterList, CustomButton, Loader, Modals, Search } from "components/Utilities";
+import FormikControl from "components/validation/FormikControl";
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  Avatar,
+  TableRow,
+  Grid,
+} from "@mui/material";
+import {
+  FilterList,
+  CustomButton,
+  Loader,
+  Modals,
+  Search,
+} from "components/Utilities";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
@@ -14,126 +28,15 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
-import { getPartners, getSingleProvider, getUsertypess } from "components/graphQL/useQuery";
+import {
+  getPartners,
+  getSingleProvider,
+  getUsertypess,
+} from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 // import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
-import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
-
-const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  actionBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "1.5rem",
-    },
-  },
-  button: {
-    "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "0.5rem",
-      maxWidth: "7rem",
-      fontSize: ".85rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "0.85rem",
-      },
-
-      "& .MuiButton-endIcon": {
-        marginLeft: ".2rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem !important",
-      height: "2.7rem",
-      borderRadius: "1.3rem",
-    },
-  },
-  tableBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      height: "3rem",
-      fontSize: "1.25rem",
-      borderRadius: "2rem",
-      boxShadow: "none",
-
-      "&:hover": {
-        "& .MuiButton-endIcon>*:nth-of-type(1)": {
-          color: "#fff",
-        },
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.5rem",
-      },
-    },
-  },
-
-  redBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightRed,
-      color: theme.palette.common.red,
-
-      "&:hover": {
-        background: theme.palette.error.light,
-        color: "#fff",
-      },
-    },
-  },
-  FormLabel: {
-    "&.MuiFormLabel-root": {
-      ...theme.typography.FormLabel,
-    },
-  },
-  searchFilterBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-  uploadBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: "#f2f2f2",
-      boxShadow: "none",
-      color: theme.palette.common.black,
-
-      "&:hover": {
-        background: "#f2f3f3",
-        boxShadow: "none",
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
-    },
-  },
-}));
+import { useStyles } from "styles/partnersPageStyles";
 
 const Partners = () => {
   const classes = useStyles();
@@ -143,6 +46,7 @@ const Partners = () => {
       userTypeId: "61ed2354e6091400135e3d94",
     },
   });
+
   useEffect(() => {
     if (da) {
       const datas = da.getUserTypeProviders.provider;
@@ -150,12 +54,14 @@ const Partners = () => {
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          }),
+          })
       );
     }
   }, [da]);
+
   const [addPartnerCat] = useMutation(addPartnerCategory);
   const theme = useTheme();
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -193,14 +99,21 @@ const Partners = () => {
     category: "",
   };
   const validationSchema2 = Yup.object({
-    category: Yup.string("select your Category").trim().required("Category is required"),
+    category: Yup.string("select your Category")
+      .trim()
+      .required("Category is required"),
   });
   const validationSchema1 = Yup.object({
     name: Yup.string("Enter your name").trim().required("name is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
-    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+    email: Yup.string()
+      .email("Enter a valid email")
+      .trim()
+      .required("Email is required"),
     provider: Yup.string("select a provider").trim(),
-    specialization: Yup.string("select your Specialization").required("Specialization is required"),
+    specialization: Yup.string("select your Specialization").required(
+      "Specialization is required"
+    ),
   });
   const [addPartners] = useMutation(addPartner);
 
@@ -294,10 +207,13 @@ const Partners = () => {
     // }
   }, [data, categoryData, setCategoryDatas]);
 
-  const { selectedRows, page } = useSelector((state) => state.tables);
+  const { rowsPerPage, selectedRows, page } = useSelector(
+    (state) => state.tables
+  );
   const { setSelectedRows } = useActions();
 
-  if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
+  if (error || categoryData.error)
+    return <NoData error={error || categoryData.error} />;
   if (loading || load) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -311,7 +227,10 @@ const Partners = () => {
           />
         </Grid>
         <Grid item className={classes.actionBtnGrid}>
-          <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
+          <FilterList
+            title="Filter Patners"
+            onClick={() => setOpenFilterPartner(true)}
+          />
         </Grid>
         {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
@@ -358,7 +277,13 @@ const Partners = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -391,7 +316,10 @@ const Partners = () => {
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {row.category}
                     </TableCell>
@@ -412,7 +340,10 @@ const Partners = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={partnersHeadCells} paginationLabel="Doctors per page" />
+        <EmptyTable
+          headCells={partnersHeadCells}
+          paginationLabel="Doctors per page"
+        />
       )}
       <Modals
         isOpen={openFilterPartner}
@@ -454,7 +385,12 @@ const Partners = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+                <Grid
+                  item
+                  container
+                  spacing={2}
+                  style={{ marginBottom: "10rem" }}
+                >
                   <Grid item md>
                     <FormikControl
                       control="select"

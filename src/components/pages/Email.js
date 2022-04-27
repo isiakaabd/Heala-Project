@@ -1,43 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { Loader, Modals, FilterList, Search, CustomButton } from "components/Utilities";
-import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { dateMoment } from "components/Utilities/Time";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useQuery } from "@apollo/client";
-import { getEmailList } from "components/graphQL/useQuery";
-import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { emailHeader } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+import { useLazyQuery } from "@apollo/client";
+import AddIcon from "@mui/icons-material/Add";
+import { Loader, Search, CustomButton } from "components/Utilities";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import {
+  TableRow,
+  Alert,
+  TableCell,
+  Checkbox,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
+
+import { Link } from "react-router-dom";
+import Filter from "components/Forms/Filters";
+import { isSelected } from "helpers/isSelected";
+import { useTheme } from "@mui/material/styles";
+import { dateMoment } from "components/Utilities/Time";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
-import AddIcon from "@mui/icons-material/Add";
-
-const genderType = [
-  { key: "Male", value: "Male" },
-  { key: "Female", value: "Female" },
-  { key: "Prefer not to say", value: "Prefer not to say" },
-];
-const plans = [
-  { key: "Plan 1", value: "Plan 1" },
-  { key: "Plan 2", value: "Plan 2" },
-  { key: "Plan 3", value: "Plan 3" },
-  { key: "Plan 4", value: "Plan 4" },
-];
-const plans1 = [
-  { key: "Plan 1", value: "Plan 1" },
-  { key: "Plan 2", value: "Plan 2" },
-  { key: "Plan 3", value: "Plan 3" },
-  { key: "Plan 4", value: "Plan 4" },
-];
+import { getEmailList } from "components/graphQL/useQuery";
+import { emailHeader } from "components/Utilities/tableHeaders";
+import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
+import { onGenderValueChange } from "helpers/filterHelperFunctions";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import { emailPageDefaultFilterValues, roleFilterBy } from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -113,11 +104,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Email = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { data, error, loading } = useQuery(getEmailList);
+  const [fetchEmails, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getEmailList);
   const [emails, setEmails] = useState([]);
+
+  useEffect(() => {
+    fetchEmails();
+  }, [fetchEmails]);
 
   useEffect(() => {
     if (data) {
@@ -126,39 +127,14 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
   }, [data]);
   const { selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [searchMail, setSearchMail] = useState("");
   const [response, setResponse] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const handleDialogOpen = () => setIsOpen(true);
-  useEffect(() => {
-    const z = setTimeout(() => {
-      setResponse("");
-    }, 2000);
-    return () => clearTimeout(z);
-  }, [response]);
+  const [searchMail, setSearchMail] = useState("");
 
-  const handleDialogClose = () => {
-    setIsOpen(false);
-  };
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
-  };
-  const initialValues = {
-    referral: "",
-    date: "",
-    category: "",
-  };
-
-  const validationSchema = Yup.object({
-    category: Yup.string("Select your category").trim().required("Category is required"),
-    referral: Yup.string("Select your referral").trim().required("Refferal is required"),
-    date: Yup.string("Select date").required("Date is required"),
-  });
-  const onSubmit = (values) => {
-    console.log(values);
   };
 
   useEffect(() => {
@@ -167,7 +143,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
-  if (loading) return <Loader />;
+  const [filterValues, setFilterValues] = React.useState(
+    emailPageDefaultFilterValues
+  );
+
   if (error) return <NoData error={error} />;
 
   return (
@@ -197,7 +176,23 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             />
           </Grid>
           <Grid item className={classes.filterBtnGrid}>
-            <FilterList onClick={handleDialogOpen} title="Filter by" />
+            <Filter
+              onHandleChange={(e) =>
+                onGenderValueChange(
+                  e,
+                  "role",
+                  filterValues,
+                  setFilterValues,
+                  fetchEmails,
+                  variables,
+                  refetch
+                )
+              }
+              options={roleFilterBy}
+              name="role"
+              placeholder="All roles"
+              value={filterValues.role}
+            />
           </Grid>
           <Grid item className={classes.filterBtnGrid}>
             <CustomButton
@@ -218,7 +213,9 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
         </Grid>
         {/* The Search and Filter ends here */}
 
-        {emails && emails.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : emails && emails.length > 0 ? (
           <Grid item container direction="column" height="100%">
             <EnhancedTable
               headCells={emailHeader}
@@ -247,7 +244,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                            onClick={() =>
+                              handleSelectedRows(
+                                _id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -302,70 +305,12 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
+          <EmptyTable
+            headCells={emailHeader}
+            paginationLabel="Email  per page"
+          />
         )}
       </Grid>
-
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validateOnBlur={false}
-          validationSchema={validationSchema}
-          validateOnChange={false}
-          validateOnMount={false}
-        >
-          {({ isSubmitting, isValid, dirty }) => {
-            return (
-              <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
-                  <Grid item container spacing={2}>
-                    <Grid item xs={6} marginBottom={4}>
-                      <FormikControl
-                        control="input"
-                        name="referral"
-                        options={genderType}
-                        label="Name"
-                        placeholder="Select Name"
-                      />
-                    </Grid>
-                    {/* second grid */}
-                    <Grid item xs={6}>
-                      <FormikControl
-                        control="select"
-                        name="date"
-                        options={plans}
-                        label="Date"
-                        placeholder="Choose Date"
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item container spacing={2}>
-                    <Grid item container gap={1} xs={6}>
-                      <FormikControl
-                        control="select"
-                        name="category"
-                        options={plans1}
-                        label="Category"
-                        placeholder="Save Category"
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item container xs={12} marginTop={20}>
-                  <CustomButton
-                    title=" Apply Filter"
-                    width="100%"
-                    type={buttonType}
-                    isSubmitting={isSubmitting}
-                    disabled={!(dirty || isValid)}
-                  />
-                </Grid>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Modals>
     </>
   );
 };

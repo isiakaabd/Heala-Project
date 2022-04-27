@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Menu, MenuItem, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,14 +49,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
-  const [arr, setArr] = useState([]);
+const Notifications = ({ anchorEl, setAnchorEl }) => {
+  const arr = Array(0);
   const classes = useStyles();
-  // const theme = useTheme();
-  useEffect(() => {
-    if (Notifications) return setArr(Notifications);
-  }, [Notifications]);
+  const theme = useTheme();
+  console.log(anchorEl);
   const open = Boolean(anchorEl);
+  console.log(open);
   return (
     <Menu
       id="basic-menu"
@@ -77,7 +76,7 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
       >
         <Grid item>
           <Typography variant="body1">
-            {arr && arr.length > 0 ? "Notifications" : "No Notification"}
+            {arr.length > 0 ? "Notifications" : "No Notification"}
           </Typography>
         </Grid>
         <Grid item>
@@ -85,21 +84,26 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
         </Grid>
       </Grid>
       {arr.length > 0
-        ? arr.map((val, i) => {
-            return (
+        ? Array(10)
+            .fill()
+            .map((val, i) => (
               <MenuItem
                 key={i}
-                // onClick={() => setAnchorEl(null)}
+                onClick={() => setAnchorEl(null)}
                 className={classes.menuItem}
                 disableRipple
               >
-                <Typography variant="body2">{val.title}</Typography>
+                <Typography variant="body2">
+                  Raphael Igbinedion{" "}
+                  <span style={{ color: theme.palette.common.grey }}>
+                    accepted your referral request
+                  </span>
+                </Typography>
                 <Typography variant="body2" color="secondary">
-                  {val.content}
+                  Just now
                 </Typography>
               </MenuItem>
-            );
-          })
+            ))
         : null}
     </Menu>
   );
@@ -107,7 +111,6 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
 
 Notifications.propTypes = {
   anchorEl: PropTypes.object,
-  Notifications: PropTypes.array,
   setAnchorEl: PropTypes.func.isRequired,
 };
 
