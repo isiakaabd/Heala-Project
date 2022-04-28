@@ -103,8 +103,8 @@ export const dashboard = gql`
 `;
 // ${PageInfo}
 export const getEarningStats = gql`
-  query getEarningStats($q: String, $page: Int, $providerId: String) {
-    getEarningStats(filterBy: { providerId: $providerId }, q: $q, page: $page) {
+  query getEarningStats($q: String, $page: Int, $providerId: String, $status: String) {
+    getEarningStats(filterBy: { status: $status, providerId: $providerId }, q: $q, page: $page) {
       totalEarnings
       totalPayout
       earningData
@@ -377,9 +377,16 @@ export const getRefferals = gql`
     $page: Int
     $specialization: String
     $patient: String
+    $type: String
   ) {
     getReferrals(
-      filterBy: { doctor: $doctor, _id: $id, specialization: $specialization, patient: $patient }
+      filterBy: {
+        doctor: $doctor
+        _id: $id
+        specialization: $specialization
+        patient: $patient
+        type: $type
+      }
       orderBy: "-createdAt"
       page: $page
     ) {
@@ -647,8 +654,11 @@ export const getPatients = gql`
 
 export const getDoctorsProfile = gql`
   ${PageInfo}
-  query doctorProfiles($specialization: String, $page: Int) {
-    doctorProfiles(filterBy: { specialization: $specialization }, page: $page) {
+  query doctorProfiles($specialization: String, $gender: String, $cadre: String, $page: Int) {
+    doctorProfiles(
+      filterBy: { specialization: $specialization, gender: $gender, cadre: $cadre }
+      page: $page
+    ) {
       profile {
         _id
         firstName
@@ -885,8 +895,8 @@ export const getProviders = gql`
   }
 `;
 export const getEmailList = gql`
-  query getEmailList {
-    getEmailList(orderBy: "-createdAt") {
+  query getEmailList($role: String) {
+    getEmailList(filterBy: { role: $role }, orderBy: "-createdAt") {
       data {
         _id
         email
@@ -960,6 +970,28 @@ export const getDoctorPatients = gql`
     }
   }
 `;
+export const getNotifications = gql`
+  query getNotifications($user: String) {
+    getNotifications(user: $user) {
+      data {
+        user
+        content
+        itemId
+        ticker
+        title
+        seen
+        tag
+        useSound
+        role
+        saveNotification
+        previewImageUri
+        previewImageUriThumbnail
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const getSingleProvider = gql`
   query getPartnerCategories {
     getPartnerCategories {
@@ -980,32 +1012,6 @@ export const getCategory = gql`
     }
   }
 `;
-
-// (user: $user);
-// ($user: String);
-export const getNotifications = gql`
-  query getNotifications {
-    getNotifications {
-      data {
-        user
-        content
-        itemId
-        ticker
-        title
-        seen
-        tag
-        useSound
-        role
-        saveNotification
-        previewImageUri
-        previewImageUriThumbnail
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-
 export const getUserTypes = gql`
   query getUserTypes {
     getUserTypes {

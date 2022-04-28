@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import Notifications from "../layouts/Notifications";
+import { Notifications } from "components/layouts";
 import { findAccounts, getNotifications } from "components/graphQL/useQuery";
 import { useLazyQuery, useQuery } from "@apollo/client";
 
@@ -24,19 +24,16 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderProfile = () => {
   const email = localStorage.getItem("email");
-  // const id = localStorage.getItem("_id");
+  const id = localStorage.getItem("_id");
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileAcc, setProfileAcc] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [profile, { data, loading }] = useLazyQuery(findAccounts, {
     variables: { email },
   });
-  const { data: notData } = useQuery(
-    getNotifications,
-    // , {
-    // variables: { user: id },
-    // }
-  );
+  const { data: notData } = useQuery(getNotifications, {
+    variables: { user: id },
+  });
 
   const classes = useStyles();
   useEffect(() => {

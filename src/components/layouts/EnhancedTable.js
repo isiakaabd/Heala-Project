@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import EnhancedTableAction from "./EnhancedTableAction";
 import { useTheme } from "@mui/material/styles";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -14,7 +13,6 @@ import {
   Paper,
 } from "@mui/material";
 import PropTypes from "prop-types";
-
 import EnhancedTableHeader from "./EnhancedTableHeader";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -81,68 +79,6 @@ const EnhancedTable = ({
     // setPageNumber(0);
     // setRowsPerPage(0);
   };
-  const EnhancedTableAction = () => {
-    const theme = useTheme();
-
-    const handleFirstPageButtonClick = async (event) => {
-      await handleChangePage(event, 1);
-    };
-
-    const handleBackButtonClick = async (event) => {
-      await handleChangePage(event, page - 1);
-      setPageNumber(pagnumber - 1);
-    };
-
-    const handleNextButtonClick = async (event) => {
-      await handleChangePage(event, page + 1);
-      setPageNumber(pagnumber + 1);
-    };
-
-    const handleLastPageButtonClick = async (event) => {
-      await handleChangePage(event, totalPages);
-      setPageNumber(totalPages - 1);
-    };
-
-    return (
-      <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={!hasPrevPage || pagnumber === 0}
-          aria-label="first page"
-        >
-          {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-        </IconButton>
-        <IconButton
-          onClick={handleBackButtonClick}
-          disabled={!hasPrevPage || pagnumber === 0}
-          aria-label="previous page"
-        >
-          {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-        </IconButton>
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={!hasNextPage || pagnumber + 1 === totalPages}
-          aria-label="next page"
-        >
-          {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-        </IconButton>
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={!hasNextPage || pagnumber + 1 === totalPages}
-          aria-label="last page"
-        >
-          {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-        </IconButton>
-      </Box>
-    );
-  };
-  EnhancedTableAction.propTypes = {
-    count: PropTypes.number.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-    hasPrevPage: PropTypes.bool,
-    hasNextPage: PropTypes.bool,
-  };
   // Avoid a layout jump when reaching the last page with empty rows.
   // const emptyRows = totalPages === page ? limit * totalPages - totalDocs : 0;
 
@@ -160,20 +96,7 @@ const EnhancedTable = ({
               headCells={headCells}
               hasCheckbox={hasCheckbox}
             />
-            <TableBody>
-              {children}
-              {/* 
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                    width: "100%",
-                  }}
-                >
-                  <TableCell colSpan={10} />
-                </TableRow>
-              )} */}
-            </TableBody>
+            <TableBody>{children}</TableBody>
           </Table>
         </TableContainer>
         {type !== "editRole" ? (
@@ -187,7 +110,19 @@ const EnhancedTable = ({
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
             className={classes.pagination}
-            ActionsComponent={EnhancedTableAction}
+            ActionsComponent={() => (
+              <EnhancedTableAction
+                {...{
+                  hasPrevPage,
+                  hasNextPage,
+                  setPageNumber,
+                  handleChangePage,
+                  pagnumber,
+                  page,
+                  totalPages,
+                }}
+              />
+            )}
           />
         ) : null}
       </Paper>
@@ -214,6 +149,82 @@ EnhancedTable.propTypes = {
   hasCheckbox: PropTypes.bool,
   rowsPerPage: PropTypes.number,
   type: PropTypes.string,
+};
+
+const EnhancedTableAction = ({
+  hasPrevPage,
+  hasNextPage,
+  setPageNumber,
+  handleChangePage,
+  pagnumber,
+  page,
+  totalPages,
+}) => {
+  const theme = useTheme();
+
+  const handleFirstPageButtonClick = async (event) => {
+    await handleChangePage(event, 1);
+  };
+
+  const handleBackButtonClick = async (event) => {
+    await handleChangePage(event, page - 1);
+    setPageNumber(pagnumber - 1);
+  };
+
+  const handleNextButtonClick = async (event) => {
+    await handleChangePage(event, page + 1);
+    setPageNumber(pagnumber + 1);
+  };
+
+  const handleLastPageButtonClick = async (event) => {
+    await handleChangePage(event, totalPages);
+    setPageNumber(totalPages - 1);
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={!hasPrevPage || pagnumber === 0}
+        aria-label="first page"
+      >
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={!hasPrevPage || pagnumber === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={!hasNextPage || pagnumber + 1 === totalPages}
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={!hasNextPage || pagnumber + 1 === totalPages}
+        aria-label="last page"
+      >
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+};
+
+EnhancedTableAction.propTypes = {
+  count: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  pagnumber: PropTypes.number,
+  totalPages: PropTypes.number,
+  rowsPerPage: PropTypes.number.isRequired,
+  hasPrevPage: PropTypes.bool,
+  setPageNumber: PropTypes.func,
+  handleChangePage: PropTypes.func,
+  hasNextPage: PropTypes.bool,
 };
 
 export default EnhancedTable;
