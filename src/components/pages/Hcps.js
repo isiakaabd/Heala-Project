@@ -1,104 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import displayPhoto from "assets/images/avatar.svg";
-import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
-import { useQuery, useMutation } from "@apollo/client";
-import { makeStyles } from "@mui/styles";
-import { FilterList, Search, Loader, Modals, CustomButton } from "components/Utilities";
-import AddIcon from "@mui/icons-material/Add";
-import { useTheme } from "@mui/material/styles";
-import { hcpsHeadCells } from "components/Utilities/tableHeaders";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
-import { getDoctorsProfile } from "components/graphQL/useQuery";
-import { createDOctorProfile } from "components/graphQL/Mutation";
+
+import Filter from "../Forms/Filters/index";
+import AddIcon from "@mui/icons-material/Add";
+import { useTheme } from "@mui/material/styles";
+import { isSelected } from "helpers/isSelected";
+import displayPhoto from "assets/images/avatar.svg";
+import { useActions } from "components/hooks/useActions";
 import { timeConverter } from "components/Utilities/Time";
-
-// const statusType = ["Active", "Blocked"];
-
-const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
-  button: {
-    "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "0.5rem",
-      maxWidth: "12rem",
-      fontSize: "1rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: ".85rem",
-      },
-
-      "& .MuiButton-endIcon": {
-        marginLeft: ".2rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem !important",
-      height: "2.7rem",
-      borderRadius: "1.3rem",
-    },
-  },
-
-  searchFilterBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-  uploadBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: "#f2f2f2",
-      boxShadow: "none",
-      color: theme.palette.common.black,
-
-      "&:hover": {
-        background: "#f2f3f3",
-        boxShadow: "none",
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
-    },
-  },
-}));
+import { handleSelectedRows } from "helpers/selectedRows";
+import { useStyles } from "../../styles/doctorsPageStyles";
+import FormikControl from "components/validation/FormikControl";
+import { getDoctorsProfile } from "components/graphQL/useQuery";
+import { hcpsHeadCells } from "components/Utilities/tableHeaders";
+import { createDOctorProfile } from "components/graphQL/Mutation";
+import { ClearFiltersBtn } from "components/Buttons/ClearFiltersBtn";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
+import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
+import { Search, Loader, Modals, CustomButton } from "components/Utilities";
+import { onGenderValueChange, resetFilters } from "../../helpers/filterHelperFunctions";
+import {
+  cadreFilterBy,
+  doctorsPageDefaultFilterValues,
+  genderType,
+  providerFilterBy,
+  specializationFilterBy,
+  statusFilterBy,
+} from "../../helpers/mockData";
 
 const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
@@ -117,10 +51,14 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const { data, error, loading, refetch, fetchMore } = useQuery(getDoctorsProfile, {
-    notifyOnNetworkStatusChange: true,
-  });
-  //const offset =
+
+  const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
+    useLazyQuery(getDoctorsProfile);
+
+  useEffect(() => {
+    fetchDoctors();
+  }, [fetchDoctors]);
+
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
       page: newPage,
@@ -142,29 +80,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   }, [data]);
 
   const [searchHcp, setSearchHcp] = useState("");
-  const [openHcpFilter, setOpenHcpFilter] = useState(false);
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
-  const initialValues1 = {
-    hospital: "",
-    specialization: "",
-    phone: "",
-    cadre: "",
-  };
-
-  const validationSchema1 = Yup.object({
-    hospital: Yup.string("Enter your hospital").trim(),
-    specialization: Yup.string("Enter your specialization").trim(),
-    phone: Yup.number("Enter a valid email").typeError("Enter a current Number"),
-    cadre: Yup.string("Enter your Cadre").trim(),
-  });
-  const onSubmit1 = async (values) => {
-    const { specialization } = values;
-    await refetch({
-      specialization,
-    });
-    setOpenHcpFilter(false);
-  };
   const onSubmit = async (values) => {
     const {
       createdAt,
@@ -213,6 +130,22 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     { key: "Female", value: "Female" },
   ];
 
+  const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
+
+  /* const resetFilters = () => {
+    setFilterValues({
+      gender: "",
+      status: "",
+      provider: "",
+      cadre: "",
+      specialization: "",
+    });
+    for (const key in variables) {
+      delete variables[key];
+    }
+    fetchDoctors();
+  }; */
+
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -225,32 +158,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     dob: null,
     dociId: "",
   };
-  const validationSchema = Yup.object({
-    firstName: Yup.string("Enter your firstName").trim().required("firstName is required"),
-    hospital: Yup.string("Enter your hosptial").trim().required("hospital is required"),
-    dob: Yup.date("required").typeError(" Enter a valid DOB").required(" DOB required"),
-    dociId: Yup.string("Enter dociId").trim().required("DociId required"),
-    gender: Yup.string("select your Gender").required("Select a gender"),
-    phone: Yup.number("Enter your Phone Number")
-      .typeError(" Enter a valid phone number")
-      .min(11, "min value is  11 digits")
-      .required("Phone number is required"),
-    lastName: Yup.string("Enter your lastName").trim().required("LastName is required"),
-    image: Yup.string("Upload a single Image")
-      .typeError("Pick correct image")
-      .required("Image is required"),
-    specialization: Yup.string("select your Specialization")
-      .trim()
-      .required("Specialization is required"),
-    cadre: Yup.string("select your Cadre").trim().required("Cadre is required"),
-  });
+
   const [createDoc] = useMutation(createDOctorProfile);
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
 
-  if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -263,9 +177,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             height="5rem"
           />
         </Grid>
-        <Grid item className={classes.filterBtnGrid}>
-          <FilterList onClick={() => setOpenHcpFilter(true)} title="Filter Doctors" />
-        </Grid>
         <Grid item>
           <CustomButton
             endIcon={<AddIcon />}
@@ -275,7 +186,104 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           />
         </Grid>
       </Grid>
-      {profiles.length > 0 ? (
+      {/* ========= FILTERS =========== */}
+      <Grid container gap={2} flexWrap="wrap" className={classes.searchFilterContainer}>
+        {/* FILTER BY GENDER */}
+        <Grid item>
+          <Filter
+            onHandleChange={(e) =>
+              onGenderValueChange(
+                e,
+                "gender",
+                filterValues,
+                setFilterValues,
+                fetchDoctors,
+                variables,
+                refetch,
+              )
+            }
+            options={genderType}
+            name="gender"
+            placeholder="By gender"
+            value={filterValues.gender}
+          />
+        </Grid>
+        {/* ========= FILTER BY SPECIALIZATION =========== */}
+        <Grid item>
+          <Filter
+            onHandleChange={(e) =>
+              onGenderValueChange(
+                e,
+                "specialization",
+                filterValues,
+                setFilterValues,
+                fetchDoctors,
+                variables,
+                refetch,
+              )
+            }
+            options={specializationFilterBy}
+            name="status"
+            placeholder="By Specialization"
+            value={filterValues.specialization}
+          />
+        </Grid>
+
+        {/* FILTER BY CADRE */}
+        <Grid item>
+          <Filter
+            onHandleChange={(e) =>
+              onGenderValueChange(
+                e,
+                "cadre",
+                filterValues,
+                setFilterValues,
+                fetchDoctors,
+                variables,
+                refetch,
+              )
+            }
+            options={cadreFilterBy}
+            name="status"
+            placeholder="By Cadre"
+            value={filterValues.provider}
+          />
+        </Grid>
+
+        {/* FILTER BY STATUS */}
+        <Grid item>
+          <Filter
+            onHandleChange={(e) => console.log(e)}
+            options={statusFilterBy}
+            name="status"
+            placeholder="By status"
+            value={filterValues.status}
+            disable={true}
+          />
+        </Grid>
+        {/* FILTER BY PROVIDER */}
+        <Grid item>
+          <Filter
+            onHandleChange={(e) => console.log(e)}
+            options={providerFilterBy}
+            name="status"
+            placeholder="By provider"
+            value={filterValues.provider}
+            disable={true}
+          />
+        </Grid>
+        <Grid item>
+          <ClearFiltersBtn
+            title="Clear filters"
+            onHandleClick={() =>
+              resetFilters(setFilterValues, doctorsPageDefaultFilterValues, variables, fetchDoctors)
+            }
+          />
+        </Grid>
+      </Grid>
+      {loading ? (
+        <Loader />
+      ) : profiles.length > 0 ? (
         <Grid item container height="100%" direction="column">
           <EnhancedTable
             headCells={hcpsHeadCells}
@@ -332,7 +340,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                       scope="row"
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, minWidth: "10rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        minWidth: "10rem",
+                      }}
                     >
                       {dociId && dociId.split("-")[1]}
                     </TableCell>
@@ -412,51 +423,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       ) : (
         <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
-      {/* Filter Modal */}
-      <Modals
-        isOpen={openHcpFilter}
-        title="Filter"
-        rowSpacing={5}
-        handleClose={() => setOpenHcpFilter(false)}
-      >
-        <Formik
-          initialValues={initialValues1}
-          onSubmit={onSubmit1}
-          validationSchema={validationSchema1}
-          validateOnChange={false}
-          validateOnMount={false}
-          validateOnBlur={false}
-        >
-          {({ isSubmitting, isValid, dirty }) => {
-            return (
-              <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column" gap={1}>
-                  <Grid item container rowSpacing={3}>
-                    <Grid item container>
-                      <FormikControl
-                        control="select"
-                        options={specializations}
-                        name="specialization"
-                        label="Specialization"
-                        placeholder="Select Specialization"
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item marginTop={3}>
-                  <CustomButton
-                    title="Apply Filter"
-                    width="100%"
-                    type={buttonType}
-                    isSubmitting={isSubmitting}
-                    disabled={!(dirty || isValid)}
-                  />
-                </Grid>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Modals>
       {/* ADD Doctor MODAL */}
       <Modals
         isOpen={openAddHcp}
@@ -468,7 +434,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
-          validationSchema={validationSchema}
+          validationSchema={addDoctorValidationSchema}
           validateOnChange={false}
           validateOnMount={false}
           validateOnBlur={false}

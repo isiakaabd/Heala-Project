@@ -7,16 +7,33 @@ import {
   ApolloClient,
   ApolloProvider,
   ApolloLink,
-  createHttpLink,
+  split,
+  HttpLink,
   InMemoryCache,
   concat,
 } from "@apollo/client";
 import { getAccessToken } from "./accessToken";
-// require("dotenv").config();
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "https://api-staging.heala.io/",
+  }),
+);
 
-const httpLink = createHttpLink({
-  uri: "https://api.heala.io/",
+const httpLink = new HttpLink({
+  uri: "https://api-staging.heala.io/",
 });
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
+  },
+  wsLink,
+  httpLink,
+);
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const accessToken = getAccessToken();
@@ -35,7 +52,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const client = new ApolloClient({
   connectToDevTools: true,
   cache: new InMemoryCache(),
-  link: concat(authMiddleware, httpLink),
+  link: concat(authMiddleware, splitLink),
   resolvers: {},
 });
 
