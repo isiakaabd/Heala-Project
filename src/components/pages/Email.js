@@ -6,15 +6,7 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  TableRow,
-  Alert,
-  TableCell,
-  Checkbox,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 
 import { Link } from "react-router-dom";
 import Filter from "components/Forms/Filters";
@@ -104,16 +96,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({
-  selectedMenu,
-  selectedSubMenu,
-  setSelectedMenu,
-  setSelectedSubMenu,
-}) => {
+const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [fetchEmails, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getEmailList);
+  const [fetchEmails, { loading, error, data, refetch, variables }] = useLazyQuery(getEmailList);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
@@ -127,7 +113,7 @@ const Email = ({
   }, [data]);
   const { selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [response, setResponse] = useState("");
+  const [response] = useState("");
   const [searchMail, setSearchMail] = useState("");
 
   const buttonType = {
@@ -143,9 +129,7 @@ const Email = ({
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
-  const [filterValues, setFilterValues] = React.useState(
-    emailPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = React.useState(emailPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
@@ -185,7 +169,7 @@ const Email = ({
                   setFilterValues,
                   fetchEmails,
                   variables,
-                  refetch
+                  refetch,
                 )
               }
               options={roleFilterBy}
@@ -244,13 +228,7 @@ const Email = ({
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                _id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
+                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -305,10 +283,7 @@ const Email = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={emailHeader}
-            paginationLabel="Email  per page"
-          />
+          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
         )}
       </Grid>
     </>

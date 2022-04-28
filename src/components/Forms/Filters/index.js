@@ -4,14 +4,7 @@ import { Grid } from "@mui/material";
 
 import { CustomSelect } from "components/validation/Select";
 
-const Filter = ({
-  onHandleChange,
-  options,
-  name,
-  placeholder,
-  value,
-  disable,
-}) => {
+const Filter = ({ onHandleChange, options, name, placeholder, value, disable }) => {
   return (
     <div>
       <Grid item container direction="column">

@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Grid,
-  Typography,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableRow,
-  TableCell,
-} from "@mui/material";
+import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import Loader from "components/Utilities/Loader";
 import { useLazyQuery } from "@apollo/client";
@@ -26,10 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PreviousButton from "components/Utilities/PreviousButton";
 import Filter from "components/Forms/Filters";
-import {
-  payoutFilterBy,
-  payoutPageDefaultFilterValues,
-} from "helpers/mockData";
+import { payoutFilterBy, payoutPageDefaultFilterValues } from "helpers/mockData";
 import { onGenderValueChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
@@ -93,12 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({
-  selectedMenu,
-  selectedSubMenu,
-  setSelectedMenu,
-  setSelectedSubMenu,
-}) => {
+const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -130,12 +114,9 @@ const Payout = ({
     }
   }, [data]);
   const [rowsPerPage, setRowsPerPage] = useState(0);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } =
-    pageInfo;
+  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
-  const [filterValues, setFilterValues] = React.useState(
-    payoutPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = React.useState(payoutPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
@@ -146,12 +127,7 @@ const Payout = ({
       </Grid>
 
       <>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingBottom: "3rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
           <Grid item container spacing={3}>
             <Grid item container alignItems="center">
               <Typography noWrap variant="h1" component="div" color="#2D2F39">
@@ -174,7 +150,7 @@ const Payout = ({
                     setFilterValues,
                     fetchEarnings,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={payoutFilterBy}
@@ -208,8 +184,7 @@ const Payout = ({
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const { amount, createdAt, doctorData, status, _id } = row;
-                  const { firstName, picture, lastName, specialization } =
-                    doctorData[0];
+                  const { firstName, picture, lastName, specialization } = doctorData[0];
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -224,13 +199,7 @@ const Payout = ({
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -308,10 +277,7 @@ const Payout = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={payoutHeader}
-            paginationLabel="Payout  per page"
-          />
+          <EmptyTable headCells={payoutHeader} paginationLabel="Payout  per page" />
         )}
       </>
     </Grid>

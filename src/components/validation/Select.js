@@ -102,5 +102,14 @@ export const CustomSelect = (props) => {
     </Grid>
   );
 };
+CustomSelect.propTypes = {
+  value: PropTypes.string,
+  options: PropTypes.string,
+  name: PropTypes.func,
+  children: PropTypes.node.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+};
 
 export default Selects;

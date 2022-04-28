@@ -13,7 +13,6 @@ import {
   Paper,
 } from "@mui/material";
 import PropTypes from "prop-types";
-
 import EnhancedTableHeader from "./EnhancedTableHeader";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -97,20 +96,7 @@ const EnhancedTable = ({
               headCells={headCells}
               hasCheckbox={hasCheckbox}
             />
-            <TableBody>
-              {children}
-              {/* 
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                    width: "100%",
-                  }}
-                >
-                  <TableCell colSpan={10} />
-                </TableRow>
-              )} */}
-            </TableBody>
+            <TableBody>{children}</TableBody>
           </Table>
         </TableContainer>
         {type !== "editRole" ? (
@@ -209,22 +195,14 @@ const EnhancedTableAction = ({
         disabled={!hasPrevPage || pagnumber === 0}
         aria-label="previous page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={!hasNextPage || pagnumber + 1 === totalPages}
         aria-label="next page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
@@ -240,8 +218,12 @@ const EnhancedTableAction = ({
 EnhancedTableAction.propTypes = {
   count: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
+  pagnumber: PropTypes.number,
+  totalPages: PropTypes.number,
   rowsPerPage: PropTypes.number.isRequired,
   hasPrevPage: PropTypes.bool,
+  setPageNumber: PropTypes.func,
+  handleChangePage: PropTypes.func,
   hasNextPage: PropTypes.bool,
 };
 

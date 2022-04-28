@@ -71,6 +71,6 @@ export const unformat = (amount, locale) => {
   return parseFloat(
     amount
       .replace(new RegExp("\\" + thousandSeparator, "g"), "")
-      .replace(new RegExp("\\" + decimalSeparator), ",")
+      .replace(new RegExp("\\" + decimalSeparator), ","),
   );
 };

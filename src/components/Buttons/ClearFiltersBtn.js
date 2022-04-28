@@ -23,6 +23,6 @@ export const ClearFiltersBtn = ({ title, onHandleClick }) => {
 };
 
 ClearFiltersBtn.propTypes = {
-  title: t.string.isRequired,
-  handleClick: t.func.isRequired,
+  title: t.string,
+  onHandleClick: t.func,
 };

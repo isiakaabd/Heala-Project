@@ -7,7 +7,7 @@ export const onGenderValueChange = async (
   setFilterValues,
   fetchData,
   variables,
-  refetchData
+  refetchData,
 ) => {
   const value = e?.target?.value;
   const newFilterData = { ...filterValues, [name]: value };
@@ -23,12 +23,7 @@ export const onGenderValueChange = async (
   }
 };
 
-export const resetFilters = (
-  setFilterValues,
-  values,
-  variables,
-  refetchData
-) => {
+export const resetFilters = (setFilterValues, values, variables, refetchData) => {
   console.log(setFilterValues, values, variables, refetchData);
   setFilterValues(values);
   for (const key in variables) {
