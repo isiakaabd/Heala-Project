@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import FormikControl from "components/validation/FormikControl";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
-import { CustomButton, Loader, Modals, FilterList, Search } from "components/Utilities";
+import { Loader, Search } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
@@ -14,11 +11,14 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
+import Filter from "components/Forms/Filters";
+import { onGenderValueChange } from "helpers/filterHelperFunctions";
+import { referralFilterBy, referralPageDefaultFilterValues } from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -78,34 +78,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
-  const handleDialogOpen = () => setIsOpen(true);
   const [pageInfo, setPageInfo] = useState([]);
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-    disabled: theme.palette.common.black,
-  };
-  const handleDialogClose = () => setIsOpen(false);
   const classes = useStyles();
-  const initialValues = {
-    specialization: "",
-    patient: "",
-    // category: "",
-    doctor: "",
-  };
-  const specializations = [
-    { key: "Diagonistic", value: "diagonistics" },
-    { key: "Pharmacy", value: "Pharmacy" },
-  ];
-  const validationSchema = Yup.object({
-    doctor: Yup.string("Enter Doctor ID"),
-    patient: Yup.string("Enter Patient ID"),
-    category: Yup.string("Select category"),
-    specialization: Yup.string("Select specialization"),
-  });
+
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
@@ -113,28 +89,20 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     } else refetch({ id: e });
   };
 
-  const onSubmit = async (values) => {
-    const { doctor, patient, specialization } = values;
-    try {
-      await refetch({
-        doctor,
-        patient,
-        // category,
-        specialization,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    handleDialogClose();
-  };
-
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
-  const { data, loading, error, refetch } = useQuery(getRefferals, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(
+    getRefferals,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
+  );
   const [referral, setReferral] = useState([]);
+
+  useEffect(() => {
+    fetchRefferals();
+  }, [fetchRefferals]);
 
   useEffect(() => {
     if (data) {
@@ -148,7 +116,8 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const [rowsPerPage, setRowsPerPage] = useState(0);
 
-  if (loading) return <Loader />;
+  const [filterValues, setFilterValues] = React.useState(referralPageDefaultFilterValues);
+
   if (error) return <NoData error={error} />;
 
   return (
@@ -164,10 +133,28 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             />
           </Grid>
           <Grid item>
-            <FilterList onClick={handleDialogOpen} title="Filter by" />
+            <Filter
+              onHandleChange={(e) =>
+                onGenderValueChange(
+                  e,
+                  "type",
+                  filterValues,
+                  setFilterValues,
+                  fetchRefferals,
+                  variables,
+                  refetch,
+                )
+              }
+              options={referralFilterBy}
+              name="status"
+              placeholder="By Type"
+              value={filterValues.type}
+            />
           </Grid>
         </Grid>
-        {referral.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : referral.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
@@ -325,75 +312,6 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <EmptyTable headCells={referralHeader} paginationLabel="Referral  per page" />
         )}
       </Grid>
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validateOnBlur={false}
-          validationSchema={validationSchema}
-          validateOnChange={false}
-          validateOnMount={false}
-        >
-          {({ isSubmitting, isValid, dirty }) => {
-            return (
-              <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
-                  <Grid item>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="select"
-                          options={specializations}
-                          name="specialization"
-                          label="Specialization"
-                          placeholder="Select Specialization"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          name="patient"
-                          label="Patient ID"
-                          placeholder="Enter Patient ID"
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-                    <Grid container spacing={2}>
-                      <Grid item md>
-                        <FormikControl
-                          control="input"
-                          name="doctor"
-                          label="Doctor ID"
-                          placeholder="Enter Doctor ID"
-                        />
-                      </Grid>
-                      <Grid item md>
-                        {/* <FormikControl
-                          control="input"
-                          name="doctor"
-                          label="Doctor ID"
-                          placeholder="Enter Doctor ID"
-                        /> */}
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <CustomButton
-                      title="Apply Filter"
-                      width="100%"
-                      type={buttonType}
-                      isSubmitting={isSubmitting}
-                      disabled={!(dirty || isValid)}
-                    />
-                  </Grid>
-                </Grid>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Modals>
     </>
   );
 };
