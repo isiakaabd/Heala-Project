@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import Notifications from "../layouts/Notifications";
+import { Notifications } from "components/layouts";
 import { findAccounts, getNotifications } from "components/graphQL/useQuery";
 import { useLazyQuery, useQuery } from "@apollo/client";
 
@@ -27,6 +27,7 @@ const HeaderProfile = () => {
   const id = localStorage.getItem("_id");
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileAcc, setProfileAcc] = useState([]);
+  const [num, setNum] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [profile, { data, loading }] = useLazyQuery(findAccounts, {
     variables: { email },
@@ -34,8 +35,17 @@ const HeaderProfile = () => {
   const { data: notData } = useQuery(getNotifications, {
     variables: { user: id },
   });
-  console.log(notData);
+  useEffect(() => {
+    setNum(notifications && notifications.length);
+
+    // eslint-disable-next-line
+  }, []);
   const classes = useStyles();
+  const handleNotification = (event) => {
+    setAnchorEl(event.currentTarget);
+    setNum(0);
+  };
+  console.log(num);
   useEffect(() => {
     (async () => {
       profile();
@@ -83,10 +93,10 @@ const HeaderProfile = () => {
         </Grid>
         <Grid item>
           <IconButton
-            aria-label={notificationsLabel(notifications && notifications.length)}
-            onClick={(event) => setAnchorEl(event.currentTarget)}
+            aria-label={notificationsLabel(num)}
+            onClick={(event) => handleNotification(event)}
           >
-            <Badge badgeContent={notifications && notifications.length} color="error">
+            <Badge badgeContent={num} color="error">
               <NotificationsActiveIcon color="primary" fontSize="large" />
             </Badge>
           </IconButton>

@@ -970,9 +970,10 @@ export const getDoctorPatients = gql`
     }
   }
 `;
+// (user: $user) ($user: String)
 export const getNotifications = gql`
-  query getNotifications($user: String) {
-    getNotifications(user: $user) {
+  query getNotifications {
+    getNotifications {
       data {
         user
         content
