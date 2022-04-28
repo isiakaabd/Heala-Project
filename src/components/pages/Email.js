@@ -7,7 +7,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
-
 import { Link } from "react-router-dom";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -105,6 +104,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
   useEffect(() => {
     fetchEmails();
   }, [fetchEmails]);
+
+  console.log(123);
 
   useEffect(() => {
     if (data) {
