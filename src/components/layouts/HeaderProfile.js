@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import Notifications from "../layouts/Notifications";
+import { Notifications } from "components/layouts";
 import { findAccounts, getNotifications } from "components/graphQL/useQuery";
 import { useLazyQuery, useQuery } from "@apollo/client";
 
@@ -34,7 +34,7 @@ const HeaderProfile = () => {
   const { data: notData } = useQuery(getNotifications, {
     variables: { user: id },
   });
-  console.log(notData);
+
   const classes = useStyles();
   useEffect(() => {
     (async () => {
