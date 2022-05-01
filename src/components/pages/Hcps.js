@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
-
+import { debounce } from "lodash";
 import Filter from "../Forms/Filters/index";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -64,13 +64,14 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       page: newPage,
     });
   };
-
-  const onChange = async (e) => {
-    setSearchHcp(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
-  };
+  //eslint-disable-next-line
+  const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
+  // const onChange = async (e) => {
+  //   setSearchHcp(e);
+  //   if (e == "") {
+  //     refetch();
+  //   } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
+  // };
   const [profiles, setProfiles] = useState("");
   useEffect(() => {
     if (data) {
@@ -79,7 +80,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     }
   }, [data]);
 
-  const [searchHcp, setSearchHcp] = useState("");
+  // const [searchHcp, setSearchHcp] = useState("");
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
   const onSubmit = async (values) => {
@@ -171,8 +172,15 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
-            value={searchHcp}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+
+              if (value !== "") {
+                return debouncer({ variables: { dociId: `HEALA-${value.toUpperCase()}` } });
+              }
+            }}
+            // debouncer
+            // onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
             height="5rem"
           />

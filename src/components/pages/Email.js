@@ -105,8 +105,6 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     fetchEmails();
   }, [fetchEmails]);
 
-  console.log(123);
-
   useEffect(() => {
     if (data) {
       setEmails(data.getEmailList.data);

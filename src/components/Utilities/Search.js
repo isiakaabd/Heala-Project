@@ -11,6 +11,7 @@ const SearchContainer = ({
   placeholderWidth,
   value,
   onChange,
+  ref,
   hasStartIcon = true,
   ...rest
 }) => {
@@ -21,6 +22,7 @@ const SearchContainer = ({
     //     },
     //   },
   });
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -28,6 +30,7 @@ const SearchContainer = ({
         id="input-with-icon-adornment"
         value={value}
         onChange={onChange}
+        ref={ref}
         {...rest}
         sx={{
           display: "flex",
@@ -55,6 +58,7 @@ const SearchContainer = ({
 };
 SearchContainer.propTypes = {
   width: PropTypes.string,
+  ref: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
   height: PropTypes.string,
   placeholderWidth: PropTypes.string,

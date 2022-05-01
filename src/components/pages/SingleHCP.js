@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import CustomButton from "components/Utilities/CustomButton";
 import { useQuery, useMutation } from "@apollo/client";
 import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
-import PreviousButton from "components/Utilities/PreviousButton";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import Card from "components/Utilities/Card";
+import { Card, CustomButton, Loader, PreviousButton } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
@@ -16,7 +14,6 @@ import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { Link, useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import Loader from "components/Utilities/Loader";
 import { deleteDoctor } from "components/graphQL/Mutation";
 //
 
@@ -28,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",
     borderRadius: "2rem",
-    padding: "4rem",
+    padding: "2rem 4rem",
   },
 
   parentGrid: {
@@ -173,7 +170,7 @@ const SingleHCP = (props) => {
         </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
-          <Grid item>
+          <Grid item sx={{ paddingTop: 0 }}>
             <Grid container alignItems="center">
               <Grid item style={{ marginRight: "2rem" }}>
                 <Avatar

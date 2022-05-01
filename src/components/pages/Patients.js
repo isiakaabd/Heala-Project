@@ -37,10 +37,14 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   useEffect(() => {
     fetchPatient();
   }, [fetchPatient]);
+  useEffect(() => {
+    if (data) {
+      setProfiles(data.profiles.data);
+    }
+  }, [data]);
 
   const [profiles, setProfiles] = useState([]);
-
-  const [filterValues, setFilterValues] = React.useState(patientsPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = useState(patientsPageDefaultFilterValues);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -50,13 +54,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     limit: 5,
     totalDocs: 0,
   });
-
-  useEffect(() => {
-    if (data) {
-      setPageInfo(data.profiles.pageInfo);
-      setProfiles(data.profiles.data);
-    }
-  }, [data]);
 
   const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
@@ -76,7 +73,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     });
     //refetch({ page: newPage });
   };
-
   useEffect(() => {
     if (data) {
       const _profile =
@@ -88,6 +84,12 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     }
   }, [data, page, rowsPerPage]);
 
+  useEffect(() => {
+    if (data) {
+      setPageInfo(data.profiles.pageInfo);
+      setProfiles(data.profiles.data);
+    }
+  }, [data]);
   if (error) return <NoData error={error} />;
 
   return (
@@ -97,12 +99,12 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
           {/*  ======= SEARCH INPUT(S) ==========*/}
           <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
             <Search
-              // value={searchPatient}
               onChange={(e) => {
-                let value = "";
-                if (value !== "") value = `HEALA-${value.toUpperCase()}`;
-                else value = "";
-                return debouncer({ variables: { dociId: value } });
+                let value = e.target.value;
+
+                if (value !== "") {
+                  return debouncer({ variables: { dociId: `HEALA-${value.toUpperCase()}` } });
+                }
               }}
               // onChange={debouncedChangeHandler}
               placeholder="Search by ID e.g 7NE6ELLO "

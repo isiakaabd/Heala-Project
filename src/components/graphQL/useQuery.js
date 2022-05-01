@@ -3,7 +3,7 @@ import { PageInfo } from "./fragment";
 
 export const doctor = gql`
   query doctorProfile($id: ID!) {
-    doctorProfile(id: $id) {
+    doctorProfile(filterBy: { doctor: $id }) {
       _id
       firstName
       lastName
@@ -256,6 +256,8 @@ export const getConsult = gql`
       _id
       patient
       consultationOwner
+      patientData
+      doctorData
       contactMedium
       status
       symptoms {
@@ -654,9 +656,15 @@ export const getPatients = gql`
 
 export const getDoctorsProfile = gql`
   ${PageInfo}
-  query doctorProfiles($specialization: String, $gender: String, $cadre: String, $page: Int) {
+  query doctorProfiles(
+    $specialization: String
+    $dociId: String
+    $gender: String
+    $cadre: String
+    $page: Int
+  ) {
     doctorProfiles(
-      filterBy: { specialization: $specialization, gender: $gender, cadre: $cadre }
+      filterBy: { specialization: $specialization, dociId: $dociId, gender: $gender, cadre: $cadre }
       page: $page
     ) {
       profile {
@@ -970,10 +978,34 @@ export const getDoctorPatients = gql`
     }
   }
 `;
-// (user: $user) ($user: String)
+export const findMultipleProfiles = gql`
+  query findMultipleProfiles($ids: String) {
+    findMultipleProfiles(ids: $ids) {
+      profiles {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        genotype
+        gender
+        phoneNumber
+        provider
+        plan
+        status
+        consultations
+        createdAt
+        image
+        rating
+      }
+    }
+  }
+`;
+//
 export const getNotifications = gql`
-  query getNotifications {
-    getNotifications {
+  query getNotifications($user: String) {
+    getNotifications(user: $user) {
       data {
         user
         content

@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { verification, getCategory } from "components/graphQL/useQuery"; //
+import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
 import {
   rejectVerification,
   updateDoctorProvider,
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "4rem 5rem",
-    height: "14.1rem",
+    minHeight: "14.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
   firstContainer: {
@@ -105,6 +105,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
+  console.log(data);
 
   const history = useHistory();
   const [respondData, setRespondData] = useState([]);
@@ -155,8 +156,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
       },
       refetchQueries: [
         {
-          query: verification,
-          variables: { id: viewId },
+          query: getVerification,
         },
       ],
     });
@@ -193,14 +193,14 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   useEffect(() => {
     if (data) {
       setRespondData(data.getVerification);
-      setRef(data.getVerification.reference.reference_code);
+      setRef(data.getVerification.reference?.reference_code);
     }
   }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
     respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   const [process, setProcess] = useState(undefined);
-  console.log(verifyState, respondData.status);
+  console.log(respondData.status);
   useEffect(() => {
     if (ref) {
       get({
@@ -231,6 +231,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     status,
     // eslint-disable-next-line
   } = respondData;
+  console.log(yearbook);
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
 
@@ -247,6 +248,14 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
         variables: {
           id: viewId,
         },
+        refetchQueries: [
+          {
+            query: verification,
+            variables: {
+              id: viewId,
+            },
+          },
+        ],
       });
     } catch (err) {
       console.error(err);
@@ -482,11 +491,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid item>
                 <Typography variant="h4">Year Book</Typography>
               </Grid>
-              {yearbook ? (
+              {yearbook && Object.keys(yearbook).length > 0 ? (
                 <Grid item container gap={2}>
-                  {yearbook.graduation_year !== "Invalid date" ? (
+                  {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                     <Grid item className={classes.link}>
-                      {yearbook.graduation_year.slice(0, 4)}
+                      {yearbook?.graduation_year?.slice(0, 4)}
                     </Grid>
                   ) : (
                     <Grid item>
@@ -576,33 +585,34 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid item>
                 <Typography variant="h4">Reference ID</Typography>
               </Grid>
-
-              {reference?.reference_code ? (
-                <>
-                  <Grid item className={classes.link}>
-                    {process ? process : reference?.reference_code}
+              <Grid item container justifyContent="space-between" paddingTop={1}>
+                {reference?.reference_code ? (
+                  <>
+                    <Grid item className={classes.link}>
+                      {process ? process : reference?.reference_code}
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid className={classes.link}>Not Provided</Grid>
+                )}
+                {reference?.reference_code && (
+                  <Grid item sx={{ alignSelf: "center" }}>
+                    <CustomButton
+                      title={
+                        doctorData?.providerId === reference?.reference_code ||
+                        updateState === "Updated"
+                          ? "Updated"
+                          : "Update Provider"
+                      }
+                      type={trasparentButton}
+                      width="100%"
+                      isSubmitting={submit}
+                      onClick={() => handleUpdateProVider(reference?.reference_code)}
+                      disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                    />
                   </Grid>
-                </>
-              ) : (
-                <Grid className={classes.link}>Not Provided</Grid>
-              )}
-              {reference?.reference_code && (
-                <Grid item sx={{ alignSelf: "center" }}>
-                  <CustomButton
-                    title={
-                      doctorData?.providerId === reference?.reference_code ||
-                      updateState === "Updated"
-                        ? "Updated"
-                        : "Update Provider"
-                    }
-                    type={trasparentButton}
-                    width="100%"
-                    isSubmitting={submit}
-                    onClick={() => handleUpdateProVider(reference?.reference_code)}
-                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
-                  />
-                </Grid>
-              )}
+                )}
+              </Grid>
             </Grid>
           </Grid>
 
