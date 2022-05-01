@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Typography,
-  Avatar,
-  TableCell,
-  TableRow,
-  Checkbox,
-} from "@mui/material";
+import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import {
-  timeMoment,
-  dateMoment,
-  formatNumber,
-} from "components/Utilities/Time";
+import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -89,29 +78,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({
-  selectedMenu,
-  setSelectedMenu,
-  selectedSubMenu,
-  setSelectedSubMenu,
-}) => {
+const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] =
-    useLazyQuery(getEarningData);
+  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchEarningData({
       variables: {
         first: pageInfo.limit,
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchEarningData]);
+  }, [fetchEarningData, pageInfo]);
 
   useEffect(() => {
     if (data) {
@@ -159,8 +142,7 @@ const Financetable = ({
             >
               {earning.map((row, index) => {
                 const { doctorData, createdAt, balance } = row;
-                const { firstName, picture, lastName, specialization } =
-                  doctorData[0];
+                const { firstName, picture, lastName, specialization } = doctorData[0];
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -175,13 +157,7 @@ const Financetable = ({
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -243,10 +219,7 @@ const Financetable = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={financeHeader}
-            paginationLabel="Finance  per page"
-          />
+          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
         )}
       </>
     </Grid>

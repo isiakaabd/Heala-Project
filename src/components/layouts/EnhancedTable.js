@@ -151,22 +151,14 @@ const EnhancedTableAction = ({ fetchData, dataPageInfo }) => {
         disabled={!dataPageInfo?.hasPrevPage}
         aria-label="previous page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={() => handlePageChange(fetchData, NEXTPAGE, dataPageInfo)}
         disabled={!dataPageInfo?.hasNextPage}
         aria-label="next page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={() => handlePageChange(fetchData, LASTPAGE, dataPageInfo)}
@@ -184,11 +176,13 @@ EnhancedTableAction.propTypes = {
   page: PropTypes.number.isRequired,
   pagnumber: PropTypes.number,
   totalPages: PropTypes.number,
+  dataPageInfo: PropTypes.object,
   rowsPerPage: PropTypes.number.isRequired,
   hasPrevPage: PropTypes.bool,
   setPageNumber: PropTypes.func,
   handleChangePage: PropTypes.func,
   hasNextPage: PropTypes.bool,
+  fetchData: PropTypes.func,
 };
 
 export default EnhancedTable;

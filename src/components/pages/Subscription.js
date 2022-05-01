@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Checkbox,
-  Button,
-  Alert,
-  TableRow,
-  TableCell,
-} from "@mui/material";
+import { Grid, Checkbox, Button, Alert, TableRow, TableCell } from "@mui/material";
 import { formatNumber } from "components/Utilities/Time";
 import { Search, Loader, CustomButton } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
@@ -20,7 +13,7 @@ import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import Modals from "components/Utilities/Modal";
+import { Modals } from "components/Utilities";
 import { SubscriptionModal } from "components/modals/SubscriptionModal";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -218,8 +211,7 @@ const Subscription = () => {
     active: theme.palette.primary.dark,
   };
   const [plan, setPlan] = useState([]);
-  const [fetchPlans, { loading, data, error, refetch }] =
-    useLazyQuery(getPlans);
+  const [fetchPlans, { loading, data, error, refetch }] = useLazyQuery(getPlans);
 
   React.useEffect(() => {
     fetchPlans({
@@ -228,7 +220,7 @@ const Subscription = () => {
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchPlans]);
+  }, [fetchPlans, pageInfo]);
 
   const onChange = async (e) => {
     setSearchMail(e);
@@ -257,13 +249,7 @@ const Subscription = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        flexWrap="nowrap"
-        gap={2}
-        height="100%"
-      >
+      <Grid container direction="column" flexWrap="nowrap" gap={2} height="100%">
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -310,14 +296,7 @@ const Subscription = () => {
               {plan
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const {
-                    _id,
-                    amount,
-                    description,
-                    providerData,
-                    duration,
-                    name,
-                  } = row;
+                  const { _id, amount, description, providerData, duration, name } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -331,13 +310,7 @@ const Subscription = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -431,10 +404,7 @@ const Subscription = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={subscriptionHeader}
-            paginationLabel="Subscription  per page"
-          />
+          <EmptyTable headCells={subscriptionHeader} paginationLabel="Subscription  per page" />
         )}
       </Grid>
 
@@ -454,12 +424,7 @@ const Subscription = () => {
       </Modals>
 
       {/* edit Modal */}
-      <Modals
-        isOpen={edit}
-        title="Edit plan"
-        rowSpacing={5}
-        handleClose={handleEditCloseDialog}
-      >
+      <Modals isOpen={edit} title="Edit plan" rowSpacing={5} handleClose={handleEditCloseDialog}>
         <SubscriptionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"

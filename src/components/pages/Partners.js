@@ -16,7 +16,6 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPartners, getSingleProvider, getUsertypess } from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
-// import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { useStyles } from "styles/partnersPageStyles";
 

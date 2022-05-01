@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Avatar,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -83,10 +76,7 @@ const Medications = (props) => {
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton
-          path={`/patients/${patientId}`}
-          onClick={() => setSelectedPatientMenu(0)}
-        />
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
 
       <Grid item container height="100%" direction="column" gap={2}>
@@ -122,13 +112,7 @@ const Medications = (props) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -184,9 +168,7 @@ const Medications = (props) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.doctor}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -195,10 +177,7 @@ const Medications = (props) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={medicationsHeadCells}
-            paginationLabel="Medications per page"
-          />
+          <EmptyTable headCells={medicationsHeadCells} paginationLabel="Medications per page" />
         )}
       </Grid>
     </Grid>

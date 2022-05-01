@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
-
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
+import { debounce } from "lodash";
 import Filter from "../Forms/Filters/index";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -63,31 +55,25 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     active: theme.palette.primary.dark,
   };
 
-  const [
-    fetchDoctors,
-    { data, error, loading, refetch, fetchMore, variables },
-  ] = useLazyQuery(getDoctorsProfile);
+  const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
+    useLazyQuery(getDoctorsProfile);
 
-  useEffect(() => {
-    fetchDoctors({
-      variables: {
-        first: pageInfo.limit,
-      },
-    });
-  }, [fetchDoctors]);
+  // useEffect(() => {
+  //   fetchDoctors({
+  //     // variables: {
+  //     //   first: pageInfo.limit,
+  //     // },
+  //   });
+  // }, [fetchDoctors, pageInfo]);
 
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
       page: newPage,
     });
   };
+  //eslint-disable-next-line
+  const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
 
-  const onChange = async (e) => {
-    setSearchHcp(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
-  };
   const [profiles, setProfiles] = useState("");
   useEffect(() => {
     if (data) {
@@ -96,7 +82,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     }
   }, [data]);
 
-  const [searchHcp, setSearchHcp] = useState("");
+  // const [searchHcp, setSearchHcp] = useState("");
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
   const onSubmit = async (values) => {
@@ -147,9 +133,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     { key: "Female", value: "Female" },
   ];
 
-  const [filterValues, setFilterValues] = React.useState(
-    doctorsPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
 
   const initialValues = {
     firstName: "",
@@ -175,8 +159,15 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
-            value={searchHcp}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+
+              if (value !== "") {
+                return debouncer({ variables: { dociId: `HEALA-${value.toUpperCase()}` } });
+              }
+            }}
+            // debouncer
+            // onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
             height="5rem"
           />
@@ -191,12 +182,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         </Grid>
       </Grid>
       {/* ========= FILTERS =========== */}
-      <Grid
-        container
-        gap={2}
-        flexWrap="wrap"
-        className={classes.searchFilterContainer}
-      >
+      <Grid container gap={2} flexWrap="wrap" className={classes.searchFilterContainer}>
         {/* FILTER BY GENDER */}
         <Grid item>
           <Filter
@@ -208,7 +194,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={genderType}
@@ -228,7 +214,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={specializationFilterBy}
@@ -249,7 +235,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={cadreFilterBy}
@@ -285,12 +271,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <ClearFiltersBtn
             title="Clear filters"
             onHandleClick={() =>
-              resetFilters(
-                setFilterValues,
-                doctorsPageDefaultFilterValues,
-                variables,
-                fetchDoctors
-              )
+              resetFilters(setFilterValues, doctorsPageDefaultFilterValues, variables, fetchDoctors)
             }
           />
         </Grid>
@@ -336,9 +317,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -432,10 +411,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpsHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
       {/* ADD Doctor MODAL */}
       <Modals

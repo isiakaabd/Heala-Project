@@ -5,15 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
+import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
@@ -46,14 +38,19 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [fetchPatient, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getPatients);
+  const [fetchPatient, { loading, error, data, refetch, variables }] = useLazyQuery(getPatients);
+
+  useEffect(() => {
+    fetchPatient();
+  }, [fetchPatient]);
+  useEffect(() => {
+    if (data) {
+      setProfiles(data.profiles.data);
+    }
+  }, [data]);
 
   const [profiles, setProfiles] = useState([]);
-
-  const [filterValues, setFilterValues] = React.useState(
-    patientsPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(patientsPageDefaultFilterValues);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -64,21 +61,9 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     totalDocs: 0,
   });
 
-  useEffect(() => {
-    fetchPatient({
-      variables: {
-        first: pageInfo.limit,
-      },
-    });
-  }, [fetchPatient]);
+  const { page } = pageInfo;
 
-  useEffect(() => {
-    if (data) {
-      setPageInfo(data.profiles.pageInfo);
-      setProfiles(data.profiles.data);
-    }
-  }, [data]);
-
+  const [rowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 
   const { setSelectedRows } = useActions();
@@ -86,32 +71,46 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   //eslint-disable-next-line
   const debouncer = useCallback(debounce(fetchPatient, 3000), []);
 
+  // const fetchMoreFunc = async (e, newPage) => {
+  //   fetchPatient({
+  //     variables: {
+  //       page: newPage,
+  //     },
+  //   });
+  //   //refetch({ page: newPage });
+  // };
+  useEffect(() => {
+    if (data) {
+      const _profile =
+        rowsPerPage > 0
+          ? (data?.profiles?.data || []).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          : data?.profiles?.data;
+      setPageInfo(data?.profiles?.pageInfo);
+      setProfiles(_profile || []);
+    }
+  }, [data, page, rowsPerPage]);
+
+  useEffect(() => {
+    if (data) {
+      setPageInfo(data.profiles.pageInfo);
+      setProfiles(data.profiles.data);
+    }
+  }, [data]);
   if (error) return <NoData error={error} />;
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
-        <Grid
-          item
-          container
-          spacing={2}
-          className={classes.searchFilterContainer}
-        >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+        <Grid item container spacing={2} className={classes.searchFilterContainer}>
           {/*  ======= SEARCH INPUT(S) ==========*/}
           <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
             <Search
-              // value={searchPatient}
               onChange={(e) => {
-                let value = "";
-                if (value !== "") value = `HEALA-${value.toUpperCase()}`;
-                else value = "";
-                return debouncer({ variables: { dociId: value } });
+                let value = e.target.value;
+
+                if (value !== "") {
+                  return debouncer({ variables: { dociId: `HEALA-${value.toUpperCase()}` } });
+                }
               }}
               // onChange={debouncedChangeHandler}
               placeholder="Search by ID e.g 7NE6ELLO "
@@ -131,7 +130,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     setFilterValues,
                     fetchPatient,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={genderType}
@@ -180,7 +179,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     setFilterValues,
                     patientsPageDefaultFilterValues,
                     variables,
-                    fetchPatient
+                    fetchPatient,
                   );
                 }}
               />
@@ -227,9 +226,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -264,9 +261,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span
-                          style={{ fontSize: "1.25rem" }}
-                        >{`${firstName} ${lastName}`}</span>
+                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
@@ -315,10 +310,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={patientsHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
         )}
       </Grid>
     </>

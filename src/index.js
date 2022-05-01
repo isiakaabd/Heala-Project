@@ -62,5 +62,5 @@ ReactDOM.render(
       <App />
     </ApolloProvider>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
