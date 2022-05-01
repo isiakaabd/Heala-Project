@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Loader, CustomButton, Modals, PreviousButton } from "components/Utilities";
+import {
+  Loader,
+  CustomButton,
+  Modals,
+  PreviousButton,
+} from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -27,11 +32,13 @@ import { isSelected } from "helpers/isSelected";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { PermissionModal, DeleteOrDisable } from "components/modals";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -115,7 +122,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSelectedMenu }) => {
+const Permission = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedSubMenu,
+  setSelectedMenu,
+}) => {
   const [singlePermission, setSinglePermission] = useState();
 
   const checkbox = [
@@ -137,9 +149,13 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission").trim().required("permission is required"),
+    name: Yup.string("Enter your Permission")
+      .trim()
+      .required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category").trim().required("Category is required"),
+    category: Yup.string("Select Category")
+      .trim()
+      .required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);
@@ -147,8 +163,12 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
-    name: Yup.string("Enter your Permission").required("permission is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
+    name: Yup.string("Enter your Permission").required(
+      "permission is required"
+    ),
+    description: Yup.string("Enter Description").required(
+      "Description is required"
+    ),
   });
 
   const classes = useStyles();
@@ -207,10 +227,19 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPermissions, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchPermissions, { loading, data, error, refetch }] =
+    useLazyQuery(getPermissions);
+
+  React.useEffect(() => {
+    fetchPermissions({
+      variables: {
+        first: pageInfo?.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchPermissions]);
+
   const fetchMoreFunc = (e, newPage) => {
     refetch({ page: newPage });
   };
@@ -230,8 +259,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       setPageInfo(data.getPermissions.pageInfo);
     }
   }, [permission, data]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -247,7 +275,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       )}
       <Grid container direction="column">
         <Grid item>
-          <PreviousButton path="/settings" onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton
+            path="/settings"
+            onClick={() => setSelectedSubMenu(0)}
+          />
         </Grid>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
@@ -272,16 +303,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
               headCells={PermissionHeader}
               rows={Permission}
               paginationLabel="permission per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchPermissions}
+              dataPageInfo={pageInfo}
             >
               {permission
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -302,7 +328,13 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -389,11 +421,19 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
+          <EmptyTable
+            headCells={PermissionHeader}
+            paginationLabel="Permission  per page"
+          />
         )}
       </Grid>
 
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -455,7 +495,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
       {/* // modal */}
 
-      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Add new permission"
+        handleClose={handleDialogClose}
+      >
         <PermissionModal
           handleDialogClose={handleDialogClose}
           type="add"
@@ -467,7 +511,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       </Modals>
 
       {/* edit modala */}
-      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+      <Modals
+        isOpen={isEdit}
+        title="Edit permission"
+        handleClose={handleEditCloseDialog}
+      >
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"

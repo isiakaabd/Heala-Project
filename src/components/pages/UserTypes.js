@@ -6,7 +6,15 @@ import NoData from "components/layouts/NoData";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
+import {
+  Grid,
+  TableRow,
+  Button,
+  Avatar,
+  TableCell,
+  Checkbox,
+  Alert,
+} from "@mui/material";
 import { CustomButton, Modals, Search, FilterList } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -17,12 +25,14 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { UserTypeModal } from "components/modals/UserTypeModal";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import { deleteUserType } from "components/graphQL/Mutation";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -149,7 +159,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const UserTypes = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -176,10 +191,22 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
       console.log(error.message);
     }
   };
+
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const { loading, data, error, refetch } = useQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error, refetch }] =
+    useLazyQuery(getUserTypes);
+
+  React.useEffect(() => {
+    fetchUserTypes({
+      variables: {
+        first: pageInfo?.limit,
+      },
+    });
+  }, [fetchUserTypes]);
+
   const onChange = async (e) => {
     setSearchHcp(e);
     if (e == "") {
@@ -190,10 +217,13 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 
   useEffect(() => {
     if (data) {
+      setPageInfo(data.getUserTypes.pageInfo);
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { rowsPerPage, selectedRows, page } = useSelector(
+    (state) => state.tables
+  );
   const { setSelectedRows } = useActions();
   const initialValues = {
     name: "",
@@ -247,7 +277,13 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -283,9 +319,12 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={userType}
-              page={page}
               paginationLabel="Patients per page"
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchUserTypes}
+              dataPageInfo={pageInfo}
             >
               {userType
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -305,7 +344,13 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -322,9 +367,14 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
+                            <Avatar
+                              src={row.icon}
+                              sx={{ width: 24, height: 24 }}
+                            />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.name}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -362,7 +412,10 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+          <EmptyTable
+            headCells={partnersHeadCells2}
+            paginationLabel="Providers  per page"
+          />
         )}
       </Grid>
       <Modals
@@ -406,7 +459,12 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -427,7 +485,10 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                  <Grid
+                    item
+                    style={{ marginBottom: "18rem", marginTop: "3rem" }}
+                  >
                     <Grid container>
                       <Grid item container>
                         <FormikControl

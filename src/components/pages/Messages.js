@@ -16,8 +16,9 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getMessage } from "components/graphQL/useQuery";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -104,10 +105,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Messages = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState({
+    page: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+    limit: 10,
+    totalDocs: 0,
+  });
   const greenButtonType = {
     background: theme.palette.primary.main,
     hover: theme.palette.primary.light,
@@ -116,9 +129,18 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getMessage, {
-    notifyOnNetworkStatusChange: true,
-  });
+
+  const [fetchMessages, { loading, data, error, refetch }] =
+    useLazyQuery(getMessage);
+
+  React.useEffect(() => {
+    fetchMessages({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchMessages]);
 
   const onChange = async (e) => {
     setSearchMessage(e);
@@ -133,9 +155,6 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
       setPageInfo(data.getMessages.pageInfo);
     }
   }, [message, data]);
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -145,8 +164,6 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
     setSelectedSubMenu(0);
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
@@ -177,17 +194,12 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             <EnhancedTable
               headCells={messagesHeadCells}
               rows={message}
-              page={page}
               paginationLabel="Message per page"
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchMessages}
+              dataPageInfo={pageInfo}
             >
               {message
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -207,7 +219,13 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -230,7 +248,9 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
+                              alt={`Display Photo of  ${
+                                recipientData && recipientData.firstName
+                              }`}
                               src={
                                 recipientData && recipientData.image
                                   ? recipientData.image
@@ -285,7 +305,10 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
+          <EmptyTable
+            headCells={messagesHeadCells}
+            paginationLabel="Messages  per page"
+          />
         )}
       </Grid>
     );

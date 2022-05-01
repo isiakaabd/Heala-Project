@@ -81,7 +81,10 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
           </Typography>
         </Grid>
         <Grid item>
-          <CloseIcon className={classes.icon} onClick={() => setAnchorEl(null)} />
+          <CloseIcon
+            className={classes.icon}
+            onClick={() => setAnchorEl(null)}
+          />
         </Grid>
       </Grid>
       {arr.length > 0

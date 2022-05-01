@@ -205,9 +205,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             <EnhancedTable
               headCells={emailHeader}
               rows={emails}
-              page={page}
               paginationLabel="email per page"
+              handleChangePage={() => console.log("")}
               hasCheckbox={true}
+              changeLimit={() => console.log("")}
+              fetchData={() => console.log("")}
+              dataPageInfo={{}}
+              hasPagination={false}
             >
               {emails &&
                 emails

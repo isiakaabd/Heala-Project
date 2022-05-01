@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const EmptyCell = (props) => {
   const classes = useStyles();
 
-  const { headCells, paginationLabel, title } = props;
+  const { headCells, title } = props;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -52,7 +52,11 @@ const EmptyCell = (props) => {
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <EnhancedTableHeader rowCount={10} headCells={headCells} hasCheckbox />
+            <EnhancedTableHeader
+              rowCount={10}
+              headCells={headCells}
+              hasCheckbox
+            />
             <TableBody>
               <TableRow
                 style={{
@@ -69,15 +73,6 @@ const EmptyCell = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={0}
-          rowsPerPage={0}
-          page={0}
-          labelRowsPerPage={paginationLabel}
-          className={classes.pagination}
-        />
       </Paper>
     </Box>
   );

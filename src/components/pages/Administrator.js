@@ -24,8 +24,10 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit } from "helpers/filterHelperFunctions";
 //
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -135,17 +137,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Administrator = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
-  const { loading, data, error, refetch } = useQuery(findAdmin, {
-    notifyOnNetworkStatusChange: true,
-  });
-  const [pageInfo, setPageInfo] = useState([]);
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchAdmins, { loading, data, error, refetch }] =
+    useLazyQuery(findAdmin);
+
+  React.useEffect(() => {
+    fetchAdmins({
+      variables: {
+        first: pageInfo?.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchAdmins]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -215,7 +227,9 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     password: Yup.string()
       .required("password is required")
       .min(8, "Password is too short - should be 8 chars minimum."),
-    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    email: Yup.string()
+      .email("Enter a valid email")
+      .required("Email is required"),
   });
   const onSubmit1 = async (values, onSubmitProps) => {
     const { email, password } = values;
@@ -243,8 +257,6 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const handleDialogOpen = () => setIsOpen(true);
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   useEffect(() => {
     setSelectedMenu(11);
@@ -257,7 +269,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
@@ -293,16 +311,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               headCells={adminHeader}
               rows={admins}
               paginationLabel="admin per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchAdmins}
+              dataPageInfo={pageInfo}
             >
               {admins
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -323,7 +335,13 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -358,7 +376,11 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                             variant="contained"
                             disableRipple
                             className={`${classes.button} ${classes.greenBtn}`}
-                            endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                            endIcon={
+                              <EditIcon
+                                style={{ color: theme.palette.common.green }}
+                              />
+                            }
                           >
                             Edit Admin
                           </Button>
@@ -371,10 +393,18 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={adminHeader} paginationLabel="Admin  per page" />
+          <EmptyTable
+            headCells={adminHeader}
+            paginationLabel="Admin  per page"
+          />
         )}
       </Grid>
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}

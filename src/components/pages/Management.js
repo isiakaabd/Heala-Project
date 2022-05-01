@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
-import { Loader, Search, CustomButton, PreviousButton, Modals } from "components/Utilities";
+import {
+  Grid,
+  Button,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Chip,
+} from "@mui/material";
+import {
+  Loader,
+  Search,
+  CustomButton,
+  PreviousButton,
+  Modals,
+} from "components/Utilities";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
@@ -14,10 +27,12 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DeleteOrDisable, RoleModal } from "components/modals";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { getRoles } from "components/graphQL/useQuery";
 import { deleteRole } from "components/graphQL/Mutation";
 import { Link } from "react-router-dom";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { defaultPageInfo } from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -133,10 +148,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelectedScopedMenu }) => {
+const Management = ({
+  setSelectedSubMenu,
+  setSelectedManagementMenu,
+  setSelectedScopedMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [deleteRoles] = useMutation(deleteRole);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
@@ -162,9 +181,16 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getRoles, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchRoles, { loading, data, error, refetch }] =
+    useLazyQuery(getRoles);
+
+  React.useEffect(() => {
+    fetchRoles({
+      variables: { first: pageInfo?.limit },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchRoles]);
+
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
@@ -188,11 +214,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
     "permission 3": false,
     "permission 4": true,
   };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -233,16 +255,11 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                 headCells={roleHeader}
                 rows={rolesManagements}
                 paginationLabel="subscription per page"
-                page={+page}
-                limit={+limit}
-                totalPages={totalPages}
-                totalDocs={totalDocs}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                hasNextPage={hasNextPage}
-                hasPrevPage={hasPrevPage}
-                handleChangePage={fetchMoreFunc}
+                handleChangePage={fetchMoreData}
                 hasCheckbox={true}
+                changeLimit={changeTableLimit}
+                fetchData={fetchRoles}
+                dataPageInfo={pageInfo}
               >
                 {rolesManagements
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -251,11 +268,14 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                     const labelId = `enhanced-table-checkbox-${index}`;
                     let newData;
                     if (row.permissions) {
-                      const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
+                      const data = [
+                        ...new Set(row.permissions.map((i) => i.split(":")[0])),
+                      ];
                       const dataLength = data.length - 5;
-                      newData = [...data.slice(0, 5), dataLength ? `+${dataLength}` : null].filter(
-                        (i) => i !== null,
-                      );
+                      newData = [
+                        ...data.slice(0, 5),
+                        dataLength ? `+${dataLength}` : null,
+                      ].filter((i) => i !== null);
                     }
                     return (
                       <TableRow
@@ -269,7 +289,11 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
-                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
+                              handleSelectedRows(
+                                row.id,
+                                selectedRows,
+                                setSelectedRows
+                              )
                             }
                             color="primary"
                             checked={isItemSelected}
@@ -283,7 +307,10 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                           scope="row"
                           align="left"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.black, minWidth: "10rem" }}
+                          style={{
+                            color: theme.palette.common.black,
+                            minWidth: "10rem",
+                          }}
                         >
                           {row.name}
                         </TableCell>
@@ -294,10 +321,21 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          <Grid container justifyContent="flex-start" gap={1} alignItems="center">
+                          <Grid
+                            container
+                            justifyContent="flex-start"
+                            gap={1}
+                            alignItems="center"
+                          >
                             {newData &&
                               newData.map((i) => {
-                                return <Chip label={i} key={i} className={classes.badge} />;
+                                return (
+                                  <Chip
+                                    label={i}
+                                    key={i}
+                                    className={classes.badge}
+                                  />
+                                );
                               })}
                           </Grid>
                         </TableCell>
@@ -342,13 +380,24 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
               </EnhancedTable>
             </Grid>
           ) : (
-            <EmptyTable headCells={roleHeader} paginationLabel="Admin  per page" />
+            <EmptyTable
+              headCells={roleHeader}
+              paginationLabel="Admin  per page"
+            />
           )}
         </>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
-        <RoleModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
+      <Modals
+        isOpen={isOpen}
+        title="Add new role"
+        handleClose={handleDialogClose}
+      >
+        <RoleModal
+          handleDialogClose={handleDialogClose}
+          type="add"
+          checkbox={checkbox}
+        />
       </Modals>
 
       {/* Edit */}

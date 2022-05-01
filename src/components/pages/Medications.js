@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
+import {
+  Grid,
+  Avatar,
+  Checkbox,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -12,9 +19,10 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { PreviousButton, Loader } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { myMedic } from "components/graphQL/useQuery";
 import { dateMoment } from "components/Utilities/Time";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -41,16 +49,19 @@ const Medications = (props) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [medications, setMedications] = useState([]);
-  const { loading, error, data, refetch } = useQuery(myMedic, {
-    variables: {
-      id: patientId,
-      orderBy: "-createdAt",
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
+
+  const [fetchMedications, { loading, error, data }] = useLazyQuery(myMedic);
+
+  React.useEffect(() => {
+    fetchMedications({
+      variables: {
+        id: patientId,
+        orderBy: "-createdAt",
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchMedications, patientId]);
+
   useEffect(() => {
     if (data) {
       setMedications(data.getMedications.medication);
@@ -65,15 +76,17 @@ const Medications = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
+        <PreviousButton
+          path={`/patients/${patientId}`}
+          onClick={() => setSelectedPatientMenu(0)}
+        />
       </Grid>
 
       <Grid item container height="100%" direction="column" gap={2}>
@@ -86,16 +99,11 @@ const Medications = (props) => {
               headCells={medicationsHeadCells}
               rows={medications}
               paginationLabel="Medication per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchMedications}
+              dataPageInfo={pageInfo}
             >
               {medications
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -114,7 +122,13 @@ const Medications = (props) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -170,7 +184,9 @@ const Medications = (props) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.doctor}
+                          </span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -179,7 +195,10 @@ const Medications = (props) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={medicationsHeadCells} paginationLabel="Medications per page" />
+          <EmptyTable
+            headCells={medicationsHeadCells}
+            paginationLabel="Medications per page"
+          />
         )}
       </Grid>
     </Grid>

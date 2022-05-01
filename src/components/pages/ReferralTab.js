@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
+import {
+  TableRow,
+  Grid,
+  Checkbox,
+  TableCell,
+  Avatar,
+  Button,
+} from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import { Loader, Search } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
@@ -17,8 +24,16 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import Filter from "components/Forms/Filters";
-import { onGenderValueChange } from "helpers/filterHelperFunctions";
-import { referralFilterBy, referralPageDefaultFilterValues } from "helpers/mockData";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  onGenderValueChange,
+} from "helpers/filterHelperFunctions";
+import {
+  defaultPageInfo,
+  referralFilterBy,
+  referralPageDefaultFilterValues,
+} from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -78,9 +93,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
-  const [pageInfo, setPageInfo] = useState([]);
-  const theme = useTheme();
   const classes = useStyles();
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const theme = useTheme();
 
   const onChange = async (e) => {
     setSearchMail(e);
@@ -92,16 +107,17 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
-  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(
-    getRefferals,
-    {
-      notifyOnNetworkStatusChange: true,
-    },
-  );
+  const [fetchRefferals, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getRefferals);
   const [referral, setReferral] = useState([]);
 
-  useEffect(() => {
-    fetchRefferals();
+  React.useEffect(() => {
+    fetchRefferals({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
   }, [fetchRefferals]);
 
   useEffect(() => {
@@ -110,19 +126,22 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       setPageInfo(data.getReferrals.pageInfo);
     }
   }, [data]);
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
 
-  const [filterValues, setFilterValues] = React.useState(referralPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = React.useState(
+    referralPageDefaultFilterValues
+  );
 
   if (error) return <NoData error={error} />;
 
   return (
     <>
-      <Grid container direction="column" height="100%" gap={2} flexWrap="nowrap">
+      <Grid
+        container
+        direction="column"
+        height="100%"
+        gap={2}
+        flexWrap="nowrap"
+      >
         <Grid item container>
           <Grid item className={classes.searchGrid}>
             <Search
@@ -142,7 +161,7 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   setFilterValues,
                   fetchRefferals,
                   variables,
-                  refetch,
+                  refetch
                 )
               }
               options={referralFilterBy}
@@ -158,18 +177,13 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
-              paginationLabel="referral per page"
               rows={referral}
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              paginationLabel="referral per page"
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchRefferals}
+              dataPageInfo={pageInfo}
             >
               {referral
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -202,7 +216,13 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -240,14 +260,18 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                firstName ? firstName : "placeholder Display Image"
+                                firstName
+                                  ? firstName
+                                  : "placeholder Display Image"
                               }`}
                               src={picture ? picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {firstName ? `${firstName} ${lastName}` : "No Doctor"}
+                            {firstName
+                              ? `${firstName} ${lastName}`
+                              : "No Doctor"}
                           </span>
                         </div>
                       </TableCell>
@@ -262,14 +286,18 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                patientName ? patientName : "placeholder Display Image"
+                                patientName
+                                  ? patientName
+                                  : "placeholder Display Image"
                               }`}
                               src={patientImage ? patientImage : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {patientName ? `${patientName} ${patientLastName}` : "No Patient"}
+                            {patientName
+                              ? `${patientName} ${patientLastName}`
+                              : "No Patient"}
                           </span>
                         </div>
                       </TableCell>
@@ -309,7 +337,10 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={referralHeader} paginationLabel="Referral  per page" />
+          <EmptyTable
+            headCells={referralHeader}
+            paginationLabel="Referral  per page"
+          />
         )}
       </Grid>
     </>

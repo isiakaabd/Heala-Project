@@ -5,8 +5,22 @@ import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
-import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
-import { CustomButton, Loader, Search, Modals, FilterList } from "components/Utilities";
+import {
+  Grid,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Alert,
+  Button,
+  Avatar,
+} from "@mui/material";
+import {
+  CustomButton,
+  Loader,
+  Search,
+  Modals,
+  FilterList,
+} from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,9 +32,11 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -140,12 +156,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Providers = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
-  const [pageInfo, setPageInfo] = useState([]);
-  const { data, error, loading, refetch } = useQuery(getProviders, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchProviders, { data, error, loading, refetch }] =
+    useLazyQuery(getProviders);
+
+  React.useEffect(() => {
+    fetchProviders({
+      variables: {
+        first: pageInfo?.limit || 10,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchProviders]);
 
   const onChange = async (e) => {
     setSearchHcp(e);
@@ -154,7 +183,6 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     } else refetch({ name: e });
   };
   const [id, setId] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   const [deleteModal, setdeleteModal] = useState(false);
   const [deleteProvider] = useMutation(deletProvider);
   // const [singleProvider] = useLazyQuery(getSingleProvider);
@@ -242,21 +270,24 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     userTypeId: Yup.string("Enter your userTypeId").trim(),
   });
 
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
   const handleDialogCloses = () => setIsOpens(false);
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
   };
   const [singleData, setSingleData] = useState();
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -294,16 +325,11 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
               headCells={partnersHeadCells2}
               rows={providers}
               paginationLabel="Providers per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchProviders}
+              dataPageInfo={pageInfo}
             >
               {providers
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -323,7 +349,13 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -340,9 +372,14 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
+                            <Avatar
+                              src={row.icon}
+                              sx={{ width: 24, height: 24 }}
+                            />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.name}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -380,7 +417,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+          <EmptyTable
+            headCells={partnersHeadCells2}
+            paginationLabel="Providers  per page"
+          />
         )}
       </Grid>
 
@@ -425,7 +465,12 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -446,7 +491,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                  <Grid
+                    item
+                    style={{ marginBottom: "18rem", marginTop: "3rem" }}
+                  >
                     <Grid container>
                       <Grid item container>
                         <FormikControl

@@ -9,9 +9,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   searchFilterContainer: {
-    "&.MuiGrid-root": {
-      justifyContent: "space-between",
-    },
+    "&.MuiGrid-root": {},
   },
 
   filterBtnGrid: {
