@@ -12,9 +12,10 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { PreviousButton, Loader } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { myMedic } from "components/graphQL/useQuery";
 import { dateMoment } from "components/Utilities/Time";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -41,16 +42,19 @@ const Medications = (props) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [medications, setMedications] = useState([]);
-  const { loading, error, data, refetch } = useQuery(myMedic, {
-    variables: {
-      id: patientId,
-      orderBy: "-createdAt",
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
+
+  const [fetchMedications, { loading, error, data }] = useLazyQuery(myMedic);
+
+  React.useEffect(() => {
+    fetchMedications({
+      variables: {
+        id: patientId,
+        orderBy: "-createdAt",
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchMedications, patientId]);
+
   useEffect(() => {
     if (data) {
       setMedications(data.getMedications.medication);
@@ -65,8 +69,7 @@ const Medications = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
@@ -86,16 +89,11 @@ const Medications = (props) => {
               headCells={medicationsHeadCells}
               rows={medications}
               paginationLabel="Medication per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchMedications}
+              dataPageInfo={pageInfo}
             >
               {medications
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

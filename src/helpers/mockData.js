@@ -83,3 +83,25 @@ export const payoutPageDefaultFilterValues = {
 export const referralPageDefaultFilterValues = {
   type: "",
 };
+
+/* ========= TYPES ============ */
+
+export const paginationActionTypes = Object.freeze({
+  FIRSTPAGE: "FIRSTPAGE",
+  NEXTPAGE: "NEXTPAGE",
+  PREVPAGE: "PREVPAGE",
+  LASTPAGE: "LASTPAGE",
+});
+
+export const defaultPageInfo = {
+  totalDocs: 0,
+  limit: 10,
+  offset: null,
+  hasPrevPage: false,
+  hasNextPage: true,
+  page: 1,
+  totalPages: 9,
+  pagingCounter: 1,
+  prevPage: null,
+  nextPage: 2,
+};

@@ -24,7 +24,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
 import { Search, Loader, Modals, CustomButton } from "components/Utilities";
-import { onGenderValueChange, resetFilters } from "../../helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  onGenderValueChange,
+  resetFilters,
+} from "../../helpers/filterHelperFunctions";
 import {
   cadreFilterBy,
   doctorsPageDefaultFilterValues,
@@ -38,7 +42,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   const cadre = [
     { key: "1", value: "1" },
     { key: "2", value: "2" },
@@ -55,9 +58,13 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
     useLazyQuery(getDoctorsProfile);
 
-  useEffect(() => {
-    fetchDoctors();
-  }, [fetchDoctors]);
+  // useEffect(() => {
+  //   fetchDoctors({
+  //     // variables: {
+  //     //   first: pageInfo.limit,
+  //     // },
+  //   });
+  // }, [fetchDoctors, pageInfo]);
 
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
@@ -66,12 +73,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   };
   //eslint-disable-next-line
   const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
-  // const onChange = async (e) => {
-  //   setSearchHcp(e);
-  //   if (e == "") {
-  //     refetch();
-  //   } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
-  // };
+
   const [profiles, setProfiles] = useState("");
   useEffect(() => {
     if (data) {
@@ -133,20 +135,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
 
-  /* const resetFilters = () => {
-    setFilterValues({
-      gender: "",
-      status: "",
-      provider: "",
-      cadre: "",
-      specialization: "",
-    });
-    for (const key in variables) {
-      delete variables[key];
-    }
-    fetchDoctors();
-  }; */
-
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -163,7 +151,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [createDoc] = useMutation(createDOctorProfile);
 
   const { selectedRows } = useSelector((state) => state.tables);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
 
   if (error) return <NoData error={error} />;
@@ -297,16 +284,11 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             headCells={hcpsHeadCells}
             rows={profiles}
             paginationLabel="Doctors per page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
             handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchDoctors}
+            dataPageInfo={pageInfo}
           >
             {profiles
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

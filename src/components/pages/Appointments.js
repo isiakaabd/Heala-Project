@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
-import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
-import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
-import { Card } from "components/Utilities";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
+import { Card } from "components/Utilities";
+import { useTheme } from "@mui/material/styles";
+import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
+import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
 
 const useStyles = makeStyles((theme) => ({
   containerGrid: {
@@ -58,7 +58,11 @@ const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
         className={classes.parentGrid}
         component={Link}
         to="/appointments/consultation"
-        style={{ marginLeft: "2em", textDecoration: "none", visibility: "hidden" }}
+        style={{
+          marginLeft: "2em",
+          textDecoration: "none",
+          visibility: "hidden",
+        }}
         lg
         md={6}
         sm={12}

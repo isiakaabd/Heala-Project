@@ -18,9 +18,11 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useQuery, useMutation /* useLazyQuery*/ } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -142,10 +144,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
-  const [pageInfo, setPageInfo] = useState([]);
-  const { data, error, loading, refetch } = useQuery(getProviders, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchProviders, { data, error, loading, refetch }] = useLazyQuery(getProviders);
+
+  React.useEffect(() => {
+    fetchProviders({
+      variables: {
+        first: pageInfo?.limit || 10,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchProviders, pageInfo]);
 
   const onChange = async (e) => {
     setSearchHcp(e);
@@ -154,7 +163,6 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     } else refetch({ name: e });
   };
   const [id, setId] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   const [deleteModal, setdeleteModal] = useState(false);
   const [deleteProvider] = useMutation(deletProvider);
   // const [singleProvider] = useLazyQuery(getSingleProvider);
@@ -242,16 +250,13 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
     userTypeId: Yup.string("Enter your userTypeId").trim(),
   });
 
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
   const handleDialogCloses = () => setIsOpens(false);
   const handleEditOpenDialog = (id) => {
     setEdit(true);
     setEditId(id);
   };
   const [singleData, setSingleData] = useState();
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -294,16 +299,11 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
               headCells={partnersHeadCells2}
               rows={providers}
               paginationLabel="Providers per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchProviders}
+              dataPageInfo={pageInfo}
             >
               {providers
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

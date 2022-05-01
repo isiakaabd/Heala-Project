@@ -110,7 +110,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
       setEmails(data.getEmailList.data);
     }
   }, [data]);
-  const { selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [response] = useState("");
   const [searchMail, setSearchMail] = useState("");
@@ -203,9 +203,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             <EnhancedTable
               headCells={emailHeader}
               rows={emails}
-              page={page}
               paginationLabel="email per page"
+              handleChangePage={() => console.log("")}
               hasCheckbox={true}
+              changeLimit={() => console.log("")}
+              fetchData={() => console.log("")}
+              dataPageInfo={{}}
+              hasPagination={false}
             >
               {emails &&
                 emails

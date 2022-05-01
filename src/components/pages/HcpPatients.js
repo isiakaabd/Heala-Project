@@ -13,7 +13,8 @@ import { Link, useParams } from "react-router-dom";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { PreviousButton, Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
+import { changeTableLimit } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -73,10 +74,16 @@ const HcpPatients = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
-  const { loading, error, data, refetch } = useQuery(getDoctorPatients, {
-    variables: { id: hcpId },
-    notifyOnNetworkStatusChange: true,
-  });
+
+  const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
+
+  React.useEffect(() => {
+    fetchDoctorsPatients({
+      variables: { id: hcpId },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchDoctorsPatients, hcpId]);
+
   const [profiles, setProfiles] = useState([]);
   useEffect(() => {
     if (data) {
@@ -87,8 +94,7 @@ const HcpPatients = (props) => {
   const fetchMoreFunc = (e, newPage) => {
     refetch({ page: newPage });
   };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -105,16 +111,11 @@ const HcpPatients = (props) => {
             headCells={hcpPatientsHeadCells}
             rows={profiles}
             paginationLabel="List Per Page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
             handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchDoctorsPatients}
+            dataPageInfo={pageInfo}
           >
             {profiles
 

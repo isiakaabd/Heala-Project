@@ -139,7 +139,7 @@ const HcpEarnings = (props) => {
   const theme = useTheme();
   useEffect(() => {
     if (datas !== undefined) {
-      setX(datas.getMyEarnings.data[0].balance);
+      setX(datas?.getMyEarnings?.data[0]?.balance);
     }
 
     if (data) {
@@ -160,7 +160,7 @@ const HcpEarnings = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
-  console.log(x, "jjj");
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -228,7 +228,10 @@ const HcpEarnings = (props) => {
                 </Typography>
                 <Typography
                   variant="body2"
-                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                  style={{
+                    color: theme.palette.common.lightGrey,
+                    fontSize: "2.275rem",
+                  }}
                 >
                   Total earnings
                 </Typography>
@@ -266,7 +269,10 @@ const HcpEarnings = (props) => {
                 </Typography>
                 <Typography
                   variant="body2"
-                  style={{ color: theme.palette.common.lightGrey, fontSize: "2.275rem" }}
+                  style={{
+                    color: theme.palette.common.lightGrey,
+                    fontSize: "2.275rem",
+                  }}
                 >
                   Total withdrawal
                 </Typography>

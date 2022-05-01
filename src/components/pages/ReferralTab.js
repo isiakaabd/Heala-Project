@@ -17,8 +17,16 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import Filter from "components/Forms/Filters";
-import { onGenderValueChange } from "helpers/filterHelperFunctions";
-import { referralFilterBy, referralPageDefaultFilterValues } from "helpers/mockData";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  onGenderValueChange,
+} from "helpers/filterHelperFunctions";
+import {
+  defaultPageInfo,
+  referralFilterBy,
+  referralPageDefaultFilterValues,
+} from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -78,9 +86,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
-  const [pageInfo, setPageInfo] = useState([]);
-  const theme = useTheme();
   const classes = useStyles();
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const theme = useTheme();
 
   const onChange = async (e) => {
     setSearchMail(e);
@@ -92,17 +100,17 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
-  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(
-    getRefferals,
-    {
-      notifyOnNetworkStatusChange: true,
-    },
-  );
+  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(getRefferals);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
-    fetchRefferals();
-  }, [fetchRefferals]);
+    fetchRefferals({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchRefferals, pageInfo]);
 
   useEffect(() => {
     if (data) {
@@ -110,13 +118,8 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       setPageInfo(data.getReferrals.pageInfo);
     }
   }, [data]);
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
 
-  const [filterValues, setFilterValues] = React.useState(referralPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = useState(referralPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
@@ -158,18 +161,13 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
-              paginationLabel="referral per page"
               rows={referral}
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              paginationLabel="referral per page"
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchRefferals}
+              dataPageInfo={pageInfo}
             >
               {referral
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

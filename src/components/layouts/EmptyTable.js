@@ -7,43 +7,40 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination,
   TableRow,
   Paper,
 } from "@mui/material";
 import PropTypes from "prop-types";
 
 import EnhancedTableHeader from "./EnhancedTableHeader";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import { NoData } from ".";
 
-const useStyles = makeStyles((theme) => ({
-  pagination: {
-    "& .MuiTablePagination-selectLabel": {
-      fontSize: "1.2rem",
-    },
+// const useStyles = makeStyles((theme) => ({
+//   pagination: {
+//     "& .MuiTablePagination-selectLabel": {
+//       fontSize: "1.2rem",
+//     },
 
-    "& .MuiTablePagination-select": {
-      fontSize: "1.2rem",
-    },
+//     "& .MuiTablePagination-select": {
+//       fontSize: "1.2rem",
+//     },
 
-    "& .MuiTablePagination-displayedRows": {
-      fontSize: "1.2rem",
-    },
-  },
+//     "& .MuiTablePagination-displayedRows": {
+//       fontSize: "1.2rem",
+//     },
+//   },
 
-  tableToolbar: {
-    "&.MuiToolbar-root": {
-      background: "#eee",
-    },
-  },
-}));
+//   tableToolbar: {
+//     "&.MuiToolbar-root": {
+//       background: "#eee",
+//     },
+//   },
+// }));
 
 const EmptyCell = (props) => {
-  const classes = useStyles();
-
-  const { headCells, paginationLabel, title } = props;
+  const { headCells, title } = props;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -69,15 +66,6 @@ const EmptyCell = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={0}
-          rowsPerPage={0}
-          page={0}
-          labelRowsPerPage={paginationLabel}
-          className={classes.pagination}
-        />
       </Paper>
     </Box>
   );

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
+
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
@@ -26,7 +27,12 @@ import {
   providerFilterBy,
   statusFilterBy,
 } from "../../helpers/mockData";
-import { onGenderValueChange, resetFilters } from "../../helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  onGenderValueChange,
+  resetFilters,
+} from "../../helpers/filterHelperFunctions";
 
 const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
@@ -51,13 +57,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
     totalPages: 1,
     hasNextPage: false,
     hasPrevPage: false,
-    limit: 5,
+    limit: 10,
     totalDocs: 0,
   });
 
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
+  const { page } = pageInfo;
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage] = useState(5);
   const { selectedRows } = useSelector((state) => state.tables);
 
   const { setSelectedRows } = useActions();
@@ -65,14 +71,14 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   //eslint-disable-next-line
   const debouncer = useCallback(debounce(fetchPatient, 3000), []);
 
-  const fetchMoreFunc = async (e, newPage) => {
-    fetchPatient({
-      variables: {
-        page: newPage,
-      },
-    });
-    //refetch({ page: newPage });
-  };
+  // const fetchMoreFunc = async (e, newPage) => {
+  //   fetchPatient({
+  //     variables: {
+  //       page: newPage,
+  //     },
+  //   });
+  //   //refetch({ page: newPage });
+  // };
   useEffect(() => {
     if (data) {
       const _profile =
@@ -189,129 +195,118 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
               headCells={patientsHeadCells}
               rows={profiles}
               paginationLabel="Patients per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchPatient}
+              dataPageInfo={pageInfo}
             >
-              {
-                // (rowsPerPage > 0
-                //   ? profiles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                //   : profiles
-                // )
-                profiles.map((row, index) => {
-                  const {
-                    dociId,
-                    firstName,
-                    lastName,
-                    plan,
-                    provider,
-                    image,
-                    consultations,
-                    _id,
-                    status,
-                  } = row;
-                  const isItemSelected = isSelected(_id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={_id}
-                      selected={isItemSelected}
+              {profiles.map((row, index) => {
+                const {
+                  dociId,
+                  firstName,
+                  lastName,
+                  plan,
+                  provider,
+                  image,
+                  consultations,
+                  _id,
+                  status,
+                } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={_id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                        textAlign: "left",
+                      }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
+                      {dociId && dociId.split("-")[1]}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
                         style={{
-                          color: theme.palette.common.grey,
-                          textAlign: "left",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
                         }}
                       >
-                        {dociId && dociId.split("-")[1]}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "left",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${firstName}`}
-                              src={image ? image : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {plan ? plan : "No Plan"}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {provider ? provider : "No Provider"}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {consultations ? consultations : 0}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <Chip
-                          label={status ? status : "No Status"}
-                          className={classes.badge}
-                          style={{
-                            background:
-                              status === "Active"
-                                ? theme.palette.common.lightGreen
-                                : theme.palette.common.lightRed,
-                            color:
-                              status === "Active"
-                                ? theme.palette.common.green
-                                : theme.palette.common.red,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          component={Link}
-                          to={`patients/${_id}`}
-                          endIcon={<ArrowForwardIosIcon />}
-                          onClick={() => {
-                            setSelectedSubMenu(2);
-                            setSelectedPatientMenu(0);
-                          }}
-                        >
-                          View Profile
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              }
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${firstName}`}
+                            src={image ? image : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {plan ? plan : "No Plan"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {provider ? provider : "No Provider"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {consultations ? consultations : 0}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Chip
+                        label={status ? status : "No Status"}
+                        className={classes.badge}
+                        style={{
+                          background:
+                            status === "Active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            status === "Active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`patients/${_id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        onClick={() => {
+                          setSelectedSubMenu(2);
+                          setSelectedPatientMenu(0);
+                        }}
+                      >
+                        View Profile
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </EnhancedTable>
           </Grid>
         ) : (

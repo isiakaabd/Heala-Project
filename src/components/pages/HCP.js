@@ -25,8 +25,9 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { dateMoment } from "components/Utilities/Time";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getVerification } from "components/graphQL/useQuery";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -98,10 +99,26 @@ const useStyles = makeStyles((theme) => ({
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getVerification, {
-    notifyOnNetworkStatusChange: true,
+  const [pageInfo, setPageInfo] = useState({
+    page: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+    limit: 10,
+    totalDocs: 0,
   });
+
+  const [fetchVerifications, { loading, data, error }] = useLazyQuery(getVerification);
+
+  useEffect(() => {
+    fetchVerifications({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchVerifications, pageInfo]);
+
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
     Name: Yup.string("Enter your Permission").trim().required("select an option"),
@@ -120,8 +137,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   };
 
   const [respondData, setRespondData] = useState([]); //setRespondData
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   useEffect(() => {
     try {
       if (data) {
@@ -132,7 +148,7 @@ const HCP = ({ setSelectedSubMenu }) => {
       console.log(err);
     }
   }, [data]);
-  console.log(data);
+
   const initialValues = {
     Name: "",
     Date: "",
@@ -157,9 +173,7 @@ const HCP = ({ setSelectedSubMenu }) => {
     { key: "read", value: "read" },
     { key: "delete", value: "delete" },
   ];
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
@@ -194,16 +208,11 @@ const HCP = ({ setSelectedSubMenu }) => {
               headCells={HCPHeader}
               rows={respondData}
               paginationLabel="verification per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchVerifications}
+              dataPageInfo={pageInfo}
             >
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

@@ -15,7 +15,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { deleteAppointment } from "components/graphQL/Mutation";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { DeleteOrDisable } from "components/modals";
 import { consultationsHeadCells2 } from "components/Utilities/tableHeaders";
@@ -32,6 +32,7 @@ import { useParams } from "react-router-dom";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -192,7 +193,12 @@ const PatientAppointment = (props) => {
     const timeValue = timeMoment(date);
     const dateValue = timeConverter(date);
     await updateAppoint({
-      variables: { id: editId, date: dateValue, time: timeValue, doctor: doctorId },
+      variables: {
+        id: editId,
+        date: dateValue,
+        time: timeValue,
+        doctor: doctorId,
+      },
       refetchQueries: [
         {
           query: getAppoint,
@@ -219,13 +225,17 @@ const PatientAppointment = (props) => {
     console.log(values);
   };
 
-  const { loading, data, error, refetch } = useQuery(getAppoint, {
-    variables: {
-      id: patientId,
-      orderBy: "-createdAt",
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const [getPatientsAppointment, { loading, data, error }] = useLazyQuery(getAppoint);
+
+  useEffect(() => {
+    getPatientsAppointment({
+      variables: {
+        id: patientId,
+        orderBy: "-createdAt",
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [getPatientsAppointment, patientId]);
 
   useEffect(() => {
     if (data) {
@@ -233,10 +243,6 @@ const PatientAppointment = (props) => {
       setPageInfo(data.getAppointments.pageInfo);
     }
   }, [data, patientId]);
-
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -276,8 +282,7 @@ const PatientAppointment = (props) => {
     { key: "Active", value: "Active" },
     { key: "Blocked", value: "Blocked" },
   ];
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   return (
@@ -319,16 +324,11 @@ const PatientAppointment = (props) => {
                 headCells={consultationsHeadCells2}
                 rows={patientAppointment}
                 paginationLabel="Patients per page"
-                page={page}
-                limit={limit}
-                totalPages={totalPages}
-                totalDocs={totalDocs}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                hasNextPage={hasNextPage}
-                hasPrevPage={hasPrevPage}
-                handleChangePage={fetchMoreFunc}
+                handleChangePage={fetchMoreData}
                 hasCheckbox={true}
+                changeLimit={changeTableLimit}
+                fetchData={getPatientsAppointment}
+                dataPageInfo={pageInfo}
               >
                 {patientAppointment
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -387,7 +387,10 @@ const PatientAppointment = (props) => {
                         <TableCell
                           align="left"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                          style={{
+                            color: theme.palette.common.grey,
+                            maxWidth: "20rem",
+                          }}
                         >
                           {/* {hours(}row.time) */} {row.time}
                         </TableCell>

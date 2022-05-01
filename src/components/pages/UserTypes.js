@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
-import NoData from "components/layouts/NoData";
+import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -17,12 +17,14 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { UserTypeModal } from "components/modals/UserTypeModal";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import Loader from "components/Utilities/Loader";
 import { deleteUserType } from "components/graphQL/Mutation";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
     "&.MuiGrid-root": {
@@ -176,10 +178,21 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
       console.log(error.message);
     }
   };
+
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const { loading, data, error, refetch } = useQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error, refetch }] = useLazyQuery(getUserTypes);
+
+  React.useEffect(() => {
+    fetchUserTypes({
+      variables: {
+        first: pageInfo?.limit,
+      },
+    });
+  }, [fetchUserTypes, pageInfo]);
+
   const onChange = async (e) => {
     setSearchHcp(e);
     if (e == "") {
@@ -190,6 +203,7 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 
   useEffect(() => {
     if (data) {
+      setPageInfo(data.getUserTypes.pageInfo);
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
@@ -283,9 +297,12 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
             <EnhancedTable
               headCells={partnersHeadCells2}
               rows={userType}
-              page={page}
               paginationLabel="Patients per page"
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchUserTypes}
+              dataPageInfo={pageInfo}
             >
               {userType
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
