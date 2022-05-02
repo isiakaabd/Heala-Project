@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       padding: "1rem",
-      maxWidth: "12rem",
+      whitespace: "nowrap",
+      maxWidth: "15rem",
+      width: "100%",
 
       "&:hover": {
         background: "#fcfcfc",
