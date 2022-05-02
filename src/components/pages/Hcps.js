@@ -58,13 +58,14 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
     useLazyQuery(getDoctorsProfile);
 
-  // useEffect(() => {
-  //   fetchDoctors({
-  //     // variables: {
-  //     //   first: pageInfo.limit,
-  //     // },
-  //   });
-  // }, [fetchDoctors, pageInfo]);
+  useEffect(() => {
+    fetchDoctors();
+    //{
+    // variables: {
+    //   first: pageInfo.limit,
+    // },
+    // }
+  }, [fetchDoctors]);
 
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
