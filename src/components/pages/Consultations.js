@@ -13,11 +13,10 @@ import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Loader, FilterList } from "components/Utilities";
+import { Loader, FilterList, PreviousButton } from "components/Utilities";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
@@ -85,7 +84,7 @@ const Consultations = (props) => {
 
   const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchConsultations({
       variables: {
         id: patientId,
