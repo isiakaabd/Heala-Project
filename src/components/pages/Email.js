@@ -105,14 +105,12 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     fetchEmails();
   }, [fetchEmails]);
 
-  console.log(123);
-
   useEffect(() => {
     if (data) {
       setEmails(data.getEmailList.data);
     }
   }, [data]);
-  const { selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [response] = useState("");
   const [searchMail, setSearchMail] = useState("");

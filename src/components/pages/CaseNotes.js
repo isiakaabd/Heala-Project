@@ -1,7 +1,12 @@
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
-import { Modals, CustomButton, PreviousButton, Loader } from "components/Utilities";
+import {
+  Modals,
+  CustomButton,
+  PreviousButton,
+  Loader,
+} from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -105,6 +110,7 @@ const CaseNotes = ({
     createdAt,
     discomfortLevel,
     status,
+    doctorData,
     description,
     doctorNote,
     severity,
@@ -151,7 +157,9 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5">{dateMoment(createdAt)}</Typography>
+                    <Typography variant="h5">
+                      {dateMoment(createdAt)}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -163,7 +171,9 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body1">{referralId ? referralId : "No Value"}</Typography>
+                    <Typography variant="body1">
+                      {referralId ? referralId : "No Value"}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -175,7 +185,9 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body1">{referralId ? referralId : "No Value"}</Typography>
+                    <Typography variant="body1">
+                      {referralId ? referralId : "No Value"}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -187,7 +199,11 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Chip variant="contained" label={status} className={classes.infoBadge} />
+                    <Chip
+                      variant="contained"
+                      label={status}
+                      className={classes.infoBadge}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
@@ -209,13 +225,16 @@ const CaseNotes = ({
                       Doctor:
                     </Typography>
                   </Grid>
-                  {doctor ? (
+                  {doctorData ? (
                     <>
                       <Grid item>
-                        <Avatar src={displayPhoto} alt="Display photo of the sender" />
+                        <Avatar
+                          src={displayPhoto}
+                          alt="Display photo of the sender"
+                        />
                       </Grid>
                       <Grid item>
-                        <Typography variant="h5">{doctor}</Typography>
+                        <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                       </Grid>
                     </>
                   ) : (
@@ -261,7 +280,9 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body1">{type ? type : "No Value"}</Typography>
+                    <Typography variant="body1">
+                      {type ? type : "No Value"}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -319,7 +340,10 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
+                  <Typography variant="body1">
+                    {" "}
+                    {firstNotice ? firstNotice : "No value"}
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid item container gap={2}>
@@ -436,7 +460,10 @@ const CaseNotes = ({
                   {doctor ? (
                     <>
                       <Grid item>
-                        <Avatar src={displayPhoto} alt="Display photo of the sender" />
+                        <Avatar
+                          src={displayPhoto}
+                          alt="Display photo of the sender"
+                        />
                       </Grid>
                       <Grid item>
                         <Typography variant="h5">{doctor}</Typography>
@@ -457,7 +484,9 @@ const CaseNotes = ({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body1">{dateMoment(createdAt)}</Typography>
+                    <Typography variant="body1">
+                      {dateMoment(createdAt)}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -551,7 +580,8 @@ const CaseNotes = ({
 
                       <Grid item>
                         <Typography variant="body1" className={classes.title}>
-                          {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
+                          {duration(i.dosageFrequency.duration)}{" "}
+                          {daily(i.dosageFrequency.day)}
                         </Typography>
                       </Grid>
                       <Grid item>

@@ -74,7 +74,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
             <Grid item>
               <Chip
                 variant="outlined"
-                label={recipientData ? recipientData.dociId : "No Hela ID"}
+                label={recipientData ? recipientData.dociId : "No Heala ID"}
                 className={classes.badge}
               />
             </Grid>

@@ -45,7 +45,7 @@ const HeaderProfile = () => {
     setAnchorEl(event.currentTarget);
     setNum(0);
   };
-  console.log(num);
+
   useEffect(() => {
     (async () => {
       profile();

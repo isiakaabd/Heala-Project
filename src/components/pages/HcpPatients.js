@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  Checkbox,
-  TableCell,
-  Button,
-} from "@mui/material";
+import { Grid, Typography, TableRow, Checkbox, TableCell, Button } from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -20,7 +13,7 @@ import { Link, useParams } from "react-router-dom";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { PreviousButton, Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,8 +75,7 @@ const HcpPatients = (props) => {
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
-  const [fetchDoctorsPatients, { loading, error, data, refetch }] =
-    useLazyQuery(getDoctorPatients);
+  const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
 
   React.useEffect(() => {
     fetchDoctorsPatients({
@@ -108,10 +100,7 @@ const HcpPatients = (props) => {
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton
-          path={`/hcps/${hcpId}`}
-          onClick={() => setSelectedHcpMenu(0)}
-        />
+        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
       </Grid>
       <Grid item>
         <Typography variant="h2">Doctor Patients</Typography>
@@ -147,13 +136,7 @@ const HcpPatients = (props) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -210,10 +193,7 @@ const HcpPatients = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpPatientsHeadCells}
-          paginationLabel="List  per page"
-        />
+        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
       )}
     </Grid>
   );

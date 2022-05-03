@@ -25,7 +25,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { dateMoment } from "components/Utilities/Time";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getVerification } from "components/graphQL/useQuery";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
@@ -108,30 +108,23 @@ const HCP = ({ setSelectedSubMenu }) => {
     totalDocs: 0,
   });
 
-  const [fetchVerifications, { loading, data, error, refetch }] =
-    useLazyQuery(getVerification);
+  const [fetchVerifications, { loading, data, error }] = useLazyQuery(getVerification);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchVerifications({
       variables: {
         first: pageInfo.limit,
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchVerifications]);
+  }, [fetchVerifications, pageInfo]);
 
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
-    Name: Yup.string("Enter your Permission")
-      .trim()
-      .required("select an option"),
-    Specialization: Yup.string("Enter your Permission")
-      .trim()
-      .required("select an option"),
+    Name: Yup.string("Enter your Permission").trim().required("select an option"),
+    Specialization: Yup.string("Enter your Permission").trim().required("select an option"),
     Date: Yup.string("Enter your Permission").required("select an option"),
-    Status: Yup.string("Enter your Permission")
-      .trim()
-      .required("select an option"),
+    Status: Yup.string("Enter your Permission").trim().required("select an option"),
   });
 
   const { selectedRows } = useSelector((state) => state.tables);
@@ -186,22 +179,10 @@ const HCP = ({ setSelectedSubMenu }) => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
           {response ? (
-            <Grid
-              item
-              width={300}
-              margin="0 auto"
-              justifyContent="left"
-              alignItems="center"
-            >
+            <Grid item width={300} margin="0 auto" justifyContent="left" alignItems="center">
               <Alert severity="success">
                 <Typography variant="h1">{response}</Typography>
               </Alert>
@@ -252,13 +233,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -286,12 +261,8 @@ const HCP = ({ setSelectedSubMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${
-                                doctorData && doctorData.firstName
-                              }`}
-                              src={
-                                doctorData ? doctorData.picture : displayPhoto
-                              }
+                              alt={`image of ${doctorData && doctorData.firstName}`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
@@ -338,19 +309,11 @@ const HCP = ({ setSelectedSubMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={HCPHeader}
-            paginationLabel="Verification  per page"
-          />
+          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
         )}
       </Grid>
       {/* Modal */}
-      <Modals
-        isOpen={isOpen}
-        title="Filter"
-        rowSpacing={2}
-        handleClose={handleDialogClose}
-      >
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={2} handleClose={handleDialogClose}>
         <Filter
           options={checkbox}
           type="hcp"

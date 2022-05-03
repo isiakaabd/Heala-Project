@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const useStyles = makeStyles((theme) => ({
   menu: {
     maxHeight: "35rem !important",
+    maxWidth: "70rem  !important",
 
     "& .MuiMenu-list": {
       paddingTop: "0 !important",
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiMenuItem-root": {
       display: "flex",
       flexDirection: "column",
+      flexWrap: "wrap",
       alignItems: "flex-start",
     },
   },
@@ -81,10 +83,7 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
           </Typography>
         </Grid>
         <Grid item>
-          <CloseIcon
-            className={classes.icon}
-            onClick={() => setAnchorEl(null)}
-          />
+          <CloseIcon className={classes.icon} onClick={() => setAnchorEl(null)} />
         </Grid>
       </Grid>
       {arr.length > 0

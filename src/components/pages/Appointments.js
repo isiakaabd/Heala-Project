@@ -34,11 +34,7 @@ const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
   const theme = useTheme();
 
   return (
-    <Grid
-      container
-      justifyContent="space-between"
-      className={classes.containerGrid}
-    >
+    <Grid container justifyContent="space-between" className={classes.containerGrid}>
       <Grid
         item
         className={classes.parentGrid}

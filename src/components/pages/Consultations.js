@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Button,
-  Avatar,
-} from "@mui/material";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -23,7 +15,7 @@ import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
 import { Loader, FilterList } from "components/Utilities";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
@@ -91,8 +83,7 @@ const Consultations = (props) => {
   const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const [fetchConsultations, { loading, data, error }] =
-    useLazyQuery(getConsultations);
+  const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
 
   React.useEffect(() => {
     fetchConsultations({
@@ -125,21 +116,14 @@ const Consultations = (props) => {
   return (
     <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
       <Grid item>
-        <PreviousButton
-          path={`/patients/${patientId}`}
-          onClick={() => setSelectedPatientMenu(0)}
-        />
+        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
       </Grid>
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
         <Grid item>
-          <FilterList
-            options={filterOptions}
-            title="Filter consultations"
-            width="18.7rem"
-          />
+          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
         </Grid>
       </Grid>
       {consultations.length > 0 ? (
@@ -171,13 +155,7 @@ const Consultations = (props) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row._id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -203,11 +181,7 @@ const Consultations = (props) => {
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
                             alt={`Display Photo of ${doctorData.firstName}`}
-                            src={
-                              doctorData.picture
-                                ? doctorData.picture
-                                : displayPhoto
-                            }
+                            src={doctorData.picture ? doctorData.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -279,10 +253,7 @@ const Consultations = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={consultationsHeadCells4}
-          paginationLabel="Patients per page"
-        />
+        <EmptyTable headCells={consultationsHeadCells4} paginationLabel="Patients per page" />
       )}
     </Grid>
   );
