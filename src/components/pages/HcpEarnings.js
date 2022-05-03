@@ -139,7 +139,9 @@ const HcpEarnings = (props) => {
   const theme = useTheme();
   useEffect(() => {
     if (datas !== undefined) {
-      setX(datas?.getMyEarnings?.data[0]?.balance);
+      if (datas.getMyEarnings.length > 0) {
+        setX(datas?.getMyEarnings?.data[0]?.balance);
+      }
     }
 
     if (data) {

@@ -105,7 +105,6 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
-  console.log(data);
 
   const history = useHistory();
   const [respondData, setRespondData] = useState([]);
@@ -218,7 +217,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
   useEffect(() => {
     if (respondData.status) {
-      setVerifyState("Doctor Verified!");
+      setVerifyState("Doctor Verified!!");
     }
   }, [verifyState, respondData.status]);
   const {
@@ -231,7 +230,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     status,
     // eslint-disable-next-line
   } = respondData;
-  console.log(yearbook);
+
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
 
@@ -271,6 +270,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
+  console.log(verifyState);
   // eslint-disable-next-line
   return (
     <>
@@ -638,7 +638,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title={verifyState}
                 type={trasparentButton}
-                disabled={verifyState === "Doctor Verified!"}
+                disabled={verifyState === "Doctor Verified!!"}
                 onClick={handleVerifyDoctor}
                 width="100%"
               />

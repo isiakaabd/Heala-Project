@@ -442,7 +442,7 @@ const HcpCaseNotes = ({
           <Grid
             item
             container
-            style={{ padding: "2rem" }}
+            style={{ padding: "2rem 0" }}
             alignItems="center"
             justifyContent="space-between"
             width="100%"
@@ -516,7 +516,7 @@ const HcpCaseNotes = ({
               <Grid
                 item
                 container
-                style={{ padding: "2rem" }}
+                style={{ padding: "2rem 0" }}
                 alignItems="center"
                 justifyContent="space-between"
                 sx={{ flexWrap: "nowrap" }}
@@ -590,7 +590,7 @@ const HcpCaseNotes = ({
           <Grid
             item
             container
-            style={{ padding: "2rem" }}
+            style={{ padding: "2rem 0" }}
             alignItems="center"
             justifyContent="space-between"
             sx={{ flexWrap: "nowrap" }}

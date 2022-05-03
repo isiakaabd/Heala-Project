@@ -3,7 +3,7 @@ import { PageInfo } from "./fragment";
 
 export const doctor = gql`
   query doctorProfile($id: ID!) {
-    doctorProfile(filterBy: { doctor: $id }) {
+    doctorProfile(id: $id) {
       _id
       firstName
       lastName
