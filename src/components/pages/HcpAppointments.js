@@ -183,7 +183,6 @@ const HcpAppointments = (props) => {
     setSelectedMenu(2);
     setSelectedSubMenu(3);
     setSelectedHcpMenu(2);
-
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
 
