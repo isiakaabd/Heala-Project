@@ -31,6 +31,20 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "5rem",
     },
   },
+
+  cardContainer: {
+    "&.MuiGrid-root": {
+      display: "grid",
+      gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
+      rowGap: "2rem",
+      // columnGap: "2rem",
+      "& > *": {
+        flex: 1,
+        flexDirection: "column",
+        gap: "10px",
+      },
+    },
+  },
   gridsWrapper: {
     background: "#fff",
     borderRadius: "1rem",
@@ -303,95 +317,86 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           <Grid
             item
             container
-            direction="column"
-            alignItems="center"
-            gap={3}
-            sx={{ height: "100%" }}
+            // direction="column"
+            // alignItems="center"
+            // gap={3}
+            className={classes.cardContainer}
+            // sx={{ height: "100%", background: "red" }}
           >
-            <Grid
-              container
-              direction="row"
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 4, sm: 8, md: 12 }}
-            >
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Doctor Name</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Doctor Name</Typography>
               </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Hospital</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.hospital}` : "No Hospital "}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Gender:</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.gender} ` : "Not Specified"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                </Typography>
               </Grid>
             </Grid>
-            <Grid
-              container
-              direction="row"
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 4, sm: 8, md: 12 }}
-            >
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Medical ID:</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
-                    </Typography>
-                  </Grid>
-                </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Hospital</Typography>
               </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Specialization:</Typography>
-                  </Grid>
-                  <Grid item width="100%">
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.specialization}` : "No specialization "}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.hospital}` : "No Hospital "}
+                </Typography>
               </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1} width="100%">
-                  <Grid item>
-                    <Typography variant="body1">DOB:</Typography>
-                  </Grid>
-                  <Grid item width="100%">
-                    <Typography variant="h4">
-                      {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Gender:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.gender} ` : "Not Specified"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Medical ID:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Specialization:</Typography>
+              </Grid>
+              <Grid item width="100%">
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.specialization}` : "No specialization "}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">DOB:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Status</Typography>
+              </Grid>
+              <Grid item>
+                <Typography
+                  variant="h4"
+                  style={{
+                    color: status === true ? theme.palette.common.green : theme.palette.common.red,
+                    width: "max-content",
+                  }}
+                >
+                  {status ? "Verified" : "Not Verified"}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>

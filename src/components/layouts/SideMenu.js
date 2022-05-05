@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "2.5em",
     paddingRight: "2.5em",
     paddingTop: "5em",
-    height: "100vh",
+    minHeight: "100vh",
+
     boxShadow: "5px -5px 7px #eee",
     position: "fixed",
     overflowY: "hidden",
