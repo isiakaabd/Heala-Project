@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Avatar,
+  Chip,
   Typography,
   TableRow,
   TableCell,
@@ -119,6 +120,8 @@ const HCP = ({ setSelectedSubMenu }) => {
     });
   }, [fetchVerifications, pageInfo]);
 
+  console.log(data);
+
   const [response, setResponse] = useState("");
   const validationSchema = Yup.object({
     Name: Yup.string("Enter your Permission").trim().required("select an option"),
@@ -176,7 +179,7 @@ const HCP = ({ setSelectedSubMenu }) => {
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
-
+  console.log(data);
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -217,7 +220,7 @@ const HCP = ({ setSelectedSubMenu }) => {
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, qualification, doctorData, _id } = row;
+                  const { createdAt, status, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -282,6 +285,26 @@ const HCP = ({ setSelectedSubMenu }) => {
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         {qualification && qualification.degree}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        <Chip
+                          label={status ? "Verified" : "Not Verified"}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === true
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === true
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
                       </TableCell>
                       <TableCell
                         align="left"

@@ -107,7 +107,10 @@ export const HCPHeader = [
     id: 2,
     label: "Degree",
   },
-
+  {
+    id: 10,
+    label: "Status",
+  },
   {
     id: 4,
     label: "Year",
