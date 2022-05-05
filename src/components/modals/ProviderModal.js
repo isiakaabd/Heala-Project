@@ -6,7 +6,11 @@ import * as Yup from "yup";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
-import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQuery";
+import {
+  getProviders,
+  getCategory,
+  getUserTypes,
+} from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 
@@ -19,8 +23,14 @@ const ProviderModal = ({
   singleData,
 }) => {
   const theme = useTheme();
-  const [createProvider] = useMutation(addProvider, { refetchQueries: [{ query: getProviders }] });
-  const [editProvider] = useMutation(editprovider, { refetchQueries: [{ query: getProviders }] });
+  const [createProvider] = useMutation(addProvider, {
+    refetchQueries: [{ query: getProviders }],
+  });
+  const [editProvider] = useMutation(editprovider, {
+    refetchQueries: [{ query: getProviders }],
+  });
+
+  console.log(editId, "hhh");
 
   const single = useQuery(getCategory, {
     variables: {
@@ -32,11 +42,13 @@ const ProviderModal = ({
   useEffect(() => {
     if (userType.data) {
       const data = userType.data.getUserTypes.userType;
+      console.log(data, "usertyppp");
+
       setDropDown(
         data &&
           data.map((i) => {
-            return { key: i.name, value: i.name };
-          }),
+            return { key: i.name, value: i._id, id: i._id };
+          })
       );
     }
   }, [userType.data]);
@@ -60,6 +72,7 @@ const ProviderModal = ({
 
   // const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];
   const onSubmit = async (values, onSubmitProps) => {
+    console.log(values);
     if (type === "add") {
       const { name, type, image } = values;
       await createProvider({
@@ -90,6 +103,9 @@ const ProviderModal = ({
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
+
+  console.log(dropDown, "see");
+
   return (
     <Formik
       onSubmit={onSubmit}

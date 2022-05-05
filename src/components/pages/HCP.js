@@ -93,6 +93,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
+      fontSize: '12px',
+
     },
   },
 }));
@@ -309,7 +311,6 @@ const HCP = ({ setSelectedSubMenu }) => {
                       <TableCell
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.red }}
                       >
                         {qualification && dateMoment(qualification.year)}
                       </TableCell>
