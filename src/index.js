@@ -23,7 +23,7 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = new HttpLink({
-  uri: "https://api-staging.heala.io//",
+  uri: "https://api-staging.heala.io",
 });
 
 const splitLink = split(
