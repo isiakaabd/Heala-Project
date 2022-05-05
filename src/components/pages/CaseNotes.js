@@ -506,7 +506,7 @@ const CaseNotes = ({
                     key={index}
                     item
                     container
-                    style={{ padding: "2rem 3rem" }}
+                    style={{ color: "#4f4f4f" }}
                     alignItems="center"
                     justifyContent="space-between"
                     sx={{ flexWrap: "nowrap", textAlign: "left" }}

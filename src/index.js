@@ -18,12 +18,12 @@ import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "https://api-staging.heala.io/",
+    url: "https://api.heala.io/",
   }),
 );
 
 const httpLink = new HttpLink({
-  uri: "https://api-staging.heala.io/",
+  uri: "https://api.heala.io/",
 });
 
 const splitLink = split(
