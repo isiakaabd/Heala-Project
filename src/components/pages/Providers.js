@@ -18,7 +18,7 @@ import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
@@ -146,6 +146,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchProviders, { data, error, loading, refetch }] = useLazyQuery(getProviders);
+  const { data: dat, error: err, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
     fetchProviders({
@@ -154,7 +155,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchProviders, pageInfo]);
+    //eslint-disable-next-line
+  }, [fetchProviders]);
 
   const onChange = async (e) => {
     setSearchHcp(e);
@@ -173,11 +175,11 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [providers, setProviders] = useState([]);
 
   useEffect(() => {
-    if (data) {
-      setProviders(data.getProviders.provider);
-      setPageInfo(data.getProviders.pageInfo);
+    if (dat) {
+      setProviders(dat.getProviders.provider);
+      setPageInfo(dat.getProviders.pageInfo);
     }
-  }, [data]);
+  }, [dat]);
   console.log(data);
 
   const theme = useTheme();
@@ -258,8 +260,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   };
   const [singleData, setSingleData] = useState();
 
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error} />;
+  if (loading || load) return <Loader />;
+  if (error || err) return <NoData error={error} />;
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">

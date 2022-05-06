@@ -36,8 +36,18 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     "&.MuiGrid-root": {
       display: "grid",
+      maxWidth: "100%",
       gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
       rowGap: "2rem",
+      "@media (max-width:1450px)": {
+        // display: "none",
+        gridTemplateColumns: "repeat(3,minmax(15rem,auto))",
+      },
+      "@media (max-width:1200px)": {
+        // display: "none",
+        gap: "10px",
+        gridTemplateColumns: "repeat(2,minmax(auto,auto))",
+      },
       // columnGap: "2rem",
       "& > *": {
         flex: 1,
@@ -67,6 +77,10 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "4rem 5rem",
+    "@media (max-width:1450px)": {
+      padding: "2rem",
+    },
+
     minHeight: "14.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
