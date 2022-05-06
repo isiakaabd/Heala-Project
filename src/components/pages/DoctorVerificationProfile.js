@@ -127,12 +127,13 @@ const DoctorVerificationProfile = ({
     gender,
     dob,
   } = doctorProfile;
-  console.log(doctorView);
   return (
     <Grid container direction="column" gap={3} width="100%">
       <Grid item>
-        <PreviousButton path={`/verification/view/${viewId}`} />
-        {/* //onClick={() => setSelectedHcpMenu(0)} */}
+        <PreviousButton
+          path={`/verification/view/${viewId}`}
+          onClick={() => setSelectedSubMenu(8)}
+        />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid item container>
