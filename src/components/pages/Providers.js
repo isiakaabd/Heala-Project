@@ -147,7 +147,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchProviders, { data, error, loading, refetch }] = useLazyQuery(getProviders);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProviders({
       variables: {
         first: pageInfo?.limit || 10,
@@ -178,11 +178,11 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
       setPageInfo(data.getProviders.pageInfo);
     }
   }, [data]);
+  console.log(data);
 
   const theme = useTheme();
-  const handleDialogOpen = () => {
-    setIsOpen(true);
-  };
+  const handleDialogOpen = () => setIsOpen(true);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -196,7 +196,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const initialValues = {
     name: "",
     type: "",
-    image: "",
+    image: null,
+    iconAlt: null,
   };
 
   const onConfirm = async () => {
@@ -308,7 +309,8 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
               {providers
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const { _id, name, icon } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -318,12 +320,12 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -340,9 +342,9 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
+                            <Avatar src={icon} sx={{ width: 24, height: 24 }} />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{name}</span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -358,7 +360,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                             variant="contained"
                             disableRipple
                             className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            onClick={() => handleEditOpenDialog(row._id)}
+                            onClick={() => handleEditOpenDialog(_id)}
                             endIcon={<EditIcon color="success" />}
                           >
                             Edit Provider
@@ -367,7 +369,7 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
                             variant="contained"
                             disableRipple
                             className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            onClick={() => handleDeleteOpenDialog(_id)}
                             endIcon={<DeleteIcon color="error" />}
                           >
                             Delete Provider

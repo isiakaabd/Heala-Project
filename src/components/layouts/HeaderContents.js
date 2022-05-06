@@ -368,7 +368,9 @@ const HeaderText = (props) => {
             title="Doctor Verification"
             scopedMenu={0}
             scopedSubMenu={0}
+            scopedSubTitle="Doctor Profile"
             subTitle="Doctor View"
+            // subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
           />
         );
       }
