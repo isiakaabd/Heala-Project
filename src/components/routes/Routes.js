@@ -11,6 +11,7 @@ import {
   Hcps,
   ViewDoctorVerification,
   SingleHCP,
+  DoctorVerificationProfile,
   Appointments,
   HcpEarnings,
   HcpAvailability,
@@ -71,6 +72,8 @@ const Routes = (props) => {
     setSelectedAppointmentMenu,
     chatMediaActive,
     setChatMediaActive,
+    doctorView,
+    setDoctorView,
     setSelectedManagementMenu,
     selectedScopedMenu,
     setSelectedScopedMenu,
@@ -539,9 +542,23 @@ const Routes = (props) => {
 
       <PrivateRoute
         path="/verification/view/:viewId"
+        exact
         component={ViewHCP}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setDoctorView={setDoctorView}
+        doctorView={doctorView}
+        selectedSubMenu={selectedSubMenu}
+      />
+      <PrivateRoute
+        exact
+        path="/verification/view/:viewId/doctor/:id" ///verification/view/${viewId}/doctor
+        component={DoctorVerificationProfile}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        setDoctorView={setDoctorView}
+        doctorView={doctorView}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedSubMenu={selectedSubMenu}
       />
@@ -600,23 +617,25 @@ const Routes = (props) => {
 };
 
 Routes.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  selectedAppointmentMenu: PropTypes.number.isRequired,
-  waitingListMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  chatMediaActive: PropTypes.bool.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
-  setWaitingListMenu: PropTypes.func.isRequired,
-  setSelectedAppointmentMenu: PropTypes.func.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
-  setSelectedManagementMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  doctorView: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  selectedAppointmentMenu: PropTypes.number,
+  waitingListMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  chatMediaActive: PropTypes.bool,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
+  setWaitingListMenu: PropTypes.func,
+  setDoctorView: PropTypes.func,
+  setSelectedAppointmentMenu: PropTypes.func,
+  setChatMediaActive: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func,
+  setSelectedManagementMenu: PropTypes.func,
 };
 
 export default Routes;
