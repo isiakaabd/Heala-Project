@@ -120,7 +120,7 @@ const HcpProfile = (props) => {
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
-
+  console.log(data);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {

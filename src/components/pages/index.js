@@ -6,6 +6,7 @@ export { default as CreateEmail } from "./CreateEmail";
 export { default as CreateMessage } from "./CreateMessage";
 export { default as Dashboard } from "./Dashboard";
 export { default as EditManagement } from "./EditManagement";
+export { default as ViewDoctorVerification } from "./ViewDoctorVerification";
 export { default as Email } from "./Email";
 export { default as Finance } from "./Finance";
 export { default as Financetable } from "./Financetable";

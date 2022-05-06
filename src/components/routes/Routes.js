@@ -9,6 +9,7 @@ import {
   Patients,
   Subscription,
   Hcps,
+  ViewDoctorVerification,
   SingleHCP,
   Appointments,
   HcpEarnings,
@@ -242,6 +243,19 @@ const Routes = (props) => {
         exact
         path="/hcps/:hcpId/profile/chat"
         component={HCPChat}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu}
+        chatMediaActive={chatMediaActive}
+        setChatMediaActive={setChatMediaActive}
+      />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/verification"
+        component={ViewDoctorVerification}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
         selectedSubMenu={selectedSubMenu}
