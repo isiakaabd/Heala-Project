@@ -6,6 +6,7 @@ import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
@@ -397,6 +398,21 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                 >
                   {status ? "Verified" : "Not Verified"}
                 </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container alignItems="center" sx={{ justifyContent: "center !important" }}>
+              <Grid item container>
+                <CustomButton
+                  title="View Doctor Profile"
+                  type={trasparentButton}
+                  width="100%"
+                  component={Link}
+                  to={`/verification/view/${viewId}/doctor`}
+                  onClick={() => setSelectedSubMenu(9)}
+                  // isSubmitting={submit}
+                  // onClick={() => handleUpdateProVider(reference?.reference_code)}
+                  // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                />
               </Grid>
             </Grid>
           </Grid>

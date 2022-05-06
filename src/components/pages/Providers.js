@@ -5,22 +5,8 @@ import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Alert,
-  Button,
-  Avatar,
-} from "@mui/material";
-import {
-  CustomButton,
-  Loader,
-  Search,
-  Modals,
-  FilterList,
-} from "components/Utilities";
+import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
+import { CustomButton, Loader, Search, Modals, FilterList } from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -156,18 +142,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Providers = ({
-  selectedMenu,
-  selectedSubMenu,
-  setSelectedMenu,
-  setSelectedSubMenu,
-}) => {
+const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchProviders, { data, error, loading, refetch }] =
-    useLazyQuery(getProviders);
+  const [fetchProviders, { data, error, loading, refetch }] = useLazyQuery(getProviders);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProviders({
       variables: {
         first: pageInfo?.limit || 10,
@@ -198,11 +178,11 @@ const Providers = ({
       setPageInfo(data.getProviders.pageInfo);
     }
   }, [data]);
+  console.log(data);
 
   const theme = useTheme();
-  const handleDialogOpen = () => {
-    setIsOpen(true);
-  };
+  const handleDialogOpen = () => setIsOpen(true);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -216,7 +196,8 @@ const Providers = ({
   const initialValues = {
     name: "",
     type: "",
-    image: "",
+    image: null,
+    iconAlt: null,
   };
 
   const onConfirm = async () => {
@@ -276,18 +257,12 @@ const Providers = ({
     setEditId(id);
   };
   const [singleData, setSingleData] = useState();
-  console.log(editId, id, "id where set");
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -334,7 +309,8 @@ const Providers = ({
               {providers
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const { _id, name, icon } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -344,18 +320,12 @@ const Providers = ({
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row._id}
+                      key={_id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -372,14 +342,9 @@ const Providers = ({
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              src={row.icon}
-                              sx={{ width: 24, height: 24 }}
-                            />
+                            <Avatar src={icon} sx={{ width: 24, height: 24 }} />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.name}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{name}</span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -395,7 +360,7 @@ const Providers = ({
                             variant="contained"
                             disableRipple
                             className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            onClick={() => handleEditOpenDialog(row._id)}
+                            onClick={() => handleEditOpenDialog(_id)}
                             endIcon={<EditIcon color="success" />}
                           >
                             Edit Provider
@@ -404,7 +369,7 @@ const Providers = ({
                             variant="contained"
                             disableRipple
                             className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(row._id)}
+                            onClick={() => handleDeleteOpenDialog(_id)}
                             endIcon={<DeleteIcon color="error" />}
                           >
                             Delete Provider
@@ -417,10 +382,7 @@ const Providers = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={partnersHeadCells2}
-            paginationLabel="Providers  per page"
-          />
+          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
         )}
       </Grid>
 
@@ -465,12 +427,7 @@ const Providers = ({
         btnValue="Delete"
       />
 
-      <Modals
-        isOpen={isOpens}
-        title="Filter"
-        rowSpacing={5}
-        handleClose={handleDialogCloses}
-      >
+      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -491,10 +448,7 @@ const Providers = ({
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid
-                    item
-                    style={{ marginBottom: "18rem", marginTop: "3rem" }}
-                  >
+                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
                     <Grid container>
                       <Grid item container>
                         <FormikControl

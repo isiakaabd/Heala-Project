@@ -293,6 +293,8 @@ const HeaderText = (props) => {
                 ? "Patients"
                 : selectedHcpMenu === 6
                 ? "Consultations"
+                : selectedHcpMenu === 7
+                ? "Doctor Verification"
                 : "White Label"
             }
             scopedSubTitle={
@@ -300,7 +302,9 @@ const HeaderText = (props) => {
                 ? "Case Note"
                 : selectedScopedMenu === 3
                 ? "Create Message"
-                : ""
+                : selectedScopedMenu === 4
+                ? "Doctor Verification"
+                : "ghgy"
             }
             title="Doctors"
             subTitle="Doctor View"
@@ -364,7 +368,9 @@ const HeaderText = (props) => {
             title="Doctor Verification"
             scopedMenu={0}
             scopedSubMenu={0}
+            scopedSubTitle="Doctor Profile"
             subTitle="Doctor View"
+            // subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
           />
         );
       }

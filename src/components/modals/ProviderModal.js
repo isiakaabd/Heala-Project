@@ -6,11 +6,7 @@ import * as Yup from "yup";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
-import {
-  getProviders,
-  getCategory,
-  getUserTypes,
-} from "components/graphQL/useQuery";
+import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 
@@ -23,14 +19,8 @@ const ProviderModal = ({
   singleData,
 }) => {
   const theme = useTheme();
-  const [createProvider] = useMutation(addProvider, {
-    refetchQueries: [{ query: getProviders }],
-  });
-  const [editProvider] = useMutation(editprovider, {
-    refetchQueries: [{ query: getProviders }],
-  });
-
-  console.log(editId, "hhh");
+  const [createProvider] = useMutation(addProvider);
+  const [editProvider] = useMutation(editprovider);
 
   const single = useQuery(getCategory, {
     variables: {
@@ -42,13 +32,11 @@ const ProviderModal = ({
   useEffect(() => {
     if (userType.data) {
       const data = userType.data.getUserTypes.userType;
-      console.log(data, "usertyppp");
-
       setDropDown(
         data &&
           data.map((i) => {
             return { key: i.name, value: i._id, id: i._id };
-          })
+          }),
       );
     }
   }, [userType.data]);
@@ -60,6 +48,7 @@ const ProviderModal = ({
         type: single.data.getProvider.userTypeId,
         image: single.data.getProvider.icon,
         id: single.data.getProvider._id,
+        iconAlt: single.data.getProvider.iconAlt,
       });
     }
   }, [single.data, setSingleData]);
@@ -68,30 +57,35 @@ const ProviderModal = ({
     name: Yup.string("Enter your Name").trim().required("Name is required"),
     type: Yup.string("Select your type").required("Type is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
+    iconAlt: Yup.string("Upload an alternate Image").required("Alt. image is required"),
   });
 
   // const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];
   const onSubmit = async (values, onSubmitProps) => {
     console.log(values);
     if (type === "add") {
-      const { name, type, image } = values;
+      const { name, type, image, iconAlt } = values;
       await createProvider({
         variables: {
           name,
           icon: image,
+          iconAlt,
           userTypeId: type,
         },
+        refetchQueries: [{ query: getProviders }],
       });
     }
     if (type === "edit") {
-      const { name, type, image, id } = values;
+      const { name, type, image, id, iconAlt } = values;
       await editProvider({
         variables: {
           id,
           name,
           icon: image,
+          iconAlt,
           userTypeId: type,
         },
+        refetchQueries: [{ query: getProviders }],
       });
     }
     onSubmitProps.resetForm();
@@ -103,8 +97,6 @@ const ProviderModal = ({
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-
-  console.log(dropDown, "see");
 
   return (
     <Formik
@@ -140,12 +132,22 @@ const ProviderModal = ({
                   />
                 </Grid>
 
-                <Grid item md display="flex" alignItems="center">
+                <Grid item container>
                   <Grid item container md>
                     <FormikControl
                       control="file"
                       name="image"
                       label="Upload Your Logo"
+                      setFieldValue={setFieldValue}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item container>
+                  <Grid item container md>
+                    <FormikControl
+                      control="file"
+                      name="iconAlt"
+                      label="Upload Alternate Logo"
                       setFieldValue={setFieldValue}
                     />
                   </Grid>

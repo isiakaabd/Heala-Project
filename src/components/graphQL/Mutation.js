@@ -550,11 +550,12 @@ export const addPartnerCategory = gql`
   }
 `;
 export const addProvider = gql`
-  mutation createProvider($name: String!, $icon: String!, $userTypeId: String!) {
-    createProvider(data: { name: $name, icon: $icon, userTypeId: $userTypeId }) {
+  mutation createProvider($name: String!, $iconAlt: String, $icon: String!, $userTypeId: String!) {
+    createProvider(data: { name: $name, iconAlt: $iconAlt, icon: $icon, userTypeId: $userTypeId }) {
       provider {
         _id
         name
+        iconAlt
         icon
         userTypeId
         createdAt

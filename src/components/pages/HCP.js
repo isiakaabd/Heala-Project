@@ -90,11 +90,9 @@ const useStyles = makeStyles((theme) => ({
 
   badge: {
     "&.MuiChip-root": {
-      fontSize: "1.6rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
-      fontSize: '12px',
-
+      fontSize: "12px",
     },
   },
 }));
@@ -308,10 +306,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                      >
+                      <TableCell align="left" className={classes.tableCell}>
                         {qualification && dateMoment(qualification.year)}
                       </TableCell>
 
@@ -320,8 +315,8 @@ const HCP = ({ setSelectedSubMenu }) => {
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`/verification/view/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
+                          to={`/verification/view/${_id}`}
                           onClick={() => setSelectedSubMenu(8)}
                         >
                           View Doctor
