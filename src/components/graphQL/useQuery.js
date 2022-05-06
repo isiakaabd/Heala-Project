@@ -20,7 +20,6 @@ export const doctor = gql`
       provider
       consultations
       status
-      profileId
       dociId
     }
   }

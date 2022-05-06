@@ -1,118 +1,118 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { NoData } from "components/layouts";
+import React from "react"; // { useEffect, useLayoutEffect, useState }
+// import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
-import { Grid, Typography, Avatar } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
-import { useHistory } from "react-router-dom";
-import { dateMoment } from "components/Utilities/Time";
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
-import {
-  rejectVerification,
-  updateDoctorProvider,
-  // updateUserProvider,
-} from "components/graphQL/Mutation";
-import { verifyHCP } from "components/graphQL/Mutation";
-import displayPhoto from "assets/images/avatar.svg";
-import { useTheme } from "@mui/material/styles";
-import { FormikControl } from "components/validation";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import Success from "components/modals/Success";
+// import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
+// import { Grid, Typography, Avatar } from "@mui/material";
+// import { useParams } from "react-router-dom";
+// import { makeStyles } from "@mui/styles";
+// import { useHistory } from "react-router-dom";
+// import { dateMoment } from "components/Utilities/Time";
+// import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+// import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
+// import {
+//   rejectVerification,
+//   updateDoctorProvider,
+//   // updateUserProvider,
+// } from "components/graphQL/Mutation";
+// import { verifyHCP } from "components/graphQL/Mutation";
+// import displayPhoto from "assets/images/avatar.svg";
+// import { useTheme } from "@mui/material/styles";
+// import { FormikControl } from "components/validation";
+// import { Formik, Form } from "formik";
+// import * as Yup from "yup";
+// import Success from "components/modals/Success";
 
-const useStyles = makeStyles((theme) => ({
-  parentGridWrapper: {
-    background: "#fff",
-    borderRadius: "1rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
-    "&:not(:last-of-type)": {
-      marginBottom: "5rem",
-    },
-  },
+// const useStyles = makeStyles((theme) => ({
+//   parentGridWrapper: {
+//     background: "#fff",
+//     borderRadius: "1rem",
+//     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
+//     "&:not(:last-of-type)": {
+//       marginBottom: "5rem",
+//     },
+//   },
 
-  cardContainer: {
-    "&.MuiGrid-root": {
-      display: "grid",
-      gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
-      rowGap: "2rem",
-      // columnGap: "2rem",
-      "& > *": {
-        flex: 1,
-        flexDirection: "column",
-        gap: "10px",
-      },
-    },
-  },
-  gridsWrapper: {
-    background: "#fff",
-    borderRadius: "1rem",
-    padding: "1rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
+//   cardContainer: {
+//     "&.MuiGrid-root": {
+//       display: "grid",
+//       gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
+//       rowGap: "2rem",
+//       // columnGap: "2rem",
+//       "& > *": {
+//         flex: 1,
+//         flexDirection: "column",
+//         gap: "10px",
+//       },
+//     },
+//   },
+//   gridsWrapper: {
+//     background: "#fff",
+//     borderRadius: "1rem",
+//     padding: "1rem",
+//     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+//   },
 
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.3rem !important",
-      //   height: "2.7rem",
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
-      borderRadius: "1.5rem",
-    },
-  },
+//   badge: {
+//     "&.MuiChip-root": {
+//       fontSize: "1.3rem !important",
+//       //   height: "2.7rem",
+//       background: theme.palette.common.lightGreen,
+//       color: theme.palette.common.green,
+//       borderRadius: "1.5rem",
+//     },
+//   },
 
-  cardGrid: {
-    background: "#fff",
-    borderRadius: "1rem",
-    padding: "4rem 5rem",
-    minHeight: "14.1rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
-  firstContainer: {
-    width: "100%",
-    height: "100%",
-  },
+//   cardGrid: {
+//     background: "#fff",
+//     borderRadius: "1rem",
+//     padding: "4rem 5rem",
+//     minHeight: "14.1rem",
+//     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+//   },
+//   firstContainer: {
+//     width: "100%",
+//     height: "100%",
+//   },
 
-  infoBadge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem",
-      borderRadius: "1.5rem",
-      color: theme.palette.common.green,
-    },
-  },
+//   infoBadge: {
+//     "&.MuiChip-root": {
+//       fontSize: "1.25rem",
+//       borderRadius: "1.5rem",
+//       color: theme.palette.common.green,
+//     },
+//   },
 
-  link: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: "1.25rem",
-    color: theme.palette.common.green,
-    border: `1px solid ${theme.palette.common.lightGrey}`,
-    padding: ".75rem",
-    borderRadius: "1.5rem",
-    textDecoration: "none",
-  },
+//   link: {
+//     display: "flex",
+//     alignItems: "center",
+//     fontSize: "1.25rem",
+//     color: theme.palette.common.green,
+//     border: `1px solid ${theme.palette.common.lightGrey}`,
+//     padding: ".75rem",
+//     borderRadius: "1.5rem",
+//     textDecoration: "none",
+//   },
 
-  linkIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "1.25rem",
-      color: theme.palette.common.green,
-      marginLeft: "1.2rem",
-    },
-  },
+//   linkIcon: {
+//     "&.MuiSvgIcon-root": {
+//       fontSize: "1.25rem",
+//       color: theme.palette.common.green,
+//       marginLeft: "1.2rem",
+//     },
+//   },
 
-  buttonsGridWrapper: {
-    marginTop: "5rem !important",
-    height: "16.1rem",
-  },
+//   buttonsGridWrapper: {
+//     marginTop: "5rem !important",
+//     height: "16.1rem",
+//   },
 
-  title: {
-    "&.MuiTypography-root": {
-      color: theme.palette.common.grey,
-      // marginRight: "2rem",
-    },
-  },
-}));
+//   title: {
+//     "&.MuiTypography-root": {
+//       color: theme.palette.common.grey,
+//       // marginRight: "2rem",
+//     },
+//   },
+// }));
 
 const ViewDoctorVerification = ({
   selectedMenu,
@@ -122,189 +122,189 @@ const ViewDoctorVerification = ({
   setSelectedHcpMenu,
   setSelectedSubMenu,
 }) => {
-  const { hcpId } = useParams();
-  const { loading, data, error } = useQuery(getVerification);
-  console.log(hcpId);
-  const history = useHistory();
-  //   const [respondData, setRespondData] = useState([]);
-  const [respondData, setRespondData] = useState([]); //setRespondData
+  // const { hcpId } = useParams();
+  // const { loading, data, error } = useQuery(getVerification);
+  // console.log(hcpId);
+  // const history = useHistory();
+  // //   const [respondData, setRespondData] = useState([]);
+  // const [respondData, setRespondData] = useState([]); //setRespondData
 
-  useEffect(() => {
-    try {
-      if (data) {
-        const value = data.getVerifications.verification;
-        const dataValue = value.filter((i) => i.profileId === hcpId);
-        setRespondData(dataValue);
-        // setPageInfo(data.getVerifications.pageInfo);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [data, hcpId]);
-  console.log(respondData);
-  const [reject] = useMutation(rejectVerification);
-  // const onConfirm = () => {
+  // useEffect(() => {
+  //   try {
+  //     if (data) {
+  //       const value = data.getVerifications.verification;
+  //       const dataValue = value.filter((i) => i.profileId === hcpId);
+  //       setRespondData(dataValue);
+  //       // setPageInfo(data.getVerifications.pageInfo);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [data, hcpId]);
+  // console.log(respondData);
+  // const [reject] = useMutation(rejectVerification);
+  // // const onConfirm = () => {
+  // //   setCancel(true);
+  // // };
+  // const [open, setOpen] = useState(false);
+
+  // const [updateState, setUpdateState] = useState("Update Provider");
+  // const [update] = useMutation(updateDoctorProvider);
+  // const [submit, setSubmit] = useState(false);
+  // const handleDialogCloses = () => setOpen(false);
+  // const handleUpdateProVider = async (value) => {
+  //   try {
+  //     setSubmit(true);
+  //     await update({
+  //       variables: {
+  //         dociId: respondData && respondData.doctorData.dociId,
+  //         providerId: value,
+  //       },
+  //     });
+  //     setSubmit(false);
+  //     setUpdateState("Updated");
+  //   } catch (err) {
+  //     setSubmit(false);
+  //     console.log(err);
+  //   }
+  // };
+  // const [cancel, setCancel] = useState(false);
+  // const handleDialogOpen = () => {
   //   setCancel(true);
   // };
-  const [open, setOpen] = useState(false);
-
-  const [updateState, setUpdateState] = useState("Update Provider");
-  const [update] = useMutation(updateDoctorProvider);
-  const [submit, setSubmit] = useState(false);
-  const handleDialogCloses = () => setOpen(false);
-  const handleUpdateProVider = async (value) => {
-    try {
-      setSubmit(true);
-      await update({
-        variables: {
-          dociId: respondData && respondData.doctorData.dociId,
-          providerId: value,
-        },
-      });
-      setSubmit(false);
-      setUpdateState("Updated");
-    } catch (err) {
-      setSubmit(false);
-      console.log(err);
-    }
-  };
-  const [cancel, setCancel] = useState(false);
-  const handleDialogOpen = () => {
-    setCancel(true);
-  };
-  const initialValues = {
-    reason: "",
-  };
-  const validationSchema = Yup.object({
-    reason: Yup.string("Enter Reason ").required("Reason is required"),
-  });
-  const onSubmit = async (values) => {
-    const { reason } = values;
-
-    await reject({
-      variables: {
-        reason,
-        id: hcpId,
-      },
-      refetchQueries: [
-        {
-          query: getVerification,
-        },
-      ],
-    });
-    setCancel(false);
-
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-      history.push("/verification");
-    }, 3000);
-  };
-  // eslint-disable-next-line
-
-  const theme = useTheme();
-  // const darkButton = {
-  //   background: theme.palette.primary.main,
-  //   hover: theme.palette.primary.light,
-  //   active: theme.palette.primary.dark,
+  // const initialValues = {
+  //   reason: "",
   // };
-  const trasparentButton = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-    disabled: "#868686",
-  };
-  const RedButton = {
-    background: "red",
-    hover: "red",
-    active: "red",
-    disabled: "#FF8484",
-  };
-  const [ref, setRef] = useState(null);
-  const [get, { data: da }] = useLazyQuery(getCategory);
-  useEffect(() => {
-    if (data) {
-      //   setRespondData(data.getVerification);
-      //   setRef(data.getVerification.reference?.reference_code);
-    }
-  }, [data, ref]);
-  const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor",
-  );
-  const [process, setProcess] = useState(undefined);
+  // const validationSchema = Yup.object({
+  //   reason: Yup.string("Enter Reason ").required("Reason is required"),
+  // });
+  // const onSubmit = async (values) => {
+  //   const { reason } = values;
 
-  //   useEffect(() => {
-  //     if (ref) {
-  //       get({
-  //         variables: {
-  //           id: ref,
+  //   await reject({
+  //     variables: {
+  //       reason,
+  //       id: hcpId,
+  //     },
+  //     refetchQueries: [
+  //       {
+  //         query: getVerification,
+  //       },
+  //     ],
+  //   });
+  //   setCancel(false);
+
+  //   setOpen(true);
+  //   setTimeout(() => {
+  //     setOpen(false);
+  //     history.push("/verification");
+  //   }, 3000);
+  // };
+  // // eslint-disable-next-line
+
+  // const theme = useTheme();
+  // // const darkButton = {
+  // //   background: theme.palette.primary.main,
+  // //   hover: theme.palette.primary.light,
+  // //   active: theme.palette.primary.dark,
+  // // };
+  // const trasparentButton = {
+  //   background: theme.palette.common.black,
+  //   hover: theme.palette.primary.main,
+  //   active: theme.palette.primary.dark,
+  //   disabled: "#868686",
+  // };
+  // const RedButton = {
+  //   background: "red",
+  //   hover: "red",
+  //   active: "red",
+  //   disabled: "#FF8484",
+  // };
+  // const [ref, setRef] = useState(null);
+  // const [get, { data: da }] = useLazyQuery(getCategory);
+  // useEffect(() => {
+  //   if (data) {
+  //     //   setRespondData(data.getVerification);
+  //     //   setRef(data.getVerification.reference?.reference_code);
+  //   }
+  // }, [data, ref]);
+  // const [verifyState, setVerifyState] = useState(
+  //   respondData.status ? "Doctor Verified!" : "Verify Doctor",
+  // );
+  // const [process, setProcess] = useState(undefined);
+
+  // //   useEffect(() => {
+  // //     if (ref) {
+  // //       get({
+  // //         variables: {
+  // //           id: ref,
+  // //         },
+  // //       });
+  // //     }
+  // //     if (da && da.getProvider !== null) {
+  // //       setProcess(da?.getProvider.name);
+  // //     } else {
+  // //       setProcess(undefined);
+  // //     }
+  // //   }, [ref, da, get]);
+
+  // //   useEffect(() => {
+  // //     if (respondData.status) {
+  // //       setVerifyState("Doctor Verified!!");
+  // //     }
+  // //   }, [verifyState, respondData.status]);
+  // const {
+  //   qualification,
+  //   license,
+  //   alumni_association,
+  //   reference,
+  //   doctorData,
+  //   yearbook,
+  //   status,
+  //   // eslint-disable-next-line
+  // } = respondData;
+
+  // const [verify, { data: verifyData }] = useMutation(verifyHCP);
+  // const [button, setButtonValue] = useState(respondData.status); //button
+
+  // useEffect(() => {
+  //   if (verifyData && verifyData.verifyHCP.status) {
+  //     setVerifyState("Doctor Verified!!");
+  //     setButtonValue(verifyData.verifyHCP.status);
+  //   }
+  // }, [verify, status, button, verifyState, verifyData]);
+
+  // const handleVerifyDoctor = async () => {
+  //   try {
+  //     await verify({
+  //       variables: {
+  //         id: hcpId,
+  //       },
+  //       refetchQueries: [
+  //         {
+  //           query: verification,
+  //           variables: {
+  //             id: hcpId,
+  //           },
   //         },
-  //       });
-  //     }
-  //     if (da && da.getProvider !== null) {
-  //       setProcess(da?.getProvider.name);
-  //     } else {
-  //       setProcess(undefined);
-  //     }
-  //   }, [ref, da, get]);
+  //       ],
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // const classes = useStyles();
+  // useEffect(() => {
+  //   setSelectedMenu(2);
+  //   setSelectedSubMenu(3);
+  //   setSelectedHcpMenu(1);
+  //   setSelectedScopedMenu(4);
+  //   //   eslint-disable-next-line
+  // }, [selectedMenu, selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu]);
 
-  //   useEffect(() => {
-  //     if (respondData.status) {
-  //       setVerifyState("Doctor Verified!!");
-  //     }
-  //   }, [verifyState, respondData.status]);
-  const {
-    qualification,
-    license,
-    alumni_association,
-    reference,
-    doctorData,
-    yearbook,
-    status,
-    // eslint-disable-next-line
-  } = respondData;
-
-  const [verify, { data: verifyData }] = useMutation(verifyHCP);
-  const [button, setButtonValue] = useState(respondData.status); //button
-
-  useEffect(() => {
-    if (verifyData && verifyData.verifyHCP.status) {
-      setVerifyState("Doctor Verified!!");
-      setButtonValue(verifyData.verifyHCP.status);
-    }
-  }, [verify, status, button, verifyState, verifyData]);
-
-  const handleVerifyDoctor = async () => {
-    try {
-      await verify({
-        variables: {
-          id: hcpId,
-        },
-        refetchQueries: [
-          {
-            query: verification,
-            variables: {
-              id: hcpId,
-            },
-          },
-        ],
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  const classes = useStyles();
-  useEffect(() => {
-    setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(1);
-    setSelectedScopedMenu(4);
-    //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu]);
-
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error} />;
-  console.log(verifyState);
+  // if (loading) return <Loader />;
+  // if (error) return <NoData error={error} />;
+  // console.log(verifyState);
   // eslint-disable-next-line
   return (
     <div>hjsaed</div>

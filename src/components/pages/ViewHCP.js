@@ -115,7 +115,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const ViewHCP = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+  setDoctorView,
+  doctorView,
+}) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -245,6 +252,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     status,
     // eslint-disable-next-line
   } = respondData;
+  console.log(doctorData);
 
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
@@ -279,9 +287,9 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   useEffect(() => {
     setSelectedMenu(7);
     setSelectedSubMenu(8);
-
+    setDoctorView(0);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu, doctorView]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -407,8 +415,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
                   type={trasparentButton}
                   width="100%"
                   component={Link}
-                  to={`/verification/view/${viewId}/doctor`}
-                  onClick={() => setSelectedSubMenu(9)}
+                  to={`/verification/view/${viewId}/doctor/${doctorData && doctorData._id}`}
+                  onClick={() => {
+                    setSelectedSubMenu(7);
+                    setDoctorView(1);
+                  }}
                   // isSubmitting={submit}
                   // onClick={() => handleUpdateProVider(reference?.reference_code)}
                   // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
@@ -721,10 +732,12 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 };
 
 ViewHCP.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  doctorView: PropTypes.number,
+  setDoctorView: PropTypes.func,
 };
 
 export default ViewHCP;

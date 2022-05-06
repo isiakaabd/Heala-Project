@@ -93,11 +93,6 @@ const HcpProfile = (props) => {
   const { hcpId } = useParams();
 
   const [doctorProfile, setDoctorProfile] = useState("");
-  // const profile = useQuery(createAllery, {
-  //   variables: {
-  //     id: hcpId,
-  //   },
-  // });
 
   const { loading, error, data } = useQuery(doctor, {
     variables: {

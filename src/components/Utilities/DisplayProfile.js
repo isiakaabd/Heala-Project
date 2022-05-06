@@ -124,20 +124,22 @@ const DisplayProfile = ({
               />
             </Grid>
           ) : null}
-          <Grid item style={{ marginRight: "2rem" }}>
-            <CustomButton
-              endIcon={<HiChat />}
-              title="Message"
-              type={greenButton}
-              component={Link}
-              to={
-                type !== "doctor"
-                  ? `/patients/${patientId}/profile/chat`
-                  : `/hcps/${hcpId}/profile/chat`
-              }
-              onClick={() => setSelectedSubMenu(6)}
-            />
-          </Grid>
+          {type !== "" ? (
+            <Grid item style={{ marginRight: "2rem" }}>
+              <CustomButton
+                endIcon={<HiChat />}
+                title="Message"
+                type={greenButton}
+                component={Link}
+                to={
+                  type !== "doctor"
+                    ? `/patients/${patientId}/profile/chat`
+                    : `/hcps/${hcpId}/profile/chat`
+                }
+                onClick={() => setSelectedSubMenu(6)}
+              />
+            </Grid>
+          ) : null}
         </Grid>
       </Grid>
     </Grid>
