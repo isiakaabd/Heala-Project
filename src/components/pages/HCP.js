@@ -28,10 +28,7 @@ import { HCPHeader } from "components/Utilities/tableHeaders";
 import { useStyles } from "../../styles/docVerificationPageStyles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import {
-  docVerifyPageDefaultFilterValues,
-  docVerifyStatusFilterBy,
-} from "helpers/mockData";
+import { docVerifyPageDefaultFilterValues, docVerifyStatusFilterBy } from "helpers/mockData";
 import {
   changeTableLimit,
   fetchMoreData,
@@ -63,9 +60,7 @@ const HCP = ({ setSelectedSubMenu }) => {
   }, [fetchVerifications, pageInfo]);
 
   const [response, setResponse] = useState("");
-  const [filterValues, setFilterValues] = useState(
-    docVerifyPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(docVerifyPageDefaultFilterValues);
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -96,22 +91,10 @@ const HCP = ({ setSelectedSubMenu }) => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
           {response ? (
-            <Grid
-              item
-              width={300}
-              margin="0 auto"
-              justifyContent="left"
-              alignItems="center"
-            >
+            <Grid item width={300} margin="0 auto" justifyContent="left" alignItems="center">
               <Alert severity="success">
                 <Typography variant="h1">{response}</Typography>
               </Alert>
@@ -136,7 +119,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                     setFilterValues,
                     fetchVerifications,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={docVerifyStatusFilterBy}
@@ -162,8 +145,7 @@ const HCP = ({ setSelectedSubMenu }) => {
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, status, qualification, doctorData, _id } =
-                    row;
+                  const { createdAt, status, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -179,13 +161,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -213,12 +189,8 @@ const HCP = ({ setSelectedSubMenu }) => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${
-                                doctorData && doctorData.firstName
-                              }`}
-                              src={
-                                doctorData ? doctorData.picture : displayPhoto
-                              }
+                              alt={`image of ${doctorData && doctorData.firstName}`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
@@ -281,10 +253,7 @@ const HCP = ({ setSelectedSubMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={HCPHeader}
-            paginationLabel="Verification  per page"
-          />
+          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
         )}
       </Grid>
     </>

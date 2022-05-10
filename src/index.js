@@ -22,7 +22,7 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 const wsLink = new GraphQLWsLink(
   createClient({
     url: "https://api-staging.heala.io/",
-  })
+  }),
 );
 
 const httpLink = new HttpLink({
@@ -32,13 +32,10 @@ const httpLink = new HttpLink({
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
+    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
   },
   wsLink,
-  httpLink
+  httpLink,
 );
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -82,7 +79,7 @@ ReactDOM.render(
           cursor: "pointer",
         }}
       >
-        'Dismiss'
+        Dismiss
       </Typography>
     )}
   >
@@ -92,5 +89,5 @@ ReactDOM.render(
       </ApolloProvider>
     </Provider>
   </SnackbarProvider>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );

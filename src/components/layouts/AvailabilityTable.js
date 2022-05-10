@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableRow,
-  Grid,
-  Typography,
-  TableCell,
-  Avatar,
-  Chip,
-} from "@mui/material";
+import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -84,7 +77,8 @@ const AvailabilityTable = ({ data }) => {
             {avaliablity
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const { _id, doctor, dates, doctorData } = row;
+                const { _id, dates, doctorData } = row;
+                console.log(doctorData);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow hover tabIndex={-1} key={_id}>
@@ -109,7 +103,7 @@ const AvailabilityTable = ({ data }) => {
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
                             alt="Remy Sharp"
-                            src={displayPhoto}
+                            src={doctorData ? doctorData.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -134,9 +128,7 @@ const AvailabilityTable = ({ data }) => {
                               return (
                                 <Chip
                                   key={index}
-                                  label={`${hours(time.start)} - ${hours(
-                                    time.stop
-                                  )} `}
+                                  label={`${hours(time.start)} - ${hours(time.stop)} `}
                                   className={classes.badge}
                                   style={{
                                     background: theme.palette.common.lightGreen,
@@ -154,10 +146,7 @@ const AvailabilityTable = ({ data }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={availabilityHeadCells}
-          paginationLabel="Availability  per page"
-        />
+        <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
       )}
     </Grid>
   );

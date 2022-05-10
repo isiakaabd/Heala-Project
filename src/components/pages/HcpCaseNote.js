@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
-
 import { Modals, Loader, PreviousButton, CustomButton } from "components/Utilities";
 import { NoData } from "components/layouts";
 import { useQuery } from "@apollo/client";

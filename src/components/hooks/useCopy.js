@@ -1,3 +1,4 @@
+import React from "react";
 import t from "prop-types";
 import { useSnackbar } from "notistack";
 import { Typography } from "@mui/material";
@@ -24,7 +25,7 @@ export const useCopy = () => {
             horizontal: "right",
             vertical: "top",
           },
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -44,7 +45,7 @@ export const useCopy = () => {
             horizontal: "right",
             vertical: "top",
           },
-        }
+        },
       );
     }
   };
