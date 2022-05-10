@@ -12,14 +12,17 @@ import {
   InMemoryCache,
   concat,
 } from "@apollo/client";
-import { getAccessToken } from "./accessToken";
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
+import { Typography } from "@mui/material";
+import { SnackbarProvider } from "notistack";
+import { getAccessToken } from "./accessToken";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+
 const wsLink = new GraphQLWsLink(
   createClient({
     url: "https://api-staging.heala.io/",
-  }),
+  })
 );
 
 const httpLink = new HttpLink({
@@ -29,10 +32,13 @@ const httpLink = new HttpLink({
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
-    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
   },
   wsLink,
-  httpLink,
+  httpLink
 );
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -56,11 +62,35 @@ const client = new ApolloClient({
   resolvers: {},
 });
 
+// add action to all snackbars
+const notistackRef = React.createRef();
+const onClickDismiss = (key) => () => {
+  notistackRef.current.closeSnackbar(key);
+};
+
 ReactDOM.render(
-  <Provider store={store}>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </Provider>,
-  document.getElementById("root"),
+  <SnackbarProvider
+    ref={notistackRef}
+    maxSnack={3}
+    action={(key) => (
+      <Typography
+        onClick={onClickDismiss(key)}
+        style={{
+          fontSize: "1.2rem",
+          color: "ffffff",
+          fontWeight: "bold",
+          cursor: "pointer",
+        }}
+      >
+        'Dismiss'
+      </Typography>
+    )}
+  >
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Provider>
+  </SnackbarProvider>,
+  document.getElementById("root")
 );

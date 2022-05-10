@@ -16,6 +16,11 @@ export const statusFilterBy = [
   { key: "Active", value: "Active" },
 ];
 
+export const docVerifyStatusFilterBy = [
+  { key: "Verified", value: true },
+  { key: "Not Verified", value: false },
+];
+
 export const patientsFilterBy = {
   gender: "",
   status: "",
@@ -70,6 +75,10 @@ export const patientsPageDefaultFilterValues = {
   status: "",
   provider: "",
   plan: "",
+};
+
+export const docVerifyPageDefaultFilterValues = {
+  status: "",
 };
 
 export const emailPageDefaultFilterValues = {

@@ -1,13 +1,15 @@
+import t from "prop-types";
+
 import { removeEmptyStringValues } from "./func";
 
-export const onGenderValueChange = async (
+export const onFilterValueChange = async (
   e,
   name,
   filterValues,
   setFilterValues,
   fetchData,
   variables,
-  refetchData,
+  refetchData
 ) => {
   const value = e?.target?.value;
   const newFilterData = { ...filterValues, [name]: value };
@@ -23,7 +25,12 @@ export const onGenderValueChange = async (
   }
 };
 
-export const resetFilters = (setFilterValues, values, variables, refetchData) => {
+export const resetFilters = (
+  setFilterValues,
+  values,
+  variables,
+  refetchData
+) => {
   console.log(setFilterValues, values, variables, refetchData);
   setFilterValues(values);
   for (const key in variables) {
@@ -81,4 +88,20 @@ export const fetchMoreData = async (newPage, fetchData) => {
       page: newPage,
     },
   });
+};
+
+export const trucateString = (word, length) => {
+  try {
+    const wordArr = word.split("");
+    const newWord = `${wordArr.slice(0, length).join("")}...`;
+    return newWord;
+  } catch (error) {
+    console.error("Error from trucateString FN", error);
+    return word;
+  }
+};
+
+trucateString.PropTypes = {
+  word: t.string.isRequired,
+  length: t.number.isRequired,
 };

@@ -4,7 +4,7 @@ import { Grid, Typography } from "@mui/material";
 import DashboardCharts from "components/layouts/DashboardChart";
 import FormSelect from "components/Utilities/FormSelect";
 import AvailabilityTable from "components/layouts/AvailabilityTable";
-import { getUsertypess } from "components/graphQL/useQuery";
+import { getUsertypess, getProviders } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
 import NoData from "components/layouts/NoData";
@@ -12,11 +12,7 @@ import Loader from "components/Utilities/Loader";
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
-  const { data: da } = useQuery(getUsertypess, {
-    variables: {
-      userTypeId: "61ed2354e6091400135e3d94",
-    },
-  });
+  const { data: da } = useQuery(getProviders);
 
   const { data, error, loading, refetch } = useQuery(dashboard, {
     notifyOnNetworkStatusChange: true,
@@ -24,16 +20,18 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
 
   useEffect(() => {
     if (da) {
-      const datas = da.getUserTypeProviders.provider;
+      console.log(da.getProviders.provider, "see p");
+      const datas = da.getProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          }),
+          })
       );
     }
   }, [da]);
   const onChange = async (e) => {
+    console.log(e.target.value, "siii");
     setForm(e.target.value);
     await refetch({ providerId: e.target.value });
   };

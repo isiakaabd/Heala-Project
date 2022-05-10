@@ -72,15 +72,20 @@ const App = () => {
   const [selectedScopedMenu, setSelectedScopedMenu] = useState(0);
   const [doctorView, setDoctorView] = useState(0);
   const [chatMediaActive, setChatMediaActive] = useState(false);
-  console.log(doctorView);
+
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
           {!isAuthenticated && (
-            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
+            <Route
+              path={["/login", "/"]}
+              render={(props) => <Login {...props} />}
+            />
           )}
-          {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
+          {isAuthenticated && !chatMediaActive && state && (
+            <Loader color="success" />
+          )}
           {isAuthenticated && !chatMediaActive && !state && (
             <>
               <Header
@@ -98,7 +103,11 @@ const App = () => {
               <ScrollToView>
                 <main
                   style={{
-                    display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
+                    display: isAuthenticated
+                      ? "flex"
+                      : chatMediaActive
+                      ? "block"
+                      : "none",
                   }}
                 >
                   <SideMenu
@@ -111,7 +120,9 @@ const App = () => {
                     setSelectedAppointmentMenu={setSelectedAppointmentMenu}
                   />
 
-                  <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
+                  <section
+                    style={!chatMediaActive ? sectionStyles : { width: "100%" }}
+                  >
                     <Routes
                       setSelectedMenu={setSelectedMenu}
                       selectedMenu={selectedMenu}

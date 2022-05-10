@@ -2,8 +2,21 @@ import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
-import { FilterList, CustomButton, Loader, Modals, Search } from "components/Utilities";
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  Avatar,
+  TableRow,
+  Grid,
+} from "@mui/material";
+import {
+  FilterList,
+  CustomButton,
+  Loader,
+  Modals,
+  Search,
+} from "components/Utilities";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
@@ -14,7 +27,12 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
-import { getPartners, getSingleProvider, getUsertypess } from "components/graphQL/useQuery";
+import {
+  getPartners,
+  getSingleProvider,
+  getUsertypess,
+  getProviders,
+} from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { useStyles } from "styles/partnersPageStyles";
@@ -22,15 +40,12 @@ import { useStyles } from "styles/partnersPageStyles";
 const Partners = () => {
   const classes = useStyles();
   const [dropDown, setDropDown] = useState([]);
-  const { data: da, loading: load } = useQuery(getUsertypess, {
-    variables: {
-      userTypeId: "61ed2354e6091400135e3d94",
-    },
-  });
+  const { data: da, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
     if (da) {
-      const datas = da.getUserTypeProviders.provider;
+      console.log(da.getProviders.provider, "see p");
+      const datas = da.getProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
@@ -80,14 +95,21 @@ const Partners = () => {
     category: "",
   };
   const validationSchema2 = Yup.object({
-    category: Yup.string("select your Category").trim().required("Category is required"),
+    category: Yup.string("select your Category")
+      .trim()
+      .required("Category is required"),
   });
   const validationSchema1 = Yup.object({
     name: Yup.string("Enter your name").trim().required("name is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
-    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+    email: Yup.string()
+      .email("Enter a valid email")
+      .trim()
+      .required("Email is required"),
     provider: Yup.string("select a provider").trim(),
-    specialization: Yup.string("select your Specialization").required("Specialization is required"),
+    specialization: Yup.string("select your Specialization").required(
+      "Specialization is required"
+    ),
   });
   const [addPartners] = useMutation(addPartner);
 
@@ -184,7 +206,8 @@ const Partners = () => {
   const { selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
+  if (error || categoryData.error)
+    return <NoData error={error || categoryData.error} />;
   if (loading || load) return <Loader />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
@@ -198,7 +221,10 @@ const Partners = () => {
           />
         </Grid>
         <Grid item className={classes.actionBtnGrid}>
-          <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
+          <FilterList
+            title="Filter Patners"
+            onClick={() => setOpenFilterPartner(true)}
+          />
         </Grid>
         {/* <Grid item className={classes.actionBtnGrid}>
           <CustomButton
@@ -245,7 +271,13 @@ const Partners = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -302,7 +334,10 @@ const Partners = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={partnersHeadCells} paginationLabel="Doctors per page" />
+        <EmptyTable
+          headCells={partnersHeadCells}
+          paginationLabel="Doctors per page"
+        />
       )}
       <Modals
         isOpen={openFilterPartner}
@@ -344,7 +379,12 @@ const Partners = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+                <Grid
+                  item
+                  container
+                  spacing={2}
+                  style={{ marginBottom: "10rem" }}
+                >
                   <Grid item md>
                     <FormikControl
                       control="select"

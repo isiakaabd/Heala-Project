@@ -16,7 +16,11 @@ import chart1 from "assets/images/chart1.png";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { LineChart, CircularProgressBar, FormSelect } from "components/Utilities";
+import {
+  LineChart,
+  CircularProgressBar,
+  FormSelect,
+} from "components/Utilities";
 import "chartjs-plugin-style";
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +116,7 @@ const DashboardCharts = ({ data, refetch }) => {
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
-  console.log(data);
+
   useEffect(() => {
     const {
       // eslint-disable-next-line
@@ -165,11 +169,18 @@ const DashboardCharts = ({ data, refetch }) => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item>
-                <Grid container className={classes.overviewGrid} justifyContent="space-between">
+                <Grid
+                  container
+                  className={classes.overviewGrid}
+                  justifyContent="space-between"
+                >
                   <Grid item>
                     <Grid container>
                       <Grid item className={classes.groupIconGrid}>
-                        <GroupIcon color="success" className={classes.groupIcon} />
+                        <GroupIcon
+                          color="success"
+                          className={classes.groupIcon}
+                        />
                       </Grid>
                       <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                         <Typography variant="h1">{data && totalDoc}</Typography>
@@ -184,11 +195,16 @@ const DashboardCharts = ({ data, refetch }) => {
                       <Grid item>
                         <Typography
                           style={{
-                            color: doctorPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                            color:
+                              doctorPercentage < 1
+                                ? "#f2190a"
+                                : theme.palette.success.main,
                           }}
                           variant="body2"
                         >
-                          {doctorPercentage ? `${Math.abs(doctorPercentage.toFixed(0))} %` : 0}
+                          {doctorPercentage
+                            ? `${Math.abs(doctorPercentage.toFixed(0))} %`
+                            : 0}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -199,7 +215,10 @@ const DashboardCharts = ({ data, refetch }) => {
                         marginTop: "-8%",
                       }}
                     >
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      <Typography
+                        variant="body2"
+                        style={{ color: theme.palette.common.lightGrey }}
+                      >
                         Total Doctors
                       </Typography>
                     </Grid>
@@ -210,14 +229,25 @@ const DashboardCharts = ({ data, refetch }) => {
                 </Grid>
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
-              <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
+              <Grid
+                item
+                container
+                md={4}
+                direction="column"
+                className={classes.bottomChartGrid}
+              >
                 <LineChart
                   timeFrames={timeFrames}
                   selectedTimeframe={selectedTimeframe}
                   setSelectedTimeframe={setSelectedTimeframe}
                   doctorStats={doctorStats}
                 />
-                <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+                <Grid
+                  item
+                  container
+                  justifyContent="space-between"
+                  style={{ paddingTop: "2rem" }}
+                >
                   <Grid item>
                     <Grid container direction="column">
                       <Grid item>
@@ -228,7 +258,9 @@ const DashboardCharts = ({ data, refetch }) => {
                       <Grid item>
                         <Grid container alignItems="center">
                           <Grid item style={{ marginRight: "1rem" }}>
-                            <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                            <div
+                              className={`${classes.dottedCircle} ${classes.green}`}
+                            ></div>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -252,7 +284,9 @@ const DashboardCharts = ({ data, refetch }) => {
                       <Grid item>
                         <Grid container alignItems="center">
                           <Grid item style={{ marginRight: "1rem" }}>
-                            <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                            <div
+                              className={`${classes.dottedCircle} ${classes.red}`}
+                            ></div>
                           </Grid>
                           <Grid item>
                             <Typography
@@ -270,7 +304,11 @@ const DashboardCharts = ({ data, refetch }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
+          <Grid
+            item
+            className={classes.chartCard}
+            style={{ marginBottom: "3em" }}
+          >
             <Grid container direction="column">
               <>
                 <Grid item>
@@ -315,7 +353,10 @@ const DashboardCharts = ({ data, refetch }) => {
                     </Grid>
                     <Grid item>
                       <Grid container>
-                        <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
+                        <Grid
+                          item
+                          className={`${classes.iconWrapper} ${classes.greenIconBg}`}
+                        >
                           <TrendingDownIcon color="success" />
                         </Grid>
                         <Grid item style={{ marginLeft: "1rem" }}>
@@ -349,7 +390,10 @@ const DashboardCharts = ({ data, refetch }) => {
                     </Grid>
                     <Grid item>
                       <Grid container>
-                        <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
+                        <Grid
+                          item
+                          className={`${classes.iconWrapper} ${classes.redIconBg}`}
+                        >
                           <TrendingUpIcon color="error" />
                         </Grid>
                         <Grid item style={{ marginLeft: "1rem" }}>
@@ -400,7 +444,9 @@ const DashboardCharts = ({ data, refetch }) => {
                         item
                         className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}
                       >
-                        <NotificationsActiveIcon className={classes.notificationIcon} />
+                        <NotificationsActiveIcon
+                          className={classes.notificationIcon}
+                        />
                       </Grid>
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
@@ -427,7 +473,9 @@ const DashboardCharts = ({ data, refetch }) => {
                         item
                         className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}
                       >
-                        <NotificationsActiveIcon className={classes.notificationIcon} />
+                        <NotificationsActiveIcon
+                          className={classes.notificationIcon}
+                        />
                       </Grid>
                       <Grid item style={{ marginLeft: "1em" }}>
                         <Grid container direction="column">
@@ -461,13 +509,20 @@ const DashboardCharts = ({ data, refetch }) => {
           </Grid>
           <Divider color={theme.palette.common.lightGrey} />
           <Grid item>
-            <Grid container className={classes.overviewGrid} justifyContent="space-between">
+            <Grid
+              container
+              className={classes.overviewGrid}
+              justifyContent="space-between"
+            >
               <Grid item>
                 <Grid container>
                   <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                     <Grid container>
                       <Grid item className={classes.groupIconGrid}>
-                        <GroupIcon color="success" className={classes.groupIcon} />
+                        <GroupIcon
+                          color="success"
+                          className={classes.groupIcon}
+                        />
                       </Grid>
                       <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
                         <Typography variant="h1">{totalPatient}</Typography>
@@ -483,10 +538,15 @@ const DashboardCharts = ({ data, refetch }) => {
                         <Typography
                           variant="body2"
                           style={{
-                            color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                            color:
+                              patientPercentage < 1
+                                ? "#f2190a"
+                                : theme.palette.success.main,
                           }}
                         >
-                          {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
+                          {patientPercentage
+                            ? `${Math.abs(patientPercentage.toFixed(0))} %`
+                            : 0}
                         </Typography>
                       </Grid>
                       <Grid
@@ -522,7 +582,12 @@ const DashboardCharts = ({ data, refetch }) => {
               doctorStats={patients}
             />
 
-            <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+            <Grid
+              item
+              container
+              justifyContent="space-between"
+              style={{ paddingTop: "2rem" }}
+            >
               <Grid item>
                 <Grid container direction="column">
                   <Grid item>
@@ -533,7 +598,9 @@ const DashboardCharts = ({ data, refetch }) => {
                   <Grid item>
                     <Grid container alignItems="center">
                       <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                        <div
+                          className={`${classes.dottedCircle} ${classes.green}`}
+                        ></div>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -557,7 +624,9 @@ const DashboardCharts = ({ data, refetch }) => {
                   <Grid item>
                     <Grid container alignItems="center">
                       <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                        <div
+                          className={`${classes.dottedCircle} ${classes.red}`}
+                        ></div>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -578,7 +647,12 @@ const DashboardCharts = ({ data, refetch }) => {
             <Typography variant="h5">Subscribers</Typography>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container direction="column" className={classes.bottomChartGrid}>
+          <Grid
+            item
+            container
+            direction="column"
+            className={classes.bottomChartGrid}
+          >
             <LineChart
               timeFrames={timeFrames}
               selectedTimeframe={selectedTimeframe}
@@ -586,7 +660,12 @@ const DashboardCharts = ({ data, refetch }) => {
               doctorStats={subscribers}
               type="subscriber"
             />
-            <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
+            <Grid
+              item
+              container
+              justifyContent="space-between"
+              style={{ paddingTop: "2rem" }}
+            >
               <Grid item>
                 <Grid container direction="column">
                   <Grid item>
@@ -597,7 +676,9 @@ const DashboardCharts = ({ data, refetch }) => {
                   <Grid item>
                     <Grid container alignItems="center">
                       <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                        <div
+                          className={`${classes.dottedCircle} ${classes.green}`}
+                        ></div>
                       </Grid>
                       <Grid item>
                         <Typography
@@ -621,7 +702,9 @@ const DashboardCharts = ({ data, refetch }) => {
                   <Grid item>
                     <Grid container alignItems="center">
                       <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                        <div
+                          className={`${classes.dottedCircle} ${classes.red}`}
+                        ></div>
                       </Grid>
                       <Grid item>
                         <Typography

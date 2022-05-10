@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
+import {
+  TableRow,
+  Grid,
+  Typography,
+  TableCell,
+  Avatar,
+  Chip,
+} from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -77,7 +84,7 @@ const AvailabilityTable = ({ data }) => {
             {avaliablity
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const { _id, doctor, dates } = row;
+                const { _id, doctor, dates, doctorData } = row;
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow hover tabIndex={-1} key={_id}>
@@ -88,7 +95,7 @@ const AvailabilityTable = ({ data }) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {_id}
+                      {doctorData ? doctorData?.dociId : "no doctor"}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -106,7 +113,11 @@ const AvailabilityTable = ({ data }) => {
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span style={{ fontSize: "1.25rem" }}>{doctor}</span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {doctorData
+                            ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                            : "no name"}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
@@ -123,7 +134,9 @@ const AvailabilityTable = ({ data }) => {
                               return (
                                 <Chip
                                   key={index}
-                                  label={`${hours(time.start)} - ${hours(time.stop)} `}
+                                  label={`${hours(time.start)} - ${hours(
+                                    time.stop
+                                  )} `}
                                   className={classes.badge}
                                   style={{
                                     background: theme.palette.common.lightGreen,
@@ -141,7 +154,10 @@ const AvailabilityTable = ({ data }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
+        <EmptyTable
+          headCells={availabilityHeadCells}
+          paginationLabel="Availability  per page"
+        />
       )}
     </Grid>
   );

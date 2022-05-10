@@ -6,7 +6,15 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
+import {
+  TableRow,
+  Alert,
+  TableCell,
+  Checkbox,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -17,7 +25,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import { onGenderValueChange } from "helpers/filterHelperFunctions";
+import { onFilterValueChange } from "helpers/filterHelperFunctions";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { emailPageDefaultFilterValues, roleFilterBy } from "helpers/mockData";
 
@@ -95,10 +103,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Email = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [fetchEmails, { loading, error, data, refetch, variables }] = useLazyQuery(getEmailList);
+  const [fetchEmails, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getEmailList);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
@@ -128,7 +142,9 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
     //   eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
-  const [filterValues, setFilterValues] = React.useState(emailPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = React.useState(
+    emailPageDefaultFilterValues
+  );
 
   if (error) return <NoData error={error} />;
 
@@ -161,14 +177,14 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
           <Grid item className={classes.filterBtnGrid}>
             <Filter
               onHandleChange={(e) =>
-                onGenderValueChange(
+                onFilterValueChange(
                   e,
                   "role",
                   filterValues,
                   setFilterValues,
                   fetchEmails,
                   variables,
-                  refetch,
+                  refetch
                 )
               }
               options={roleFilterBy}
@@ -231,7 +247,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                            onClick={() =>
+                              handleSelectedRows(
+                                _id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -286,7 +308,10 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
+          <EmptyTable
+            headCells={emailHeader}
+            paginationLabel="Email  per page"
+          />
         )}
       </Grid>
     </>

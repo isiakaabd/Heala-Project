@@ -105,7 +105,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Messages = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -125,7 +130,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
 
-  const [fetchMessages, { loading, data, error, refetch }] = useLazyQuery(getMessage);
+  const [fetchMessages, { loading, data, error, refetch }] =
+    useLazyQuery(getMessage);
 
   useEffect(() => {
     fetchMessages({
@@ -168,7 +174,8 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             <Search
               value={searchMessage}
               onChange={(e) => onChange(e.target.value)}
-              placeholder="Type to search Messages by recipient e.g 61e5d7ebbe7d97001467f6fe"
+              placeholder="Type to search Messages by recipient e.g HEALA-7NE6ELLO
+              "
               height="5rem"
             />
           </Grid>
@@ -213,7 +220,13 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -236,7 +249,9 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
+                              alt={`Display Photo of  ${
+                                recipientData && recipientData.firstName
+                              }`}
                               src={
                                 recipientData && recipientData.image
                                   ? recipientData.image
@@ -291,7 +306,10 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
+          <EmptyTable
+            headCells={messagesHeadCells}
+            paginationLabel="Messages  per page"
+          />
         )}
       </Grid>
     );
