@@ -239,12 +239,13 @@ const HCP = ({ setSelectedSubMenu }) => {
                         <Button
                           variant="contained"
                           className={classes.button}
+                          style={{whiteSpace:'nowrap', padding:'5% 40%', marginLeft:'-10%'}}
                           component={Link}
                           endIcon={<ArrowForwardIosIcon />}
                           to={`/verification/view/${_id}`}
                           onClick={() => setSelectedSubMenu(8)}
                         >
-                          View Doctor
+                          View Verification{" "}
                         </Button>
                       </TableCell>
                     </TableRow>
