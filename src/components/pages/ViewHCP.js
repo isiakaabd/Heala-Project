@@ -39,20 +39,24 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "100%",
       gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
       rowGap: "2rem",
-      "@media (max-width:1450px)": {
-        // display: "none",
-        gridTemplateColumns: "repeat(3,minmax(15rem,auto))",
-      },
-      "@media (max-width:1200px)": {
-        // display: "none",
-        gap: "10px",
-        gridTemplateColumns: "repeat(2,minmax(auto,auto))",
-      },
-      // columnGap: "2rem",
       "& > *": {
         flex: 1,
         flexDirection: "column",
         gap: "10px",
+      },
+
+      "@media (max-width:1450px)": {
+        gridTemplateColumns: "repeat(3,minmax(15rem,auto))",
+        "&.MuiGrid-root .btn": {
+          gridColumnStart: 3,
+        },
+      },
+      "@media (max-width:1200px)": {
+        gap: "10px",
+        gridTemplateColumns: "repeat(2,minmax(auto,auto))",
+        "&.MuiGrid-root .btn": {
+          gridColumnStart: 2,
+        },
       },
     },
   },
@@ -66,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
   badge: {
     "&.MuiChip-root": {
       fontSize: "1.3rem !important",
-      //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
       borderRadius: "1.5rem",
@@ -362,7 +365,7 @@ const ViewHCP = ({
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.hospital}` : "No Hospital "}
+                  {doctorData && doctorData.hospital !== "" ? doctorData.hospital : "No Hospital"}
                 </Typography>
               </Grid>
             </Grid>
@@ -422,7 +425,13 @@ const ViewHCP = ({
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container alignItems="center" sx={{ justifyContent: "center !important" }}>
+            <Grid
+              item
+              container
+              className="btn"
+              alignItems="center"
+              sx={{ justifyContent: "center !important" }}
+            >
               <Grid item container>
                 <CustomButton
                   title="View Doctor Profile"
@@ -537,7 +546,7 @@ const ViewHCP = ({
               <Grid item>
                 <Typography variant="h4">Year Book</Typography>
               </Grid>
-              {yearbook && Object.keys(yearbook).length > 0 ? (
+              {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
                 <Grid item container gap={2}>
                   {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                     <Grid item className={classes.link}>

@@ -1,12 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
-import {
-  Modals,
-  CustomButton,
-  PreviousButton,
-  Loader,
-} from "components/Utilities";
+import { Modals, CustomButton, PreviousButton, Loader } from "components/Utilities";
 import Copy from "components/Copy";
 import { makeStyles } from "@mui/styles";
 import { useQuery } from "@apollo/client";
@@ -148,12 +143,7 @@ const CaseNotes = ({
           <Typography variant="h2">Consultation Details</Typography>
         </Grid>
 
-        <Grid
-          item
-          container
-          direction="column"
-          className={classes.parentGridWrapper}
-        >
+        <Grid item container direction="column" className={classes.parentGridWrapper}>
           <Grid item container className={classes.item}>
             <Grid item>
               <Grid container className={classes.subItem}>
@@ -168,12 +158,7 @@ const CaseNotes = ({
               </Grid>
             </Grid>
             <Grid item>
-              <Grid
-                item
-                container
-                flexDirection="column"
-                className={classes.subItem}
-              >
+              <Grid item container flexDirection="column" className={classes.subItem}>
                 <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
                     Referral:
@@ -281,9 +266,7 @@ const CaseNotes = ({
               </Grid>
               <Grid item>
                 <Grid container gap={1}>
-                  <Typography variant="body1">
-                    {severity ? severity : "No value"}
-                  </Typography>
+                  <Typography variant="body1">{severity ? severity : "No value"}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -294,10 +277,7 @@ const CaseNotes = ({
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body1">
-                  {" "}
-                  {firstNotice ? firstNotice : "No value"}
-                </Typography>
+                <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
               </Grid>
             </Grid>
             <Grid item container className={classes.subItem}>
@@ -346,11 +326,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Chip
-                    variant="contained"
-                    label={status}
-                    className={classes.infoBadge}
-                  />
+                  <Chip variant="contained" label={status} className={classes.infoBadge} />
                 </Grid>
               </Grid>
             </Grid>
@@ -362,9 +338,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {type ? type : "No Value"}
-                  </Typography>
+                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -477,9 +451,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {dateMoment(createdAt)}
-                  </Typography>
+                  <Typography variant="body1">{dateMoment(createdAt)}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -573,8 +545,7 @@ const CaseNotes = ({
 
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {duration(i.dosageFrequency.duration)}{" "}
-                        {daily(i.dosageFrequency.day)}
+                        {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
                       </Typography>
                     </Grid>
                     <Grid item>

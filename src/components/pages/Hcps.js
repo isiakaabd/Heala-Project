@@ -4,15 +4,7 @@ import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
 import { debounce } from "lodash";
 import Filter from "../Forms/Filters/index";
 import AddIcon from "@mui/icons-material/Add";
@@ -63,10 +55,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     active: theme.palette.primary.dark,
   };
 
-  const [
-    fetchDoctors,
-    { data, error, loading, refetch, fetchMore, variables },
-  ] = useLazyQuery(getDoctorsProfile);
+  const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
+    useLazyQuery(getDoctorsProfile);
 
   useEffect(() => {
     fetchDoctors();
@@ -144,9 +134,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     { key: "Female", value: "Female" },
   ];
 
-  const [filterValues, setFilterValues] = React.useState(
-    doctorsPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
 
   const initialValues = {
     firstName: "",
@@ -197,12 +185,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         </Grid>
       </Grid>
       {/* ========= FILTERS =========== */}
-      <Grid
-        container
-        gap={2}
-        flexWrap="wrap"
-        className={classes.searchFilterContainer}
-      >
+      <Grid container gap={2} flexWrap="wrap" className={classes.searchFilterContainer}>
         {/* FILTER BY GENDER */}
         <Grid item>
           <Filter
@@ -214,7 +197,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={genderType}
@@ -234,7 +217,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={specializationFilterBy}
@@ -255,7 +238,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={cadreFilterBy}
@@ -291,12 +274,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           <ClearFiltersBtn
             title="Clear filters"
             onHandleClick={() =>
-              resetFilters(
-                setFilterValues,
-                doctorsPageDefaultFilterValues,
-                variables,
-                fetchDoctors
-              )
+              resetFilters(setFilterValues, doctorsPageDefaultFilterValues, variables, fetchDoctors)
             }
           />
         </Grid>
@@ -342,9 +320,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -438,10 +414,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpsHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
       {/* ADD Doctor MODAL */}
       <Modals

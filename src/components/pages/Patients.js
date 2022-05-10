@@ -5,15 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
+import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
@@ -46,11 +38,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [profiles, setProfiles] = useState([]);
-  const [filterValues, setFilterValues] = useState(
-    patientsPageDefaultFilterValues
-  );
-  const [fetchPatient, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getPatients);
+  const [filterValues, setFilterValues] = useState(patientsPageDefaultFilterValues);
+  const [fetchPatient, { loading, error, data, refetch, variables }] = useLazyQuery(getPatients);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -72,7 +61,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
         first: pageInfo.limit,
       },
     });
-  }, [fetchPatient]);
+  }, [fetchPatient, pageInfo]);
 
   useEffect(() => {
     if (data) {
@@ -85,19 +74,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
-        <Grid
-          item
-          container
-          spacing={2}
-          className={classes.searchFilterContainer}
-        >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+        <Grid item container spacing={2} className={classes.searchFilterContainer}>
           {/*  ======= SEARCH INPUT(S) ==========*/}
           <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
             <Search
@@ -128,7 +106,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     setFilterValues,
                     fetchPatient,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={genderType}
@@ -176,7 +154,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     setFilterValues,
                     patientsPageDefaultFilterValues,
                     variables,
-                    fetchPatient
+                    fetchPatient,
                   );
                 }}
               />
@@ -223,9 +201,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -260,9 +236,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span
-                          style={{ fontSize: "1.25rem" }}
-                        >{`${firstName} ${lastName}`}</span>
+                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
@@ -311,10 +285,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={patientsHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
         )}
       </Grid>
     </>

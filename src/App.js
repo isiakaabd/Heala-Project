@@ -78,14 +78,9 @@ const App = () => {
       <Router>
         <div className="container">
           {!isAuthenticated && (
-            <Route
-              path={["/login", "/"]}
-              render={(props) => <Login {...props} />}
-            />
+            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
           )}
-          {isAuthenticated && !chatMediaActive && state && (
-            <Loader color="success" />
-          )}
+          {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
           {isAuthenticated && !chatMediaActive && !state && (
             <>
               <Header
@@ -103,11 +98,7 @@ const App = () => {
               <ScrollToView>
                 <main
                   style={{
-                    display: isAuthenticated
-                      ? "flex"
-                      : chatMediaActive
-                      ? "block"
-                      : "none",
+                    display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
                   }}
                 >
                   <SideMenu
@@ -120,9 +111,7 @@ const App = () => {
                     setSelectedAppointmentMenu={setSelectedAppointmentMenu}
                   />
 
-                  <section
-                    style={!chatMediaActive ? sectionStyles : { width: "100%" }}
-                  >
+                  <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
                     <Routes
                       setSelectedMenu={setSelectedMenu}
                       selectedMenu={selectedMenu}

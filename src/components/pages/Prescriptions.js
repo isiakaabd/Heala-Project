@@ -121,9 +121,9 @@ const Prescriptions = (props) => {
                   />
                 </Grid>
                 <Grid item>
-                  <Typography variant="h5">{doc.firstName?`${doc && doc.firstName} ${
-                    doc && doc.lastName
-                  }`:'no doctor'}</Typography>
+                  <Typography variant="h5">
+                    {doc.firstName ? `${doc && doc.firstName} ${doc && doc.lastName}` : "no doctor"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>

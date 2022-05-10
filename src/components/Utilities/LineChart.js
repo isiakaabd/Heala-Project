@@ -41,8 +41,10 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
       const z = doc.inactiveCount.map((i) => i.count);
       setInActives(z);
     }
-    const z = doc && doc.activeCount.map((i) => i.count);
-    setActives(z);
+    if (doc && doc.activeCount) {
+      const z = doc && doc.activeCount.map((i) => i.count);
+      setActives(z);
+    }
   }, [doctorStats, type]);
   const data = {
     labels: ["ONE DAY", "FIVE DAYS", "ONE MONTH", "THREE MONTHS", "ONE YEAR"],
