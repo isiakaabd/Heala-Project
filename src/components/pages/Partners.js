@@ -117,8 +117,11 @@ const Partners = () => {
     // console.log(values);
   };
   const onSubmit1 = async (values, onSubmitProps) => {
-    const { name, email, specialization, provider, image } = values;
+    let { name, email, specialization, provider, image } = values;
     console.log(provider);
+
+    name = name.trim()
+
     try {
       await addPartners({
         variables: {
@@ -136,8 +139,8 @@ const Partners = () => {
       onSubmitProps.resetForm();
       setOpenAddPartner(false);
     } catch (err) {
-      console.log(err.errors);
-      enqueueSnackbar(err.message, {
+      console.log(err,'err');
+      enqueueSnackbar('Email is already taken', {
         variant: "error",
       });
     }
