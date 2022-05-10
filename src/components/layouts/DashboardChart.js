@@ -112,7 +112,7 @@ const DashboardCharts = ({ data, refetch }) => {
   const [subscribers, setsubscribers] = useState([]);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
-  console.log(data);
+
   useEffect(() => {
     const {
       // eslint-disable-next-line
@@ -123,14 +123,16 @@ const DashboardCharts = ({ data, refetch }) => {
       totalEarnings,
       totalPayout,
     } = data?.getStats;
-    setPatients(patientStats);
-    setDoctorStats(doctorStats);
-    setAppointmentStats(appointmentStats);
-    setsubscribers(subscribers);
-    setTotalEarning(totalEarnings);
-    setTotalPayouts(totalPayout);
-    const value = financialPercent(totalEarnings, totalPayout);
-    setFinances(value);
+    if (data) {
+      setPatients(patientStats);
+      setDoctorStats(doctorStats);
+      setAppointmentStats(appointmentStats);
+      setsubscribers(subscribers);
+      setTotalEarning(totalEarnings);
+      setTotalPayouts(totalPayout);
+      const value = financialPercent(totalEarnings, totalPayout);
+      setFinances(value);
+    }
   }, [data]);
 
   const financialValue = financialPercent(totalEarning, totalPayouts);
@@ -147,12 +149,6 @@ const DashboardCharts = ({ data, refetch }) => {
     setForms(e.target.value);
     await refetch({ q: e.target.value });
   };
-
-  // useEffect(() => {
-  //   if (earningData) {
-
-  //   }
-  // }, [earningData, refetch]);
 
   return (
     <Grid container justifyContent="space-between" spacing={3}>
@@ -199,7 +195,10 @@ const DashboardCharts = ({ data, refetch }) => {
                         marginTop: "-8%",
                       }}
                     >
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      <Typography
+                        variant="body2"
+                        style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+                      >
                         Total Doctors
                       </Typography>
                     </Grid>
@@ -498,7 +497,7 @@ const DashboardCharts = ({ data, refetch }) => {
                       >
                         <Typography
                           variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
+                          style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
                         >
                           Total Patients
                         </Typography>

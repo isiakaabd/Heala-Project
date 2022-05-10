@@ -6,9 +6,10 @@ import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { verification, getCategory } from "components/graphQL/useQuery"; //
+import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
 import {
   rejectVerification,
   updateDoctorProvider,
@@ -31,6 +32,34 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "5rem",
     },
   },
+
+  cardContainer: {
+    "&.MuiGrid-root": {
+      display: "grid",
+      maxWidth: "100%",
+      gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
+      rowGap: "2rem",
+      "& > *": {
+        flex: 1,
+        flexDirection: "column",
+        gap: "10px",
+      },
+
+      "@media (max-width:1450px)": {
+        gridTemplateColumns: "repeat(3,minmax(15rem,auto))",
+        "&.MuiGrid-root .btn": {
+          gridColumnStart: 3,
+        },
+      },
+      "@media (max-width:1200px)": {
+        gap: "10px",
+        gridTemplateColumns: "repeat(2,minmax(auto,auto))",
+        "&.MuiGrid-root .btn": {
+          gridColumnStart: 2,
+        },
+      },
+    },
+  },
   gridsWrapper: {
     background: "#fff",
     borderRadius: "1rem",
@@ -41,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
   badge: {
     "&.MuiChip-root": {
       fontSize: "1.3rem !important",
-      //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
       borderRadius: "1.5rem",
@@ -52,7 +80,11 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "4rem 5rem",
-    height: "14.1rem",
+    "@media (max-width:1450px)": {
+      padding: "2rem",
+    },
+
+    minHeight: "14.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
   firstContainer: {
@@ -100,7 +132,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const ViewHCP = ({
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedMenu,
+  setSelectedSubMenu,
+  setDoctorView,
+  doctorView,
+}) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -155,8 +194,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
       },
       refetchQueries: [
         {
-          query: verification,
-          variables: { id: viewId },
+          query: getVerification,
         },
       ],
     });
@@ -193,14 +231,14 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   useEffect(() => {
     if (data) {
       setRespondData(data.getVerification);
-      setRef(data.getVerification.reference.reference_code);
+      setRef(data.getVerification.reference?.reference_code);
     }
   }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
     respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   const [process, setProcess] = useState(undefined);
-  console.log(verifyState, respondData.status);
+  console.log(respondData.status);
   useEffect(() => {
     if (ref) {
       get({
@@ -218,7 +256,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 
   useEffect(() => {
     if (respondData.status) {
-      setVerifyState("Doctor Verified!");
+      setVerifyState("Doctor Verified!!");
     }
   }, [verifyState, respondData.status]);
   const {
@@ -231,6 +269,8 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
     status,
     // eslint-disable-next-line
   } = respondData;
+  console.log(doctorData);
+
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
 
@@ -247,6 +287,14 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
         variables: {
           id: viewId,
         },
+        refetchQueries: [
+          {
+            query: verification,
+            variables: {
+              id: viewId,
+            },
+          },
+        ],
       });
     } catch (err) {
       console.error(err);
@@ -256,12 +304,13 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
   useEffect(() => {
     setSelectedMenu(7);
     setSelectedSubMenu(8);
-
+    setDoctorView(0);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu, selectedSubMenu, doctorView]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
+  console.log(verifyState);
   // eslint-disable-next-line
   return (
     <>
@@ -294,95 +343,110 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
           <Grid
             item
             container
-            direction="column"
-            alignItems="center"
-            gap={3}
-            sx={{ height: "100%" }}
+            // direction="column"
+            // alignItems="center"
+            // gap={3}
+            className={classes.cardContainer}
+            // sx={{ height: "100%", background: "red" }}
           >
-            <Grid
-              container
-              direction="row"
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 4, sm: 8, md: 12 }}
-            >
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Doctor Name</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Doctor Name</Typography>
               </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Hospital</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.hospital}` : "No Hospital "}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                </Typography>
               </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Gender:</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.gender} ` : "Not Specified"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Hospital</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData && doctorData.hospital !== "" ? doctorData.hospital : "No Hospital"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Gender:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.gender} ` : "Not Specified"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Medical ID:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Specialization:</Typography>
+              </Grid>
+              <Grid item width="100%">
+                <Typography variant="h4">
+                  {doctorData ? `${doctorData.specialization}` : "No specialization "}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">DOB:</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4">
+                  {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container>
+              <Grid item>
+                <Typography variant="body1">Status</Typography>
+              </Grid>
+              <Grid item>
+                <Typography
+                  variant="h4"
+                  style={{
+                    color: status === true ? theme.palette.common.green : theme.palette.common.red,
+                    width: "max-content",
+                  }}
+                >
+                  {status ? "Verified" : "Not Verified"}
+                </Typography>
               </Grid>
             </Grid>
             <Grid
+              item
               container
-              direction="row"
-              spacing={{ xs: 2, md: 3 }}
-              columns={{ xs: 4, sm: 8, md: 12 }}
+              className="btn"
+              alignItems="center"
+              sx={{ justifyContent: "center !important" }}
             >
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Medical ID:</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1}>
-                  <Grid item>
-                    <Typography variant="body1">Specialization:</Typography>
-                  </Grid>
-                  <Grid item width="100%">
-                    <Typography variant="h4">
-                      {doctorData ? `${doctorData.specialization}` : "No specialization "}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={4} md={4}>
-                <Grid container direction="column" gap={1} width="100%">
-                  <Grid item>
-                    <Typography variant="body1">DOB:</Typography>
-                  </Grid>
-                  <Grid item width="100%">
-                    <Typography variant="h4">
-                      {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              <Grid item container>
+                <CustomButton
+                  title="View Doctor Profile"
+                  type={trasparentButton}
+                  width="100%"
+                  component={Link}
+                  to={`/verification/view/${viewId}/doctor/${doctorData && doctorData._id}`}
+                  onClick={() => {
+                    setSelectedSubMenu(7);
+                    setDoctorView(1);
+                  }}
+                  // isSubmitting={submit}
+                  // onClick={() => handleUpdateProVider(reference?.reference_code)}
+                  // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -482,11 +546,11 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid item>
                 <Typography variant="h4">Year Book</Typography>
               </Grid>
-              {yearbook ? (
+              {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
                 <Grid item container gap={2}>
-                  {yearbook.graduation_year !== "Invalid date" ? (
+                  {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                     <Grid item className={classes.link}>
-                      {yearbook.graduation_year.slice(0, 4)}
+                      {yearbook?.graduation_year?.slice(0, 4)}
                     </Grid>
                   ) : (
                     <Grid item>
@@ -576,33 +640,34 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <Grid item>
                 <Typography variant="h4">Reference ID</Typography>
               </Grid>
-
-              {reference?.reference_code ? (
-                <>
-                  <Grid item className={classes.link}>
-                    {process ? process : reference?.reference_code}
+              <Grid item container justifyContent="space-between" paddingTop={1}>
+                {reference?.reference_code ? (
+                  <>
+                    <Grid item className={classes.link}>
+                      {process ? process : reference?.reference_code}
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid className={classes.link}>Not Provided</Grid>
+                )}
+                {reference?.reference_code && (
+                  <Grid item sx={{ alignSelf: "center" }}>
+                    <CustomButton
+                      title={
+                        doctorData?.providerId === reference?.reference_code ||
+                        updateState === "Updated"
+                          ? "Updated"
+                          : "Update Provider"
+                      }
+                      type={trasparentButton}
+                      width="100%"
+                      isSubmitting={submit}
+                      onClick={() => handleUpdateProVider(reference?.reference_code)}
+                      disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                    />
                   </Grid>
-                </>
-              ) : (
-                <Grid className={classes.link}>Not Provided</Grid>
-              )}
-              {reference?.reference_code && (
-                <Grid item sx={{ alignSelf: "center" }}>
-                  <CustomButton
-                    title={
-                      doctorData?.providerId === reference?.reference_code ||
-                      updateState === "Updated"
-                        ? "Updated"
-                        : "Update Provider"
-                    }
-                    type={trasparentButton}
-                    width="100%"
-                    isSubmitting={submit}
-                    onClick={() => handleUpdateProVider(reference?.reference_code)}
-                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
-                  />
-                </Grid>
-              )}
+                )}
+              </Grid>
             </Grid>
           </Grid>
 
@@ -628,7 +693,7 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
               <CustomButton
                 title={verifyState}
                 type={trasparentButton}
-                disabled={verifyState === "Doctor Verified!"}
+                disabled={verifyState === "Doctor Verified!!"}
                 onClick={handleVerifyDoctor}
                 width="100%"
               />
@@ -690,10 +755,12 @@ const ViewHCP = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSu
 };
 
 ViewHCP.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  doctorView: PropTypes.number,
+  setDoctorView: PropTypes.func,
 };
 
 export default ViewHCP;

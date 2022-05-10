@@ -13,12 +13,14 @@ import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import Modals from "components/Utilities/Modal";
+import { Modals } from "components/Utilities";
 import { SubscriptionModal } from "components/modals/SubscriptionModal";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { getPlans } from "components/graphQL/useQuery";
 import { DELETE_PLAN } from "components/graphQL/Mutation";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -153,7 +155,7 @@ const Subscription = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [alert, setAlert] = useState(null);
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [isOpen, setIsOpen] = useState(false);
   const [deletePlan] = useMutation(DELETE_PLAN);
   const [id, setId] = useState(null);
@@ -197,8 +199,6 @@ const Subscription = () => {
       console.error(error.message);
     }
   };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   const { selectedRows } = useSelector((state) => state.tables);
 
   const { setSelectedRows } = useActions();
@@ -211,9 +211,17 @@ const Subscription = () => {
     active: theme.palette.primary.dark,
   };
   const [plan, setPlan] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPlans, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchPlans, { loading, data, error, refetch }] = useLazyQuery(getPlans);
+
+  React.useEffect(() => {
+    fetchPlans({
+      variables: {
+        first: pageInfo?.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchPlans, pageInfo]);
+
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
@@ -236,9 +244,7 @@ const Subscription = () => {
     duration: "",
     provider: "",
   };
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -281,16 +287,11 @@ const Subscription = () => {
               headCells={subscriptionHeader}
               rows={plan}
               paginationLabel="subscription per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchPlans}
+              dataPageInfo={pageInfo}
             >
               {plan
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -339,21 +340,30 @@ const Subscription = () => {
                       <TableCell
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                        style={{
+                          color: theme.palette.common.black,
+                          maxWidth: "20rem",
+                        }}
                       >
                         {description}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                        style={{
+                          color: theme.palette.common.black,
+                          maxWidth: "20rem",
+                        }}
                       >
                         {providerData ? providerData.name : "No Value"}
                       </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black, maxWidth: "20rem" }}
+                        style={{
+                          color: theme.palette.common.black,
+                          maxWidth: "20rem",
+                        }}
                       >
                         {duration}
                       </TableCell>

@@ -27,11 +27,13 @@ import { isSelected } from "helpers/isSelected";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { PermissionModal, DeleteOrDisable } from "components/modals";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
 import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -207,13 +209,21 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
-  const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getPermissions, {
-    notifyOnNetworkStatusChange: true,
-  });
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchPermissions, { loading, data, error }] = useLazyQuery(getPermissions);
+
+  useEffect(() => {
+    fetchPermissions({
+      variables: {
+        first: pageInfo?.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchPermissions, pageInfo]);
+
+  // const fetchMoreFunc = (e, newPage) => {
+  //   refetch({ page: newPage });
+  // };
   const [deletPlan] = useMutation(DELETE_PERMISSION);
 
   useEffect(() => {
@@ -230,8 +240,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       setPageInfo(data.getPermissions.pageInfo);
     }
   }, [permission, data]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -272,16 +281,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
               headCells={PermissionHeader}
               rows={Permission}
               paginationLabel="permission per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchPermissions}
+              dataPageInfo={pageInfo}
             >
               {permission
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

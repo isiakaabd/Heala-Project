@@ -70,6 +70,7 @@ const App = () => {
   const [selectedAppointmentMenu, setSelectedAppointmentMenu] = useState(0);
   const [waitingListMenu, setWaitingListMenu] = useState(0);
   const [selectedScopedMenu, setSelectedScopedMenu] = useState(0);
+  const [doctorView, setDoctorView] = useState(0);
   const [chatMediaActive, setChatMediaActive] = useState(false);
 
   return (
@@ -90,6 +91,7 @@ const App = () => {
                 selectedHcpMenu={selectedHcpMenu}
                 selectedAppointmentMenu={selectedAppointmentMenu}
                 waitingListMenu={waitingListMenu}
+                doctorView={doctorView}
                 selectedScopedMenu={selectedScopedMenu}
               />
 
@@ -105,6 +107,7 @@ const App = () => {
                     setSelectedSubMenu={setSelectedSubMenu}
                     setSelectedManagementMenu={setSelectedManagementMenu}
                     setWaitingListMenu={setWaitingListMenu}
+                    setDoctorView={setDoctorView}
                     setSelectedAppointmentMenu={setSelectedAppointmentMenu}
                   />
 
@@ -122,6 +125,8 @@ const App = () => {
                       selectedAppointmentMenu={selectedAppointmentMenu}
                       setSelectedAppointmentMenu={setSelectedAppointmentMenu}
                       waitingListMenu={waitingListMenu}
+                      doctorView={doctorView}
+                      setDoctorView={setDoctorView}
                       setWaitingListMenu={setWaitingListMenu}
                       chatMediaActive={chatMediaActive}
                       setChatMediaActive={setChatMediaActive}

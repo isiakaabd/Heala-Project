@@ -1,22 +1,15 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
-import DashboardCharts from "components/layouts/DashboardChart";
-import FormSelect from "components/Utilities/FormSelect";
-import AvailabilityTable from "components/layouts/AvailabilityTable";
-import { getUsertypess } from "components/graphQL/useQuery";
+import { getProviders } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
-import NoData from "components/layouts/NoData";
-import Loader from "components/Utilities/Loader";
+import { NoData, AvailabilityTable, DashboardCharts, EmptyTable } from "components/layouts";
+import { Loader, FormSelect } from "components/Utilities";
 const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
-  const { data: da } = useQuery(getUsertypess, {
-    variables: {
-      userTypeId: "61ed2354e6091400135e3d94",
-    },
-  });
+  const { data: da } = useQuery(getProviders);
 
   const { data, error, loading, refetch } = useQuery(dashboard, {
     notifyOnNetworkStatusChange: true,
@@ -24,7 +17,7 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
 
   useEffect(() => {
     if (da) {
-      const datas = da.getUserTypeProviders.provider;
+      const datas = da.getProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
@@ -64,18 +57,23 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
           />
         </Grid>
       </Grid>
-
-      <Grid item>
-        <DashboardCharts data={data} refetch={refetch} />
-      </Grid>
-      <AvailabilityTable data={data?.getStats.availabilityCalendar} />
+      {data ? (
+        <>
+          <Grid item>
+            <DashboardCharts data={data} refetch={refetch} />
+          </Grid>
+          <AvailabilityTable data={data?.getStats.availabilityCalendar} />
+        </>
+      ) : (
+        <EmptyTable />
+      )}
     </Grid>
   );
 };
 
 Dashboard.propTypes = {
-  chatMediaActive: PropTypes.bool.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  chatMediaActive: PropTypes.bool,
+  setChatMediaActive: PropTypes.func,
 };
 
 export default Dashboard;

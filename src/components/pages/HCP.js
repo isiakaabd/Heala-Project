@@ -1,127 +1,73 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import * as Yup from "yup";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLazyQuery } from "@apollo/client";
+import { useTheme } from "@mui/material/styles";
 import {
   Grid,
   Alert,
   Button,
   Avatar,
+  Chip,
   Typography,
   TableRow,
   TableCell,
   Checkbox,
 } from "@mui/material";
-import { Loader, Search, Modals, FilterList } from "components/Utilities";
-import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import Filter from "components/modals/Filter";
-import { HCPHeader } from "components/Utilities/tableHeaders";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+import Filter from "components/Forms/Filters";
+import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Loader, Search } from "components/Utilities";
+import { dateMoment } from "components/Utilities/Time";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
-import { dateMoment } from "components/Utilities/Time";
-import { useQuery } from "@apollo/client";
 import { getVerification } from "components/graphQL/useQuery";
-
-const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
-  FormLabel: {
-    "&.MuiFormLabel-root": {
-      ...theme.typography.FormLabel,
-    },
-  },
-  button: {
-    "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "10rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-  btn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      width: "100%",
-    },
-  },
-  tableCell: {
-    "&.MuiTableCell-root": {
-      fontSize: "1.25rem",
-    },
-  },
-
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.6rem !important",
-      height: "3rem",
-      borderRadius: "1.3rem",
-    },
-  },
-}));
+import { HCPHeader } from "components/Utilities/tableHeaders";
+import { useStyles } from "../../styles/docVerificationPageStyles";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import { docVerifyPageDefaultFilterValues, docVerifyStatusFilterBy } from "helpers/mockData";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  onFilterValueChange,
+} from "helpers/filterHelperFunctions";
 
 const HCP = ({ setSelectedSubMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getVerification, {
-    notifyOnNetworkStatusChange: true,
+  const [pageInfo, setPageInfo] = useState({
+    page: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+    limit: 10,
+    totalDocs: 0,
   });
+
+  const [fetchVerifications, { loading, data, error, variables, refetch }] =
+    useLazyQuery(getVerification);
+
+  useEffect(() => {
+    fetchVerifications({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchVerifications, pageInfo]);
+
   const [response, setResponse] = useState("");
-  const validationSchema = Yup.object({
-    Name: Yup.string("Enter your Permission").trim().required("select an option"),
-    Specialization: Yup.string("Enter your Permission").trim().required("select an option"),
-    Date: Yup.string("Enter your Permission").required("select an option"),
-    Status: Yup.string("Enter your Permission").trim().required("select an option"),
-  });
+  const [filterValues, setFilterValues] = useState(docVerifyPageDefaultFilterValues);
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [searchMail, setSearchMail] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleDialogOpen = () => {
-    setIsOpen(true);
-  };
 
   const [respondData, setRespondData] = useState([]); //setRespondData
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   useEffect(() => {
     try {
       if (data) {
@@ -132,13 +78,6 @@ const HCP = ({ setSelectedSubMenu }) => {
       console.log(err);
     }
   }, [data]);
-  console.log(data);
-  const initialValues = {
-    Name: "",
-    Date: "",
-    Specialization: "",
-    Status: "",
-  };
 
   useEffect(() => {
     const z = setTimeout(() => {
@@ -147,19 +86,6 @@ const HCP = ({ setSelectedSubMenu }) => {
     return () => clearTimeout(z);
   }, [response]);
 
-  const handleDialogClose = () => {
-    setIsOpen(false);
-  };
-  const checkbox = [
-    { key: "select an option", value: "" },
-    { key: "create", value: "create" },
-    { key: "update", value: "update" },
-    { key: "read", value: "read" },
-    { key: "delete", value: "delete" },
-  ];
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
@@ -184,7 +110,23 @@ const HCP = ({ setSelectedSubMenu }) => {
               />
             </Grid>
             <Grid item>
-              <FilterList onClick={handleDialogOpen} title="Filter by" />
+              <Filter
+                onHandleChange={(e) =>
+                  onFilterValueChange(
+                    e,
+                    "status",
+                    filterValues,
+                    setFilterValues,
+                    fetchVerifications,
+                    variables,
+                    refetch,
+                  )
+                }
+                options={docVerifyStatusFilterBy}
+                name="status"
+                placeholder="By status"
+                value={filterValues.status}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -194,21 +136,16 @@ const HCP = ({ setSelectedSubMenu }) => {
               headCells={HCPHeader}
               rows={respondData}
               paginationLabel="verification per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchVerifications}
+              dataPageInfo={pageInfo}
             >
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, qualification, doctorData, _id } = row;
+                  const { createdAt, status, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -279,6 +216,22 @@ const HCP = ({ setSelectedSubMenu }) => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
+                        <Chip
+                          label={status ? "Verified" : "Not Verified"}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === true
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === true
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
                         {qualification && dateMoment(qualification.year)}
                       </TableCell>
 
@@ -287,8 +240,8 @@ const HCP = ({ setSelectedSubMenu }) => {
                           variant="contained"
                           className={classes.button}
                           component={Link}
-                          to={`/verification/view/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
+                          to={`/verification/view/${_id}`}
                           onClick={() => setSelectedSubMenu(8)}
                         >
                           View Doctor
@@ -303,15 +256,6 @@ const HCP = ({ setSelectedSubMenu }) => {
           <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
         )}
       </Grid>
-      {/* Modal */}
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={2} handleClose={handleDialogClose}>
-        <Filter
-          options={checkbox}
-          type="hcp"
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-        />
-      </Modals>
     </>
   );
 };

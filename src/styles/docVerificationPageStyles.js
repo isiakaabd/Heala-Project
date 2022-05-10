@@ -7,14 +7,14 @@ export const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
-
-  searchFilterContainer: {
-    "&.MuiGrid-root": {},
-  },
-
   filterBtnGrid: {
     "&.MuiGrid-root": {
       marginRight: "3rem",
+    },
+  },
+  FormLabel: {
+    "&.MuiFormLabel-root": {
+      ...theme.typography.FormLabel,
     },
   },
   button: {
@@ -25,10 +25,8 @@ export const useStyles = makeStyles((theme) => ({
       borderRadius: "2rem",
       display: "flex",
       alignItems: "center",
-      maxWidth: "12rem",
-      fontSize: "1rem",
-      whiteSpace: "nowrap",
-      padding: "0.5rem 1rem",
+      padding: "1rem",
+      maxWidth: "10rem",
 
       "&:hover": {
         background: "#fcfcfc",
@@ -39,45 +37,32 @@ export const useStyles = makeStyles((theme) => ({
       },
 
       "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: ".85rem",
+        fontSize: "1.2rem",
       },
 
       "& .MuiButton-endIcon": {
-        marginLeft: ".2rem",
+        marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
     },
   },
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem !important",
-      height: "2.7rem",
-      borderRadius: "1.3rem",
-    },
-  },
-
-  searchFilterBtn: {
+  btn: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
-      background: theme.palette.common.black,
       width: "100%",
     },
   },
-  uploadBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: "#f2f2f2",
-      boxShadow: "none",
-      color: theme.palette.common.black,
+  tableCell: {
+    "&.MuiTableCell-root": {
+      fontSize: "1.25rem",
+    },
+  },
 
-      "&:hover": {
-        background: "#f2f3f3",
-        boxShadow: "none",
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
+  badge: {
+    "&.MuiChip-root": {
+      height: "3rem",
+      borderRadius: "1.3rem",
+      fontSize: "12px",
     },
   },
 }));

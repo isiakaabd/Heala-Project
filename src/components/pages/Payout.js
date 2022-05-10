@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
 import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
-import Loader from "components/Utilities/Loader";
+import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
-import { getEarningStats } from "components/graphQL/useQuery";
+import { getPayoutData } from "components/graphQL/useQuery";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -18,8 +18,12 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PreviousButton from "components/Utilities/PreviousButton";
 import Filter from "components/Forms/Filters";
-import { payoutFilterBy, payoutPageDefaultFilterValues } from "helpers/mockData";
-import { onGenderValueChange } from "helpers/filterHelperFunctions";
+import { defaultPageInfo, payoutFilterBy, payoutPageDefaultFilterValues } from "helpers/mockData";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  onFilterValueChange,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -89,32 +93,32 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+
   useEffect(() => {
     setSelectedMenu(8);
     setSelectedSubMenu(9);
 
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
-  const [fetchEarnings, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getEarningStats);
+  const [fetchPayout, { loading, error, data, refetch, variables }] = useLazyQuery(getPayoutData);
 
   React.useEffect(() => {
-    fetchEarnings();
-  }, [fetchEarnings]);
+    fetchPayout({
+      variables: {
+        first: pageInfo?.limit,
+      },
+    });
+  }, [fetchPayout, pageInfo]);
 
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
   const [payout, setPayout] = useState([]);
-  const [pageInfo, setPageInfo] = useState([]);
+
   useEffect(() => {
     if (data) {
       setPageInfo(data.getEarningStats.payoutData.PageInfo);
       setPayout(data.getEarningStats.payoutData.data);
     }
   }, [data]);
-  const [rowsPerPage, setRowsPerPage] = useState(0);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
 
   const [filterValues, setFilterValues] = React.useState(payoutPageDefaultFilterValues);
 
@@ -143,12 +147,12 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
               </Typography>
               <Filter
                 onHandleChange={(e) =>
-                  onGenderValueChange(
+                  onFilterValueChange(
                     e,
                     "status",
                     filterValues,
                     setFilterValues,
-                    fetchEarnings,
+                    fetchPayout,
                     variables,
                     refetch,
                   )
@@ -169,16 +173,11 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
               headCells={payoutHeader}
               rows={payout}
               paginationLabel="payout per page"
-              page={+page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchPayout}
+              dataPageInfo={pageInfo}
             >
               {payout
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

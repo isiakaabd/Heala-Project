@@ -13,11 +13,11 @@ import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PreviousButton from "components/Utilities/PreviousButton";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Loader, FilterList } from "components/Utilities";
+import { Loader, FilterList, PreviousButton } from "components/Utilities";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -73,7 +73,7 @@ const Consultations = (props) => {
     setSelectedPatientMenu,
     setSelectedScopedMenu,
   } = props;
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState({});
   const classes = useStyles();
   const theme = useTheme();
   const { patientConsultation } = useActions();
@@ -82,12 +82,16 @@ const Consultations = (props) => {
   const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const { loading, data, error, refetch } = useQuery(getConsultations, {
-    variables: {
-      id: patientId,
-      orderBy: "-createdAt",
-    },
-  });
+  const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
+
+  useEffect(() => {
+    fetchConsultations({
+      variables: {
+        id: patientId,
+        orderBy: "-createdAt",
+      },
+    });
+  }, [fetchConsultations, patientId]);
 
   useEffect(() => {
     if (data) {
@@ -97,9 +101,6 @@ const Consultations = (props) => {
     }
   }, [data, consultations, patientConsultation]);
 
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
   useEffect(() => {
     setSelectedMenu(1);
     setSelectedSubMenu(2);
@@ -107,8 +108,7 @@ const Consultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
@@ -131,16 +131,11 @@ const Consultations = (props) => {
             headCells={consultationsHeadCells4}
             rows={consultations}
             paginationLabel="Patients per page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
-            handleChangePage={fetchMoreFunc}
+            handleChangePage={fetchMoreData}
             hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchConsultations}
+            dataPageInfo={pageInfo}
           >
             {consultations
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -208,21 +203,30 @@ const Consultations = (props) => {
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {row.contactMedium ? row.contactMedium : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {row.type ? row.type : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {row.status ? row.status : "No Value"}
                     </TableCell>

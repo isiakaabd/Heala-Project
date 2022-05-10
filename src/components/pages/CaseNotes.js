@@ -2,14 +2,15 @@ import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
 import { Modals, CustomButton, PreviousButton, Loader } from "components/Utilities";
-import displayPhoto from "assets/images/avatar.svg";
+import Copy from "components/Copy";
 import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getConsult } from "components/graphQL/useQuery";
-import { dateMoment, duration, daily } from "components/Utilities/Time";
 import { NoData } from "components/layouts";
+import { useParams } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import { getConsult } from "components/graphQL/useQuery";
+import { trucateString } from "helpers/filterHelperFunctions";
+import { dateMoment, duration, daily } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -35,17 +36,31 @@ const useStyles = makeStyles((theme) => ({
     "&.MuiTypography-root": {
       color: theme.palette.common.grey,
       // marginRight: "2rem",
+      whitespace: "wrap",
     },
   },
-}));
-
-const caseNotes = [
-  {
-    id: 0,
-    photo: displayPhoto,
-    caregiver: "Raphael Igbenedion",
+  item: {
+    padding: "2rem 3rem",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    flexWrap: "nowrap",
+    // justifyContent: "space-between",
+    "&.MuiGrid-root > *": {
+      flex: 1,
+    },
   },
-];
+  subItem: {
+    "&.MuiGrid-container": {
+      flexDirection: "column",
+      wordBreak: "break-word",
+    },
+    // "&:nth-child(1) > p": {
+    //   color: "green",
+    //   marginTop: "1rem",
+    // },
+  },
+}));
 
 const CaseNotes = ({
   selectedMenu,
@@ -106,10 +121,11 @@ const CaseNotes = ({
     discomfortLevel,
     status,
     description,
+    updatedAt,
+    doctorData,
     doctorNote,
     severity,
     firstNotice,
-    doctor,
     contactMedium,
     symptoms,
   } = caseNoteState;
@@ -126,279 +142,264 @@ const CaseNotes = ({
         <Grid item>
           <Typography variant="h2">Consultation Details</Typography>
         </Grid>
-        {caseNotes.map((casenote) => (
-          <Grid
-            item
-            container
-            direction="column"
-            key={casenote.id}
-            className={classes.parentGridWrapper}
-          >
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Consultation Date:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h5">{dateMoment(createdAt)}</Typography>
-                  </Grid>
+
+        <Grid item container direction="column" className={classes.parentGridWrapper}>
+          <Grid item container className={classes.item}>
+            <Grid item>
+              <Grid container className={classes.subItem}>
+                <Grid item container marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Consultation Date:
+                  </Typography>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Referral:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{referralId ? referralId : "No Value"}</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Consultation ID:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{referralId ? referralId : "No Value"}</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Status:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Chip variant="contained" label={status} className={classes.infoBadge} />
-                  </Grid>
+                <Grid item container>
+                  <Typography variant="h5">{dateMoment(createdAt)}</Typography>
                 </Grid>
               </Grid>
             </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Doctor:
-                    </Typography>
-                  </Grid>
-                  {doctor ? (
+            <Grid item>
+              <Grid item container flexDirection="column" className={classes.subItem}>
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Referral:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  {referralId ? (
                     <>
-                      <Grid item>
-                        <Avatar src={displayPhoto} alt="Display photo of the sender" />
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="h5">{doctor}</Typography>
-                      </Grid>
+                      <Typography variant="body1" sx={{ marginRight: "1rem" }}>
+                        {trucateString(referralId, 10)}
+                      </Typography>
+                      <Copy text={referralId} name="Consultation ID" />
                     </>
                   ) : (
-                    <Typography variant="body1" className={classes.title}>
-                      No Doctor
-                    </Typography>
+                    "No value"
                   )}
                 </Grid>
               </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Contact:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">
-                      {contactMedium ? contactMedium : "No Value"}
-                    </Typography>
-                  </Grid>
+            </Grid>
+            <Grid item>
+              <Grid item container flexDirection="column">
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Consultation ID:
+                  </Typography>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Owner:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">
-                      {consultationOwner ? consultationOwner : "No Value"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Type:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{type ? type : "No Value"}</Typography>
-                  </Grid>
+                <Grid item>
+                  {referralId ? (
+                    <>
+                      <Typography variant="body1" sx={{ marginRight: "1rem" }}>
+                        {trucateString(referralId, 10)}
+                      </Typography>
+                      <Copy text={referralId} name="Consultation ID" />
+                    </>
+                  ) : (
+                    "No value"
+                  )}
                 </Grid>
               </Grid>
             </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
-
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item container gap={2}>
-                <Grid item>
+          </Grid>
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid item container className={classes.item}>
+            <Grid item>
+              <Grid container className={classes.subItem}>
+                <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
-                    Symptoms:
+                    Doctor:
                   </Typography>
                 </Grid>
-                <Grid item>
-                  <Grid container gap={1}>
-                    {symptoms ? (
-                      symptoms.map((symptom, index) => {
-                        return (
-                          <Typography key={index} variant="body1">
-                            {symptom.name}
-                          </Typography>
-                        );
-                      })
-                    ) : (
-                      <Typography variant="body1">No Value</Typography>
-                    )}
-                  </Grid>
-                </Grid>
+                {doctorData && Object.keys(doctorData).length > 0 ? (
+                  <>
+                    <Grid item>
+                      <Avatar
+                        src={doctorData.image}
+                        alt={`Display photo of the ${doctorData.firstName}`}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
+                    </Grid>
+                  </>
+                ) : (
+                  <Typography variant="body1">No Doctor</Typography>
+                )}
               </Grid>
-              <Grid item container gap={2}>
-                <Grid item>
+            </Grid>
+            <Grid item>
+              <Grid item className={classes.subItem}>
+                <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
-                    Severity:
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container gap={1}>
-                    <Typography variant="body1" className={classes.title}>
-                      {severity ? severity : "No value"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item container gap={2}>
-                <Grid item>
-                  <Typography variant="body1" className={classes.title}>
-                    First Notice:
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
-                </Grid>
-              </Grid>
-              <Grid item container gap={2}>
-                <Grid item>
-                  <Typography variant="body1" className={classes.title}>
-                    Discomfort:
+                    Contact:
                   </Typography>
                 </Grid>
                 <Grid item>
                   <Typography variant="body1">
-                    {discomfortLevel ? discomfortLevel : "No Value"}
+                    {contactMedium ? contactMedium : "No Value"}
                   </Typography>
                 </Grid>
               </Grid>
             </Grid>
-
-            <Divider color={theme.palette.common.lighterGrey} />
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item container direction="column" gap={3}>
-                <Grid item>
+            <Grid item>
+              <Grid item className={classes.subItem}>
+                <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
-                    Description:
+                    Owner:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-                    {description ? description : "No Value"}
+                  <Typography variant="body1">
+                    {consultationOwner ? consultationOwner : "No Value"}
                   </Typography>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item container direction="column" gap={2}>
-                <Grid item>
-                  <Typography variant="body1" className={classes.title}>
-                    Doctors Note:
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-                    {doctorNote ? doctorNote : "No Value"}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
-            <Grid
-              item
-              container
-              style={{ padding: "4rem 3rem" }}
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Grid item container sx={{ width: "20%" }}>
-                <CustomButton
-                  title="View Prescription"
-                  width="100%"
-                  type={buttonType}
-                  onClick={handleDialogOpen}
-                />
               </Grid>
             </Grid>
           </Grid>
-        ))}
+          <Divider color={theme.palette.common.lighterGrey} />
+
+          <Grid item container className={classes.item}>
+            <Grid item container className={classes.subItem}>
+              <Grid item marginBottom="2rem">
+                <Typography variant="body1" className={classes.title}>
+                  Severity:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container gap={1}>
+                  <Typography variant="body1">{severity ? severity : "No value"}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item container className={classes.subItem}>
+              <Grid item marginBottom="2rem">
+                <Typography variant="body1" className={classes.title}>
+                  First Notice:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
+              </Grid>
+            </Grid>
+            <Grid item container className={classes.subItem}>
+              <Grid item marginBottom="2rem">
+                <Typography variant="body1" className={classes.title}>
+                  Discomfort:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">
+                  {discomfortLevel ? discomfortLevel : "No Value"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid item container className={classes.item}>
+            <Grid item container className={classes.subItem}>
+              <Grid item marginBottom="2rem">
+                <Typography variant="body1" className={classes.title}>
+                  Symptoms:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container gap={1}>
+                  {symptoms ? (
+                    symptoms.map((symptom, index) => {
+                      return (
+                        <Typography key={index} variant="body1">
+                          {`${symptom.name},`}
+                        </Typography>
+                      );
+                    })
+                  ) : (
+                    <Typography variant="body1">No Value</Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid item container flexDirection="column">
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Status:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Chip variant="contained" label={status} className={classes.infoBadge} />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid item container className={classes.subItem}>
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Type:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid item container className={classes.item}>
+            <Grid item container className={classes.subItem}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Description:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  {description ? description : "No Value"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container direction="column" gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Doctors Note:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  {doctorNote ? doctorNote : "No Value"}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container direction="column" gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Updated At:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  {dateMoment(updatedAt)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider color={theme.palette.common.lighterGrey} />
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Grid item container sx={{ width: "20%" }}>
+              <CustomButton
+                title="View Prescription"
+                width="100%"
+                type={buttonType}
+                onClick={handleDialogOpen}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
 
       <Modals
@@ -408,185 +409,177 @@ const CaseNotes = ({
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
-        {caseNotes.map((casenote) => (
+        <Grid item container width="100%" direction="row">
           <Grid
             item
             container
+            style={{ padding: "2rem 0" }}
+            alignItems="center"
+            justifyContent="space-between"
             width="100%"
-            direction="row"
-            key={casenote.id}
-            // className={classes.parentGridWrapper}
+            sx={{ flexWrap: "nowrap" }}
           >
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Doctor:
-                    </Typography>
-                  </Grid>
-                  {doctor ? (
-                    <>
-                      <Grid item>
-                        <Avatar src={displayPhoto} alt="Display photo of the sender" />
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="h5">{doctor}</Typography>
-                      </Grid>
-                    </>
-                  ) : (
+            <Grid item>
+              <Grid item container className={classes.subItem}>
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Doctor:
+                  </Typography>
+                </Grid>
+                {doctorData && Object.keys(doctorData).length > 0 ? (
+                  <>
                     <Grid item>
-                      <Typography variant="h5">No Doctor</Typography>
+                      <Avatar
+                        src={doctorData.image}
+                        alt={`Display photo of the ${doctorData.firstName}`}
+                      />
                     </Grid>
-                  )}
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Prescription Date:
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1">{dateMoment(createdAt)}</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid item container gap={2} alignItems="center">
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Symptoms
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container gap={1}>
-                      {symptoms ? (
-                        symptoms.map((i) => {
-                          return (
-                            <Typography key={i.name} variant="body1">
-                              {i.name}
-                            </Typography>
-                          );
-                        })
-                      ) : (
-                        <Typography variant="body1">No Value</Typography>
-                      )}
+                    <Grid item>
+                      <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>
-                  </Grid>
+                  </>
+                ) : (
+                  <Typography variant="body1">No Doctor</Typography>
+                )}
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid item container className={classes.subItem}>
+                <Grid item marginBottom="2rem">
+                  <Typography variant="body1" className={classes.title}>
+                    Prescription Date:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1">{dateMoment(createdAt)}</Typography>
                 </Grid>
               </Grid>
             </Grid>
-            <Divider color={theme.palette.common.lighterGrey} />
-            {prescription && (
-              <Fragment>
-                <Grid
-                  item
-                  container
-                  style={{ padding: "2rem 3rem" }}
-                  alignItems="center"
-                  justifyContent="space-between"
-                  sx={{ flexWrap: "nowrap" }}
-                >
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Drug
-                    </Typography>
-                  </Grid>
-
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Dosage
-                    </Typography>
-                  </Grid>
-
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Frequency
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body1" className={classes.title}>
-                      Mode
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Divider color={theme.palette.common.lighterGrey} />
-              </Fragment>
-            )}
-
-            {prescription &&
-              prescription.map((i, index) => {
-                return (
-                  <>
-                    <Grid
-                      key={index}
-                      item
-                      container
-                      style={{ padding: "2rem 3rem" }}
-                      alignItems="center"
-                      justifyContent="space-between"
-                      sx={{ flexWrap: "nowrap", textAlign: "left" }}
-                    >
-                      <Grid item>
-                        <Typography variant="body1" className={classes.title}>
-                          {i.drugName}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item>
-                        <Typography variant="body1" className={classes.title}>
-                          {`${i.dosageQuantity} ${i.dosage}`}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item>
-                        <Typography variant="body1" className={classes.title}>
-                          {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1" className={classes.title}>
-                          {i.mode}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Divider color={theme.palette.common.lighterGrey} />
-                  </>
-                );
-              })}
-            <Grid
-              item
-              container
-              style={{ padding: "2rem 3rem" }}
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ flexWrap: "nowrap" }}
-            >
-              <Grid item container direction="column" gap={2}>
-                <Grid item>
+            <Grid item>
+              <Grid item container className={classes.subItem}>
+                <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
-                    Doctors Note:
+                    Symptoms
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-                    {doctorNote ? doctorNote : "No Value"}
-                  </Typography>
+                  <Grid container gap={1}>
+                    {symptoms ? (
+                      symptoms.map((i) => {
+                        return (
+                          <Typography key={i.name} variant="body1">
+                            {i.name}
+                          </Typography>
+                        );
+                      })
+                    ) : (
+                      <Typography variant="body1">No Value</Typography>
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-        ))}
+          <Divider color={theme.palette.common.lighterGrey} />
+          {prescription && (
+            <Fragment>
+              <Grid
+                item
+                container
+                style={{ padding: "2rem 0rem" }}
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ flexWrap: "nowrap" }}
+              >
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Drug
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Dosage
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Frequency
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" className={classes.title}>
+                    Mode
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Divider color={theme.palette.common.lighterGrey} />
+            </Fragment>
+          )}
+
+          {prescription &&
+            prescription.map((i, index) => {
+              return (
+                <>
+                  <Grid
+                    key={index}
+                    item
+                    container
+                    style={{ color: "#4f4f4f" }}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{ flexWrap: "nowrap", textAlign: "left" }}
+                  >
+                    <Grid item>
+                      <Typography variant="body1" className={classes.title}>
+                        {i.drugName}
+                      </Typography>
+                    </Grid>
+
+                    <Grid item>
+                      <Typography variant="body1" className={classes.title}>
+                        {`${i.dosageQuantity} ${i.dosage}`}
+                      </Typography>
+                    </Grid>
+
+                    <Grid item>
+                      <Typography variant="body1" className={classes.title}>
+                        {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body1" className={classes.title}>
+                        {i.mode}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Divider color={theme.palette.common.lighterGrey} />
+                </>
+              );
+            })}
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 0rem" }}
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ flexWrap: "nowrap" }}
+          >
+            <Grid item container direction="column" gap={2}>
+              <Grid item>
+                <Typography variant="body1" className={classes.title}>
+                  Doctors Note:
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" style={{ lineHeight: 1.85 }}>
+                  {doctorNote ? doctorNote : "No Value"}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Modals>
     </>
   );

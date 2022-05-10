@@ -11,3 +11,4 @@ export { default as Notifications } from "./Notifications";
 export { default as SideMenu } from "./SideMenu";
 export { default as WaitingListTable } from "./WaitingListTable";
 export { default as EmptyTable } from "./EmptyTable";
+export { default as DashboardCharts } from "./DashboardChart";

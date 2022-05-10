@@ -7,7 +7,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
-
 import { Link } from "react-router-dom";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -18,7 +17,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import { onGenderValueChange } from "helpers/filterHelperFunctions";
+import { onFilterValueChange } from "helpers/filterHelperFunctions";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { emailPageDefaultFilterValues, roleFilterBy } from "helpers/mockData";
 
@@ -111,7 +110,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
       setEmails(data.getEmailList.data);
     }
   }, [data]);
-  const { selectedRows, page } = useSelector((state) => state.tables);
+  const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [response] = useState("");
   const [searchMail, setSearchMail] = useState("");
@@ -162,7 +161,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
           <Grid item className={classes.filterBtnGrid}>
             <Filter
               onHandleChange={(e) =>
-                onGenderValueChange(
+                onFilterValueChange(
                   e,
                   "role",
                   filterValues,
@@ -204,9 +203,13 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
             <EnhancedTable
               headCells={emailHeader}
               rows={emails}
-              page={page}
               paginationLabel="email per page"
+              handleChangePage={() => console.log("")}
               hasCheckbox={true}
+              changeLimit={() => console.log("")}
+              fetchData={() => console.log("")}
+              dataPageInfo={{}}
+              hasPagination={false}
             >
               {emails &&
                 emails

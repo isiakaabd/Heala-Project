@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
-
+import { debounce } from "lodash";
 import Filter from "../Forms/Filters/index";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -24,7 +24,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
 import { Search, Loader, Modals, CustomButton } from "components/Utilities";
-import { onGenderValueChange, resetFilters } from "../../helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  onFilterValueChange,
+  resetFilters,
+} from "../../helpers/filterHelperFunctions";
 import {
   cadreFilterBy,
   doctorsPageDefaultFilterValues,
@@ -38,7 +42,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   const cadre = [
     { key: "1", value: "1" },
     { key: "2", value: "2" },
@@ -57,6 +60,11 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   useEffect(() => {
     fetchDoctors();
+    //{
+    // variables: {
+    //   first: pageInfo.limit,
+    // },
+    // }
   }, [fetchDoctors]);
 
   const fetchMoreFunc = (e, newPage) => {
@@ -64,13 +72,9 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       page: newPage,
     });
   };
+  //eslint-disable-next-line
+  const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
 
-  const onChange = async (e) => {
-    setSearchHcp(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ dociId: `HEALA-${e.toUpperCase()}` });
-  };
   const [profiles, setProfiles] = useState("");
   useEffect(() => {
     if (data) {
@@ -79,7 +83,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     }
   }, [data]);
 
-  const [searchHcp, setSearchHcp] = useState("");
+  // const [searchHcp, setSearchHcp] = useState("");
   const [openAddHcp, setOpenAddHcp] = useState(false);
 
   const onSubmit = async (values) => {
@@ -132,20 +136,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 
   const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
 
-  /* const resetFilters = () => {
-    setFilterValues({
-      gender: "",
-      status: "",
-      provider: "",
-      cadre: "",
-      specialization: "",
-    });
-    for (const key in variables) {
-      delete variables[key];
-    }
-    fetchDoctors();
-  }; */
-
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -162,7 +152,6 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
   const [createDoc] = useMutation(createDOctorProfile);
 
   const { selectedRows } = useSelector((state) => state.tables);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
   const { setSelectedRows } = useActions();
 
   if (error) return <NoData error={error} />;
@@ -171,8 +160,17 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       <Grid item container>
         <Grid item className={classes.searchGrid}>
           <Search
-            value={searchHcp}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+
+              if (value !== "") {
+                return debouncer({
+                  variables: { dociId: `HEALA-${value.toUpperCase()}` },
+                });
+              }
+            }}
+            // debouncer
+            // onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
             height="5rem"
           />
@@ -192,7 +190,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         <Grid item>
           <Filter
             onHandleChange={(e) =>
-              onGenderValueChange(
+              onFilterValueChange(
                 e,
                 "gender",
                 filterValues,
@@ -212,7 +210,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         <Grid item>
           <Filter
             onHandleChange={(e) =>
-              onGenderValueChange(
+              onFilterValueChange(
                 e,
                 "specialization",
                 filterValues,
@@ -233,7 +231,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         <Grid item>
           <Filter
             onHandleChange={(e) =>
-              onGenderValueChange(
+              onFilterValueChange(
                 e,
                 "cadre",
                 filterValues,
@@ -289,16 +287,11 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             headCells={hcpsHeadCells}
             rows={profiles}
             paginationLabel="Doctors per page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
             handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchDoctors}
+            dataPageInfo={pageInfo}
           >
             {profiles
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

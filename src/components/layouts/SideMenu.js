@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "2.5em",
     paddingRight: "2.5em",
     paddingTop: "5em",
-    height: "100vh",
+    minHeight: "100vh",
+    height: "100%",
     boxShadow: "5px -5px 7px #eee",
     position: "fixed",
     overflowY: "hidden",
@@ -115,7 +116,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SideMenu = (props) => {
-  const { selectedMenu, setSelectedMenu, setSelectedSubMenu, setWaitingListMenu } = props;
+  const { selectedMenu, setSelectedMenu, setDoctorView, setSelectedSubMenu, setWaitingListMenu } =
+    props;
   const { logout } = useActions();
   const [logout_user] = useMutation(LOGOUT_USER);
 
@@ -167,6 +169,7 @@ const SideMenu = (props) => {
                 setSelectedMenu(menu.id);
                 setSelectedSubMenu(0);
                 setWaitingListMenu(0);
+                setDoctorView(0);
               }}
               selected={selectedMenu === menu.id}
               component={Link}
@@ -209,10 +212,11 @@ const SideMenu = (props) => {
 };
 
 SideMenu.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setWaitingListMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setWaitingListMenu: PropTypes.func,
+  setDoctorView: PropTypes.func,
 };
 
 export default SideMenu;

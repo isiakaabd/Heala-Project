@@ -16,6 +16,11 @@ export const statusFilterBy = [
   { key: "Active", value: "Active" },
 ];
 
+export const docVerifyStatusFilterBy = [
+  { key: "Verified", value: true },
+  { key: "Not Verified", value: false },
+];
+
 export const patientsFilterBy = {
   gender: "",
   status: "",
@@ -72,6 +77,10 @@ export const patientsPageDefaultFilterValues = {
   plan: "",
 };
 
+export const docVerifyPageDefaultFilterValues = {
+  status: "",
+};
+
 export const emailPageDefaultFilterValues = {
   role: "",
 };
@@ -82,4 +91,26 @@ export const payoutPageDefaultFilterValues = {
 
 export const referralPageDefaultFilterValues = {
   type: "",
+};
+
+/* ========= TYPES ============ */
+
+export const paginationActionTypes = Object.freeze({
+  FIRSTPAGE: "FIRSTPAGE",
+  NEXTPAGE: "NEXTPAGE",
+  PREVPAGE: "PREVPAGE",
+  LASTPAGE: "LASTPAGE",
+});
+
+export const defaultPageInfo = {
+  totalDocs: 0,
+  limit: 10,
+  offset: null,
+  hasPrevPage: false,
+  hasNextPage: true,
+  page: 1,
+  totalPages: 9,
+  pagingCounter: 1,
+  prevPage: null,
+  nextPage: 2,
 };

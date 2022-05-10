@@ -1,120 +1,118 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 import { Chip, Grid, Typography } from "@mui/material";
 import { NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
 import { Loader, PreviousButton, DisplayProfile } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
-const useStyles = makeStyles((theme) => ({
-  gridsWrapper: {
-    background: "#fff",
-    borderRadius: "1rem",
-    padding: "4rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
-
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.3rem",
-      //   height: "2.7rem",
-      background: theme.palette.common.lightGreen,
-      color: theme.palette.common.green,
-      borderRadius: "1.5rem",
+const DoctorVerificationProfile = ({
+  setSelectedMenu,
+  selectedMenu,
+  selectedSubMenu,
+  setSelectedSubMenu,
+  setScopedMenu,
+  scopedMenu,
+  setChatMediaActive,
+  chatMediaActive,
+  setDoctorView,
+  doctorView,
+}) => {
+  const useStyles = makeStyles((theme) => ({
+    gridsWrapper: {
+      background: "#fff",
+      borderRadius: "1rem",
+      padding: "4rem",
+      boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
     },
-  },
 
-  cardGrid: {
-    background: "#fff",
-    borderRadius: "1rem",
-    padding: "4rem 5rem",
-    width: "100%",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
+    badge: {
+      "&.MuiChip-root": {
+        fontSize: "1.3rem",
+        //   height: "2.7rem",
+        background: theme.palette.common.lightGreen,
+        color: theme.palette.common.green,
+        borderRadius: "1.5rem",
+      },
+    },
 
-  infoBadge: {
-    "&.MuiChip-root": {
+    cardGrid: {
+      background: "#fff",
+      borderRadius: "1rem",
+      padding: "4rem 5rem",
+      width: "100%",
+      boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+    },
+
+    infoBadge: {
+      "&.MuiChip-root": {
+        fontSize: "1.25rem",
+        borderRadius: "1.5rem",
+        color: theme.palette.common.green,
+      },
+    },
+
+    link: {
+      display: "flex",
+      alignItems: "center",
       fontSize: "1.25rem",
+      color: theme.palette.common.green,
+      border: `1px solid ${theme.palette.common.lightGrey}`,
+      padding: ".75rem",
       borderRadius: "1.5rem",
-      color: theme.palette.common.green,
+      textDecoration: "none",
     },
-  },
 
-  link: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: "1.25rem",
-    color: theme.palette.common.green,
-    border: `1px solid ${theme.palette.common.lightGrey}`,
-    padding: ".75rem",
-    borderRadius: "1.5rem",
-    textDecoration: "none",
-  },
-
-  linkIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "1.25rem",
-      color: theme.palette.common.green,
-      marginLeft: "1.2rem",
+    linkIcon: {
+      "&.MuiSvgIcon-root": {
+        fontSize: "1.25rem",
+        color: theme.palette.common.green,
+        marginLeft: "1.2rem",
+      },
     },
-  },
 
-  locationIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "2rem",
+    locationIcon: {
+      "&.MuiSvgIcon-root": {
+        fontSize: "2rem",
+      },
     },
-  },
 
-  buttonsGridWrapper: {
-    marginTop: "5rem !important",
-    height: "16.1rem",
-  },
-}));
-
-const HcpProfile = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    selectedSubMenu,
-    chatMediaActive,
-    setSelectedSubMenu,
-    selectedHcpMenu,
-    setSelectedHcpMenu,
-    setChatMediaActive,
-  } = props;
+    buttonsGridWrapper: {
+      marginTop: "5rem !important",
+      height: "16.1rem",
+    },
+  }));
   const classes = useStyles();
 
-  const { hcpId } = useParams();
-
+  const { id, viewId } = useParams();
   const [doctorProfile, setDoctorProfile] = useState("");
 
   const { loading, error, data } = useQuery(doctor, {
     variables: {
-      id: hcpId,
+      id,
     },
   });
-
   useEffect(() => {
     if (data) {
       setDoctorProfile(data.doctorProfile);
     }
-  }, [data, hcpId]);
-
-  useLayoutEffect(() => {
-    setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(1);
-    setChatMediaActive(false);
-
+  }, [data, id]);
+  useEffect(() => {
+    // setSelectedMenu(4);
+    // setSelectedSubMenu(8);
+    // setScopedMenu(1);
+    // setChatMediaActive(false);
+    // setSelectedMenu(7);
+    setSelectedSubMenu(8);
+    setDoctorView(1);
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
-
+  }, [selectedMenu, selectedSubMenu, doctorView, chatMediaActive, scopedMenu]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {
@@ -132,7 +130,10 @@ const HcpProfile = (props) => {
   return (
     <Grid container direction="column" gap={3} width="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton
+          path={`/verification/view/${viewId}`}
+          onClick={() => setSelectedSubMenu(8)}
+        />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid item container>
@@ -142,11 +143,11 @@ const HcpProfile = (props) => {
           medicalTitle="Medical ID"
           statusId={dociId && dociId.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
-          chatPath={`/hcps/${hcpId}/profile/chat`}
+          // chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
           setSelectedSubMenu={setSelectedSubMenu}
           selectedMenu={selectedMenu}
-          type="doctor"
+          type=""
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
@@ -275,15 +276,16 @@ const HcpProfile = (props) => {
   );
 };
 
-HcpProfile.propTypes = {
+DoctorVerificationProfile.propTypes = {
   selectedMenu: PropTypes.number,
+  scopedMenu: PropTypes.number,
   selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  chatMediaActive: PropTypes.bool,
+  doctorView: PropTypes.number,
   setSelectedMenu: PropTypes.func,
   setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  setScopedMenu: PropTypes.func,
+  setDoctorView: PropTypes.func,
+  chatMediaActive: PropTypes.number,
   setChatMediaActive: PropTypes.func,
 };
-
-export default HcpProfile;
+export default DoctorVerificationProfile;

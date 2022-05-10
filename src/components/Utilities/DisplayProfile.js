@@ -112,20 +112,34 @@ const DisplayProfile = ({
       {/* Action Buttons grid */}
       <Grid item>
         <Grid container alignItems="center" rowSpacing={2}>
-          <Grid item style={{ marginRight: "2rem" }}>
-            <CustomButton
-              endIcon={<HiChat />}
-              title="Message"
-              type={greenButton}
-              component={Link}
-              to={
-                type !== "doctor"
-                  ? `/patients/${patientId}/profile/chat`
-                  : `/hcps/${hcpId}/profile/chat`
-              }
-              onClick={() => setSelectedSubMenu(6)}
-            />
-          </Grid>
+          {type === "doctor" ? (
+            <Grid item style={{ marginRight: "2rem" }}>
+              <CustomButton
+                endIcon={<HiChat />}
+                title="View Doctor Verification"
+                type={greenButton}
+                component={Link}
+                to={`/hcps/${hcpId}/verification`}
+                onClick={() => setSelectedSubMenu(7)}
+              />
+            </Grid>
+          ) : null}
+          {type !== "" ? (
+            <Grid item style={{ marginRight: "2rem" }}>
+              <CustomButton
+                endIcon={<HiChat />}
+                title="Message"
+                type={greenButton}
+                component={Link}
+                to={
+                  type !== "doctor"
+                    ? `/patients/${patientId}/profile/chat`
+                    : `/hcps/${hcpId}/profile/chat`
+                }
+                onClick={() => setSelectedSubMenu(6)}
+              />
+            </Grid>
+          ) : null}
         </Grid>
       </Grid>
     </Grid>

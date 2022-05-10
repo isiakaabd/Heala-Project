@@ -24,8 +24,10 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit } from "helpers/filterHelperFunctions";
 //
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -139,13 +141,17 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
-  const { loading, data, error, refetch } = useQuery(findAdmin, {
-    notifyOnNetworkStatusChange: true,
-  });
-  const [pageInfo, setPageInfo] = useState([]);
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [fetchAdmins, { loading, data, error, refetch }] = useLazyQuery(findAdmin);
+
+  useEffect(() => {
+    fetchAdmins({
+      variables: {
+        first: pageInfo?.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchAdmins, pageInfo]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -243,8 +249,6 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const handleDialogOpen = () => setIsOpen(true);
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   useEffect(() => {
     setSelectedMenu(11);
@@ -293,16 +297,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
               headCells={adminHeader}
               rows={admins}
               paginationLabel="admin per page"
-              page={page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchAdmins}
+              dataPageInfo={pageInfo}
             >
               {admins
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

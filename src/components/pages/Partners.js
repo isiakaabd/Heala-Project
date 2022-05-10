@@ -14,24 +14,22 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation } from "@apollo/client";
-import { getPartners, getSingleProvider, getUsertypess } from "components/graphQL/useQuery";
+import { getPartners, getSingleProvider, getProviders } from "components/graphQL/useQuery";
 import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
-// import { timeConverter } from "components/Utilities/Time";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { useStyles } from "styles/partnersPageStyles";
+import { useSnackbar } from "notistack";
 
 const Partners = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [dropDown, setDropDown] = useState([]);
-  const { data: da, loading: load } = useQuery(getUsertypess, {
-    variables: {
-      userTypeId: "61ed2354e6091400135e3d94",
-    },
-  });
+  const { data: da, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
     if (da) {
-      const datas = da.getUserTypeProviders.provider;
+      console.log(da.getProviders.provider, "see p");
+      const datas = da.getProviders.provider;
       setDropDown(
         datas &&
           datas.map((i) => {
@@ -121,19 +119,28 @@ const Partners = () => {
   const onSubmit1 = async (values, onSubmitProps) => {
     const { name, email, specialization, provider, image } = values;
     console.log(provider);
-
-    await addPartners({
-      variables: {
-        name,
-        email,
-        category: specialization,
-        logoImageUrl: image,
-        providerId: provider,
-      },
-      refetchQueries: [{ query: getPartners }],
-    });
-    setOpenAddPartner(false);
-    onSubmitProps.resetForm();
+    try {
+      await addPartners({
+        variables: {
+          name,
+          email,
+          category: specialization,
+          logoImageUrl: image,
+          providerId: provider,
+        },
+        refetchQueries: [{ query: getPartners }],
+      });
+      enqueueSnackbar("Partner added successfully", {
+        variant: "success",
+      });
+      onSubmitProps.resetForm();
+      setOpenAddPartner(false);
+    } catch (err) {
+      console.log(err.errors);
+      enqueueSnackbar(err.message, {
+        variant: "error",
+      });
+    }
   };
 
   const [searchPartner, setSearchPartner] = useState("");

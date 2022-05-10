@@ -112,15 +112,6 @@ const PatientProfile = ({
     }
   }, [data, patientId]);
 
-  // const handleDialogOpen = () => setIsOpen(true);
-  // const initialValues = {
-  //   referral: "",
-  //   category: "",
-  //   textarea: "",
-  // };
-
-  // const handleDialogClose = () => setIsOpen(false);
-  // const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const onConfirm = async () => {
     try {

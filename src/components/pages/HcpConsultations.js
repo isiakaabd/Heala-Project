@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
 import { Avatar, Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
@@ -17,6 +17,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { PreviousButton, FilterList, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
+import { changeTableLimit } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -80,13 +81,17 @@ const HcpConsultations = (props) => {
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
 
-  const { loading, data, error, refetch } = useQuery(getDocConsult, {
-    variables: {
-      id: hcpId,
-      orderBy: "-createdAt",
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchDocConsultations, { loading, data, error, refetch }] = useLazyQuery(getDocConsult);
+
+  React.useEffect(() => {
+    fetchDocConsultations({
+      variables: {
+        id: hcpId,
+        orderBy: "-createdAt",
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchDocConsultations, hcpId]);
 
   useEffect(() => {
     if (data && data.getConsultations.data) {
@@ -105,8 +110,6 @@ const HcpConsultations = (props) => {
     setSelectedScopedMenu(0);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -130,16 +133,11 @@ const HcpConsultations = (props) => {
             headCells={consultationsHeadCells}
             rows={consultations}
             paginationLabel="Consultations per page"
-            page={page}
-            limit={limit}
-            totalPages={totalPages}
-            totalDocs={totalDocs}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            hasNextPage={hasNextPage}
-            hasPrevPage={hasPrevPage}
             handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchDocConsultations}
+            dataPageInfo={pageInfo}
           >
             {consultations
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -208,7 +206,10 @@ const HcpConsultations = (props) => {
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       <Grid container gap={1}>
                         {symptoms
@@ -221,21 +222,30 @@ const HcpConsultations = (props) => {
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {contactMedium}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {type ? type : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey, maxWidth: "20rem" }}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
                     >
                       {status ? status : "No Value"}
                     </TableCell>

@@ -14,10 +14,12 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DeleteOrDisable, RoleModal } from "components/modals";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { getRoles } from "components/graphQL/useQuery";
 import { deleteRole } from "components/graphQL/Mutation";
 import { Link } from "react-router-dom";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { defaultPageInfo } from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -136,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
 const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelectedScopedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [deleteRoles] = useMutation(deleteRole);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
@@ -162,9 +164,15 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getRoles, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchRoles, { loading, data, error, refetch }] = useLazyQuery(getRoles);
+
+  useEffect(() => {
+    fetchRoles({
+      variables: { first: pageInfo?.limit },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchRoles, pageInfo]);
+
   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
@@ -188,11 +196,7 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
     "permission 3": false,
     "permission 4": true,
   };
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  const [rowsPerPage, setRowsPerPage] = useState(0);
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -233,16 +237,11 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                 headCells={roleHeader}
                 rows={rolesManagements}
                 paginationLabel="subscription per page"
-                page={+page}
-                limit={+limit}
-                totalPages={totalPages}
-                totalDocs={totalDocs}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                hasNextPage={hasNextPage}
-                hasPrevPage={hasPrevPage}
-                handleChangePage={fetchMoreFunc}
+                handleChangePage={fetchMoreData}
                 hasCheckbox={true}
+                changeLimit={changeTableLimit}
+                fetchData={fetchRoles}
+                dataPageInfo={pageInfo}
               >
                 {rolesManagements
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -283,7 +282,10 @@ const Management = ({ setSelectedSubMenu, setSelectedManagementMenu, setSelected
                           scope="row"
                           align="left"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.black, minWidth: "10rem" }}
+                          style={{
+                            color: theme.palette.common.black,
+                            minWidth: "10rem",
+                          }}
                         >
                           {row.name}
                         </TableCell>

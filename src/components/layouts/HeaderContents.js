@@ -184,6 +184,7 @@ const HeaderText = (props) => {
     selectedPatientMenu,
     selectedHcpMenu,
     waitingListMenu,
+    doctorView,
     selectedAppointmentMenu,
     selectedManagementMenu,
     selectedScopedMenu,
@@ -293,6 +294,8 @@ const HeaderText = (props) => {
                 ? "Patients"
                 : selectedHcpMenu === 6
                 ? "Consultations"
+                : selectedHcpMenu === 7
+                ? "Doctor Verification"
                 : "White Label"
             }
             scopedSubTitle={
@@ -300,7 +303,9 @@ const HeaderText = (props) => {
                 ? "Case Note"
                 : selectedScopedMenu === 3
                 ? "Create Message"
-                : ""
+                : selectedScopedMenu === 4
+                ? "Doctor Verification"
+                : "ghgy"
             }
             title="Doctors"
             subTitle="Doctor View"
@@ -362,9 +367,11 @@ const HeaderText = (props) => {
         return (
           <CustomSubHeaderText
             title="Doctor Verification"
-            scopedMenu={0}
+            scopedMenu={doctorView}
             scopedSubMenu={0}
             subTitle="Doctor View"
+            subSubTitle={doctorView === 1 ? "Doctor Profile" : ""}
+            // subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
           />
         );
       }
@@ -446,6 +453,7 @@ HeaderText.propTypes = {
   selectedAppointmentMenu: PropTypes.number,
   selectedScopedMenu: PropTypes.number,
   selectedManagementMenu: PropTypes.number,
+  doctorView: PropTypes.number,
 };
 
 const HeaderContent = (props) => {

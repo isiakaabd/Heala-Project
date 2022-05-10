@@ -13,8 +13,10 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { PreviousButton, Loader } from "components/Utilities";
-import { useQuery } from "@apollo/client";
-import { getEarningStats } from "components/graphQL/useQuery";
+import { useLazyQuery } from "@apollo/client";
+import { getEarningData } from "components/graphQL/useQuery";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -81,14 +83,18 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [pageInfo, setPageInfo] = useState([]);
-  const { loading, data, error, refetch } = useQuery(getEarningStats, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const fetchMoreFunc = (_, newPage) => {
-    refetch({ page: newPage });
-  };
+  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
+
+  useEffect(() => {
+    fetchEarningData({
+      variables: {
+        first: pageInfo.limit,
+      },
+      notifyOnNetworkStatusChange: true,
+    });
+  }, [fetchEarningData, pageInfo]);
 
   useEffect(() => {
     if (data) {
@@ -96,17 +102,15 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
       setPageInfo(data.getEarningStats.earningData.PageInfo);
     }
   }, [earning, data]);
+
   useEffect(() => {
     setSelectedMenu(8);
     setSelectedSubMenu(9);
     // eslint-disable-next-line
   }, [selectedMenu, selectedSubMenu]);
 
-  const [rowsPerPage, setRowsPerPage] = useState(0);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
-  const { page, totalPages, hasNextPage, hasPrevPage, limit, totalDocs } = pageInfo;
-  console.log(page, limit);
   return (
     <Grid container direction="column" gap={2} height="100%">
       <Grid item>
@@ -130,16 +134,11 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
               headCells={financeHeader}
               rows={earning}
               paginationLabel="finance per page"
-              page={+page}
-              limit={limit}
-              totalPages={totalPages}
-              totalDocs={totalDocs}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              hasNextPage={hasNextPage}
-              hasPrevPage={hasPrevPage}
-              handleChangePage={fetchMoreFunc}
+              handleChangePage={fetchMoreData}
               hasCheckbox={true}
+              changeLimit={changeTableLimit}
+              fetchData={fetchEarningData}
+              dataPageInfo={pageInfo}
             >
               {earning.map((row, index) => {
                 const { doctorData, createdAt, balance } = row;
