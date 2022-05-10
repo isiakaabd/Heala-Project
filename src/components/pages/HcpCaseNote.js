@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
 
@@ -11,7 +11,7 @@ import {
 import { NoData } from "components/layouts";
 import { useQuery } from "@apollo/client";
 import { getConsult } from "components/graphQL/useQuery";
-import { dateMoment, duration, daily } from "components/Utilities/Time";
+import { dateMoment, duration } from "components/Utilities/Time";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
   },
   items: {
     flex: 1,
+    flexDirection: "column",
+    // rowGap: "200px",
   },
   infoBadge: {
     "&.MuiChip-root": {
@@ -50,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
   title: {
     "&.MuiTypography-root": {
       color: theme.palette.common.grey,
+    },
+  },
+  tableHeader: {
+    "&.MuiGrid-root": {
+      marginBottom: "1rem",
+      "& > *": {
+        flex: 1,
+        // marginTop: "2rem",
+      },
     },
   },
 }));
@@ -569,10 +580,11 @@ const HcpCaseNotes = ({
       <Modals
         isOpen={isOpen}
         title="Prescription"
-        width="60vw"
+        width="50vw"
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
+<<<<<<< HEAD
         <Grid item container width="100%" direction="row">
           <Grid
             item
@@ -592,10 +604,26 @@ const HcpCaseNotes = ({
                 alignItems="flex-start"
               >
                 <Grid item>
+=======
+        <Grid item container width="100%" direction="row" rowGap="2rem">
+          <>
+            <Grid
+              item
+              container
+              // style={{ padding: "2rem 0" }}
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+              sx={{ flexWrap: "nowrap" }}
+            >
+              <Grid item container className={classes.items}>
+                <Grid item sx={{ marginBottom: "1rem" }}>
+>>>>>>> ed19ecff2a66a78be78d3c823536baa0172f7131
                   <Typography variant="body1" className={classes.title}>
                     Patient:
                   </Typography>
                 </Grid>
+<<<<<<< HEAD
                 <Grid item container gap={2} alignItems="center">
                   <Grid item>
                     <Avatar
@@ -646,36 +674,62 @@ const HcpCaseNotes = ({
                     Symptoms:
                   </Typography>
                 </Grid>
+=======
+                <Grid item container alignItems="center">
+                  {/* <Grid item sx={{ maxHeight: "100%", paddingLeft: 0 }}> */}
+                  {/* <Avatar
+                    src={patientData ? patientData.image : displayPhoto}
+                    alt="Display photo of the sender"
+                    sx={{ height: "30px", width: "30px" }}
+                  /> */}
+                  {/* </Grid> */}
+                  {/* <Grid item> */}
+                  <Typography variant="h5">
+                    {patientData
+                      ? `${patientData.firstName} ${patientData.firstName}`
+                      : "No Patient"}
+                  </Typography>
+                  {/* </Grid> */}
+                </Grid>
+              </Grid>
+              {/* </Grid> */}
+
+              <Grid item className={classes.items}>
+                <Typography variant="body1" marginBottom="1rem" className={classes.title}>
+                  Prescription Date:
+                </Typography>
+
+                <Typography variant="h5">{dateMoment(createdAt)}</Typography>
+              </Grid>
+              <Grid item className={classes.items}>
+                <Typography marginBottom="1rem" variant="body1" className={classes.title}>
+                  Symptoms:
+                </Typography>
+
+>>>>>>> ed19ecff2a66a78be78d3c823536baa0172f7131
                 <Grid item>
                   <Grid container gap={1}>
                     {symptoms ? (
                       symptoms.map((i) => {
                         return (
-                          <Typography key={i.name} variant="body1">
-                            {i.name}
+                          <Typography key={i.name} variant="h5">
+                            {`${i.name},`}
                           </Typography>
                         );
                       })
                     ) : (
-                      <Typography variant="body1">No Value</Typography>
+                      <Typography variant="h5">No Value</Typography>
                     )}
                   </Grid>
+                  {/* </Grid> */}
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Divider color={theme.palette.common.lighterGrey} />
-
+            <Divider color={theme.palette.common.lighterGrey} sx={{ width: "100%" }} />
+          </>
           {prescription && (
             <>
-              <Grid
-                item
-                container
-                style={{ padding: "2rem 0" }}
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ flexWrap: "nowrap" }}
-              >
+              <Grid item container className={classes.tableHeader}>
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Drug
@@ -684,58 +738,46 @@ const HcpCaseNotes = ({
 
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
-                    Dosage
-                  </Typography>
-                </Grid>
-
-                <Grid item>
-                  <Typography variant="body1" className={classes.title}>
-                    Frequency
+                    Quantity / Dosage
                   </Typography>
                 </Grid>
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
-                    Mode
+                    Mode / Duration
                   </Typography>
                 </Grid>
               </Grid>
-              <Divider color={theme.palette.common.lighterGrey} />
             </>
           )}
+
           {prescription &&
             prescription.map((i, index) => {
+              const { dosageQuantity, mode, dosageFrequency, dosage, drugName } = i;
               return (
                 <>
-                  <Grid
-                    key={index}
-                    item
-                    container
-                    style={{ padding: "2rem" }}
-                    alignItems="center"
-                    justifyContent="space-between"
-                    sx={{ flexWrap: "nowrap", textAlign: "left" }}
-                  >
+                  <Grid item key={index} container className={classes.tableHeader}>
+                    {/* <Fragment key={index}> */}
                     <Grid item>
-                      <Typography variant="body1" className={classes.title}>
-                        {i.drugName}
-                      </Typography>
+                      <Typography variant="h5">{drugName}</Typography>
                     </Grid>
 
                     <Grid item>
-                      <Typography variant="body1" className={classes.title}>
-                        {`${i.dosageQuantity} ${i.dosage}`}
-                      </Typography>
+                      <Typography variant="h5">{`${dosageQuantity} / ${dosage}`}</Typography>
                     </Grid>
 
-                    <Grid item>
+                    {/* <Grid item>
                       <Typography variant="body1" className={classes.title}>
+<<<<<<< HEAD
                         {duration(i.dosageFrequency.duration)}{" "}
                         {daily(i.dosageFrequency.day)}
+=======
+                        {duration(dosageFrequency.duration)} /{daily(dosageFrequency.day)}
+>>>>>>> ed19ecff2a66a78be78d3c823536baa0172f7131
                       </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
-                      <Typography variant="body1" className={classes.title}>
-                        {i.mode}
+                      <Typography variant="h5">
+                        {`${mode} / ${duration(dosageFrequency.duration)}`}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -743,6 +785,7 @@ const HcpCaseNotes = ({
                 </>
               );
             })}
+<<<<<<< HEAD
           <Grid
             item
             container
@@ -768,6 +811,27 @@ const HcpCaseNotes = ({
                   {doctorNote ? doctorNote : "No Value"}
                 </Typography>
               </Grid>
+=======
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid
+          item
+          container
+          style={{ padding: "2rem 0" }}
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ flexWrap: "nowrap" }}
+        >
+          <Grid item container direction="column" gap={2} alignItems="flex-start">
+            <Grid item>
+              <Typography variant="body1" className={classes.title}>
+                Doctors Note:
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="h5">{doctorNote ? doctorNote : "No Value"}</Typography>
+>>>>>>> ed19ecff2a66a78be78d3c823536baa0172f7131
             </Grid>
           </Grid>
         </Grid>
