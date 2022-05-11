@@ -28,7 +28,6 @@ const Partners = () => {
 
   useEffect(() => {
     if (da) {
-      console.log(da.getProviders.provider, "see p");
       const datas = da.getProviders.provider;
       setDropDown(
         datas &&
@@ -88,7 +87,7 @@ const Partners = () => {
     provider: Yup.string("select a provider").trim(),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
-  const [addPartners] = useMutation(addPartner);
+  const [addPartners, { data: addData, error: errors }] = useMutation(addPartner);
 
   const onSubmit = (values) => {
     console.log(values);
@@ -117,31 +116,36 @@ const Partners = () => {
     // console.log(values);
   };
   const onSubmit1 = async (values, onSubmitProps) => {
-    const { name, email, specialization, provider, image } = values;
-    console.log(provider);
-    try {
-      await addPartners({
-        variables: {
-          name,
-          email,
-          category: specialization,
-          logoImageUrl: image,
-          providerId: provider,
-        },
-        refetchQueries: [{ query: getPartners }],
-      });
+    let { name, email, specialization, provider, image } = values;
+    name = name.trim();
+
+    await addPartners({
+      variables: {
+        name,
+        email,
+        category: specialization,
+        logoImageUrl: image,
+        providerId: provider,
+      },
+      refetchQueries: [{ query: getPartners }],
+    });
+
+    onSubmitProps.resetForm();
+    setOpenAddPartner(false);
+  };
+  useEffect(() => {
+    if (addData) {
       enqueueSnackbar("Partner added successfully", {
         variant: "success",
       });
-      onSubmitProps.resetForm();
-      setOpenAddPartner(false);
-    } catch (err) {
-      console.log(err.errors);
-      enqueueSnackbar(err.message, {
+    } else if (errors) {
+      const error = errors?.networkError?.result?.errors[0].message;
+      enqueueSnackbar(error, {
         variant: "error",
       });
     }
-  };
+    //es
+  }, [addData, errors, enqueueSnackbar]);
 
   const [searchPartner, setSearchPartner] = useState("");
   const [openFilterPartner, setOpenFilterPartner] = useState(false);
