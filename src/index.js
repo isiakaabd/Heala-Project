@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
+import { Slide } from "@material-ui/core";
 import { store } from "store";
 import {
   ApolloClient,
@@ -82,6 +83,10 @@ ReactDOM.render(
         Dismiss
       </Typography>
     )}
+    classes={{
+      base: { fontSize: 33 },
+    }}
+    TransitionComponent={Slide}
   >
     <Provider store={store}>
       <ApolloProvider client={client}>
