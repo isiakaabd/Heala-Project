@@ -28,7 +28,6 @@ const Partners = () => {
 
   useEffect(() => {
     if (da) {
-      console.log(da.getProviders.provider, "see p");
       const datas = da.getProviders.provider;
       setDropDown(
         datas &&
@@ -88,7 +87,7 @@ const Partners = () => {
     provider: Yup.string("select a provider").trim(),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
-  const [addPartners] = useMutation(addPartner);
+  const [addPartners, { data: addData, error: errors }] = useMutation(addPartner);
 
   const onSubmit = (values) => {
     console.log(values);
@@ -118,33 +117,35 @@ const Partners = () => {
   };
   const onSubmit1 = async (values, onSubmitProps) => {
     let { name, email, specialization, provider, image } = values;
-    console.log(provider);
+    name = name.trim();
 
-    name = name.trim()
+    await addPartners({
+      variables: {
+        name,
+        email,
+        category: specialization,
+        logoImageUrl: image,
+        providerId: provider,
+      },
+      refetchQueries: [{ query: getPartners }],
+    });
 
-    try {
-      await addPartners({
-        variables: {
-          name,
-          email,
-          category: specialization,
-          logoImageUrl: image,
-          providerId: provider,
-        },
-        refetchQueries: [{ query: getPartners }],
-      });
+    onSubmitProps.resetForm();
+    setOpenAddPartner(false);
+  };
+  useEffect(() => {
+    if (addData) {
       enqueueSnackbar("Partner added successfully", {
         variant: "success",
       });
-      onSubmitProps.resetForm();
-      setOpenAddPartner(false);
-    } catch (err) {
-      console.log(err,'err');
-      enqueueSnackbar('Email is already taken', {
+    } else if (errors) {
+      const error = errors?.networkError?.result?.errors[0].message;
+      enqueueSnackbar(error, {
         variant: "error",
       });
     }
-  };
+    //es
+  }, [addData, errors, enqueueSnackbar]);
 
   const [searchPartner, setSearchPartner] = useState("");
   const [openFilterPartner, setOpenFilterPartner] = useState(false);

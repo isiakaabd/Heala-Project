@@ -209,7 +209,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         {doctorData && doctorData.lastName}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {qualification && qualification.degree}
+                        {qualification.degree ? qualification?.degree : "No degree"}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -239,7 +239,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         <Button
                           variant="contained"
                           className={classes.button}
-                          style={{whiteSpace:'nowrap', padding:'5% 40%', marginLeft:'-10%'}}
+                          style={{ whiteSpace: "nowrap", padding: "5% 40%", marginLeft: "-10%" }}
                           component={Link}
                           endIcon={<ArrowForwardIosIcon />}
                           to={`/verification/view/${_id}`}
