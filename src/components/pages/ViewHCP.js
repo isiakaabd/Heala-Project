@@ -438,7 +438,7 @@ const ViewHCP = ({
                   type={trasparentButton}
                   width="100%"
                   component={Link}
-                  to={`/verification/view/${viewId}/doctor/${doctorData && doctorData._id}`}
+                  to={`/hcps/${doctorData && doctorData._id}`}
                   onClick={() => {
                     setSelectedSubMenu(7);
                     setDoctorView(1);
