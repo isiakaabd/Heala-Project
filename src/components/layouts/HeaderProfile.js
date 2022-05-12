@@ -10,15 +10,18 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   role: {
-    fontSize: "1.5rem",
+    // fontSize: "1.5rem",
+    fontSize: "clamp(1rem, 1vw, 1.5rem)",
     color: theme.palette.common.lightGrey,
   },
 
   name: {
     fontWeight: "normal",
+    fontSize: "clamp(1.6rem, 2vw, 1.2rem)",
   },
+
   notification: {
-    fontSize: "2rem",
+    fontSize: "clamp(2rem, 2vw, 1.2rem)",
   },
 }));
 
@@ -73,22 +76,26 @@ const HeaderProfile = () => {
 
   return (
     <header>
-      <Grid container alignItems="center">
+      <Grid
+        container
+        alignItems="center"
+        gap="3px"
+        justifyContent="space-between"
+        flexWrap="nowrap"
+      >
         <Grid item>
           <Avatar alt="Display avatar" src={displayPhoto} />
         </Grid>
-        <Grid item style={{ marginRight: "3em", marginLeft: "1em" }}>
-          <Grid container direction="column" justifyContent="center">
-            <Grid item>
-              <Typography variant="body1" className={classes.name}>
-                {profileAcc && profileAcc.role}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
-                {profileAcc && profileAcc.email}
-              </Typography>
-            </Grid>
+        <Grid item container justifyContent="space-between">
+          <Grid item container direction="column" justifyContent="space-evenly">
+            <Typography variant="body1" className={classes.name}>
+              {profileAcc && profileAcc.role}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
+              {profileAcc && profileAcc.email}
+            </Typography>
           </Grid>
         </Grid>
         <Grid item>
@@ -97,7 +104,10 @@ const HeaderProfile = () => {
             onClick={(event) => handleNotification(event)}
           >
             <Badge badgeContent={num} color="error">
-              <NotificationsActiveIcon color="primary" fontSize="large" />
+              <NotificationsActiveIcon
+                color="primary"
+                sx={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)" }}
+              />
             </Badge>
           </IconButton>
           <Notifications

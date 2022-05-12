@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Typography, Toolbar } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import HeaderProfile from "./HeaderProfile";
 import { makeStyles } from "@mui/styles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -14,7 +14,7 @@ import { getPatients, DoctorCount } from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     alignItems: "center",
-    width: "100%",
+    // width: "100%",
     height: "100%",
     justifyContent: "space-between",
   },
@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   title: {
-    fontSize: "2.4rem",
+    // fontSize: "clamp(1.2rem, 1vw+1rem, 2.4rem )",
+    fontSize: "clamp(1.5rem, 1.5vw, 2.25rem)",
     color: theme.palette.common.red,
     "&.MuiTypography-root": {
       marginRight: ".5rem",
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     color: theme.palette.common.green,
     "&.MuiTypography-root": {
-      fontSize: "1.25rem",
+      fontSize: "clamp(0.6rem, 1vw + .5rem, 1.25rem)",
       marginLeft: ".5rem",
       alignSelf: "flex-end",
     },
@@ -59,17 +60,21 @@ const CustomHeaderText = ({ title, total, path, data }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.titleWrapper}>
-      <Link to={`/${path}`} className={classes.link}>
-        <Typography variant="h3" classes={{ root: classes.title }}>
-          {title}
+    <Grid container flexDirection="column" justifyContent="space-between">
+      <Grid item container flexWrap="nowrap" alignItems="center">
+        <Link to={`/${path}`} className={classes.link}>
+          <Typography variant="h3" classes={{ root: classes.title }}>
+            {title}
+          </Typography>
+        </Link>
+        <ArrowUpwardIcon color="success" />
+      </Grid>
+      <Grid item>
+        <Typography variant="h5" className={classes.subtitle}>
+          {total} total
         </Typography>
-      </Link>
-      <ArrowUpwardIcon color="success" />
-      <Typography variant="h5" className={classes.subtitle}>
-        {total} total
-      </Typography>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -468,9 +473,17 @@ const HeaderContent = (props) => {
     data,
     selectedManagementMenu,
   } = props;
-  const classes = useStyles();
+
   return (
-    <Toolbar className={classes.toolbar}>
+    <Grid
+      container
+      sx={{
+        flex: 1,
+        display: "flex",
+        flexWrap: "nowrap",
+        justifyContent: "space-between",
+      }}
+    >
       <HeaderText
         selectedMenu={selectedMenu}
         selectedSubMenu={selectedSubMenu}
@@ -482,7 +495,7 @@ const HeaderContent = (props) => {
         selectedManagementMenu={selectedManagementMenu}
       />
       <HeaderProfile data={data} />
-    </Toolbar>
+    </Grid>
   );
 };
 
@@ -496,6 +509,8 @@ HeaderContent.propTypes = {
   selectedAppointmentMenu: PropTypes.number,
   selectedScopedMenu: PropTypes.number,
   data: PropTypes.object,
+  drawerWidth: PropTypes.number,
+  handleDrawerToggle: PropTypes.func,
 };
 
 export default HeaderContent;

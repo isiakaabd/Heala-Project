@@ -173,7 +173,7 @@ const CaseNotes = ({
                       <Copy text={referralId} name="Consultation ID" />
                     </>
                   ) : (
-                    "No value"
+                    <Typography variant="h5">No Value</Typography>
                   )}
                 </Grid>
               </Grid>
@@ -194,7 +194,7 @@ const CaseNotes = ({
                       <Copy text={referralId} name="Consultation ID" />
                     </>
                   ) : (
-                    "No value"
+                    <Typography variant="h5">No Value</Typography>
                   )}
                 </Grid>
               </Grid>
