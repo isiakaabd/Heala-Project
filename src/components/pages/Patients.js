@@ -164,7 +164,13 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
         <Loader />
       ) : profiles.length > 0 ? (
         /* ================= PATIENTS TABLE ================= */
-        <Grid item container height="100%" direction="column">
+        <Grid
+          item
+          container
+          height="100%"
+          // sx={{ maxWidth: "100%" }}
+          direction="column"
+        >
           <EnhancedTable
             headCells={patientsHeadCells}
             rows={profiles}
@@ -212,7 +218,6 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                     id={labelId}
                     scope="row"
                     align="left"
-                    className={classes.tableCell}
                     style={{
                       color: theme.palette.common.grey,
                       textAlign: "left",
@@ -220,7 +225,7 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                   >
                     {dociId && dociId.split("-")[1]}
                   </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
+                  <TableCell align="left">
                     <div
                       style={{
                         height: "100%",
@@ -238,16 +243,10 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                     </div>
                   </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {plan ? plan : "No Plan"}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {provider ? provider : "No Provider"}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {consultations ? consultations : 0}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
+                  <TableCell align="left">{plan ? plan : "No Plan"}</TableCell>
+                  <TableCell align="left">{provider ? provider : "No Provider"}</TableCell>
+                  <TableCell align="left">{consultations ? consultations : 0}</TableCell>
+                  <TableCell align="left">
                     <Chip
                       label={status ? status : "No Status"}
                       className={classes.badge}
