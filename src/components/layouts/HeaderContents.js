@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     color: theme.palette.common.lightGrey,
-    fontSize: "1.5rem",
+    fontSize: "clamp(1rem, 1.2vw, 1.5rem)",
     fontWeight: 300,
   },
   name: {
-    fontSize: "2rem",
+    fontSize: "clamp(1.5rem, 1.5vw, 2rem)",
     fontWeight: 300,
   },
   titleWrapper: {
