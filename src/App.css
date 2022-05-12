@@ -78,7 +78,7 @@ body {
 
 /* Table pagination menu items */
 .MuiTablePagination-menuItem {
-  font-size: 1.2rem !important;
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
 }
 
 .MuiSelect-select {
