@@ -48,7 +48,7 @@ const EmptyCell = (props) => {
         <EnhancedTableToolbar title={title} />
 
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHeader rowCount={10} headCells={headCells} hasCheckbox />
             <TableBody>
               <TableRow

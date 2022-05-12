@@ -72,11 +72,21 @@ const EnhancedTable = ({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ maxWidth: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selectedRows.length} title={title} />
 
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <TableContainer
+          sx={{
+            width: "100%",
+            overflowX: "auto",
+            // marginRight: "auto",
+            // marginLeft: "auto",
+            // marginTop: "50px",
+            // padding: "10px",
+            // margin: "10px",
+          }}
+        >
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHeader
               numSelected={selectedRows.length}
               onSelectAllClick={handleSelectAllClick}
