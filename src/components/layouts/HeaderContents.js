@@ -60,7 +60,7 @@ const CustomHeaderText = ({ title, total, path, data }) => {
   const classes = useStyles();
 
   return (
-    <Grid container flexDirection="column" justifyContent="space-between">
+    <Grid container flexDirection="column" justifyContent="center" rowGap={1}>
       <Grid item container flexWrap="nowrap" alignItems="center">
         <Link to={`/${path}`} className={classes.link}>
           <Typography variant="h3" classes={{ root: classes.title }}>

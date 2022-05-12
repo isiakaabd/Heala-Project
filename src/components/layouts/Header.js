@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     "&.MuiToolbar-root": {
       display: "flex",
+      justifyContent: "space-around",
       padding: "0px",
       paddingInline: "min(2.5rem,4vw)",
     },
@@ -46,14 +47,14 @@ const Header = (props) => {
       }}
       // classes={{ root: classes.appBar }}
     >
-      <Toolbar component="div" className={classes.appBar}>
-        <Grid item>
+      <Toolbar className={classes.appBar}>
+        <Grid item marginInline={2.5}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ color: "black", display: { sm: "none" } }}
+            sx={{ color: "white", fontSize: "3rem", background: "black", display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
