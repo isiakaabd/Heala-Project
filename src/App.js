@@ -1,34 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
+import PropTypes from "prop-types";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import jwtDecode from "jwt-decode";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 import { Loader } from "components/Utilities";
 import { muiTheme } from "components/muiTheme";
+import { Box, Drawer, Toolbar, CssBaseline } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { useActions } from "components/hooks/useActions";
 import { Header, SideMenu } from "components/layouts";
 import Routes from "components/routes/Routes";
-import ScrollToView from "components/ScrollToView";
+// import ScrollToView from "components/ScrollToView";
 import { Login } from "components/pages";
 import { setAccessToken } from "./accessToken";
 import { useSelector } from "react-redux";
 
-const sectionStyles = {
-  paddingLeft: "39rem",
-  paddingRight: "5rem",
-  paddingTop: "12rem",
-  paddingBottom: "5rem",
-  minHeight: "100vh",
-  width: "100%",
-  backgroundColor: "#fbfbfb",
-};
+// const sectionStyles = {
+//   paddingLeft: "39rem",
+//   paddingRight: "5rem",
+//   paddingTop: "12rem",
+//   paddingBottom: "5rem",
+//   minHeight: "100vh",
+//   width: "100%",
+//   backgroundColor: "#fbfbfb",
+// };
 
-const App = () => {
+const App = ({ window }) => {
+  const container = window !== undefined ? () => window().document.body : undefined;
+  // window !== undefined ? () => window().document.body : undefined;
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
   const [logout_user] = useMutation(LOGOUT_USER);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const drawerWidth = 200;
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
@@ -76,13 +86,14 @@ const App = () => {
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
-        <div className="container">
-          {!isAuthenticated && (
-            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
-          )}
-          {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
-          {isAuthenticated && !chatMediaActive && !state && (
-            <>
+        {!isAuthenticated && (
+          <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
+        )}
+        {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
+        {isAuthenticated && !chatMediaActive && !state && (
+          <>
+            <Box sx={{ display: "flex" }}>
+              <CssBaseline />
               <Header
                 selectedMenu={selectedMenu}
                 selectedSubMenu={selectedSubMenu}
@@ -93,12 +104,32 @@ const App = () => {
                 waitingListMenu={waitingListMenu}
                 doctorView={doctorView}
                 selectedScopedMenu={selectedScopedMenu}
+                handleDrawerToggle={handleDrawerToggle}
+                drawerWidth={drawerWidth}
               />
 
-              <ScrollToView>
-                <main
-                  style={{
-                    display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
+              {/* <ScrollToView> */}
+              {/* <main
+                    style={{
+                      display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
+                    }}
+                  > */}
+              <Box
+                component="nav"
+                sx={{ width: { sm: `max(300px, 20vw)` }, flexShrink: { sm: 0 } }}
+                aria-label="mailbox foldersssss"
+              >
+                <Drawer
+                  container={container}
+                  variant="temporary"
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                  }}
+                  sx={{
+                    display: { xs: "block", sm: "none" },
+                    "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
                   }}
                 >
                   <SideMenu
@@ -109,39 +140,66 @@ const App = () => {
                     setWaitingListMenu={setWaitingListMenu}
                     setDoctorView={setDoctorView}
                     setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                    drawerWidth={drawerWidth}
+                    handleDrawerToggle={handleDrawerToggle}
                   />
-
-                  <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
-                    <Routes
-                      setSelectedMenu={setSelectedMenu}
-                      selectedMenu={selectedMenu}
-                      selectedSubMenu={selectedSubMenu}
-                      setSelectedSubMenu={setSelectedSubMenu}
-                      selectedPatientMenu={selectedPatientMenu}
-                      setSelectedPatientMenu={setSelectedPatientMenu}
-                      setSelectedManagementMenu={setSelectedManagementMenu}
-                      selectedHcpMenu={selectedHcpMenu}
-                      setSelectedHcpMenu={setSelectedHcpMenu}
-                      selectedAppointmentMenu={selectedAppointmentMenu}
-                      setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-                      waitingListMenu={waitingListMenu}
-                      doctorView={doctorView}
-                      setDoctorView={setDoctorView}
-                      setWaitingListMenu={setWaitingListMenu}
-                      chatMediaActive={chatMediaActive}
-                      setChatMediaActive={setChatMediaActive}
-                      selectedScopedMenu={selectedScopedMenu}
-                      setSelectedScopedMenu={setSelectedScopedMenu}
-                    />
-                  </section>
-                </main>
-              </ScrollToView>
-            </>
-          )}
-        </div>
+                </Drawer>
+                <Drawer
+                  variant="permanent"
+                  sx={{
+                    display: { xs: "none", sm: "block" },
+                    "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+                  }}
+                  open
+                >
+                  <SideMenu
+                    selectedMenu={selectedMenu}
+                    setSelectedMenu={setSelectedMenu}
+                    setSelectedSubMenu={setSelectedSubMenu}
+                    setSelectedManagementMenu={setSelectedManagementMenu}
+                    setWaitingListMenu={setWaitingListMenu}
+                    setDoctorView={setDoctorView}
+                    setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                    drawerWidth={drawerWidth}
+                  />
+                </Drawer>
+              </Box>
+              <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+              >
+                <Toolbar />
+                <Routes
+                  setSelectedMenu={setSelectedMenu}
+                  selectedMenu={selectedMenu}
+                  selectedSubMenu={selectedSubMenu}
+                  setSelectedSubMenu={setSelectedSubMenu}
+                  selectedPatientMenu={selectedPatientMenu}
+                  setSelectedPatientMenu={setSelectedPatientMenu}
+                  setSelectedManagementMenu={setSelectedManagementMenu}
+                  selectedHcpMenu={selectedHcpMenu}
+                  setSelectedHcpMenu={setSelectedHcpMenu}
+                  selectedAppointmentMenu={selectedAppointmentMenu}
+                  setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+                  waitingListMenu={waitingListMenu}
+                  doctorView={doctorView}
+                  setDoctorView={setDoctorView}
+                  setWaitingListMenu={setWaitingListMenu}
+                  chatMediaActive={chatMediaActive}
+                  setChatMediaActive={setChatMediaActive}
+                  selectedScopedMenu={selectedScopedMenu}
+                  setSelectedScopedMenu={setSelectedScopedMenu}
+                />
+              </Box>
+              {/* </ScrollToView> */}
+            </Box>
+          </>
+        )}
       </Router>
     </ThemeProvider>
   );
 };
-
+App.propTypes = {
+  window: PropTypes.object,
+};
 export default App;
