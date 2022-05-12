@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "space-around",
       padding: "0px",
+      alignItems: "center",
       paddingInline: "min(2.5rem,4vw)",
     },
   },

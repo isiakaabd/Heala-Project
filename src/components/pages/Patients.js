@@ -230,7 +230,8 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
                       style={{
                         height: "100%",
                         display: "flex",
-                        alignItems: "left",
+                        // alignItems:"center",
+                        alignItems: "center",
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>
