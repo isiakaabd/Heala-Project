@@ -140,8 +140,8 @@ const Consultations = (props) => {
             {consultations
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const { doctorData } = row;
-                const isItemSelected = isSelected(row._id, selectedRows);
+                const { doctorData, contactMedium, symptoms, _id, type, status, createdAt } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -149,12 +149,12 @@ const Consultations = (props) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row._id}
+                    key={_id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -163,7 +163,7 @@ const Consultations = (props) => {
                       />
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {dateMoment(row.createdAt)}
+                      {dateMoment(createdAt)}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -193,8 +193,8 @@ const Consultations = (props) => {
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <Grid container gap={1}>
-                        {row.symptoms
-                          ? row.symptoms.map((i) => {
+                        {symptoms
+                          ? symptoms.map((i) => {
                               return <p key={i.name}>{i.name}</p>;
                             })
                           : "No Value"}
@@ -208,7 +208,7 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {row.contactMedium ? row.contactMedium : "No Value"}
+                      {contactMedium ? contactMedium : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -218,7 +218,7 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {row.type ? row.type : "No Value"}
+                      {type ? type : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -228,14 +228,14 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {row.status ? row.status : "No Value"}
+                      {status ? status : "No Value"}
                     </TableCell>
                     <TableCell align="left">
                       <Button
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`/patients/${patientId}/consultations/case-note/${row._id}`}
+                        to={`/patients/${patientId}/consultations/case-note/${_id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
                           setSelectedSubMenu(2);

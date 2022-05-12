@@ -73,222 +73,219 @@ const Patients = ({ setSelectedSubMenu, setSelectedPatientMenu }) => {
   if (error) return <NoData error={error} />;
 
   return (
-    <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item container spacing={2} className={classes.searchFilterContainer}>
-          {/*  ======= SEARCH INPUT(S) ==========*/}
-          <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
-            <Search
-              onChange={(e) => {
-                let value = e.target.value;
+    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid item container spacing={2} className={classes.searchFilterContainer}>
+        {/*  ======= SEARCH INPUT(S) ==========*/}
+        <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
+          <Search
+            onChange={(e) => {
+              let value = e.target.value;
 
-                if (value !== "") {
-                  return debouncer({
-                    variables: { dociId: `HEALA-${value.toUpperCase()}` },
-                  });
-                }
-              }}
-              // onChange={debouncedChangeHandler}
-              placeholder="Search by ID e.g 7NE6ELLO "
-              height="5rem"
+              if (value !== "") {
+                return debouncer({
+                  variables: { dociId: `HEALA-${value.toUpperCase()}` },
+                });
+              }
+            }}
+            // onChange={debouncedChangeHandler}
+            placeholder="Search by ID e.g 7NE6ELLO "
+            maxHeight="5rem"
+          />
+        </Grid>
+        {/* ========= FILTERS =========== */}
+        <Grid item container spacing={2}>
+          {/* FILTER BY GENDER */}
+          <Grid item>
+            <Filter
+              onHandleChange={(e) =>
+                onFilterValueChange(
+                  e,
+                  "gender",
+                  filterValues,
+                  setFilterValues,
+                  fetchPatient,
+                  variables,
+                  refetch,
+                )
+              }
+              options={genderType}
+              name="gender"
+              placeholder="By gender"
+              value={filterValues.gender}
             />
           </Grid>
-          {/* ========= FILTERS =========== */}
-          <Grid item container spacing={2}>
-            {/* FILTER BY GENDER */}
-            <Grid item>
-              <Filter
-                onHandleChange={(e) =>
-                  onFilterValueChange(
-                    e,
-                    "gender",
-                    filterValues,
-                    setFilterValues,
-                    fetchPatient,
-                    variables,
-                    refetch,
-                  )
-                }
-                options={genderType}
-                name="gender"
-                placeholder="By gender"
-                value={filterValues.gender}
-              />
-            </Grid>
-            {/* FILTER BY STATUS */}
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => console.log(e)}
-                options={statusFilterBy}
-                name="status"
-                placeholder="By status"
-                value={filterValues.status}
-              />
-            </Grid>
-            {/* FILTER BY PROVIDER */}
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => console.log(e)}
-                options={providerFilterBy}
-                name="status"
-                placeholder="By provider"
-                value={filterValues.provider}
-              />
-            </Grid>
-            {/* FILTER BY PLAN */}
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => console.log(e)}
-                options={planFilterBy}
-                name="status"
-                placeholder="By plan"
-                value={filterValues.plan}
-              />
-            </Grid>
-            {/* ==== CLEAR FILTERS BUTTON ===== */}
-            <Grid item>
-              <ClearFiltersBtn
-                title="Clear filters"
-                onHandleClick={() => {
-                  resetFilters(
-                    setFilterValues,
-                    patientsPageDefaultFilterValues,
-                    variables,
-                    fetchPatient,
-                  );
-                }}
-              />
-            </Grid>
+          {/* FILTER BY STATUS */}
+          <Grid item>
+            <Filter
+              onHandleChange={(e) => console.log(e)}
+              options={statusFilterBy}
+              name="status"
+              placeholder="By status"
+              value={filterValues.status}
+            />
+          </Grid>
+          {/* FILTER BY PROVIDER */}
+          <Grid item>
+            <Filter
+              onHandleChange={(e) => console.log(e)}
+              options={providerFilterBy}
+              name="status"
+              placeholder="By provider"
+              value={filterValues.provider}
+            />
+          </Grid>
+          {/* FILTER BY PLAN */}
+          <Grid item>
+            <Filter
+              onHandleChange={(e) => console.log(e)}
+              options={planFilterBy}
+              name="status"
+              placeholder="By plan"
+              value={filterValues.plan}
+            />
+          </Grid>
+          {/* ==== CLEAR FILTERS BUTTON ===== */}
+          <Grid item>
+            <ClearFiltersBtn
+              title="Clear filters"
+              onHandleClick={() => {
+                resetFilters(
+                  setFilterValues,
+                  patientsPageDefaultFilterValues,
+                  variables,
+                  fetchPatient,
+                );
+              }}
+            />
           </Grid>
         </Grid>
-        {loading ? (
-          <Loader />
-        ) : profiles.length > 0 ? (
-          /* ================= PATIENTS TABLE ================= */
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
-              headCells={patientsHeadCells}
-              rows={profiles}
-              paginationLabel="Patients per page"
-              handleChangePage={fetchMoreData}
-              hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchPatient}
-              dataPageInfo={pageInfo}
-            >
-              {profiles.map((row, index) => {
-                const {
-                  dociId,
-                  firstName,
-                  lastName,
-                  plan,
-                  provider,
-                  image,
-                  consultations,
-                  _id,
-                  status,
-                } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
+      </Grid>
+      {loading ? (
+        <Loader />
+      ) : profiles.length > 0 ? (
+        /* ================= PATIENTS TABLE ================= */
+        <Grid
+          item
+          container
+          height="100%"
+          // sx={{ maxWidth: "100%" }}
+          direction="column"
+        >
+          <EnhancedTable
+            headCells={patientsHeadCells}
+            rows={profiles}
+            paginationLabel="Patients per page"
+            handleChangePage={fetchMoreData}
+            hasCheckbox={true}
+            changeLimit={changeTableLimit}
+            fetchData={fetchPatient}
+            dataPageInfo={pageInfo}
+          >
+            {profiles.map((row, index) => {
+              const {
+                dociId,
+                firstName,
+                lastName,
+                plan,
+                provider,
+                image,
+                consultations,
+                _id,
+                status,
+              } = row;
+              const isItemSelected = isSelected(_id, selectedRows);
+              const labelId = `enhanced-table-checkbox-${index}`;
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={_id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    style={{
+                      color: theme.palette.common.grey,
+                      textAlign: "left",
+                    }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
+                    {dociId && dociId.split("-")[1]}
+                  </TableCell>
+                  <TableCell align="left">
+                    <div
                       style={{
-                        color: theme.palette.common.grey,
-                        textAlign: "left",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "left",
                       }}
                     >
-                      {dociId && dociId.split("-")[1]}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${firstName}`}
-                            src={image ? image : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {plan ? plan : "No Plan"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {provider ? provider : "No Provider"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {consultations ? consultations : 0}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={status ? status : "No Status"}
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Active"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Active"
-                              ? theme.palette.common.green
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`patients/${_id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => {
-                          setSelectedSubMenu(2);
-                          setSelectedPatientMenu(0);
-                        }}
-                      >
-                        View Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
-        )}
-      </Grid>
-    </>
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt={`Display Photo of ${firstName}`}
+                          src={image ? image : displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="left">{plan ? plan : "No Plan"}</TableCell>
+                  <TableCell align="left">{provider ? provider : "No Provider"}</TableCell>
+                  <TableCell align="left">{consultations ? consultations : 0}</TableCell>
+                  <TableCell align="left">
+                    <Chip
+                      label={status ? status : "No Status"}
+                      className={classes.badge}
+                      style={{
+                        background:
+                          status === "Active"
+                            ? theme.palette.common.lightGreen
+                            : theme.palette.common.lightRed,
+                        color:
+                          status === "Active"
+                            ? theme.palette.common.green
+                            : theme.palette.common.red,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      className={classes.button}
+                      component={Link}
+                      to={`patients/${_id}`}
+                      endIcon={<ArrowForwardIosIcon />}
+                      onClick={() => {
+                        setSelectedSubMenu(2);
+                        setSelectedPatientMenu(0);
+                      }}
+                    >
+                      View Profile
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </EnhancedTable>
+        </Grid>
+      ) : (
+        <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
+      )}
+    </Grid>
   );
 };
 

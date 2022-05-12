@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 const ScrollToView = (props) => {
   const location = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(100, 100);
   }, [location]);
   return <main>{props.children}</main>;
 };
