@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
-
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
