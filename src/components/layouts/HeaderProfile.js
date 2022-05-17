@@ -23,6 +23,18 @@ const useStyles = makeStyles((theme) => ({
   notification: {
     fontSize: "clamp(2rem, 2vw, 1.2rem)",
   },
+  HeaderProfile: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  head: {
+    "@media(max-width:600px)": {
+      "&.MuiGrid-root": {
+        display: "none",
+      },
+    },
+  },
 }));
 
 const HeaderProfile = () => {
@@ -75,13 +87,14 @@ const HeaderProfile = () => {
   if (loading) return <p style={{ display: "hidden" }}>Loading</p>;
 
   return (
-    <header>
+    <header className={classes.HeaderProfile}>
       <Grid
         container
         alignItems="center"
         gap="3px"
         justifyContent="space-between"
         flexWrap="nowrap"
+        className={classes.head}
       >
         <Grid item>
           <Avatar alt="Display avatar" src={displayPhoto} />
@@ -98,25 +111,25 @@ const HeaderProfile = () => {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item>
-          <IconButton
-            aria-label={notificationsLabel(num)}
-            onClick={(event) => handleNotification(event)}
-          >
-            <Badge badgeContent={num} color="error">
-              <NotificationsActiveIcon
-                color="primary"
-                sx={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)" }}
-              />
-            </Badge>
-          </IconButton>
-          <Notifications
-            anchorEl={anchorEl}
-            Notifications={notifications}
-            setNotifications={setNotifications}
-            setAnchorEl={setAnchorEl}
-          />
-        </Grid>
+      </Grid>
+      <Grid item>
+        <IconButton
+          aria-label={notificationsLabel(num)}
+          onClick={(event) => handleNotification(event)}
+        >
+          <Badge badgeContent={num} color="error">
+            <NotificationsActiveIcon
+              color="primary"
+              sx={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)" }}
+            />
+          </Badge>
+        </IconButton>
+        <Notifications
+          anchorEl={anchorEl}
+          Notifications={notifications}
+          setNotifications={setNotifications}
+          setAnchorEl={setAnchorEl}
+        />
       </Grid>
     </header>
   );

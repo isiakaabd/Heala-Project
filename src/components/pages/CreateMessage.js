@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
+import { getErrors } from "components/Utilities/Time";
+import { useSnackbar } from "notistack";
 import { CustomButton, PreviousButton } from "components/Utilities";
 import { Divider, Grid, Typography } from "@mui/material";
 import FormikControl from "components/validation/FormikControl";
@@ -60,6 +62,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
@@ -104,9 +107,16 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       });
 
       history.push("/messages");
+      enqueueSnackbar("Message Created", {
+        variant: "success",
+      });
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getErrors(error), {
+        variant: "error",
+      });
+      console.error(error);
     }
+
     onSubmitProps.resetForm();
   };
   const onChange = useCallback(
