@@ -7,6 +7,10 @@ export const timeMoment = (dateString) => {
   return moment(dateString).format("hh:mm A");
 };
 
+export const getErrors = (error) => {
+  return error?.networkError?.result?.errors[0].message;
+};
+
 export const timeConverter = (str) => {
   const date = new Date(str),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),

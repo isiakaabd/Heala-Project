@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
+import { getErrors } from "components/Utilities/Time";
+import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -67,6 +69,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
     // }
   }, [fetchDoctors]);
 
+  const { enqueueSnackbar } = useSnackbar();
   const fetchMoreFunc = (e, newPage) => {
     fetchMore({
       page: newPage,
@@ -102,27 +105,37 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       cadre,
       image,
     } = values;
-    const correctDOB = timeConverter(dob);
-    await createDoc({
-      variables: {
-        dociId,
-        createdAt,
-        updatedAt,
-        firstName,
-        lastName,
-        gender,
-        phoneNumber: phone,
-        email,
-        hospital,
-        specialization,
-        dob: correctDOB,
-        cadre,
-        image,
-        providerId: "61db6f8968b248001aec4fcb",
-      },
-      refetchQueries: [{ query: getDoctorsProfile }],
-    });
-    setOpenAddHcp(false);
+    try {
+      const correctDOB = timeConverter(dob);
+      await createDoc({
+        variables: {
+          dociId,
+          createdAt,
+          updatedAt,
+          firstName,
+          lastName,
+          gender,
+          phoneNumber: phone,
+          email,
+          hospital,
+          specialization,
+          dob: correctDOB,
+          cadre,
+          image,
+          providerId: "61db6f8968b248001aec4fcb",
+        },
+        refetchQueries: [{ query: getDoctorsProfile }],
+      });
+      setOpenAddHcp(false);
+      enqueueSnackbar("Doctor profile updated", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar(getErrors(error), {
+        variant: "error",
+      });
+      console.error(error);
+    }
   };
   const specializations = [
     { key: "diagnostics", value: "diagnostics" },

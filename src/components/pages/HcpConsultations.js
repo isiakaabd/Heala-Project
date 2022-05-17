@@ -94,7 +94,7 @@ const HcpConsultations = (props) => {
   }, [fetchDocConsultations, hcpId]);
 
   useEffect(() => {
-    if (data && data.getConsultations.data) {
+    if (data?.getConsultations.data) {
       setConsultations(data.getConsultations.data);
       setPageInfo(data.getConsultations.pageInfo);
     }

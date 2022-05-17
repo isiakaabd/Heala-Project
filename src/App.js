@@ -35,7 +35,6 @@ const App = ({ window }) => {
   const [logout_user] = useMutation(LOGOUT_USER);
   const [mobileOpen, setMobileOpen] = useState(false);
   const drawerWidth = 200;
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
