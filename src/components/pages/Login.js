@@ -65,6 +65,11 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  error: {
+    "&.MuiAlert-root": {
+      fontSize: "clamp(1rem, 1.5vw, 1.5rem)",
+    },
+  },
   logoAlign: {
     width: "100%",
     display: "flex",
@@ -192,6 +197,7 @@ const Login = () => {
                           {Object.keys(authError).length > 0 && (
                             <Alert
                               variant="filled"
+                              className={classes.error}
                               severity={authError.type}
                               sx={{ justifyContent: "center" }}
                             >
