@@ -60,6 +60,6 @@ const CheckboxesGroup = ({ row }) => {
   );
 };
 CheckboxesGroup.propTypes = {
-  row: PropTypes.array.isRequired,
+  row: PropTypes.array,
 };
 export default CheckboxesGroup;

@@ -31,7 +31,7 @@ const DisplayProfile = ({
   statusId,
   specialization,
   status,
-  setSelectedSubMenu,
+  /* setSelectedSubMenu, */
   type,
 }) => {
   const classes = useStyles();
@@ -112,18 +112,6 @@ const DisplayProfile = ({
       {/* Action Buttons grid */}
       <Grid item>
         <Grid container alignItems="center" rowSpacing={2}>
-          {type === "doctor" ? (
-            <Grid item style={{ marginRight: "2rem" }}>
-              <CustomButton
-                endIcon={<HiChat />}
-                title="View Doctor Verification"
-                type={greenButton}
-                component={Link}
-                to={`/hcps/${hcpId}/verification`}
-                onClick={() => setSelectedSubMenu(7)}
-              />
-            </Grid>
-          ) : null}
           {type !== "" ? (
             <Grid item style={{ marginRight: "2rem" }}>
               <CustomButton
@@ -136,7 +124,7 @@ const DisplayProfile = ({
                     ? `/patients/${patientId}/profile/chat`
                     : `/hcps/${hcpId}/profile/chat`
                 }
-                onClick={() => setSelectedSubMenu(6)}
+                /* onClick={() => setSelectedSubMenu(6)} */
               />
             </Grid>
           ) : null}
@@ -156,11 +144,11 @@ DisplayProfile.propTypes = {
   chatPath: PropTypes.string,
   type: PropTypes.string,
   setChatMediaActive: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
+  /* setSelectedSubMenu: PropTypes.func,
   selectedMenu: PropTypes.number,
   setSelectedPatientMenu: PropTypes.func,
   setSelectedScopedMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default DisplayProfile;

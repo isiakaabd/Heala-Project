@@ -32,15 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const ViewReferral = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const { referralId } = useParams();
-  const { loading, data, error } = useQuery(getRefferal, { variables: { id: referralId } });
+  const { loading, data, error } = useQuery(getRefferal, {
+    variables: { id: referralId },
+  });
   useEffect(() => {
     setSelectedMenu(9);
-    setSelectedSubMenu(10);
+    /* setSelectedSubMenu(10); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -267,9 +272,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
 ViewReferral.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewReferral;

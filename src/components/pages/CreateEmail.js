@@ -3,12 +3,9 @@ import styled from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Grid, Divider, Typography } from "@mui/material";
 import ChipInput from "material-ui-chip-input";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
-import Divider from "@mui/material/Divider";
+import { PreviousButton, CustomButton } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 // import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -86,7 +83,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const CreateEmail = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const isEvent = (event) =>
     event && (event instanceof Event || event.nativeEvent instanceof Event);
   const history = useHistory();
@@ -97,10 +97,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
 
   useEffect(() => {
     setSelectedMenu(6);
-    setSelectedSubMenu(7);
+    /* setSelectedSubMenu(7); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -288,10 +288,10 @@ const ChipWrapper = styled.div`
   font-size: 1.4rem;
 `;
 CreateEmail.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default CreateEmail;

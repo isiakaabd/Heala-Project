@@ -151,7 +151,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const UserTypes = ({
+  selectedMenu,
+  setSelectedMenu /*  selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -185,7 +188,7 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   const [singleData, setSingleData] = useState();
   const [fetchUserTypes, { loading, data, error, refetch }] = useLazyQuery(getUserTypes);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchUserTypes({
       variables: {
         first: pageInfo?.limit,
@@ -217,10 +220,10 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 
   useEffect(() => {
     setSelectedMenu(12);
-    setSelectedSubMenu(13);
+    /* setSelectedSubMenu(13); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
@@ -476,9 +479,9 @@ const UserTypes = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
 };
 UserTypes.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default UserTypes;

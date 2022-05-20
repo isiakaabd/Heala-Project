@@ -75,7 +75,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const PendingPayout = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu,  setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -84,10 +87,10 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(8);
-    setSelectedSubMenu(9);
+    /* setSelectedSubMenu(9); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /*  selectedSubMenu */]);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -96,7 +99,7 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
-        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
       </Grid>
 
       <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
@@ -225,10 +228,10 @@ const PendingPayout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 };
 
 PendingPayout.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default PendingPayout;

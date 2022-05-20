@@ -65,13 +65,13 @@ const filterOptions = [
 const HcpConsultations = (props) => {
   const {
     selectedMenu,
-    selectedSubMenu,
+    setSelectedMenu,
+    /* selectedSubMenu,
     selectedHcpMenu,
     selectedScopedMenu,
-    setSelectedMenu,
     setSelectedSubMenu,
     setSelectedHcpMenu,
-    setSelectedScopedMenu,
+    setSelectedScopedMenu, */
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -83,7 +83,7 @@ const HcpConsultations = (props) => {
 
   const [fetchDocConsultations, { loading, data, error, refetch }] = useLazyQuery(getDocConsult);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchDocConsultations({
       variables: {
         id: hcpId,
@@ -94,7 +94,7 @@ const HcpConsultations = (props) => {
   }, [fetchDocConsultations, hcpId]);
 
   useEffect(() => {
-    if (data?.getConsultations.data) {
+    if (data && data.getConsultations.data) {
       setConsultations(data.getConsultations.data);
       setPageInfo(data.getConsultations.pageInfo);
     }
@@ -105,18 +105,18 @@ const HcpConsultations = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
+    /* setSelectedSubMenu(3);
     setSelectedHcpMenu(6);
-    setSelectedScopedMenu(0);
+    setSelectedScopedMenu(0); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" height="100%" gap={2}>
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
 
       <Grid item container justifyContent="space-between" alignItems="center">
@@ -256,11 +256,11 @@ const HcpConsultations = (props) => {
                         component={Link}
                         to={`/hcps/${hcpId}/consultations/case-notes/${_id}`}
                         endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => {
+                        /* onClick={() => {
                           setSelectedSubMenu(2);
                           setSelectedHcpMenu(0);
                           setSelectedScopedMenu(2);
-                        }}
+                        }} */
                       >
                         View Details
                       </Button>

@@ -16,7 +16,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Loader, FilterList, PreviousButton } from "components/Utilities";
+import { Loader, FilterList } from "components/Utilities";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,13 +65,13 @@ const filterOptions = [
 const Consultations = (props) => {
   const {
     selectedMenu,
-    selectedSubMenu,
+    setSelectedMenu,
+    /* selectedSubMenu,
     selectedPatientMenu,
     selectedScopedMenu,
-    setSelectedMenu,
     setSelectedSubMenu,
     setSelectedPatientMenu,
-    setSelectedScopedMenu,
+    setSelectedScopedMenu, */
   } = props;
   const [pageInfo, setPageInfo] = useState({});
   const classes = useStyles();
@@ -103,20 +103,20 @@ const Consultations = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
+    /*  setSelectedSubMenu(2);
     setSelectedPatientMenu(5);
-    setSelectedScopedMenu(0);
+    setSelectedScopedMenu(0); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu, selectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu, selectedScopedMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
   return (
     <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
-      <Grid item>
+      {/* <Grid item>
         <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
-      </Grid>
+      </Grid> */}
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
@@ -140,8 +140,8 @@ const Consultations = (props) => {
             {consultations
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const { doctorData, contactMedium, symptoms, _id, type, status, createdAt } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
+                const { doctorData } = row;
+                const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -149,12 +149,12 @@ const Consultations = (props) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={_id}
+                    key={row._id}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -163,7 +163,7 @@ const Consultations = (props) => {
                       />
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      {dateMoment(createdAt)}
+                      {dateMoment(row.createdAt)}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -193,8 +193,8 @@ const Consultations = (props) => {
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <Grid container gap={1}>
-                        {symptoms
-                          ? symptoms.map((i) => {
+                        {row.symptoms
+                          ? row.symptoms.map((i) => {
                               return <p key={i.name}>{i.name}</p>;
                             })
                           : "No Value"}
@@ -208,7 +208,7 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {contactMedium ? contactMedium : "No Value"}
+                      {row.contactMedium ? row.contactMedium : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -218,7 +218,7 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {type ? type : "No Value"}
+                      {row.type ? row.type : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -228,19 +228,19 @@ const Consultations = (props) => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {status ? status : "No Value"}
+                      {row.status ? row.status : "No Value"}
                     </TableCell>
                     <TableCell align="left">
                       <Button
                         variant="contained"
                         className={classes.button}
                         component={Link}
-                        to={`/patients/${patientId}/consultations/case-note/${_id}`}
+                        to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
                         endIcon={<ArrowForwardIosIcon />}
                         onClick={() => {
-                          setSelectedSubMenu(2);
+                          /* setSelectedSubMenu(2);
                           setSelectedPatientMenu(0);
-                          setSelectedScopedMenu(1);
+                          setSelectedScopedMenu(1); */
                         }}
                       >
                         View Details
@@ -259,14 +259,14 @@ const Consultations = (props) => {
 };
 
 Consultations.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default Consultations;

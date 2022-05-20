@@ -80,8 +80,8 @@ const Appointments = ({ setSelectedSubMenu, setSelectedAppointmentMenu }) => {
 };
 
 Appointments.propTypes = {
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedAppointmentMenu: PropTypes.func.isRequired,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedAppointmentMenu: PropTypes.func,
 };
 
 export default Appointments;

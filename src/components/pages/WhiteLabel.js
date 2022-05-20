@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WhiteLabel = ({ setSelectedSubMenu }) => {
+const WhiteLabel = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -54,7 +54,7 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
           <Link
             to="/label/provider"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(13)}
+            /* onClick={() => setSelectedSubMenu(13)} */
           >
             <Card alt="providers " title="Providers" background={theme.palette.common.lightGreen}>
               <Administrator fill={theme.palette.common.green} />
@@ -68,7 +68,7 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
           <Link
             to="/label/types"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(13)}
+            /* onClick={() => setSelectedSubMenu(13)} */
           >
             <Card alt="User Types" title="User Types" background={theme.palette.common.lightRed}>
               <ConsulationIcon fill={theme.palette.common.red} />
@@ -81,9 +81,9 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
 };
 
 WhiteLabel.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 export default WhiteLabel;

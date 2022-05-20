@@ -57,24 +57,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MedicalRecords = (props) => {
-  const {
-    selectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
-    setSelectedMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu,
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
 
   const [patients, { loading, data, error }] = useLazyQuery(getProfile);
-  const [alergy, allergyResult] = useLazyQuery(findAllergies, { variables: { id: patientId } });
-  const [labResult, labResults] = useLazyQuery(getLabResult, { variables: { id: patientId } });
+  const [alergy, allergyResult] = useLazyQuery(findAllergies, {
+    variables: { id: patientId },
+  });
+  const [labResult, labResults] = useLazyQuery(getLabResult, {
+    variables: { id: patientId },
+  });
   const [alergies, setAlergies] = useState([]);
   const [lab, setLab] = useState([]);
-  console.log(lab);
+
   useEffect(() => {
     (async () => {
       try {
@@ -91,11 +88,11 @@ const MedicalRecords = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(4);
+    /* setSelectedSubMenu(2);
+    setSelectedPatientMenu(4); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
   useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
@@ -110,7 +107,7 @@ const MedicalRecords = (props) => {
         <Grid item style={{ marginBottom: "3rem" }}>
           <PreviousButton
             path={`/patients/${patientId}`}
-            onClick={() => setSelectedPatientMenu(0)}
+            /* onClick={() => setSelectedPatientMenu(0)} */
           />
         </Grid>
         <Grid item>
@@ -306,12 +303,12 @@ const MedicalRecords = (props) => {
   } else return <NoData />;
 };
 MedicalRecords.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default MedicalRecords;

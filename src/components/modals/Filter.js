@@ -112,11 +112,11 @@ const Filter = (props) => {
 };
 
 Filter.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  type: PropTypes.string,
   name: PropTypes.string,
-  options: PropTypes.array.isRequired,
-  initialValues: PropTypes.object.isRequired,
-  validationSchema: PropTypes.object.isRequired,
+  options: PropTypes.array,
+  initialValues: PropTypes.object,
+  validationSchema: PropTypes.object,
 };
 export default Filter;

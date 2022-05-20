@@ -14,7 +14,6 @@ import {
   Alert,
   Chip,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -117,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSelectedMenu }) => {
+const Permission = ({ selectedMenu, setSelectedMenu }) => {
   const [singlePermission, setSinglePermission] = useState();
 
   const checkbox = [
@@ -228,10 +227,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(11);
-    setSelectedSubMenu(12);
+    /* setSelectedSubMenu(12); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [permission, setPermission] = useState([]);
 
   useEffect(() => {
@@ -256,7 +255,7 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       )}
       <Grid container direction="column">
         <Grid item>
-          <PreviousButton path="/settings" onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton path="/settings" /* onClick={() => setSelectedSubMenu(0)} */ />
         </Grid>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
@@ -499,8 +498,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 export default Permission;
 Permission.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
+  /*  selectedSubMenu: PropTypes.number,
   setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };

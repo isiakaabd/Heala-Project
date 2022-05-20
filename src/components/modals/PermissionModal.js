@@ -146,13 +146,13 @@ const PermissionModal = ({
 };
 export default PermissionModal;
 PermissionModal.propTypes = {
-  handleDialogClose: PropTypes.func.isRequired,
+  handleDialogClose: PropTypes.func,
   setSinglePermission: PropTypes.func,
   setAlert: PropTypes.func,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   editId: PropTypes.string,
-  options: PropTypes.array.isRequired,
-  initialValues: PropTypes.object.isRequired,
-  singlePermission: PropTypes.object.isRequired,
-  validationSchema: PropTypes.object.isRequired,
+  options: PropTypes.array,
+  initialValues: PropTypes.object,
+  singlePermission: PropTypes.object,
+  validationSchema: PropTypes.object,
 };

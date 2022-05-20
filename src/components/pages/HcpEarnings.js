@@ -110,10 +110,10 @@ const HcpEarnings = (props) => {
   const {
     selectedMenu,
     setSelectedMenu,
-    selectedSubMenu,
+    /*  selectedSubMenu,
     setSelectedSubMenu,
     selectedHcpMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   const [form, setForm] = useState("");
@@ -157,18 +157,18 @@ const HcpEarnings = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(4);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(4); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
@@ -288,12 +288,12 @@ const HcpEarnings = (props) => {
 };
 
 HcpEarnings.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpEarnings;

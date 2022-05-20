@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -155,9 +155,9 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 
   useEffect(() => {
     setSelectedMenu(5);
-    setSelectedSubMenu(0);
+    /* setSelectedSubMenu(0); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
@@ -180,7 +180,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
               type={greenButtonType}
               component={Link}
               to="/messages/create-message"
-              onClick={() => setSelectedSubMenu(6)}
+              /* onClick={() => setSelectedSubMenu(6)} */
             />
           </Grid>
         </Grid>
@@ -281,7 +281,7 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
                           component={Link}
                           to={`messages/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
-                          onClick={() => setSelectedSubMenu(6)}
+                          /* onClick={() => setSelectedSubMenu(6)} */
                         >
                           View Message
                         </Button>
@@ -300,10 +300,10 @@ const Messages = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedS
 };
 
 Messages.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Messages;

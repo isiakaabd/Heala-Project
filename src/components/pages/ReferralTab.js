@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import { Loader, Search } from "components/Utilities";
@@ -85,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
+const ReferralTab = () => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const theme = useTheme();
@@ -294,9 +293,9 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                           component={Link}
                           to={`referrals/${_id}`}
                           endIcon={<ArrowForwardIosIcon />}
-                          onClick={() => {
+                          /* onClick={() => {
                             setSelectedSubMenu(10);
-                          }}
+                          }} */
                         >
                           View Referral
                         </Button>
@@ -315,8 +314,8 @@ const ReferralTab = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 };
 
 ReferralTab.propTypes = {
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  /* setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default ReferralTab;

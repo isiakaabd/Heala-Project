@@ -700,3 +700,21 @@ export const createDOctorProfile = gql`
     }
   }
 `;
+
+export const addTest = gql`
+  mutation addDiagnosticLabTest($name: String, $price: Float, $tat: String) {
+    addDiagnosticLabTest(data: { name: $name, price: $price, tat: $tat }) {
+      diagnosticLabTest {
+        _id
+        partner
+        name
+        price
+        tat
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

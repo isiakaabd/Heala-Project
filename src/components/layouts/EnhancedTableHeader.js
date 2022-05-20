@@ -11,12 +11,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tableHeaderCell: {
     "&.MuiTableCell-root, &.MuiTableCell-root": {
-      fontSize: "calc(1.4rem, 3vw,1.65rem)",
+      fontSize: "1.65rem",
     },
 
     "&.MuiTableCell-root": {
-      // fontSize: "1.35rem",
-      fontSize: "calc(1rem, 2vw,1.35rem)",
+      fontSize: "1.35rem",
     },
   },
 }));
@@ -58,10 +57,10 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  rowCount: PropTypes.number.isRequired,
-  headCells: PropTypes.array.isRequired,
+  numSelected: PropTypes.number,
+  onSelectAllClick: PropTypes.func,
+  rowCount: PropTypes.number,
+  headCells: PropTypes.array,
   hasCheckbox: PropTypes.bool,
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo, createElement } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -59,11 +59,11 @@ const useStyles = makeStyles((theme) => ({
 const SinglePatient = (props) => {
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedPatientMenu,
     setSelectedSubMenu,
-    setSelectedPatientMenu,
+    setSelectedPatientMenu, */
   } = props;
   const history = useHistory();
 
@@ -73,7 +73,10 @@ const SinglePatient = (props) => {
   const [disableUser] = useMutation(deleteProfile);
   const onConfirm = async () => {
     try {
-      await disableUser({ variables: { id: patientId }, refetchQueries: [{ query: getPatients }] });
+      await disableUser({
+        variables: { id: patientId },
+        refetchQueries: [{ query: getPatients }],
+      });
 
       history.push("/patients");
     } catch (error) {
@@ -140,19 +143,6 @@ const SinglePatient = (props) => {
     active: "#f4f4f4",
   };
 
-  // const greenButton = {
-  //   background: theme.palette.success.main,
-  //   hover: theme.palette.success.light,
-  //   active: theme.palette.success.dark,
-  // };
-  // const initialValues = {
-  //   type: "",
-  //   reason: "",
-  //   note: "",
-  //   specialization: "",
-  //   patient: patientId,
-  //   doctor: localStorage.getItem("user_id"),
-  // };
   const [patientProfile, setPatientProfile] = useState("");
   const { loading, error, data } = useQuery(findProfile, {
     variables: {
@@ -171,24 +161,23 @@ const SinglePatient = (props) => {
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
-  // const handleDialogOpen = () => setIsOpen(true);
-
-  // const handleDialogClose = () => setIsOpen(false);
-  // const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(0);
+    /* setSelectedSubMenu(2);
+    setSelectedPatientMenu(0); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   else {
     return (
       <Grid container direction="column" className={classes.gridContainer} gap={2}>
         <Grid item>
-          <PreviousButton path={`/patients`} onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton
+            path={`/patients`}
+            /* onClick={() => setSelectedSubMenu(0)} */
+          />
         </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
@@ -221,14 +210,6 @@ const SinglePatient = (props) => {
                   onClick={() => setOpenDisablePatient(true)}
                 />
               </Grid>
-              {/* <Grid item>
-                <CustomButton
-                  endIcon={<TrendingUpIcon />}
-                  title="Refer Patient"
-                  type={greenButton}
-                  onClick={handleDialogOpen}
-                />
-              </Grid> */}
             </Grid>
           </Grid>
         </Grid>
@@ -241,10 +222,10 @@ const SinglePatient = (props) => {
               className={classes.parentGrid}
               component={Link}
               to={`/patients/${patientId}/${card.path}`}
-              onClick={() => setSelectedPatientMenu(card.id)}
+              /* onClick={() => setSelectedPatientMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, { fill: card.fill })}
+                {createElement(card.icon, { fill: card.fill })}
               </Card>
             </Grid>
           ))}
@@ -258,10 +239,10 @@ const SinglePatient = (props) => {
               className={classes.parentGrid}
               component={Link}
               to={`/patients/${patientId}/${card.path}`}
-              onClick={() => setSelectedPatientMenu(card.id)}
+              /* onClick={() => setSelectedPatientMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, {
+                {createElement(card.icon, {
                   fill: card.fill,
                   color: "success",
                   style: { fontSize: "4rem" },
@@ -278,13 +259,6 @@ const SinglePatient = (props) => {
           onConfirm={onConfirm}
           confirmationMsg="disable Patient"
         />
-        {/* <Modals isOpen={isOpen} title="Refer Patient" handleClose={handleDialogClose}>
-          <ReferPatient
-            type="refer"
-            handleDialogClose={handleDialogClose}
-            initialValues={initialValues}
-          />
-        </Modals> */}
       </Grid>
     );
   }
@@ -292,11 +266,11 @@ const SinglePatient = (props) => {
 
 SinglePatient.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  selectedPatientMenu: PropTypes.number.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
+  setSelectedPatientMenu: PropTypes.func.isRequired, */
 };
 
-export default React.memo(SinglePatient);
+export default memo(SinglePatient);

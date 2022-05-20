@@ -78,10 +78,10 @@ const Modals = ({
   );
 };
 Modals.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool,
   isClose: PropTypes.bool,
-  handleClose: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
+  handleClose: PropTypes.func,
+  children: PropTypes.node,
   title: PropTypes.string,
   color: PropTypes.string,
   height: PropTypes.string,

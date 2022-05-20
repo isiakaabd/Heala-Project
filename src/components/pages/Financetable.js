@@ -78,7 +78,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Financetable = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -105,16 +108,16 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
   useEffect(() => {
     setSelectedMenu(8);
-    setSelectedSubMenu(9);
+    /* setSelectedSubMenu(9); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} height="100%">
       <Grid item>
-        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
       </Grid>
 
       <>
@@ -227,10 +230,10 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 };
 
 Financetable.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Financetable;

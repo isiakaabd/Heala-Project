@@ -213,7 +213,7 @@ const Subscription = () => {
   const [plan, setPlan] = useState([]);
   const [fetchPlans, { loading, data, error, refetch }] = useLazyQuery(getPlans);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPlans({
       variables: {
         first: pageInfo?.limit,

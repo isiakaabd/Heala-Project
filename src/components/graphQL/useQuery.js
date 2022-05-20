@@ -701,9 +701,11 @@ export const getDoctorsProfile = gql`
     $gender: String
     $cadre: String
     $page: Int
+    $first: Int
   ) {
     doctorProfiles(
       filterBy: { specialization: $specialization, dociId: $dociId, gender: $gender, cadre: $cadre }
+      first: $first
       page: $page
     ) {
       profile {
@@ -1138,6 +1140,20 @@ export const getUsertypess = gql`
         pagingCounter
         prevPage
         nextPage
+      }
+    }
+  }
+`;
+
+export const getListOfLabTests = gql`
+  query getDiagnosticLabTests {
+    getDiagnosticLabTests {
+      data {
+        _id
+        partner
+        name
+        price
+        tat
       }
     }
   }

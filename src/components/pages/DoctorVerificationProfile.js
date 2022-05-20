@@ -13,16 +13,15 @@ import { Loader, PreviousButton, DisplayProfile } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
 const DoctorVerificationProfile = ({
-  setSelectedMenu,
   selectedMenu,
-  selectedSubMenu,
+  setChatMediaActive,
+  chatMediaActive,
+  /* selectedSubMenu,
   setSelectedSubMenu,
   setScopedMenu,
   scopedMenu,
-  setChatMediaActive,
-  chatMediaActive,
   setDoctorView,
-  doctorView,
+  doctorView, */
 }) => {
   const useStyles = makeStyles((theme) => ({
     gridsWrapper: {
@@ -109,10 +108,10 @@ const DoctorVerificationProfile = ({
     // setScopedMenu(1);
     // setChatMediaActive(false);
     // setSelectedMenu(7);
-    setSelectedSubMenu(8);
-    setDoctorView(1);
+    /* setSelectedSubMenu(8);
+    setDoctorView(1); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, doctorView, chatMediaActive, scopedMenu]);
+  }, [selectedMenu, chatMediaActive /* selectedSubMenu, doctorView, scopedMenu */]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {
@@ -132,7 +131,7 @@ const DoctorVerificationProfile = ({
       <Grid item>
         <PreviousButton
           path={`/verification/view/${viewId}`}
-          onClick={() => setSelectedSubMenu(8)}
+          /* onClick={() => setSelectedSubMenu(8)} */
         />
       </Grid>
       {/* Display photo and profile name grid */}
@@ -145,7 +144,7 @@ const DoctorVerificationProfile = ({
           specialization={specialization ? specialization : "Not assigned"}
           // chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
-          setSelectedSubMenu={setSelectedSubMenu}
+          /* setSelectedSubMenu={setSelectedSubMenu} */
           selectedMenu={selectedMenu}
           type=""
         />
@@ -278,14 +277,14 @@ const DoctorVerificationProfile = ({
 
 DoctorVerificationProfile.propTypes = {
   selectedMenu: PropTypes.number,
-  scopedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  doctorView: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setScopedMenu: PropTypes.func,
-  setDoctorView: PropTypes.func,
   chatMediaActive: PropTypes.number,
   setChatMediaActive: PropTypes.func,
+  /* scopedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  doctorView: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setScopedMenu: PropTypes.func,
+  setDoctorView: PropTypes.func, */
 };
 export default DoctorVerificationProfile;

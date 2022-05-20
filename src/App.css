@@ -72,13 +72,13 @@ body {
 }
 
 .container {
-  min-width: 100vw;
+  width: 100%;
   height: 100%;
 }
 
 /* Table pagination menu items */
 .MuiTablePagination-menuItem {
-  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+  font-size: 1.2rem !important;
 }
 
 .MuiSelect-select {

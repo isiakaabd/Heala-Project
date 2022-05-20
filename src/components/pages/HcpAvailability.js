@@ -21,26 +21,26 @@ const HcpAvailability = (props) => {
 
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedHcpMenu,
     setSelectedSubMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(3);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(3); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       <Grid item>
         <Typography variant="h2">HCP Availability</Typography>
@@ -63,12 +63,12 @@ const HcpAvailability = (props) => {
 };
 
 HcpAvailability.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpAvailability;

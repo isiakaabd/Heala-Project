@@ -134,11 +134,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewHCP = ({
   selectedMenu,
-  selectedSubMenu,
   setSelectedMenu,
+  /* selectedSubMenu,
   setSelectedSubMenu,
   setDoctorView,
-  doctorView,
+  doctorView, */
 }) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
@@ -303,10 +303,10 @@ const ViewHCP = ({
   const classes = useStyles();
   useEffect(() => {
     setSelectedMenu(7);
-    setSelectedSubMenu(8);
-    setDoctorView(0);
+    /* setSelectedSubMenu(8);
+    setDoctorView(0); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, doctorView]);
+  }, [selectedMenu /* selectedSubMenu, doctorView */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -439,10 +439,10 @@ const ViewHCP = ({
                   width="100%"
                   component={Link}
                   to={`/hcps/${doctorData && doctorData._id}`}
-                  onClick={() => {
+                  /* onClick={() => {
                     setSelectedSubMenu(7);
                     setDoctorView(1);
-                  }}
+                  }} */
                   // isSubmitting={submit}
                   // onClick={() => handleUpdateProVider(reference?.reference_code)}
                   // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
@@ -756,11 +756,11 @@ const ViewHCP = ({
 
 ViewHCP.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
   setSelectedSubMenu: PropTypes.func,
   doctorView: PropTypes.number,
-  setDoctorView: PropTypes.func,
+  setDoctorView: PropTypes.func, */
 };
 
 export default ViewHCP;

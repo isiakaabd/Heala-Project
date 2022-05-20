@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
-import Loader from "components/Utilities/Loader";
+import { Loader, CustomButton } from "components/Utilities";
 import { useParams } from "react-router-dom";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
@@ -61,12 +59,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Chat = ({
-  setSelectedSubMenu,
-  setSelectedMenu,
-  selectedSubMenu,
   selectedMenu,
+  setSelectedMenu,
+  /* selectedSubMenu,
+  setSelectedSubMenu,
   setSelectedPatientMenu,
-  setSelectedScopedMenu,
+  setSelectedScopedMenu, */
 }) => {
   const { patientId } = useParams();
   const classes = useStyles();
@@ -75,7 +73,9 @@ const Chat = ({
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
-  const { data, loading } = useQuery(getProfile, { variables: { profileId: patientId } });
+  const { data, loading } = useQuery(getProfile, {
+    variables: { profileId: patientId },
+  });
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -120,16 +120,16 @@ const Chat = ({
     }
     onSubmitProps.resetForm();
     history.push(`/patients/${patientId}/profile`);
-    setSelectedScopedMenu(0);
+    /* setSelectedScopedMenu(0); */
   };
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
+    /* setSelectedSubMenu(2);
     setSelectedPatientMenu(1);
-    setSelectedScopedMenu(3);
+    setSelectedScopedMenu(3); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu */]);
   if (loading) return <Loader />;
   return (
     <Formik
@@ -145,12 +145,12 @@ const Chat = ({
         return (
           <Form>
             <Grid container direction="column">
-              <Grid item style={{ marginBottom: "3rem" }}>
+              {/* <Grid item style={{ marginBottom: "3rem" }}>
                 <PreviousButton
                   path={`/patients/${patientId}/profile`}
                   onClick={() => setSelectedScopedMenu(0)}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
                   <Typography variant="h4" style={{ marginBottom: "3rem" }}>
@@ -237,14 +237,14 @@ const Chat = ({
 };
 
 Chat.propTypes = {
+  selectedMenu: PropTypes.func,
+  setSelectedMenu: PropTypes.func,
   chatMediaActive: PropTypes.bool,
   setChatMediaActive: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedMenu: PropTypes.func,
+  /* setSelectedSubMenu: PropTypes.func,
   selectedSubMenu: PropTypes.func,
-  selectedMenu: PropTypes.func,
   setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default Chat;

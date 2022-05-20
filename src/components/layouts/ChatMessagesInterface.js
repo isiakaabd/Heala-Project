@@ -172,7 +172,7 @@ const ChatMessagesInterface = ({ setChatMediaActive }) => {
 };
 
 ChatMessagesInterface.propTypes = {
-  setChatMediaActive: PropTypes.func.isRequired,
+  setChatMediaActive: PropTypes.func,
 };
 
 export default ChatMessagesInterface;

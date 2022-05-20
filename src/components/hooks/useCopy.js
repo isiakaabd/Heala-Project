@@ -56,6 +56,6 @@ export const useCopy = () => {
 };
 
 useCopy.PropTypes = {
-  text: t.string.isRequired,
+  text: t.string,
   name: t.string,
 };

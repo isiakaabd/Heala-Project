@@ -137,7 +137,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Administrator = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
@@ -252,10 +255,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(11);
-    setSelectedSubMenu(12);
+    /* setSelectedSubMenu(12); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -478,10 +481,10 @@ const Administrator = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   );
 };
 Administrator.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Administrator;

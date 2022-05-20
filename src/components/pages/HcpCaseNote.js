@@ -61,13 +61,13 @@ const useStyles = makeStyles((theme) => ({
 
 const HcpCaseNotes = ({
   selectedMenu,
-  selectedSubMenu,
   setSelectedMenu,
+  /* selectedSubMenu,
   selectedHcpMenu,
   selectedScopedMenu,
   setSelectedSubMenu,
   setSelectedHcpMenu,
-  setSelectedScopedMenu,
+  setSelectedScopedMenu, */
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -83,11 +83,11 @@ const HcpCaseNotes = ({
   const [consult, setConsult] = useState([]);
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
+    /* setSelectedSubMenu(3);
     setSelectedHcpMenu(6);
-    setSelectedScopedMenu(2);
+    setSelectedScopedMenu(2); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
 
   const { loading, data, error } = useQuery(getConsult, {
     variables: {
@@ -134,7 +134,7 @@ const HcpCaseNotes = ({
         <Grid item>
           <PreviousButton
             path={`/hcps/${hcpId}/consultations`}
-            onClick={() => setSelectedHcpMenu(6)}
+            /* onClick={() => setSelectedHcpMenu(6)} */
           />
         </Grid>
         <Grid item>
@@ -618,14 +618,14 @@ const HcpCaseNotes = ({
 };
 
 HcpCaseNotes.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default HcpCaseNotes;

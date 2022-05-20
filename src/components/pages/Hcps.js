@@ -1,8 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
-import { getErrors } from "components/Utilities/Time";
-import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -28,11 +25,16 @@ import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
 import { Search, Loader, Modals, CustomButton } from "components/Utilities";
 import {
   changeTableLimit,
+  fetchMoreData,
   onFilterValueChange,
   resetFilters,
 } from "../../helpers/filterHelperFunctions";
 import {
+  addDocInitialValues,
   cadreFilterBy,
+  defaultPageInfo,
+  docCadreOptions,
+  docSpecializationsOptions,
   doctorsPageDefaultFilterValues,
   genderType,
   providerFilterBy,
@@ -40,54 +42,44 @@ import {
   statusFilterBy,
 } from "../../helpers/mockData";
 
-const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
+const Hcps = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const [pageInfo, setPageInfo] = useState([]);
-  const cadre = [
-    { key: "1", value: "1" },
-    { key: "2", value: "2" },
-    { key: "3", value: "3" },
-    { key: "4", value: "4" },
-    { key: "5", value: "5" },
-  ];
+  const [profiles, setProfiles] = useState("");
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  // const [searchHcp, setSearchHcp] = useState("");
+  const [openAddHcp, setOpenAddHcp] = useState(false);
+  const [createDoc] = useMutation(createDOctorProfile);
+  const { selectedRows } = useSelector((state) => state.tables);
+  const { setSelectedRows } = useActions();
+  const [filterValues, setFilterValues] = useState(doctorsPageDefaultFilterValues);
+
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
     active: theme.palette.primary.dark,
   };
 
-  const [fetchDoctors, { data, error, loading, refetch, fetchMore, variables }] =
+  const [fetchDoctors, { data, error, loading, refetch, variables }] =
     useLazyQuery(getDoctorsProfile);
 
-  useEffect(() => {
-    fetchDoctors();
-    //{
-    // variables: {
-    //   first: pageInfo.limit,
-    // },
-    // }
-  }, [fetchDoctors]);
-
-  const { enqueueSnackbar } = useSnackbar();
-  const fetchMoreFunc = (e, newPage) => {
-    fetchMore({
-      page: newPage,
-    });
-  };
   //eslint-disable-next-line
   const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
 
-  const [profiles, setProfiles] = useState("");
+  useEffect(() => {
+    fetchDoctors({
+      variables: {
+        first: pageInfo.limit,
+      },
+    });
+  }, [fetchDoctors, pageInfo]);
+
   useEffect(() => {
     if (data) {
       setProfiles(data.doctorProfiles.profile);
       setPageInfo(data.doctorProfiles.pageInfo);
     }
   }, [data]);
-
-  // const [searchHcp, setSearchHcp] = useState("");
-  const [openAddHcp, setOpenAddHcp] = useState(false);
 
   const onSubmit = async (values) => {
     const {
@@ -105,67 +97,28 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
       cadre,
       image,
     } = values;
-    try {
-      const correctDOB = timeConverter(dob);
-      await createDoc({
-        variables: {
-          dociId,
-          createdAt,
-          updatedAt,
-          firstName,
-          lastName,
-          gender,
-          phoneNumber: phone,
-          email,
-          hospital,
-          specialization,
-          dob: correctDOB,
-          cadre,
-          image,
-          providerId: "61db6f8968b248001aec4fcb",
-        },
-        refetchQueries: [{ query: getDoctorsProfile }],
-      });
-      setOpenAddHcp(false);
-      enqueueSnackbar("Doctor profile updated", {
-        variant: "success",
-      });
-    } catch (error) {
-      enqueueSnackbar(getErrors(error), {
-        variant: "error",
-      });
-      console.error(error);
-    }
+    const correctDOB = timeConverter(dob);
+    await createDoc({
+      variables: {
+        dociId,
+        createdAt,
+        updatedAt,
+        firstName,
+        lastName,
+        gender,
+        phoneNumber: phone,
+        email,
+        hospital,
+        specialization,
+        dob: correctDOB,
+        cadre,
+        image,
+        providerId: "61db6f8968b248001aec4fcb",
+      },
+      refetchQueries: [{ query: getDoctorsProfile }],
+    });
+    setOpenAddHcp(false);
   };
-  const specializations = [
-    { key: "diagnostics", value: "diagnostics" },
-    { key: "pharmacy", value: "pharmacy" },
-  ];
-
-  const gender = [
-    { key: "Male", value: "Male" },
-    { key: "Female", value: "Female" },
-  ];
-
-  const [filterValues, setFilterValues] = React.useState(doctorsPageDefaultFilterValues);
-
-  const initialValues = {
-    firstName: "",
-    lastName: "",
-    specialization: "",
-    image: null,
-    cadre: "",
-    gender: "",
-    hospital: "",
-    phone: "",
-    dob: null,
-    dociId: "",
-  };
-
-  const [createDoc] = useMutation(createDOctorProfile);
-
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
 
   if (error) return <NoData error={error} />;
   return (
@@ -300,7 +253,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
             headCells={hcpsHeadCells}
             rows={profiles}
             paginationLabel="Doctors per page"
-            handleChangePage={fetchMoreFunc}
+            handleChangePage={fetchMoreData}
             hasCheckbox={true}
             changeLimit={changeTableLimit}
             fetchData={fetchDoctors}
@@ -413,10 +366,10 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                         component={Link}
                         to={`hcps/${_id}`}
                         endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => {
+                        /* onClick={() => {
                           setSelectedSubMenu(3);
                           setSelectedHcpMenu(0);
-                        }}
+                        }} */
                       >
                         View Doctor
                       </Button>
@@ -438,7 +391,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
         handleClose={() => setOpenAddHcp(false)}
       >
         <Formik
-          initialValues={initialValues}
+          initialValues={addDocInitialValues}
           onSubmit={onSubmit}
           validationSchema={addDoctorValidationSchema}
           validateOnChange={false}
@@ -488,7 +441,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                             <Grid container direction="column">
                               <FormikControl
                                 control="select"
-                                options={specializations}
+                                options={docSpecializationsOptions}
                                 name="specialization"
                                 label="Specialization"
                                 placeholder="Specialization"
@@ -508,7 +461,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                             label="Gender"
                             id="gender"
                             name="gender"
-                            options={gender}
+                            options={genderType}
                             placeholder="Gender"
                           />
                         </Grid>
@@ -539,7 +492,7 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
                             <Grid container direction="column">
                               <FormikControl
                                 control="select"
-                                options={cadre}
+                                options={docCadreOptions}
                                 name="cadre"
                                 label="Cadre"
                                 placeholder="Select Cadre"
@@ -589,8 +542,8 @@ const Hcps = ({ setSelectedSubMenu, setSelectedHcpMenu }) => {
 };
 
 Hcps.propTypes = {
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  /*  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default Hcps;

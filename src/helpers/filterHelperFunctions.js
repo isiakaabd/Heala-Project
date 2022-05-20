@@ -1,6 +1,45 @@
 import t from "prop-types";
-
+import React from "react";
+import { Typography } from "@mui/material";
 import { removeEmptyStringValues } from "./func";
+
+export const showErrorMsg = (enqueueSnackbar, errorMsg) => {
+  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{errorMsg}</Typography>, {
+    variant: "error",
+    preventDuplicate: true,
+    anchorOrigin: {
+      horizontal: "center",
+      vertical: "top",
+    },
+    autoHideDuration: 10000,
+  });
+};
+
+export const showSuccessMsg = (enqueueSnackbar, successMsg) => {
+  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>, {
+    variant: "success",
+    preventDuplicate: true,
+    anchorOrigin: {
+      horizontal: "right",
+      vertical: "top",
+    },
+    autoHideDuration: 5000,
+  });
+};
+
+export const handleError = (error, enqueueSnackbar) => {
+  if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+    (error?.graphQLErrors || []).map((err) =>
+      showErrorMsg(enqueueSnackbar, Typography, err.message),
+    );
+  } else if (error?.networkError) {
+    error.networkError?.result?.errors?.map((err) =>
+      showErrorMsg(enqueueSnackbar, Typography, err.message || "Something went wrong, try again."),
+    );
+  } else if (error?.message) {
+    showErrorMsg(enqueueSnackbar, Typography, error.message);
+  }
+};
 
 export const onFilterValueChange = async (
   e,
@@ -97,6 +136,6 @@ export const trucateString = (word, length) => {
 };
 
 trucateString.PropTypes = {
-  word: t.string.isRequired,
-  length: t.number.isRequired,
+  word: t.string,
+  length: t.number,
 };

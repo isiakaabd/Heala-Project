@@ -8,37 +8,39 @@ const WaitingList = (props) => {
   const {
     selectedMenu,
     setSelectedMenu,
-    selectedSubMenu,
+    /* selectedSubMenu,
     selectedAppointmentMenu,
     setSelectedSubMenu,
     setWaitingListMenu,
-    setSelectedAppointmentMenu,
+    setSelectedAppointmentMenu, */
   } = props;
 
   useEffect(() => {
     setSelectedMenu(4);
-    setSelectedAppointmentMenu(1);
-    setSelectedSubMenu(5);
+    /* setSelectedAppointmentMenu(1);
+    setSelectedSubMenu(5); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedAppointmentMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedAppointmentMenu */]);
 
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
         <PreviousButton
           path="/appointments"
-          onClick={() => {
+          /* onClick={() => {
             setSelectedSubMenu(0);
             setSelectedAppointmentMenu(0);
-          }}
+          }} */
         />
       </Grid>
       <Grid item>
         <Typography variant="h2">Waiting List</Typography>
       </Grid>
       <Grid item style={{ marginTop: "5rem" }}>
-        <WaitingListTable path="/appointments/waiting-list" onClick={() => setWaitingListMenu(1)} />
+        <WaitingListTable
+          path="/appointments/waiting-list" /* onClick={() => setWaitingListMenu(1)} */
+        />
       </Grid>
     </Grid>
   );
@@ -46,12 +48,12 @@ const WaitingList = (props) => {
 
 WaitingList.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedAppointmentMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  selectedAppointmentMenu: PropTypes.number.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setWaitingListMenu: PropTypes.func.isRequired,
-  setSelectedAppointmentMenu: PropTypes.func.isRequired,
+  setSelectedAppointmentMenu: PropTypes.func.isRequired, */
 };
 
 export default WaitingList;
