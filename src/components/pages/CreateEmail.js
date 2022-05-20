@@ -86,7 +86,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const CreateEmail = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const isEvent = (event) =>
     event && (event instanceof Event || event.nativeEvent instanceof Event);
   const history = useHistory();
@@ -97,10 +100,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
 
   useEffect(() => {
     setSelectedMenu(6);
-    setSelectedSubMenu(7);
+    /* setSelectedSubMenu(7); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -125,7 +128,9 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
     email: "Sule@gmail.com",
   };
   const validationSchema = Yup.object({
-    name: Yup.array().of(Yup.string().email("Enter a valid email").required("Email is required")),
+    name: Yup.array().of(
+      Yup.string().email("Enter a valid email").required("Email is required")
+    ),
     message: Yup.string("Enter your subject").required("Subject is required"),
     textarea: Yup.string("Enter your message").required("Message is required"),
   });
@@ -153,7 +158,12 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                   </Typography>
                 </Grid>
 
-                <Grid item container direction="column" className={classes.gridWrapper}>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  className={classes.gridWrapper}
+                >
                   <Grid item style={{ marginBottom: "3rem" }}>
                     <Grid container alignItems="center">
                       <Grid item>
@@ -187,7 +197,9 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                                     }
                                   }}
                                   onDelete={(deletedVal) => {
-                                    const newArr = value.filter((state) => state !== deletedVal);
+                                    const newArr = value.filter(
+                                      (state) => state !== deletedVal
+                                    );
                                     if (isEvent(newArr)) {
                                       onChange(newArr);
                                     } else {
@@ -230,7 +242,12 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                           Message:{" "}
                         </Typography>
                       </Grid>
-                      <Grid item container sx={{ marginBottom: "2rem" }} maxWidth="100%">
+                      <Grid
+                        item
+                        container
+                        sx={{ marginBottom: "2rem" }}
+                        maxWidth="100%"
+                      >
                         <Field name="textarea">
                           {({ field, form }) => {
                             return (
@@ -242,7 +259,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                                   data={field.value}
                                   editor={ClassicEditor}
                                   onChange={(e, editor) => {
-                                    form.setFieldValue("textarea", editor.getData("text"));
+                                    form.setFieldValue(
+                                      "textarea",
+                                      editor.getData("text")
+                                    );
                                   }}
                                 />
                               </Wrapper>
@@ -254,7 +274,10 @@ const CreateEmail = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelect
                     <ErrorMessage name="textarea" component={TextError} />
                     <Divider className={classes.divider} />
                   </Grid>
-                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                  <Grid
+                    item
+                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
+                  >
                     <CustomButton
                       title="Send Mail"
                       width="100%"
@@ -289,9 +312,9 @@ const ChipWrapper = styled.div`
 `;
 CreateEmail.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default CreateEmail;

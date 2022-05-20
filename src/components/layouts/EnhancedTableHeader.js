@@ -11,12 +11,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tableHeaderCell: {
     "&.MuiTableCell-root, &.MuiTableCell-root": {
-      fontSize: "calc(1.4rem, 3vw,1.65rem)",
+      fontSize: "1.65rem",
     },
 
     "&.MuiTableCell-root": {
-      // fontSize: "1.35rem",
-      fontSize: "calc(1rem, 2vw,1.35rem)",
+      fontSize: "1.35rem",
     },
   },
 }));

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TableRow,
+  Checkbox,
+  TableCell,
+  Button,
+} from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -57,11 +64,11 @@ const HcpPatients = (props) => {
   const [pageInfo, setPageInfo] = useState([]);
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedHcpMenu,
     setSelectedSubMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   const { hcpId } = useParams();
@@ -71,13 +78,14 @@ const HcpPatients = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(5);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(5); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
 
-  const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
+  const [fetchDoctorsPatients, { loading, error, data, refetch }] =
+    useLazyQuery(getDoctorPatients);
 
   React.useEffect(() => {
     fetchDoctorsPatients({
@@ -102,7 +110,9 @@ const HcpPatients = (props) => {
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton
+          path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
+        />
       </Grid>
       <Grid item>
         <Typography variant="h2">Doctor Patients</Typography>
@@ -138,7 +148,13 @@ const HcpPatients = (props) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -195,7 +211,10 @@ const HcpPatients = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
+        <EmptyTable
+          headCells={hcpPatientsHeadCells}
+          paginationLabel="List  per page"
+        />
       )}
     </Grid>
   );
@@ -203,11 +222,11 @@ const HcpPatients = (props) => {
 
 HcpPatients.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired, */
 };
 
 export default HcpPatients;

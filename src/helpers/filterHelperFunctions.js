@@ -1,6 +1,53 @@
 import t from "prop-types";
-
 import { removeEmptyStringValues } from "./func";
+
+export const showErrorMsg = (enqueueSnackbar, Typography, errorMsg) => {
+  enqueueSnackbar(
+    <Typography style={{ fontSize: "1.2rem" }}>{errorMsg}</Typography>,
+    {
+      variant: "error",
+      preventDuplicate: true,
+      anchorOrigin: {
+        horizontal: "center",
+        vertical: "top",
+      },
+      autoHideDuration: 10000,
+    }
+  );
+};
+
+export const showSuccessMsg = (enqueueSnackbar, Typography, successMsg) => {
+  enqueueSnackbar(
+    <Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>,
+    {
+      variant: "success",
+      preventDuplicate: true,
+      anchorOrigin: {
+        horizontal: "right",
+        vertical: "top",
+      },
+      autoHideDuration: 5000,
+    }
+  );
+};
+
+export const handleError = (error, enqueueSnackbar, Typography) => {
+  if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+    (error?.graphQLErrors || []).map((err) =>
+      showErrorMsg(enqueueSnackbar, Typography, err.message)
+    );
+  } else if (error?.networkError) {
+    error.networkError?.result?.errors?.map((err) =>
+      showErrorMsg(
+        enqueueSnackbar,
+        Typography,
+        err.message || "Something went wrong, try again."
+      )
+    );
+  } else if (error?.message) {
+    showErrorMsg(enqueueSnackbar, Typography, error.message);
+  }
+};
 
 export const onFilterValueChange = async (
   e,
@@ -9,7 +56,7 @@ export const onFilterValueChange = async (
   setFilterValues,
   fetchData,
   variables,
-  refetchData,
+  refetchData
 ) => {
   const value = e?.target?.value;
   const newFilterData = { ...filterValues, [name]: value };
@@ -25,7 +72,12 @@ export const onFilterValueChange = async (
   }
 };
 
-export const resetFilters = (setFilterValues, values, variables, refetchData) => {
+export const resetFilters = (
+  setFilterValues,
+  values,
+  variables,
+  refetchData
+) => {
   console.log(setFilterValues, values, variables, refetchData);
   setFilterValues(values);
   for (const key in variables) {

@@ -211,8 +211,14 @@ export const CREATE_PERMISSION = gql`
   }
 `;
 export const UPDATE_PERMISSION = gql`
-  mutation updatePermission($id: String!, $name: String!, $description: String!) {
-    updatePermission(data: { id: $id, name: $name, description: $description }) {
+  mutation updatePermission(
+    $id: String!
+    $name: String!
+    $description: String!
+  ) {
+    updatePermission(
+      data: { id: $id, name: $name, description: $description }
+    ) {
       permission {
         _id
         name
@@ -260,7 +266,13 @@ export const updateAppointment = gql`
     $time: String
   ) {
     updateAppointment(
-      data: { id: $id, doctor: $doctor, patient: $patient, date: $date, time: $time }
+      data: {
+        id: $id
+        doctor: $doctor
+        patient: $patient
+        date: $date
+        time: $time
+      }
     ) {
       appointment {
         _id
@@ -281,9 +293,19 @@ export const updateAppointment = gql`
 
 // message
 export const CREATE_MESSAGE = gql`
-  mutation createMessage($recipient: String!, $sender: String!, $subject: String!, $body: String!) {
+  mutation createMessage(
+    $recipient: String!
+    $sender: String!
+    $subject: String!
+    $body: String!
+  ) {
     createMessage(
-      data: { recipient: $recipient, sender: $sender, subject: $subject, body: $body }
+      data: {
+        recipient: $recipient
+        sender: $sender
+        subject: $subject
+        body: $body
+      }
     ) {
       messages {
         _id
@@ -435,9 +457,19 @@ export const addRole = gql`
 `;
 
 export const editRole = gql`
-  mutation updateRole($id: String!, $name: String, $description: String, $permissions: [String!]) {
+  mutation updateRole(
+    $id: String!
+    $name: String
+    $description: String
+    $permissions: [String!]
+  ) {
     updateRole(
-      data: { id: $id, name: $name, permissions: $permissions, description: $description }
+      data: {
+        id: $id
+        name: $name
+        permissions: $permissions
+        description: $description
+      }
     ) {
       role {
         _id
@@ -550,8 +582,20 @@ export const addPartnerCategory = gql`
   }
 `;
 export const addProvider = gql`
-  mutation createProvider($name: String!, $iconAlt: String, $icon: String!, $userTypeId: String!) {
-    createProvider(data: { name: $name, iconAlt: $iconAlt, icon: $icon, userTypeId: $userTypeId }) {
+  mutation createProvider(
+    $name: String!
+    $iconAlt: String
+    $icon: String!
+    $userTypeId: String!
+  ) {
+    createProvider(
+      data: {
+        name: $name
+        iconAlt: $iconAlt
+        icon: $icon
+        userTypeId: $userTypeId
+      }
+    ) {
       provider {
         _id
         name
@@ -594,8 +638,20 @@ export const deleteUserType = gql`
   }
 `;
 export const signup = gql`
-  mutation signup($authType: String!, $email: EmailAddress!, $password: String!, $role: String) {
-    signup(data: { authType: $authType, email: $email, password: $password, role: $role }) {
+  mutation signup(
+    $authType: String!
+    $email: EmailAddress!
+    $password: String!
+    $role: String
+  ) {
+    signup(
+      data: {
+        authType: $authType
+        email: $email
+        password: $password
+        role: $role
+      }
+    ) {
       account {
         _id
         email
@@ -634,7 +690,12 @@ export const createAllery = gql`
     $severity: String!
   ) {
     createAllergy(
-      data: { food: $food, medication: $medication, profile: $profile, severity: $severity }
+      data: {
+        food: $food
+        medication: $medication
+        profile: $profile
+        severity: $severity
+      }
     ) {
       allergy {
         _id
@@ -692,6 +753,24 @@ export const createDOctorProfile = gql`
         dob
         cadre
         picture
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const addTest = gql`
+  mutation addDiagnosticLabTest($name: String, $price: Float, $tat: String) {
+    addDiagnosticLabTest(data: { name: $name, price: $price, tat: $tat }) {
+      diagnosticLabTest {
+        _id
+        partner
+        name
+        price
+        tat
       }
       errors {
         field

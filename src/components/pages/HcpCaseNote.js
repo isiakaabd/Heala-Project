@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
-import { Modals, Loader, PreviousButton, CustomButton } from "components/Utilities";
+import {
+  Modals,
+  Loader,
+  PreviousButton,
+  CustomButton,
+} from "components/Utilities";
 import { NoData } from "components/layouts";
 import { useQuery } from "@apollo/client";
 import { getConsult } from "components/graphQL/useQuery";
@@ -61,13 +66,13 @@ const useStyles = makeStyles((theme) => ({
 
 const HcpCaseNotes = ({
   selectedMenu,
-  selectedSubMenu,
   setSelectedMenu,
+  /* selectedSubMenu,
   selectedHcpMenu,
   selectedScopedMenu,
   setSelectedSubMenu,
   setSelectedHcpMenu,
-  setSelectedScopedMenu,
+  setSelectedScopedMenu, */
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -83,11 +88,11 @@ const HcpCaseNotes = ({
   const [consult, setConsult] = useState([]);
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
+    /* setSelectedSubMenu(3);
     setSelectedHcpMenu(6);
-    setSelectedScopedMenu(2);
+    setSelectedScopedMenu(2); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
 
   const { loading, data, error } = useQuery(getConsult, {
     variables: {
@@ -134,7 +139,7 @@ const HcpCaseNotes = ({
         <Grid item>
           <PreviousButton
             path={`/hcps/${hcpId}/consultations`}
-            onClick={() => setSelectedHcpMenu(6)}
+            /* onClick={() => setSelectedHcpMenu(6)} */
           />
         </Grid>
         <Grid item>
@@ -158,7 +163,13 @@ const HcpCaseNotes = ({
             sx={{ flexWrap: "nowrap" }}
           >
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Consultation Date:
@@ -170,7 +181,13 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Referral:
@@ -191,7 +208,13 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Consultation ID:
@@ -212,14 +235,24 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Status:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Chip variant="contained" label={status} className={classes.infoBadge} />
+                  <Chip
+                    variant="contained"
+                    label={status}
+                    className={classes.infoBadge}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -235,7 +268,13 @@ const HcpCaseNotes = ({
             sx={{ flexWrap: "nowrap" }}
           >
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Patient
@@ -259,7 +298,13 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Contact:
@@ -273,7 +318,13 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Owner:
@@ -287,14 +338,22 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Type:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
+                  <Typography variant="body1">
+                    {type ? type : "No Value"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -310,7 +369,13 @@ const HcpCaseNotes = ({
             sx={{ flexWrap: "nowrap" }}
           >
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Symptoms:
@@ -334,7 +399,13 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Severity:
@@ -350,19 +421,34 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     First Notice:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
+                  <Typography variant="body1">
+                    {" "}
+                    {firstNotice ? firstNotice : "No value"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Description:
@@ -387,19 +473,33 @@ const HcpCaseNotes = ({
             sx={{ flexWrap: "nowrap" }}
           >
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Type:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
+                  <Typography variant="body1">
+                    {type ? type : "No Value"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Discomfort:
@@ -413,20 +513,34 @@ const HcpCaseNotes = ({
               </Grid>
             </Grid>
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Doctors Note:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">{doctorNote ? doctorNote : "No Value"} </Typography>
+                  <Typography variant="body1">
+                    {doctorNote ? doctorNote : "No Value"}{" "}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
 
             <Grid item className={classes.items}>
-              <Grid item container flexDirection="column" gap={2} alignItems="flex-start">
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                alignItems="flex-start"
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Updated At:
@@ -506,14 +620,22 @@ const HcpCaseNotes = ({
               {/* </Grid> */}
 
               <Grid item className={classes.items}>
-                <Typography variant="body1" marginBottom="1rem" className={classes.title}>
+                <Typography
+                  variant="body1"
+                  marginBottom="1rem"
+                  className={classes.title}
+                >
                   Prescription Date:
                 </Typography>
 
                 <Typography variant="h5">{dateMoment(createdAt)}</Typography>
               </Grid>
               <Grid item className={classes.items}>
-                <Typography marginBottom="1rem" variant="body1" className={classes.title}>
+                <Typography
+                  marginBottom="1rem"
+                  variant="body1"
+                  className={classes.title}
+                >
                   Symptoms:
                 </Typography>
 
@@ -535,7 +657,10 @@ const HcpCaseNotes = ({
                 </Grid>
               </Grid>
             </Grid>
-            <Divider color={theme.palette.common.lighterGrey} sx={{ width: "100%" }} />
+            <Divider
+              color={theme.palette.common.lighterGrey}
+              sx={{ width: "100%" }}
+            />
           </>
           {prescription && (
             <>
@@ -562,10 +687,21 @@ const HcpCaseNotes = ({
 
           {prescription &&
             prescription.map((i, index) => {
-              const { dosageQuantity, mode, dosageFrequency, dosage, drugName } = i;
+              const {
+                dosageQuantity,
+                mode,
+                dosageFrequency,
+                dosage,
+                drugName,
+              } = i;
               return (
                 <>
-                  <Grid item key={index} container className={classes.tableHeader}>
+                  <Grid
+                    item
+                    key={index}
+                    container
+                    className={classes.tableHeader}
+                  >
                     {/* <Fragment key={index}> */}
                     <Grid item>
                       <Typography variant="h5">{drugName}</Typography>
@@ -601,14 +737,22 @@ const HcpCaseNotes = ({
           justifyContent="space-between"
           sx={{ flexWrap: "nowrap" }}
         >
-          <Grid item container direction="column" gap={2} alignItems="flex-start">
+          <Grid
+            item
+            container
+            direction="column"
+            gap={2}
+            alignItems="flex-start"
+          >
             <Grid item>
               <Typography variant="body1" className={classes.title}>
                 Doctors Note:
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h5">{doctorNote ? doctorNote : "No Value"}</Typography>
+              <Typography variant="h5">
+                {doctorNote ? doctorNote : "No Value"}
+              </Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -619,13 +763,13 @@ const HcpCaseNotes = ({
 
 HcpCaseNotes.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
   selectedHcpMenu: PropTypes.number.isRequired,
   selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
   setSelectedHcpMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
+  setSelectedScopedMenu: PropTypes.func.isRequired, */
 };
 
 export default HcpCaseNotes;

@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Avatar,
+  TableCell,
+  TableRow,
+  Checkbox,
+} from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
+import {
+  timeMoment,
+  dateMoment,
+  formatNumber,
+} from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -78,14 +89,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const Financetable = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
+  const [fetchEarningData, { loading, data, error }] =
+    useLazyQuery(getEarningData);
 
   useEffect(() => {
     fetchEarningData({
@@ -105,16 +120,18 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
   useEffect(() => {
     setSelectedMenu(8);
-    setSelectedSubMenu(9);
+    /* setSelectedSubMenu(9); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} height="100%">
       <Grid item>
-        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton
+          path="/finance" /* onClick={() => setSelectedSubMenu(0)} */
+        />
       </Grid>
 
       <>
@@ -142,7 +159,8 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
             >
               {earning.map((row, index) => {
                 const { doctorData, createdAt, balance } = row;
-                const { firstName, picture, lastName, specialization } = doctorData[0];
+                const { firstName, picture, lastName, specialization } =
+                  doctorData[0];
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -157,7 +175,13 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -219,7 +243,10 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
+          <EmptyTable
+            headCells={financeHeader}
+            paginationLabel="Finance  per page"
+          />
         )}
       </>
     </Grid>
@@ -228,9 +255,9 @@ const Financetable = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
 Financetable.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default Financetable;

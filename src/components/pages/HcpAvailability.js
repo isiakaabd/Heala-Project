@@ -21,31 +21,40 @@ const HcpAvailability = (props) => {
 
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedHcpMenu,
     setSelectedSubMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(3);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(3); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton
+          path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
+        />
       </Grid>
       <Grid item>
         <Typography variant="h2">HCP Availability</Typography>
       </Grid>
-      <Grid item container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        item
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {availabiltyArray.length > 0 ? (
           availabiltyArray.map((availability, index) => {
             return (
@@ -64,11 +73,11 @@ const HcpAvailability = (props) => {
 
 HcpAvailability.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired, */
 };
 
 export default HcpAvailability;

@@ -114,14 +114,16 @@ import PropTypes from "prop-types";
 //   },
 // }));
 
-const ViewDoctorVerification = ({
-  selectedMenu,
+const ViewDoctorVerification = (
+  {
+    /* selectedMenu,
   selectedSubMenu,
-  setSelectedScopedMenu,
   setSelectedMenu,
+  setSelectedScopedMenu,
   setSelectedHcpMenu,
-  setSelectedSubMenu,
-}) => {
+  setSelectedSubMenu, */
+  }
+) => {
   // const { hcpId } = useParams();
   // const { loading, data, error } = useQuery(getVerification);
   // console.log(hcpId);
@@ -729,12 +731,12 @@ const ViewDoctorVerification = ({
 };
 
 ViewDoctorVerification.propTypes = {
-  selectedMenu: PropTypes.number,
+  /* selectedMenu: PropTypes.number,
   selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
   setSelectedSubMenu: PropTypes.func,
   setSelectedHcpMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default ViewDoctorVerification;

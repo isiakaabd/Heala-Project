@@ -93,14 +93,31 @@ export const referralPageDefaultFilterValues = {
   type: "",
 };
 
-/* ========= TYPES ============ */
+export const docSpecializationsOptions = [
+  { key: "diagnostics", value: "diagnostics" },
+  { key: "pharmacy", value: "pharmacy" },
+];
 
-export const paginationActionTypes = Object.freeze({
-  FIRSTPAGE: "FIRSTPAGE",
-  NEXTPAGE: "NEXTPAGE",
-  PREVPAGE: "PREVPAGE",
-  LASTPAGE: "LASTPAGE",
-});
+export const addDocInitialValues = {
+  firstName: "",
+  lastName: "",
+  specialization: "",
+  image: null,
+  cadre: "",
+  gender: "",
+  hospital: "",
+  phone: "",
+  dob: null,
+  dociId: "",
+};
+
+export const docCadreOptions = [
+  { key: "1", value: "1" },
+  { key: "2", value: "2" },
+  { key: "3", value: "3" },
+  { key: "4", value: "4" },
+  { key: "5", value: "5" },
+];
 
 export const defaultPageInfo = {
   totalDocs: 0,
@@ -114,3 +131,12 @@ export const defaultPageInfo = {
   prevPage: null,
   nextPage: 2,
 };
+
+/* ========= TYPES ============ */
+
+export const paginationActionTypes = Object.freeze({
+  FIRSTPAGE: "FIRSTPAGE",
+  NEXTPAGE: "NEXTPAGE",
+  PREVPAGE: "PREVPAGE",
+  LASTPAGE: "LASTPAGE",
+});

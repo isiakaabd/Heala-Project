@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid, Alert, Divider, Avatar, Typography } from "@mui/material";
-import { Modals, CustomButton, Loader, PreviousButton } from "components/Utilities";
+import {
+  Modals,
+  CustomButton,
+  Loader,
+  PreviousButton,
+} from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
@@ -72,11 +77,11 @@ const HcpAppointments = (props) => {
   };
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedHcpMenu,
     setSelectedSubMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   const greenButton = {
@@ -145,7 +150,9 @@ const HcpAppointments = (props) => {
     date: "",
   };
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required("Date  and time is required"),
+    date: Yup.string("select date and time ").required(
+      "Date  and time is required"
+    ),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
@@ -181,16 +188,22 @@ const HcpAppointments = (props) => {
   };
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(2);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(2); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
+      <Grid
+        container
+        gap={2}
+        flexWrap="nowrap"
+        direction="column"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -201,7 +214,9 @@ const HcpAppointments = (props) => {
           </Alert>
         )}
         <Grid item>
-          <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+          <PreviousButton
+            path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
+          />
         </Grid>
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
           <Typography variant="h2">Doctor Appointments</Typography>
@@ -215,8 +230,17 @@ const HcpAppointments = (props) => {
               key={appoint._id}
               className={classes.parentGridWrapper}
             >
-              <Grid item container style={{ maxWidth: "60rem", padding: "4rem 5rem" }}>
-                <Grid item container alignItems="center" justifyContent="space-between">
+              <Grid
+                item
+                container
+                style={{ maxWidth: "60rem", padding: "4rem 5rem" }}
+              >
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Consultation Date:
@@ -258,7 +282,11 @@ const HcpAppointments = (props) => {
                   </Grid>
                   <Grid item>
                     <Avatar
-                      src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
+                      src={
+                        appoint.patientData.picture
+                          ? appoint.patientData.picture
+                          : displayPhoto
+                      }
                       alt="Display Photo of the patient"
                     />
                   </Grid>
@@ -284,14 +312,20 @@ const HcpAppointments = (props) => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item>
-                <Grid container justifyContent="flex-end" style={{ padding: "2rem 5rem" }}>
+                <Grid
+                  container
+                  justifyContent="flex-end"
+                  style={{ padding: "2rem 5rem" }}
+                >
                   <Grid item style={{ marginRight: "3rem" }}>
                     <CustomButton
                       title="Reschedule"
                       type={greenButton}
                       height="3.5rem"
                       textColorOnHover="#fff"
-                      onClick={() => handleSchedule(appoint._id, appoint.patient)}
+                      onClick={() =>
+                        handleSchedule(appoint._id, appoint.patient)
+                      }
                       textColor={theme.palette.common.green}
                       endIcon={<AssignmentIcon color="success" />}
                       borderRadius="3rem"
@@ -359,7 +393,13 @@ const HcpAppointments = (props) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                  <Grid
+                    item
+                    container
+                    alignItems="flex-end"
+                    marginTop={5}
+                    xs={12}
+                  >
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"
@@ -380,11 +420,11 @@ const HcpAppointments = (props) => {
 
 HcpAppointments.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  selectedHcpMenu: PropTypes.number.isRequired,
   setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  setSelectedHcpMenu: PropTypes.func.isRequired, */
 };
 
 export default HcpAppointments;

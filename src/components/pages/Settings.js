@@ -37,7 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = ({ setSelectedSubMenu }) => {
+const Settings = (
+  {
+    /* setSelectedSubMenu */
+  }
+) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -50,11 +54,18 @@ const Settings = ({ setSelectedSubMenu }) => {
         columnGap={4}
         rowSpacing={4}
       >
-        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginRight: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/settings/administrator"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="A administrator icon used as a representation for the administrator "
@@ -68,11 +79,18 @@ const Settings = ({ setSelectedSubMenu }) => {
 
         {/* 2 */}
 
-        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginLeft: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/settings/management"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="An icon used as a representation for making consultation with the doctor"
@@ -92,11 +110,18 @@ const Settings = ({ setSelectedSubMenu }) => {
         rowSpacing={4}
         columnGap={4}
       >
-        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginRight: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/settings/permissions"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="An icon used as a permission for making consultation with the doctor"
@@ -108,11 +133,18 @@ const Settings = ({ setSelectedSubMenu }) => {
           </Link>
         </Grid>
         {/* 4 */}
-        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginLeft: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/settings/list-management"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="list management Icon"
@@ -130,9 +162,9 @@ const Settings = ({ setSelectedSubMenu }) => {
 
 Settings.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default Settings;

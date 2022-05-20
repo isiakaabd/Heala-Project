@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
+import {
+  CustomButton,
+  Loader,
+  Modals,
+  PreviousButton,
+} from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
@@ -9,7 +14,11 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
+import {
+  verification,
+  getVerification,
+  getCategory,
+} from "components/graphQL/useQuery"; //
 import {
   rejectVerification,
   updateDoctorProvider,
@@ -134,11 +143,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewHCP = ({
   selectedMenu,
-  selectedSubMenu,
   setSelectedMenu,
+  /* selectedSubMenu,
   setSelectedSubMenu,
   setDoctorView,
-  doctorView,
+  doctorView, */
 }) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
@@ -235,7 +244,7 @@ const ViewHCP = ({
     }
   }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor",
+    respondData.status ? "Doctor Verified!" : "Verify Doctor"
   );
   const [process, setProcess] = useState(undefined);
   console.log(respondData.status);
@@ -303,10 +312,10 @@ const ViewHCP = ({
   const classes = useStyles();
   useEffect(() => {
     setSelectedMenu(7);
-    setSelectedSubMenu(8);
-    setDoctorView(0);
+    /* setSelectedSubMenu(8);
+    setDoctorView(0); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, doctorView]);
+  }, [selectedMenu /* selectedSubMenu, doctorView */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -355,7 +364,9 @@ const ViewHCP = ({
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                  {doctorData
+                    ? `${doctorData.firstName} ${doctorData.lastName}`
+                    : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -365,7 +376,9 @@ const ViewHCP = ({
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData && doctorData.hospital !== "" ? doctorData.hospital : "No Hospital"}
+                  {doctorData && doctorData.hospital !== ""
+                    ? doctorData.hospital
+                    : "No Hospital"}
                 </Typography>
               </Grid>
             </Grid>
@@ -395,7 +408,9 @@ const ViewHCP = ({
               </Grid>
               <Grid item width="100%">
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.specialization}` : "No specialization "}
+                  {doctorData
+                    ? `${doctorData.specialization}`
+                    : "No specialization "}
                 </Typography>
               </Grid>
             </Grid>
@@ -417,7 +432,10 @@ const ViewHCP = ({
                 <Typography
                   variant="h4"
                   style={{
-                    color: status === true ? theme.palette.common.green : theme.palette.common.red,
+                    color:
+                      status === true
+                        ? theme.palette.common.green
+                        : theme.palette.common.red,
                     width: "max-content",
                   }}
                 >
@@ -439,10 +457,10 @@ const ViewHCP = ({
                   width="100%"
                   component={Link}
                   to={`/hcps/${doctorData && doctorData._id}`}
-                  onClick={() => {
+                  /* onClick={() => {
                     setSelectedSubMenu(7);
                     setDoctorView(1);
-                  }}
+                  }} */
                   // isSubmitting={submit}
                   // onClick={() => handleUpdateProVider(reference?.reference_code)}
                   // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
@@ -451,8 +469,18 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginRight: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -469,7 +497,9 @@ const ViewHCP = ({
                     <Grid className={classes.link}>{qualification.degree}</Grid>
                   )}
                   {qualification?.year && (
-                    <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
+                    <Grid className={classes.link}>
+                      {dateMoment(qualification.year).slice(-4)}
+                    </Grid>
                   )}
                   {qualification?.image && (
                     <a
@@ -490,7 +520,12 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginLeft: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -534,8 +569,18 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginRight: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -546,7 +591,9 @@ const ViewHCP = ({
               <Grid item>
                 <Typography variant="h4">Year Book</Typography>
               </Grid>
-              {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
+              {yearbook &&
+              Object.keys(yearbook).length > 0 &&
+              yearbook.image ? (
                 <Grid item container gap={2}>
                   {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                     <Grid item className={classes.link}>
@@ -582,7 +629,12 @@ const ViewHCP = ({
             </Grid>
           </Grid>
 
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          <Grid
+            item
+            md
+            className={classes.cardGrid}
+            style={{ marginLeft: "2rem" }}
+          >
             <Grid
               container
               direction="column"
@@ -628,8 +680,18 @@ const ViewHCP = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md style={{ marginRight: " 2rem" }} className={classes.cardGrid}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingTop: "2rem" }}
+        >
+          <Grid
+            item
+            md
+            style={{ marginRight: " 2rem" }}
+            className={classes.cardGrid}
+          >
             <Grid
               container
               direction="column"
@@ -640,7 +702,12 @@ const ViewHCP = ({
               <Grid item>
                 <Typography variant="h4">Reference ID</Typography>
               </Grid>
-              <Grid item container justifyContent="space-between" paddingTop={1}>
+              <Grid
+                item
+                container
+                justifyContent="space-between"
+                paddingTop={1}
+              >
                 {reference?.reference_code ? (
                   <>
                     <Grid item className={classes.link}>
@@ -662,8 +729,14 @@ const ViewHCP = ({
                       type={trasparentButton}
                       width="100%"
                       isSubmitting={submit}
-                      onClick={() => handleUpdateProVider(reference?.reference_code)}
-                      disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                      onClick={() =>
+                        handleUpdateProVider(reference?.reference_code)
+                      }
+                      disabled={
+                        doctorData?.providerId === reference?.reference_code
+                          ? true
+                          : false
+                      }
                     />
                   </Grid>
                 )}
@@ -679,7 +752,13 @@ const ViewHCP = ({
           ></Grid>
         </Grid>
         <Grid item container style={{ paddingTop: "2rem" }}>
-          <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
+          <Grid
+            item
+            container
+            justifyContent="center"
+            gap={2}
+            className={classes.cardGrid}
+          >
             <Grid item>
               <CustomButton
                 title="Reject Verification"
@@ -756,11 +835,11 @@ const ViewHCP = ({
 
 ViewHCP.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
   setSelectedSubMenu: PropTypes.func,
   doctorView: PropTypes.number,
-  setDoctorView: PropTypes.func,
+  setDoctorView: PropTypes.func, */
 };
 
 export default ViewHCP;

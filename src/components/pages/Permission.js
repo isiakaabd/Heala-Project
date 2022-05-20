@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Loader, CustomButton, Modals, PreviousButton } from "components/Utilities";
+import {
+  Loader,
+  CustomButton,
+  Modals,
+  PreviousButton,
+} from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -117,7 +122,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSelectedMenu }) => {
+const Permission = ({
+  selectedMenu,
+  /* selectedSubMenu, setSelectedSubMenu, */ setSelectedMenu,
+}) => {
   const [singlePermission, setSinglePermission] = useState();
 
   const checkbox = [
@@ -139,9 +147,13 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission").trim().required("permission is required"),
+    name: Yup.string("Enter your Permission")
+      .trim()
+      .required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category").trim().required("Category is required"),
+    category: Yup.string("Select Category")
+      .trim()
+      .required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);
@@ -149,8 +161,12 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
-    name: Yup.string("Enter your Permission").required("permission is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
+    name: Yup.string("Enter your Permission").required(
+      "permission is required"
+    ),
+    description: Yup.string("Enter Description").required(
+      "Description is required"
+    ),
   });
 
   const classes = useStyles();
@@ -210,7 +226,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchPermissions, { loading, data, error }] = useLazyQuery(getPermissions);
+  const [fetchPermissions, { loading, data, error }] =
+    useLazyQuery(getPermissions);
 
   useEffect(() => {
     fetchPermissions({
@@ -228,10 +245,10 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(11);
-    setSelectedSubMenu(12);
+    /* setSelectedSubMenu(12); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [permission, setPermission] = useState([]);
 
   useEffect(() => {
@@ -256,7 +273,9 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       )}
       <Grid container direction="column">
         <Grid item>
-          <PreviousButton path="/settings" onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton
+            path="/settings" /* onClick={() => setSelectedSubMenu(0)} */
+          />
         </Grid>
         <Grid item sm container className={classes.flexContainer}>
           <Grid item>
@@ -306,7 +325,13 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -393,11 +418,19 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
+          <EmptyTable
+            headCells={PermissionHeader}
+            paginationLabel="Permission  per page"
+          />
         )}
       </Grid>
 
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -459,7 +492,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 
       {/* // modal */}
 
-      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Add new permission"
+        handleClose={handleDialogClose}
+      >
         <PermissionModal
           handleDialogClose={handleDialogClose}
           type="add"
@@ -471,7 +508,11 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
       </Modals>
 
       {/* edit modala */}
-      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+      <Modals
+        isOpen={isEdit}
+        title="Edit permission"
+        handleClose={handleEditCloseDialog}
+      >
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"
@@ -499,8 +540,8 @@ const Permission = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, setSele
 export default Permission;
 Permission.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
+  /*  selectedSubMenu: PropTypes.number,
   setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };

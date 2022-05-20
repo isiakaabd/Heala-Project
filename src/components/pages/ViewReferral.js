@@ -32,15 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const ViewReferral = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const { referralId } = useParams();
-  const { loading, data, error } = useQuery(getRefferal, { variables: { id: referralId } });
+  const { loading, data, error } = useQuery(getRefferal, {
+    variables: { id: referralId },
+  });
   useEffect(() => {
     setSelectedMenu(9);
-    setSelectedSubMenu(10);
+    /* setSelectedSubMenu(10); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -99,7 +104,11 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
               </Grid>
               <Grid item>
                 <Avatar
-                  src={patientData && patientData.picture ? patientData.picture : displayPhoto}
+                  src={
+                    patientData && patientData.picture
+                      ? patientData.picture
+                      : displayPhoto
+                  }
                   alt={`Display photo of the  ${
                     patientData ? patientData.firstName : "placeholder"
                   }`}
@@ -107,7 +116,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {patientData ? `${patientData.firstName} ${patientData.lastName}` : "No Patient"}
+                  {patientData
+                    ? `${patientData.firstName} ${patientData.lastName}`
+                    : "No Patient"}
                 </Typography>
               </Grid>
             </Grid>
@@ -121,13 +132,21 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
               </Grid>
               <Grid item>
                 <Avatar
-                  src={doctorData && doctorData.picture ? doctorData.picture : displayPhoto}
-                  alt={`Display photo of the doctor ${doctorData ? doctorData.firstName : ""}`}
+                  src={
+                    doctorData && doctorData.picture
+                      ? doctorData.picture
+                      : displayPhoto
+                  }
+                  alt={`Display photo of the doctor ${
+                    doctorData ? doctorData.firstName : ""
+                  }`}
                 />
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                  {doctorData
+                    ? `${doctorData.firstName} ${doctorData.lastName}`
+                    : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -188,7 +207,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">{testType ? testType : "No Value"}</Typography>
+                <Typography variant="h5">
+                  {testType ? testType : "No Value"}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -267,9 +288,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelec
 
 ViewReferral.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewReferral;

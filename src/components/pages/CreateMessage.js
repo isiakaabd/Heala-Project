@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { getErrors } from "components/Utilities/Time";
-import { useSnackbar } from "notistack";
 import { CustomButton, PreviousButton } from "components/Utilities";
 import { Divider, Grid, Typography } from "@mui/material";
 import FormikControl from "components/validation/FormikControl";
@@ -12,7 +10,11 @@ import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { getMessage, getProfileByDociId, getDoctorByDociId } from "components/graphQL/useQuery";
+import {
+  getMessage,
+  getProfileByDociId,
+  getDoctorByDociId,
+} from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -58,11 +60,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const CreateMessage = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
@@ -71,10 +75,13 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
     fetchPolicy: "network-only",
     nextFetchPolicy: "network-only",
   });
-  const { data: doctorProfile, refetch: refetch2 } = useQuery(getDoctorByDociId, {
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "network-only",
-  });
+  const { data: doctorProfile, refetch: refetch2 } = useQuery(
+    getDoctorByDociId,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+    }
+  );
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -84,9 +91,15 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
   };
 
   const validationSchema = Yup.object({
-    subject: Yup.string("Enter your subject").trim().required("Subject is required"),
-    textarea: Yup.string("Enter your message").trim().required("Message is required"),
-    recipient: Yup.string("Enter your recipient").trim().required("recipients is required"),
+    subject: Yup.string("Enter your subject")
+      .trim()
+      .required("Subject is required"),
+    textarea: Yup.string("Enter your message")
+      .trim()
+      .required("Message is required"),
+    recipient: Yup.string("Enter your recipient")
+      .trim()
+      .required("recipients is required"),
   });
 
   const [recipient, setRecipient] = useState("");
@@ -107,16 +120,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       });
 
       history.push("/messages");
-      enqueueSnackbar("Message Created", {
-        variant: "success",
-      });
     } catch (error) {
-      enqueueSnackbar(getErrors(error), {
-        variant: "error",
-      });
-      console.error(error);
+      console.log(error);
     }
-
     onSubmitProps.resetForm();
   };
   const onChange = useCallback(
@@ -129,7 +135,7 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
         await refetch2({ dociId: `HEALA-${e.toUpperCase()}` });
       }
     },
-    [refetch, refetch2, data, error],
+    [refetch, refetch2, data, error]
   );
 
   useEffect(() => {
@@ -154,10 +160,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(5);
-    setSelectedSubMenu(6);
+    /* setSelectedSubMenu(6); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   return (
     <Formik
@@ -183,7 +189,12 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     Create New Message
                   </Typography>
                 </Grid>
-                <Grid item container direction="column" className={classes.gridWrapper}>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  className={classes.gridWrapper}
+                >
                   <Grid item style={{ marginBottom: "3rem" }}>
                     <Grid container alignItems="center">
                       <Grid item>
@@ -242,7 +253,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
                     </Grid>
                     {/* <Divider className={classes.divider} /> */}
                   </Grid>
-                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                  <Grid
+                    item
+                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
+                  >
                     <CustomButton
                       title="Send Message"
                       width="100%"
@@ -266,9 +280,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
 CreateMessage.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default CreateMessage;

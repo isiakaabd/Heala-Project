@@ -55,12 +55,16 @@ import {
   Providers,
   Financetable,
 } from "components/pages";
+import ListManagment from "components/pages/ListManagment";
+import TestList from "components/pages/TestList";
 
 const Routes = (props) => {
   const {
     selectedMenu,
     setSelectedMenu,
-    selectedSubMenu,
+    chatMediaActive,
+    setChatMediaActive,
+    /* selectedSubMenu,
     selectedPatientMenu,
     selectedHcpMenu,
     setSelectedSubMenu,
@@ -70,17 +74,16 @@ const Routes = (props) => {
     setWaitingListMenu,
     selectedAppointmentMenu,
     setSelectedAppointmentMenu,
-    chatMediaActive,
-    setChatMediaActive,
     doctorView,
     setDoctorView,
     setSelectedManagementMenu,
     selectedScopedMenu,
-    setSelectedScopedMenu,
+    setSelectedScopedMenu, */
   } = props;
 
   return (
     <Switch>
+      {/*  =====  DASHBORD ROUTES STARTS HERE ===== */}
       <PrivateRoute
         path={["/", "/dashboard"]}
         exact
@@ -89,12 +92,13 @@ const Routes = (props) => {
         setChatMediaActive={setChatMediaActive}
       />
 
+      {/*  =====  PATENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/patients"
         component={Patients}
-        setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedPatientMenu={setSelectedPatientMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu} */
       />
 
       <PrivateRoute
@@ -102,11 +106,11 @@ const Routes = (props) => {
         path="/patients/:patientId"
         component={SinglePatient}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
-        selectedPatientMenu={selectedPatientMenu}
         setSelectedMenu={setSelectedMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
         setSelectedPatientMenu={setSelectedPatientMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -115,8 +119,8 @@ const Routes = (props) => {
         component={PatientProfile}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />
@@ -127,10 +131,10 @@ const Routes = (props) => {
         component={Chat}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         setSelectedPatientMenu={setSelectedPatientMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />
@@ -141,12 +145,12 @@ const Routes = (props) => {
         component={Consultations}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedPatientMenu={selectedPatientMenu}
+        /* selectedPatientMenu={selectedPatientMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         setSelectedPatientMenu={setSelectedPatientMenu}
         selectedScopedMenu={selectedScopedMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
       />
 
       <PrivateRoute
@@ -154,10 +158,10 @@ const Routes = (props) => {
         component={Prescriptions}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
-        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu} */
       />
 
       <PrivateRoute
@@ -165,53 +169,54 @@ const Routes = (props) => {
         component={PatientAppointment}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
-        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu} */
       />
 
       <PrivateRoute
         path="/patients/:patientId/records"
         component={MedicalRecords}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
-        selectedPatientMenu={selectedPatientMenu}
         setSelectedMenu={setSelectedMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        selectedPatientMenu={selectedPatientMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedPatientMenu={setSelectedPatientMenu}
+        setSelectedPatientMenu={setSelectedPatientMenu} */
       />
 
       <PrivateRoute
-        path="/patients/:patientId/consultations/case-note/:rowId"
+        path="/patients/:patientId/consultations/case-notes/:rowId"
         component={CaseNotes}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         selectedScopedMenu={selectedScopedMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedPatientMenu={selectedPatientMenu}
         setSelectedPatientMenu={setSelectedPatientMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
       />
 
       <PrivateRoute
         path="/patients/:patientId/medications"
         component={Medications}
         selectedMenu={selectedMenu}
-        selectedPatientMenu={selectedPatientMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
+        /* selectedPatientMenu={selectedPatientMenu}
+        selectedSubMenu={selectedSubMenu}
         setSelectedPatientMenu={setSelectedPatientMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
+      {/*  =====  DOCTORS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/hcps"
         component={Hcps}
-        setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -220,12 +225,12 @@ const Routes = (props) => {
         component={SingleHCP}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedScopedMenu={selectedScopedMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
       />
 
       <PrivateRoute
@@ -234,12 +239,12 @@ const Routes = (props) => {
         component={HcpProfile}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
-        selectedSubMenu={selectedSubMenu}
         chatMediaActive={chatMediaActive}
-        setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
         setChatMediaActive={setChatMediaActive}
+        /* selectedHcpMenu={selectedHcpMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -248,10 +253,10 @@ const Routes = (props) => {
         component={HCPChat}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />
@@ -261,10 +266,10 @@ const Routes = (props) => {
         component={ViewDoctorVerification}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
         chatMediaActive={chatMediaActive}
         setChatMediaActive={setChatMediaActive}
       />
@@ -274,10 +279,10 @@ const Routes = (props) => {
         component={HcpAppointments}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -285,10 +290,10 @@ const Routes = (props) => {
         component={HcpAvailability}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -296,10 +301,10 @@ const Routes = (props) => {
         component={HcpEarnings}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -307,21 +312,21 @@ const Routes = (props) => {
         component={HcpEarnings}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
-        path="/hcps/:hcpId/patients"
+        path="/hcps/:hcpId/doctor-patients"
         component={HcpPatients}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -330,12 +335,12 @@ const Routes = (props) => {
         component={HcpConsultations}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedScopedMenu={selectedScopedMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
       />
 
       <PrivateRoute
@@ -343,22 +348,24 @@ const Routes = (props) => {
         component={HcpCaseNote}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedHcpMenu={selectedHcpMenu}
+        /* selectedHcpMenu={selectedHcpMenu}
         selectedSubMenu={selectedSubMenu}
         setSelectedHcpMenu={setSelectedHcpMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         selectedScopedMenu={selectedScopedMenu}
-        setSelectedScopedMenu={setSelectedScopedMenu}
+        setSelectedScopedMenu={setSelectedScopedMenu} */
       />
 
+      {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
 
+      {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/appointments"
         component={Appointments}
-        setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedAppointmentMenu={setSelectedAppointmentMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
+        setSelectedAppointmentMenu={setSelectedAppointmentMenu} */
       />
 
       <PrivateRoute
@@ -367,11 +374,11 @@ const Routes = (props) => {
         component={WaitingList}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         setWaitingListMenu={setWaitingListMenu}
         setSelectedAppointmentMenu={setSelectedAppointmentMenu}
-        selectedAppointmentMenu={selectedAppointmentMenu}
+        selectedAppointmentMenu={selectedAppointmentMenu} */
       />
 
       <PrivateRoute
@@ -379,74 +386,83 @@ const Routes = (props) => {
         component={WaitingListDetails}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        selectedSubMenu={selectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
         waitingListMenu={waitingListMenu}
         setSelectedAppointmentMenu={setSelectedAppointmentMenu}
         selectedAppointmentMenu={selectedAppointmentMenu}
-        setWaitingListMenu={setWaitingListMenu}
+        setWaitingListMenu={setWaitingListMenu} */
       />
 
-      <PrivateRoute exact path="/appointments/consultation" component={CircularChart} />
+      <PrivateRoute
+        exact
+        path="/appointments/consultation"
+        component={CircularChart}
+      />
 
+      {/*  =====  MESSAGES ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/messages"
         component={Messages}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/messages/create-message"
         component={CreateMessage}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/messages/:messageId"
         component={ViewMessage}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
+
+      {/*  =====  EMAILS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         path="/email/create-email"
         component={CreateEmail}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/email/:emailId"
         component={ViewMail}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/email"
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
         component={Email}
       />
+
+      {/*  =====  DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/verification"
         component={HCP}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -454,43 +470,46 @@ const Routes = (props) => {
         path="/verification"
         component={HCP}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu} */
       />
+
+      {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/label"
         component={WhiteLabel}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
       <PrivateRoute
         path="/label/provider"
         component={Providers}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/label/types"
         component={UserTypes}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
+      {/*  =====  FINANCE ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/finance"
         component={Finance}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -498,9 +517,9 @@ const Routes = (props) => {
         path="/finance/earnings"
         component={Financetable}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -508,48 +527,51 @@ const Routes = (props) => {
         path="/finance/payouts"
         component={Payout}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
       <PrivateRoute
         exact
         path="/finance/pending"
         component={PendingPayout}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
+      {/*  =====  REFERRALS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         path="/referrals/:referralId"
         component={ViewReferral}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
+        /* selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
-        setSelectedHcpMenu={setSelectedHcpMenu}
+        setSelectedHcpMenu={setSelectedHcpMenu} */
       />
 
       <PrivateRoute
         path="/referrals"
         component={ReferralTab}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu} */
       />
 
+      {/*  =====  SUBSCRIPTION ROUTES STARTS HERE ===== */}
       <PrivateRoute path="/plans" component={Subscription} />
 
+      {/*  =====  VIEW DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
       <PrivateRoute
         path="/verification/view/:viewId"
         exact
         component={ViewHCP}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
         setDoctorView={setDoctorView}
         doctorView={doctorView}
-        selectedSubMenu={selectedSubMenu}
+        selectedSubMenu={selectedSubMenu} */
       />
       <PrivateRoute
         exact
@@ -557,38 +579,39 @@ const Routes = (props) => {
         component={DoctorVerificationProfile}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        setDoctorView={setDoctorView}
+        /* setDoctorView={setDoctorView}
         doctorView={doctorView}
         setSelectedSubMenu={setSelectedSubMenu}
-        selectedSubMenu={selectedSubMenu}
+        selectedSubMenu={selectedSubMenu} */
       />
 
+      {/*  =====  SETTINGS ROUTES STARTS HERE ===== */}
       <PrivateRoute
         exact
         path="/settings"
         component={Settings}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/settings/administrator"
         component={Administrator}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
         path="/settings/permissions"
         component={Permission}
         selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* selectedSubMenu={selectedSubMenu}
+        setSelectedSubMenu={setSelectedSubMenu} */
       />
 
       <PrivateRoute
@@ -597,9 +620,9 @@ const Routes = (props) => {
         component={Management}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
         selectedSubMenu={selectedSubMenu}
-        setSelectedManagementMenu={setSelectedManagementMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu} */
       />
       <PrivateRoute
         exact
@@ -607,9 +630,29 @@ const Routes = (props) => {
         component={EditManagement}
         selectedMenu={selectedMenu}
         setSelectedMenu={setSelectedMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
         selectedSubMenu={selectedSubMenu}
-        setSelectedManagementMenu={setSelectedManagementMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu} */
+      />
+      <PrivateRoute
+        exact
+        path="/settings/list-management"
+        component={ListManagment}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu} */
+      />
+      <PrivateRoute
+        exact
+        path="/settings/list-management/tests"
+        component={TestList}
+        selectedMenu={selectedMenu}
+        setSelectedMenu={setSelectedMenu}
+        /* setSelectedSubMenu={setSelectedSubMenu}
+        selectedSubMenu={selectedSubMenu}
+        setSelectedManagementMenu={setSelectedManagementMenu} */
       />
     </Switch>
   );
@@ -618,24 +661,24 @@ const Routes = (props) => {
 
 Routes.propTypes = {
   selectedMenu: PropTypes.number,
-  doctorView: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  chatMediaActive: PropTypes.bool,
+  setChatMediaActive: PropTypes.func,
+  /* doctorView: PropTypes.number,
   selectedPatientMenu: PropTypes.number,
   selectedSubMenu: PropTypes.number,
   selectedHcpMenu: PropTypes.number,
   selectedAppointmentMenu: PropTypes.number,
   waitingListMenu: PropTypes.number,
   selectedScopedMenu: PropTypes.number,
-  chatMediaActive: PropTypes.bool,
-  setSelectedMenu: PropTypes.func,
   setSelectedSubMenu: PropTypes.func,
   setSelectedPatientMenu: PropTypes.func,
   setSelectedHcpMenu: PropTypes.func,
   setWaitingListMenu: PropTypes.func,
   setDoctorView: PropTypes.func,
   setSelectedAppointmentMenu: PropTypes.func,
-  setChatMediaActive: PropTypes.func,
   setSelectedScopedMenu: PropTypes.func,
-  setSelectedManagementMenu: PropTypes.func,
+  setSelectedManagementMenu: PropTypes.func, */
 };
 
 export default Routes;

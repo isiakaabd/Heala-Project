@@ -37,7 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WhiteLabel = ({ setSelectedSubMenu }) => {
+const WhiteLabel = (
+  {
+    /* setSelectedSubMenu */
+  }
+) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -50,13 +54,24 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
         columnGap={4}
         rowSpacing={4}
       >
-        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginRight: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/label/provider"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(13)}
+            /* onClick={() => setSelectedSubMenu(13)} */
           >
-            <Card alt="providers " title="Providers" background={theme.palette.common.lightGreen}>
+            <Card
+              alt="providers "
+              title="Providers"
+              background={theme.palette.common.lightGreen}
+            >
               <Administrator fill={theme.palette.common.green} />
             </Card>
           </Link>
@@ -64,13 +79,24 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
 
         {/* 2 */}
 
-        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
+        <Grid
+          item
+          className={classes.parentGrid}
+          style={{ marginLeft: "2em" }}
+          lg
+          md={12}
+          sm={12}
+        >
           <Link
             to="/label/types"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(13)}
+            /* onClick={() => setSelectedSubMenu(13)} */
           >
-            <Card alt="User Types" title="User Types" background={theme.palette.common.lightRed}>
+            <Card
+              alt="User Types"
+              title="User Types"
+              background={theme.palette.common.lightRed}
+            >
               <ConsulationIcon fill={theme.palette.common.red} />
             </Card>
           </Link>
@@ -82,8 +108,8 @@ const WhiteLabel = ({ setSelectedSubMenu }) => {
 
 WhiteLabel.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 export default WhiteLabel;

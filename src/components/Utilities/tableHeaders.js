@@ -417,3 +417,9 @@ export const hcpPatientsHeadCells = [
   { id: 1, label: "Patient Name" },
   { id: 2, label: "" },
 ];
+
+export const testTableHeadCells = [
+  { id: 0, label: "Test Name" },
+  { id: 1, label: "Price (Naira)" },
+  { id: 2, label: "Turnaround time (TAT)" },
+];

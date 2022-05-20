@@ -19,11 +19,9 @@ const Filter = ({ onHandleChange, options, name, placeholder, value, disable }) 
             onChange={(e) => onHandleChange(e)}
           />
         </Grid>
-
-        {/*  why do we need to breaks here??? */}
-        {/* <br></br>
         <br></br>
-        <br></br> */}
+        <br></br>
+        <br></br>
       </Grid>
     </div>
   );
