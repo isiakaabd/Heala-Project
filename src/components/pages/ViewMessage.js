@@ -66,9 +66,7 @@ const ViewMessage = ({
             <Grid item>
               <Avatar
                 src={recipientData ? recipientData.image : displayPhoto}
-                alt={`Display photo of the sender ${
-                  recipientData && recipientData.firstName
-                }`}
+                alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
               />
             </Grid>
             <Grid item style={{ margin: "0 3rem 0 1.5rem" }}>

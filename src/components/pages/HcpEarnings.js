@@ -6,20 +6,11 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import {
-  CircularProgressBar,
-  Loader,
-  PreviousButton,
-  FormSelect,
-} from "components/Utilities";
+import { CircularProgressBar, Loader, PreviousButton, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
-import {
-  financialPercent,
-  selectOptions,
-  formatNumber,
-} from "components/Utilities/Time";
+import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -177,9 +168,7 @@ const HcpEarnings = (props) => {
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton
-          path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
-        />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       <Grid container component="div" className={classes.mainContainer}>
         <Grid item sm container className={classes.flexContainer}>
@@ -200,10 +189,7 @@ const HcpEarnings = (props) => {
         </Grid>
 
         <Grid item container sx={{ padding: "3rem 4rem" }}>
-          <Grid
-            container
-            sx={{ alignItems: "center", justifyContent: "space-between" }}
-          >
+          <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
               <CircularProgressBar
                 height="17rem"
@@ -227,10 +213,7 @@ const HcpEarnings = (props) => {
                 sx={{ background: theme.palette.common.lightGreen }}
               >
                 <Grid item>
-                  <TrendingDownIcon
-                    color="success"
-                    className={classes.cardIcon}
-                  />
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
                 </Grid>
               </Grid>
               <Grid item>
@@ -305,12 +288,12 @@ const HcpEarnings = (props) => {
 };
 
 HcpEarnings.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpEarnings;

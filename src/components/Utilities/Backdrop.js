@@ -19,5 +19,5 @@ const Backdrops = ({ open, handleClose }) => {
 export default Backdrops;
 Backdrops.propTypes = {
   open: PropTypes.bool,
-  handleClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
 };

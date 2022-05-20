@@ -110,7 +110,7 @@ const Notifications = ({ anchorEl, setAnchorEl, Notifications }) => {
 Notifications.propTypes = {
   anchorEl: PropTypes.object,
   Notifications: PropTypes.array,
-  setAnchorEl: PropTypes.func.isRequired,
+  setAnchorEl: PropTypes.func,
 };
 
 export default Notifications;

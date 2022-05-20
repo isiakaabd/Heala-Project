@@ -6,11 +6,7 @@ import { PreviousButton, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { calculateBMI } from "components/Utilities/bMI";
-import {
-  getProfile,
-  findAllergies,
-  getLabResult,
-} from "components/graphQL/useQuery";
+import { getProfile, findAllergies, getLabResult } from "components/graphQL/useQuery";
 import { NoData } from "components/layouts";
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -61,14 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MedicalRecords = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedPatientMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
@@ -95,14 +84,7 @@ const MedicalRecords = (props) => {
         console.error(err);
       }
     })();
-  }, [
-    alergy,
-    patients,
-    patientId,
-    labResult,
-    allergyResult.data,
-    labResults.data,
-  ]);
+  }, [alergy, patients, patientId, labResult, allergyResult.data, labResults.data]);
 
   useEffect(() => {
     setSelectedMenu(1);
@@ -118,8 +100,7 @@ const MedicalRecords = (props) => {
   }, [data]);
 
   if (loading || allergyResult.loading) return <Loader />;
-  if (error || allergyResult.error)
-    return <NoData error={allergyResult.error || error} />;
+  if (error || allergyResult.error) return <NoData error={allergyResult.error || error} />;
   if (patientProfile) {
     return (
       <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
@@ -132,19 +113,9 @@ const MedicalRecords = (props) => {
         <Grid item>
           <Typography variant="h2">Medical Records</Typography>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
           {/* HEIGHT GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -158,21 +129,14 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={
-                    patientProfile.height ? patientProfile.height : "No Height"
-                  }
+                  label={patientProfile.height ? patientProfile.height : "No Height"}
                   className={classes.infoBadge}
                 />
               </Grid>
             </Grid>
           </Grid>
           {/* WEIGHT GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -186,28 +150,16 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={
-                    patientProfile.weight ? patientProfile.weight : "No Weight"
-                  }
+                  label={patientProfile.weight ? patientProfile.weight : "No Weight"}
                   className={classes.infoBadge}
                 />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
           {/* BLOOD GROUP GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -221,23 +173,14 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={
-                    patientProfile.bloodGroup
-                      ? patientProfile.bloodGroup
-                      : "No Blood Group"
-                  }
+                  label={patientProfile.bloodGroup ? patientProfile.bloodGroup : "No Blood Group"}
                   className={classes.infoBadge}
                 />
               </Grid>
             </Grid>
           </Grid>
           {/* WEIGHT GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -251,30 +194,16 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={
-                    patientProfile.genotype
-                      ? patientProfile.genotype
-                      : "No Genotype"
-                  }
+                  label={patientProfile.genotype ? patientProfile.genotype : "No Genotype"}
                   className={classes.infoBadge}
                 />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
           {/* BMI GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -288,22 +217,14 @@ const MedicalRecords = (props) => {
               <Grid item>
                 <Chip
                   variant="outlined"
-                  label={calculateBMI(
-                    patientProfile.height,
-                    patientProfile.weight
-                  ).toFixed(2)}
+                  label={calculateBMI(patientProfile.height, patientProfile.weight).toFixed(2)}
                   className={classes.infoBadge}
                 />
               </Grid>
             </Grid>
           </Grid>
           {/* ALLERGIES GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginLeft: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -338,19 +259,9 @@ const MedicalRecords = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
           {/* BMI GRID */}
-          <Grid
-            item
-            md
-            className={classes.cardGrid}
-            style={{ marginRight: "2rem" }}
-          >
+          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
             <Grid
               container
               direction="column"
@@ -378,34 +289,26 @@ const MedicalRecords = (props) => {
                       </Grid>
                     ))
                   ) : (
-                    <Chip
-                      variant="outlined"
-                      label="No Lab Result"
-                      className={classes.infoBadge}
-                    />
+                    <Chip variant="outlined" label="No Lab Result" className={classes.infoBadge} />
                   )}
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
           {/* EMPTY PLACEHOLDER GRID */}
-          <Grid
-            item
-            md
-            style={{ marginLeft: "2rem", padding: "4rem 5rem" }}
-          ></Grid>
+          <Grid item md style={{ marginLeft: "2rem", padding: "4rem 5rem" }}></Grid>
         </Grid>
       </Grid>
     );
   } else return <NoData />;
 };
 MedicalRecords.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default MedicalRecords;

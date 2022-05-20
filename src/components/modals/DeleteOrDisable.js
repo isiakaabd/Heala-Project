@@ -135,11 +135,11 @@ const DeleteOrDisable = ({
 };
 
 DeleteOrDisable.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  confirmationMsg: PropTypes.string.isRequired,
-  btnValue: PropTypes.string.isRequired,
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+  title: PropTypes.string,
+  confirmationMsg: PropTypes.string,
+  btnValue: PropTypes.string,
   type: PropTypes.string,
   onConfirm: PropTypes.func,
   onCancel: PropTypes.func,

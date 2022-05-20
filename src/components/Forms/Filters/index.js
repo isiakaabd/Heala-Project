@@ -28,11 +28,11 @@ const Filter = ({ onHandleChange, options, name, placeholder, value, disable }) 
 };
 
 Filter.propTypes = {
-  onHandleChange: t.func.isRequired,
-  options: t.array.isRequired,
-  name: t.string.isRequired,
+  onHandleChange: t.func,
+  options: t.array,
+  name: t.string,
   placeholder: t.string,
-  value: t.string.isRequired,
+  value: t.string,
   disable: t.bool,
 };
 

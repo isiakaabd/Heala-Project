@@ -14,7 +14,7 @@ const Copy = ({ text, name }) => {
 };
 
 Copy.propTypes = {
-  text: t.string.isRequired,
+  text: t.string,
   name: t.string,
 };
 

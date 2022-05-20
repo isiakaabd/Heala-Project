@@ -37,11 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = (
-  {
-    /* setSelectedSubMenu */
-  }
-) => {
+const Settings = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -54,14 +50,7 @@ const Settings = (
         columnGap={4}
         rowSpacing={4}
       >
-        <Grid
-          item
-          className={classes.parentGrid}
-          style={{ marginRight: "2em" }}
-          lg
-          md={12}
-          sm={12}
-        >
+        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
           <Link
             to="/settings/administrator"
             style={{ textDecoration: "none" }}
@@ -79,14 +68,7 @@ const Settings = (
 
         {/* 2 */}
 
-        <Grid
-          item
-          className={classes.parentGrid}
-          style={{ marginLeft: "2em" }}
-          lg
-          md={12}
-          sm={12}
-        >
+        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
           <Link
             to="/settings/management"
             style={{ textDecoration: "none" }}
@@ -110,14 +92,7 @@ const Settings = (
         rowSpacing={4}
         columnGap={4}
       >
-        <Grid
-          item
-          className={classes.parentGrid}
-          style={{ marginRight: "2em" }}
-          lg
-          md={12}
-          sm={12}
-        >
+        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
           <Link
             to="/settings/permissions"
             style={{ textDecoration: "none" }}
@@ -133,14 +108,7 @@ const Settings = (
           </Link>
         </Grid>
         {/* 4 */}
-        <Grid
-          item
-          className={classes.parentGrid}
-          style={{ marginLeft: "2em" }}
-          lg
-          md={12}
-          sm={12}
-        >
+        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
           <Link
             to="/settings/list-management"
             style={{ textDecoration: "none" }}
@@ -161,10 +129,10 @@ const Settings = (
 };
 
 Settings.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Settings;

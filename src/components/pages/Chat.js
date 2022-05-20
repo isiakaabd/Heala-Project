@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
-import Loader from "components/Utilities/Loader";
+import { Loader, CustomButton } from "components/Utilities";
 import { useParams } from "react-router-dom";
-import CustomButton from "components/Utilities/CustomButton";
-import PreviousButton from "components/Utilities/PreviousButton";
 import FormikControl from "components/validation/FormikControl";
 import { useTheme } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
@@ -100,15 +98,9 @@ const Chat = ({
   }, [data]);
 
   const validationSchema = Yup.object({
-    subject: Yup.string("Enter your subject")
-      .trim()
-      .required("Subject is required"),
-    textarea: Yup.string("Enter your message")
-      .trim()
-      .required("Message is required"),
-    recipient: Yup.string("Enter your recipient")
-      .trim()
-      .required("recipients is required"),
+    subject: Yup.string("Enter your subject").trim().required("Subject is required"),
+    textarea: Yup.string("Enter your message").trim().required("Message is required"),
+    recipient: Yup.string("Enter your recipient").trim().required("recipients is required"),
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
@@ -137,9 +129,7 @@ const Chat = ({
     setSelectedPatientMenu(1);
     setSelectedScopedMenu(3); */
     //   eslint-disable-next-line
-  }, [
-    selectedMenu /* selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu */,
-  ]);
+  }, [selectedMenu /* selectedSubMenu, setSelectedPatientMenu, setSelectedScopedMenu */]);
   if (loading) return <Loader />;
   return (
     <Formik
@@ -167,19 +157,9 @@ const Chat = ({
                     Create New Message
                   </Typography>
                 </Grid>
-                <Grid
-                  item
-                  container
-                  direction="column"
-                  className={classes.gridWrapper}
-                >
+                <Grid item container direction="column" className={classes.gridWrapper}>
                   <Grid item>
-                    <Grid
-                      item
-                      container
-                      alignItems="center"
-                      sx={{ gap: "0!important" }}
-                    >
+                    <Grid item container alignItems="center" sx={{ gap: "0!important" }}>
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
                           Recipient:
@@ -236,10 +216,7 @@ const Chat = ({
                     </Grid>
                     {/* <Divider className={classes.divider} /> */}
                   </Grid>
-                  <Grid
-                    item
-                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
-                  >
+                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton
                       title="Send Message"
                       width="100%"

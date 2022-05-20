@@ -9,14 +9,8 @@ import { useMutation } from "@apollo/client";
 import { CustomButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
 import { addTest, uploadTests } from "components/graphQL/Mutation";
-import {
-  addTestValidation,
-  uploadTestFileValidation,
-} from "helpers/validationSchemas";
-import {
-  handleError,
-  showSuccessMsg,
-} from "../../helpers/filterHelperFunctions";
+import { addTestValidation, uploadTestFileValidation } from "helpers/validationSchemas";
+import { handleError, showSuccessMsg } from "../../helpers/filterHelperFunctions";
 import DragAndDrop from "./DragAndDrop";
 
 export const UploadTestForm = ({ onSuccess }) => {
@@ -63,11 +57,7 @@ export const UploadTestForm = ({ onSuccess }) => {
           <Form style={{ marginTop: "1rem" }}>
             <Grid container direction="column" space={2}>
               <Grid item>
-                <DragAndDrop
-                  name="testFile"
-                  setFieldValue={setFieldValue}
-                  maxFiles={1}
-                />
+                <DragAndDrop name="testFile" setFieldValue={setFieldValue} maxFiles={1} />
               </Grid>
               <Grid item>
                 <CustomButton
@@ -87,5 +77,5 @@ export const UploadTestForm = ({ onSuccess }) => {
 };
 
 UploadTestForm.propTypes = {
-  onSuccess: t.func.isRequired,
+  onSuccess: t.func,
 };

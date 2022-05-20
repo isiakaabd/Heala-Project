@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
@@ -28,21 +27,14 @@ import { HCPHeader } from "components/Utilities/tableHeaders";
 import { useStyles } from "../../styles/docVerificationPageStyles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import {
-  docVerifyPageDefaultFilterValues,
-  docVerifyStatusFilterBy,
-} from "helpers/mockData";
+import { docVerifyPageDefaultFilterValues, docVerifyStatusFilterBy } from "helpers/mockData";
 import {
   changeTableLimit,
   fetchMoreData,
   onFilterValueChange,
 } from "helpers/filterHelperFunctions";
 
-const HCP = (
-  {
-    /* setSelectedSubMenu */
-  }
-) => {
+const HCP = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -67,9 +59,7 @@ const HCP = (
   }, [fetchVerifications, pageInfo]);
 
   const [response, setResponse] = useState("");
-  const [filterValues, setFilterValues] = useState(
-    docVerifyPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(docVerifyPageDefaultFilterValues);
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -100,22 +90,10 @@ const HCP = (
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
           {response ? (
-            <Grid
-              item
-              width={300}
-              margin="0 auto"
-              justifyContent="left"
-              alignItems="center"
-            >
+            <Grid item width={300} margin="0 auto" justifyContent="left" alignItems="center">
               <Alert severity="success">
                 <Typography variant="h1">{response}</Typography>
               </Alert>
@@ -140,7 +118,7 @@ const HCP = (
                     setFilterValues,
                     fetchVerifications,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={docVerifyStatusFilterBy}
@@ -166,8 +144,7 @@ const HCP = (
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, status, qualification, doctorData, _id } =
-                    row;
+                  const { createdAt, status, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -183,13 +160,7 @@ const HCP = (
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -217,12 +188,8 @@ const HCP = (
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${
-                                doctorData && doctorData.firstName
-                              }`}
-                              src={
-                                doctorData ? doctorData.picture : displayPhoto
-                              }
+                              alt={`image of ${doctorData && doctorData.firstName}`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
@@ -290,10 +257,7 @@ const HCP = (
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={HCPHeader}
-            paginationLabel="Verification  per page"
-          />
+          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
         )}
       </Grid>
     </>
@@ -301,7 +265,7 @@ const HCP = (
 };
 
 HCP.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func.isRequired, */
+  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default HCP;

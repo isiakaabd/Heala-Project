@@ -6,15 +6,7 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  TableRow,
-  Alert,
-  TableCell,
-  Checkbox,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -103,14 +95,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [fetchEmails, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getEmailList);
+  const [fetchEmails, { loading, error, data, refetch, variables }] = useLazyQuery(getEmailList);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
@@ -140,9 +128,7 @@ const Email = ({
     //   eslint-disable-next-line
   }, [selectedMenu /* selectedSubMenu */]);
 
-  const [filterValues, setFilterValues] = React.useState(
-    emailPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
@@ -182,7 +168,7 @@ const Email = ({
                   setFilterValues,
                   fetchEmails,
                   variables,
-                  refetch
+                  refetch,
                 )
               }
               options={roleFilterBy}
@@ -245,13 +231,7 @@ const Email = ({
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                _id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
+                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -306,10 +286,7 @@ const Email = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={emailHeader}
-            paginationLabel="Email  per page"
-          />
+          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
         )}
       </Grid>
     </>
@@ -318,8 +295,8 @@ const Email = ({
 
 export default Email;
 Email.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };

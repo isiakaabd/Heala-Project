@@ -217,10 +217,10 @@ export const SubscriptionModal = ({
 };
 
 SubscriptionModal.propTypes = {
-  handleDialogClose: PropTypes.func.isRequired,
+  handleDialogClose: PropTypes.func,
   setAlert: PropTypes.func,
   editId: PropTypes.string,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   edit: PropTypes.bool,
   initialValues: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   validationSchema: PropTypes.object,

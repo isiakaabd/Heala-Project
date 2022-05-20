@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -6,7 +6,6 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { NoData, EmptyTable } from "components/layouts";
-
 import { isSelected } from "helpers/isSelected";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -14,24 +13,18 @@ import { TestListRow } from "components/Rows/TestListRow";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { getListOfLabTests } from "components/graphQL/useQuery";
 import { testTableHeadCells } from "components/Utilities/tableHeaders";
-import {
-  CustomButton,
-  Loader,
-  PreviousButton,
-  Modals,
-} from "components/Utilities";
+import { CustomButton, Loader, PreviousButton, Modals } from "components/Utilities";
 import { AddTestForm } from "components/Forms/AddTestForm";
 
 const TestList = () => {
   const theme = useTheme();
-  const [list, setList] = React.useState([]);
-  const [fetchLabTestList, { loading, error, data, refetch }] =
-    useLazyQuery(getListOfLabTests);
+  const [list, setList] = useState([]);
+  const [fetchLabTestList, { loading, error, data, refetch }] = useLazyQuery(getListOfLabTests);
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [addTestModal, setAddTestModal] = React.useState(false);
-  const [uploadListModal, setUploadListModal] = React.useState(false);
+  const [addTestModal, setAddTestModal] = useState(false);
+  const [setUploadListModal] = useState(false);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -39,11 +32,11 @@ const TestList = () => {
     active: theme.palette.primary.dark,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchLabTestList();
   }, [fetchLabTestList]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setList(data?.getDiagnosticLabTests?.data);
     }
@@ -51,13 +44,7 @@ const TestList = () => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container justifyContent="space-between">
           <PreviousButton path="/settings/list-management" />
 
@@ -116,10 +103,7 @@ const TestList = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={testTableHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={testTableHeadCells} paginationLabel="Patients per page" />
         )}
         {/* ==== ADD TEST MODAL ==== */}
         <Modals

@@ -60,8 +60,8 @@ const EnhancedTableAction = (props) => {
 export default EnhancedTableAction;
 
 EnhancedTableAction.propTypes = {
-  count: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
+  count: PropTypes.number,
+  onPageChange: PropTypes.func,
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
 };

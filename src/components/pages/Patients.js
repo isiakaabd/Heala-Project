@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
+import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
@@ -42,19 +33,12 @@ import {
   resetFilters,
 } from "../../helpers/filterHelperFunctions";
 
-const Patients = (
-  {
-    /* setSelectedSubMenu, setSelectedPatientMenu */
-  }
-) => {
+const Patients = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [profiles, setProfiles] = useState([]);
-  const [filterValues, setFilterValues] = useState(
-    patientsPageDefaultFilterValues
-  );
-  const [fetchPatient, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getPatients);
+  const [filterValues, setFilterValues] = useState(patientsPageDefaultFilterValues);
+  const [fetchPatient, { loading, error, data, refetch, variables }] = useLazyQuery(getPatients);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -89,19 +73,8 @@ const Patients = (
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
-        <Grid
-          item
-          container
-          spacing={2}
-          className={classes.searchFilterContainer}
-        >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+        <Grid item container spacing={2} className={classes.searchFilterContainer}>
           {/*  ======= SEARCH INPUT(S) ==========*/}
           <Grid item className={classes.searchGrid} style={{ width: "100%" }}>
             <Search
@@ -132,7 +105,7 @@ const Patients = (
                     setFilterValues,
                     fetchPatient,
                     variables,
-                    refetch
+                    refetch,
                   )
                 }
                 options={genderType}
@@ -180,7 +153,7 @@ const Patients = (
                     setFilterValues,
                     patientsPageDefaultFilterValues,
                     variables,
-                    fetchPatient
+                    fetchPatient,
                   );
                 }}
               />
@@ -227,9 +200,7 @@ const Patients = (
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -264,9 +235,7 @@ const Patients = (
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
-                        <span
-                          style={{ fontSize: "1.25rem" }}
-                        >{`${firstName} ${lastName}`}</span>
+                        <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                       </div>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
@@ -315,10 +284,7 @@ const Patients = (
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={patientsHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
         )}
       </Grid>
     </>
@@ -326,8 +292,8 @@ const Patients = (
 };
 
 Patients.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired, */
+  /* setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Patients;

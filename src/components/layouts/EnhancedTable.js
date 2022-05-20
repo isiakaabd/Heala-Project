@@ -120,16 +120,16 @@ const EnhancedTable = ({
 
 EnhancedTable.propTypes = {
   children: PropTypes.node,
-  rows: PropTypes.array.isRequired,
-  headCells: PropTypes.array.isRequired,
+  rows: PropTypes.array,
+  headCells: PropTypes.array,
   paginationLabel: PropTypes.string,
   title: PropTypes.string,
   handleChangePage: PropTypes.func,
   hasCheckbox: PropTypes.bool,
   type: PropTypes.string,
-  changeLimit: PropTypes.func.isRequired,
-  fetchData: PropTypes.func.isRequired,
-  dataPageInfo: PropTypes.object.isRequired,
+  changeLimit: PropTypes.func,
+  fetchData: PropTypes.func,
+  dataPageInfo: PropTypes.object,
   hasPagination: PropTypes.bool,
 };
 
@@ -172,12 +172,12 @@ const EnhancedTableAction = ({ fetchData, dataPageInfo }) => {
 };
 
 EnhancedTableAction.propTypes = {
-  count: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired,
+  count: PropTypes.number,
+  page: PropTypes.number,
   pagnumber: PropTypes.number,
   totalPages: PropTypes.number,
   dataPageInfo: PropTypes.object,
-  rowsPerPage: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number,
   hasPrevPage: PropTypes.bool,
   setPageNumber: PropTypes.func,
   handleChangePage: PropTypes.func,

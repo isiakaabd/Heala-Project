@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { NoData } from "components/layouts";
 import { Loader, CircularProgressBar, FormSelect } from "components/Utilities";
 import { Grid, Typography, Stack } from "@mui/material";
@@ -11,11 +10,7 @@ import { Link } from "react-router-dom";
 import Card from "components/Utilities/Card";
 import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
-import {
-  financialPercent,
-  selectOptions,
-  formatNumber,
-} from "components/Utilities/Time";
+import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -104,11 +99,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Finance = (
-  {
-    /* setSelectedSubMenu */
-  }
-) => {
+const Finance = () => {
   const [form, setForm] = useState("");
   const { data, error, loading, refetch } = useQuery(getEarningStats, {
     variables: { q: "365" },
@@ -157,10 +148,7 @@ const Finance = (
         </Grid>
 
         <Grid item container sx={{ padding: "3rem 4rem" }}>
-          <Grid
-            container
-            sx={{ alignItems: "center", justifyContent: "space-between" }}
-          >
+          <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
             <Grid item xs={4}>
               <CircularProgressBar
                 height="17rem"
@@ -184,10 +172,7 @@ const Finance = (
                 sx={{ background: theme.palette.common.lightGreen }}
               >
                 <Grid item>
-                  <TrendingDownIcon
-                    color="success"
-                    className={classes.cardIcon}
-                  />
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
                 </Grid>
               </Grid>
               <Grid item>
@@ -266,10 +251,7 @@ const Finance = (
           style={{ marginRight: "5rem" }}
           /* onClick={() => setSelectedSubMenu(9)} */
         >
-          <Card
-            title="Earnings Table"
-            background={theme.palette.common.lightGreen}
-          >
+          <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
             <Grid className={classes.iconWrapper}>
               <TrendingDownIcon color="success" className={classes.cardIcon} />
             </Grid>
@@ -283,10 +265,7 @@ const Finance = (
           style={{ marginRight: "5rem" }}
           /* onClick={() => setSelectedSubMenu(9)} */
         >
-          <Card
-            title="Payouts Table"
-            background={theme.palette.common.lightRed}
-          >
+          <Card title="Payouts Table" background={theme.palette.common.lightRed}>
             <TrendingUpIcon color="error" className={classes.cardIcon} />
           </Card>
         </Grid>
@@ -298,10 +277,7 @@ const Finance = (
           style={{ marginRight: "5rem" }}
           /* onClick={() => setSelectedSubMenu(10)} */
         >
-          <Card
-            title="Pending Payout"
-            background={theme.palette.common.lightRed}
-          >
+          <Card title="Pending Payout" background={theme.palette.common.lightRed}>
             <Grid className={classes.iconWrapper}>
               <TrendingUpIcon color="error" className={classes.cardIcon} />
             </Grid>
@@ -313,7 +289,7 @@ const Finance = (
 };
 
 Finance.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func.isRequired, */
+  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Finance;

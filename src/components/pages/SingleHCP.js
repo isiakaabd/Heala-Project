@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createElement } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useQuery, useMutation } from "@apollo/client";
@@ -6,12 +6,7 @@ import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import {
-  Card,
-  CustomButton,
-  Loader,
-  PreviousButton,
-} from "components/Utilities";
+import { Card, CustomButton, Loader, PreviousButton } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
@@ -169,25 +164,14 @@ const SingleHCP = (props) => {
   if (profile.loading) return <Loader />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        rowSpacing={2}
-        className={classes.gridContainer}
-      >
+      <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
         <Grid item>
           <PreviousButton
             path={`/hcps`}
             /* onClick={() => setSelectedSubMenu(0)} */
           />
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          className={classes.gridsWrapper}
-        >
+        <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
           <Grid item sx={{ paddingTop: 0 }}>
             <Grid container alignItems="center">
@@ -219,12 +203,7 @@ const SingleHCP = (props) => {
           </Grid>
         </Grid>
         {/* TOP CARDS SECTION */}
-        <Grid
-          item
-          container
-          style={{ paddingTop: "5rem" }}
-          justifyContent="space-evenly"
-        >
+        <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
           {cards1.map((card) => (
             <Grid
               key={card.id}
@@ -235,18 +214,13 @@ const SingleHCP = (props) => {
               /* onClick={() => setSelectedHcpMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, { fill: card.fill })}
+                {createElement(card.icon, { fill: card.fill })}
               </Card>
             </Grid>
           ))}
         </Grid>
         {/* BOTTOM CARDS SECTION */}
-        <Grid
-          item
-          container
-          justifyContent="space-evenly"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
           {cards2.map((card) => (
             <Grid
               key={card.id}
@@ -257,7 +231,7 @@ const SingleHCP = (props) => {
               /*  onClick={() => setSelectedHcpMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, {
+                {createElement(card.icon, {
                   fill: card.fill,
                   color: card.id === 4 || card.id === 6 ? "success" : undefined,
                   style: { fontSize: "4rem" },
@@ -281,14 +255,14 @@ const SingleHCP = (props) => {
 };
 
 SingleHCP.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default SingleHCP;

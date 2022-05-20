@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -60,7 +60,7 @@ const client = new ApolloClient({
 });
 
 // add action to all snackbars
-const notistackRef = React.createRef();
+const notistackRef = createRef();
 const onClickDismiss = (key) => () => {
   notistackRef.current.closeSnackbar(key);
 };

@@ -107,8 +107,8 @@ Formiks.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
-  children: PropTypes.node.isRequired,
-  name: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  name: PropTypes.string,
   onBlur: PropTypes.func,
   setFieldValue: PropTypes.func,
 };
@@ -127,8 +127,8 @@ const Files = (props) => {
 
 Files.propTypes = {
   label: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  name: PropTypes.string,
+  options: PropTypes.array,
   placeholder: PropTypes.string,
 };
 

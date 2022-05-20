@@ -36,22 +36,11 @@ const useStyles = makeStyles((theme) => ({
     }, */
 }));
 
-export const SettingsCard = ({
-  link,
-  /* setSelectedSubMenu, */ title,
-  icon,
-}) => {
+export const SettingsCard = ({ link, /* setSelectedSubMenu, */ title, icon }) => {
   const theme = useTheme();
   const classes = useStyles();
   return (
-    <Grid
-      item
-      className={classes.parentGrid}
-      style={{ marginRight: "2em" }}
-      lg
-      md={12}
-      sm={12}
-    >
+    <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
       <Link
         to={link} // "/settings/administrator"
         style={{ textDecoration: "none" }}
@@ -70,8 +59,8 @@ export const SettingsCard = ({
 };
 
 SettingsCard.propTypes = {
-  icon: t.node.isRequired,
-  link: t.string.isRequired,
-  title: t.string.isRequired,
+  icon: t.node,
+  link: t.string,
+  title: t.string,
   /* setSelectedSubMenu: t.func, */
 };

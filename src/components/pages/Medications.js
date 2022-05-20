@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Avatar,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -52,7 +45,7 @@ const Medications = (props) => {
 
   const [fetchMedications, { loading, error, data }] = useLazyQuery(myMedic);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchMedications({
       variables: {
         id: patientId,
@@ -121,13 +114,7 @@ const Medications = (props) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -183,9 +170,7 @@ const Medications = (props) => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.doctor}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -194,10 +179,7 @@ const Medications = (props) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={medicationsHeadCells}
-            paginationLabel="Medications per page"
-          />
+          <EmptyTable headCells={medicationsHeadCells} paginationLabel="Medications per page" />
         )}
       </Grid>
     </Grid>
@@ -205,12 +187,12 @@ const Medications = (props) => {
 };
 
 Medications.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Medications;

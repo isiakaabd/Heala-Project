@@ -10,11 +10,7 @@ import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import {
-  getMessage,
-  getProfileByDociId,
-  getDoctorByDociId,
-} from "components/graphQL/useQuery";
+import { getMessage, getProfileByDociId, getDoctorByDociId } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridWrapper: {
@@ -75,13 +71,10 @@ const CreateMessage = ({
     fetchPolicy: "network-only",
     nextFetchPolicy: "network-only",
   });
-  const { data: doctorProfile, refetch: refetch2 } = useQuery(
-    getDoctorByDociId,
-    {
-      fetchPolicy: "network-only",
-      nextFetchPolicy: "network-only",
-    }
-  );
+  const { data: doctorProfile, refetch: refetch2 } = useQuery(getDoctorByDociId, {
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+  });
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -91,15 +84,9 @@ const CreateMessage = ({
   };
 
   const validationSchema = Yup.object({
-    subject: Yup.string("Enter your subject")
-      .trim()
-      .required("Subject is required"),
-    textarea: Yup.string("Enter your message")
-      .trim()
-      .required("Message is required"),
-    recipient: Yup.string("Enter your recipient")
-      .trim()
-      .required("recipients is required"),
+    subject: Yup.string("Enter your subject").trim().required("Subject is required"),
+    textarea: Yup.string("Enter your message").trim().required("Message is required"),
+    recipient: Yup.string("Enter your recipient").trim().required("recipients is required"),
   });
 
   const [recipient, setRecipient] = useState("");
@@ -135,7 +122,7 @@ const CreateMessage = ({
         await refetch2({ dociId: `HEALA-${e.toUpperCase()}` });
       }
     },
-    [refetch, refetch2, data, error]
+    [refetch, refetch2, data, error],
   );
 
   useEffect(() => {
@@ -189,12 +176,7 @@ const CreateMessage = ({
                     Create New Message
                   </Typography>
                 </Grid>
-                <Grid
-                  item
-                  container
-                  direction="column"
-                  className={classes.gridWrapper}
-                >
+                <Grid item container direction="column" className={classes.gridWrapper}>
                   <Grid item style={{ marginBottom: "3rem" }}>
                     <Grid container alignItems="center">
                       <Grid item>
@@ -253,10 +235,7 @@ const CreateMessage = ({
                     </Grid>
                     {/* <Divider className={classes.divider} /> */}
                   </Grid>
-                  <Grid
-                    item
-                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
-                  >
+                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton
                       title="Send Message"
                       width="100%"
@@ -279,10 +258,10 @@ const CreateMessage = ({
 };
 
 CreateMessage.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default CreateMessage;

@@ -32,11 +32,7 @@ const Header = (props) => {
 
   return (
     <Fragment>
-      <AppBar
-        position="fixed"
-        className={classes.appBar}
-        classes={{ root: classes.appBar }}
-      >
+      <AppBar position="fixed" className={classes.appBar} classes={{ root: classes.appBar }}>
         <HeaderContents
           selectedMenu={selectedMenu}
           /* selectedSubMenu={selectedSubMenu}

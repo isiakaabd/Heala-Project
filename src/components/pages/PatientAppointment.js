@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import {
-  CustomButton,
-  FilterList,
-  Modals,
-  PreviousButton,
-  Loader,
-} from "components/Utilities";
+import { CustomButton, FilterList, Modals, PreviousButton, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
@@ -192,9 +186,7 @@ const PatientAppointment = (props) => {
     status: Yup.string("Select your status").required("Status is required"),
   });
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required(
-      "Date  and time is required"
-    ),
+    date: Yup.string("select date and time ").required("Date  and time is required"),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
@@ -233,8 +225,7 @@ const PatientAppointment = (props) => {
     console.log(values);
   };
 
-  const [getPatientsAppointment, { loading, data, error }] =
-    useLazyQuery(getAppoint);
+  const [getPatientsAppointment, { loading, data, error }] = useLazyQuery(getAppoint);
 
   useEffect(() => {
     getPatientsAppointment({
@@ -305,13 +296,7 @@ const PatientAppointment = (props) => {
           {alert.message}
         </Alert>
       )}
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item>
           <PreviousButton
             path={`/patients/${patientId}`}
@@ -320,12 +305,7 @@ const PatientAppointment = (props) => {
         </Grid>
 
         <>
-          <Grid
-            item
-            container
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Grid item container justifyContent="space-between" alignItems="center">
             <Grid item>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
@@ -367,11 +347,7 @@ const PatientAppointment = (props) => {
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
-                              handleSelectedRows(
-                                row.id,
-                                selectedRows,
-                                setSelectedRows
-                              )
+                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
                             }
                             color="primary"
                             checked={isItemSelected}
@@ -395,11 +371,7 @@ const PatientAppointment = (props) => {
                             <span style={{ marginRight: "1rem" }}>
                               <Avatar
                                 alt={`Display Photo of ${row.doctorData.firstName}`}
-                                src={
-                                  row.doctorData.picture
-                                    ? row.doctorData.picture
-                                    : displayPhoto
-                                }
+                                src={row.doctorData.picture ? row.doctorData.picture : displayPhoto}
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
@@ -490,13 +462,7 @@ const PatientAppointment = (props) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    container
-                    alignItems="flex-end"
-                    marginTop={5}
-                    xs={12}
-                  >
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"
@@ -575,13 +541,7 @@ const PatientAppointment = (props) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    container
-                    alignItems="flex-end"
-                    marginTop={5}
-                    xs={12}
-                  >
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
                     <CustomButton
                       title=" Apply Filter"
                       width="100%"
@@ -619,12 +579,12 @@ const PatientAppointment = (props) => {
 };
 
 PatientAppointment.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default PatientAppointment;

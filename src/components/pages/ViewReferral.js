@@ -104,11 +104,7 @@ const ViewReferral = ({
               </Grid>
               <Grid item>
                 <Avatar
-                  src={
-                    patientData && patientData.picture
-                      ? patientData.picture
-                      : displayPhoto
-                  }
+                  src={patientData && patientData.picture ? patientData.picture : displayPhoto}
                   alt={`Display photo of the  ${
                     patientData ? patientData.firstName : "placeholder"
                   }`}
@@ -116,9 +112,7 @@ const ViewReferral = ({
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {patientData
-                    ? `${patientData.firstName} ${patientData.lastName}`
-                    : "No Patient"}
+                  {patientData ? `${patientData.firstName} ${patientData.lastName}` : "No Patient"}
                 </Typography>
               </Grid>
             </Grid>
@@ -132,21 +126,13 @@ const ViewReferral = ({
               </Grid>
               <Grid item>
                 <Avatar
-                  src={
-                    doctorData && doctorData.picture
-                      ? doctorData.picture
-                      : displayPhoto
-                  }
-                  alt={`Display photo of the doctor ${
-                    doctorData ? doctorData.firstName : ""
-                  }`}
+                  src={doctorData && doctorData.picture ? doctorData.picture : displayPhoto}
+                  alt={`Display photo of the doctor ${doctorData ? doctorData.firstName : ""}`}
                 />
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {doctorData
-                    ? `${doctorData.firstName} ${doctorData.lastName}`
-                    : "No Doctor"}
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -207,9 +193,7 @@ const ViewReferral = ({
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">
-                  {testType ? testType : "No Value"}
-                </Typography>
+                <Typography variant="h5">{testType ? testType : "No Value"}</Typography>
               </Grid>
             </Grid>
           </Grid>

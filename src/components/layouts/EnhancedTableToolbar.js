@@ -54,7 +54,7 @@ const EnhancedTableToolbar = ({ numSelected, title }) => {
 };
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  numSelected: PropTypes.number,
   title: PropTypes.string,
 };
 

@@ -21,7 +21,7 @@ PrivateRoute.propTypes = {
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   path: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
+    pathname: PropTypes.string,
     state: PropTypes.shape({
       from: PropTypes.string,
     }),

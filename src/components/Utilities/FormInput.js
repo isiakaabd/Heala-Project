@@ -34,9 +34,9 @@ const FormInput = ({ label, labelId, id, ...rest }) => {
 };
 
 FormInput.propTypes = {
-  label: PropTypes.string.isRequired,
-  labelId: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  labelId: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default FormInput;

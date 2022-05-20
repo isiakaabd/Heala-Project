@@ -56,11 +56,7 @@ const DisplayProfile = ({
       <Grid item>
         <Grid container width="100%" gap={2} alignItems="center" rowSpacing={2}>
           <Grid item>
-            <Avatar
-              alt={`Display Photo`}
-              src={displayPhoto}
-              sx={{ width: 50, height: 50 }}
-            />
+            <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
           </Grid>
           <Grid item>
             <Grid container direction="column">
@@ -70,14 +66,8 @@ const DisplayProfile = ({
               <Grid item>
                 <Grid container alignItems="center">
                   <Grid item style={{ marginRight: "3rem" }}>
-                    <Typography
-                      variant="h4"
-                      color="error"
-                      style={{ fontWeight: 400 }}
-                    >
-                      <span style={{ color: theme.palette.common.lightGrey }}>
-                        {medicalTitle}:
-                      </span>{" "}
+                    <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
+                      <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span>{" "}
                       {statusId}
                     </Typography>
                   </Grid>
@@ -87,20 +77,14 @@ const DisplayProfile = ({
                         <span style={{ color: theme.palette.common.lightGrey }}>
                           Specialization:
                         </span>{" "}
-                        <Chip
-                          label={specialization}
-                          color="success"
-                          className={classes.badge}
-                        />
+                        <Chip label={specialization} color="success" className={classes.badge} />
                       </Typography>
                     </Grid>
                   ) : status ? (
                     <Grid item>
                       {" "}
                       <Typography variant="h4">
-                        <span style={{ color: theme.palette.common.lightGrey }}>
-                          Status:
-                        </span>{" "}
+                        <span style={{ color: theme.palette.common.lightGrey }}>Status:</span>{" "}
                         <Chip
                           label={status}
                           color={status === "Active" ? "success" : "error"}

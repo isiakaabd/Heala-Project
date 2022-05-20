@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
+import { Grid, Chip, Divider, Typography, Avatar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton } from "components/Utilities";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -37,10 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMail = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu  */,
-}) => {
+const ViewMail = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu  */ }) => {
   const { emailId } = useParams();
 
   const classes = useStyles();
@@ -77,9 +70,7 @@ const ViewMail = ({
                 <Chip
                   variant="outlined"
                   deleteIcon={<ArrowForwardIosIcon />}
-                  onClick={() =>
-                    window.open(`mailto:${details.email}`, "_blank")
-                  }
+                  onClick={() => window.open(`mailto:${details.email}`, "_blank")}
                   onDelete={() => console.log(" ")}
                   label={details.email}
                   className={classes.chip}
@@ -107,11 +98,7 @@ const ViewMail = ({
           </Grid>
         </Grid>
         <Divider />
-        <Grid
-          item
-          className={classes.gridWrapper}
-          style={{ lineHeight: 1.85, fontSize: "1.5rem" }}
-        >
+        <Grid item className={classes.gridWrapper} style={{ lineHeight: 1.85, fontSize: "1.5rem" }}>
           {/* <Typography variant="body1" style={{ lineHeight: 1.85 }}> */}
           {parseTextArea}
           {/* </Typography> */}
@@ -122,10 +109,10 @@ const ViewMail = ({
 };
 
 ViewMail.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  /* setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewMail;

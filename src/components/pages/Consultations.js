@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Button,
-  Avatar,
-} from "@mui/material";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -24,7 +16,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Loader, FilterList, PreviousButton } from "components/Utilities";
+import { Loader, FilterList } from "components/Utilities";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
@@ -90,8 +82,7 @@ const Consultations = (props) => {
   const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const [fetchConsultations, { loading, data, error }] =
-    useLazyQuery(getConsultations);
+  const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
 
   useEffect(() => {
     fetchConsultations({
@@ -116,9 +107,7 @@ const Consultations = (props) => {
     setSelectedPatientMenu(5);
     setSelectedScopedMenu(0); */
     // eslint-disable-next-line
-  }, [
-    selectedMenu /* selectedSubMenu, selectedPatientMenu, selectedScopedMenu */,
-  ]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu, selectedScopedMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
@@ -133,11 +122,7 @@ const Consultations = (props) => {
           <Typography variant="h2">Consultations</Typography>
         </Grid>
         <Grid item>
-          <FilterList
-            options={filterOptions}
-            title="Filter consultations"
-            width="18.7rem"
-          />
+          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
         </Grid>
       </Grid>
       {consultations.length > 0 ? (
@@ -169,13 +154,7 @@ const Consultations = (props) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row._id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -201,11 +180,7 @@ const Consultations = (props) => {
                         <span style={{ marginRight: "1rem" }}>
                           <Avatar
                             alt={`Display Photo of ${doctorData.firstName}`}
-                            src={
-                              doctorData.picture
-                                ? doctorData.picture
-                                : displayPhoto
-                            }
+                            src={doctorData.picture ? doctorData.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -277,24 +252,21 @@ const Consultations = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={consultationsHeadCells4}
-          paginationLabel="Patients per page"
-        />
+        <EmptyTable headCells={consultationsHeadCells4} paginationLabel="Patients per page" />
       )}
     </Grid>
   );
 };
 
 Consultations.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default Consultations;

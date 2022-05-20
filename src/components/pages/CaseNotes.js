@@ -1,12 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
-import {
-  Modals,
-  CustomButton,
-  PreviousButton,
-  Loader,
-} from "components/Utilities";
+import { Modals, CustomButton, Loader } from "components/Utilities";
 import Copy from "components/Copy";
 import { makeStyles } from "@mui/styles";
 import { useQuery } from "@apollo/client";
@@ -60,35 +55,16 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
       wordBreak: "break-word",
     },
-    // "&:nth-child(1) > p": {
-    //   color: "green",
-    //   marginTop: "1rem",
-    // },
   },
 }));
 
-const CaseNotes = ({
-  selectedMenu,
-  /* selectedSubMenu,
-  setSelectedMenu,
-  selectedScopedMenu,
-  setSelectedSubMenu,
-  selectedPatientMenu,
-  setSelectedPatientMenu,
-  setSelectedScopedMenu, */
-}) => {
+const CaseNotes = ({ selectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { patientId, rowId } = useParams();
+  const { rowId } = useParams();
   useEffect(() => {
-    /* setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(5);
-    setSelectedScopedMenu(1); */
     // eslint-disable-next-line
-  }, [
-    selectedMenu /* selectedSubMenu, selectedPatientMenu, selectedScopedMenu */,
-  ]);
+  }, [selectedMenu]);
   const [caseNoteState, setCaseNoteState] = useState([]);
 
   const { loading, data, error } = useQuery(getConsult, {
@@ -150,12 +126,7 @@ const CaseNotes = ({
           <Typography variant="h2">Consultation Details</Typography>
         </Grid>
 
-        <Grid
-          item
-          container
-          direction="column"
-          className={classes.parentGridWrapper}
-        >
+        <Grid item container direction="column" className={classes.parentGridWrapper}>
           <Grid item container className={classes.item}>
             <Grid item>
               <Grid container className={classes.subItem}>
@@ -170,12 +141,7 @@ const CaseNotes = ({
               </Grid>
             </Grid>
             <Grid item>
-              <Grid
-                item
-                container
-                flexDirection="column"
-                className={classes.subItem}
-              >
+              <Grid item container flexDirection="column" className={classes.subItem}>
                 <Grid item marginBottom="2rem">
                   <Typography variant="body1" className={classes.title}>
                     Referral:
@@ -283,9 +249,7 @@ const CaseNotes = ({
               </Grid>
               <Grid item>
                 <Grid container gap={1}>
-                  <Typography variant="body1">
-                    {severity ? severity : "No value"}
-                  </Typography>
+                  <Typography variant="body1">{severity ? severity : "No value"}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -296,10 +260,7 @@ const CaseNotes = ({
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body1">
-                  {" "}
-                  {firstNotice ? firstNotice : "No value"}
-                </Typography>
+                <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
               </Grid>
             </Grid>
             <Grid item container className={classes.subItem}>
@@ -348,11 +309,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Chip
-                    variant="contained"
-                    label={status}
-                    className={classes.infoBadge}
-                  />
+                  <Chip variant="contained" label={status} className={classes.infoBadge} />
                 </Grid>
               </Grid>
             </Grid>
@@ -364,9 +321,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {type ? type : "No Value"}
-                  </Typography>
+                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -433,7 +388,7 @@ const CaseNotes = ({
       <Modals
         isOpen={isOpen}
         title="Prescription"
-        width="60vw"
+        width="50vw"
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
@@ -479,9 +434,7 @@ const CaseNotes = ({
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {dateMoment(createdAt)}
-                  </Typography>
+                  <Typography variant="body1">{dateMoment(createdAt)}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -575,8 +528,7 @@ const CaseNotes = ({
 
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {duration(i.dosageFrequency.duration)}{" "}
-                        {daily(i.dosageFrequency.day)}
+                        {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -617,14 +569,14 @@ const CaseNotes = ({
 };
 
 CaseNotes.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default CaseNotes;

@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createElement } from "react";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
-import {
-  List,
-  ListItemText,
-  ListItemButton,
-  ListItemIcon,
-} from "@mui/material";
+import { List, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.svg";
@@ -174,18 +169,15 @@ const SideMenu = (props) => {
               key={menu.id}
               onClick={() => {
                 setSelectedMenu(menu.id);
-                /* setSelectedSubMenu(0);
-                setWaitingListMenu(0);
-                setDoctorView(0); */
               }}
               selected={selectedMenu === menu.id}
               component={Link}
               to={menu.path}
             >
               <ListItemIcon>
-                {React.createElement(
+                {createElement(
                   menu.icon,
-                  menu.id === 5 ? { size: 20, className: "message-icon" } : {}
+                  menu.id === 5 ? { size: 20, className: "message-icon" } : {},
                 )}
               </ListItemIcon>
 
@@ -221,9 +213,6 @@ const SideMenu = (props) => {
 SideMenu.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* setSelectedSubMenu: PropTypes.func,
-  setWaitingListMenu: PropTypes.func,
-  setDoctorView: PropTypes.func, */
 };
 
 export default SideMenu;

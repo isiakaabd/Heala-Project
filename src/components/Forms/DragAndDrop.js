@@ -4,7 +4,6 @@ import { useSnackbar } from "notistack";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
-
 import styled from "styled-components";
 import { TextError } from "components/Utilities/TextError";
 import { CustomButton, Loader } from "components/Utilities";
@@ -80,18 +79,11 @@ const errorContainer = {
 const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const [preview, setPreview] = React.useState("");
-  const [progress, setProgress] = React.useState();
-  const [isCompleted, setIsCompleted] = React.useState(null);
-  const [isCompressing, setIsCompressing] = React.useState(false);
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject,
-    open,
-  } = useDropzone({
+  const [preview, setPreview] = useState("");
+  const [progress, setProgress] = useState();
+  const [isCompleted, setIsCompleted] = useState(null);
+  const [isCompressing, setIsCompressing] = useState(false);
+  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, open } = useDropzone({
     accept: "application/.csv",
     maxFiles: maxFiles,
     autoFocus: true,
@@ -101,7 +93,7 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
         showErrorMsg(
           enqueueSnackbar,
           Typography,
-          "This file is not supported. Please select a .CSV file."
+          "This file is not supported. Please select a .CSV file.",
         );
         return;
       }
@@ -115,7 +107,7 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
         setFieldValue,
         setProgress,
         setIsCompressing,
-        setIsCompleted
+        setIsCompleted,
       );
 
       const reader = new FileReader();
@@ -130,15 +122,11 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
     active: theme.palette.primary.dark,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     isCompleted === "passed" &&
       showSuccessMsg(enqueueSnackbar, Typography, "Image upload complete.");
     if (isCompleted === "failed") {
-      showErrorMsg(
-        enqueueSnackbar,
-        Typography,
-        "Image upload failed, Try again."
-      );
+      showErrorMsg(enqueueSnackbar, Typography, "Image upload failed, Try again.");
     }
   }, [isCompleted]);
 
@@ -148,15 +136,9 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           <Typography>
-            Drag and drop your file(s), or click to select files or Click on the
-            button below
+            Drag and drop your file(s), or click to select files or Click on the button below
           </Typography>
-          <Grid
-            item
-            container
-            justifyContent="center"
-            style={{ marginTop: "15px" }}
-          >
+          <Grid item container justifyContent="center" style={{ marginTop: "15px" }}>
             <CustomButton
               variant="contained"
               title=" Select file(s)"
@@ -175,13 +157,7 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
       <aside style={{ marginTop: "1.5rem" }}>
         <Grid item>
           {progress < 100 || isCompressing ? (
-            <Grid
-              container
-              item
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Grid container item direction="row" justifyContent="center" alignItems="center">
               <Typography display={"inline"}>
                 {isCompressing ? "Compressing file" : "Uploading file"}
               </Typography>

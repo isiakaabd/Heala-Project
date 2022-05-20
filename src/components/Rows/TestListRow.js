@@ -38,8 +38,8 @@ export const TestListRow = ({
 };
 
 TestListRow.propTypes = {
-  isItemSelected: t.bool.isRequired,
-  _id: t.string.isRequired,
+  isItemSelected: t.bool,
+  _id: t.string,
   handleSelectedRows: t.func,
   selectedRows: t.any,
   setSelectedRows: t.func,

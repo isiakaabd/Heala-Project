@@ -149,7 +149,7 @@ const WaitingListTable = ({ path, onClick }) => {
 };
 
 WaitingListTable.propTypes = {
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
   onClick: PropTypes.func,
 };
 

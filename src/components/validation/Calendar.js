@@ -43,7 +43,7 @@ const Calendars = ({ label, name, ...rest }) => {
 };
 
 Calendars.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  name: PropTypes.string,
 };
 export default Calendars;

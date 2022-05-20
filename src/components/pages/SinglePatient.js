@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo, createElement } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 // import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import {
-  Card,
-  PreviousButton,
-  CustomButton,
-  Loader,
-} from "components/Utilities";
+import { Card, PreviousButton, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -177,33 +172,21 @@ const SinglePatient = (props) => {
   if (error) return <NoData error={error} />;
   else {
     return (
-      <Grid
-        container
-        direction="column"
-        className={classes.gridContainer}
-        gap={2}
-      >
+      <Grid container direction="column" className={classes.gridContainer} gap={2}>
         <Grid item>
           <PreviousButton
             path={`/patients`}
             /* onClick={() => setSelectedSubMenu(0)} */
           />
         </Grid>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          className={classes.gridsWrapper}
-        >
+        <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
           <Grid item>
             <Grid container alignItems="center">
               <Grid item style={{ marginRight: "2rem" }}>
                 <Avatar
                   alt={patientProfile.firstName}
-                  src={
-                    patientProfile.image ? patientProfile.image : displayPhoto
-                  }
+                  src={patientProfile.image ? patientProfile.image : displayPhoto}
                   sx={{ width: 50, height: 50 }}
                 />
               </Grid>
@@ -231,12 +214,7 @@ const SinglePatient = (props) => {
           </Grid>
         </Grid>
         {/* TOP CARDS SECTION */}
-        <Grid
-          item
-          container
-          style={{ paddingTop: "5rem" }}
-          justifyContent="space-evenly"
-        >
+        <Grid item container style={{ paddingTop: "5rem" }} justifyContent="space-evenly">
           {cards1.map((card) => (
             <Grid
               key={card.id}
@@ -247,18 +225,13 @@ const SinglePatient = (props) => {
               /* onClick={() => setSelectedPatientMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, { fill: card.fill })}
+                {createElement(card.icon, { fill: card.fill })}
               </Card>
             </Grid>
           ))}
         </Grid>
         {/* BOTTOM CARDS SECTION */}
-        <Grid
-          item
-          container
-          justifyContent="space-evenly"
-          style={{ paddingTop: "5rem" }}
-        >
+        <Grid item container justifyContent="space-evenly" style={{ paddingTop: "5rem" }}>
           {cards2.map((card) => (
             <Grid
               key={card.id}
@@ -269,7 +242,7 @@ const SinglePatient = (props) => {
               /* onClick={() => setSelectedPatientMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, {
+                {createElement(card.icon, {
                   fill: card.fill,
                   color: "success",
                   style: { fontSize: "4rem" },
@@ -300,4 +273,4 @@ SinglePatient.propTypes = {
   setSelectedPatientMenu: PropTypes.func.isRequired, */
 };
 
-export default React.memo(SinglePatient);
+export default memo(SinglePatient);

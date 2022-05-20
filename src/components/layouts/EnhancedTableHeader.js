@@ -57,10 +57,10 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  rowCount: PropTypes.number.isRequired,
-  headCells: PropTypes.array.isRequired,
+  numSelected: PropTypes.number,
+  onSelectAllClick: PropTypes.func,
+  rowCount: PropTypes.number,
+  headCells: PropTypes.array,
   hasCheckbox: PropTypes.bool,
 };
 

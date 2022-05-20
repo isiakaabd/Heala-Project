@@ -132,9 +132,7 @@ const HcpProfile = (props) => {
   return (
     <Grid container direction="column" gap={3} width="100%">
       <Grid item>
-        <PreviousButton
-          path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
-        />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid item container>
@@ -152,13 +150,7 @@ const HcpProfile = (props) => {
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        gap={5}
-        sx={{ width: "100%" }}
-      >
+      <Grid item container justifyContent="space-between" gap={5} sx={{ width: "100%" }}>
         {/* GENDER GRID */}
         <Grid item md className={classes.cardGrid}>
           <Grid
@@ -172,11 +164,7 @@ const HcpProfile = (props) => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip
-                variant="outlined"
-                label={gender}
-                className={classes.infoBadge}
-              />
+              <Chip variant="outlined" label={gender} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -273,9 +261,7 @@ const HcpProfile = (props) => {
               {hospital ? (
                 <a href={email} className={classes.link}>
                   <span>{hospital}</span>
-                  <LocationOnIcon
-                    className={`${classes.linkIcon} ${classes.locationIcon}`}
-                  />
+                  <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
                 </a>
               ) : (
                 <span className={classes.link}>No Hospital attached</span>

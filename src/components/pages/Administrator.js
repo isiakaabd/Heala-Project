@@ -145,8 +145,7 @@ const Administrator = ({
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchAdmins, { loading, data, error, refetch }] =
-    useLazyQuery(findAdmin);
+  const [fetchAdmins, { loading, data, error, refetch }] = useLazyQuery(findAdmin);
 
   useEffect(() => {
     fetchAdmins({
@@ -225,9 +224,7 @@ const Administrator = ({
     password: Yup.string()
       .required("password is required")
       .min(8, "Password is too short - should be 8 chars minimum."),
-    email: Yup.string()
-      .email("Enter a valid email")
-      .required("Email is required"),
+    email: Yup.string().email("Enter a valid email").required("Email is required"),
   });
   const onSubmit1 = async (values, onSubmitProps) => {
     const { email, password } = values;
@@ -267,13 +264,7 @@ const Administrator = ({
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item>
           <PreviousButton path="/settings" />
         </Grid>
@@ -333,13 +324,7 @@ const Administrator = ({
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -374,11 +359,7 @@ const Administrator = ({
                             variant="contained"
                             disableRipple
                             className={`${classes.button} ${classes.greenBtn}`}
-                            endIcon={
-                              <EditIcon
-                                style={{ color: theme.palette.common.green }}
-                              />
-                            }
+                            endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
                           >
                             Edit Admin
                           </Button>
@@ -391,18 +372,10 @@ const Administrator = ({
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={adminHeader}
-            paginationLabel="Admin  per page"
-          />
+          <EmptyTable headCells={adminHeader} paginationLabel="Admin  per page" />
         )}
       </Grid>
-      <Modals
-        isOpen={isOpen}
-        title="Filter"
-        rowSpacing={5}
-        handleClose={handleDialogClose}
-      >
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -508,10 +481,10 @@ const Administrator = ({
   );
 };
 Administrator.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Administrator;

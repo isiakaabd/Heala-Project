@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Button,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Chip,
-} from "@mui/material";
-import {
-  Loader,
-  Search,
-  CustomButton,
-  PreviousButton,
-  Modals,
-} from "components/Utilities";
+import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
+import { Loader, Search, CustomButton, PreviousButton, Modals } from "components/Utilities";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { roleHeader } from "components/Utilities/tableHeaders";
@@ -148,11 +134,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Management = (
-  {
-    /* setSelectedSubMenu, setSelectedManagementMenu, setSelectedScopedMenu */
-  }
-) => {
+const Management = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
@@ -181,8 +163,7 @@ const Management = (
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const [fetchRoles, { loading, data, error, refetch }] =
-    useLazyQuery(getRoles);
+  const [fetchRoles, { loading, data, error, refetch }] = useLazyQuery(getRoles);
 
   useEffect(() => {
     fetchRoles({
@@ -268,14 +249,11 @@ const Management = (
                     const labelId = `enhanced-table-checkbox-${index}`;
                     let newData;
                     if (row.permissions) {
-                      const data = [
-                        ...new Set(row.permissions.map((i) => i.split(":")[0])),
-                      ];
+                      const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
                       const dataLength = data.length - 5;
-                      newData = [
-                        ...data.slice(0, 5),
-                        dataLength ? `+${dataLength}` : null,
-                      ].filter((i) => i !== null);
+                      newData = [...data.slice(0, 5), dataLength ? `+${dataLength}` : null].filter(
+                        (i) => i !== null,
+                      );
                     }
                     return (
                       <TableRow
@@ -289,11 +267,7 @@ const Management = (
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
-                              handleSelectedRows(
-                                row.id,
-                                selectedRows,
-                                setSelectedRows
-                              )
+                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
                             }
                             color="primary"
                             checked={isItemSelected}
@@ -321,21 +295,10 @@ const Management = (
                           className={classes.tableCell}
                           style={{ color: theme.palette.common.black }}
                         >
-                          <Grid
-                            container
-                            justifyContent="flex-start"
-                            gap={1}
-                            alignItems="center"
-                          >
+                          <Grid container justifyContent="flex-start" gap={1} alignItems="center">
                             {newData &&
                               newData.map((i) => {
-                                return (
-                                  <Chip
-                                    label={i}
-                                    key={i}
-                                    className={classes.badge}
-                                  />
-                                );
+                                return <Chip label={i} key={i} className={classes.badge} />;
                               })}
                           </Grid>
                         </TableCell>
@@ -380,24 +343,13 @@ const Management = (
               </EnhancedTable>
             </Grid>
           ) : (
-            <EmptyTable
-              headCells={roleHeader}
-              paginationLabel="Admin  per page"
-            />
+            <EmptyTable headCells={roleHeader} paginationLabel="Admin  per page" />
           )}
         </>
       </Grid>
       {/* // modal */}
-      <Modals
-        isOpen={isOpen}
-        title="Add new role"
-        handleClose={handleDialogClose}
-      >
-        <RoleModal
-          handleDialogClose={handleDialogClose}
-          type="add"
-          checkbox={checkbox}
-        />
+      <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
+        <RoleModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
       </Modals>
 
       {/* Edit */}
@@ -420,7 +372,7 @@ const Management = (
 export default Management;
 
 Management.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedManagementMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired, */
+  /* setSelectedSubMenu: PropTypes.func,
+  setSelectedManagementMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };

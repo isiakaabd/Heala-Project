@@ -35,8 +35,8 @@ const LoginInput = (props) => {
   );
 };
 LoginInput.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default LoginInput;

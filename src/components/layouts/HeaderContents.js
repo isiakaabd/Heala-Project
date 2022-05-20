@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { useLazyQuery } from "@apollo/client";
@@ -7,7 +7,6 @@ import { Typography, Toolbar, Grid } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-
 import HeaderProfile from "./HeaderProfile";
 import { findAccounts } from "components/graphQL/useQuery";
 import { getPatients, DoctorCount } from "components/graphQL/useQuery";
@@ -58,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomHeaderText = ({ title, total, path, data }) => {
+const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
 
   return (
@@ -151,17 +150,12 @@ const CustomSubHeaderText = (props) => {
       </Typography>
       {scopedMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon
-            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
-          />
+          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
             style={{
-              color:
-                scopedSubMenu === 0
-                  ? theme.palette.common.red
-                  : theme.palette.common.grey,
+              color: scopedSubMenu === 0 ? theme.palette.common.red : theme.palette.common.grey,
             }}
           >
             {subSubTitle}
@@ -171,9 +165,7 @@ const CustomSubHeaderText = (props) => {
 
       {scopedSubMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon
-            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
-          />
+          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
@@ -209,9 +201,10 @@ const HeaderText = (props) => {
   const [docCount, setDocCount] = useState([]);
   const [patientCount, setPatientCount] = useState([]);
 
-  const breadcrumbs = React.useMemo(() => {
-    return predicateBreadcrumbFromUrl(patterns, pathname.substring(1));
-  }, [pathname]);
+  const breadcrumbs = useMemo(
+    () => predicateBreadcrumbFromUrl(patterns, pathname.substring(1)),
+    [pathname],
+  );
 
   const [profile, { data }] = useLazyQuery(findAccounts, {
     variables: { email },
@@ -235,8 +228,7 @@ const HeaderText = (props) => {
     (async () => {
       patient();
       doctor();
-      if (patientContent.data)
-        setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
+      if (patientContent.data) setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
       if (doctorContent.data) setDocCount(doctorContent.data.DoctorCount);
     })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
@@ -265,41 +257,18 @@ const HeaderText = (props) => {
 
 HeaderText.propTypes = {
   selectedMenu: PropTypes.number,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  waitingListMenu: PropTypes.number,
-  selectedAppointmentMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
-  selectedManagementMenu: PropTypes.number,
-  doctorView: PropTypes.number, */
 };
 
 const HeaderContent = (props) => {
   const {
     selectedMenu,
-    /* selectedSubMenu,
-    selectedPatientMenu,
-    selectedHcpMenu,
-    waitingListMenu,
-    selectedAppointmentMenu,
-    selectedScopedMenu,
-    selectedManagementMenu, */
+
     data,
   } = props;
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
-      <HeaderText
-        selectedMenu={selectedMenu}
-        /* selectedSubMenu={selectedSubMenu}
-        selectedPatientMenu={selectedPatientMenu}
-        selectedHcpMenu={selectedHcpMenu}
-        waitingListMenu={waitingListMenu}
-        selectedAppointmentMenu={selectedAppointmentMenu}
-        selectedScopedMenu={selectedScopedMenu}
-        selectedManagementMenu={selectedManagementMenu} */
-      />
+      <HeaderText selectedMenu={selectedMenu} />
       <HeaderProfile data={data} />
     </Toolbar>
   );
@@ -308,21 +277,12 @@ const HeaderContent = (props) => {
 HeaderContent.propTypes = {
   selectedMenu: PropTypes.number,
   data: PropTypes.object,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  selectedManagementMenu: PropTypes.number,
-  waitingListMenu: PropTypes.number,
-  selectedAppointmentMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number, */
 };
 
 const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
   const theme = useTheme();
   const classes = useStyles();
   const history = useHistory();
-
-  // Patients Doctors
 
   return (
     <Grid container justifyContent="flex-start" alignItems="center">
@@ -342,11 +302,7 @@ const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
                   />
                 </Grid>
                 {counts[text] && (
-                  <Grid
-                    item
-                    sx={{ marginLeft: "0.5rem", display: "flex" }}
-                    alignContent="center"
-                  >
+                  <Grid item sx={{ marginLeft: "0.5rem", display: "flex" }} alignContent="center">
                     <Grid container alignContent="center">
                       <ArrowUpwardIcon color="success" />
                       <Typography variant="h5" className={classes.subtitle}>

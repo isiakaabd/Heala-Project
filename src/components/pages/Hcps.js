@@ -1,18 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
 import { debounce } from "lodash";
 import Filter from "../Forms/Filters/index";
 import AddIcon from "@mui/icons-material/Add";
@@ -51,11 +42,7 @@ import {
   statusFilterBy,
 } from "../../helpers/mockData";
 
-const Hcps = (
-  {
-    /* setSelectedSubMenu, setSelectedHcpMenu */
-  }
-) => {
+const Hcps = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [profiles, setProfiles] = useState("");
@@ -65,9 +52,7 @@ const Hcps = (
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [filterValues, setFilterValues] = React.useState(
-    doctorsPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(doctorsPageDefaultFilterValues);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -75,10 +60,8 @@ const Hcps = (
     active: theme.palette.primary.dark,
   };
 
-  const [
-    fetchDoctors,
-    { data, error, loading, refetch, fetchMore, variables },
-  ] = useLazyQuery(getDoctorsProfile);
+  const [fetchDoctors, { data, error, loading, refetch, variables }] =
+    useLazyQuery(getDoctorsProfile);
 
   //eslint-disable-next-line
   const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
@@ -89,7 +72,7 @@ const Hcps = (
         first: pageInfo.limit,
       },
     });
-  }, [fetchDoctors]);
+  }, [fetchDoctors, pageInfo]);
 
   useEffect(() => {
     if (data) {
@@ -168,12 +151,7 @@ const Hcps = (
         </Grid>
       </Grid>
       {/* ========= FILTERS =========== */}
-      <Grid
-        container
-        gap={2}
-        flexWrap="wrap"
-        className={classes.searchFilterContainer}
-      >
+      <Grid container gap={2} flexWrap="wrap" className={classes.searchFilterContainer}>
         {/* FILTER BY GENDER */}
         <Grid item>
           <Filter
@@ -185,7 +163,7 @@ const Hcps = (
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={genderType}
@@ -205,7 +183,7 @@ const Hcps = (
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={specializationFilterBy}
@@ -226,7 +204,7 @@ const Hcps = (
                 setFilterValues,
                 fetchDoctors,
                 variables,
-                refetch
+                refetch,
               )
             }
             options={cadreFilterBy}
@@ -262,12 +240,7 @@ const Hcps = (
           <ClearFiltersBtn
             title="Clear filters"
             onHandleClick={() =>
-              resetFilters(
-                setFilterValues,
-                doctorsPageDefaultFilterValues,
-                variables,
-                fetchDoctors
-              )
+              resetFilters(setFilterValues, doctorsPageDefaultFilterValues, variables, fetchDoctors)
             }
           />
         </Grid>
@@ -313,9 +286,7 @@ const Hcps = (
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -409,10 +380,7 @@ const Hcps = (
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpsHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
       {/* ADD Doctor MODAL */}
       <Modals
@@ -574,8 +542,8 @@ const Hcps = (
 };
 
 Hcps.propTypes = {
-  /*  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired, */
+  /*  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default Hcps;
