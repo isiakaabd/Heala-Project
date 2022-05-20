@@ -405,7 +405,7 @@ const CaseNotes = ({
       <Modals
         isOpen={isOpen}
         title="Prescription"
-        width="60vw"
+        width="50vw"
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
