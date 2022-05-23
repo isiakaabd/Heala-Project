@@ -3,7 +3,7 @@ import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 // import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import { Card, PreviousButton, CustomButton, Loader } from "components/Utilities";
+import { Card, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -57,14 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SinglePatient = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedPatientMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const history = useHistory();
 
   const classes = useStyles();
@@ -173,12 +166,6 @@ const SinglePatient = (props) => {
   else {
     return (
       <Grid container direction="column" className={classes.gridContainer} gap={2}>
-        <Grid item>
-          <PreviousButton
-            path={`/patients`}
-            /* onClick={() => setSelectedSubMenu(0)} */
-          />
-        </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
           <Grid item>
