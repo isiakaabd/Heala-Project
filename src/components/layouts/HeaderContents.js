@@ -16,17 +16,18 @@ import { propTypes } from "react-bootstrap/esm/Image";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     alignItems: "center",
-    width: "100%",
+    // width: "100%",
     height: "100%",
+    flex: 1,
     justifyContent: "space-between",
   },
   text: {
     color: theme.palette.common.lightGrey,
-    fontSize: "1.5rem",
+    fontSize: "clamp(1rem, 1.2vw, 1.5rem)",
     fontWeight: 300,
   },
   name: {
-    fontSize: "2rem",
+    fontSize: "clamp(1.5rem, 1.5vw, 2rem)", //clamp(1.5rem, 1.5vw, 2.25rem)
     fontWeight: 300,
   },
   titleWrapper: {
@@ -37,7 +38,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   title: {
-    fontSize: "2.4rem",
+    // fontSize: "clamp(1.2rem, 1vw+1rem, 2.4rem )",
+    fontSize: "clamp(1.5rem, 1.5vw, 2.25rem)",
     color: theme.palette.common.red,
     "&.MuiTypography-root": {
       marginRight: ".5rem",
@@ -46,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     color: theme.palette.common.green,
     "&.MuiTypography-root": {
-      fontSize: "1.25rem",
+      fontSize: "clamp(0.6rem, 1vw + .5rem, 1.25rem)",
       marginLeft: ".5rem",
       alignSelf: "flex-end",
     },
@@ -61,17 +63,21 @@ const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.titleWrapper}>
-      <Link to={`/${path}`} className={classes.link}>
-        <Typography variant="h3" classes={{ root: classes.title }}>
-          {title}
+    <Grid container flex={1} flexDirection="column" justifyContent="center" rowGap={1}>
+      <Grid item container flexWrap="nowrap" alignItems="center">
+        <Link to={`/${path}`} className={classes.link}>
+          <Typography variant="h3" classes={{ root: classes.title }}>
+            {title}
+          </Typography>
+        </Link>
+        <ArrowUpwardIcon color="success" />
+      </Grid>
+      <Grid item>
+        <Typography variant="h5" className={classes.subtitle}>
+          {total} total
         </Typography>
-      </Link>
-      <ArrowUpwardIcon color="success" />
-      <Typography variant="h5" className={classes.subtitle}>
-        {total} total
-      </Typography>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -82,14 +88,16 @@ CustomHeaderText.propTypes = {
   data: PropTypes.object,
 };
 
-const CustomHeaderTitle = ({ title, path, onClick = null, variant }) => {
+const CustomHeaderTitle = ({ title, path, onClick = null }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.titleWrapper}>
       {!onClick ? (
         <Link to={`/${path}`} className={classes.link}>
-          <Typography>{title}</Typography>
+          <Typography variant="h3" classes={{ root: classes.title }}>
+            {title}
+          </Typography>
         </Link>
       ) : (
         <Typography
@@ -97,7 +105,8 @@ const CustomHeaderTitle = ({ title, path, onClick = null, variant }) => {
             cursor: "pointer",
           }}
           onClick={onClick}
-          variant={variant}
+          variant="h3"
+          classes={{ root: classes.title }}
         >
           {title}
         </Typography>
@@ -260,11 +269,7 @@ HeaderText.propTypes = {
 };
 
 const HeaderContent = (props) => {
-  const {
-    selectedMenu,
-
-    data,
-  } = props;
+  const { selectedMenu, data } = props;
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
@@ -321,7 +326,7 @@ const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
                 }}
               />
             )}
-            ;
+
             {breadcrumbs.length > 0 && breadcrumbs.length - 1 > index ? (
               <KeyboardArrowRightIcon
                 size={10}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
+import PropTypes from "prop-types";
 import { ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
@@ -10,29 +11,24 @@ import { Loader } from "components/Utilities";
 import Routes from "components/routes/Routes";
 import { muiTheme } from "components/muiTheme";
 import { setAccessToken } from "./accessToken";
-import ScrollToView from "components/ScrollToView";
+import { Box, Drawer, Toolbar, CssBaseline } from "@mui/material";
 import { Header, SideMenu } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 
-const sectionStyles = {
-  paddingLeft: "39rem",
-  paddingRight: "5rem",
-  paddingTop: "12rem",
-  paddingBottom: "5rem",
-  minHeight: "100vh",
-  width: "100%",
-  backgroundColor: "#fbfbfb",
-};
+const App = ({ window }) => {
+  const container = window !== undefined ? () => window().document.body : undefined;
 
-const App = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
   const [logout_user] = useMutation(LOGOUT_USER);
-
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const drawerWidth = 200;
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [state, setstate] = useState(true);
-
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -73,32 +69,85 @@ const App = () => {
           {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
           {isAuthenticated && !chatMediaActive && !state && (
             <>
-              <Header selectedMenu={selectedMenu} />
+              <Box sx={{ display: "flex" }}>
+                <CssBaseline />
+                <Header
+                  selectedMenu={selectedMenu}
+                  handleDrawerToggle={handleDrawerToggle}
+                  drawerWidth={drawerWidth}
+                />
 
-              <ScrollToView>
+                {/* <ScrollToView>
                 <main
                   style={{
                     display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
                   }}
+                > */}
+                <Box
+                  component="nav"
+                  sx={{ width: { sm: `max(300px, 20vw)` }, flexShrink: { sm: 0 } }}
+                  aria-label="mailbox foldersssss"
                 >
-                  <SideMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
-
-                  <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}>
-                    <Routes
-                      setSelectedMenu={setSelectedMenu}
+                  <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                      keepMounted: true, // Better open performance on mobile.
+                    }}
+                    sx={{
+                      display: { xs: "block", sm: "none" },
+                      "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+                    }}
+                  >
+                    <SideMenu
                       selectedMenu={selectedMenu}
-                      chatMediaActive={chatMediaActive}
-                      setChatMediaActive={setChatMediaActive}
+                      setSelectedMenu={setSelectedMenu}
+                      drawerWidth={drawerWidth}
+                      handleDrawerToggle={handleDrawerToggle}
                     />
-                  </section>
-                </main>
-              </ScrollToView>
+                  </Drawer>
+                  {/* <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}> */}
+                  <Drawer
+                    variant="permanent"
+                    sx={{
+                      display: { xs: "none", sm: "block" },
+                      "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+                    }}
+                    open
+                  >
+                    <SideMenu
+                      selectedMenu={selectedMenu}
+                      setSelectedMenu={setSelectedMenu}
+                      drawerWidth={drawerWidth}
+                    />
+                  </Drawer>
+                </Box>
+                <Box
+                  component="main"
+                  sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                >
+                  <Toolbar />
+
+                  <Routes
+                    setSelectedMenu={setSelectedMenu}
+                    selectedMenu={selectedMenu}
+                    chatMediaActive={chatMediaActive}
+                    setChatMediaActive={setChatMediaActive}
+                  />
+                </Box>
+                {/* </ScrollToView> */}
+              </Box>
             </>
           )}
         </div>
       </Router>
     </ThemeProvider>
   );
+};
+App.propTypes = {
+  window: PropTypes.object,
 };
 
 export default App;
