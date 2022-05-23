@@ -99,7 +99,7 @@ const LineGraph = ({ data }) => {
 };
 
 LineGraph.propTypes = {
-  data: t.object.isRequired,
+  data: t.object,
 };
 
 export default LineGraph;

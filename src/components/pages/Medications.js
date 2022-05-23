@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
 const Medications = (props) => {
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedPatientMenu,
     setSelectedSubMenu,
-    setSelectedPatientMenu,
+    setSelectedPatientMenu, */
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -45,7 +45,7 @@ const Medications = (props) => {
 
   const [fetchMedications, { loading, error, data }] = useLazyQuery(myMedic);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchMedications({
       variables: {
         id: patientId,
@@ -64,11 +64,11 @@ const Medications = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(6);
+    /* setSelectedSubMenu(2);
+    setSelectedPatientMenu(6); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu /*  selectedSubMenu, selectedPatientMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -76,7 +76,9 @@ const Medications = (props) => {
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
+        <PreviousButton
+          path={`/patients/${patientId}`} /* onClick={() => setSelectedPatientMenu(0)} */
+        />
       </Grid>
 
       <Grid item container height="100%" direction="column" gap={2}>
@@ -185,12 +187,12 @@ const Medications = (props) => {
 };
 
 Medications.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Medications;

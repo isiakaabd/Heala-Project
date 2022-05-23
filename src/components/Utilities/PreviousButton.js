@@ -22,7 +22,7 @@ const PreviousButton = ({ path, ...rest }) => {
 };
 
 PreviousButton.propTypes = {
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
 };
 
 export default PreviousButton;

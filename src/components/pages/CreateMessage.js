@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { getErrors } from "components/Utilities/Time";
-import { useSnackbar } from "notistack";
 import { CustomButton, PreviousButton } from "components/Utilities";
 import { Divider, Grid, Typography } from "@mui/material";
 import FormikControl from "components/validation/FormikControl";
@@ -58,11 +56,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const CreateMessage = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
@@ -107,16 +107,9 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
       });
 
       history.push("/messages");
-      enqueueSnackbar("Message Created", {
-        variant: "success",
-      });
     } catch (error) {
-      enqueueSnackbar(getErrors(error), {
-        variant: "error",
-      });
-      console.error(error);
+      console.log(error);
     }
-
     onSubmitProps.resetForm();
   };
   const onChange = useCallback(
@@ -154,10 +147,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 
   useEffect(() => {
     setSelectedMenu(5);
-    setSelectedSubMenu(6);
+    /* setSelectedSubMenu(6); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
   return (
     <Formik
@@ -265,10 +258,10 @@ const CreateMessage = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSele
 };
 
 CreateMessage.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default CreateMessage;

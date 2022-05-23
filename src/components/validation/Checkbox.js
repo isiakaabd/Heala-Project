@@ -55,8 +55,8 @@ const Checkboxs = ({ name, options, formlabel }) => {
 };
 export default Checkboxs;
 Checkboxs.propTypes = {
-  name: PropTypes.string.isRequired,
-  formlabel: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  name: PropTypes.string,
+  formlabel: PropTypes.string,
+  label: PropTypes.string,
+  options: PropTypes.array,
 };

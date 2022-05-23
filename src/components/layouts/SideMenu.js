@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createElement } from "react";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
 import { List, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
@@ -12,15 +12,7 @@ import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const SideMenu = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    setDoctorView,
-    setSelectedSubMenu,
-    setWaitingListMenu,
-    drawerWidth,
-    // handleDrawerToggle,
-  } = props;
+  const { selectedMenu, setSelectedMenu, drawerWidth } = props;
   const useStyles = makeStyles((theme) => ({
     aside: {
       width: `${drawerWidth}`,
@@ -172,19 +164,13 @@ const SideMenu = (props) => {
             <ListItemButton
               disableRipple
               key={menu.id}
-              onClick={() => {
-                setSelectedMenu(menu.id);
-                setSelectedSubMenu(0);
-                setWaitingListMenu(0);
-                setDoctorView(0);
-                // handleDrawerToggle();
-              }}
+              onClick={() => setSelectedMenu(menu.id)}
               selected={selectedMenu === menu.id}
               component={Link}
               to={menu.path}
             >
               <ListItemIcon>
-                {React.createElement(
+                {createElement(
                   menu.icon,
                   menu.id === 5 ? { size: 20, className: "message-icon" } : {},
                 )}
@@ -221,11 +207,8 @@ const SideMenu = (props) => {
 
 SideMenu.propTypes = {
   selectedMenu: PropTypes.number,
-  drawerWidth: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setWaitingListMenu: PropTypes.func,
-  setDoctorView: PropTypes.func,
+  drawerWidth: PropTypes.number,
   handleDrawerToggle: PropTypes.func,
 };
 

@@ -45,11 +45,11 @@ const useStyles = makeStyles((theme) => ({
 const Prescriptions = (props) => {
   const {
     selectedMenu,
-    selectedSubMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
     setSelectedSubMenu,
     selectedPatientMenu,
-    setSelectedPatientMenu,
+    setSelectedPatientMenu, */
   } = props;
   const classes = useStyles();
 
@@ -57,10 +57,10 @@ const Prescriptions = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(3);
+    /* setSelectedSubMenu(2);
+    setSelectedPatientMenu(3); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
 
   const { loading, error, data } = useQuery(getConsultations, {
     variables: {
@@ -89,7 +89,9 @@ const Prescriptions = (props) => {
   return (
     <Grid container direction="column" flexWrap="nowrap" height="100%" gap={2}>
       <Grid item>
-        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
+        <PreviousButton
+          path={`/patients/${patientId}`} /* onClick={() => setSelectedPatientMenu(0)} */
+        />
       </Grid>
       <Grid item>
         <Typography variant="h2">Prescriptions</Typography>
@@ -269,11 +271,7 @@ const Prescriptions = (props) => {
 
 Prescriptions.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func,
 };
 
 export default Prescriptions;

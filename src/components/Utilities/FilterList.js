@@ -65,7 +65,7 @@ const FilterList = ({ width, title, ...rest }) => {
 
 FilterList.propTypes = {
   width: PropTypes.string,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };
 
 export default FilterList;

@@ -105,11 +105,11 @@ const PatientAppointment = (props) => {
   const [updateAppoint] = useMutation(updateAppointment);
   const {
     selectedMenu,
-    selectedSubMenu,
     setSelectedMenu,
+    /*  selectedSubMenu,
     setSelectedSubMenu,
     selectedPatientMenu,
-    setSelectedPatientMenu,
+    setSelectedPatientMenu, */
   } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
   const [pageInfo, setPageInfo] = useState([]);
@@ -249,10 +249,10 @@ const PatientAppointment = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    setSelectedSubMenu(2);
-    setSelectedPatientMenu(2);
+    /* setSelectedSubMenu(2);
+    setSelectedPatientMenu(2); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedPatientMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -300,7 +300,7 @@ const PatientAppointment = (props) => {
         <Grid item>
           <PreviousButton
             path={`/patients/${patientId}`}
-            onClick={() => setSelectedPatientMenu(0)}
+            /* onClick={() => setSelectedPatientMenu(0)} */
           />
         </Grid>
 
@@ -579,12 +579,12 @@ const PatientAppointment = (props) => {
 };
 
 PatientAppointment.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedPatientMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default PatientAppointment;

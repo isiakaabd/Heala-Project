@@ -1,21 +1,24 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Typography, Grid } from "@mui/material";
-import HeaderProfile from "./HeaderProfile";
 import { makeStyles } from "@mui/styles";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { findAccounts } from "components/graphQL/useQuery";
-import { Link, useLocation } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 import { useLazyQuery } from "@apollo/client";
+import { useTheme } from "@mui/material/styles";
+import { Typography, Toolbar, Grid } from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import HeaderProfile from "./HeaderProfile";
+import { findAccounts } from "components/graphQL/useQuery";
 import { getPatients, DoctorCount } from "components/graphQL/useQuery";
+import { patterns, predicateBreadcrumbFromUrl } from "helpers/breadcrumb";
+import { propTypes } from "react-bootstrap/esm/Image";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     alignItems: "center",
     // width: "100%",
     height: "100%",
+    flex: 1,
     justifyContent: "space-between",
   },
   text: {
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 300,
   },
   name: {
-    fontSize: "clamp(1.5rem, 1.5vw, 2rem)",
+    fontSize: "clamp(1.5rem, 1.5vw, 2rem)", //clamp(1.5rem, 1.5vw, 2.25rem)
     fontWeight: 300,
   },
   titleWrapper: {
@@ -56,11 +59,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomHeaderText = ({ title, total, path, data }) => {
+const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
 
   return (
-    <Grid container flexDirection="column" justifyContent="center" rowGap={1}>
+    <Grid container flex={1} flexDirection="column" justifyContent="center" rowGap={1}>
       <Grid item container flexWrap="nowrap" alignItems="center">
         <Link to={`/${path}`} className={classes.link}>
           <Typography variant="h3" classes={{ root: classes.title }}>
@@ -85,23 +88,38 @@ CustomHeaderText.propTypes = {
   data: PropTypes.object,
 };
 
-const CustomHeaderTitle = ({ title, path }) => {
+const CustomHeaderTitle = ({ title, path, onClick = null }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.titleWrapper}>
-      <Link to={`/${path}`} className={classes.link}>
-        <Typography variant="h3" classes={{ root: classes.title }}>
+      {!onClick ? (
+        <Link to={`/${path}`} className={classes.link}>
+          <Typography variant="h3" classes={{ root: classes.title }}>
+            {title}
+          </Typography>
+        </Link>
+      ) : (
+        <Typography
+          sx={{
+            cursor: "pointer",
+          }}
+          onClick={onClick}
+          variant="h3"
+          classes={{ root: classes.title }}
+        >
           {title}
         </Typography>
-      </Link>
+      )}
     </div>
   );
 };
 
 CustomHeaderTitle.propTypes = {
+  onClick: propTypes.func,
   title: PropTypes.string,
   path: PropTypes.string,
+  variant: PropTypes.string,
 };
 
 // SUBMENU HEADERS
@@ -183,25 +201,29 @@ CustomSubHeaderText.propTypes = {
 
 // HEADER DYNAMIC RENDERING COMPONENT
 const HeaderText = (props) => {
-  const {
-    selectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
-    selectedHcpMenu,
-    waitingListMenu,
-    doctorView,
-    selectedAppointmentMenu,
-    selectedManagementMenu,
-    selectedScopedMenu,
-  } = props;
+  const { selectedMenu } = props;
 
-  const theme = useTheme();
+  const classes = useStyles();
+  const { pathname } = useLocation();
   const email = localStorage.getItem("email");
   const [profileAcc, setProfileAcc] = useState([]);
+  const [docCount, setDocCount] = useState([]);
+  const [patientCount, setPatientCount] = useState([]);
+
+  const breadcrumbs = useMemo(
+    () => predicateBreadcrumbFromUrl(patterns, pathname.substring(1)),
+    [pathname],
+  );
+
   const [profile, { data }] = useLazyQuery(findAccounts, {
     variables: { email },
   });
-  const classes = useStyles();
+
+  const [patient, patientContent] = useLazyQuery(getPatients);
+  const [doctor, doctorContent] = useLazyQuery(DoctorCount, {
+    fetchPolicy: "cache-first",
+  });
+
   useEffect(() => {
     (async () => {
       profile();
@@ -210,19 +232,20 @@ const HeaderText = (props) => {
       }
     })();
   }, [profile, email, data]);
-  const [patient, patientContent] = useLazyQuery(getPatients);
-  const [doctor, doctorContent] = useLazyQuery(DoctorCount, { fetchPolicy: "cache-first" });
-  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
     (async () => {
       patient();
       doctor();
-      if (patientContent.data) setProfiles(patientContent.data.profiles.pageInfo.totalDocs);
+      if (patientContent.data) setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
+      if (doctorContent.data) setDocCount(doctorContent.data.DoctorCount);
     })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
 
-  const { pathname } = useLocation();
+  const counts = {
+    Doctors: docCount,
+    Patients: patientCount,
+  };
 
   switch (selectedMenu) {
     case 0:
@@ -236,281 +259,92 @@ const HeaderText = (props) => {
           </Typography>
         </div>
       );
-    case 1:
-      if (selectedSubMenu === 2) {
-        return (
-          <CustomSubHeaderText
-            title="Patients"
-            subTitle="Patient View"
-            scopedMenu={selectedPatientMenu}
-            scopedSubMenu={selectedScopedMenu}
-            scopedSubTitle={
-              selectedScopedMenu === 1
-                ? "Consultation Details"
-                : selectedScopedMenu === 3
-                ? "Create Message"
-                : ""
-            }
-            titleColor={
-              selectedPatientMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
-            }
-            subSubTitle={
-              selectedPatientMenu === 1
-                ? "Patient Profile"
-                : selectedPatientMenu === 2
-                ? "Appointments"
-                : selectedPatientMenu === 3
-                ? "Prescriptions"
-                : selectedPatientMenu === 4
-                ? "Medical Records"
-                : selectedPatientMenu === 5
-                ? "Consultations"
-                : selectedPatientMenu === 6
-                ? "Medications"
-                : ""
-            }
-            selectedPatientMenu={selectedPatientMenu}
-          />
-        );
-      }
-      return (
-        <CustomHeaderText
-          title="Patients"
-          total={patientContent.loading ? "Loading" : profiles}
-          path="patients"
-        />
-      );
-    case 2:
-      if (selectedSubMenu === 3) {
-        return (
-          <CustomSubHeaderText
-            scopedMenu={selectedHcpMenu}
-            scopedSubMenu={selectedScopedMenu}
-            subSubTitle={
-              selectedHcpMenu === 1
-                ? "Doctor Profile"
-                : selectedHcpMenu === 2
-                ? "Doctor Appointments"
-                : selectedHcpMenu === 3
-                ? "Availability"
-                : selectedHcpMenu === 4
-                ? "Earnings"
-                : selectedHcpMenu === 5
-                ? "Patients"
-                : selectedHcpMenu === 6
-                ? "Consultations"
-                : selectedHcpMenu === 7
-                ? "Doctor Verification"
-                : "White Label"
-            }
-            scopedSubTitle={
-              selectedScopedMenu === 2
-                ? "Case Note"
-                : selectedScopedMenu === 3
-                ? "Create Message"
-                : selectedScopedMenu === 4
-                ? "Doctor Verification"
-                : "ghgy"
-            }
-            title="Doctors"
-            subTitle="Doctor View"
-            titleColor={
-              selectedHcpMenu === 0 ? theme.palette.common.red : theme.palette.common.grey
-            }
-          />
-        );
-      }
-      return (
-        <CustomHeaderText
-          title="Doctors"
-          total={doctorContent.data && doctorContent.data.DoctorCount}
-          path="hcps"
-        />
-      );
-    case 3:
-      return <CustomHeaderText title="Partners" total={24} path="partners" />;
-
-    case 4:
-      if (selectedSubMenu === 5) {
-        if (selectedAppointmentMenu === 1) {
-          return (
-            <CustomSubHeaderText
-              title="Appointments"
-              subTitle="Waiting List"
-              subSubTitle={waitingListMenu === 1 ? "Details View" : ""}
-              scopedMenu={waitingListMenu}
-              scopedSubMenu={0}
-            />
-          );
-        }
-        return (
-          <CustomSubHeaderText
-            title="Appointments"
-            subTitle="Consultation"
-            scopedMenu={0}
-            scopedSubMenu={0}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Appointments" path="appointments" />;
-    case 5:
-      if (selectedSubMenu === 6) {
-        return (
-          <CustomSubHeaderText
-            title="Messages"
-            scopedMenu={0}
-            scopedSubMenu={0}
-            subTitle={pathname === "/messages/create-message" ? "New Message" : "View Message"}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Messages" path="messages" />;
-    case 6:
-      return <CustomHeaderTitle title="Email" path="email" />;
-    case 7:
-      if (selectedSubMenu === 8) {
-        return (
-          <CustomSubHeaderText
-            title="Doctor Verification"
-            scopedMenu={doctorView}
-            scopedSubMenu={0}
-            subTitle="Doctor View"
-            subSubTitle={doctorView === 1 ? "Doctor Profile" : ""}
-            // subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Doctor Verification" path="verification" />;
-    case 8:
-      if (selectedSubMenu === 9) {
-        return (
-          <CustomSubHeaderText
-            title="Finance"
-            scopedMenu={0}
-            scopedSubMenu={0}
-            subTitle={pathname === "/finance/earnings" ? "Earnings Table" : "Payouts Table"}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Finance" path="finance" />;
-    case 9:
-      if (selectedSubMenu === 10) {
-        return (
-          <CustomSubHeaderText
-            title="Referrals"
-            subTitle="Referral View"
-            scopedMenu={0}
-            scopedSubMenu={0}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Referrals" path="referrals" />;
-    case 10:
-      return <CustomHeaderTitle title="Subscription Plans" path="plans" />;
-    case 11:
-      if (selectedSubMenu === 12) {
-        return (
-          <CustomSubHeaderText
-            title="Settings"
-            subTitle={pathname === "/settings/administrator" ? "Administrator" : "Management"}
-            scopedSubMenu={0} // okay
-            subSubTitle={selectedManagementMenu === 1 ? "Edit Management" : ""}
-            scopedMenu={selectedManagementMenu}
-            // scopedMenu={selectedManagementMenu}
-            // scopedSubMenu={selectedManagementMenu}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="Settings" path="settings" />;
-    case 12:
-      if (selectedSubMenu === 13) {
-        return (
-          <CustomSubHeaderText
-            title="White Label"
-            subTitle={pathname === "/label/provider" ? "Providers" : "User Types"}
-            scopedMenu={0}
-            scopedSubMenu={selectedScopedMenu}
-            // scopedSubMenu={0}
-          />
-        );
-      }
-      return <CustomHeaderTitle title="White Label" path="label" />;
     default:
-      return (
-        <div>
-          <Typography variant="h5" className={classes.text} gutterBottom>
-            Welcome,
-          </Typography>
-          <Typography variant="h3" color="primary" className={classes.name}>
-            {profileAcc && profileAcc.role}
-          </Typography>
-        </div>
-      );
+      return <Breadcrumb breadcrumbs={breadcrumbs} counts={counts} />;
   }
 };
 
 HeaderText.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  waitingListMenu: PropTypes.number,
-  selectedAppointmentMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
-  selectedManagementMenu: PropTypes.number,
-  doctorView: PropTypes.number,
 };
 
 const HeaderContent = (props) => {
-  const {
-    selectedMenu,
-    selectedSubMenu,
-    selectedPatientMenu,
-    selectedHcpMenu,
-    waitingListMenu,
-    selectedAppointmentMenu,
-    selectedScopedMenu,
-    data,
-    selectedManagementMenu,
-  } = props;
-
+  const { selectedMenu, data } = props;
+  const classes = useStyles();
   return (
-    <Grid
-      container
-      sx={{
-        flex: 1,
-        display: "flex",
-        flexWrap: "nowrap",
-        justifyContent: "space-between",
-      }}
-    >
-      <HeaderText
-        selectedMenu={selectedMenu}
-        selectedSubMenu={selectedSubMenu}
-        selectedPatientMenu={selectedPatientMenu}
-        selectedHcpMenu={selectedHcpMenu}
-        waitingListMenu={waitingListMenu}
-        selectedAppointmentMenu={selectedAppointmentMenu}
-        selectedScopedMenu={selectedScopedMenu}
-        selectedManagementMenu={selectedManagementMenu}
-      />
+    <Toolbar className={classes.toolbar}>
+      <HeaderText selectedMenu={selectedMenu} />
       <HeaderProfile data={data} />
-    </Grid>
+    </Toolbar>
   );
 };
 
 HeaderContent.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  selectedManagementMenu: PropTypes.number,
-  waitingListMenu: PropTypes.number,
-  selectedAppointmentMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
   data: PropTypes.object,
-  drawerWidth: PropTypes.number,
-  handleDrawerToggle: PropTypes.func,
+};
+
+const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
+  const theme = useTheme();
+  const classes = useStyles();
+  const history = useHistory();
+
+  return (
+    <Grid container justifyContent="flex-start" alignItems="center">
+      {breadcrumbs.map((text, index) => {
+        return (
+          <>
+            {breadcrumbs.length < 2 ? (
+              <Grid container alignContent="center">
+                <Grid item>
+                  <CustomHeaderTitle
+                    title={text}
+                    variant="h2"
+                    onClick={() => {
+                      const page = index - (breadcrumbs.length - 1);
+                      history.go(page);
+                    }}
+                  />
+                </Grid>
+                {counts[text] && (
+                  <Grid item sx={{ marginLeft: "0.5rem", display: "flex" }} alignContent="center">
+                    <Grid container alignContent="center">
+                      <ArrowUpwardIcon color="success" />
+                      <Typography variant="h5" className={classes.subtitle}>
+                        {counts[text]} total
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )}
+              </Grid>
+            ) : (
+              <CustomHeaderTitle
+                title={text}
+                onClick={() => {
+                  const page = index - (breadcrumbs.length - 1);
+                  history.go(page);
+                }}
+              />
+            )}
+
+            {breadcrumbs.length > 0 && breadcrumbs.length - 1 > index ? (
+              <KeyboardArrowRightIcon
+                size={10}
+                style={{
+                  color: theme.palette.common.grey,
+                }}
+              />
+            ) : null}
+          </>
+        );
+      })}
+    </Grid>
+  );
+};
+
+Breadcrumb.propTypes = {
+  breadcrumbs: PropTypes.array,
+  counts: PropTypes.object,
 };
 
 export default HeaderContent;

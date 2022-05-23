@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
+import { Grid, Chip, Divider, Typography, Avatar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import PreviousButton from "components/Utilities/PreviousButton";
+import { PreviousButton } from "components/Utilities";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -37,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const ViewMail = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu  */ }) => {
   const { emailId } = useParams();
 
   const classes = useStyles();
@@ -47,9 +43,9 @@ const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedS
 
   useEffect(() => {
     setSelectedMenu(6);
-    setSelectedSubMenu(7);
+    /* setSelectedSubMenu(7); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -113,10 +109,10 @@ const ViewMail = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedS
 };
 
 ViewMail.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  selectedSubMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewMail;

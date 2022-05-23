@@ -1,8 +1,7 @@
-import React from "react";
+import React, { createRef } from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
-import { Slide } from "@material-ui/core";
 import { store } from "store";
 import {
   ApolloClient,
@@ -61,7 +60,7 @@ const client = new ApolloClient({
 });
 
 // add action to all snackbars
-const notistackRef = React.createRef();
+const notistackRef = createRef();
 const onClickDismiss = (key) => () => {
   notistackRef.current.closeSnackbar(key);
 };
@@ -83,10 +82,6 @@ ReactDOM.render(
         Dismiss
       </Typography>
     )}
-    classes={{
-      base: { fontSize: 33 },
-    }}
-    TransitionComponent={Slide}
   >
     <Provider store={store}>
       <ApolloProvider client={client}>

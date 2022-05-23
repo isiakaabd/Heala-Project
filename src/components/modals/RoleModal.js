@@ -97,7 +97,7 @@ const RoleModal = ({ handleDialogClose, type }) => {
 };
 export default RoleModal;
 RoleModal.propTypes = {
-  handleDialogClose: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-  checkbox: PropTypes.object.isRequired,
+  handleDialogClose: PropTypes.func,
+  type: PropTypes.string,
+  checkbox: PropTypes.object,
 };

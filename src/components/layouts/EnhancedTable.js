@@ -72,21 +72,11 @@ const EnhancedTable = ({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ maxWidth: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selectedRows.length} title={title} />
 
-        <TableContainer
-          sx={{
-            width: "100%",
-            overflowX: "auto",
-            // marginRight: "auto",
-            // marginLeft: "auto",
-            // marginTop: "50px",
-            // padding: "10px",
-            // margin: "10px",
-          }}
-        >
-          <Table aria-labelledby="tableTitle">
+        <TableContainer>
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHeader
               numSelected={selectedRows.length}
               onSelectAllClick={handleSelectAllClick}
@@ -130,16 +120,16 @@ const EnhancedTable = ({
 
 EnhancedTable.propTypes = {
   children: PropTypes.node,
-  rows: PropTypes.array.isRequired,
-  headCells: PropTypes.array.isRequired,
+  rows: PropTypes.array,
+  headCells: PropTypes.array,
   paginationLabel: PropTypes.string,
   title: PropTypes.string,
   handleChangePage: PropTypes.func,
   hasCheckbox: PropTypes.bool,
   type: PropTypes.string,
-  changeLimit: PropTypes.func.isRequired,
-  fetchData: PropTypes.func.isRequired,
-  dataPageInfo: PropTypes.object.isRequired,
+  changeLimit: PropTypes.func,
+  fetchData: PropTypes.func,
+  dataPageInfo: PropTypes.object,
   hasPagination: PropTypes.bool,
 };
 
@@ -182,12 +172,12 @@ const EnhancedTableAction = ({ fetchData, dataPageInfo }) => {
 };
 
 EnhancedTableAction.propTypes = {
-  count: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired,
+  count: PropTypes.number,
+  page: PropTypes.number,
   pagnumber: PropTypes.number,
   totalPages: PropTypes.number,
   dataPageInfo: PropTypes.object,
-  rowsPerPage: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number,
   hasPrevPage: PropTypes.bool,
   setPageNumber: PropTypes.func,
   handleChangePage: PropTypes.func,

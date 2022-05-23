@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [fetchEmails, { loading, error, data, refetch, variables }] = useLazyQuery(getEmailList);
@@ -124,11 +124,11 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
 
   useEffect(() => {
     setSelectedMenu(6);
-    setSelectedSubMenu(0);
+    /* setSelectedSubMenu(0); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
 
-  const [filterValues, setFilterValues] = React.useState(emailPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
@@ -275,7 +275,7 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
                             disabled
                             to={`email/${index}`}
                             endIcon={<ArrowForwardIosIcon />}
-                            onClick={() => setSelectedSubMenu(7)}
+                            /* onClick={() => setSelectedSubMenu(7)} */
                           >
                             View mail
                           </Button>
@@ -295,8 +295,8 @@ const Email = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubM
 
 export default Email;
 Email.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };

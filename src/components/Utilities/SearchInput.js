@@ -62,8 +62,8 @@ const Search = ({
 };
 Search.propTypes = {
   width: PropTypes.string,
-  placeholder: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
   height: PropTypes.string,
   placeholderWidth: PropTypes.string,
   type: PropTypes.string,

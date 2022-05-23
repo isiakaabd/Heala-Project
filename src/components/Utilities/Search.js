@@ -59,12 +59,12 @@ const SearchContainer = ({
 SearchContainer.propTypes = {
   width: PropTypes.string,
   ref: PropTypes.string,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   height: PropTypes.string,
   placeholderWidth: PropTypes.string,
   value: PropTypes.string,
   hasStartIcon: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
 };
 
 export default SearchContainer;

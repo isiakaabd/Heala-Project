@@ -111,25 +111,25 @@ const HeaderProfile = () => {
             </Typography>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <IconButton
-          aria-label={notificationsLabel(num)}
-          onClick={(event) => handleNotification(event)}
-        >
-          <Badge badgeContent={num} color="error">
-            <NotificationsActiveIcon
-              color="primary"
-              sx={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)" }}
-            />
-          </Badge>
-        </IconButton>
-        <Notifications
-          anchorEl={anchorEl}
-          Notifications={notifications}
-          setNotifications={setNotifications}
-          setAnchorEl={setAnchorEl}
-        />
+        <Grid item>
+          <IconButton
+            aria-label={notificationsLabel(num)}
+            onClick={(event) => handleNotification(event)}
+          >
+            <Badge badgeContent={num} color="error">
+              <NotificationsActiveIcon
+                color="primary"
+                sx={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)" }}
+              />
+            </Badge>
+          </IconButton>
+          <Notifications
+            anchorEl={anchorEl}
+            Notifications={notifications}
+            setNotifications={setNotifications}
+            setAnchorEl={setAnchorEl}
+          />
+        </Grid>
       </Grid>
     </header>
   );

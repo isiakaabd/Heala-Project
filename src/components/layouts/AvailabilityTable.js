@@ -78,7 +78,7 @@ const AvailabilityTable = ({ data }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const { _id, dates, doctorData } = row;
-                console.log(doctorData);
+
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow hover tabIndex={-1} key={_id}>

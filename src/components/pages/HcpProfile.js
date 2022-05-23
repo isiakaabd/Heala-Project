@@ -81,12 +81,12 @@ const HcpProfile = (props) => {
   const {
     selectedMenu,
     setSelectedMenu,
-    selectedSubMenu,
     chatMediaActive,
+    setChatMediaActive,
+    /* selectedSubMenu,
     setSelectedSubMenu,
     selectedHcpMenu,
-    setSelectedHcpMenu,
-    setChatMediaActive,
+    setSelectedHcpMenu, */
   } = props;
   const classes = useStyles();
 
@@ -108,12 +108,12 @@ const HcpProfile = (props) => {
 
   useLayoutEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(1);
     setChatMediaActive(false);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(1); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, chatMediaActive]);
+  }, [selectedMenu, /*  selectedHcpMenu, selectedSubMenu, */ chatMediaActive]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -132,7 +132,7 @@ const HcpProfile = (props) => {
   return (
     <Grid container direction="column" gap={3} width="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       {/* Display photo and profile name grid */}
       <Grid item container>
@@ -144,7 +144,7 @@ const HcpProfile = (props) => {
           specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
-          setSelectedSubMenu={setSelectedSubMenu}
+          /* setSelectedSubMenu={setSelectedSubMenu} */
           selectedMenu={selectedMenu}
           type="doctor"
         />
@@ -277,13 +277,13 @@ const HcpProfile = (props) => {
 
 HcpProfile.propTypes = {
   selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  chatMediaActive: PropTypes.bool,
   setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
+  chatMediaActive: PropTypes.bool,
   setChatMediaActive: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpProfile;

@@ -57,8 +57,8 @@ const EmptyTextarea = (props) => {
   );
 };
 EmptyTextarea.propTypes = {
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
   onBlur: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.string,
@@ -83,7 +83,7 @@ const Textarea = ({ label, name, fLabel, placeholder, ...rest }) => {
 Textarea.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   fLabel: PropTypes.bool,
 };
 

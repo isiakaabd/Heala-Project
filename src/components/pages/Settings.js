@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = ({ setSelectedSubMenu }) => {
+const Settings = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -54,7 +54,7 @@ const Settings = ({ setSelectedSubMenu }) => {
           <Link
             to="/settings/administrator"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="A administrator icon used as a representation for the administrator "
@@ -72,7 +72,7 @@ const Settings = ({ setSelectedSubMenu }) => {
           <Link
             to="/settings/management"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="An icon used as a representation for making consultation with the doctor"
@@ -96,7 +96,7 @@ const Settings = ({ setSelectedSubMenu }) => {
           <Link
             to="/settings/permissions"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="An icon used as a permission for making consultation with the doctor"
@@ -112,7 +112,7 @@ const Settings = ({ setSelectedSubMenu }) => {
           <Link
             to="/settings/list-management"
             style={{ textDecoration: "none" }}
-            onClick={() => setSelectedSubMenu(12)}
+            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="list management Icon"
@@ -129,10 +129,10 @@ const Settings = ({ setSelectedSubMenu }) => {
 };
 
 Settings.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Settings;

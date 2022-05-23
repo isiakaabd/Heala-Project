@@ -78,7 +78,7 @@ const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
   const { patientId, hcpId } = useParams();
   const { pathname } = useLocation();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -184,9 +184,9 @@ const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
 };
 
 ChatInterfaceHeading.propTypes = {
-  callPath: PropTypes.string.isRequired,
-  videoPath: PropTypes.string.isRequired,
-  setChatMediaActive: PropTypes.func.isRequired,
+  callPath: PropTypes.string,
+  videoPath: PropTypes.string,
+  setChatMediaActive: PropTypes.func,
 };
 
 export default ChatInterfaceHeading;

@@ -29,16 +29,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
+const ViewMessage = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const { messageId } = useParams();
-  const { loading, data, error } = useQuery(getAMessage, { variables: { id: messageId } });
+  const { loading, data, error } = useQuery(getAMessage, {
+    variables: { id: messageId },
+  });
 
   useEffect(() => {
     setSelectedMenu(5);
-    setSelectedSubMenu(6);
+    /* setSelectedSubMenu(6); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [message, setMessage] = useState([]);
   useEffect(() => {
     if (data) setMessage(data.getMessage);
@@ -93,9 +98,9 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu, selectedSubMenu, setSelect
 
 ViewMessage.propTypes = {
   selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* selectedSubMenu: PropTypes.number.isRequired,
+  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default ViewMessage;

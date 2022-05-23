@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -97,13 +97,13 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 
   useEffect(() => {
     setSelectedMenu(8);
-    setSelectedSubMenu(9);
+    /* setSelectedSubMenu(9); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [fetchPayout, { loading, error, data, refetch, variables }] = useLazyQuery(getPayoutData);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPayout({
       variables: {
         first: pageInfo?.limit,
@@ -120,14 +120,14 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
     }
   }, [data]);
 
-  const [filterValues, setFilterValues] = React.useState(payoutPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = useState(payoutPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
-        <PreviousButton path="/finance" onClick={() => setSelectedSubMenu(0)} />
+        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
       </Grid>
 
       <>
@@ -284,10 +284,10 @@ const Payout = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSub
 };
 
 Payout.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Payout;

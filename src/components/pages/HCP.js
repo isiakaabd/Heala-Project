@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
@@ -35,7 +34,7 @@ import {
   onFilterValueChange,
 } from "helpers/filterHelperFunctions";
 
-const HCP = ({ setSelectedSubMenu }) => {
+const HCP = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -209,7 +208,7 @@ const HCP = ({ setSelectedSubMenu }) => {
                         {doctorData && doctorData.lastName}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {qualification.degree ? qualification?.degree : "No degree"}
+                        {qualification && qualification.degree}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -239,11 +238,15 @@ const HCP = ({ setSelectedSubMenu }) => {
                         <Button
                           variant="contained"
                           className={classes.button}
-                          style={{ whiteSpace: "nowrap", padding: "5% 40%", marginLeft: "-10%" }}
+                          style={{
+                            whiteSpace: "nowrap",
+                            padding: "5% 40%",
+                            marginLeft: "-10%",
+                          }}
                           component={Link}
                           endIcon={<ArrowForwardIosIcon />}
                           to={`/verification/view/${_id}`}
-                          onClick={() => setSelectedSubMenu(8)}
+                          /* onClick={() => setSelectedSubMenu(8)} */
                         >
                           View Verification{" "}
                         </Button>
@@ -262,7 +265,7 @@ const HCP = ({ setSelectedSubMenu }) => {
 };
 
 HCP.propTypes = {
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default HCP;

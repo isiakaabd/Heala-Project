@@ -59,12 +59,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HCPChat = ({
-  setSelectedSubMenu,
-  setSelectedMenu,
-  selectedSubMenu,
   selectedMenu,
+  setSelectedMenu,
+  /* selectedSubMenu,
+  setSelectedSubMenu,
   setSelectedHcpMenu,
-  setSelectedScopedMenu,
+  setSelectedScopedMenu, */
 }) => {
   const { hcpId } = useParams();
 
@@ -120,16 +120,16 @@ const HCPChat = ({
     onSubmitProps.resetForm();
     history.push(`/hcps/${hcpId}/profile`);
 
-    setSelectedScopedMenu(0);
+    /* setSelectedScopedMenu(0); */
   };
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
+    /* setSelectedSubMenu(3);
     setSelectedHcpMenu(1);
-    setSelectedScopedMenu(3);
+    setSelectedScopedMenu(3); */
     //   eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu */]);
   if (loading) return <Loader />;
   return (
     <Formik
@@ -148,7 +148,7 @@ const HCPChat = ({
               <Grid item style={{ marginBottom: "3rem" }}>
                 <PreviousButton
                   path={`/hcps/${hcpId}/profile`}
-                  onClick={() => setSelectedScopedMenu(0)}
+                  /* onClick={() => setSelectedScopedMenu(0)} */
                 />
               </Grid>
               <Grid item container direction="column" alignItems="center">
@@ -239,12 +239,12 @@ const HCPChat = ({
 HCPChat.propTypes = {
   chatMediaActive: PropTypes.bool,
   setChatMediaActive: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedMenu: PropTypes.func,
-  selectedSubMenu: PropTypes.number,
   selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
   setSelectedHcpMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default HCPChat;

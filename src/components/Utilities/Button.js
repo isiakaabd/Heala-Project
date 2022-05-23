@@ -50,10 +50,10 @@ const IconLabelButtons = ({
 };
 
 IconLabelButtons.propTypes = {
-  width: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  backgroundColor: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  width: PropTypes.string,
+  placeholder: PropTypes.string,
+  backgroundColor: PropTypes.string,
+  type: PropTypes.string,
   border: PropTypes.string,
   height: PropTypes.string,
   endIcon: PropTypes.node,

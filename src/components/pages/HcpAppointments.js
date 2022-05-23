@@ -72,11 +72,11 @@ const HcpAppointments = (props) => {
   };
   const {
     selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
     setSelectedMenu,
+    /* selectedSubMenu,
+    selectedHcpMenu,
     setSelectedSubMenu,
-    setSelectedHcpMenu,
+    setSelectedHcpMenu, */
   } = props;
 
   const greenButton = {
@@ -181,10 +181,10 @@ const HcpAppointments = (props) => {
   };
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(2);
+    /* setSelectedSubMenu(3);
+    setSelectedHcpMenu(2); */
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -201,7 +201,7 @@ const HcpAppointments = (props) => {
           </Alert>
         )}
         <Grid item>
-          <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+          <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
         </Grid>
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
           <Typography variant="h2">Doctor Appointments</Typography>
@@ -379,12 +379,12 @@ const HcpAppointments = (props) => {
 };
 
 HcpAppointments.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpAppointments;

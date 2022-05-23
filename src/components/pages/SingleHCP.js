@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createElement } from "react";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useQuery, useMutation } from "@apollo/client";
@@ -56,12 +56,12 @@ const SingleHCP = (props) => {
   const {
     selectedMenu,
     setSelectedMenu,
-    selectedSubMenu,
+    /* selectedSubMenu,
     selectedScopedMenu,
     setSelectedSubMenu,
     selectedHcpMenu,
     setSelectedHcpMenu,
-    setSelectedScopedMenu,
+    setSelectedScopedMenu, */
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -133,7 +133,7 @@ const SingleHCP = (props) => {
       id: 5,
       title: "Patients",
       background: theme.palette.common.lightRed,
-      path: "patients",
+      path: "doctor-patients",
       icon: UserIcon,
       fill: theme.palette.common.red,
     },
@@ -155,18 +155,21 @@ const SingleHCP = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
+    /* setSelectedSubMenu(3);
     setSelectedHcpMenu(0);
-    setSelectedScopedMenu(0);
+    setSelectedScopedMenu(0); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu, selectedScopedMenu]);
+  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
   if (profile.loading) return <Loader />;
   return (
     <>
       <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
         <Grid item>
-          <PreviousButton path={`/hcps`} onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton
+            path={`/hcps`}
+            /* onClick={() => setSelectedSubMenu(0)} */
+          />
         </Grid>
         <Grid item container justifyContent="space-between" className={classes.gridsWrapper}>
           {/* Display photo and profile name grid */}
@@ -208,10 +211,10 @@ const SingleHCP = (props) => {
               className={classes.parentGrid}
               component={Link}
               to={`/hcps/${hcpId}/${card.path}`}
-              onClick={() => setSelectedHcpMenu(card.id)}
+              /* onClick={() => setSelectedHcpMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, { fill: card.fill })}
+                {createElement(card.icon, { fill: card.fill })}
               </Card>
             </Grid>
           ))}
@@ -225,10 +228,10 @@ const SingleHCP = (props) => {
               className={classes.parentGrid}
               component={Link}
               to={`/hcps/${hcpId}/${card.path}`}
-              onClick={() => setSelectedHcpMenu(card.id)}
+              /*  onClick={() => setSelectedHcpMenu(card.id)} */
             >
               <Card title={card.title} background={card.background} header="h4">
-                {React.createElement(card.icon, {
+                {createElement(card.icon, {
                   fill: card.fill,
                   color: card.id === 4 || card.id === 6 ? "success" : undefined,
                   style: { fontSize: "4rem" },
@@ -252,14 +255,14 @@ const SingleHCP = (props) => {
 };
 
 SingleHCP.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  selectedScopedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
-  setSelectedScopedMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  selectedScopedMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func,
+  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default SingleHCP;

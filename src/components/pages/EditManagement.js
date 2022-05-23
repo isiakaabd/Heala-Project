@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const EditManagement = ({ setSelectedSubMenu }) => {
+const EditManagement = () => {
   let history = useHistory();
   const { editId } = useParams();
   const [last, setLast] = useState([]);
@@ -92,7 +92,9 @@ const EditManagement = ({ setSelectedSubMenu }) => {
     description: "",
     name: "",
   });
-  const { data, loading, error } = useQuery(getRole, { variables: { id: editId } });
+  const { data, loading, error } = useQuery(getRole, {
+    variables: { id: editId },
+  });
   console.log(role);
   useEffect(() => {
     if (data) {
@@ -125,7 +127,9 @@ const EditManagement = ({ setSelectedSubMenu }) => {
     onSubmitProps.resetForm();
   };
 
-  const [editRoles] = useMutation(editRole, { refetchQueries: [{ query: getRoles }] });
+  const [editRoles] = useMutation(editRole, {
+    refetchQueries: [{ query: getRoles }],
+  });
   const onSubmit = async (values) => {
     const { name, description, permissions } = values;
     await editRoles({
@@ -162,7 +166,7 @@ const EditManagement = ({ setSelectedSubMenu }) => {
     <>
       <Grid container direction="column" rowSpacing={2}>
         <Grid item>
-          <PreviousButton path="/settings/management" onClick={() => setSelectedSubMenu(0)} />
+          <PreviousButton path="/settings/management" /* onClick={() => setSelectedSubMenu(0)} */ />
         </Grid>
         <Formik
           initialValues={initialValues}
@@ -254,7 +258,10 @@ const EditManagement = ({ setSelectedSubMenu }) => {
                               scope="row"
                               align="left"
                               //  className={classes.tableCell}
-                              style={{ color: theme.palette.common.black, display: "flex" }}
+                              style={{
+                                color: theme.palette.common.black,
+                                display: "flex",
+                              }}
                             >
                               {row.value.map((i, index) => {
                                 return (
@@ -322,11 +329,11 @@ const EditManagement = ({ setSelectedSubMenu }) => {
 };
 
 EditManagement.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
   handleDialogClose: PropTypes.func,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default EditManagement;

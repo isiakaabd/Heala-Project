@@ -216,7 +216,7 @@ const Login = () => {
                           <Grid container direction="column">
                             <LoginInput
                               id="password"
-                              label="password"
+                              label="Password"
                               name="password"
                               placeholder="Enter your password"
                               type={showPassword ? "text" : "password"}

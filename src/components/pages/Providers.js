@@ -142,10 +142,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelectedSubMenu }) => {
+const Providers = ({
+  selectedMenu,
+  setSelectedMenu /* selectedSubMenu,  setSelectedSubMenu */,
+}) => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchProviders, { data, error, loading, refetch }] = useLazyQuery(getProviders);
+  const [fetchProviders, { error, loading, refetch }] = useLazyQuery(getProviders);
   const { data: dat, error: err, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
@@ -180,7 +183,6 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
       setPageInfo(dat.getProviders.pageInfo);
     }
   }, [dat]);
-  console.log(data);
 
   const theme = useTheme();
   const handleDialogOpen = () => setIsOpen(true);
@@ -216,10 +218,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   //   openDeletePartner
   useEffect(() => {
     setSelectedMenu(12);
-    setSelectedSubMenu(13);
+    /* setSelectedSubMenu(13); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu]);
+  }, [selectedMenu /* selectedSubMenu */]);
   const [searchHcp, setSearchHcp] = useState("");
   const [editId, setEditId] = useState(null);
   const [isOpens, setIsOpens] = useState(false);
@@ -481,10 +483,10 @@ const Providers = ({ selectedMenu, selectedSubMenu, setSelectedMenu, setSelected
   );
 };
 Providers.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Providers;

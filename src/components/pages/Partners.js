@@ -87,7 +87,7 @@ const Partners = () => {
     provider: Yup.string("select a provider").trim(),
     specialization: Yup.string("select your Specialization").required("Specialization is required"),
   });
-  const [addPartners, { data: addData, error: errors }] = useMutation(addPartner);
+  const [addPartners] = useMutation(addPartner);
 
   const onSubmit = (values) => {
     console.log(values);
@@ -117,35 +117,33 @@ const Partners = () => {
   };
   const onSubmit1 = async (values, onSubmitProps) => {
     let { name, email, specialization, provider, image } = values;
+    console.log(provider);
+
     name = name.trim();
 
-    await addPartners({
-      variables: {
-        name,
-        email,
-        category: specialization,
-        logoImageUrl: image,
-        providerId: provider,
-      },
-      refetchQueries: [{ query: getPartners }],
-    });
-
-    onSubmitProps.resetForm();
-    setOpenAddPartner(false);
-  };
-  useEffect(() => {
-    if (addData) {
+    try {
+      await addPartners({
+        variables: {
+          name,
+          email,
+          category: specialization,
+          logoImageUrl: image,
+          providerId: provider,
+        },
+        refetchQueries: [{ query: getPartners }],
+      });
       enqueueSnackbar("Partner added successfully", {
         variant: "success",
       });
-    } else if (errors) {
-      const error = errors?.networkError?.result?.errors[0].message;
-      enqueueSnackbar(error, {
+      onSubmitProps.resetForm();
+      setOpenAddPartner(false);
+    } catch (err) {
+      console.log(err, "err");
+      enqueueSnackbar("Email is already taken", {
         variant: "error",
       });
     }
-    //es
-  }, [addData, errors, enqueueSnackbar]);
+  };
 
   const [searchPartner, setSearchPartner] = useState("");
   const [openFilterPartner, setOpenFilterPartner] = useState(false);

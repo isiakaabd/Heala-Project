@@ -55,14 +55,7 @@ const HcpPatients = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const {
-    selectedMenu,
-    selectedSubMenu,
-    selectedHcpMenu,
-    setSelectedMenu,
-    setSelectedSubMenu,
-    setSelectedHcpMenu,
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
 
   const { hcpId } = useParams();
 
@@ -71,15 +64,13 @@ const HcpPatients = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    setSelectedSubMenu(3);
-    setSelectedHcpMenu(5);
 
     // eslint-disable-next-line
-  }, [selectedMenu, selectedSubMenu, selectedHcpMenu]);
+  }, [selectedMenu]);
 
   const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchDoctorsPatients({
       variables: { id: hcpId },
       notifyOnNetworkStatusChange: true,
@@ -102,7 +93,7 @@ const HcpPatients = (props) => {
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
       <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} onClick={() => setSelectedHcpMenu(0)} />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
       <Grid item>
         <Typography variant="h2">Doctor Patients</Typography>
@@ -202,12 +193,12 @@ const HcpPatients = (props) => {
 };
 
 HcpPatients.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  selectedSubMenu: PropTypes.number.isRequired,
-  selectedHcpMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedHcpMenu: PropTypes.func.isRequired,
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
+  /* selectedSubMenu: PropTypes.number,
+  selectedHcpMenu: PropTypes.number,
+  setSelectedSubMenu: PropTypes.func,
+  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpPatients;
