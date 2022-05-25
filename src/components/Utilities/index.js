@@ -5,6 +5,7 @@ export { default as CheckBox } from "./CheckBox";
 export { default as CircularChart } from "./CircularChart";
 export { default as CustomButton } from "./CustomButton";
 export { default as DataGrid } from "./DataGrid";
+export { default as ProfileCard } from "./ProfileCard";
 export { default as DisplayProfile } from "./DisplayProfile";
 export { default as FilterList } from "./FilterList";
 export { default as FormInput } from "./FormInput";

@@ -30,8 +30,8 @@ const Header = (props) => {
       position="fixed"
       padding="1rem"
       sx={{
-        width: { sm: `calc(100% - (${drawerWidth}px + 5em))` },
-        ml: { sm: `${drawerWidth}px` },
+        width: { md: `calc(100% - (${drawerWidth}px + 5em))` },
+        // ml: { sm: `${drawerWidth}px` },
       }}
     >
       <Toolbar className={classes.appBar}>
@@ -41,7 +41,7 @@ const Header = (props) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ color: "white", fontSize: "3rem", background: "black", display: { sm: "none" } }}
+            sx={{ color: "white", fontSize: "3rem", background: "black", display: { md: "none" } }}
           >
             <MenuIcon />
           </IconButton>

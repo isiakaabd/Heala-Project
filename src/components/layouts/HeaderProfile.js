@@ -10,7 +10,6 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   role: {
-    // fontSize: "1.5rem",
     fontSize: "clamp(1rem, 1vw, 1.5rem)",
     color: theme.palette.common.lightGrey,
   },

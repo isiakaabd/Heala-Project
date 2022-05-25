@@ -2,13 +2,11 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import { dateMoment } from "components/Utilities/Time";
 import { NoData } from "components/layouts";
-import { Typography, Grid, Chip } from "@mui/material";
+import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { CustomButton, Loader, PreviousButton, DisplayProfile } from "components/Utilities";
+import { CustomButton, Loader, DisplayProfile, ProfileCard } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { IoCopy } from "react-icons/io5";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { DeleteOrDisable } from "components/modals";
 import { useParams, useHistory } from "react-router-dom";
@@ -42,25 +40,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
-  infoBadge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem",
-      borderRadius: "1.5rem",
-      color: theme.palette.common.green,
-    },
-  },
-
-  link: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: "1.25rem",
-    color: theme.palette.common.green,
-    border: `1px solid ${theme.palette.common.lightGrey}`,
-    padding: ".75rem",
-    borderRadius: "1.5rem",
-    textDecoration: "none",
-  },
-
   linkIcon: {
     "&.MuiSvgIcon-root": {
       fontSize: "1.25rem",
@@ -70,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   buttonsGridWrapper: {
-    marginTop: "5rem !important",
+    // marginTop: "5rem !important",
     height: "16.1rem",
   },
 }));
@@ -155,17 +134,13 @@ const PatientProfile = ({
     email,
   } = patientProfile;
   return (
-    <Grid container direction="column" gap={2}>
-      <Grid item>
-        <PreviousButton path={`/patients/${patientId}`} />
-      </Grid>
-      {/* Display photo and profile name grid */}
+    <Grid container direction="column" gap={4}>
       <Grid item>
         <DisplayProfile
           fullName={`${firstName} ${lastName}`}
           displayPhoto={image ? image : displayPhoto}
           medicalTitle="User ID"
-          statusId={dociId && dociId.split("-")[1]}
+          statusId={dociId?.split("-")[1]}
           status={status ? status : "No Value"}
           chatPath={`/patients/${patientId}/profile/chat`}
           callPath={`/patients/${patientId}/profile/call`}
@@ -175,141 +150,53 @@ const PatientProfile = ({
           selectedMenu={selectedMenu}
         />
       </Grid>
-      {/* PERSONAL INFO SECTION */}
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-        {/* GENDER GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Gender</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
-                className={classes.infoBadge}
-              />
-            </Grid>
-          </Grid>
+      {/* <Grid item container> */}
+      <Grid item container spacing={4} justifyContent="space-between">
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard
+            text="Gender"
+            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
+          />
         </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Provider</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={provider ? provider : "No Provider"}
-                className={classes.infoBadge}
-              />
-            </Grid>
-          </Grid>
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard text="Created At" value={dateMoment(createdAt)} />
         </Grid>
-      </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-        {/* EMAIL ADDRESS GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Created At</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={dateMoment(createdAt)}
-                className={classes.infoBadge}
-              />
-            </Grid>
-          </Grid>
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard text="Provider" value={provider ? provider : "No Provider"} />
         </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Verified</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={emailStat == "false" ? "Not Verified" : "Verified"}
-                className={classes.infoBadge}
-              />
-            </Grid>
-          </Grid>
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard text="Verified" value={emailStat == "false" ? "Not Verified" : "Verified"} />
         </Grid>
-      </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-        {/* EMAIL ADDRESS GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Email Address</Typography>
-            </Grid>
-            <Grid item>
-              {email ? (
+        <Grid item container md={6} sm={6} xs={12} mx="auto">
+          <ProfileCard
+            text="Email Address"
+            value={
+              email ? (
                 <a href={`mailto:${email}`} className={classes.link}>
-                  <span>{email}</span>
-                  <ArrowForwardIosIcon className={classes.linkIcon} />
+                  {email}
                 </a>
               ) : (
-                <p className={classes.link}> No Email Provided</p>
-              )}
-            </Grid>
-          </Grid>
+                "NO Email Provided"
+              )
+            }
+          />
         </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Phone Number</Typography>
-            </Grid>
-            <Grid item>
-              <a href={`tel:+234${phoneNumber}`} className={classes.link}>
-                <span>{phoneNumber}</span>
-                <IoCopy className={classes.linkIcon} size={12.5} style={{ marginLeft: "1.2rem" }} />
-              </a>
-            </Grid>
-          </Grid>
+        <Grid item container md={6} sm={6} xs={10}>
+          <ProfileCard
+            text="Phone Number"
+            value={
+              phoneNumber ? (
+                <a href={`tel:+234${phoneNumber}`} className={classes.link}>
+                  {phoneNumber}
+                </a>
+              ) : (
+                "No Phone Number"
+              )
+            }
+          />
         </Grid>
       </Grid>
+
       <Grid
         item
         container
@@ -317,7 +204,7 @@ const PatientProfile = ({
         alignItems="center"
         className={`${classes.gridsWrapper} ${classes.buttonsGridWrapper}`}
       >
-        <Grid item style={{ marginRight: "2rem" }}>
+        <Grid item>
           <CustomButton
             endIcon={<PersonRemoveIcon />}
             title="Disable Patient"
@@ -326,18 +213,6 @@ const PatientProfile = ({
             onClick={() => setOpenDisablePatient(true)}
           />
         </Grid>
-        {/* <Grid item style={{ marginLeft: "2rem" }}>
-          <CustomButton
-            endIcon={<TrendingUpIcon />}
-            title="Refer Patient"
-            type={greenButton}
-            onClick={handleDialogOpen}
-          />
-        </Grid> */}
-
-        {/* <Modals isOpen={isOpen} title="Add Admin" handleClose={handleDialogClose}>
-          <ReferPatient handleDialogClose={handleDialogClose} initialValues={initialValues} />
-        </Modals> */}
 
         <DeleteOrDisable
           open={openDisablePatient}
