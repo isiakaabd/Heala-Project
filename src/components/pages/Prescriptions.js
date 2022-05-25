@@ -6,7 +6,7 @@ import displayPhoto from "assets/images/avatar.svg";
 import { dateMoment } from "components/Utilities/Time";
 import { getConsultations } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
-import { PreviousButton, Loader } from "components/Utilities";
+import { Loader } from "components/Utilities";
 import { NoData } from "components/layouts";
 import { useParams } from "react-router-dom";
 
@@ -89,11 +89,6 @@ const Prescriptions = (props) => {
   return (
     <Grid container direction="column" flexWrap="nowrap" height="100%" gap={2}>
       <Grid item>
-        <PreviousButton
-          path={`/patients/${patientId}`} /* onClick={() => setSelectedPatientMenu(0)} */
-        />
-      </Grid>
-      <Grid item>
         <Typography variant="h2">Prescriptions</Typography>
       </Grid>
       {Object.entries(consultations).length > 0 ? (
@@ -106,6 +101,7 @@ const Prescriptions = (props) => {
             justifyContent="space-between"
             flexWrap="no-wrap"
             padding=" 2rem 0"
+            rowGap={{ xs: 2 }}
             width="90%"
             margin="auto"
           >
@@ -192,8 +188,6 @@ const Prescriptions = (props) => {
                   <Grid item>
                     <Typography variant="h5">Mode</Typography>
                   </Grid>
-                  {/* );
-            })} */}
                 </Grid>
               </Grid>
               <Divider />

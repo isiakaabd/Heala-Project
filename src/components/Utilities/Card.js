@@ -19,12 +19,13 @@ const Card = ({ title, background, children, header = "h2", padding }) => {
   const classes = useStyles();
   return (
     <Grid
+      item
       container
       direction="column"
       alignItems="center"
       justifyContent="space-between"
       className={classes.gridWrapper}
-      style={{ padding: padding ? padding : "5rem 3rem" }}
+      rowGap={3}
     >
       <Grid item className={classes.iconWrapper} style={{ background }}>
         {children}

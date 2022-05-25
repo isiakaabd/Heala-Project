@@ -9,7 +9,7 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { PreviousButton, Loader } from "components/Utilities";
+import { Loader } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
@@ -26,14 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Medications = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedPatientMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -75,12 +68,6 @@ const Medications = (props) => {
 
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item>
-        <PreviousButton
-          path={`/patients/${patientId}`} /* onClick={() => setSelectedPatientMenu(0)} */
-        />
-      </Grid>
-
       <Grid item container height="100%" direction="column" gap={2}>
         <Grid item>
           <Typography variant="h2">Medications</Typography>
