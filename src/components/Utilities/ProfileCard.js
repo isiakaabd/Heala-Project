@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     fontSize: "1.25rem",
     color: theme.palette.common.green,
-    // border: `1px solid ${theme.palette.common.lightGrey}`,
     padding: ".75rem",
     borderRadius: "1.5rem",
     textDecoration: "none",

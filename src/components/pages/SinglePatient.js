@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     "&.MuiGrid-root": {
       paddingTop: "5rem",
-      // rowGap: "1rem",
       flexWrap: "wrap",
       "@media(max-width:600px)": {
         "&": {
@@ -263,10 +262,6 @@ const SinglePatient = (props) => {
 SinglePatient.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  selectedPatientMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired, */
 };
 
 export default memo(SinglePatient);

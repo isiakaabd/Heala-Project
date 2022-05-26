@@ -47,9 +47,13 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "1.2rem",
     },
   },
+  link: {
+    textDecoration: "none",
+    color: theme.palette.common.green,
+    cursor: "pointer",
+  },
 
   buttonsGridWrapper: {
-    // marginTop: "5rem !important",
     height: "16.1rem",
   },
 }));
@@ -102,11 +106,6 @@ const PatientProfile = ({
   };
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
-  // const greenButton = {
-  //   background: theme.palette.success.main,
-  //   hover: theme.palette.success.light,
-  //   active: theme.palette.success.dark,
-  // };
 
   const trasparentButton = {
     background: "transparent",
@@ -143,8 +142,6 @@ const PatientProfile = ({
           statusId={dociId?.split("-")[1]}
           status={status ? status : "No Value"}
           chatPath={`/patients/${patientId}/profile/chat`}
-          callPath={`/patients/${patientId}/profile/call`}
-          videoPath={`/patients/${patientId}/profile/video`}
           setChatMediaActive={setChatMediaActive}
           setSelectedSubMenu={setSelectedSubMenu}
           selectedMenu={selectedMenu}
@@ -176,12 +173,12 @@ const PatientProfile = ({
                   {email}
                 </a>
               ) : (
-                "NO Email Provided"
+                "No Email Provided"
               )
             }
           />
         </Grid>
-        <Grid item container md={6} sm={6} xs={10}>
+        <Grid item container md={6} sm={6} xs={12}>
           <ProfileCard
             text="Phone Number"
             value={

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Grid, Alert, Divider, Avatar, Typography } from "@mui/material";
-import { Modals, CustomButton, Loader, PreviousButton } from "components/Utilities";
+import { Modals, CustomButton, Loader } from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
@@ -70,14 +70,7 @@ const HcpAppointments = (props) => {
     setId(id);
     setdeleteModal(true);
   };
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedHcpMenu,
-    setSelectedSubMenu,
-    setSelectedHcpMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
 
   const greenButton = {
     background: theme.palette.common.lightGreen,
@@ -181,10 +174,9 @@ const HcpAppointments = (props) => {
   };
   useEffect(() => {
     setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(2); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -200,9 +192,7 @@ const HcpAppointments = (props) => {
             {alert.message}
           </Alert>
         )}
-        <Grid item>
-          <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
-        </Grid>
+
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
           <Typography variant="h2">Doctor Appointments</Typography>
         </Grid>

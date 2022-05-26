@@ -39,11 +39,9 @@ const MedicalRecords = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    /* setSelectedSubMenu(2);
-    setSelectedPatientMenu(4); */
 
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
+  }, [selectedMenu]);
   useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
