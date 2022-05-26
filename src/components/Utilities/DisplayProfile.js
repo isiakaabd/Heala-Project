@@ -49,87 +49,69 @@ const DisplayProfile = ({
       container
       justifyContent="space-between"
       alignItems="center"
+      flexWrap="wrap"
+      direction="row"
       className={classes.gridsWrapper}
-      rowSpacing={2}
-      sx={{ width: "100%" }}
+      rowGap={2}
     >
       <Grid item>
-        <Grid container width="100%" gap={2} alignItems="center" rowSpacing={2}>
-          <Grid item>
-            <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
-          </Grid>
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item style={{ marginBottom: "1rem" }}>
-                <Typography variant="h3">{fullName}</Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "3rem" }}>
-                    <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
-                      <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span>{" "}
-                      {statusId}
-                    </Typography>
-                  </Grid>
-                  {specialization ? (
-                    <Grid item>
-                      <Typography variant="h4" style={{ fontWeight: 400 }}>
-                        <span style={{ color: theme.palette.common.lightGrey }}>
-                          Specialization:
-                        </span>{" "}
-                        <Chip label={specialization} color="success" className={classes.badge} />
-                      </Typography>
-                    </Grid>
-                  ) : status ? (
-                    <Grid item>
-                      {" "}
-                      <Typography variant="h4">
-                        <span style={{ color: theme.palette.common.lightGrey }}>Status:</span>{" "}
-                        <Chip
-                          label={status}
-                          color={status === "Active" ? "success" : "error"}
-                          className={classes.badge}
-                          style={{
-                            background:
-                              status === "Active"
-                                ? theme.palette.common.lightGreen
-                                : theme.palette.common.lightRed,
-                            color:
-                              status === "Active"
-                                ? theme.palette.common.green
-                                : theme.palette.common.red,
-                          }}
-                        />
-                      </Typography>
-                    </Grid>
-                  ) : null}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+        <Grid container gap={2} alignItems="center">
+          <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+          <Typography variant="h3">{fullName}</Typography>
         </Grid>
       </Grid>
-      {/* Action Buttons grid */}
       <Grid item>
-        <Grid container alignItems="center" rowSpacing={2}>
-          {type !== "" ? (
-            <Grid item style={{ marginRight: "2rem" }}>
-              <CustomButton
-                endIcon={<HiChat />}
-                title="Message"
-                type={greenButton}
-                component={Link}
-                to={
-                  type !== "doctor"
-                    ? `/patients/${patientId}/profile/chat`
-                    : `/hcps/${hcpId}/profile/chat`
-                }
-                /* onClick={() => setSelectedSubMenu(6)} */
-              />
+        <Grid container alignItems="center" justifyContent="space-between">
+          {specialization ? (
+            <Grid item>
+              <Typography variant="h4" style={{ fontWeight: 400 }}>
+                <span style={{ color: theme.palette.common.lightGrey }}>Specialization:</span>{" "}
+                <Chip label={specialization} color="success" className={classes.badge} />
+              </Typography>
+            </Grid>
+          ) : status ? (
+            <Grid item>
+              <Typography variant="h4">
+                <span style={{ color: theme.palette.common.lightGrey }}>Status:</span>{" "}
+                <Chip
+                  label={status}
+                  color={status === "Active" ? "success" : "error"}
+                  className={classes.badge}
+                  style={{
+                    background:
+                      status === "Active"
+                        ? theme.palette.common.lightGreen
+                        : theme.palette.common.lightRed,
+                    color:
+                      status === "Active" ? theme.palette.common.green : theme.palette.common.red,
+                  }}
+                />
+              </Typography>
             </Grid>
           ) : null}
         </Grid>
       </Grid>
+      <Grid item>
+        <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
+          <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span> {statusId}
+        </Typography>
+      </Grid>
+      {type !== "" ? (
+        <Grid item>
+          <CustomButton
+            endIcon={<HiChat />}
+            title="Message"
+            type={greenButton}
+            component={Link}
+            to={
+              type !== "doctor"
+                ? `/patients/${patientId}/profile/chat`
+                : `/hcps/${hcpId}/profile/chat`
+            }
+            /* onClick={() => setSelectedSubMenu(6)} */
+          />
+        </Grid>
+      ) : null}
     </Grid>
   );
 };

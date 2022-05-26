@@ -59,7 +59,7 @@ export const muiTheme = createTheme({
       fontWeight: 700,
     },
     h2: {
-      fontSize: "2.5rem",
+      fontSize: "clamp(1.5rem, 3vw,2.5rem)",
       color: dark,
       fontWeight: 600,
     },
@@ -68,7 +68,7 @@ export const muiTheme = createTheme({
       fontWeight: 500,
     },
     h4: {
-      fontSize: "1.85rem",
+      fontSize: "clamp(1.5rem,2vw,1.85rem)",
       fontWeight: 500,
     },
     h5: {
@@ -77,7 +77,7 @@ export const muiTheme = createTheme({
     },
 
     body1: {
-      fontSize: "1.6rem",
+      fontSize: "clamp(1.4rem, 2vw, 1.6rem)",
       fontWeight: 500,
       lineHeight: 1.7,
       color: dark,
@@ -114,15 +114,20 @@ export const muiTheme = createTheme({
     cardGridWrapper: {
       height: "100%",
       padding: "5rem 3rem",
+      "@media(max-width:600px)": {
+        padding: "3rem 2rem",
+      },
       borderRadius: 20,
       boxShadow: "-1px 11px 30px 0px #e0e0e03b",
     },
 
     cardParentGrid: {
       background: "#fff",
-      borderRadius: 10,
+      // borderRadius: 10,
       height: "25.8rem",
-      cursor: "pointer",
+      "@media(max-width:600px)": {
+        height: "20rem",
+      },
     },
     FormLabel: {
       fontSize: "1.6rem",
@@ -131,8 +136,8 @@ export const muiTheme = createTheme({
     input: {
       width: "100%",
       height: "5rem",
-      border: "1px solid lightGrey",
-      borderRadius: ".5rem",
+      // border: "1px solid lightGrey",
+      // borderRadius: ".5rem",
       padding: "1rem",
       fontSize: "1.6rem",
       color: dark,
