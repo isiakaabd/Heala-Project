@@ -298,9 +298,4 @@ const Patients = () => {
   );
 };
 
-Patients.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
-};
-
 export default Patients;

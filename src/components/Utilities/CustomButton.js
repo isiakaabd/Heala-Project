@@ -15,6 +15,7 @@ const CustomButton = ({
   textColor,
   path,
   role,
+  fontSize,
   type: { background, hover, active, disabled },
   isSubmitting,
   ...rest
@@ -31,6 +32,8 @@ const CustomButton = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        fontSize: "clamp(1.2rem,2vw, 1.3rem)",
+        // fontSize ? fontSize : undefined,
 
         "&:hover": {
           backgroundColor: hover,
@@ -95,6 +98,7 @@ CustomButton.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   borderRadius: PropTypes.string,
+  fontSize: PropTypes.string,
   textColorOnHover: PropTypes.string,
   path: PropTypes.string,
   isSubmitting: PropTypes.bool,

@@ -19,9 +19,6 @@ const Filter = ({ onHandleChange, options, name, placeholder, value, disable }) 
             onChange={(e) => onHandleChange(e)}
           />
         </Grid>
-        <br></br>
-        <br></br>
-        <br></br>
       </Grid>
     </div>
   );
