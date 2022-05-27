@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     padding: "2rem 3rem",
-    alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
     flexWrap: "nowrap",
@@ -116,21 +115,23 @@ const CaseNotes = ({ selectedMenu }) => {
   return (
     <>
       <Grid container direction="column" gap={2}>
-        {/* <Grid item>
-          <PreviousButton
-            path={`/patients/${patientId}/consultations`}
-            onClick={() => setSelectedPatientMenu(5)}
-          />
-        </Grid> */}
         <Grid item>
           <Typography variant="h2">Consultation Details</Typography>
         </Grid>
 
         <Grid item container direction="column" className={classes.parentGridWrapper}>
-          <Grid item container className={classes.item}>
+          <Grid
+            item
+            container
+            flexWrap="wrap"
+            className={classes.item}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1.5rem", sm: "1.5rem" }}
+          >
             <Grid item>
-              <Grid container className={classes.subItem}>
-                <Grid item container marginBottom="2rem">
+              <Grid container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Consultation Date:
                   </Typography>
@@ -141,20 +142,18 @@ const CaseNotes = ({ selectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container flexDirection="column" className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Referral:
                   </Typography>
                 </Grid>
                 <Grid item>
                   {referralId ? (
-                    <>
-                      <Typography variant="body1" sx={{ marginRight: "1rem" }}>
-                        {trucateString(referralId, 10)}
-                      </Typography>
+                    <Grid item container gap={2}>
+                      <Typography variant="body1">{trucateString(referralId, 10)}</Typography>
                       <Copy text={referralId} name="Consultation ID" />
-                    </>
+                    </Grid>
                   ) : (
                     "No value"
                   )}
@@ -162,39 +161,44 @@ const CaseNotes = ({ selectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container flexDirection="column">
-                <Grid item marginBottom="2rem">
+              <Grid item container flexDirection="column" gap={2} className={classes.subItem}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Consultation ID:
                   </Typography>
                 </Grid>
                 <Grid item>
                   {referralId ? (
-                    <>
-                      <Typography variant="body1" sx={{ marginRight: "1rem" }}>
-                        {trucateString(referralId, 10)}
-                      </Typography>
+                    <Grid item container gap={2}>
+                      <Typography variant="h5">{trucateString(referralId, 10)}</Typography>
                       <Copy text={referralId} name="Consultation ID" />
-                    </>
+                    </Grid>
                   ) : (
-                    "No value"
+                    <Typography variant="h5"> No value</Typography>
                   )}
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container className={classes.item}>
+          <Grid
+            item
+            container
+            className={classes.item}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1.5rem", sm: "1.5rem" }}
+          >
             <Grid item>
-              <Grid container className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Doctor:
                   </Typography>
                 </Grid>
                 {doctorData && Object.keys(doctorData).length > 0 ? (
-                  <>
-                    <Grid item>
+                  <Grid item container alignItems="center">
+                    <Grid item marginRight={2}>
                       <Avatar
                         src={doctorData.image}
                         alt={`Display photo of the ${doctorData.firstName}`}
@@ -203,15 +207,15 @@ const CaseNotes = ({ selectedMenu }) => {
                     <Grid item>
                       <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>
-                  </>
+                  </Grid>
                 ) : (
-                  <Typography variant="body1">No Doctor</Typography>
+                  <Typography variant="h5">No Doctor</Typography>
                 )}
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Contact:
                   </Typography>
@@ -224,8 +228,8 @@ const CaseNotes = ({ selectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Owner:
                   </Typography>
@@ -240,9 +244,16 @@ const CaseNotes = ({ selectedMenu }) => {
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
 
-          <Grid item container className={classes.item}>
-            <Grid item container className={classes.subItem}>
-              <Grid item marginBottom="2rem">
+          <Grid
+            item
+            container
+            className={classes.item}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1.5rem", sm: "1.5rem" }}
+          >
+            <Grid item container className={classes.subItem} gap={2}>
+              <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Severity:
                 </Typography>
@@ -253,8 +264,8 @@ const CaseNotes = ({ selectedMenu }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item container className={classes.subItem}>
-              <Grid item marginBottom="2rem">
+            <Grid item container className={classes.subItem} gap={2}>
+              <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   First Notice:
                 </Typography>
@@ -263,8 +274,8 @@ const CaseNotes = ({ selectedMenu }) => {
                 <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
               </Grid>
             </Grid>
-            <Grid item container className={classes.subItem}>
-              <Grid item marginBottom="2rem">
+            <Grid item container className={classes.subItem} gap={2}>
+              <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Discomfort:
                 </Typography>
@@ -278,9 +289,16 @@ const CaseNotes = ({ selectedMenu }) => {
           </Grid>
 
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container className={classes.item}>
-            <Grid item container className={classes.subItem}>
-              <Grid item marginBottom="2rem">
+          <Grid
+            item
+            container
+            className={classes.item}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1.5rem", sm: "1.5rem" }}
+          >
+            <Grid item container className={classes.subItem} gap={2}>
+              <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Symptoms:
                 </Typography>
@@ -302,8 +320,8 @@ const CaseNotes = ({ selectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container flexDirection="column">
-                <Grid item marginBottom="2rem">
+              <Grid item container flexDirection="column" className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Status:
                   </Typography>
@@ -314,8 +332,8 @@ const CaseNotes = ({ selectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={2}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Type:
                   </Typography>
@@ -327,8 +345,15 @@ const CaseNotes = ({ selectedMenu }) => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container className={classes.item}>
-            <Grid item container className={classes.subItem}>
+          <Grid
+            item
+            container
+            className={classes.item}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1.5rem", sm: "1.5rem" }}
+          >
+            <Grid item container className={classes.subItem} gap={2}>
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Description:
@@ -366,14 +391,8 @@ const CaseNotes = ({ selectedMenu }) => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid
-            item
-            container
-            style={{ padding: "2rem 3rem" }}
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Grid item container sx={{ width: "20%" }}>
+          <Grid item container style={{ padding: "2rem 3rem" }} justifyContent="flex-end">
+            <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
               <CustomButton
                 title="View Prescription"
                 width="100%"
@@ -387,8 +406,9 @@ const CaseNotes = ({ selectedMenu }) => {
 
       <Modals
         isOpen={isOpen}
+        height={{ xs: "90vh" }}
         title="Prescription"
-        width="50vw"
+        width={{ md: "50vw", sm: "70vw", xs: "90vw" }}
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
@@ -396,22 +416,24 @@ const CaseNotes = ({ selectedMenu }) => {
           <Grid
             item
             container
-            style={{ padding: "2rem 0" }}
-            alignItems="center"
+            padding={{ md: "2rem 0", sm: "1rem 0", xs: "1rem 0" }}
+            // alignItems="center"
             justifyContent="space-between"
             width="100%"
-            sx={{ flexWrap: "nowrap" }}
+            flexDirection={{ xs: "column", sm: "row", md: "row" }}
+            alignItems={{ md: "center", xs: "flex-start", sm: "flex-start" }}
+            rowGap={{ xs: "1rem", sm: "1.5rem" }}
           >
             <Grid item>
-              <Grid item container className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Doctor:
                   </Typography>
                 </Grid>
                 {doctorData && Object.keys(doctorData).length > 0 ? (
-                  <>
-                    <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item marginRight={2}>
                       <Avatar
                         src={doctorData.image}
                         alt={`Display photo of the ${doctorData.firstName}`}
@@ -420,27 +442,27 @@ const CaseNotes = ({ selectedMenu }) => {
                     <Grid item>
                       <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>
-                  </>
+                  </Grid>
                 ) : (
                   <Typography variant="body1">No Doctor</Typography>
                 )}
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+                <Grid>
                   <Typography variant="body1" className={classes.title}>
-                    Prescription Date:
+                    Prescription Date
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">{dateMoment(createdAt)}</Typography>
+                  <Typography variant="h5">{dateMoment(createdAt)}</Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container className={classes.subItem}>
-                <Grid item marginBottom="2rem">
+              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+                <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Symptoms
                   </Typography>
@@ -450,13 +472,13 @@ const CaseNotes = ({ selectedMenu }) => {
                     {symptoms ? (
                       symptoms.map((i) => {
                         return (
-                          <Typography key={i.name} variant="body1">
+                          <Typography key={i.name} variant="h5">
                             {i.name}
                           </Typography>
                         );
                       })
                     ) : (
-                      <Typography variant="body1">No Value</Typography>
+                      <Typography variant="h5">No Value</Typography>
                     )}
                   </Grid>
                 </Grid>
@@ -544,12 +566,12 @@ const CaseNotes = ({ selectedMenu }) => {
           <Grid
             item
             container
-            style={{ padding: "2rem 0rem" }}
+            padding={{ md: "2rem 0", sm: "1rem 0", xs: "1rem 0" }}
             alignItems="center"
             justifyContent="space-between"
             sx={{ flexWrap: "nowrap" }}
           >
-            <Grid item container direction="column" gap={2}>
+            <Grid item container direction="column" gap={{ md: 2, sm: 2, xs: 0 }}>
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Doctors Note:
@@ -570,13 +592,6 @@ const CaseNotes = ({ selectedMenu }) => {
 
 CaseNotes.propTypes = {
   selectedMenu: PropTypes.number,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default CaseNotes;

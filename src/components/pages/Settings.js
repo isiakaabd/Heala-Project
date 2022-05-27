@@ -4,58 +4,23 @@ import { Grid } from "@mui/material";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
 import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
 import { Card } from "components/Utilities";
-import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-  containerGrid: {
-    paddingTop: "7em",
-  },
-
-  parentGrid: {
-    "&.MuiGrid-item": {
-      ...theme.typography.cardParentGrid,
-      width: "30rem",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-    },
-  },
-
-  gridWrapper: {
-    ...theme.typography.cardGridWrapper,
-  },
-
-  iconWrapper: {
-    ...theme.typography.cardIconWrapper,
-  },
-}));
-
 const Settings = () => {
-  const classes = useStyles();
   const theme = useTheme();
 
   return (
-    <>
-      <Grid
-        container
-        justifyContent="space-between"
-        className={classes.containerGrid}
-        columnGap={4}
-        rowSpacing={4}
-      >
-        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
-          <Link
-            to="/settings/administrator"
-            style={{ textDecoration: "none" }}
-            /* onClick={() => setSelectedSubMenu(12)} */
-          >
+    <Grid
+      container
+      alignItems="space-between"
+      gap="5rem"
+      paddingY="2rem"
+      justifyContent={{ sm: "center", md: "center" }}
+    >
+      <Grid item container md={5} sm={5} xs={12}>
+        <Grid item container flexDirection="column">
+          <Link to="/settings/administrator" style={{ textDecoration: "none" }}>
             <Card
               alt="A administrator icon used as a representation for the administrator "
               title="Administrator"
@@ -65,15 +30,11 @@ const Settings = () => {
             </Card>
           </Link>
         </Grid>
-
-        {/* 2 */}
-
-        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
-          <Link
-            to="/settings/management"
-            style={{ textDecoration: "none" }}
-            /* onClick={() => setSelectedSubMenu(12)} */
-          >
+      </Grid>
+      {/* 2 */}
+      <Grid item container md={5} sm={5} xs={12}>
+        <Grid item container flexDirection="column">
+          <Link to="/settings/management" style={{ textDecoration: "none" }}>
             <Card
               alt="An icon used as a representation for making consultation with the doctor"
               title="Role Management"
@@ -85,19 +46,9 @@ const Settings = () => {
         </Grid>
       </Grid>
       {/* 3 */}
-      <Grid
-        container
-        justifyContent="space-between"
-        className={classes.containerGrid}
-        rowSpacing={4}
-        columnGap={4}
-      >
-        <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
-          <Link
-            to="/settings/permissions"
-            style={{ textDecoration: "none" }}
-            /* onClick={() => setSelectedSubMenu(12)} */
-          >
+      <Grid item container md={5} sm={5} xs={12}>
+        <Grid item container flexDirection="column">
+          <Link to="/settings/permissions" style={{ textDecoration: "none" }}>
             <Card
               alt="An icon used as a permission for making consultation with the doctor"
               title="Permissions"
@@ -107,8 +58,9 @@ const Settings = () => {
             </Card>
           </Link>
         </Grid>
-        {/* 4 */}
-        <Grid item className={classes.parentGrid} style={{ marginLeft: "2em" }} lg md={12} sm={12}>
+      </Grid>
+      <Grid item container md={5} sm={5} xs={12}>
+        <Grid item container flexDirection="column">
           <Link
             to="/settings/list-management"
             style={{ textDecoration: "none" }}
@@ -124,7 +76,7 @@ const Settings = () => {
           </Link>
         </Grid>
       </Grid>
-    </>
+    </Grid>
   );
 };
 

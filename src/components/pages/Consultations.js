@@ -63,16 +63,7 @@ const filterOptions = [
 ];
 
 const Consultations = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedPatientMenu,
-    selectedScopedMenu,
-    setSelectedSubMenu,
-    setSelectedPatientMenu,
-    setSelectedScopedMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const [pageInfo, setPageInfo] = useState({});
   const classes = useStyles();
   const theme = useTheme();
@@ -103,20 +94,15 @@ const Consultations = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    /*  setSelectedSubMenu(2);
-    setSelectedPatientMenu(5);
-    setSelectedScopedMenu(0); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu, selectedScopedMenu */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error.message} />;
 
   return (
     <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
-      {/* <Grid item>
-        <PreviousButton path={`/patients/${patientId}`} onClick={() => setSelectedPatientMenu(0)} />
-      </Grid> */}
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
@@ -168,7 +154,7 @@ const Consultations = (props) => {
                     <TableCell
                       align="left"
                       className={classes.tableCell}
-                      style={{ maxWidth: "20rem" }}
+                      style={{ maxWidth: "25rem" }}
                     >
                       <div
                         style={{
@@ -205,7 +191,7 @@ const Consultations = (props) => {
                       className={classes.tableCell}
                       style={{
                         color: theme.palette.common.grey,
-                        maxWidth: "20rem",
+                        width: "4rem",
                       }}
                     >
                       {row.contactMedium ? row.contactMedium : "No Value"}
@@ -215,7 +201,6 @@ const Consultations = (props) => {
                       className={classes.tableCell}
                       style={{
                         color: theme.palette.common.grey,
-                        maxWidth: "20rem",
                       }}
                     >
                       {row.type ? row.type : "No Value"}
@@ -225,7 +210,6 @@ const Consultations = (props) => {
                       className={classes.tableCell}
                       style={{
                         color: theme.palette.common.grey,
-                        maxWidth: "20rem",
                       }}
                     >
                       {row.status ? row.status : "No Value"}
@@ -237,11 +221,6 @@ const Consultations = (props) => {
                         component={Link}
                         to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
                         endIcon={<ArrowForwardIosIcon />}
-                        onClick={() => {
-                          /* setSelectedSubMenu(2);
-                          setSelectedPatientMenu(0);
-                          setSelectedScopedMenu(1); */
-                        }}
                       >
                         View Details
                       </Button>

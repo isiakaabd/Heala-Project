@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
-
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
@@ -164,7 +163,15 @@ const Patients = () => {
           <Loader />
         ) : profiles.length > 0 ? (
           /* ================= PATIENTS TABLE ================= */
-          <Grid item container height="100%" direction="column">
+          <Grid
+            item
+            container
+            height="100%"
+            direction="column"
+            // display={{ x: "none" }}
+            width={{ md: "100%", sm: "100%", xs: "100%" }}
+            // overflow={{ xs: "scroll" }}
+          >
             <EnhancedTable
               headCells={patientsHeadCells}
               rows={profiles}
@@ -289,11 +296,6 @@ const Patients = () => {
       </Grid>
     </>
   );
-};
-
-Patients.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Patients;

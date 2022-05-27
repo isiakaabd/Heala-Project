@@ -77,15 +77,9 @@ const App = ({ window }) => {
                   drawerWidth={drawerWidth}
                 />
 
-                {/* <ScrollToView>
-                <main
-                  style={{
-                    display: isAuthenticated ? "flex" : chatMediaActive ? "block" : "none",
-                  }}
-                > */}
                 <Box
                   component="nav"
-                  sx={{ width: { sm: `max(300px, 20vw)` }, flexShrink: { sm: 0 } }}
+                  sx={{ width: { md: "300px" }, flexShrink: { md: 0 } }}
                   aria-label="mailbox foldersssss"
                 >
                   <Drawer
@@ -97,7 +91,7 @@ const App = ({ window }) => {
                       keepMounted: true, // Better open performance on mobile.
                     }}
                     sx={{
-                      display: { xs: "block", sm: "none" },
+                      display: { xs: "block", md: "none" },
                       "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
                     }}
                   >
@@ -108,11 +102,10 @@ const App = ({ window }) => {
                       handleDrawerToggle={handleDrawerToggle}
                     />
                   </Drawer>
-                  {/* <section style={!chatMediaActive ? sectionStyles : { width: "100%" }}> */}
                   <Drawer
                     variant="permanent"
                     sx={{
-                      display: { xs: "none", sm: "block" },
+                      display: { xs: "none", md: "block" },
                       "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
                     }}
                     open

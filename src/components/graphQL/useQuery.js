@@ -1011,6 +1011,8 @@ export const getDoctorPatients = gql`
         _id
         doctor
         patient
+        patientData
+        doctorData
         createdAt
         updatedAt
       }

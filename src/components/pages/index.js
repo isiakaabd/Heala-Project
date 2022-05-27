@@ -4,6 +4,7 @@ export { default as CaseNotes } from "./CaseNotes";
 export { default as Consultations } from "./Consultations";
 export { default as CreateEmail } from "./CreateEmail";
 export { default as CreateMessage } from "./CreateMessage";
+
 export { default as Dashboard } from "./Dashboard";
 export { default as EditManagement } from "./EditManagement";
 export { default as ViewDoctorVerification } from "./ViewDoctorVerification";
