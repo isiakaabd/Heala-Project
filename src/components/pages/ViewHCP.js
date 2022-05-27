@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
 import PropTypes from "prop-types";
-import { CustomButton, Loader, Modals, PreviousButton } from "components/Utilities";
+import { CustomButton, Loader, Modals } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
@@ -10,11 +10,7 @@ import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
-import {
-  rejectVerification,
-  updateDoctorProvider,
-  // updateUserProvider,
-} from "components/graphQL/Mutation";
+import { rejectVerification, updateDoctorProvider } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -36,28 +32,15 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     "&.MuiGrid-root": {
       display: "grid",
-      maxWidth: "100%",
-      gridTemplateColumns: "repeat(4,minmax(15rem,1fr))",
       rowGap: "2rem",
       "& > *": {
         flex: 1,
         flexDirection: "column",
         gap: "10px",
       },
-
-      "@media (max-width:1450px)": {
-        gridTemplateColumns: "repeat(3,minmax(15rem,auto))",
-        "&.MuiGrid-root .btn": {
-          gridColumnStart: 3,
-        },
-      },
-      "@media (max-width:1200px)": {
-        gap: "10px",
-        gridTemplateColumns: "repeat(2,minmax(auto,auto))",
-        "&.MuiGrid-root .btn": {
-          gridColumnStart: 2,
-        },
-      },
+    },
+    "@media (max-width:1200px)": {
+      gap: "10px",
     },
   },
   gridsWrapper: {
@@ -77,19 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   cardGrid: {
-    background: "#fff",
     borderRadius: "1rem",
-    padding: "4rem 5rem",
-    "@media (max-width:1450px)": {
-      padding: "2rem",
-    },
-
     minHeight: "14.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
-  firstContainer: {
-    width: "100%",
-    height: "100%",
   },
 
   infoBadge: {
@@ -132,14 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({
-  selectedMenu,
-  setSelectedMenu,
-  /* selectedSubMenu,
-  setSelectedSubMenu,
-  setDoctorView,
-  doctorView, */
-}) => {
+const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -149,9 +115,6 @@ const ViewHCP = ({
   const [respondData, setRespondData] = useState([]);
 
   const [reject] = useMutation(rejectVerification);
-  // const onConfirm = () => {
-  //   setCancel(true);
-  // };
   const [open, setOpen] = useState(false);
 
   const [updateState, setUpdateState] = useState("Update Provider");
@@ -206,14 +169,9 @@ const ViewHCP = ({
       history.push("/verification");
     }, 3000);
   };
-  // eslint-disable-next-line
 
   const theme = useTheme();
-  // const darkButton = {
-  //   background: theme.palette.primary.main,
-  //   hover: theme.palette.primary.light,
-  //   active: theme.palette.primary.dark,
-  // };
+
   const trasparentButton = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -238,7 +196,6 @@ const ViewHCP = ({
     respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   const [process, setProcess] = useState(undefined);
-  console.log(respondData.status);
   useEffect(() => {
     if (ref) {
       get({
@@ -303,32 +260,29 @@ const ViewHCP = ({
   const classes = useStyles();
   useEffect(() => {
     setSelectedMenu(7);
-    /* setSelectedSubMenu(8);
-    setDoctorView(0); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, doctorView */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
-  console.log(verifyState);
-  // eslint-disable-next-line
+
   return (
     <>
-      <Grid container direction="column" gap={2} sx={{ overFlow: "hidden" }}>
-        <Grid item>
-          <PreviousButton path="/verification" />
-        </Grid>
+      <Grid container direction="column" rowGap={4} sx={{ overFlow: "hidden" }}>
         <Grid
           item
-          flexWrap="nowrap"
+          direction={{ md: "row", xs: "column", sm: "row" }}
           width="100%"
           justifyContent="space-between"
-          gap={4}
+          gap={{ md: 2, sm: 2, xs: 2 }}
           container
+          flexWrap={{ md: "nowrap", sm: "wrap" }}
           alignItems="center"
+          padding={{ sm: "2.5rem", xs: "1.5rem", md: "3rem" }}
           className={`${classes.cardGrid} ${classes.firstContainer}`}
         >
-          <Grid item container justifyContent="center" flex={1} height="100%">
+          <Grid item container justifyContent="center" height="100%">
             <Grid item>
               <Avatar
                 src={doctorData ? doctorData.picture : displayPhoto}
@@ -342,12 +296,15 @@ const ViewHCP = ({
           </Grid>
           <Grid
             item
+            flex={1}
             container
-            // direction="column"
-            // alignItems="center"
-            // gap={3}
+            display="grid"
+            gridTemplateColumns={{
+              md: "repeat(4,minmax(15rem,1fr))",
+              sm: "repeat(3,minmax(15rem,auto))",
+              xs: "repeat(2,minmax(15rem,1fr))",
+            }}
             className={classes.cardContainer}
-            // sx={{ height: "100%", background: "red" }}
           >
             <Grid item container>
               <Grid item>
@@ -430,46 +387,51 @@ const ViewHCP = ({
               container
               className="btn"
               alignItems="center"
+              gridColumnStart={{ sm: 2, xs: 2, md: 3 }}
               sx={{ justifyContent: "center !important" }}
             >
-              <Grid item container>
-                <CustomButton
-                  title="View Doctor Profile"
-                  type={trasparentButton}
-                  width="100%"
-                  component={Link}
-                  to={`/hcps/${doctorData && doctorData._id}`}
-                  /* onClick={() => {
-                    setSelectedSubMenu(7);
-                    setDoctorView(1);
-                  }} */
-                  // isSubmitting={submit}
-                  // onClick={() => handleUpdateProVider(reference?.reference_code)}
-                  // disabled={doctorData?.providerId === reference?.reference_code ? true : false}
-                />
-              </Grid>
+              <CustomButton
+                title="View Doctor Profile"
+                type={trasparentButton}
+                width="100%"
+                component={Link}
+                to={`/hcps/${doctorData && doctorData._id}`}
+              />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        {/* qualifications */}
+        <Grid
+          container
+          display="grid"
+          gap={3}
+          gridTemplateColumns={{ md: "repeat(2,1fr)", sm: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+        >
+          <Grid item>
             <Grid
               container
+              justifyContent="center"
+              alignItems="center"
               direction="column"
-              style={{ height: "100%" }}
-              justifyContent="space-between"
-              alignItems="flex-start"
+              gap={{ sm: 3, md: 4, xs: 3 }}
+              className={classes.cardGrid}
             >
               <Grid item>
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
-              {qualification ? (
+              {qualification?.degree !== "" && qualification?.image !== "" ? (
                 <Grid item container gap={2}>
                   {qualification?.degree && (
-                    <Grid className={classes.link}>{qualification.degree}</Grid>
+                    <Grid item>
+                      <Typography variant="h5" className={classes.link}>
+                        {qualification.degree}
+                      </Typography>
+                    </Grid>
                   )}
                   {qualification?.year && (
-                    <Grid className={classes.link}>{dateMoment(qualification.year).slice(-4)}</Grid>
+                    <Typography variant="h5" item className={classes.link}>
+                      {dateMoment(qualification.year).slice(-4)}
+                    </Typography>
                   )}
                   {qualification?.image && (
                     <a
@@ -483,26 +445,34 @@ const ViewHCP = ({
                   )}
                 </Grid>
               ) : (
-                <Grid item className={classes.link}>
+                <Typography variant="h5" item className={classes.link}>
                   Not Provided
-                </Grid>
+                </Typography>
               )}
             </Grid>
           </Grid>
-
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+          {/* 2 */}
+          <Grid item>
             <Grid
               container
+              justifyContent="center"
+              alignItems="center"
               direction="column"
-              style={{ height: "100%" }}
-              justifyContent="space-between"
-              alignItems="flex-start"
+              gap={{ sm: 3, md: 4, xs: 3 }}
+              className={classes.cardGrid}
             >
               <Grid item>
-                <Typography variant="h4">License</Typography>
+                <Typography variant="h5">License</Typography>
               </Grid>
               {license && license.number ? (
-                <Grid item container gap={2}>
+                <Grid
+                  item
+                  container
+                  justifyContent="center"
+                  alignItems="center"
+                  flexWrap="wrap"
+                  gap={2}
+                >
                   {license.number && (
                     <Grid item className={classes.link}>
                       {license.number}
@@ -533,176 +503,187 @@ const ViewHCP = ({
               )}
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
-            <Grid
-              container
-              direction="column"
-              style={{ height: "100%" }}
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Grid item>
-                <Typography variant="h4">Year Book</Typography>
-              </Grid>
-              {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
-                <Grid item container gap={2}>
-                  {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
-                    <Grid item className={classes.link}>
-                      {yearbook?.graduation_year?.slice(0, 4)}
-                    </Grid>
-                  ) : (
-                    <Grid item>
-                      <Typography className={classes.link} variant="h4">
-                        Not Provided
-                      </Typography>
-                    </Grid>
-                  )}
-                  {yearbook.image && (
-                    <Grid item>
-                      <a
-                        href={yearbook.image}
-                        rel="noreferrer"
-                        target="_blank"
-                        className={classes.link}
-                      >
-                        <span>Qualification PNG</span>
-                      </a>
-                    </Grid>
-                  )}
-                </Grid>
-              ) : (
-                <Grid item>
-                  <Typography className={classes.link} variant="h4">
-                    Not Provided
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
-          </Grid>
 
-          <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
-            <Grid
-              container
-              direction="column"
-              style={{ height: "100%" }}
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Grid item>
-                <Typography variant="h4">Alumni</Typography>
-              </Grid>
-              {alumni_association?.facebook_group_name ? (
-                <Grid item container gap={2}>
-                  {alumni_association.facebook_group_name && (
-                    <Grid item>
-                      <a
-                        href={alumni_association.image}
-                        rel="noreferrer"
-                        target="_blank"
-                        className={classes.link}
-                      >
-                        <span>{alumni_association.facebook_group_name}</span>
-                      </a>
-                    </Grid>
-                  )}
-                  {alumni_association.instagram_handle && (
-                    <Grid item>
-                      <a
-                        href={alumni_association.image}
-                        rel="noreferrer"
-                        target="_blank"
-                        className={classes.link}
-                      >
-                        <span>{alumni_association.instagram_handle}</span>
-                      </a>
-                    </Grid>
-                  )}
-                </Grid>
-              ) : (
-                <Grid item className={classes.link}>
-                  Not Provided
-                </Grid>
-              )}
+          {/* 3 */}
+          <Grid
+            item
+            container
+            justifyContent="center"
+            alignItems="center"
+            direction="column"
+            gap={{ sm: 3, md: 4, xs: 3 }}
+            className={classes.cardGrid}
+          >
+            <Grid item>
+              <Typography variant="h4">Year Book</Typography>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-          <Grid item md style={{ marginRight: " 2rem" }} className={classes.cardGrid}>
-            <Grid
-              container
-              direction="column"
-              style={{ height: "100%" }}
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Grid item>
-                <Typography variant="h4">Reference ID</Typography>
-              </Grid>
-              <Grid item container justifyContent="space-between" paddingTop={1}>
-                {reference?.reference_code ? (
-                  <>
-                    <Grid item className={classes.link}>
-                      {process ? process : reference?.reference_code}
-                    </Grid>
-                  </>
+            {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
+              <Grid
+                item
+                container
+                justifyContent="center"
+                alignItems="center"
+                flexWrap="wrap"
+                gap={2}
+              >
+                {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
+                  <Typography className={classes.link} variant="h5">
+                    {yearbook?.graduation_year?.slice(0, 4)}
+                  </Typography>
                 ) : (
-                  <Grid className={classes.link}>Not Provided</Grid>
+                  <Grid item>
+                    <Typography className={classes.link} variant="h5">
+                      Not Provided
+                    </Typography>
+                  </Grid>
                 )}
-                {reference?.reference_code && (
-                  <Grid item sx={{ alignSelf: "center" }}>
-                    <CustomButton
-                      title={
-                        doctorData?.providerId === reference?.reference_code ||
-                        updateState === "Updated"
-                          ? "Updated"
-                          : "Update Provider"
-                      }
-                      type={trasparentButton}
-                      width="100%"
-                      isSubmitting={submit}
-                      onClick={() => handleUpdateProVider(reference?.reference_code)}
-                      disabled={doctorData?.providerId === reference?.reference_code ? true : false}
-                    />
+                {yearbook.image && (
+                  <Grid item>
+                    <a
+                      href={yearbook.image}
+                      rel="noreferrer"
+                      target="_blank"
+                      className={classes.link}
+                    >
+                      <span>Qualification PNG</span>
+                    </a>
                   </Grid>
                 )}
               </Grid>
+            ) : (
+              <Grid item>
+                <Typography className={classes.link} variant="h5">
+                  Not Provided
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
+
+          {/* 4 */}
+          <Grid
+            item
+            container
+            justifyContent="center"
+            alignItems="center"
+            direction="column"
+            gap={{ sm: 3, md: 4, xs: 3 }}
+            className={classes.cardGrid}
+          >
+            <Grid item>
+              <Typography variant="h4">Alumni</Typography>
             </Grid>
+            {alumni_association?.facebook_group_name ? (
+              <Grid item container gap={2}>
+                {alumni_association.facebook_group_name && (
+                  <a
+                    href={alumni_association.image}
+                    rel="noreferrer"
+                    target="_blank"
+                    className={classes.link}
+                  >
+                    <span>{alumni_association.facebook_group_name}</span>
+                  </a>
+                )}
+                {alumni_association.instagram_handle && (
+                  <a
+                    href={alumni_association.image}
+                    rel="noreferrer"
+                    target="_blank"
+                    className={classes.link}
+                  >
+                    <span>{alumni_association.instagram_handle}</span>
+                  </a>
+                )}
+              </Grid>
+            ) : (
+              <Typography variant="h5" className={classes.link}>
+                Not Provided
+              </Typography>
+            )}
           </Grid>
 
           <Grid
             item
-            md
-            style={{ marginLeft: "2rem", visibility: "hidden" }}
+            container
+            justifyContent="center"
+            alignItems="center"
+            direction="column"
+            gap={{ sm: 3, md: 4, xs: 3 }}
             className={classes.cardGrid}
-          ></Grid>
-        </Grid>
-        <Grid item container style={{ paddingTop: "2rem" }}>
-          <Grid item container justifyContent="center" gap={2} className={classes.cardGrid}>
+          >
             <Grid item>
-              <CustomButton
-                title="Reject Verification"
-                type={RedButton}
-                // disabled={verifyState !== "Doctor Verified!"}
-                onClick={handleDialogOpen}
-                width="100%"
-              />
+              <Typography variant="h4">Reference ID</Typography>
             </Grid>
-            <Grid item>
-              <CustomButton
-                title={verifyState}
-                type={trasparentButton}
-                disabled={verifyState === "Doctor Verified!!"}
-                onClick={handleVerifyDoctor}
-                width="100%"
-              />
+            <Grid
+              item
+              container
+              justifyContent="center"
+              gap={{ md: 10, sm: 6, xs: 4 }}
+              flexWrap="nowrap"
+            >
+              {reference?.reference_code ? (
+                <Typography variant="h5" className={classes.link}>
+                  {process ? process : reference?.reference_code}
+                </Typography>
+              ) : (
+                <Typography variant="h5" className={classes.link}>
+                  Not Provided
+                </Typography>
+              )}
+              {reference?.reference_code && (
+                <Grid item>
+                  <CustomButton
+                    title={
+                      doctorData?.providerId === reference?.reference_code ||
+                      updateState === "Updated"
+                        ? "Updated"
+                        : "Update Provider"
+                    }
+                    type={trasparentButton}
+                    width="100%"
+                    isSubmitting={submit}
+                    onClick={() => handleUpdateProVider(reference?.reference_code)}
+                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>
+
+        {/* 5 */}
+
+        <Grid
+          item
+          container
+          justifyContent="center"
+          alignItems="center"
+          gap={2}
+          className={classes.cardGrid}
+        >
+          <Grid item>
+            <CustomButton
+              title="Reject Verification"
+              type={RedButton}
+              onClick={handleDialogOpen}
+              width="100%"
+            />
+          </Grid>
+          <Grid item>
+            <CustomButton
+              title={verifyState}
+              type={trasparentButton}
+              disabled={verifyState === "Doctor Verified!!"}
+              onClick={handleVerifyDoctor}
+              width="100%"
+            />
+          </Grid>
+        </Grid>
       </Grid>
+
       <Modals
         isOpen={cancel}
+        width={{ sm: "30vw", md: "30vw", xs: "90vw" }}
         title="Reject Doctor"
         rowSpacing={5}
         handleClose={() => setCancel(false)}

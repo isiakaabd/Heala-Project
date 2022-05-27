@@ -9,20 +9,10 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IoCopy } from "react-icons/io5";
 import { useQuery } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
-import { Loader, PreviousButton, DisplayProfile } from "components/Utilities";
+import { Loader, DisplayProfile } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
-const DoctorVerificationProfile = ({
-  selectedMenu,
-  setChatMediaActive,
-  chatMediaActive,
-  /* selectedSubMenu,
-  setSelectedSubMenu,
-  setScopedMenu,
-  scopedMenu,
-  setDoctorView,
-  doctorView, */
-}) => {
+const DoctorVerificationProfile = ({ selectedMenu, setChatMediaActive, chatMediaActive }) => {
   const useStyles = makeStyles((theme) => ({
     gridsWrapper: {
       background: "#fff",
@@ -89,7 +79,7 @@ const DoctorVerificationProfile = ({
   }));
   const classes = useStyles();
 
-  const { id, viewId } = useParams();
+  const { id } = useParams();
   const [doctorProfile, setDoctorProfile] = useState("");
 
   const { loading, error, data } = useQuery(doctor, {
@@ -102,16 +92,6 @@ const DoctorVerificationProfile = ({
       setDoctorProfile(data.doctorProfile);
     }
   }, [data, id]);
-  useEffect(() => {
-    // setSelectedMenu(4);
-    // setSelectedSubMenu(8);
-    // setScopedMenu(1);
-    // setChatMediaActive(false);
-    // setSelectedMenu(7);
-    /* setSelectedSubMenu(8);
-    setDoctorView(1); */
-    // eslint-disable-next-line
-  }, [selectedMenu, chatMediaActive /* selectedSubMenu, doctorView, scopedMenu */]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {
@@ -128,12 +108,6 @@ const DoctorVerificationProfile = ({
   } = doctorProfile;
   return (
     <Grid container direction="column" gap={3} width="100%">
-      <Grid item>
-        <PreviousButton
-          path={`/verification/view/${viewId}`}
-          /* onClick={() => setSelectedSubMenu(8)} */
-        />
-      </Grid>
       {/* Display photo and profile name grid */}
       <Grid item container>
         <DisplayProfile
@@ -142,9 +116,7 @@ const DoctorVerificationProfile = ({
           medicalTitle="Medical ID"
           statusId={dociId && dociId.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
-          // chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
-          /* setSelectedSubMenu={setSelectedSubMenu} */
           selectedMenu={selectedMenu}
           type=""
         />
