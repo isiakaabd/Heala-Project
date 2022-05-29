@@ -60,12 +60,12 @@ const AvailabilityTable = ({ data }) => {
   const { page, rowsPerPage } = useSelector((state) => state.tables);
 
   return (
-    <Grid container height="100%" gap={2}>
+    <Grid item container height="100%" gap={2}>
       <Grid item sx={{ flexGrow: 1 }}>
         <Typography variant="h4">Availability Table</Typography>
       </Grid>
       {avaliablity && avaliablity.length > 0 ? (
-        <Grid item container direction="column" height="100%">
+        <Grid item container direction="column" display={{ xs: "none" }} height="100%">
           <EnhancedTable
             headCells={availabilityHeadCells}
             rows={avaliablity}

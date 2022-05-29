@@ -41,8 +41,8 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
   if (error) return <NoData error={error} />;
 
   return (
-    <Grid container direction="column">
-      <Grid item container alignItems="center">
+    <Grid container direction="column" gap={3}>
+      <Grid item container alignItems="center" flexWrap={"nowrap"}>
         <Grid item sx={{ flexGrow: 1 }}>
           <Typography variant="h1">Dashboard</Typography>
         </Grid>
@@ -62,7 +62,9 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
           <Grid item>
             <DashboardCharts data={data} refetch={refetch} />
           </Grid>
-          <AvailabilityTable data={data?.getStats.availabilityCalendar} />
+          <Grid item>
+            <AvailabilityTable data={data?.getStats.availabilityCalendar} />
+          </Grid>
         </>
       ) : (
         <EmptyTable />
