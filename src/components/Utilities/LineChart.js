@@ -31,9 +31,9 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
   const classes = useStyles();
   const theme = useTheme();
   const [actives, setActives] = useState([]);
-  // const [results, setResults] = useState([]);
+  // const [results, setResults] = useState([])
   const [inActives, setInActives] = useState([]);
-  // const [times, setTimes] = useState([]);
+  // const [times, setTimes] = useState([])
 
   useEffect(() => {
     const doc = doctorStats.oneYear;
@@ -134,8 +134,8 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
   }
   return (
     <Grid item container>
-      <Grid item container sx={{ maxWidth: "100%" }}>
-        <Line data={data} options={options} />;
+      <Grid item container>
+        <Line data={data} options={options} />
       </Grid>
       <Grid item container>
         <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
