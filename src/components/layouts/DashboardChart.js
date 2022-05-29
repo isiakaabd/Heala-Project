@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "1.5rem 2rem",
   },
   overviewGrid: {
-    padding: "4rem 2rem 3rem",
+    // padding: "4rem 2rem 3rem",
   },
   groupIconGrid: {
     width: "5rem",
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bottomChartGrid: {
-    padding: "3rem 2rem",
+    // padding: "3rem 2rem",
   },
 
   dottedCircle: {
@@ -151,300 +151,122 @@ const DashboardCharts = ({ data, refetch }) => {
   };
 
   return (
-    <Grid container justifyContent="space-between" spacing={3}>
-      <Grid item container lg>
-        <Grid container direction="column">
-          <Grid item className={classes.chartCard} sx={{ marginBottom: "3em" }}>
-            <Grid container direction="column">
-              <Grid item className={classes.headerGrid}>
-                <Typography variant="h5">Doctor Stats</Typography>
-              </Grid>
-              <Divider color={theme.palette.common.lighterGrey} />
-              <Grid item>
-                <Grid container className={classes.overviewGrid} justifyContent="space-between">
+    <Grid
+      container
+      justifyContent="space-between"
+      display="grid"
+      padding=".2rem" //repeat(auto-fit, minmax(250px, 1fr));
+      gridTemplateColumns={{ sm: "repeat(2,1fr)", md: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+      spacing={3}
+    >
+      {/* doctor */}
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Doctor Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          paddingY={{ md: 2, sm: 2, xs: 2 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            gap={{ sm: 3, xs: 2, md: 3 }}
+            alignItems="center"
+            flexWrap={"nowrap"}
+            container
+            flex={3}
+          >
+            <Grid item className={classes.groupIconGrid}>
+              <GroupIcon color="success" className={classes.groupIcon} />
+            </Grid>
+            <Grid item alignItems="center" container flex={1}>
+              <Grid item container direction="column">
+                <Grid item container gap={1}>
+                  <Typography variant="h1">{data && totalDoc}</Typography>
                   <Grid item>
-                    <Grid container>
-                      <Grid item className={classes.groupIconGrid}>
-                        <GroupIcon color="success" className={classes.groupIcon} />
-                      </Grid>
-                      <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                        <Typography variant="h1">{data && totalDoc}</Typography>
-                      </Grid>
-                      <Grid item style={{ marginRight: "0.5rem" }}>
-                        {doctorPercentage < 1 ? (
-                          <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
-                        ) : (
-                          <ArrowUpwardIcon color="success" />
-                        )}
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          style={{
-                            color: doctorPercentage < 1 ? "#f2190a" : theme.palette.success.main,
-                          }}
-                          variant="body2"
-                        >
-                          {doctorPercentage ? `${Math.abs(doctorPercentage.toFixed(0))} %` : 0}
-                        </Typography>
-                      </Grid>
+                    {doctorPercentage < 1 ? (
+                      <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
+                    ) : (
+                      <ArrowUpwardIcon color="success" />
+                    )}
+                  </Grid>
+                  <Typography
+                    style={{
+                      color: doctorPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                    }}
+                    variant="body2"
+                  >
+                    {doctorPercentage ? `${Math.abs(doctorPercentage.toFixed(0))} %` : 0}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Typography
+                variant="body2"
+                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Total Doctors
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid item>
+            <img src={chart1} sx={{ objectFit: "contain" }} alt="Arc chart" />
+          </Grid>
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart
+            timeFrames={timeFrames}
+            selectedTimeframe={selectedTimeframe}
+            setSelectedTimeframe={setSelectedTimeframe}
+            doctorStats={doctorStats}
+          />
+
+          {/* Line */}
+          <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography variant="h3" gutterBottom>
+                    {doctorStats && doctorStats.activeDoctors}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.green}`}></div>
                     </Grid>
-                    <Grid
-                      item
-                      style={{
-                        marginLeft: "38%",
-                        marginTop: "-8%",
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-                      >
-                        Total Doctors
+                    <Grid item>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total active Doctors
                       </Typography>
                     </Grid>
                   </Grid>
-                  <Grid item>
-                    <img src={chart1} alt="Arc chart" />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Divider color={theme.palette.common.lighterGrey} />
-              <Grid item container md={4} direction="column" className={classes.bottomChartGrid}>
-                <LineChart
-                  timeFrames={timeFrames}
-                  selectedTimeframe={selectedTimeframe}
-                  setSelectedTimeframe={setSelectedTimeframe}
-                  doctorStats={doctorStats}
-                />
-                <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-                  <Grid item>
-                    <Grid container direction="column">
-                      <Grid item>
-                        <Typography variant="h3" gutterBottom>
-                          {doctorStats && doctorStats.activeDoctors}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Grid container alignItems="center">
-                          <Grid item style={{ marginRight: "1rem" }}>
-                            <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total active Doctors
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Grid container direction="column" justifyContent="center">
-                      <Grid item>
-                        <Typography variant="h3" gutterBottom>
-                          {doctorStats && doctorStats.inactiveDoctors}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Grid container alignItems="center">
-                          <Grid item style={{ marginRight: "1rem" }}>
-                            <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total inactive Doctors
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item className={classes.chartCard} style={{ marginBottom: "3em" }}>
-            <Grid container direction="column">
-              <>
+            <Grid item>
+              <Grid container direction="column" justifyContent="center">
                 <Grid item>
-                  <Grid
-                    container
-                    justifyContent="space-between"
-                    alignItems="center"
-                    className={classes.headerGrid}
-                  >
-                    <Grid item>
-                      <Typography variant="h5">Financial Stats</Typography>
-                    </Grid>
-                    <Grid item>
-                      <FormSelect
-                        placeholder="Select Months"
-                        value={forms}
-                        onChange={onChange}
-                        options={selectOptions}
-                        name="finance"
-                      />
-                    </Grid>
-                  </Grid>
-                  <Divider color={theme.palette.common.lighterGrey} />
+                  <Typography variant="h3" gutterBottom>
+                    {doctorStats && doctorStats.inactiveDoctors}
+                  </Typography>
                 </Grid>
-
                 <Grid item>
-                  <Grid
-                    container
-                    justifyContent="space-between"
-                    alignItems="center"
-                    className={classes.overviewGrid}
-                  >
-                    <Grid item>
-                      <CircularProgressBar
-                        height="8rem"
-                        width="8rem"
-                        color={theme.palette.common.green}
-                        trailColor={theme.palette.common.red}
-                        value={finances}
-                        strokeWidth={8}
-                      />
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.red}`}></div>
                     </Grid>
                     <Grid item>
-                      <Grid container>
-                        <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
-                          <TrendingDownIcon color="success" />
-                        </Grid>
-                        <Grid item style={{ marginLeft: "1rem" }}>
-                          <Grid container direction="column">
-                            <Grid item>
-                              <Typography variat="h3">
-                                <span
-                                  style={{
-                                    textDecoration: "line-through",
-                                    textDecorationStyle: "double",
-                                  }}
-                                >
-                                  N
-                                </span>
-                                {formatNumber(totalEarning)}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Typography
-                                variant="body2"
-                                style={{
-                                  color: theme.palette.common.lightGrey,
-                                }}
-                              >
-                                Total earnings
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item>
-                      <Grid container>
-                        <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
-                          <TrendingUpIcon color="error" />
-                        </Grid>
-                        <Grid item style={{ marginLeft: "1rem" }}>
-                          <Grid container direction="column">
-                            <Grid item>
-                              <Typography variat="h3">
-                                <span
-                                  style={{
-                                    textDecoration: "line-through",
-                                    textDecorationStyle: "double",
-                                  }}
-                                >
-                                  N
-                                </span>
-                                {formatNumber(totalPayouts)}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Typography
-                                variant="body2"
-                                style={{
-                                  color: theme.palette.common.lightGrey,
-                                }}
-                              >
-                                Total payouts
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" className={classes.chartCard}>
-              <Grid item className={classes.headerGrid}>
-                <Typography variant="h5">Appointment Stats</Typography>
-              </Grid>
-              <Divider color={theme.palette.common.lightGrey} />
-              <Grid item className={classes.overviewGrid}>
-                <Grid container justifyContent="space-between">
-                  <Grid item>
-                    <Grid container>
-                      <Grid
-                        item
-                        className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}
-                      >
-                        <NotificationsActiveIcon className={classes.notificationIcon} />
-                      </Grid>
-                      <Grid item style={{ marginLeft: "1em" }}>
-                        <Grid container direction="column">
-                          <Grid item>
-                            <Typography variant="h4">
-                              {data && appointmentStats.totalUpcoming}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total Upcoming
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Grid container>
-                      <Grid
-                        item
-                        className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}
-                      >
-                        <NotificationsActiveIcon className={classes.notificationIcon} />
-                      </Grid>
-                      <Grid item style={{ marginLeft: "1em" }}>
-                        <Grid container direction="column">
-                          <Grid item>
-                            <Typography variant="h4">
-                              {appointmentStats && appointmentStats.totalPast}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              variant="body2"
-                              style={{ color: theme.palette.common.lightGrey }}
-                            >
-                              Total Past
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total inactive Doctors
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -453,182 +275,348 @@ const DashboardCharts = ({ data, refetch }) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item md>
-        <Grid container direction="column" className={classes.chartCard}>
-          <Grid item className={classes.headerGrid}>
-            <Typography variant="h5">Patient Stats</Typography>
+      {/* patients */}
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Patients Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          paddingY={{ md: 2, sm: 2, xs: 2 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            gap={{ sm: 3, xs: 2, md: 3 }}
+            alignItems="center"
+            flexWrap={"nowrap"}
+            container
+            flex={3}
+          >
+            <Grid item className={classes.groupIconGrid}>
+              <GroupIcon color="success" className={classes.groupIcon} />
+            </Grid>
+            <Grid item alignItems="center" container flex={1}>
+              <Grid item container direction="column">
+                <Grid item container gap={1}>
+                  <Typography variant="h1">{data && totalPatient}</Typography>
+                  <Grid item>
+                    {patientPercentage < 1 ? (
+                      <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
+                    ) : (
+                      <ArrowUpwardIcon color="success" />
+                    )}
+                  </Grid>
+                  <Typography
+                    style={{
+                      color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                    }}
+                    variant="body2"
+                  >
+                    {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Typography
+                variant="body2"
+                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Total Patients
+              </Typography>
+            </Grid>
           </Grid>
-          <Divider color={theme.palette.common.lightGrey} />
+
           <Grid item>
-            <Grid container className={classes.overviewGrid} justifyContent="space-between">
-              <Grid item>
-                <Grid container>
-                  <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                    <Grid container>
-                      <Grid item className={classes.groupIconGrid}>
-                        <GroupIcon color="success" className={classes.groupIcon} />
-                      </Grid>
-                      <Grid item style={{ margin: "0 0.5rem 0 1rem" }}>
-                        <Typography variant="h1">{totalPatient}</Typography>
-                      </Grid>
-                      <Grid item style={{ marginRight: "0.5rem" }}>
-                        {patientPercentage < 1 ? (
-                          <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
-                        ) : (
-                          <ArrowUpwardIcon color="success" />
-                        )}
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="body2"
+            <img src={chart1} sx={{ objectFit: "contain" }} alt="Arc chart" />
+          </Grid>
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart
+            timeFrames={timeFrames}
+            selectedTimeframe={selectedTimeframe}
+            setSelectedTimeframe={setSelectedTimeframe}
+            doctorStats={patients}
+          />
+
+          {/* Line */}
+          <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography variant="h3" gutterBottom>
+                    {data && patients.activePatients}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total active Patients
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container direction="column" justifyContent="center">
+                <Grid item>
+                  <Typography variant="h3" gutterBottom>
+                    {patients && patients.inactivePatients}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total inactive Patients
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      {/* active subscriber */}
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Subscribers Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart
+            timeFrames={timeFrames}
+            selectedTimeframe={selectedTimeframe}
+            setSelectedTimeframe={setSelectedTimeframe}
+            doctorStats={subscribers}
+            type="subscriber"
+          />
+
+          {/* Line */}
+          <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
+            <Grid item>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography variant="h3" gutterBottom>
+                    {data && subscribers.totalActiveSubscribers}
+                  </Typography>{" "}
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total active Subscribers
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container direction="column" justifyContent="center">
+                <Grid item>
+                  <Typography variant="h3" gutterBottom>
+                    {data && subscribers.totalInactiveSubscribers}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item style={{ marginRight: "1rem" }}>
+                      <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total inactive Subscribers
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      {/* financial */}
+      <Grid item container direction="column" className={classes.chartCard}>
+        <Grid item container rowGap={{ sm: 6, xs: 0 }} flexDirection={{ xs: "column" }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            flex={{ sm: 1 }}
+            flexWrap={"nowrap"}
+          >
+            <Grid item flex={1}>
+              <Typography
+                variant="h5"
+                // style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Financial Stats
+              </Typography>
+            </Grid>
+            <Grid item>
+              <FormSelect
+                placeholder="Select Months"
+                value={forms}
+                onChange={onChange}
+                options={selectOptions}
+                name="finance"
+              />
+            </Grid>
+          </Grid>
+
+          <Grid
+            item
+            container
+            sx={{ justifySelf: "center" }}
+            justifyContent="space-between"
+            alignItems="center"
+            className={classes.overviewGrid}
+          >
+            <Grid item>
+              <CircularProgressBar
+                height="8rem"
+                width="8rem"
+                color={theme.palette.common.green}
+                trailColor={theme.palette.common.red}
+                value={finances}
+                strokeWidth={8}
+              />
+            </Grid>
+            <Grid item>
+              <Grid container gap={2} alignItems="center">
+                <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
+                  <TrendingDownIcon color="success" />
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography variat="h3">
+                        <span
                           style={{
-                            color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                            textDecoration: "line-through",
+                            textDecorationStyle: "double",
                           }}
                         >
-                          {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
+                          N
+                        </span>
+                        {formatNumber(totalEarning)}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography
+                        variant="body2"
                         style={{
-                          marginLeft: "24%",
-                          marginTop: "-5%",
+                          color: theme.palette.common.lightGrey,
                         }}
                       >
-                        <Typography
-                          variant="body2"
-                          style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-                        >
-                          Total Patients
-                        </Typography>
-                      </Grid>
+                        Total earnings
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item>
-                <img src={chart1} alt="Arc chart" />
+            </Grid>
+            <Grid item>
+              <Grid container gap={2} alignItems="center">
+                <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
+                  <TrendingUpIcon color="error" />
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography variat="h3">
+                        <span
+                          style={{
+                            textDecoration: "line-through",
+                            textDecorationStyle: "double",
+                          }}
+                        >
+                          N
+                        </span>
+                        {formatNumber(totalPayouts)}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography
+                        variant="body2"
+                        style={{
+                          color: theme.palette.common.lightGrey,
+                        }}
+                      >
+                        Total payouts
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Divider color={theme.palette.common.lighterGrey} />
-          <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item lg={5} className={classes.bottomChartGrid}>
-            <LineChart
-              timeFrames={timeFrames}
-              selectedTimeframe={selectedTimeframe}
-              setSelectedTimeframe={setSelectedTimeframe}
-              doctorStats={patients}
-            />
 
-            <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-              <Grid item>
-                <Grid container direction="column">
-                  <Grid item>
-                    <Typography variant="h3" gutterBottom>
-                      {data && patients.activePatients}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container alignItems="center">
-                      <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
-                        >
-                          Total active Patients
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container direction="column" justifyContent="center">
-                  <Grid item>
-                    <Typography variant="h3" gutterBottom>
-                      {data && subscribers.totalActiveSubscribers}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container alignItems="center">
-                      <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
-                        >
-                          Total inactive Patients
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
+          <Grid container flex={{ sm: 1 }} direction="column" className={classes.chartCard}>
+            {/* <Divider color={theme.palette.common.lightGrey} /> */}
+            <Grid item className={classes.headerGrid}>
+              <Typography variant="h5">Appointment Stats</Typography>
             </Grid>
-          </Grid>
-          <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item className={classes.headerGrid}>
-            <Typography variant="h5">Subscribers</Typography>
-          </Grid>
-          <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container direction="column" className={classes.bottomChartGrid}>
-            <LineChart
-              timeFrames={timeFrames}
-              selectedTimeframe={selectedTimeframe}
-              setSelectedTimeframe={setSelectedTimeframe}
-              doctorStats={subscribers}
-              type="subscriber"
-            />
-            <Grid item container justifyContent="space-between" style={{ paddingTop: "2rem" }}>
-              <Grid item>
-                <Grid container direction="column">
-                  <Grid item>
-                    <Typography variant="h3" gutterBottom>
-                      {data && subscribers.totalActiveSubscribers}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container alignItems="center">
-                      <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
-                        >
-                          Total active Subscribers
-                        </Typography>
-                      </Grid>
+
+            <Grid item container paddingY={{ sm: 3, md: 3, xs: 2 }}>
+              <Grid item container justifyContent="space-between">
+                <Grid item>
+                  <Grid container gap={2}>
+                    <Grid item className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}>
+                      <NotificationsActiveIcon className={classes.notificationIcon} />
+                    </Grid>
+
+                    <Grid item direction="column">
+                      <Typography variant="h5">{data && appointmentStats.totalUpcoming}</Typography>
+
+                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                        Total Upcoming
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container direction="column" justifyContent="center">
-                  <Grid item>
-                    <Typography variant="h3" gutterBottom>
-                      {data && subscribers.totalInactiveSubscribers}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container alignItems="center">
-                      <Grid item style={{ marginRight: "1rem" }}>
-                        <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                      </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="body2"
-                          style={{ color: theme.palette.common.lightGrey }}
-                        >
-                          Total inactive Subscribers
-                        </Typography>
+                <Grid item>
+                  <Grid container>
+                    <Grid item className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}>
+                      <NotificationsActiveIcon className={classes.notificationIcon} />
+                    </Grid>
+                    <Grid item style={{ marginLeft: "1em" }}>
+                      <Grid container direction="column">
+                        <Grid item>
+                          <Typography variant="h4">
+                            {appointmentStats && appointmentStats.totalPast}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            variant="body2"
+                            style={{ color: theme.palette.common.lightGrey }}
+                          >
+                            Total Past
+                          </Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>

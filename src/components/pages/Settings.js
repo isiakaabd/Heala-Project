@@ -83,8 +83,6 @@ const Settings = () => {
 Settings.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Settings;
