@@ -240,13 +240,12 @@ const HCP = () => {
                           className={classes.button}
                           style={{
                             whiteSpace: "nowrap",
-                            padding: "5% 40%",
+                            padding: "5% 50%",
                             marginLeft: "-10%",
                           }}
                           component={Link}
                           endIcon={<ArrowForwardIosIcon />}
                           to={`/verification/view/${_id}`}
-                          /* onClick={() => setSelectedSubMenu(8)} */
                         >
                           View Verification{" "}
                         </Button>
@@ -262,10 +261,6 @@ const HCP = () => {
       </Grid>
     </>
   );
-};
-
-HCP.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default HCP;

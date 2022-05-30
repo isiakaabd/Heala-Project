@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { NoData } from "components/layouts";
 import { Loader, CircularProgressBar, FormSelect } from "components/Utilities";
-import { Grid, Typography, Stack } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
-import Card from "components/Utilities/Card";
+import { Card } from "components/Utilities";
 import { useQuery } from "@apollo/client";
 import { getEarningStats } from "components/graphQL/useQuery";
 import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
@@ -55,8 +55,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     margin: "auto",
     width: "100%",
-
-    padding: "2rem 4rem",
     "&:first-child": {
       borderBottom: ".5px solid #F8F8F8",
     },
@@ -69,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.red,
   },
   mainContainer: {
-    flexDirection: "column",
     width: "100%",
     background: "white",
     borderRadius: "2rem",
@@ -108,6 +105,7 @@ const Finance = () => {
   const [totalPayouts, setTotalPayouts] = useState([]);
   const financialValue = financialPercent(totalEarning, totalPayouts);
   const [finances, setFinances] = useState(financialValue);
+
   const onChange = async (e) => {
     setForm(e.target.value);
     await refetch({ q: e.target.value });
@@ -128,9 +126,17 @@ const Finance = () => {
   if (error) return <NoData error={error} />;
 
   return (
-    <Stack position="static" className={classes.containerGrid} spacing={3}>
-      <Grid container component="div" className={classes.mainContainer}>
-        <Grid item sm container className={classes.flexContainer}>
+    <Grid container gap={3}>
+      <Grid
+        item
+        container
+        rowGap={4}
+        padding={{ md: "2rem 4rem", sm: "2rem, 4rem", xs: "1rem" }}
+        className={classes.mainContainer}
+        flexDirection={{ md: "row", sm: "row", xs: "column" }}
+        sx={{ alignItems: "center", justifyContent: "space-between" }}
+      >
+        <Grid item container className={classes.flexContainer}>
           <Grid item>
             <Typography variant="h1" color="#2D2F39">
               Earning
@@ -146,145 +152,141 @@ const Finance = () => {
             />
           </Grid>
         </Grid>
-
-        <Grid item container sx={{ padding: "3rem 4rem" }}>
-          <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Grid item xs={4}>
-              <CircularProgressBar
-                height="17rem"
-                width="17rem"
-                color={theme.palette.common.green}
-                trailColor={theme.palette.common.red}
-                value={finances}
-                strokeWidth={8}
-              />
-            </Grid>
+        <Grid
+          item
+          container
+          alignItems="center"
+          flexDirection={{ md: "row", sm: "row", xs: "column" }}
+          spacing={{ md: 2, xs: 2, sm: 2 }}
+        >
+          <Grid item>
+            <CircularProgressBar
+              height="17rem"
+              width="17rem"
+              color={theme.palette.common.green}
+              trailColor={theme.palette.common.red}
+              value={finances}
+              strokeWidth={8}
+            />
+          </Grid>
+          <Grid item flex={1}>
             <Grid
-              item
-              sm
               container
-              columnSpacing={2}
-              xs={3}
-              sx={{ justifyContent: "center", alignItems: "center" }}
+              alignItems="center"
+              rowGap={4}
+              justifyContent={{ md: "space-around", xs: "flex-start", sm: "space-around" }}
             >
-              <Grid
-                className={classes.iconWrapper}
-                sx={{ background: theme.palette.common.lightGreen }}
-              >
-                <Grid item>
-                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+              <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                  <Grid
+                    className={classes.iconWrapper}
+                    sx={{ background: theme.palette.common.lightGreen }}
+                  >
+                    <Grid item>
+                      <TrendingDownIcon color="success" className={classes.cardIcon} />
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography noWrap variant="h2">
+                      <span
+                        style={{
+                          textDecoration: "line-through",
+                          textDecorationStyle: "double",
+                        }}
+                      >
+                        N{""}
+                      </span>
+                      {formatNumber(totalEarning)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      style={{
+                        color: theme.palette.common.lightGrey,
+                      }}
+                    >
+                      Total earnings
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
+              {/* second */}
               <Grid item>
-                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
-                  <span
-                    style={{
-                      textDecoration: "line-through",
-                      textDecorationStyle: "double",
-                    }}
+                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                  <Grid
+                    className={classes.iconWrapper}
+                    sx={{ background: theme.palette.common.lightRed }}
                   >
-                    N
-                  </span>
-                  {formatNumber(totalEarning)}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: theme.palette.common.lightGrey,
-                    fontSize: "2.275rem",
-                  }}
-                >
-                  Total earning
-                </Typography>
-              </Grid>
-            </Grid>
-            {/* second */}
-            <Grid
-              item
-              sm
-              container
-              columnSpacing={2}
-              xs={3}
-              sx={{ justifyContent: "center", alignItems: "center" }}
-            >
-              <Grid
-                className={classes.iconWrapper}
-                sx={{ background: theme.palette.common.lightRed }}
-              >
-                <Grid item>
-                  <TrendingUpIcon color="error" className={classes.cardIcon} />
+                    <Grid item>
+                      <TrendingUpIcon color="error" className={classes.cardIcon} />
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography noWrap variant="h2">
+                      <span
+                        style={{
+                          textDecoration: "line-through",
+                          textDecorationStyle: "double",
+                        }}
+                      >
+                        N{""}
+                      </span>
+                      {formatNumber(+totalPayouts)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      style={{
+                        color: theme.palette.common.lightGrey,
+                      }}
+                    >
+                      Total withdrawal
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-
-              <Grid item>
-                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
-                  <span
-                    style={{
-                      textDecoration: "line-through",
-                      textDecorationStyle: "double",
-                    }}
-                  >
-                    N{""}
-                  </span>
-                  {formatNumber(totalPayouts)}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: theme.palette.common.lightGrey,
-                    fontSize: "2.275rem",
-                  }}
-                >
-                  Total withdrawal
-                </Typography>
-              </Grid>
+              {/* second */}
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid
-          item
-          component={Link}
-          to="/finance/earnings"
-          className={classes.parentGrid}
-          style={{ marginRight: "5rem" }}
-          /* onClick={() => setSelectedSubMenu(9)} */
-        >
-          <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
-            <Grid className={classes.iconWrapper}>
-              <TrendingDownIcon color="success" className={classes.cardIcon} />
-            </Grid>
-          </Card>
+
+      {/* iterms */}
+      <Grid item container spacing={2} justifyContent="space-between">
+        {/* 1 */}
+        <Grid item container md={4} sm={4} xs={12}>
+          <Grid item container flexDirection="column">
+            <Link to="/finance/payouts" style={{ textDecoration: "none" }}>
+              <Card title="Payouts Table" background={theme.palette.common.lightRed}>
+                <TrendingUpIcon color="error" className={classes.cardIcon} />
+              </Card>
+            </Link>
+          </Grid>
         </Grid>
-        <Grid
-          item
-          component={Link}
-          to="/finance/payouts"
-          className={classes.parentGrid}
-          style={{ marginRight: "5rem" }}
-          /* onClick={() => setSelectedSubMenu(9)} */
-        >
-          <Card title="Payouts Table" background={theme.palette.common.lightRed}>
-            <TrendingUpIcon color="error" className={classes.cardIcon} />
-          </Card>
+        {/* 2 */}
+        <Grid item container md={4} sm={4} xs={12}>
+          <Grid item container flexDirection="column">
+            <Link to="/finance/earnings" style={{ textDecoration: "none" }}>
+              <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
+                <Grid className={classes.iconWrapper}>
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                </Grid>
+              </Card>
+            </Link>
+          </Grid>
         </Grid>
-        <Grid
-          item
-          component={Link}
-          to="/finance/pending"
-          className={classes.parentGrid}
-          style={{ marginRight: "5rem" }}
-          /* onClick={() => setSelectedSubMenu(10)} */
-        >
-          <Card title="Pending Payout" background={theme.palette.common.lightRed}>
-            <Grid className={classes.iconWrapper}>
-              <TrendingUpIcon color="error" className={classes.cardIcon} />
-            </Grid>
-          </Card>
+        {/* 3 */}
+        <Grid item container md={4} sm={4} xs={12}>
+          <Grid item container flexDirection="column">
+            <Link to="/finance/payout" style={{ textDecoration: "none" }}>
+              <Card title="Payout Table" background={theme.palette.common.lightGreen}>
+                <Grid className={classes.iconWrapper}>
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                </Grid>
+              </Card>
+            </Link>
+          </Grid>
         </Grid>
       </Grid>
-    </Stack>
+    </Grid>
   );
 };
 

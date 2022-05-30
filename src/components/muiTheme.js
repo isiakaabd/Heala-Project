@@ -130,16 +130,14 @@ export const muiTheme = createTheme({
       },
     },
     FormLabel: {
-      fontSize: "1.6rem",
+      fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
     },
     input: {
       width: "100%",
       height: "5rem",
-      // border: "1px solid lightGrey",
-      // borderRadius: ".5rem",
-      padding: "1rem",
-      fontSize: "1.6rem",
+      padding: "clamp(0.5rem, 2vw, 1rem)",
+      fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
       fontWeight: 600,
 
