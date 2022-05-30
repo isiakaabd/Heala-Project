@@ -408,7 +408,7 @@ const CaseNotes = ({ selectedMenu }) => {
         isOpen={isOpen}
         height={{ xs: "90vh" }}
         title="Prescription"
-        width={{ md: "50vw", sm: "50vw", xs: "90vw" }}
+        width={{ md: "50vw", sm: "70vw", xs: "90vw" }}
         rowSpacing={2}
         handleClose={handleDialogClose}
       >
@@ -592,13 +592,6 @@ const CaseNotes = ({ selectedMenu }) => {
 
 CaseNotes.propTypes = {
   selectedMenu: PropTypes.number,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default CaseNotes;

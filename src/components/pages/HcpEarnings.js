@@ -6,7 +6,7 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { CircularProgressBar, Loader, PreviousButton, FormSelect } from "components/Utilities";
+import { CircularProgressBar, Loader, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     width: "100%",
 
-    padding: "2rem 4rem",
+    // padding: "2rem 4rem",
     "&:first-child": {
       borderBottom: ".5px solid #F8F8F8",
     },
@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-// const selectOptions = ["One day", "Five Days", "One Month", "Three Months", "One Year"];
 
 const HcpEarnings = (props) => {
   const classes = useStyles();
@@ -107,14 +106,7 @@ const HcpEarnings = (props) => {
 
   const { hcpId } = useParams();
 
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /*  selectedSubMenu,
-    setSelectedSubMenu,
-    selectedHcpMenu,
-    setSelectedHcpMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
 
   const [form, setForm] = useState("");
   const { data, error, loading, refetch } = useQuery(getEarningStats, {
@@ -157,129 +149,135 @@ const HcpEarnings = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(4); */
 
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
-      </Grid>
-      <Grid container component="div" className={classes.mainContainer}>
-        <Grid item sm container className={classes.flexContainer}>
-          <Grid item>
-            <Typography variant="h5" style={{ fontSize: "3.3rem" }}>
-              Earnings
-            </Typography>
-          </Grid>
-          <Grid item>
-            <FormSelect
-              placeholder="Select days"
-              value={form}
-              onChange={onChange}
-              options={selectOptions}
-              name="finance"
-            />
-          </Grid>
+    <Grid
+      container
+      padding={{ md: "2rem 4rem", sm: "2rem, 4rem", xs: "1rem" }}
+      className={classes.mainContainer}
+      gap={3}
+    >
+      <Grid
+        item
+        flexWrap="nowrap"
+        // flexDirection={{ md: "row", sm: "column", xs: "column" }}
+        container
+        className={classes.flexContainer}
+      >
+        <Grid item flex={1}>
+          <Typography variant="h5" fontSize="clamp(2rem, 2vw, 3.3rem)">
+            Earnings
+          </Typography>
         </Grid>
+        <Grid item>
+          <FormSelect
+            placeholder="Select days"
+            value={form}
+            onChange={onChange}
+            options={selectOptions}
+            name="finance"
+          />
+        </Grid>
+      </Grid>
 
-        <Grid item container sx={{ padding: "3rem 4rem" }}>
-          <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
-            <Grid item xs={4}>
-              <CircularProgressBar
-                height="17rem"
-                width="17rem"
-                color={theme.palette.common.green}
-                trailColor={theme.palette.common.red}
-                value={finances}
-                strokeWidth={8}
-              />
-            </Grid>
-            <Grid
-              item
-              sm
-              container
-              columnSpacing={2}
-              xs={3}
-              sx={{ justifyContent: "center", alignItems: "center" }}
-            >
-              <Grid
-                className={classes.iconWrapper}
-                sx={{ background: theme.palette.common.lightGreen }}
-              >
-                <Grid item>
-                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+      <Grid
+        item
+        container
+        rowGap={4}
+        flexDirection={{ md: "row", sm: "row", xs: "column" }}
+        sx={{ alignItems: "center", justifyContent: "space-between" }}
+      >
+        <Grid item>
+          <CircularProgressBar
+            height="17rem"
+            width="17rem"
+            color={theme.palette.common.green}
+            trailColor={theme.palette.common.red}
+            value={finances}
+            strokeWidth={8}
+          />
+        </Grid>
+        <Grid item flex={1}>
+          <Grid
+            container
+            alignItems="center"
+            rowGap={4}
+            justifyContent={{ md: "space-around", xs: "flex-start", sm: "space-around" }}
+          >
+            <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+              <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                <Grid
+                  className={classes.iconWrapper}
+                  sx={{ background: theme.palette.common.lightGreen }}
+                >
+                  <Grid item>
+                    <TrendingDownIcon color="success" className={classes.cardIcon} />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
-                  <span
+                <Grid item>
+                  <Typography noWrap variant="h2">
+                    <span
+                      style={{
+                        textDecoration: "line-through",
+                        textDecorationStyle: "double",
+                      }}
+                    >
+                      N{""}
+                    </span>
+                    {formatNumber(+x)}
+                  </Typography>
+                  <Typography
+                    variant="body2"
                     style={{
-                      textDecoration: "line-through",
-                      textDecorationStyle: "double",
+                      color: theme.palette.common.lightGrey,
                     }}
                   >
-                    N{""}
-                  </span>
-                  {formatNumber(+x)}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: theme.palette.common.lightGrey,
-                    fontSize: "2.275rem",
-                  }}
-                >
-                  Total earnings
-                </Typography>
+                    Total earnings
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
             {/* second */}
-            <Grid
-              item
-              sm
-              container
-              columnSpacing={2}
-              xs={3}
-              sx={{ justifyContent: "center", alignItems: "center" }}
-            >
-              <Grid
-                className={classes.iconWrapper}
-                sx={{ background: theme.palette.common.lightRed }}
-              >
-                <Grid item>
-                  <TrendingUpIcon color="error" className={classes.cardIcon} />
+            <Grid item>
+              <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                <Grid
+                  className={classes.iconWrapper}
+                  sx={{ background: theme.palette.common.lightRed }}
+                >
+                  <Grid item>
+                    <TrendingUpIcon color="error" className={classes.cardIcon} />
+                  </Grid>
                 </Grid>
-              </Grid>
-
-              <Grid item>
-                <Typography noWrap variant="h2" style={{ fontSize: "3.9rem" }}>
-                  <span
+                <Grid item>
+                  <Typography noWrap variant="h2">
+                    <span
+                      style={{
+                        textDecoration: "line-through",
+                        textDecorationStyle: "double",
+                      }}
+                    >
+                      N{""}
+                    </span>
+                    {formatNumber(+totalPayouts)}
+                  </Typography>
+                  <Typography
+                    variant="body2"
                     style={{
-                      textDecoration: "line-through",
-                      textDecorationStyle: "double",
+                      color: theme.palette.common.lightGrey,
+                      // fontSize: "clamp(2,3vw,2.275rem)",
                     }}
                   >
-                    N{""}
-                  </span>
-                  {formatNumber(totalPayouts)}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  style={{
-                    color: theme.palette.common.lightGrey,
-                    fontSize: "2.275rem",
-                  }}
-                >
-                  Total withdrawal
-                </Typography>
+                    Total withdrawal
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
+            {/* second */}
           </Grid>
         </Grid>
       </Grid>
@@ -290,10 +288,6 @@ const HcpEarnings = (props) => {
 HcpEarnings.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpEarnings;

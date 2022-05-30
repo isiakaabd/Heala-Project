@@ -1,28 +1,26 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
-import { Chip, Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { IoCopy } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { doctor } from "components/graphQL/useQuery";
-import { Loader, PreviousButton, DisplayProfile } from "components/Utilities";
+import { Loader, DisplayProfile, ProfileCard } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
     background: "#fff",
     borderRadius: "1rem",
-    padding: "4rem",
+    padding: "1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
   badge: {
     "&.MuiChip-root": {
-      fontSize: "1.3rem",
+      fontSize: "1.3rem !important",
       //   height: "2.7rem",
       background: theme.palette.common.lightGreen,
       color: theme.palette.common.green,
@@ -34,27 +32,8 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "4rem 5rem",
-    width: "100%",
+    height: "16.1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
-  },
-
-  infoBadge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem",
-      borderRadius: "1.5rem",
-      color: theme.palette.common.green,
-    },
-  },
-
-  link: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: "1.25rem",
-    color: theme.palette.common.green,
-    border: `1px solid ${theme.palette.common.lightGrey}`,
-    padding: ".75rem",
-    borderRadius: "1.5rem",
-    textDecoration: "none",
   },
 
   linkIcon: {
@@ -64,30 +43,19 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "1.2rem",
     },
   },
-
-  locationIcon: {
-    "&.MuiSvgIcon-root": {
-      fontSize: "2rem",
-    },
+  link: {
+    textDecoration: "none",
+    color: theme.palette.common.green,
+    cursor: "pointer",
   },
 
   buttonsGridWrapper: {
-    marginTop: "5rem !important",
     height: "16.1rem",
   },
 }));
 
 const HcpProfile = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    chatMediaActive,
-    setChatMediaActive,
-    /* selectedSubMenu,
-    setSelectedSubMenu,
-    selectedHcpMenu,
-    setSelectedHcpMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu, chatMediaActive, setChatMediaActive } = props;
   const classes = useStyles();
 
   const { hcpId } = useParams();
@@ -109,11 +77,9 @@ const HcpProfile = (props) => {
   useLayoutEffect(() => {
     setSelectedMenu(2);
     setChatMediaActive(false);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(1); */
 
     // eslint-disable-next-line
-  }, [selectedMenu, /*  selectedHcpMenu, selectedSubMenu, */ chatMediaActive]);
+  }, [selectedMenu, chatMediaActive]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -130,12 +96,9 @@ const HcpProfile = (props) => {
     dob,
   } = doctorProfile;
   return (
-    <Grid container direction="column" gap={3} width="100%">
-      <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
-      </Grid>
+    <Grid container direction="column" gap={4}>
       {/* Display photo and profile name grid */}
-      <Grid item container>
+      <Grid item>
         <DisplayProfile
           fullName={`${firstName} ${lastName}`}
           displayPhoto={picture}
@@ -144,132 +107,65 @@ const HcpProfile = (props) => {
           specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
-          /* setSelectedSubMenu={setSelectedSubMenu} */
           selectedMenu={selectedMenu}
           type="doctor"
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
-      <Grid item container justifyContent="space-between" gap={5} sx={{ width: "100%" }}>
-        {/* GENDER GRID */}
-        <Grid item md className={classes.cardGrid}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Gender</Typography>
-            </Grid>
-            <Grid item>
-              <Chip variant="outlined" label={gender} className={classes.infoBadge} />
-            </Grid>
-          </Grid>
+      <Grid item container spacing={4} justifyContent="space-between">
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard
+            text="Gender"
+            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
+          />
         </Grid>
-        {/* DATE OF BIRTH GRID */}
-        <Grid item md className={classes.cardGrid}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Date of Birth</Typography>
-            </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={dob ? dateMoment(dob) : <span>DOB not Provided</span>}
-                className={classes.infoBadge}
-              />
-            </Grid>
-          </Grid>
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard text="Date Of Birth" value={dob ? dateMoment(dob) : "DOB not Provided"} />
         </Grid>
-      </Grid>
-      <Grid item container justifyContent="space-between" gap={5}>
-        {/* EMAIL ADDRESS GRID */}
-        <Grid item md className={classes.cardGrid}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Email Address</Typography>
-            </Grid>
-            <Grid item>
-              {email ? (
+
+        <Grid item container md={6} sm={6} xs={12} mx="auto">
+          <ProfileCard
+            text="Email Address"
+            value={
+              email ? (
                 <a href={`mailto:${email}`} className={classes.link}>
-                  <span>{email}</span>
-                  <ArrowForwardIosIcon className={classes.linkIcon} />
+                  {email}
                 </a>
               ) : (
-                <span className={classes.link}>No Email Address</span>
-              )}
-            </Grid>
-          </Grid>
+                "NO Email Provided"
+              )
+            }
+          />
         </Grid>
-        {/* PhONE NUMBER GRID */}
-        <Grid item md className={classes.cardGrid}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Phone Number</Typography>
-            </Grid>
-            <Grid item>
-              {phoneNumber ? (
-                <a href={phoneNumber} className={classes.link}>
-                  <span>{phoneNumber} </span>
-                  <IoCopy
-                    className={classes.linkIcon}
-                    size={12.5}
-                    style={{ marginLeft: "1.2rem" }}
-                  />
+        <Grid item container md={6} sm={6} xs={12}>
+          <ProfileCard
+            text="Phone Number"
+            value={
+              phoneNumber ? (
+                <a href={`tel:+234${phoneNumber}`} className={classes.link}>
+                  {phoneNumber}
                 </a>
               ) : (
-                <span className={classes.link}>No Phone Number</span>
-              )}
-            </Grid>
-          </Grid>
+                "No Phone Number"
+              )
+            }
+          />
         </Grid>
-      </Grid>
-      <Grid item container justifyContent="space-between">
-        {/* HOSPITAL GRID */}
-        <Grid item md className={classes.cardGrid}>
-          <Grid
-            container
-            direction="column"
-            style={{ height: "100%" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4">Hospital</Typography>
-            </Grid>
-            <Grid item>
-              {hospital ? (
+        <Grid item container md={12} sm={12} xs={12}>
+          <ProfileCard
+            text="Hospital"
+            value={
+              hospital ? (
                 <a href={email} className={classes.link}>
                   <span>{hospital}</span>
                   <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
                 </a>
               ) : (
-                <span className={classes.link}>No Hospital attached</span>
-              )}
-            </Grid>
-          </Grid>
+                "No Hospital attached"
+              )
+            }
+          />
         </Grid>
-        {/* PLACEHOLDER GRID */}
       </Grid>
     </Grid>
   );
@@ -280,10 +176,6 @@ HcpProfile.propTypes = {
   setSelectedMenu: PropTypes.func,
   chatMediaActive: PropTypes.bool,
   setChatMediaActive: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpProfile;
