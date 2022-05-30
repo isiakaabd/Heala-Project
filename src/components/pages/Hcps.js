@@ -135,7 +135,6 @@ const Hcps = () => {
                 });
               }
             }}
-            // debouncer
             // onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
             height="5rem"
@@ -388,6 +387,7 @@ const Hcps = () => {
         title="Add Doctor"
         rowSpacing={5}
         height="auto"
+        width={{ sm: "50vw", xs: "100vw" }}
         handleClose={() => setOpenAddHcp(false)}
       >
         <Formik
@@ -403,108 +403,99 @@ const Hcps = () => {
               <Form style={{ marginTop: "1rem" }}>
                 <Grid container direction="column" gap={2}>
                   <Grid item container direction="column" gap={1}>
-                    <Grid item container>
-                      <Grid container spacing={2}>
-                        <Grid item md>
-                          <FormikControl
-                            control="input"
-                            label="First Name"
-                            id="firstName"
-                            name="firstName"
-                            placeholder="Enter first name"
-                          />
-                        </Grid>
-                        <Grid item md>
-                          <FormikControl
-                            control="input"
-                            label="Last Name"
-                            id="lastName"
-                            name="lastName"
-                            placeholder="Enter last name"
-                          />
-                        </Grid>
+                    <Grid item container spacing={2}>
+                      <Grid item container xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="First Name"
+                          id="firstName"
+                          name="firstName"
+                          placeholder="Enter first name"
+                        />
+                      </Grid>
+                      <Grid item container xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="Last Name"
+                          id="lastName"
+                          name="lastName"
+                          placeholder="Enter last name"
+                        />
                       </Grid>
                     </Grid>
                     <Grid item container direction="column" gap={2}>
-                      <Grid item container>
-                        <Grid container spacing={2}>
-                          <Grid item md>
+                      <Grid item container spacing={2}>
+                        <Grid item xs={6}>
+                          <FormikControl
+                            control="date"
+                            name="dob"
+                            label="DOB"
+                            setFieldValue={setFieldValue}
+                            setValues={setValues}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Grid container direction="column">
                             <FormikControl
-                              control="date"
-                              name="dob"
-                              label="DOB"
-                              setFieldValue={setFieldValue}
-                              setValues={setValues}
+                              control="select"
+                              options={docSpecializationsOptions}
+                              name="specialization"
+                              label="Specialization"
+                              placeholder="Specialization"
                             />
-                          </Grid>
-                          <Grid item md>
-                            <Grid container direction="column">
-                              <FormikControl
-                                control="select"
-                                options={docSpecializationsOptions}
-                                name="specialization"
-                                label="Specialization"
-                                placeholder="Specialization"
-                              />
-                            </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item container direction="column" gap={2}>
-                    <Grid item container>
-                      <Grid container spacing={2}>
-                        <Grid item md>
-                          <FormikControl
-                            control="select"
-                            label="Gender"
-                            id="gender"
-                            name="gender"
-                            options={genderType}
-                            placeholder="Gender"
-                          />
-                        </Grid>
-                        <Grid item md>
-                          <FormikControl
-                            control="input"
-                            label="Phone Number"
-                            id="phone"
-                            name="phone"
-                            placeholder="Enter last Phone number"
-                          />
-                        </Grid>
+                    <Grid item container spacing={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="select"
+                          label="Gender"
+                          id="gender"
+                          name="gender"
+                          options={genderType}
+                          placeholder="Gender"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="Phone Number"
+                          id="phone"
+                          name="phone"
+                          placeholder="Enter last Phone number"
+                        />
                       </Grid>
                     </Grid>
+
                     <Grid item container direction="column" gap={2}>
-                      <Grid item container>
-                        <Grid container spacing={2}>
-                          <Grid item md>
-                            <FormikControl
-                              control="input"
-                              label="Hospital"
-                              id="hospital"
-                              name="hospital"
-                              placeholder="Enter hospital Name"
-                            />
-                          </Grid>
-                          <Grid item md>
-                            <Grid container direction="column">
-                              <FormikControl
-                                control="select"
-                                options={docCadreOptions}
-                                name="cadre"
-                                label="Cadre"
-                                placeholder="Select Cadre"
-                              />
-                            </Grid>
-                          </Grid>
+                      <Grid item container spacing={2}>
+                        <Grid item xs={6}>
+                          <FormikControl
+                            control="input"
+                            label="Hospital"
+                            id="hospital"
+                            name="hospital"
+                            placeholder="Enter hospital Name"
+                          />
+                        </Grid>
+                        <Grid item xs={6} marginBottom={{ xs: 1 }}>
+                          <FormikControl
+                            control="select"
+                            options={docCadreOptions}
+                            name="cadre"
+                            label="Cadre"
+                            placeholder="Select Cadre"
+                          />
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item container spacing={2} alignItems="center">
-                    <Grid item container md>
+                    <Grid item xs={6}>
                       <FormikControl
                         control="file"
                         name="image"
@@ -512,7 +503,7 @@ const Hcps = () => {
                         setFieldValue={setFieldValue}
                       />
                     </Grid>
-                    <Grid item md>
+                    <Grid item xs={6}>
                       <FormikControl
                         control="input"
                         label="Heala-ID"
