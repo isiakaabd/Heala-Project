@@ -157,7 +157,7 @@ const DashboardCharts = ({ data, refetch }) => {
       display="grid"
       padding=".2rem" //repeat(auto-fit, minmax(250px, 1fr));
       gridTemplateColumns={{ sm: "repeat(2,1fr)", md: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
-      spacing={3}
+      rowSpacing={3}
     >
       {/* doctor */}
       <Grid item container className={classes.chartCard}>
@@ -458,7 +458,7 @@ const DashboardCharts = ({ data, refetch }) => {
       </Grid>
 
       {/* financial */}
-      <Grid item container direction="column" className={classes.chartCard}>
+      <Grid item direction="column" className={classes.chartCard}>
         <Grid item container rowGap={{ sm: 6, xs: 0 }} flexDirection={{ xs: "column" }}>
           <Grid
             container
@@ -468,12 +468,7 @@ const DashboardCharts = ({ data, refetch }) => {
             flexWrap={"nowrap"}
           >
             <Grid item flex={1}>
-              <Typography
-                variant="h5"
-                // style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Financial Stats
-              </Typography>
+              <Typography variant="h5">Financial Stats</Typography>
             </Grid>
             <Grid item>
               <FormSelect
@@ -489,12 +484,16 @@ const DashboardCharts = ({ data, refetch }) => {
           <Grid
             item
             container
-            sx={{ justifySelf: "center" }}
+            justifySelf={{ xs: "center", md: "space-between" }}
             justifyContent="space-between"
+            flexWrap={{ sm: "nowrap" }}
+            flexDirection={{ xs: "column", sm: "column", md: "row" }}
             alignItems="center"
+            rowGap={{ xs: "2rem" }}
+            paddingY={{ xs: "1rem" }}
             className={classes.overviewGrid}
           >
-            <Grid item>
+            <Grid item marginRight={{ sm: "2rem", md: "2rem" }}>
               <CircularProgressBar
                 height="8rem"
                 width="8rem"
@@ -504,8 +503,8 @@ const DashboardCharts = ({ data, refetch }) => {
                 strokeWidth={8}
               />
             </Grid>
-            <Grid item>
-              <Grid container gap={2} alignItems="center">
+            <Grid item container flexWrap="nowrap" flexDirection={{ xs: "row" }}>
+              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center">
                 <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
                   <TrendingDownIcon color="success" />
                 </Grid>
@@ -537,9 +536,8 @@ const DashboardCharts = ({ data, refetch }) => {
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container gap={2} alignItems="center">
+
+              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center">
                 <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
                   <TrendingUpIcon color="error" />
                 </Grid>
@@ -575,8 +573,7 @@ const DashboardCharts = ({ data, refetch }) => {
           </Grid>
 
           <Grid container flex={{ sm: 1 }} direction="column" className={classes.chartCard}>
-            {/* <Divider color={theme.palette.common.lightGrey} /> */}
-            <Grid item className={classes.headerGrid}>
+            <Grid item>
               <Typography variant="h5">Appointment Stats</Typography>
             </Grid>
 

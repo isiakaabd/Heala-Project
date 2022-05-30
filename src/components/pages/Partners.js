@@ -210,14 +210,7 @@ const Partners = () => {
         <Grid item className={classes.actionBtnGrid}>
           <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
         </Grid>
-        {/* <Grid item className={classes.actionBtnGrid}>
-          <CustomButton
-            endIcon={<PersonAddAlt1Icon />}
-            title="Add  Partner Category"
-            type={redButton}
-            onClick={() => setAddPartnerCategory(true)}
-          />
-        </Grid> */}
+
         <Grid item>
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}

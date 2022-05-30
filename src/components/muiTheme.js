@@ -64,7 +64,7 @@ export const muiTheme = createTheme({
       fontWeight: 600,
     },
     h3: {
-      fontSize: "2.25rem",
+      fontSize: "clamp(1.8rem, 2vw,2.25rem)",
       fontWeight: 500,
     },
     h4: {
@@ -83,7 +83,7 @@ export const muiTheme = createTheme({
       color: dark,
     },
     body2: {
-      fontSize: "1.4rem",
+      fontSize: "clamp(1.2rem,2vw, 1.4rem)",
       fontWeight: 500,
       lineHeight: 1.85,
     },
@@ -140,7 +140,6 @@ export const muiTheme = createTheme({
       fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
       fontWeight: 600,
-
       "&::placeholder": {
         color: lightGrey,
         fontWeight: "500 !important",
