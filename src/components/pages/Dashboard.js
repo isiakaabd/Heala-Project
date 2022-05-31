@@ -59,12 +59,10 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
       </Grid>
       {data ? (
         <>
-          <Grid item>
-            <DashboardCharts data={data} refetch={refetch} />
-          </Grid>
-          <Grid item>
-            <AvailabilityTable data={data?.getStats.availabilityCalendar} />
-          </Grid>
+          {/* <Grid item container sx={{ overflow: "hidden" }}> */}
+          <DashboardCharts data={data} refetch={refetch} />
+          {/* </Grid> */}
+          <Grid item>{/* <AvailabilityTable data={data?.getStats.availabilityCalendar} /> */}</Grid>
         </>
       ) : (
         <EmptyTable />
