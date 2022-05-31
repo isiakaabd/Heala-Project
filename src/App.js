@@ -80,7 +80,7 @@ const App = ({ window }) => {
                 <Box
                   component="nav"
                   sx={{ width: { md: "300px" }, flexShrink: { md: 0 } }}
-                  aria-label="mailbox foldersssss"
+                  aria-label="sidebar_menu"
                 >
                   <Drawer
                     container={container}
@@ -119,7 +119,7 @@ const App = ({ window }) => {
                 </Box>
                 <Box
                   component="main"
-                  sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                  sx={{ flex: 1, p: 3, width: { xs: `calc(100% - ${drawerWidth}px)` } }}
                 >
                   <Toolbar />
 

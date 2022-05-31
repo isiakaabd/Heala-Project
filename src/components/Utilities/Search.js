@@ -35,7 +35,7 @@ const SearchContainer = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          width,
+          width: width ? width : "100%",
           height,
           fontSize: "16px",
           placeholderWidth,
