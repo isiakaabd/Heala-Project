@@ -129,15 +129,15 @@ export const financeHeader = [
     id: 1,
     label: "Time",
   },
-  {
-    id: 2,
-    label: "Name",
-  },
+  // {
+  //   id: 2,
+  //   label: "Name",
+  // },
 
-  {
-    id: 3,
-    label: "Specialization",
-  },
+  // {
+  //   id: 3,
+  //   label: "Specialization",
+  // },
   {
     id: 4,
     label: "Amount",
@@ -211,15 +211,15 @@ export const payoutHeader = [
     id: 1,
     label: "Time",
   },
-  {
-    id: 2,
-    label: " Name",
-  },
+  // {
+  //   id: 2,
+  //   label: " Name",
+  // },
 
-  {
-    id: 3,
-    label: "Specialization",
-  },
+  // {
+  //   id: 3,
+  //   label: "Specialization",
+  // },
   {
     id: 4,
     label: "Amount Paid out",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { CustomButton, FilterList, Modals, PreviousButton, Loader } from "components/Utilities";
+import { CustomButton, FilterList, Modals, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import PropTypes from "prop-types";
@@ -103,14 +103,7 @@ const filterOptions = [
 
 const PatientAppointment = (props) => {
   const [updateAppoint] = useMutation(updateAppointment);
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /*  selectedSubMenu,
-    setSelectedSubMenu,
-    selectedPatientMenu,
-    setSelectedPatientMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
   const [pageInfo, setPageInfo] = useState([]);
   const [alert, setAlert] = useState(null);
@@ -219,9 +212,6 @@ const PatientAppointment = (props) => {
     handlePatientCloses();
   };
   const onSubmit = (values) => {
-    // const { date } = values;
-    // let d = timeConverter(date);
-
     console.log(values);
   };
 
@@ -249,10 +239,9 @@ const PatientAppointment = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    /* setSelectedSubMenu(2);
-    setSelectedPatientMenu(2); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
+  }, [selectedMenu]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -297,25 +286,13 @@ const PatientAppointment = (props) => {
         </Alert>
       )}
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item>
-          <PreviousButton
-            path={`/patients/${patientId}`}
-            /* onClick={() => setSelectedPatientMenu(0)} */
-          />
-        </Grid>
-
         <>
-          <Grid item container justifyContent="space-between" alignItems="center">
-            <Grid item>
+          <Grid item container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
+            <Grid item flex={1}>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
             <Grid item>
-              <FilterList
-                onClick={handlePatientOpen}
-                options={filterOptions}
-                title="Filter Appointments"
-                width="18.7rem"
-              />
+              <FilterList onClick={handlePatientOpen} options={filterOptions} title="Filter" />
             </Grid>
           </Grid>
           {patientAppointment.length > 0 ? (

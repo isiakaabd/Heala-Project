@@ -64,7 +64,7 @@ export const muiTheme = createTheme({
       fontWeight: 600,
     },
     h3: {
-      fontSize: "2.25rem",
+      fontSize: "clamp(1.8rem, 2vw,2.25rem)",
       fontWeight: 500,
     },
     h4: {
@@ -83,7 +83,7 @@ export const muiTheme = createTheme({
       color: dark,
     },
     body2: {
-      fontSize: "1.4rem",
+      fontSize: "clamp(1.2rem,2vw, 1.4rem)",
       fontWeight: 500,
       lineHeight: 1.85,
     },
@@ -130,21 +130,19 @@ export const muiTheme = createTheme({
       },
     },
     FormLabel: {
-      fontSize: "1.6rem",
+      fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
     },
     input: {
       width: "100%",
       height: "5rem",
-      // border: "1px solid lightGrey",
-      // borderRadius: ".5rem",
-      padding: "1rem",
-      fontSize: "1.6rem",
+      padding: "clamp(0.3rem, 2vw, 1rem)",
+      fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
       fontWeight: 600,
-
       "&::placeholder": {
         color: lightGrey,
+        // fontSize: "clamp(1.2rem,2vw,1.6rem)",
         fontWeight: "500 !important",
       },
     },

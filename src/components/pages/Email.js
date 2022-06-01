@@ -8,7 +8,7 @@ import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import Filter from "components/Forms/Filters";
+// import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import { useTheme } from "@mui/material/styles";
 import { dateMoment } from "components/Utilities/Time";
@@ -16,23 +16,12 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
-import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-import { onFilterValueChange } from "helpers/filterHelperFunctions";
+// import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
+// import { onFilterValueChange } from "helpers/filterHelperFunctions";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { emailPageDefaultFilterValues, roleFilterBy } from "helpers/mockData";
-
+// import { emailPageDefaultFilterValues } from "helpers/mockData";
+//roleFilterBy
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
   chip: {
     "&.MuiChip-root": {
       fontSize: "1.25rem",
@@ -95,10 +84,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
+const Email = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [fetchEmails, { loading, error, data, refetch, variables }] = useLazyQuery(getEmailList);
+  const [
+    fetchEmails,
+    {
+      loading,
+      error,
+      data,
+      // refetch, variables
+    },
+  ] = useLazyQuery(getEmailList);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
@@ -124,17 +121,17 @@ const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSu
 
   useEffect(() => {
     setSelectedMenu(6);
-    /* setSelectedSubMenu(0); */
-    //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
 
-  const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
+    //   eslint-disable-next-line
+  }, [selectedMenu]);
+
+  // const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
   return (
     <>
-      <Grid container direction="column" height="100%" flexWrap="nowrap">
+      <Grid container direction="column" height="100%" flexWrap="nowrap" gap={2}>
         {response ? (
           <Grid
             item
@@ -149,8 +146,8 @@ const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSu
             </Alert>
           </Grid>
         ) : null}
-        <Grid item container style={{ paddingBottom: "5rem" }}>
-          <Grid item className={classes.searchGrid}>
+        <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
+          <Grid item flex={1}>
             <Search
               value={searchMail}
               onChange={(e) => setSearchMail(e.target.value)}
@@ -158,7 +155,7 @@ const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSu
               height="5rem"
             />
           </Grid>
-          <Grid item className={classes.filterBtnGrid}>
+          {/*<Grid item>
             <Filter
               onHandleChange={(e) =>
                 onFilterValueChange(
@@ -177,13 +174,13 @@ const Email = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSu
               value={filterValues.role}
             />
           </Grid>
-          <Grid item className={classes.filterBtnGrid}>
+         <Grid item>
             <CustomButton
               endIcon={<DownloadSharpIcon />}
               title="Download Email"
               type={buttonType}
             />
-          </Grid>
+          </Grid> */}
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}

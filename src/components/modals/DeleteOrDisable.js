@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
 
       "&:hover": {
+        cursor: "pointer",
         color: theme.palette.common.lightGreen,
       },
     },
@@ -25,13 +26,10 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "auto",
-  minWidth: "40rem",
   height: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: "1rem",
-  padding: "3rem",
 };
 
 const DeleteOrDisable = ({
@@ -73,12 +71,16 @@ const DeleteOrDisable = ({
       }}
     >
       <Fade in={open}>
-        <Box sx={style}>
+        <Box
+          sx={style}
+          width={{ md: "30vw", sm: "30vw", xs: "80vw" }}
+          padding={{ sm: 2, xs: 2, md: 4 }}
+        >
           <Grid container direction="column" alignItems="center" justifyContent="center">
             <Grid item alignSelf="flex-end">
               <CloseIcon
                 color="primary"
-                fontSize="medium"
+                fontSize="large"
                 className={classes.closeIcon}
                 onClick={() => setOpen(false)}
               />
@@ -97,16 +99,19 @@ const DeleteOrDisable = ({
               <Typography variant="h2">{title}</Typography>
             </Grid>
             <Grid item style={{ marginBottom: "2rem" }}>
-              <Typography variant="body1">{`Are you sure you want to ${confirmationMsg}?`}</Typography>
+              <Typography
+                textAlign="center"
+                variant="body1"
+              >{`Are you sure you want to ${confirmationMsg}?`}</Typography>
             </Grid>
             <Grid
               item
               container
               justifyContent="space-between"
-              gap={3}
+              rowGap={3}
               sx={{ justifyContent: "space-between" }}
             >
-              <Grid item md>
+              <Grid item columms={{ md: 4, sm: 4, xs: 3 }}>
                 <CustomButton
                   title="Discard"
                   textColor={theme.palette.common.black}
@@ -115,7 +120,7 @@ const DeleteOrDisable = ({
                   onClick={() => setOpen(false)}
                 />
               </Grid>
-              <Grid item md>
+              <Grid item columms={{ md: 4, sm: 4, xs: 3 }}>
                 <CustomButton
                   title={`Yes, ${btnValue}`}
                   type={disableButton}

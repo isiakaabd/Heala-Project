@@ -21,17 +21,6 @@ import { getMessage } from "components/graphQL/useQuery";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  actionBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "1.5rem",
-    },
-  },
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -155,16 +144,21 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
 
   useEffect(() => {
     setSelectedMenu(5);
-    /* setSelectedSubMenu(0); */
     //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
+  }, [selectedMenu]);
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
     return (
-      <Grid containerdirection="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item container style={{ paddingBottom: "5rem" }}>
-          <Grid item className={classes.searchGrid}>
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+        <Grid
+          item
+          gap={{ md: 4, sm: 4, xs: 2 }}
+          direction={{ sm: "row", xs: "column" }}
+          container
+          justifyContent="space-between"
+        >
+          <Grid item flex={1}>
             <Search
               value={searchMessage}
               onChange={(e) => onChange(e.target.value)}
@@ -180,7 +174,6 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
               type={greenButtonType}
               component={Link}
               to="/messages/create-message"
-              /* onClick={() => setSelectedSubMenu(6)} */
             />
           </Grid>
         </Grid>
