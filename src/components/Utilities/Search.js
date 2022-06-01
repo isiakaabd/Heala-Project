@@ -1,9 +1,9 @@
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import PropTypes from "prop-types";
-import { InputAdornment, OutlinedInput } from "@mui/material";
+import { InputAdornment, OutlinedInput, Grid } from "@mui/material";
 
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 const SearchContainer = ({
   width,
   placeholder,
@@ -15,17 +15,8 @@ const SearchContainer = ({
   hasStartIcon = true,
   ...rest
 }) => {
-  const useStyles = makeStyles({
-    //   root: {
-    //     "& .css-1u99e1o-MuiInputBase-root-MuiOutlinedInput-root": {
-    //       fontSize: "1.6rem",
-    //     },
-    //   },
-  });
-
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <Grid container>
       <OutlinedInput
         id="input-with-icon-adornment"
         value={value}
@@ -35,8 +26,8 @@ const SearchContainer = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          width: width ? width : "100%",
           height,
+          width: "100%",
           fontSize: "16px",
           placeholderWidth,
           background: "white",
@@ -53,7 +44,7 @@ const SearchContainer = ({
         }
         autoFocus
       />
-    </div>
+    </Grid>
   );
 };
 SearchContainer.propTypes = {

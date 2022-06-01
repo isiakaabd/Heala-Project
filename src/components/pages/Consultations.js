@@ -103,12 +103,12 @@ const Consultations = (props) => {
 
   return (
     <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
-      <Grid item container justifyContent="space-between" alignItems="center">
-        <Grid item>
+      <Grid item container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
+        <Grid item flex={1}>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
         <Grid item>
-          <FilterList options={filterOptions} title="Filter consultations" width="18.7rem" />
+          <FilterList options={filterOptions} title="Filter" />
         </Grid>
       </Grid>
       {consultations.length > 0 ? (

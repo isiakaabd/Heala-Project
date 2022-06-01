@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Avatar, TableCell, TableRow, Checkbox } from "@mui/material";
+import { Grid, Typography, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
+// import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import { PreviousButton, Loader } from "components/Utilities";
+import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getEarningData } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: "#fff",
@@ -78,10 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const Financetable = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -108,21 +99,17 @@ const Financetable = ({
 
   useEffect(() => {
     setSelectedMenu(8);
-    /* setSelectedSubMenu(9); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} height="100%">
-      <Grid item>
-        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
-      </Grid>
-
       <>
         <Grid item container gap={1} alignItems="center">
-          <Grid item>
+          <Grid item flex={1}>
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
               Earnings table
             </Typography>
@@ -144,8 +131,8 @@ const Financetable = ({
               dataPageInfo={pageInfo}
             >
               {earning.map((row, index) => {
-                const { doctorData, createdAt, balance } = row;
-                const { firstName, picture, lastName, specialization } = doctorData[0];
+                const { createdAt, balance } = row;
+                // const { firstName, picture, lastName, specialization } = doctorData[0];
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -186,7 +173,7 @@ const Financetable = ({
                     >
                       {timeMoment(createdAt)}
                     </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
+                    {/* <TableCell align="left" className={classes.tableCell}>
                       <div
                         style={{
                           height: "100%",
@@ -208,7 +195,7 @@ const Financetable = ({
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       {specialization ? specialization : "No Value"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       align="left"
                       className={classes.tableCell}

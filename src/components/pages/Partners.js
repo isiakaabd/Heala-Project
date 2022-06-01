@@ -177,18 +177,6 @@ const Partners = () => {
     if (data) {
       setPartners(data.getPartners.data);
     }
-    // try {
-    //   if (categoryData && categoryData.data) {
-    //     const value = categoryData.data.getPartnerCategories.data;
-    //     setCategoryDatas(
-    //       value.map((i) => {
-    //         return { key: i, value: i };
-    //       }),
-    //     );
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
   }, [data, categoryData, setCategoryDatas]);
 
   const { selectedRows, page } = useSelector((state) => state.tables);
@@ -197,9 +185,9 @@ const Partners = () => {
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
   if (loading || load) return <Loader />;
   return (
-    <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container style={{ paddingBottom: "5rem" }}>
-        <Grid item className={classes.searchGrid} gap={2}>
+    <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
+      <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
+        <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
           <Search
             value={searchPartner}
             onChange={(e) => onChange(e.target.value)}
@@ -207,17 +195,19 @@ const Partners = () => {
             height="5rem"
           />
         </Grid>
-        <Grid item className={classes.actionBtnGrid}>
-          <FilterList title="Filter Patners" onClick={() => setOpenFilterPartner(true)} />
-        </Grid>
+        <Grid item container justifyContent="space-between" flex={{ sm: 1, xs: 1, md: 1 }}>
+          <Grid item>
+            <FilterList title="Filter" onClick={() => setOpenFilterPartner(true)} />
+          </Grid>
 
-        <Grid item>
-          <CustomButton
-            endIcon={<PersonAddAlt1Icon />}
-            title="Add New Partner"
-            type={darkButtonType}
-            onClick={() => setOpenAddPartner(true)}
-          />
+          <Grid item>
+            <CustomButton
+              endIcon={<PersonAddAlt1Icon />}
+              title="Add  Partner"
+              type={darkButtonType}
+              onClick={() => setOpenAddPartner(true)}
+            />
+          </Grid>
         </Grid>
       </Grid>
       {partner.length > 0 ? (
@@ -311,6 +301,7 @@ const Partners = () => {
         isOpen={openFilterPartner}
         title="Filter"
         rowSpacing={5}
+        width={{ sm: "40vw", xs: "90vw", md: "40vw" }}
         handleClose={() => setOpenFilterPartner(false)}
       >
         <Formik
@@ -327,7 +318,7 @@ const Partners = () => {
                 <Grid item container direction="column" gap={3}>
                   <Grid item marginBottom={3}>
                     <Grid container spacing={2}>
-                      <Grid item md>
+                      <Grid item xs={6}>
                         <FormikControl
                           control="input"
                           name="Name"
@@ -335,7 +326,7 @@ const Partners = () => {
                           placeholder="Select name"
                         />
                       </Grid>
-                      <Grid item md>
+                      <Grid item xs={6}>
                         <FormikControl
                           control="select"
                           options={specializations}
@@ -348,7 +339,7 @@ const Partners = () => {
                   </Grid>
                 </Grid>
                 <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
-                  <Grid item md>
+                  <Grid item xs={6}>
                     <FormikControl
                       control="select"
                       options={specializations}

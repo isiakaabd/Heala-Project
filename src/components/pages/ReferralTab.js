@@ -28,17 +28,6 @@ import {
 } from "helpers/mockData";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -125,8 +114,8 @@ const ReferralTab = () => {
   return (
     <>
       <Grid container direction="column" height="100%" gap={2} flexWrap="nowrap">
-        <Grid item container>
-          <Grid item className={classes.searchGrid}>
+        <Grid item direction={{ sm: "row", xs: "column" }} gap={{ sm: 4, xs: 2 }} container>
+          <Grid item flex={1}>
             <Search
               value={searchMail}
               onChange={(e) => onChange(e.target.value)}
@@ -156,7 +145,7 @@ const ReferralTab = () => {
         </Grid>
         {loading ? (
           <Loader />
-        ) : referral.length > 0 ? (
+        ) : referral?.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
@@ -180,12 +169,13 @@ const ReferralTab = () => {
                     doctorData,
                     patientData,
                   } = row;
-                  const { firstName, lastName, picture } = doctorData;
-                  const {
-                    firstName: patientName,
-                    lastName: patientLastName,
-                    picture: patientImage,
-                  } = patientData;
+                  console.log(doctorData);
+                  // const { firstName, lastName, picture } = row?.doctorData;
+                  // const {
+                  //   firstName: patientName,
+                  //   lastName: lastName,
+                  //   picture: picture,
+                  // } = patientData;
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
@@ -237,14 +227,18 @@ const ReferralTab = () => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                firstName ? firstName : "placeholder Display Image"
+                                doctorData?.firstName
+                                  ? doctorData.firstName
+                                  : "placeholder Display Image"
                               }`}
-                              src={picture ? picture : displayPhoto}
+                              src={doctorData?.picture ? doctorData?.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {firstName ? `${firstName} ${lastName}` : "No Doctor"}
+                            {doctorData?.firstName
+                              ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                              : "No Doctor"}
                           </span>
                         </div>
                       </TableCell>
@@ -259,14 +253,18 @@ const ReferralTab = () => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`image of ${
-                                patientName ? patientName : "placeholder Display Image"
+                                patientData?.firstName
+                                  ? patientData?.firstName
+                                  : "placeholder Display Image"
                               }`}
-                              src={patientImage ? patientImage : displayPhoto}
+                              src={patientData?.picture ? patientData?.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
                           <span style={{ fontSize: "1.25rem" }}>
-                            {patientName ? `${patientName} ${patientLastName}` : "No Patient"}
+                            {patientData?.firstName
+                              ? `${patientData?.firstName} ${patientData?.lastName}`
+                              : "No Patient"}
                           </span>
                         </div>
                       </TableCell>

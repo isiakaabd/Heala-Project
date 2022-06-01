@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Avatar, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
+import { Grid, Typography, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -10,13 +10,12 @@ import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeader } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// import displayPhoto from "assets/images/avatar.svg";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import PreviousButton from "components/Utilities/PreviousButton";
 import Filter from "components/Forms/Filters";
 import { defaultPageInfo, payoutFilterBy, payoutPageDefaultFilterValues } from "helpers/mockData";
 import {
@@ -26,12 +25,6 @@ import {
 } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.css-13i4rnv-MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
   iconWrapper: {
     width: 20,
     height: 20,
@@ -97,10 +90,9 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
 
   useEffect(() => {
     setSelectedMenu(8);
-    /* setSelectedSubMenu(9); */
 
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
+  }, [selectedMenu]);
   const [fetchPayout, { loading, error, data, refetch, variables }] = useLazyQuery(getPayoutData);
 
   useEffect(() => {
@@ -126,25 +118,15 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
 
   return (
     <Grid container direction="column" rowSpacing={2}>
-      <Grid item>
-        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
-      </Grid>
-
       <>
         <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
-          <Grid item container spacing={3}>
-            <Grid item container alignItems="center">
-              <Typography noWrap variant="h1" component="div" color="#2D2F39">
+          <Grid item container spacing={3} alignItems="center">
+            <Grid item flex={1}>
+              <Typography noWrap variant="h1" color="#2D2F39">
                 Payout table
               </Typography>
-              <Grid item className={classes.iconWrapper} marginLeft="1rem">
-                <TrendingUpIcon color="success" className={classes.cardIcon} />
-              </Grid>
             </Grid>
             <Grid item>
-              <Typography noWrap component="div" color="#2D2F39">
-                Filter by
-              </Typography>
               <Filter
                 onHandleChange={(e) =>
                   onFilterValueChange(
@@ -183,7 +165,9 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const { amount, createdAt, doctorData, status, _id } = row;
-                  const { firstName, picture, lastName, specialization } = doctorData[0];
+                  // console.log(row);
+                  console.log(doctorData);
+                  /*   const { firstName, picture, lastName specialization } = doctorData;*/
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -224,7 +208,7 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
                       >
                         {timeMoment(createdAt)}
                       </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
+                      {/* <TableCell align="left" className={classes.tableCell}>
                         <div
                           style={{
                             height: "100%",
@@ -243,10 +227,10 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
                             {firstName} {lastName}
                           </span>
                         </div>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
+                      </TableCell> */}
+                      {/* <TableCell align="left" className={classes.tableCell}>
                         {specialization}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell
                         align="left"
                         className={classes.tableCell}

@@ -25,17 +25,6 @@ import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
@@ -142,10 +131,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Providers = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu,  setSelectedSubMenu */,
-}) => {
+const Providers = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchProviders, { error, loading, refetch }] = useLazyQuery(getProviders);
@@ -218,8 +204,6 @@ const Providers = ({
   //   openDeletePartner
   useEffect(() => {
     setSelectedMenu(12);
-    /* setSelectedSubMenu(13); */
-
     // eslint-disable-next-line
   }, [selectedMenu /* selectedSubMenu */]);
   const [searchHcp, setSearchHcp] = useState("");
@@ -276,8 +260,8 @@ const Providers = ({
             {alert.message}
           </Alert>
         )}
-        <Grid item container>
-          <Grid item className={classes.searchGrid}>
+        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ md: "row", sm: "column" }}>
+          <Grid item flex={1}>
             <Search
               value={searchHcp}
               placeholder="Type to search Providers by Hospital name e.g Lagoon Hospital"
@@ -285,17 +269,18 @@ const Providers = ({
               height="5rem"
             />
           </Grid>
-          <Grid item className={classes.filterBtnGrid}>
-            <FilterList title="Filter partner" onClick={handleDialogOpens1} />
-            {/* onClick={() => setOpenHcpFilter(true)} */}
-          </Grid>
-          <Grid item>
-            <CustomButton
-              endIcon={<AddIcon />}
-              title="Add new Provider"
-              type={buttonType}
-              onClick={handleDialogOpen}
-            />
+          <Grid item container justifyContent="space-between">
+            <Grid item>
+              <FilterList title="Filter partner" onClick={handleDialogOpens1} />
+            </Grid>
+            <Grid item>
+              <CustomButton
+                endIcon={<AddIcon />}
+                title="Add new Provider"
+                type={buttonType}
+                onClick={handleDialogOpen}
+              />
+            </Grid>
           </Grid>
         </Grid>
         {providers.length > 0 ? (
@@ -401,6 +386,7 @@ const Providers = ({
           type="add"
           setAlert={setAlert}
           editId={editId}
+          setSingleData={setSingleData}
           initialValues={initialValues}
         />
       </Modals>

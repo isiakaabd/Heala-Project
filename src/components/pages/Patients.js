@@ -38,9 +38,7 @@ export const useStyles = makeStyles((theme) => ({
       justifyContent: "space-between",
     },
   },
-  searchGrid: {
-    "&.MuiGrid-root": {},
-  },
+
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -147,7 +145,7 @@ const Patients = () => {
     <Grid item flex={1} container direction="column" rowGap={2}>
       <Grid item container spacing={2} className={classes.searchFilterContainer}>
         {/*  ======= SEARCH INPUT(S) ==========*/}
-        <Grid item flex={1} className={classes.searchGrid} width="100%">
+        <Grid item flex={1} width="100%">
           <Search
             onChange={(e) => {
               let value = e.target.value;

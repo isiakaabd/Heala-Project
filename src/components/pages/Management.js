@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
-import { Loader, Search, CustomButton, PreviousButton, Modals } from "components/Utilities";
+import { Loader, Search, CustomButton, Modals } from "components/Utilities";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -201,18 +201,14 @@ const Management = () => {
   return (
     <>
       <Grid container direction="column" gap={2}>
-        <Grid item>
-          <PreviousButton
-            path="/settings"
-            /* onClick={() => {
-              setSelectedSubMenu(12);
-              setSelectedManagementMenu(0);
-            }} */
-          />
-        </Grid>
         <>
-          <Grid item container>
-            <Grid item className={classes.searchGrid}>
+          <Grid
+            item
+            container
+            direction={{ xs: "column", sm: "row" }}
+            gap={{ md: 4, sm: 4, xs: 2 }}
+          >
+            <Grid item flex={1}>
               <Search
                 value={searchMail}
                 onChange={(e) => onChange(e.target.value)}
