@@ -43,24 +43,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Prescriptions = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    setSelectedSubMenu,
-    selectedPatientMenu,
-    setSelectedPatientMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
 
   const { patientId } = useParams();
 
   useEffect(() => {
     setSelectedMenu(1);
-    /* setSelectedSubMenu(2);
-    setSelectedPatientMenu(3); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedPatientMenu */]);
+  }, [selectedMenu]);
 
   const { loading, error, data } = useQuery(getConsultations, {
     variables: {

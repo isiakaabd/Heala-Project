@@ -7,7 +7,7 @@ import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
 import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
-import { CustomButton, Modals, Search, FilterList } from "components/Utilities";
+import { CustomButton, Loader, Modals, Search, FilterList } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -21,22 +21,10 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
-import Loader from "components/Utilities/Loader";
 import { deleteUserType } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flex: 1,
-      marginRight: "5rem",
-    },
-  },
-  filterBtnGrid: {
-    "&.MuiGrid-root": {
-      marginRight: "3rem",
-    },
-  },
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
@@ -151,10 +139,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserTypes = ({
-  selectedMenu,
-  setSelectedMenu /*  selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -220,10 +205,8 @@ const UserTypes = ({
 
   useEffect(() => {
     setSelectedMenu(12);
-    /* setSelectedSubMenu(13); */
-
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
+  }, [selectedMenu]);
   const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
@@ -274,8 +257,8 @@ const UserTypes = ({
             {alert.message}
           </Alert>
         )}
-        <Grid item container>
-          <Grid item className={classes.searchGrid}>
+        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ sm: "row", xs: "column" }}>
+          <Grid item flex={{ sm: 1, xs: 1 }}>
             <Search
               value={searchHcp}
               placeholder="Type to search User types..."
@@ -283,16 +266,26 @@ const UserTypes = ({
               height="5rem"
             />
           </Grid>
-          <Grid item className={classes.filterBtnGrid}>
-            <FilterList title="Filter partner" onClick={handleDialogOpens1} />
-          </Grid>
-          <Grid item>
-            <CustomButton
-              endIcon={<AddIcon />}
-              onClick={handleDialogOpen}
-              title="Add new User Types"
-              type={buttonType}
-            />
+          <Grid
+            item
+            flex={{ sm: 1, xs: 1 }}
+            container
+            alignItems="center"
+            flexWrap="nowrap"
+            gap={1}
+            justifyContent="space-between"
+          >
+            <Grid item>
+              <FilterList title="Filter" onClick={handleDialogOpens1} />
+            </Grid>
+            <Grid item>
+              <CustomButton
+                endIcon={<AddIcon />}
+                onClick={handleDialogOpen}
+                title="Add new User Types"
+                type={buttonType}
+              />
+            </Grid>
           </Grid>
         </Grid>
         {userType.length > 0 ? (
@@ -438,7 +431,7 @@ const UserTypes = ({
           {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
+                <Grid item container direction="column" rowGap={4}>
                   <Grid item container>
                     <FormikControl
                       control="input"
@@ -447,18 +440,16 @@ const UserTypes = ({
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
-                    <Grid container>
-                      <Grid item container>
-                        <FormikControl
-                          control="input"
-                          name="userTypeId"
-                          label="User Type"
-                          placeholder="Enter User Type"
-                        />
-                      </Grid>
-                    </Grid>
+
+                  <Grid item container>
+                    <FormikControl
+                      control="input"
+                      name="userTypeId"
+                      label="User Type"
+                      placeholder="Enter User Type"
+                    />
                   </Grid>
+
                   <Grid item>
                     <CustomButton
                       title="Apply Filter"

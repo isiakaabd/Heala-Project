@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Loader, CustomButton, Modals, PreviousButton } from "components/Utilities";
+import { Loader, CustomButton, Modals } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
@@ -220,14 +220,10 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
     });
   }, [fetchPermissions, pageInfo]);
 
-  // const fetchMoreFunc = (e, newPage) => {
-  //   refetch({ page: newPage });
-  // };
   const [deletPlan] = useMutation(DELETE_PERMISSION);
 
   useEffect(() => {
     setSelectedMenu(11);
-    /* setSelectedSubMenu(12); */
 
     // eslint-disable-next-line
   }, [selectedMenu /* selectedSubMenu */]);
@@ -254,11 +250,8 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
         </Alert>
       )}
       <Grid container direction="column">
-        <Grid item>
-          <PreviousButton path="/settings" /* onClick={() => setSelectedSubMenu(0)} */ />
-        </Grid>
-        <Grid item sm container className={classes.flexContainer}>
-          <Grid item>
+        <Grid item sm container>
+          <Grid item flex={1}>
             <Typography variant="h1" color=" #2D2F39">
               Permission management
             </Typography>
