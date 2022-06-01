@@ -60,12 +60,18 @@ const AvailabilityTable = ({ data }) => {
   const { page, rowsPerPage } = useSelector((state) => state.tables);
 
   return (
-    <Grid item container height="100%" gap={2}>
-      <Grid item sx={{ flexGrow: 1 }}>
+    <Grid item container direction="column" height="100%" rowGap={2}>
+      <Grid item>
         <Typography variant="h4">Availability Table</Typography>
       </Grid>
       {avaliablity && avaliablity.length > 0 ? (
-        <Grid item container direction="column" display={{ xs: "none" }} height="100%">
+        <Grid
+          item
+          container
+          direction="column"
+          overflow="hidden"
+          maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
+        >
           <EnhancedTable
             headCells={availabilityHeadCells}
             rows={avaliablity}
@@ -78,7 +84,6 @@ const AvailabilityTable = ({ data }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const { _id, dates, doctorData } = row;
-
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow hover tabIndex={-1} key={_id}>
