@@ -8,8 +8,8 @@ import { Grid, Typography } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { CustomButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
-import { addTest, uploadTests } from "components/graphQL/Mutation";
-import { addTestValidation, uploadTestFileValidation } from "helpers/validationSchemas";
+import { addTest, uploadTests } from "../../components/graphQL/Mutation";
+import { addTestValidation, uploadTestFileValidation } from "../../helpers/validationSchemas";
 import { handleError, showSuccessMsg } from "../../helpers/filterHelperFunctions";
 import DragAndDrop from "./DragAndDrop";
 
