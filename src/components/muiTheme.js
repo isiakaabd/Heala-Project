@@ -136,12 +136,13 @@ export const muiTheme = createTheme({
     input: {
       width: "100%",
       height: "5rem",
-      padding: "clamp(0.5rem, 2vw, 1rem)",
+      padding: "clamp(0.3rem, 2vw, 1rem)",
       fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
       fontWeight: 600,
       "&::placeholder": {
         color: lightGrey,
+        // fontSize: "clamp(1.2rem,2vw,1.6rem)",
         fontWeight: "500 !important",
       },
     },

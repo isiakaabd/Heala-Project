@@ -2,15 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
-import {
-  Loader,
-  Button,
-  Modals,
-  PreviousButton,
-  CustomButton,
-  Search,
-  FilterList,
-} from "components/Utilities";
+import { Loader, Button, Modals, CustomButton, Search, FilterList } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
@@ -30,12 +22,6 @@ import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
 //
 const useStyles = makeStyles((theme) => ({
-  searchGrid: {
-    "&.MuiGrid-root": {
-      flexGrow: 1,
-    },
-  },
-
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
@@ -265,11 +251,13 @@ const Administrator = ({
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item>
-          <PreviousButton path="/settings" />
-        </Grid>
-        <Grid item container flexWrap="nowrap" gap={2}>
-          <Grid item className={classes.searchGrid}>
+        <Grid
+          item
+          gap={{ md: 4, sm: 3, xs: 2 }}
+          direction={{ md: "row", sm: "row", xs: "column" }}
+          container
+        >
+          <Grid item flex={{ md: 1, sm: 2, xs: 1 }}>
             <Search
               value={searchMail}
               onChange={(e) => onChange(e.target.value)}
@@ -277,20 +265,18 @@ const Administrator = ({
               height="5rem"
             />
           </Grid>
-          <Grid item>
-            <FilterList
-              onClick={handleDialogOpen}
-              title="Filter Administrator"
-              options={optionss}
-            />
-          </Grid>
-          <Grid item>
-            <CustomButton
-              endIcon={<AddIcon />}
-              title="Add Admin"
-              type={buttonType}
-              onClick={handleAdminOpen}
-            />
+          <Grid item container flex={{ md: 1, sm: 1, xs: 1 }} justifyContent="space-between">
+            <Grid item>
+              <FilterList onClick={handleDialogOpen} title="Filter" options={optionss} />
+            </Grid>
+            <Grid item>
+              <CustomButton
+                endIcon={<AddIcon />}
+                title="Add Admin"
+                type={buttonType}
+                onClick={handleAdminOpen}
+              />
+            </Grid>
           </Grid>
         </Grid>
         {/* The Search and Filter ends here */}
@@ -387,35 +373,37 @@ const Administrator = ({
           {({ isSubmitting, isValid, dirty }) => {
             return (
               <Form style={{ marginTop: "3rem" }}>
-                <Grid item container direction="column">
-                  <Grid item container spacing={2}>
-                    <Grid item xs={6} marginBottom={4}>
-                      <FormikControl
-                        control="input"
-                        name="email"
-                        label="Admin Email"
-                        placeholder="Enter Admin Email"
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormikControl
-                        control="select"
-                        name="role"
-                        label="Role"
-                        options={specializations}
-                        placeholder="Select Role"
-                      />
+                <Grid item container gap={4}>
+                  <Grid item container direction="column">
+                    <Grid item container spacing={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          name="email"
+                          label="Admin Email"
+                          placeholder="Enter Admin Email"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="select"
+                          name="role"
+                          label="Role"
+                          options={specializations}
+                          placeholder="Select Role"
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item container xs={12} marginTop={30}>
-                  <CustomButton
-                    title="Apply Filter"
-                    width="100%"
-                    isSubmitting={isSubmitting}
-                    disabled={!(dirty || isValid)}
-                    type={buttonType}
-                  />
+                  <Grid item container xs={12}>
+                    <CustomButton
+                      title="Apply Filter"
+                      width="100%"
+                      isSubmitting={isSubmitting}
+                      disabled={!(dirty || isValid)}
+                      type={buttonType}
+                    />
+                  </Grid>
                 </Grid>
               </Form>
             );

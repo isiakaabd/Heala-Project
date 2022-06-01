@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import { PreviousButton, Loader } from "components/Utilities";
+import { Loader } from "components/Utilities";
 import { useQuery } from "@apollo/client";
 import { getAMessage } from "components/graphQL/useQuery";
 import { NoData } from "components/layouts";
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.1)",
   },
   gridWrapper: {
-    padding: "3rem 5rem",
+    padding: "4rem",
   },
   badge: {
     "&.MuiChip-root": {
@@ -29,10 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMessage = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
   const classes = useStyles();
   const { messageId } = useParams();
   const { loading, data, error } = useQuery(getAMessage, {
@@ -41,9 +38,9 @@ const ViewMessage = ({
 
   useEffect(() => {
     setSelectedMenu(5);
-    /* setSelectedSubMenu(6); */
+
     //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
+  }, [selectedMenu]);
   const [message, setMessage] = useState([]);
   useEffect(() => {
     if (data) setMessage(data.getMessage);
@@ -53,38 +50,37 @@ const ViewMessage = ({
   const { body, recipientData, subject } = message;
   return (
     <Grid container direction="column">
-      <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton path={`/messages`} />
-      </Grid>
       <Grid item container direction="column" className={classes.parentGrid}>
         <Grid item className={classes.gridWrapper}>
           <Typography variant="h3">{subject}</Typography>
         </Grid>
         <Divider />
-        <Grid item style={{ padding: "1.5rem 5rem" }}>
-          <Grid container alignItems="center">
+
+        <Grid item direction="column" className={classes.gridWrapper} container gap={2}>
+          <Grid item container gap={2} alignItems="center">
             <Grid item>
               <Avatar
                 src={recipientData ? recipientData.image : displayPhoto}
                 alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
               />
             </Grid>
-            <Grid item style={{ margin: "0 3rem 0 1.5rem" }}>
+            <Grid item>
               <Typography variant="h5">
                 {recipientData
                   ? `${recipientData.firstName} ${recipientData.lastName}`
                   : "No Value"}
               </Typography>
             </Grid>
-            <Grid item>
-              <Chip
-                variant="outlined"
-                label={recipientData ? recipientData.dociId : "No Heala ID"}
-                className={classes.badge}
-              />
-            </Grid>
+          </Grid>
+          <Grid item>
+            <Chip
+              variant="outlined"
+              label={recipientData ? recipientData?.dociId : "No Heala ID"}
+              className={classes.badge}
+            />
           </Grid>
         </Grid>
+
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>

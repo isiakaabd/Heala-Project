@@ -123,8 +123,14 @@ const Hcps = () => {
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item container>
-        <Grid item className={classes.searchGrid}>
+      <Grid
+        item
+        gap={{ md: 4, sm: 4, xs: 2 }}
+        direction={{ sm: "row", xs: "column" }}
+        container
+        justifyContent="space-between"
+      >
+        <Grid item container flex={1}>
           <Search
             onChange={(e) => {
               let value = e.target.value;
@@ -150,7 +156,13 @@ const Hcps = () => {
         </Grid>
       </Grid>
       {/* ========= FILTERS =========== */}
-      <Grid container gap={2} flexWrap="wrap" className={classes.searchFilterContainer}>
+      <Grid
+        container
+        gap={2}
+        flexWrap="wrap"
+        justifyContent="flex-start"
+        className={classes.searchFilterContainer}
+      >
         {/* FILTER BY GENDER */}
         <Grid item>
           <Filter
@@ -166,8 +178,8 @@ const Hcps = () => {
               )
             }
             options={genderType}
-            name="gender"
-            placeholder="By gender"
+            name="Gender"
+            placeholder=" gender"
             value={filterValues.gender}
           />
         </Grid>
@@ -187,7 +199,7 @@ const Hcps = () => {
             }
             options={specializationFilterBy}
             name="status"
-            placeholder="By Specialization"
+            placeholder=" Specialization"
             value={filterValues.specialization}
           />
         </Grid>
@@ -208,7 +220,7 @@ const Hcps = () => {
             }
             options={cadreFilterBy}
             name="status"
-            placeholder="By Cadre"
+            placeholder=" Cadre"
             value={filterValues.provider}
           />
         </Grid>
@@ -219,7 +231,7 @@ const Hcps = () => {
             onHandleChange={(e) => console.log(e)}
             options={statusFilterBy}
             name="status"
-            placeholder="By status"
+            placeholder=" Status"
             value={filterValues.status}
             disable={true}
           />
@@ -230,7 +242,7 @@ const Hcps = () => {
             onHandleChange={(e) => console.log(e)}
             options={providerFilterBy}
             name="status"
-            placeholder="By provider"
+            placeholder=" provider"
             value={filterValues.provider}
             disable={true}
           />
@@ -365,10 +377,6 @@ const Hcps = () => {
                         component={Link}
                         to={`hcps/${_id}`}
                         endIcon={<ArrowForwardIosIcon />}
-                        /* onClick={() => {
-                          setSelectedSubMenu(3);
-                          setSelectedHcpMenu(0);
-                        }} */
                       >
                         View Doctor
                       </Button>
@@ -387,7 +395,7 @@ const Hcps = () => {
         title="Add Doctor"
         rowSpacing={5}
         height="auto"
-        width={{ sm: "50vw", xs: "100vw" }}
+        width={{ sm: "50vw", xs: "90vw" }}
         handleClose={() => setOpenAddHcp(false)}
       >
         <Formik

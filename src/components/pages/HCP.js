@@ -99,8 +99,13 @@ const HCP = () => {
               </Alert>
             </Grid>
           ) : null}
-          <Grid item container>
-            <Grid item className={classes.searchGrid}>
+          <Grid
+            item
+            direction={{ sm: "row", xs: "column" }}
+            gap={{ md: 4, sm: 4, xs: 2 }}
+            container
+          >
+            <Grid item flex={1}>
               <Search
                 value={searchMail}
                 onChange={(e) => setSearchMail(e.target.value)}
