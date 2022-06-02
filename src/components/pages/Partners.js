@@ -395,7 +395,7 @@ const Partners = () => {
                             label="Name"
                             id="name"
                             name="name"
-                            placeholder="Enter last name"
+                            placeholder="Enter partner name"
                           />
                         </Grid>
                       </Grid>
@@ -417,9 +417,9 @@ const Partners = () => {
                             control="select"
                             options={
                               [
-                                { key: "Diagnostics", value: "Diagnostics" },
-                                { key: "Pharmacy", value: "Pharmacy" },
-                                { key: "Hospital", value: "Hospital" },
+                                { key: "Diagnostics", value: "diagnostics" },
+                                { key: "Pharmacy", value: "pharmacy" },
+                                { key: "Hospital", value: "pospital" },
                               ] || ""
                             }
                             name="specialization"
@@ -428,7 +428,7 @@ const Partners = () => {
                           />
                         </Grid>
                       </Grid>
-                      {values.specialization === "Hospital" ? (
+                      {values.specialization === "hospital" ? (
                         <Grid item container>
                           <Grid item container>
                             <FormikControl

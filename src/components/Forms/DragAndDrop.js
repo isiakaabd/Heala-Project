@@ -1,18 +1,15 @@
 import React from "react";
+import t from "prop-types";
 import { ErrorMessage } from "formik";
 import { useSnackbar } from "notistack";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
+
 import styled from "styled-components";
 import { TextError } from "components/Utilities/TextError";
 import { CustomButton, Loader } from "components/Utilities";
-import {
-  showErrorMsg,
-  showSuccessMsg,
-  compressAndUploadImage,
-  uploadImage,
-} from "helpers/filterHelperFunctions";
+import { IsImg } from "helpers/filterHelperFunctions";
 
 const getColor = (props) => {
   if (props.isDragAccept) {
@@ -76,43 +73,33 @@ const errorContainer = {
   margin: "1rem 0rem",
 };
 
-const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
+const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
   const theme = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
-  const [preview, setPreview] = useState("");
-  const [progress, setProgress] = useState();
-  const [isCompleted, setIsCompleted] = useState(null);
-  const [isCompressing, setIsCompressing] = useState(false);
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, open } = useDropzone({
-    accept: "application/.csv",
+  const [preview, setPreview] = React.useState("");
+  const [progress, setProgress] = React.useState();
+  const [isCompleted, setIsCompleted] = React.useState(null);
+  const [isCompressing, setIsCompressing] = React.useState(false);
+  const [file, setFile] = React.useState(null);
+  const {
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+    open,
+  } = useDropzone({
+    accept: "application/json",
     maxFiles: maxFiles,
     autoFocus: true,
     onDropAccepted: (acceptedFiles) => {
-      const filenameArr = acceptedFiles[0].name.split(".");
-      if (filenameArr[filenameArr.length - 1] !== "csv") {
-        showErrorMsg(
-          enqueueSnackbar,
-          Typography,
-          "This file is not supported. Please select a .CSV file.",
-        );
-        return;
+      setFile(acceptedFiles[0]);
+      if (hasPreview || IsImg(acceptedFiles[0])) {
+        const reader = new FileReader();
+        reader.readAsDataURL(acceptedFiles[0]);
+        reader.onloadend = (e) => setPreview(reader.result);
       }
-      setProgress(1);
 
-      compressAndUploadImage(
-        acceptedFiles[0],
-        uploadImage,
-        setPreview,
-        name,
-        setFieldValue,
-        setProgress,
-        setIsCompressing,
-        setIsCompleted,
-      );
-
-      const reader = new FileReader();
-      reader.readAsDataURL(acceptedFiles[0]);
-      reader.onloadend = (e) => setPreview(reader.result);
+      uploadFunc(acceptedFiles[0]);
     },
   });
 
@@ -122,23 +109,21 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
     active: theme.palette.primary.dark,
   };
 
-  useEffect(() => {
-    isCompleted === "passed" &&
-      showSuccessMsg(enqueueSnackbar, Typography, "Image upload complete.");
-    if (isCompleted === "failed") {
-      showErrorMsg(enqueueSnackbar, Typography, "Image upload failed, Try again.");
-    }
-  }, [isCompleted]);
-
   return (
     <div>
       <div className="container">
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           <Typography>
-            Drag and drop your file(s), or click to select files or Click on the button below
+            Drag and drop your file(s), or click to select files or Click on the
+            button below
           </Typography>
-          <Grid item container justifyContent="center" style={{ marginTop: "15px" }}>
+          <Grid
+            item
+            container
+            justifyContent="center"
+            style={{ marginTop: "15px" }}
+          >
             <CustomButton
               variant="contained"
               title=" Select file(s)"
@@ -157,25 +142,40 @@ const DragAndDrop = ({ name, setFieldValue, maxFiles }) => {
       <aside style={{ marginTop: "1.5rem" }}>
         <Grid item>
           {progress < 100 || isCompressing ? (
-            <Grid container item direction="row" justifyContent="center" alignItems="center">
+            <Grid
+              container
+              item
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Typography display={"inline"}>
                 {isCompressing ? "Compressing file" : "Uploading file"}
               </Typography>
               <Loader />
             </Grid>
-          ) : preview && isCompleted !== "failed" ? (
+          ) : preview && isCompleted !== "failed" && IsImg(file) ? (
             <div style={thumb}>
               <div style={thumbInner}>
                 <img src={preview} alt="preview" style={img} />
               </div>
             </div>
           ) : (
-            ""
+            <Typography sx={{ marginBottom: "1rem", color: "green" }}>
+              {file && file.name}
+            </Typography>
           )}
         </Grid>
       </aside>
     </div>
   );
+};
+
+DragAndDrop.propTypes = {
+  name: t.string.isRequired,
+  maxFiles: t.number.isRequired,
+  hasPreview: t.bool.isRequired,
+  uploadFunc: t.func.isRequired,
 };
 
 export default DragAndDrop;
