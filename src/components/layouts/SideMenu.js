@@ -21,7 +21,7 @@ const SideMenu = (props) => {
       paddingRight: "2.5em",
       paddingTop: "1em",
       minHeight: "100vh",
-      boxShadow: "5px -5px 7px #eee",
+      boxShadow: "0px -5px 7px #eee",
       // height: "100%",
       position: "fixed",
       overflowY: "hidden",
