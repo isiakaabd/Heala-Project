@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createElement } from "react";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
-import { List, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
+import { List, ListItemText, ListItemButton, ListItemIcon, Box } from "@mui/material";
 import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.svg";
@@ -21,8 +21,6 @@ const SideMenu = (props) => {
       paddingRight: "2.5em",
       paddingTop: "1em",
       minHeight: "100vh",
-      boxShadow: "0px -5px 7px #eee",
-      // height: "100%",
       position: "fixed",
       overflowY: "hidden",
       zIndex: theme.zIndex.appBar + 1,
@@ -155,7 +153,7 @@ const SideMenu = (props) => {
 
   return (
     <>
-      <aside className={classes.aside}>
+      <Box className={classes.aside} boxShadow={{ sm: "5px -5px 7px #eee", xs: "none" }}>
         <div className={classes.logoWrapper}>
           <img src={logo} alt="logo" />
         </div>
@@ -191,7 +189,7 @@ const SideMenu = (props) => {
             <ListItemText>Logout</ListItemText>
           </ListItemButton>
         </List>
-      </aside>
+      </Box>
       <DeleteOrDisable
         open={Logout}
         setOpen={setLogout}
