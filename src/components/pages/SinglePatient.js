@@ -68,8 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SinglePatient = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const SinglePatient = () => {
   const history = useHistory();
 
   const classes = useStyles();
@@ -164,15 +163,16 @@ const SinglePatient = (props) => {
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
-  useEffect(() => {
-    setSelectedMenu(1);
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   else {
     return (
-      <Grid container direction="column" className={classes.gridContainer} gap={2}>
+      <Grid
+        container
+        direction="column"
+        className={classes.gridContainer}
+        gap={2}
+      >
         <Grid
           item
           justifyContent="space-between"
@@ -235,7 +235,11 @@ const SinglePatient = (props) => {
                 p={0}
                 to={`/patients/${patientId}/${card.path}`}
               >
-                <Card title={card.title} background={card.background} header="h4">
+                <Card
+                  title={card.title}
+                  background={card.background}
+                  header="h4"
+                >
                   {createElement(card.icon, {
                     fill: card.fill,
                     color: "success",
@@ -257,11 +261,6 @@ const SinglePatient = (props) => {
       </Grid>
     );
   }
-};
-
-SinglePatient.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default memo(SinglePatient);

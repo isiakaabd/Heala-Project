@@ -17,7 +17,8 @@ import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const App = ({ window }) => {
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
@@ -57,22 +58,24 @@ const App = ({ window }) => {
     // })();
   }, [logout_user, logout, state, isAuthenticated]);
 
-  const [chatMediaActive, setChatMediaActive] = useState(false);
+  /*   const [chatMediaActive, setChatMediaActive] = useState(false); */
 
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
           {!isAuthenticated && (
-            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
+            <Route
+              path={["/login", "/"]}
+              render={(props) => <Login {...props} />}
+            />
           )}
-          {isAuthenticated && !chatMediaActive && state && <Loader color="success" />}
-          {isAuthenticated && !chatMediaActive && !state && (
+          {isAuthenticated && state && <Loader color="success" />}
+          {isAuthenticated && !state && (
             <>
               <Box sx={{ display: "flex" }}>
                 <CssBaseline />
                 <Header
-                  selectedMenu={selectedMenu}
                   handleDrawerToggle={handleDrawerToggle}
                   drawerWidth={drawerWidth}
                 />
@@ -98,8 +101,6 @@ const App = ({ window }) => {
                     }}
                   >
                     <SideMenu
-                      selectedMenu={selectedMenu}
-                      setSelectedMenu={setSelectedMenu}
                       drawerWidth={drawerWidth}
                       handleDrawerToggle={handleDrawerToggle}
                     />
@@ -109,29 +110,27 @@ const App = ({ window }) => {
                     elevation={0}
                     sx={{
                       display: { xs: "none", md: "block" },
-                      "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+                      "& .MuiDrawer-paper": {
+                        boxSizing: "border-box",
+                        width: drawerWidth,
+                      },
                     }}
                     open
                   >
-                    <SideMenu
-                      selectedMenu={selectedMenu}
-                      setSelectedMenu={setSelectedMenu}
-                      drawerWidth={drawerWidth}
-                    />
+                    <SideMenu drawerWidth={drawerWidth} />
                   </Drawer>
                 </Box>
                 <Box
                   component="main"
-                  sx={{ flex: 1, p: 3, width: { xs: `calc(100% - ${drawerWidth}px)` } }}
+                  sx={{
+                    flex: 1,
+                    p: 3,
+                    width: { xs: `calc(100% - ${drawerWidth}px)` },
+                  }}
                 >
                   <Toolbar />
 
-                  <Routes
-                    setSelectedMenu={setSelectedMenu}
-                    selectedMenu={selectedMenu}
-                    chatMediaActive={chatMediaActive}
-                    setChatMediaActive={setChatMediaActive}
-                  />
+                  <Routes />
                 </Box>
                 {/* </ScrollToView> */}
               </Box>

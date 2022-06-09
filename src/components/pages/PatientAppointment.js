@@ -3,7 +3,6 @@ import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { CustomButton, FilterList, Modals, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-import PropTypes from "prop-types";
 import {
   Grid,
   Alert,
@@ -101,9 +100,8 @@ const filterOptions = [
   { id: 2, value: "Description" },
 ];
 
-const PatientAppointment = (props) => {
+const PatientAppointment = () => {
   const [updateAppoint] = useMutation(updateAppointment);
-  const { selectedMenu, setSelectedMenu } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
   const [pageInfo, setPageInfo] = useState([]);
   const [alert, setAlert] = useState(null);
@@ -179,7 +177,9 @@ const PatientAppointment = (props) => {
     status: Yup.string("Select your status").required("Status is required"),
   });
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required("Date  and time is required"),
+    date: Yup.string("select date and time ").required(
+      "Date  and time is required"
+    ),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
@@ -215,7 +215,8 @@ const PatientAppointment = (props) => {
     console.log(values);
   };
 
-  const [getPatientsAppointment, { loading, data, error }] = useLazyQuery(getAppoint);
+  const [getPatientsAppointment, { loading, data, error }] =
+    useLazyQuery(getAppoint);
 
   useEffect(() => {
     getPatientsAppointment({
@@ -236,12 +237,6 @@ const PatientAppointment = (props) => {
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-
-  useEffect(() => {
-    setSelectedMenu(1);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -285,14 +280,30 @@ const PatientAppointment = (props) => {
           {alert.message}
         </Alert>
       )}
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <>
-          <Grid item container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
+          <Grid
+            item
+            container
+            flexWrap="nowrap"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Grid item flex={1}>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
             <Grid item>
-              <FilterList onClick={handlePatientOpen} options={filterOptions} title="Filter" />
+              <FilterList
+                onClick={handlePatientOpen}
+                options={filterOptions}
+                title="Filter"
+              />
             </Grid>
           </Grid>
           {patientAppointment.length > 0 ? (
@@ -324,7 +335,11 @@ const PatientAppointment = (props) => {
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
-                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
+                              handleSelectedRows(
+                                row.id,
+                                selectedRows,
+                                setSelectedRows
+                              )
                             }
                             color="primary"
                             checked={isItemSelected}
@@ -348,7 +363,11 @@ const PatientAppointment = (props) => {
                             <span style={{ marginRight: "1rem" }}>
                               <Avatar
                                 alt={`Display Photo of ${row.doctorData.firstName}`}
-                                src={row.doctorData.picture ? row.doctorData.picture : displayPhoto}
+                                src={
+                                  row.doctorData.picture
+                                    ? row.doctorData.picture
+                                    : displayPhoto
+                                }
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
@@ -439,7 +458,13 @@ const PatientAppointment = (props) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                  <Grid
+                    item
+                    container
+                    alignItems="flex-end"
+                    marginTop={5}
+                    xs={12}
+                  >
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"
@@ -518,7 +543,13 @@ const PatientAppointment = (props) => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                  <Grid
+                    item
+                    container
+                    alignItems="flex-end"
+                    marginTop={5}
+                    xs={12}
+                  >
                     <CustomButton
                       title=" Apply Filter"
                       width="100%"
@@ -555,9 +586,5 @@ const PatientAppointment = (props) => {
   );
 };
 
-PatientAppointment.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-};
 
 export default PatientAppointment;

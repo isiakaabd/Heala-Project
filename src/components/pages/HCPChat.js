@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { CustomButton, Loader, PreviousButton } from "components/Utilities";
@@ -58,14 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HCPChat = ({
-  selectedMenu,
-  setSelectedMenu,
-  /* selectedSubMenu,
-  setSelectedSubMenu,
-  setSelectedHcpMenu,
-  setSelectedScopedMenu, */
-}) => {
+const HCPChat = () => {
   const { hcpId } = useParams();
 
   const classes = useStyles();
@@ -99,7 +91,9 @@ const HCPChat = ({
   const validationSchema = Yup.object({
     subject: Yup.string("Enter your subject").required("Subject is required"),
     textarea: Yup.string("Enter your message").required("Message is required"),
-    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+    recipient: Yup.string("Enter your recipient").required(
+      "recipients is required"
+    ),
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
@@ -123,13 +117,6 @@ const HCPChat = ({
     /* setSelectedScopedMenu(0); */
   };
 
-  useEffect(() => {
-    setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(1);
-    setSelectedScopedMenu(3); */
-    //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu */]);
   if (loading) return <Loader />;
   return (
     <Formik
@@ -157,9 +144,19 @@ const HCPChat = ({
                     Create New Message
                   </Typography>
                 </Grid>
-                <Grid item container direction="column" className={classes.gridWrapper}>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  className={classes.gridWrapper}
+                >
                   <Grid item>
-                    <Grid item container alignItems="center" sx={{ gap: "0!important" }}>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      sx={{ gap: "0!important" }}
+                    >
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
                           Recipient:
@@ -216,7 +213,10 @@ const HCPChat = ({
                     </Grid>
                     {/* <Divider className={classes.divider} /> */}
                   </Grid>
-                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                  <Grid
+                    item
+                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
+                  >
                     <CustomButton
                       title="Send Message"
                       width="100%"
@@ -234,17 +234,6 @@ const HCPChat = ({
       }}
     </Formik>
   );
-};
-
-HCPChat.propTypes = {
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default HCPChat;

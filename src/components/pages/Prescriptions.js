@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Typography, Grid, Avatar, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -42,17 +41,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Prescriptions = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const Prescriptions = () => {
   const classes = useStyles();
 
   const { patientId } = useParams();
-
-  useEffect(() => {
-    setSelectedMenu(1);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   const { loading, error, data } = useQuery(getConsultations, {
     variables: {
@@ -84,7 +76,13 @@ const Prescriptions = (props) => {
         <Typography variant="h2">Prescriptions</Typography>
       </Grid>
       {Object.entries(consultations).length > 0 ? (
-        <Grid item container direction="column" width="100%" className={classes.parentGrid}>
+        <Grid
+          item
+          container
+          direction="column"
+          width="100%"
+          className={classes.parentGrid}
+        >
           <Grid
             item
             container
@@ -106,13 +104,19 @@ const Prescriptions = (props) => {
                 </Grid>
                 <Grid item>
                   <Avatar
-                    src={consultations && doc && doc.picture ? doc.picture : displayPhoto}
+                    src={
+                      consultations && doc && doc.picture
+                        ? doc.picture
+                        : displayPhoto
+                    }
                     alt="Display photo of the sender"
                   />
                 </Grid>
                 <Grid item>
                   <Typography variant="h5">
-                    {doc.firstName ? `${doc && doc.firstName} ${doc && doc.lastName}` : "no doctor"}
+                    {doc.firstName
+                      ? `${doc && doc.firstName} ${doc && doc.lastName}`
+                      : "no doctor"}
                   </Typography>
                 </Grid>
               </Grid>
@@ -125,7 +129,9 @@ const Prescriptions = (props) => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="h5">{dateMoment(consultations.updatedAt)}</Typography>
+                  <Typography variant="h5">
+                    {dateMoment(consultations.updatedAt)}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -243,7 +249,9 @@ const Prescriptions = (props) => {
             </Grid>
             <Grid item>
               <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-                {consultations.doctorNote ? consultations.doctorNote : "No Note"}
+                {consultations.doctorNote
+                  ? consultations.doctorNote
+                  : "No Note"}
               </Typography>
             </Grid>
           </Grid>
@@ -253,11 +261,6 @@ const Prescriptions = (props) => {
       )}
     </Grid>
   );
-};
-
-Prescriptions.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default Prescriptions;

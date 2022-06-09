@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
+const Messages = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -114,7 +114,8 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
   const [searchMessage, setSearchMessage] = useState("");
   const [message, setMessage] = useState([]);
 
-  const [fetchMessages, { loading, data, error, refetch }] = useLazyQuery(getMessage);
+  const [fetchMessages, { loading, data, error, refetch }] =
+    useLazyQuery(getMessage);
 
   useEffect(() => {
     fetchMessages({
@@ -142,15 +143,17 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  useEffect(() => {
-    setSelectedMenu(5);
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
     return (
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid
           item
           gap={{ md: 4, sm: 4, xs: 2 }}
@@ -207,7 +210,13 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -230,7 +239,9 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
+                              alt={`Display Photo of  ${
+                                recipientData && recipientData.firstName
+                              }`}
                               src={
                                 recipientData && recipientData.image
                                   ? recipientData.image
@@ -285,18 +296,14 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
+          <EmptyTable
+            headCells={messagesHeadCells}
+            paginationLabel="Messages  per page"
+          />
         )}
       </Grid>
     );
   }
-};
-
-Messages.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Messages;

@@ -4,9 +4,15 @@ import { Grid, Typography } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
-import { NoData, AvailabilityTable, DashboardCharts, EmptyTable } from "components/layouts";
+import {
+  NoData,
+  AvailabilityTable,
+  DashboardCharts,
+  EmptyTable,
+} from "components/layouts";
 import { Loader, FormSelect } from "components/Utilities";
-const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
+
+const Dashboard = () => {
   const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
   const { data: da } = useQuery(getProviders);
@@ -22,7 +28,7 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          }),
+          })
       );
     }
   }, [da]);
@@ -30,11 +36,6 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
     setForm(e.target.value);
     await refetch({ providerId: e.target.value });
   };
-  useLayoutEffect(() => {
-    setChatMediaActive(false);
-
-    // eslint-disable-next-line
-  }, [chatMediaActive]);
 
   if (loading) return <Loader />;
 
@@ -70,11 +71,6 @@ const Dashboard = ({ chatMediaActive, setChatMediaActive }) => {
       )}
     </Grid>
   );
-};
-
-Dashboard.propTypes = {
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
 };
 
 export default Dashboard;

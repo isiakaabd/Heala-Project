@@ -13,7 +13,6 @@ import { ReactComponent as ConsultationIcon } from "assets/images/consultation.s
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { Link, useParams, useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
 import { deleteDoctor } from "components/graphQL/Mutation";
 //
 
@@ -65,8 +64,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SingleHCP = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const SingleHCP = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -154,15 +152,16 @@ const SingleHCP = (props) => {
     active: "#f4f4f4",
   };
 
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   if (profile.loading) return <Loader />;
   return (
     <>
-      <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        rowSpacing={2}
+        className={classes.gridContainer}
+      >
         <Grid
           item
           container
@@ -226,10 +225,15 @@ const SingleHCP = (props) => {
                 component={Link}
                 to={`/hcps/${hcpId}/${card.path}`}
               >
-                <Card title={card.title} background={card.background} header="h4">
+                <Card
+                  title={card.title}
+                  background={card.background}
+                  header="h4"
+                >
                   {createElement(card.icon, {
                     fill: card.fill,
-                    color: card.id === 4 || card.id === 6 ? "success" : undefined,
+                    color:
+                      card.id === 4 || card.id === 6 ? "success" : undefined,
                     style: { fontSize: "clamp(2.5rem, 3vw,4rem)" },
                   })}
                 </Card>
@@ -249,11 +253,6 @@ const SingleHCP = (props) => {
       />
     </>
   );
-};
-
-SingleHCP.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default SingleHCP;

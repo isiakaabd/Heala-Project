@@ -1,5 +1,4 @@
 import React, { useEffect, Fragment, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
 import { Modals, Loader, CustomButton } from "components/Utilities";
 import { NoData } from "components/layouts";
@@ -58,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
+const HcpCaseNotes = () => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -71,11 +70,6 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
   const { rowId } = useParams();
 
   const [consult, setConsult] = useState([]);
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   const { loading, data, error } = useQuery(getConsult, {
     variables: {
@@ -124,7 +118,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
           <Typography variant="h2">Consultation Details</Typography>
         </Grid>
 
-        <Grid item container direction="column" className={classes.parentGridWrapper}>
+        <Grid
+          item
+          container
+          direction="column"
+          className={classes.parentGridWrapper}
+        >
           <Grid
             item
             container
@@ -156,7 +155,9 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="body1">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="body1">
+                        {trucateString(referralId, 10)}
+                      </Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
@@ -166,7 +167,13 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container flexDirection="column" gap={2} className={classes.subItem}>
+              <Grid
+                item
+                container
+                flexDirection="column"
+                gap={2}
+                className={classes.subItem}
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Consultation ID:
@@ -175,7 +182,9 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="h5">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="h5">
+                        {trucateString(referralId, 10)}
+                      </Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
@@ -265,7 +274,9 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
               <Grid item>
                 <Grid container gap={1}>
-                  <Typography variant="body1">{severity ? severity : "No value"}</Typography>
+                  <Typography variant="body1">
+                    {severity ? severity : "No value"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -276,7 +287,10 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body1"> {firstNotice ? firstNotice : "No value"}</Typography>
+                <Typography variant="body1">
+                  {" "}
+                  {firstNotice ? firstNotice : "No value"}
+                </Typography>
               </Grid>
             </Grid>
             <Grid item container className={classes.subItem} gap={2}>
@@ -325,14 +339,24 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container flexDirection="column" className={classes.subItem} gap={2}>
+              <Grid
+                item
+                container
+                flexDirection="column"
+                className={classes.subItem}
+                gap={2}
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Status:
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Chip variant="contained" label={status} className={classes.infoBadge} />
+                  <Chip
+                    variant="contained"
+                    label={status}
+                    className={classes.infoBadge}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -344,7 +368,9 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">{type ? type : "No Value"}</Typography>
+                  <Typography variant="body1">
+                    {type ? type : "No Value"}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -396,7 +422,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container style={{ padding: "2rem 3rem" }} justifyContent="flex-end">
+          <Grid
+            item
+            container
+            style={{ padding: "2rem 3rem" }}
+            justifyContent="flex-end"
+          >
             <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
               <CustomButton
                 title="View Prescription"
@@ -429,7 +460,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
             rowGap={{ xs: "1rem", sm: "1.5rem" }}
           >
             <Grid item>
-              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+              <Grid
+                item
+                container
+                className={classes.subItem}
+                gap={{ md: 2, sm: 2, xs: 0 }}
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Doctor:
@@ -453,7 +489,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+              <Grid
+                item
+                container
+                className={classes.subItem}
+                gap={{ md: 2, sm: 2, xs: 0 }}
+              >
                 <Grid>
                   <Typography variant="body1" className={classes.title}>
                     Prescription Date
@@ -465,7 +506,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <Grid item container className={classes.subItem} gap={{ md: 2, sm: 2, xs: 0 }}>
+              <Grid
+                item
+                container
+                className={classes.subItem}
+                gap={{ md: 2, sm: 2, xs: 0 }}
+              >
                 <Grid item>
                   <Typography variant="body1" className={classes.title}>
                     Symptoms
@@ -554,7 +600,8 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
 
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {duration(i.dosageFrequency.duration)} {daily(i.dosageFrequency.day)}
+                        {duration(i.dosageFrequency.duration)}{" "}
+                        {daily(i.dosageFrequency.day)}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -575,7 +622,12 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
             justifyContent="space-between"
             sx={{ flexWrap: "nowrap" }}
           >
-            <Grid item container direction="column" gap={{ md: 2, sm: 2, xs: 0 }}>
+            <Grid
+              item
+              container
+              direction="column"
+              gap={{ md: 2, sm: 2, xs: 0 }}
+            >
               <Grid item>
                 <Typography variant="body1" className={classes.title}>
                   Doctors Note:
@@ -592,11 +644,6 @@ const HcpCaseNotes = ({ selectedMenu, setSelectedMenu }) => {
       </Modals>
     </>
   );
-};
-
-HcpCaseNotes.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default HcpCaseNotes;

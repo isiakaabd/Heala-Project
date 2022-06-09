@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Avatar, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Avatar,
+  TableRow,
+  Checkbox,
+  TableCell,
+  Button,
+} from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -51,24 +59,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpPatients = (props) => {
+const HcpPatients = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const { selectedMenu, setSelectedMenu } = props;
 
   const { hcpId } = useParams();
 
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
 
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-
-  const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
+  const [fetchDoctorsPatients, { loading, error, data, refetch }] =
+    useLazyQuery(getDoctorPatients);
 
   useEffect(() => {
     fetchDoctorsPatients({
@@ -126,7 +128,9 @@ const HcpPatients = (props) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(_id, selectedRows, setSelectedRows)
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -141,7 +145,9 @@ const HcpPatients = (props) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {doctorData ? doctorData?.dociId?.split("-")[1] : "No Doctor ID"}
+                      {doctorData
+                        ? doctorData?.dociId?.split("-")[1]
+                        : "No Doctor ID"}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -153,7 +159,11 @@ const HcpPatients = (props) => {
                         }}
                       >
                         <span style={{ marginRight: "1rem" }}>
-                          <Avatar alt="Remy Sharp" src={row.image} sx={{ width: 24, height: 24 }} />
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={row.image}
+                            sx={{ width: 24, height: 24 }}
+                          />
                         </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {patientData?.firstName
@@ -180,7 +190,10 @@ const HcpPatients = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
+        <EmptyTable
+          headCells={hcpPatientsHeadCells}
+          paginationLabel="List  per page"
+        />
       )}
     </Grid>
   );

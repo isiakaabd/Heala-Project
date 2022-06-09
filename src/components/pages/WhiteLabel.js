@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
 import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
@@ -22,7 +21,11 @@ const WhiteLabel = () => {
         <Grid item container md={5} sm={5} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/label/provider" style={{ textDecoration: "none" }}>
-              <Card alt="providers " title="Providers" background={theme.palette.common.lightGreen}>
+              <Card
+                alt="providers "
+                title="Providers"
+                background={theme.palette.common.lightGreen}
+              >
                 <Administrator fill={theme.palette.common.green} />
               </Card>
             </Link>
@@ -31,7 +34,11 @@ const WhiteLabel = () => {
         <Grid item container md={5} sm={5} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/label/types" style={{ textDecoration: "none" }}>
-              <Card alt="User Types" title="User Types" background={theme.palette.common.lightRed}>
+              <Card
+                alt="User Types"
+                title="User Types"
+                background={theme.palette.common.lightRed}
+              >
                 <ConsulationIcon fill={theme.palette.common.red} />
               </Card>
             </Link>
@@ -42,8 +49,4 @@ const WhiteLabel = () => {
   );
 };
 
-WhiteLabel.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-};
 export default WhiteLabel;

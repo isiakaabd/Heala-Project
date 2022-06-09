@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
-import PropTypes from "prop-types";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -9,8 +8,15 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
-import { rejectVerification, updateDoctorProvider } from "components/graphQL/Mutation";
+import {
+  verification,
+  getVerification,
+  getCategory,
+} from "components/graphQL/useQuery"; //
+import {
+  rejectVerification,
+  updateDoctorProvider,
+} from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -106,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
+const ViewHCP = () => {
   const { viewId } = useParams();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
@@ -194,7 +200,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     }
   }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor",
+    respondData.status ? "Doctor Verified!" : "Verify Doctor"
   );
   const [process, setProcess] = useState(undefined);
   useEffect(() => {
@@ -259,11 +265,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     }
   };
   const classes = useStyles();
-  useEffect(() => {
-    setSelectedMenu(7);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -313,7 +314,9 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                  {doctorData
+                    ? `${doctorData.firstName} ${doctorData.lastName}`
+                    : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -323,7 +326,9 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData && doctorData.hospital !== "" ? doctorData.hospital : "No Hospital"}
+                  {doctorData && doctorData.hospital !== ""
+                    ? doctorData.hospital
+                    : "No Hospital"}
                 </Typography>
               </Grid>
             </Grid>
@@ -353,7 +358,9 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
               <Grid item width="100%">
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.specialization}` : "No specialization "}
+                  {doctorData
+                    ? `${doctorData.specialization}`
+                    : "No specialization "}
                 </Typography>
               </Grid>
             </Grid>
@@ -375,7 +382,10 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Typography
                   variant="h4"
                   style={{
-                    color: status === true ? theme.palette.common.green : theme.palette.common.red,
+                    color:
+                      status === true
+                        ? theme.palette.common.green
+                        : theme.palette.common.red,
                     width: "max-content",
                   }}
                 >
@@ -406,7 +416,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
           container
           display="grid"
           gap={3}
-          gridTemplateColumns={{ md: "repeat(2,1fr)", sm: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+          gridTemplateColumns={{
+            md: "repeat(2,1fr)",
+            sm: "repeat(2,1fr)",
+            xs: "repeat(1,1fr)",
+          }}
         >
           <Grid item>
             <Grid
@@ -649,8 +663,14 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                     type={trasparentButton}
                     width="100%"
                     isSubmitting={submit}
-                    onClick={() => handleUpdateProVider(reference?.reference_code)}
-                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
+                    onClick={() =>
+                      handleUpdateProVider(reference?.reference_code)
+                    }
+                    disabled={
+                      doctorData?.providerId === reference?.reference_code
+                        ? true
+                        : false
+                    }
                   />
                 </Grid>
               )}
@@ -741,15 +761,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
       />
     </>
   );
-};
-
-ViewHCP.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  doctorView: PropTypes.number,
-  setDoctorView: PropTypes.func, */
 };
 
 export default ViewHCP;

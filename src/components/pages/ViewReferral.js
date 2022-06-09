@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Typography, Grid, Avatar, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -32,17 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
+const ViewReferral = () => {
   const classes = useStyles();
   const { referralId } = useParams();
   const { loading, data, error } = useQuery(getRefferal, {
     variables: { id: referralId },
   });
-  useEffect(() => {
-    setSelectedMenu(9);
 
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -67,7 +62,13 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
 
   return (
     <Grid container direction="column" gap={2} padding="0 2rem">
-      <Grid item container direction="column" margin="auto" className={classes.parentGrid}>
+      <Grid
+        item
+        container
+        direction="column"
+        margin="auto"
+        className={classes.parentGrid}
+      >
         <Grid
           item
           container
@@ -85,7 +86,11 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
             <Grid item container alignItems="center" gap={2}>
               <Grid item>
                 <Avatar
-                  src={patientData && patientData.picture ? patientData.picture : displayPhoto}
+                  src={
+                    patientData && patientData.picture
+                      ? patientData.picture
+                      : displayPhoto
+                  }
                   alt={`Display photo of the  ${
                     patientData ? patientData.firstName : "placeholder"
                   }`}
@@ -93,7 +98,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {patientData ? `${patientData.firstName} ${patientData.lastName}` : "No Patient"}
+                  {patientData
+                    ? `${patientData.firstName} ${patientData.lastName}`
+                    : "No Patient"}
                 </Typography>
               </Grid>
             </Grid>
@@ -108,13 +115,21 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
             <Grid item container gap={2} alignItems="center">
               <Grid item>
                 <Avatar
-                  src={doctorData && doctorData.picture ? doctorData.picture : displayPhoto}
-                  alt={`Display photo of the doctor ${doctorData ? doctorData.firstName : ""}`}
+                  src={
+                    doctorData && doctorData.picture
+                      ? doctorData.picture
+                      : displayPhoto
+                  }
+                  alt={`Display photo of the doctor ${
+                    doctorData ? doctorData.firstName : ""
+                  }`}
                 />
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
+                  {doctorData
+                    ? `${doctorData.firstName} ${doctorData.lastName}`
+                    : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -158,7 +173,9 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h5">{testType ? testType : "No Value"}</Typography>
+              <Typography variant="h5">
+                {testType ? testType : "No Value"}
+              </Typography>
             </Grid>
           </Grid>
 
@@ -203,7 +220,13 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
               <Typography variant="h5">{specialization}</Typography>
             </Grid>
           </Grid>
-          <Grid item container xs={4} gap={2} direction={{ sm: "column", xs: "column" }}>
+          <Grid
+            item
+            container
+            xs={4}
+            gap={2}
+            direction={{ sm: "column", xs: "column" }}
+          >
             <Grid item>
               <Typography variant="body1" className={classes.title}>
                 Referral ID
@@ -215,7 +238,14 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
           </Grid>
         </Grid>
         <Divider />
-        <Grid item container gap={2} padding="2rem" flexDirection="column" margin="auto">
+        <Grid
+          item
+          container
+          gap={2}
+          padding="2rem"
+          flexDirection="column"
+          margin="auto"
+        >
           <Grid item>
             <Typography variant="body1" className={classes.title}>
               Referral Notes
@@ -230,13 +260,6 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
       </Grid>
     </Grid>
   );
-};
-
-ViewReferral.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewReferral;
