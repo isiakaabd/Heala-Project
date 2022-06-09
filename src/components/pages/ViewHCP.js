@@ -303,7 +303,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
             gridTemplateColumns={{
               md: "repeat(4,minmax(15rem,1fr))",
               sm: "repeat(3,minmax(15rem,auto))",
-              xs: "1fr",
+              xs: "repeat(2,1fr)",
             }}
             className={classes.cardContainer}
           >
@@ -421,7 +421,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
-                <Grid item container gap={2} justifyContent={{ xs: "space-around", sm: "center" }}>
+                <Grid item container gap={2} justifyContent={{ xs: "left", sm: "center" }}>
                   {qualification?.degree && (
                     <Grid item>
                       <Typography variant="h5" className={classes.link}>
@@ -471,7 +471,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                   container
                   alignItems="center"
                   flexWrap="wrap"
-                  justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
+                  justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
                   gap={2}
                 >
                   {license.number && (
@@ -522,7 +522,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
+                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
                 gap={2}
                 alignItems="center"
                 flexWrap="wrap"
@@ -577,7 +577,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
+                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
                 gap={2}
               >
                 {alumni_association.facebook_group_name && (
