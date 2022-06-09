@@ -31,7 +31,6 @@ const Header = (props) => {
       padding="1rem"
       sx={{
         width: { md: `calc(100% - (${drawerWidth}px + 5em))` },
-        // ml: { sm: `${drawerWidth}px` },
       }}
     >
       <Toolbar className={classes.appBar}>

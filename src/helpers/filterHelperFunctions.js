@@ -1,9 +1,10 @@
 import axios from "axios";
 import t from "prop-types";
 import React from "react";
+import { Typography } from "@mui/material";
 import { removeEmptyStringValues } from "./func";
 
-export const showErrorMsg = (enqueueSnackbar, Typography, errorMsg) => {
+export const showErrorMsg = (enqueueSnackbar, errorMsg) => {
   enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{errorMsg}</Typography>, {
     variant: "error",
     preventDuplicate: true,

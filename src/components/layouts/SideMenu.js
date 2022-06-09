@@ -22,7 +22,7 @@ const SideMenu = (props) => {
       paddingTop: "1em",
       minHeight: "100vh",
       boxShadow: "5px -5px 7px #eee",
-      height: "100%",
+      // height: "100%",
       position: "fixed",
       overflowY: "hidden",
       zIndex: theme.zIndex.appBar + 1,

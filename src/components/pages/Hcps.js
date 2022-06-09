@@ -540,9 +540,4 @@ const Hcps = () => {
   );
 };
 
-Hcps.propTypes = {
-  /*  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
-};
-
 export default Hcps;

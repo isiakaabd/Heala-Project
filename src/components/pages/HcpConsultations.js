@@ -14,7 +14,7 @@ import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { PreviousButton, FilterList, Loader } from "components/Utilities";
+import { FilterList, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
@@ -104,10 +104,6 @@ const HcpConsultations = (props) => {
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" height="100%" gap={2}>
-      <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
-      </Grid>
-
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
