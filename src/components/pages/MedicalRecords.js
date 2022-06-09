@@ -54,14 +54,8 @@ const MedicalRecords = (props) => {
     const value =
       alergies.length > 0 && alergies?.map((alergy) => alergy.name).filter((i) => i !== undefined);
 
-    const labResult = lab?.map((alergy, index) => alergy);
-    //  <a
-    //   rel="noreferrer"
-    //   key={alergy._id}
-    //   className={classes.link}
-    //   href={alergy.url}
-    //   target="_blank"
-    // ></a>
+    const labResult = lab?.map((alergy) => alergy);
+
     return (
       <Grid
         container

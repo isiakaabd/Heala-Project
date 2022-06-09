@@ -95,9 +95,7 @@ const CustomHeaderTitle = ({ title, path, onClick = null }) => {
     <div className={classes.titleWrapper}>
       {!onClick ? (
         <Link to={`/${path}`} className={classes.link}>
-          <Typography variant="h3" classes={{ root: classes.title }}>
-            {title}
-          </Typography>
+          <Typography>{title}</Typography>
         </Link>
       ) : (
         <Typography

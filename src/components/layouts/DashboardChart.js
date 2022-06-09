@@ -155,8 +155,9 @@ const DashboardCharts = ({ data, refetch }) => {
       container
       justifyContent="space-between"
       display="grid"
-      padding=".2rem" //repeat(auto-fit, minmax(250px, 1fr));
+      padding=".5rem" //repeat(auto-fit, minmax(250px, 1fr));
       gridTemplateColumns={{ sm: "repeat(2,1fr)", md: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+      gap={2}
       rowSpacing={3}
     >
       {/* doctor */}

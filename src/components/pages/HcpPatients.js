@@ -189,10 +189,6 @@ const HcpPatients = (props) => {
 HcpPatients.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpPatients;

@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     borderRadius: "1rem",
     minHeight: "14.1rem",
+    paddingInline: "1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -302,7 +303,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
             gridTemplateColumns={{
               md: "repeat(4,minmax(15rem,1fr))",
               sm: "repeat(3,minmax(15rem,auto))",
-              xs: "repeat(2,minmax(15rem,1fr))",
+              xs: "1fr",
             }}
             className={classes.cardContainer}
           >
@@ -420,7 +421,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
-                <Grid item container gap={2}>
+                <Grid item container gap={2} justifyContent={{ xs: "space-around", sm: "center" }}>
                   {qualification?.degree && (
                     <Grid item>
                       <Typography variant="h5" className={classes.link}>
@@ -468,9 +469,9 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Grid
                   item
                   container
-                  justifyContent="center"
                   alignItems="center"
                   flexWrap="wrap"
+                  justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
                   gap={2}
                 >
                   {license.number && (
@@ -521,10 +522,10 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent="center"
+                justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
+                gap={2}
                 alignItems="center"
                 flexWrap="wrap"
-                gap={2}
               >
                 {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                   <Typography className={classes.link} variant="h5">
@@ -573,7 +574,12 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Typography variant="h4">Alumni</Typography>
             </Grid>
             {alumni_association?.facebook_group_name ? (
-              <Grid item container gap={2}>
+              <Grid
+                item
+                container
+                justifyContent={{ md: "center", sm: "center", xs: "space-around" }}
+                gap={2}
+              >
                 {alumni_association.facebook_group_name && (
                   <a
                     href={alumni_association.image}
@@ -617,8 +623,9 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
             <Grid
               item
               container
-              justifyContent="center"
-              gap={{ md: 10, sm: 6, xs: 4 }}
+              // justifyContent="center"
+              justifyContent={{ md: "center", sm: "space-between", xs: "space-around" }}
+              gap={2}
               flexWrap="nowrap"
             >
               {reference?.reference_code ? (
@@ -659,6 +666,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
           justifyContent="center"
           alignItems="center"
           gap={2}
+          flexWrap="nowrap"
           className={classes.cardGrid}
         >
           <Grid item>

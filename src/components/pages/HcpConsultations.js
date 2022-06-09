@@ -14,7 +14,7 @@ import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { PreviousButton, FilterList, Loader } from "components/Utilities";
+import { FilterList, Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
@@ -63,16 +63,7 @@ const filterOptions = [
 ];
 
 const HcpConsultations = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedHcpMenu,
-    selectedScopedMenu,
-    setSelectedSubMenu,
-    setSelectedHcpMenu,
-    setSelectedScopedMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -105,20 +96,14 @@ const HcpConsultations = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(6);
-    setSelectedScopedMenu(0); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
+  }, [selectedMenu]);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   return (
     <Grid container direction="column" height="100%" gap={2}>
-      <Grid item>
-        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
-      </Grid>
-
       <Grid item container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h2">Consultations</Typography>

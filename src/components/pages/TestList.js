@@ -1,19 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
-import { useSelector } from "react-redux";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
 import { NoData, EmptyTable } from "components/layouts";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 
-import { isSelected } from "helpers/isSelected";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { TestListRow } from "components/Rows/TestListRow";
 import ConfirmModal from "components/modals/ConfirmModal";
-import { uploadTests } from "components/graphQL/Mutation";
 import { AddTestForm } from "components/Forms/AddTestForm";
 import { deleteItem } from "helpers/filterHelperFunctions";
 import EnhancedTable from "components/layouts/EnhancedTable";
@@ -21,12 +16,7 @@ import DeletePartner from "components/modals/DeleteOrDisable";
 import { UploadTestForm } from "components/Forms/UploadTestForm";
 import { DELETE_TEST, getListOfLabTests } from "components/graphQL/useQuery";
 import { testTableHeadCells } from "components/Utilities/tableHeaders";
-import {
-  CustomButton,
-  Loader,
-  PreviousButton,
-  Modals,
-} from "components/Utilities";
+import { CustomButton, Loader, PreviousButton, Modals } from "components/Utilities";
 import { EditTestForm } from "components/Forms/EditTestForm";
 
 const TestList = () => {
@@ -44,8 +34,7 @@ const TestList = () => {
   const [editTestModal, setEditTestModal] = React.useState(false);
   const [uploadListModal, setUploadListModal] = React.useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = React.useState(false);
-  const [fetchLabTestList, { loading, error, data, refetch }] =
-    useLazyQuery(getListOfLabTests);
+  const [fetchLabTestList, { loading, error, data, refetch }] = useLazyQuery(getListOfLabTests);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -71,17 +60,11 @@ const TestList = () => {
         return null;
       });
     }
-  }, [data]);
+  }, [data, isDeleting]);
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container justifyContent="space-between">
           <PreviousButton path="/settings/list-management" />
 
@@ -110,10 +93,7 @@ const TestList = () => {
         ) : loading ? (
           <Loader />
         ) : !list ? (
-          <EmptyTable
-            headCells={testTableHeadCells}
-            paginationLabel="Test per page"
-          />
+          <EmptyTable headCells={testTableHeadCells} paginationLabel="Test per page" />
         ) : list.length > 0 ? (
           /* ================= TESTS TABLE ================= */
           <Grid item container height="100%" direction="column">
@@ -148,10 +128,7 @@ const TestList = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={testTableHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={testTableHeadCells} paginationLabel="Patients per page" />
         )}
 
         {/* ==== ADD TEST MODAL ==== */}
@@ -233,7 +210,7 @@ const TestList = () => {
               Typography,
               enqueueSnackbar,
               setIsDeleting,
-              isDeleting
+              isDeleting,
             );
             setUploadListModal(false);
           }}

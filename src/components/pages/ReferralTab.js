@@ -311,9 +311,4 @@ const ReferralTab = () => {
   );
 };
 
-ReferralTab.propTypes = {
-  /* setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
-};
-
 export default ReferralTab;
