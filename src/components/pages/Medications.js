@@ -57,11 +57,9 @@ const Medications = (props) => {
 
   useEffect(() => {
     setSelectedMenu(1);
-    /* setSelectedSubMenu(2);
-    setSelectedPatientMenu(6); */
 
     // eslint-disable-next-line
-  }, [selectedMenu /*  selectedSubMenu, selectedPatientMenu */]);
+  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -176,10 +174,6 @@ const Medications = (props) => {
 Medications.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Medications;

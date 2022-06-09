@@ -9,7 +9,7 @@ import { useStyles } from "../../styles/patientsPageStyles";
 
 export const TestListRow = ({
   data,
-  labelId,
+  // labelId,
   isDeleting,
   setEditData,
   openEditModal,
@@ -73,18 +73,11 @@ export const TestListRow = ({
 };
 
 TestListRow.propTypes = {
-  /* isItemSelected: t.bool.isRequired,
-  _id: t.string.isRequired,
-  handleSelectedRows: t.func,
-  selectedRows: t.any,
-  setSelectedRows: t.func, */
-  /* testName: t.string,
-  price: t.string,
-  tat: t.string, */
+  data: t.object,
   labelId: t.string,
-  isDeleting: t.bool.isRequired,
-  setEditData: t.func.isRequired,
-  openEditModal: t.func.isRequired,
-  openConfirmModal: t.func.isRequired,
-  setTestIdToDelete: t.func.isRequired,
+  isDeleting: t.bool,
+  setEditData: t.func,
+  openEditModal: t.func,
+  openConfirmModal: t.func,
+  setTestIdToDelete: t.func,
 };

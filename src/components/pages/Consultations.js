@@ -240,12 +240,6 @@ const Consultations = (props) => {
 Consultations.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  selectedScopedMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default Consultations;

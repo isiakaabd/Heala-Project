@@ -150,10 +150,7 @@ const PatientProfile = ({
       {/* <Grid item container> */}
       <Grid item container spacing={4} justifyContent="space-between">
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard
-            text="Gender"
-            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
-          />
+          <ProfileCard text="Gender" value={gender} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
           <ProfileCard text="Created At" value={dateMoment(createdAt)} />

@@ -63,16 +63,7 @@ const filterOptions = [
 ];
 
 const HcpConsultations = (props) => {
-  const {
-    selectedMenu,
-    setSelectedMenu,
-    /* selectedSubMenu,
-    selectedHcpMenu,
-    selectedScopedMenu,
-    setSelectedSubMenu,
-    setSelectedHcpMenu,
-    setSelectedScopedMenu, */
-  } = props;
+  const { selectedMenu, setSelectedMenu } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -105,11 +96,9 @@ const HcpConsultations = (props) => {
 
   useEffect(() => {
     setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(6);
-    setSelectedScopedMenu(0); */
+
     // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, selectedHcpMenu, selectedScopedMenu */]);
+  }, [selectedMenu]);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;

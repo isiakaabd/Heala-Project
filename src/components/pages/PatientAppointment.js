@@ -558,10 +558,6 @@ const PatientAppointment = (props) => {
 PatientAppointment.propTypes = {
   selectedMenu: PropTypes.number,
   setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default PatientAppointment;
