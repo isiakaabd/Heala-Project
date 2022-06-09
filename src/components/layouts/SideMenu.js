@@ -1,18 +1,28 @@
-import React, { useEffect, useState, createElement } from "react";
-import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import React, { useState, createElement } from "react";
 import PropTypes from "prop-types";
-import { List, ListItemText, ListItemButton, ListItemIcon, Grid } from "@mui/material";
-import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
+import { List, ListItemText, ListItemButton, ListItemIcon, Grid } from "@mui/material";
+
+
 import logo from "assets/images/logo.svg";
-import { Link, useLocation } from "react-router-dom";
 import { HiLogout } from "react-icons/hi";
-import { useActions } from "components/hooks/useActions";
+import { setSideNav } from "helpers/func";
+import { menus } from "helpers/asideMenus";
+
 import { useMutation } from "@apollo/client";
+import { Link, useLocation } from "react-router-dom";
+import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const SideMenu = (props) => {
-  const { selectedMenu, setSelectedMenu, drawerWidth } = props;
+  const { drawerWidth } = props;
+  const location = useLocation();
+  const { logout } = useActions();
+  const [Logout, setLogout] = useState(false);
+  const [logout_user] = useMutation(LOGOUT_USER);
+  const [selectedMenu, setSelectedMenu] = React.useState(0);
+
   const useStyles = makeStyles((theme) => ({
     aside: {
       width: `${drawerWidth}`,
@@ -117,12 +127,7 @@ const SideMenu = (props) => {
       },
     },
   }));
-  const { logout } = useActions();
-  const [logout_user] = useMutation(LOGOUT_USER);
-
   const classes = useStyles();
-  const [Logout, setLogout] = useState(false);
-  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -138,20 +143,9 @@ const SideMenu = (props) => {
     }
   };
 
-  useEffect(() => {
-    [...menus].filter((menu) => {
-      switch (location.pathname) {
-        case menu.path:
-          if (menu.id !== selectedMenu) {
-            setSelectedMenu(menu.id);
-          }
-          break;
-        default:
-          break;
-      }
-    });
-    // eslint-disable-next-line
-  }, [selectedMenu]);
+  React.useEffect(() => {
+    setSideNav(menus, location?.pathname, setSelectedMenu);
+  }, [location?.pathname]);
 
   return (
     <>
@@ -172,7 +166,7 @@ const SideMenu = (props) => {
               <ListItemIcon>
                 {createElement(
                   menu.icon,
-                  menu.id === 5 ? { size: 20, className: "message-icon" } : {},
+                  menu.id === 5 ? { size: 20, className: "message-icon" } : {}
                 )}
               </ListItemIcon>
 
@@ -206,8 +200,6 @@ const SideMenu = (props) => {
 };
 
 SideMenu.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
   drawerWidth: PropTypes.number,
   handleDrawerToggle: PropTypes.func,
 };

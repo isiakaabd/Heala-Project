@@ -140,7 +140,6 @@ DisplayProfile.propTypes = {
   status: PropTypes.string,
   chatPath: PropTypes.string,
   type: PropTypes.string,
-  setChatMediaActive: PropTypes.func,
 };
 
 export default DisplayProfile;

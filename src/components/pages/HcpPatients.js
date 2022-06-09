@@ -199,9 +199,4 @@ const HcpPatients = () => {
   );
 };
 
-HcpPatients.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-};
-
 export default HcpPatients;
