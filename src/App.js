@@ -90,9 +90,11 @@ const App = ({ window }) => {
                     ModalProps={{
                       keepMounted: true, // Better open performance on mobile.
                     }}
+                    elevation={0}
                     sx={{
                       display: { xs: "block", md: "none" },
                       "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+                      "& .MuiBackdrop-root": { backgroundColor: "rgba(0, 0, 0, 0.2)" },
                     }}
                   >
                     <SideMenu
@@ -104,6 +106,7 @@ const App = ({ window }) => {
                   </Drawer>
                   <Drawer
                     variant="permanent"
+                    elevation={0}
                     sx={{
                       display: { xs: "none", md: "block" },
                       "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },

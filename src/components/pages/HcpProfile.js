@@ -103,7 +103,7 @@ const HcpProfile = (props) => {
           fullName={`${firstName} ${lastName}`}
           displayPhoto={picture}
           medicalTitle="Medical ID"
-          statusId={dociId && dociId.split("-")[1]}
+          statusId={dociId?.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
           setChatMediaActive={setChatMediaActive}
@@ -114,10 +114,7 @@ const HcpProfile = (props) => {
       {/* PERSONAL INFO SECTION */}
       <Grid item container spacing={4} justifyContent="space-between">
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard
-            text="Gender"
-            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
-          />
+          <ProfileCard text="Gender" value={gender} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
           <ProfileCard text="Date Of Birth" value={dob ? dateMoment(dob) : "DOB not Provided"} />
