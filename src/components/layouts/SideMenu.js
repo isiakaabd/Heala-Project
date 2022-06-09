@@ -1,25 +1,18 @@
-import React, { useState, createElement } from "react";
+import React, { useEffect, useState, createElement } from "react";
+import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import PropTypes from "prop-types";
-import { List, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
+import { List, ListItemText, ListItemButton, ListItemIcon, Grid } from "@mui/material";
+import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
 import logo from "assets/images/logo.svg";
-import { HiLogout } from "react-icons/hi";
-import { setSideNav } from "helpers/func";
-import { menus } from "helpers/asideMenus";
-import { useMutation } from "@apollo/client";
 import { Link, useLocation } from "react-router-dom";
+import { HiLogout } from "react-icons/hi";
 import { useActions } from "components/hooks/useActions";
+import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
-import DeleteOrDisable from "components/modals/DeleteOrDisable";
 
 const SideMenu = (props) => {
-  const { drawerWidth } = props;
-  const location = useLocation();
-  const { logout } = useActions();
-  const [Logout, setLogout] = useState(false);
-  const [logout_user] = useMutation(LOGOUT_USER);
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
-
+  const { selectedMenu, setSelectedMenu, drawerWidth } = props;
   const useStyles = makeStyles((theme) => ({
     aside: {
       width: `${drawerWidth}`,
@@ -28,8 +21,8 @@ const SideMenu = (props) => {
       paddingRight: "2.5em",
       paddingTop: "1em",
       minHeight: "100vh",
-      boxShadow: "0px -5px 7px #eee",
-      // height: "100%",
+      // boxShadow: "5px -5px 7px #eee",
+      height: "100%",
       position: "fixed",
       overflowY: "hidden",
       zIndex: theme.zIndex.appBar + 1,
@@ -124,7 +117,12 @@ const SideMenu = (props) => {
       },
     },
   }));
+  const { logout } = useActions();
+  const [logout_user] = useMutation(LOGOUT_USER);
+
   const classes = useStyles();
+  const [Logout, setLogout] = useState(false);
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -140,13 +138,24 @@ const SideMenu = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    setSideNav(menus, location?.pathname, setSelectedMenu);
-  }, [location?.pathname]);
+  useEffect(() => {
+    [...menus].filter((menu) => {
+      switch (location.pathname) {
+        case menu.path:
+          if (menu.id !== selectedMenu) {
+            setSelectedMenu(menu.id);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+    // eslint-disable-next-line
+  }, [selectedMenu]);
 
   return (
     <>
-      <aside className={classes.aside}>
+      <Grid className={classes.aside} boxShadow={{ sm: "5px -5px 7px #eee", xs: "none" }}>
         <div className={classes.logoWrapper}>
           <img src={logo} alt="logo" />
         </div>
@@ -182,7 +191,7 @@ const SideMenu = (props) => {
             <ListItemText>Logout</ListItemText>
           </ListItemButton>
         </List>
-      </aside>
+      </Grid>
       <DeleteOrDisable
         open={Logout}
         setOpen={setLogout}
@@ -197,6 +206,8 @@ const SideMenu = (props) => {
 };
 
 SideMenu.propTypes = {
+  selectedMenu: PropTypes.number,
+  setSelectedMenu: PropTypes.func,
   drawerWidth: PropTypes.number,
   handleDrawerToggle: PropTypes.func,
 };
