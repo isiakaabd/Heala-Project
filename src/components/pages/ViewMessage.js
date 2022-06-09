@@ -45,6 +45,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
   useEffect(() => {
     if (data) setMessage(data.getMessage);
   }, [message, data]);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const { body, recipientData, subject } = message;
@@ -66,8 +67,8 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {recipientData
-                  ? `${recipientData.firstName} ${recipientData.lastName}`
+                {recipientData && Object.keys(recipientData).length > 0
+                  ? `${recipientData?.firstName} ${recipientData?.lastName}`
                   : "No Value"}
               </Typography>
             </Grid>
@@ -75,7 +76,11 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
           <Grid item>
             <Chip
               variant="outlined"
-              label={recipientData ? recipientData?.dociId : "No Heala ID"}
+              label={
+                recipientData && Object.keys(recipientData).length > 0
+                  ? recipientData.dociId
+                  : "No Heala ID"
+              }
               className={classes.badge}
             />
           </Grid>
@@ -84,7 +89,7 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            {body}
+            {body ? body : "No Value"}
           </Typography>
         </Grid>
       </Grid>
