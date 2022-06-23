@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material/styles";
 import { useQuery, useMutation } from "@apollo/client";
 import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { Card, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
@@ -106,17 +105,17 @@ const SingleHCP = () => {
     },
     {
       id: 2,
-      title: "Appointments",
+      title: "Availability",
       background: theme.palette.common.lightGreen,
-      path: "appointments",
-      icon: CalendarIcon,
+      path: "availability",
+      icon: ConsultationIcon,
       fill: theme.palette.common.green,
     },
     {
       id: 3,
-      title: "Availability",
+      title: "Consultations",
       background: theme.palette.common.lightRed,
-      path: "availability",
+      path: "consultations",
       icon: ConsultationIcon,
       fill: theme.palette.common.red,
     },
@@ -138,11 +137,11 @@ const SingleHCP = () => {
     },
     {
       id: 6,
-      title: "Consultations",
+      title: "Appointments",
       background: theme.palette.common.lightGreen,
-      path: "consultations",
-      icon: AssignmentIcon,
-      fill: theme.palette.common.red,
+      path: "appointments",
+      icon: CalendarIcon,
+      fill: theme.palette.common.green,
     },
   ];
 

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "components/routes/PrivateRoute";
 import { CircularChart } from "components/Utilities";
@@ -236,7 +235,7 @@ const Routes = () => {
       />
       <PrivateRoute
         exact
-        path="/verification/view/:viewId/doctor/:id" ///verification/view/${viewId}/doctor
+        path="/verification/view/:viewId/doctor/:id"
         component={DoctorVerificationProfile}
       />
 

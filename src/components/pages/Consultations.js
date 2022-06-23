@@ -110,13 +110,14 @@ const Consultations = () => {
         flexWrap="nowrap"
         justifyContent="space-between"
         alignItems="center"
+        sx={{ margin: "1rem 0rem" }}
       >
         <Grid item flex={1}>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <FilterList options={filterOptions} title="Filter" />
-        </Grid>
+        </Grid> */}
       </Grid>
       {consultations.length > 0 ? (
         <Grid item container direction="column" height="100%">
@@ -256,7 +257,5 @@ const Consultations = () => {
     </Grid>
   );
 };
-
-
 
 export default Consultations;

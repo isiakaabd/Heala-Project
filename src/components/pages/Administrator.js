@@ -277,11 +277,11 @@ const Administrator = () => {
             justifyContent="space-between"
           >
             <Grid item>
-              <FilterList
+              {/* <FilterList
                 onClick={handleDialogOpen}
                 title="Filter"
                 options={optionss}
-              />
+              /> */}
             </Grid>
             <Grid item>
               <CustomButton
@@ -352,7 +352,7 @@ const Administrator = () => {
                         {role}
                       </TableCell>
 
-                      <TableCell align="left" className={classes.tableCell}>
+                      {/* <TableCell align="left" className={classes.tableCell}>
                         <Grid
                           style={{
                             height: "100%",
@@ -374,11 +374,10 @@ const Administrator = () => {
                             Edit Admin
                           </Button>
                         </Grid>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}
-              )
             </EnhancedTable>
           </Grid>
         ) : (

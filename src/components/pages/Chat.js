@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 import { Grid, Typography, Divider } from "@mui/material";
 import { Loader, CustomButton, PreviousButton } from "components/Utilities";
 import { useParams } from "react-router-dom";
@@ -10,6 +11,10 @@ import { CREATE_MESSAGE } from "components/graphQL/Mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import {
+  showSuccessMsg,
+  handleError,
+} from "../../helpers/filterHelperFunctions";
 import { getMessage, getProfile } from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +67,7 @@ const Chat = () => {
   const classes = useStyles();
   const theme = useTheme();
   let history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [createNewMessage] = useMutation(CREATE_MESSAGE, {
     refetchQueries: [{ query: getMessage }],
   });
@@ -113,7 +119,9 @@ const Chat = () => {
           body: textarea,
         },
       });
+      showSuccessMsg(enqueueSnackbar, Typography, "Message sent");
     } catch (error) {
+      handleError(error, enqueueSnackbar, Typography);
       console.log(error);
     }
     onSubmitProps.resetForm();

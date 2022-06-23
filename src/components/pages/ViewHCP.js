@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
+import { useSnackbar } from "notistack";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -24,6 +25,7 @@ import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Success from "components/modals/Success";
+import { handleError, showSuccessMsg } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -114,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewHCP = () => {
   const { viewId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
@@ -155,26 +158,36 @@ const ViewHCP = () => {
     reason: Yup.string("Enter Reason ").required("Reason is required"),
   });
   const onSubmit = async (values) => {
-    const { reason } = values;
-
-    await reject({
-      variables: {
-        reason,
-        id: viewId,
-      },
-      refetchQueries: [
-        {
-          query: getVerification,
+    try {
+      const { reason } = values;
+      const trimedReason = reason.trim();
+      console.log("trimmed reason", trimedReason);
+      await reject({
+        variables: {
+          reason: trimedReason,
+          id: viewId,
         },
-      ],
-    });
-    setCancel(false);
-
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-      history.push("/verification");
-    }, 3000);
+        refetchQueries: [
+          {
+            query: getVerification,
+          },
+        ],
+      });
+      setCancel(false);
+      showSuccessMsg(
+        enqueueSnackbar,
+        Typography,
+        "Reject verification successful."
+      );
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+        history.push("/verification");
+      }, 3000);
+    } catch (error) {
+      console.log("Error from reject verification", error);
+      handleError(error, enqueueSnackbar, Typography);
+    }
   };
 
   const theme = useTheme();
@@ -233,7 +246,6 @@ const ViewHCP = () => {
     status,
     // eslint-disable-next-line
   } = respondData;
-  console.log(doctorData);
 
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
@@ -435,7 +447,12 @@ const ViewHCP = () => {
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
-                <Grid item container gap={2} justifyContent={{ xs: "left", sm: "center" }}>
+                <Grid
+                  item
+                  container
+                  gap={2}
+                  justifyContent={{ xs: "left", sm: "center" }}
+                >
                   {qualification?.degree && (
                     <Grid item>
                       <Typography variant="h5" className={classes.link}>
@@ -485,7 +502,11 @@ const ViewHCP = () => {
                   container
                   alignItems="center"
                   flexWrap="wrap"
-                  justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                  justifyContent={{
+                    md: "center",
+                    sm: "center",
+                    xs: "flex-start",
+                  }}
                   gap={2}
                 >
                   {license.number && (
@@ -536,7 +557,11 @@ const ViewHCP = () => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
                 gap={2}
                 alignItems="center"
                 flexWrap="wrap"
@@ -591,7 +616,11 @@ const ViewHCP = () => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
                 gap={2}
               >
                 {alumni_association.facebook_group_name && (
@@ -638,7 +667,11 @@ const ViewHCP = () => {
               item
               container
               // justifyContent="center"
-              justifyContent={{ md: "center", sm: "space-between", xs: "space-around" }}
+              justifyContent={{
+                md: "center",
+                sm: "space-between",
+                xs: "space-around",
+              }}
               gap={2}
               flexWrap="nowrap"
             >

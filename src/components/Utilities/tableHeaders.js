@@ -70,10 +70,6 @@ export const adminHeader = [
     id: 1,
     label: "Role",
   },
-  {
-    id: 2,
-    label: "",
-  },
 ];
 export const roleHeader = [
   {
@@ -165,10 +161,6 @@ export const referralHeader = [
   {
     id: 8,
     label: "Type",
-  },
-  {
-    id: 18,
-    label: "Category",
   },
   {
     id: 6,
@@ -386,7 +378,7 @@ export const hcpsHeadCells = [
   { id: 1, label: "Name" },
   { id: 2, label: "Category" },
   { id: 3, label: "Consultations" },
-  { id: 4, label: "Hospital" },
+  { id: 4, label: "Provider" },
   { id: 5, label: "Status" },
   { id: 6, label: "" },
 ];
@@ -413,8 +405,9 @@ export const messagesHeadCells = [
 ];
 // Doctor Patients HEADCELLS
 export const hcpPatientsHeadCells = [
-  { id: 0, label: "User ID" },
+  { id: 0, label: "Patient ID" },
   { id: 1, label: "Patient Name" },
+  { id: 2, label: "Gender" },
   { id: 2, label: "" },
 ];
 

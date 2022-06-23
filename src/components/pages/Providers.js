@@ -291,7 +291,7 @@ const Providers = () => {
           </Grid>
           <Grid item container justifyContent="space-between">
             <Grid item>
-              <FilterList title="Filter partner" onClick={handleDialogOpens1} />
+              {/* <FilterList title="Filter partner" onClick={handleDialogOpens1} /> */}
             </Grid>
             <Grid item>
               <CustomButton

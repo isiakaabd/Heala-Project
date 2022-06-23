@@ -98,22 +98,6 @@ const SinglePatient = () => {
       fill: theme.palette.common.red,
     },
     {
-      id: 2,
-      title: "Appointments",
-      background: theme.palette.common.lightGreen,
-      path: "appointments",
-      icon: ConsultationIcon,
-      fill: theme.palette.common.green,
-    },
-    {
-      id: 3,
-      title: "Prescriptions",
-      background: theme.palette.common.lightRed,
-      path: "prescriptions",
-      icon: PrescriptionIcon,
-      fill: theme.palette.common.red,
-    },
-    {
       id: 4,
       title: "Medical Records",
       background: theme.palette.common.lightGreen,
@@ -130,13 +114,29 @@ const SinglePatient = () => {
       fill: theme.palette.common.red,
     },
     {
+      id: 3,
+      title: "Prescriptions",
+      background: theme.palette.common.lightRed,
+      path: "prescriptions",
+      icon: PrescriptionIcon,
+      fill: theme.palette.common.red,
+    },
+    {
+      id: 2,
+      title: "Appointments",
+      background: theme.palette.common.lightGreen,
+      path: "appointments",
+      icon: ConsultationIcon,
+      fill: theme.palette.common.green,
+    },
+    /* {
       id: 6,
       title: "Medications",
       background: theme.palette.common.lightGreen,
       path: "medications",
       icon: UserIcon,
       fill: theme.palette.common.green,
-    },
+    }, */
   ];
 
   const trasparentButton = {

@@ -138,6 +138,7 @@ const PendingPayout = () => {
             page={page}
             paginationLabel="payout per page"
             hasCheckbox={true}
+            hasPagination={false}
           >
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

@@ -177,9 +177,7 @@ const Payout = () => {
               {payout
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { amount, createdAt, doctorData, status, _id } = row;
-                  // console.log(row);
-                  console.log(doctorData);
+                  const { amount, createdAt, status, _id } = row;
                   /*   const { firstName, picture, lastName specialization } = doctorData;*/
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;

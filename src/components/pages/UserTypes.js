@@ -300,7 +300,7 @@ const UserTypes = () => {
             justifyContent="space-between"
           >
             <Grid item>
-              <FilterList title="Filter" onClick={handleDialogOpens1} />
+              {/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}
             </Grid>
             <Grid item>
               <CustomButton

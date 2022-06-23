@@ -428,14 +428,16 @@ const HcpCaseNotes = () => {
             style={{ padding: "2rem 3rem" }}
             justifyContent="flex-end"
           >
-            <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
-              <CustomButton
-                title="View Prescription"
-                width="100%"
-                type={buttonType}
-                onClick={handleDialogOpen}
-              />
-            </Grid>
+            {prescription && (
+              <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
+                <CustomButton
+                  title="View Prescription"
+                  width="100%"
+                  type={buttonType}
+                  onClick={handleDialogOpen}
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>

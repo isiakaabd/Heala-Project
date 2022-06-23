@@ -22,7 +22,6 @@ export const arrangeItems = (array) => {
     }
   });
   finalArray.shift();
-  console.log(finalArray);
   return finalArray;
 };
 

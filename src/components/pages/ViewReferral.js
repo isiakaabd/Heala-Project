@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Grid, Avatar, Divider } from "@mui/material";
+import { Typography, Grid, Avatar, Divider, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
@@ -48,11 +48,10 @@ const ViewReferral = () => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {
-    specialization,
     type,
     reason,
     note,
-    testType,
+    tests,
     createdAt,
     patientData,
     doctorData,
@@ -172,10 +171,15 @@ const ViewReferral = () => {
                 Test Type:
               </Typography>
             </Grid>
-            <Grid item>
-              <Typography variant="h5">
-                {testType ? testType : "No Value"}
-              </Typography>
+            <Grid item container flexWrap="wrap" columnGap={2} rowGap={2}>
+              {tests &&
+                tests.map((test, index) => {
+                  return (
+                    <Grid item>
+                      <Chip key={index} label={test?.name} />
+                    </Grid>
+                  );
+                })}
             </Grid>
           </Grid>
 
@@ -208,16 +212,6 @@ const ViewReferral = () => {
               <Typography variant="body1" style={{ lineHeight: 1.85 }}>
                 {reason}
               </Typography>
-            </Grid>
-          </Grid>
-          <Grid item container xs={4} direction="column" gap={2}>
-            <Grid item>
-              <Typography variant="body1" className={classes.title}>
-                Specialization
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">{specialization}</Typography>
             </Grid>
           </Grid>
           <Grid

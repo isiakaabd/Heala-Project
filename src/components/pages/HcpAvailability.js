@@ -35,11 +35,15 @@ const HcpAvailability = () => {
       >
         {availabiltyArray.length > 0 ? (
           availabiltyArray.map((availability, index) => {
-            return (
-              <Grid item key={index}>
-                <AvailabilityCard availability={availability} />
-              </Grid>
-            );
+            if (availability.dates[0].times) {
+              return (
+                <Grid item key={index}>
+                  <AvailabilityCard availability={availability.dates[0]} />
+                </Grid>
+              );
+            } else {
+              return null;
+            }
           })
         ) : (
           <NoData />

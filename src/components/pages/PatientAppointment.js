@@ -298,13 +298,13 @@ const PatientAppointment = () => {
             <Grid item flex={1}>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <FilterList
                 onClick={handlePatientOpen}
                 options={filterOptions}
                 title="Filter"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           {patientAppointment.length > 0 ? (
             <Grid item container height="100%" direction="column">
@@ -585,6 +585,5 @@ const PatientAppointment = () => {
     </>
   );
 };
-
 
 export default PatientAppointment;

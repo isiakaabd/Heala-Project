@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
-import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
+import {
+  Button,
+  Avatar,
+  Chip,
+  Checkbox,
+  TableCell,
+  TableRow,
+  Grid,
+} from "@mui/material";
 import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
@@ -20,9 +28,9 @@ import { patientsHeadCells } from "components/Utilities/tableHeaders";
 import {
   genderType,
   patientsPageDefaultFilterValues,
-  planFilterBy,
+  /* planFilterBy,
   providerFilterBy,
-  statusFilterBy,
+  statusFilterBy, */
 } from "../../helpers/mockData";
 import {
   changeTableLimit,
@@ -107,8 +115,11 @@ const Patients = () => {
   const theme = useTheme();
   const [profiles, setProfiles] = useState([]);
 
-  const [filterValues, setFilterValues] = useState(patientsPageDefaultFilterValues);
-  const [fetchPatient, { loading, error, data, refetch, variables }] = useLazyQuery(getPatients);
+  const [filterValues, setFilterValues] = useState(
+    patientsPageDefaultFilterValues
+  );
+  const [fetchPatient, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getPatients);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -143,7 +154,12 @@ const Patients = () => {
 
   return (
     <Grid item flex={1} container direction="column" rowGap={2}>
-      <Grid item container spacing={2} className={classes.searchFilterContainer}>
+      <Grid
+        item
+        container
+        spacing={2}
+        className={classes.searchFilterContainer}
+      >
         {/*  ======= SEARCH INPUT(S) ==========*/}
         <Grid item flex={1} width="100%">
           <Search
@@ -174,7 +190,7 @@ const Patients = () => {
                   setFilterValues,
                   fetchPatient,
                   variables,
-                  refetch,
+                  refetch
                 )
               }
               options={genderType}
@@ -184,7 +200,7 @@ const Patients = () => {
             />
           </Grid>
           {/* FILTER BY STATUS */}
-          <Grid item>
+          {/* <Grid item>
             <Filter
               onHandleChange={(e) => console.log(e)}
               options={statusFilterBy}
@@ -192,9 +208,9 @@ const Patients = () => {
               placeholder="By status"
               value={filterValues.status}
             />
-          </Grid>
+          </Grid> */}
           {/* FILTER BY PROVIDER */}
-          <Grid item>
+          {/* <Grid item>
             <Filter
               onHandleChange={(e) => console.log(e)}
               options={providerFilterBy}
@@ -202,9 +218,9 @@ const Patients = () => {
               placeholder="By provider"
               value={filterValues.provider}
             />
-          </Grid>
+          </Grid> */}
           {/* FILTER BY PLAN */}
-          <Grid item>
+          {/* <Grid item>
             <Filter
               onHandleChange={(e) => console.log(e)}
               options={planFilterBy}
@@ -212,7 +228,7 @@ const Patients = () => {
               placeholder="By plan"
               value={filterValues.plan}
             />
-          </Grid>
+          </Grid> */}
           {/* ==== CLEAR FILTERS BUTTON ===== */}
           <Grid item>
             <ClearFiltersBtn
@@ -222,7 +238,7 @@ const Patients = () => {
                   setFilterValues,
                   patientsPageDefaultFilterValues,
                   variables,
-                  fetchPatient,
+                  fetchPatient
                 );
               }}
             />
@@ -275,7 +291,9 @@ const Patients = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                      onClick={() =>
+                        handleSelectedRows(_id, selectedRows, setSelectedRows)
+                      }
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -310,7 +328,9 @@ const Patients = () => {
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
-                      <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
+                      <span
+                        style={{ fontSize: "1.25rem" }}
+                      >{`${firstName} ${lastName}`}</span>
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
@@ -355,7 +375,10 @@ const Patients = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
+        <EmptyTable
+          headCells={patientsHeadCells}
+          paginationLabel="Patients per page"
+        />
       )}
     </Grid>
   );

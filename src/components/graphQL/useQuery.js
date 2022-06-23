@@ -470,14 +470,22 @@ export const getRefferal = gql`
       _id
       doctor
       patient
+      doctorData
+      patientData
       type
       reason
       note
       specialization
+      totalMarkUp
+      trackingId
+      tests {
+        name
+        price
+        tat
+      }
+      consultationId
       createdAt
       updatedAt
-      doctorData
-      patientData
     }
   }
 `;
@@ -566,9 +574,9 @@ export const verifiedEmail = gql`
 `;
 export const findAdmin = gql`
   ${PageInfo}
-  query findAccounts($role: String, $email: String, $page: Int, $first: Int) {
+  query findAccounts($email: String, $page: Int, $first: Int) {
     accounts(
-      filterBy: { role: $role, email: $email }
+      filterBy: { role: "admin", email: $email }
       page: $page
       orderBy: "-createdAt"
       first: $first
@@ -1060,6 +1068,7 @@ export const getDoctorPatients = gql`
         _id
         doctor
         patient
+        patientData
         createdAt
         updatedAt
       }

@@ -1,108 +1,42 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import * as Yup from "yup";
-import LoginInput from "components/validation/LoginInput";
+import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
+import { useSnackbar } from "notistack";
+/* import { makeStyles } from "@mui/styles"; */
+import { useMutation } from "@apollo/client";
+import { useTheme } from "@mui/material/styles";
 import { Link, useHistory } from "react-router-dom";
-import { Grid, Checkbox, InputAdornment, Typography, Alert } from "@mui/material";
-import { CustomButton } from "components/Utilities";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import people from "assets/images/login-page-photo.png";
-import loginBackground from "assets/images/login-background.svg";
+import {
+  Grid,
+  Checkbox,
+  InputAdornment,
+  Typography,
+  Alert,
+} from "@mui/material";
+
 import logo from "assets/images/logo.svg";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { useActions } from "components/hooks/useActions";
 import { useSelector } from "react-redux";
-import { Login_USER } from "components/graphQL/Mutation";
-import { useMutation } from "@apollo/client";
 import { setAccessToken } from "../../accessToken";
-
-const useStyles = makeStyles((theme) => ({
-  gridContainer: {
-    "&.MuiGrid-root": {
-      minHeight: "100vh",
-      display: "grid !important",
-      gridTemplateColumns: "repeat(2,1fr)",
-      "@media(max-width:600px)": {
-        gridTemplateColumns: "1fr",
-        "& >*:first-child": {
-          display: "none !important",
-        },
-      },
-    },
-  },
-  leftParentGrid: {
-    "&.MuiGrid-root": {
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundImage: `url(${people}),
-      linear-gradient(89.63deg, rgba(1, 2, 2, 0.49) 0.3%, rgba(1, 2, 2, 0) 99.66%)`,
-      backgroundBlendMode: "darken",
-    },
-  },
-  overlay: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
-  },
-  peopleBgImage: {
-    width: "100%",
-    height: "100%",
-    backgroundSize: "cover",
-    overflow: "hidden",
-    backgroundPosition: "25% 50%",
-  },
-  heading: {
-    "&.MuiTypography-root": {
-      fontSize: "clamp(3rem, 3vw, 4.8rem)",
-      "@media(max-width:600px)": {
-        textAlign: "center",
-      },
-    },
-  },
-  logoAlign: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  logo: {
-    width: "min(28rem, 40vw)",
-    position: "relative",
-    textAlign: "center",
-  },
-  rightParentGrid: {
-    backgroundImage: `url(${loginBackground})`,
-    // padding: "5rem 8rem",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-
-  link: {
-    textDecoration: "none",
-  },
-}));
+import { useStyles } from "styles/loginPageStyles";
+import { CustomButton } from "components/Utilities";
+/* import people from "assets/images/login-page-photo.png"; */
+import { useActions } from "components/hooks/useActions";
+import { Login_USER } from "components/graphQL/Mutation";
+import LoginInput from "components/validation/LoginInput";
+import { showErrorMsg } from "../../helpers/filterHelperFunctions";
+/* import loginBackground from "assets/images/login-background.svg"; */
 
 const Login = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { authError } = useSelector((state) => state.auth);
   const theme = useTheme();
   const history = useHistory();
-  const [loginInfo] = useMutation(Login_USER); //{ data, loading, error }
+  const [loginInfo] = useMutation(Login_USER);
   const { loginUser, loginFailue } = useActions();
-  // const { authError } = useSelector((state) => state.auth);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [showPassword, setShowPassword] = useState(false);
   const buttonColors = {
@@ -117,7 +51,10 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+    email: Yup.string()
+      .email("Enter a valid email")
+      .trim()
+      .required("Email is required"),
     password: Yup.string().trim().required("password is required"),
   });
 
@@ -141,7 +78,8 @@ const Login = () => {
           },
         });
         if (data) {
-          const { email, access_token, _id, userTypeId, dociId } = data.login.account;
+          const { email, access_token, _id, userTypeId, dociId } =
+            data.login.account;
           setAccessToken(access_token);
           localStorage.setItem("email", email);
           localStorage.setItem("_id", _id);
@@ -161,11 +99,21 @@ const Login = () => {
     return () => (isMounted = false);
   };
 
+  React.useEffect(() => {
+    Object.keys(authError).length > 0 &&
+      showErrorMsg(enqueueSnackbar, authError?.message);
+  }, [authError, enqueueSnackbar]);
+
   return (
     <>
       <Grid container className={classes.gridContainer}>
         <Grid item container className={classes.leftParentGrid}></Grid>
-        <Grid container item className={classes.rightParentGrid} sx={{ justifyContent: "center" }}>
+        <Grid
+          container
+          item
+          className={classes.rightParentGrid}
+          sx={{ justifyContent: "center" }}
+        >
           <Grid item container md={8} xs={10} margin="auto">
             <Grid item className={classes.logoAlign}>
               <img src={logo} alt="Brand logo" className={classes.logo} />
@@ -181,25 +129,22 @@ const Login = () => {
               >
                 {({ isSubmitting, isValid, dirty }) => {
                   return (
-                    <Grid item container direction="column" justifyContent="center">
+                    <Grid
+                      item
+                      container
+                      direction="column"
+                      justifyContent="center"
+                    >
                       <Form>
                         <Grid item style={{ marginBottom: "3rem" }}>
                           <Typography variant="h2" className={classes.heading}>
                             Sign into your account
                           </Typography>
                         </Grid>
-                        <Grid item style={{ marginBottom: "2rem" }}>
-                          {Object.keys(authError).length > 0 && (
-                            <Alert
-                              variant="filled"
-                              severity={authError.type}
-                              sx={{ justifyContent: "center" }}
-                            >
-                              {authError.message}
-                            </Alert>
-                          )}
-                        </Grid>
-                        <Grid item style={{ marginBottom: "2rem", width: "100%" }}>
+                        <Grid
+                          item
+                          style={{ marginBottom: "2rem", width: "100%" }}
+                        >
                           <Grid container direction="column">
                             <LoginInput
                               label="Email address"
@@ -224,10 +169,16 @@ const Login = () => {
                               endAdornment={
                                 <InputAdornment
                                   position="end"
-                                  onClick={() => setShowPassword((prev) => !prev)}
+                                  onClick={() =>
+                                    setShowPassword((prev) => !prev)
+                                  }
                                   style={{ cursor: "pointer" }}
                                 >
-                                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                  {showPassword ? (
+                                    <VisibilityOffIcon />
+                                  ) : (
+                                    <VisibilityIcon />
+                                  )}
                                 </InputAdornment>
                               }
                             />
@@ -244,7 +195,11 @@ const Login = () => {
                               <Checkbox
                                 {...label}
                                 defaultChecked
-                                sx={{ "& .MuiSvgIcon-root": { fontSize: "min(28, 5vw)" } }}
+                                sx={{
+                                  "& .MuiSvgIcon-root": {
+                                    fontSize: "min(28, 5vw)",
+                                  },
+                                }}
                                 color="success"
                               />
 
@@ -281,7 +236,12 @@ const Login = () => {
                             disabled={!(dirty || isValid)}
                           />
                         </Grid>
-                        <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>
+                        <Grid
+                          item
+                          container
+                          alignItems="center"
+                          style={{ marginTop: "2rem" }}
+                        >
                           <Grid item>
                             <Typography
                               variant="body2"

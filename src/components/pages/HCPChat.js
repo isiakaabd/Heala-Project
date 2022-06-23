@@ -112,9 +112,7 @@ const HCPChat = () => {
       console.log(error);
     }
     onSubmitProps.resetForm();
-    history.push(`/hcps/${hcpId}/profile`);
-
-    /* setSelectedScopedMenu(0); */
+    history.goBack();
   };
 
   if (loading) return <Loader />;

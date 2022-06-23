@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
 import { isSelected } from "helpers/isSelected";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -22,6 +22,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { TableRow, TableCell, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { arrangeItems } from "../../helpers/func";
+import { handleError, showSuccessMsg } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   filterBtnGrid: {
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const EditManagement = () => {
   let history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const { editId } = useParams();
   const [last, setLast] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +102,7 @@ const EditManagement = () => {
   const { data, loading, error } = useQuery(getRole, {
     variables: { id: editId },
   });
-  console.log(role);
+
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
@@ -108,7 +110,7 @@ const EditManagement = () => {
         name,
         description,
       });
-      console.log(permissions);
+
       setLast(permissions);
       setRole(permissions === null ? [] : arrangeItems(permissions)); //h);  arrangeItems(
     }
@@ -136,17 +138,25 @@ const EditManagement = () => {
     refetchQueries: [{ query: getRoles }],
   });
   const onSubmit = async (values) => {
-    const { name, description, permissions } = values;
-    await editRoles({
-      variables: {
-        id: editId,
-        name,
-        description,
-        permissions,
-      },
-    });
-
-    history.push("/settings/management");
+    try {
+      const { name, description, permissions } = values;
+      await editRoles({
+        variables: {
+          id: editId,
+          name,
+          description,
+          permissions,
+        },
+      });
+      showSuccessMsg(
+        enqueueSnackbar,
+        Typography,
+        "Premissions updated successfully."
+      );
+      history.push("/settings/management");
+    } catch (error) {
+      handleError(error, enqueueSnackbar, Typography);
+    }
   };
 
   const theme = useTheme();
@@ -182,7 +192,7 @@ const EditManagement = () => {
           validateOnBlur={false}
           enableReinitialize
         >
-          {({ isSubmitting, values }) => {
+          {({ isSubmitting }) => {
             return (
               <>
                 <Form>
@@ -270,20 +280,28 @@ const EditManagement = () => {
                               id={labelId}
                               scope="row"
                               align="left"
-                              //  className={classes.tableCell}
                               style={{
                                 color: theme.palette.common.black,
                                 display: "flex",
                               }}
                             >
-                              {row.value.map((i, index) => {
+                              {[
+                                row.name === "account" ? "count" : "create",
+                                "get-all",
+                                "get",
+                                "delete",
+                                "update",
+                              ].map((type, index) => {
+                                const value = row.value.includes(type)
+                                  ? `${row.name}:${type}`
+                                  : "";
                                 return (
                                   <FormikControl
                                     control="check"
                                     name="permissions"
-                                    label={i}
+                                    label={type}
                                     key={index}
-                                    value={`${row.name}:${i}`}
+                                    value={value}
                                   />
                                 );
                               })}
