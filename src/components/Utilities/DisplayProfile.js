@@ -31,7 +31,6 @@ const DisplayProfile = ({
   statusId,
   specialization,
   status,
-  /* setSelectedSubMenu, */
   type,
 }) => {
   const classes = useStyles();
@@ -56,7 +55,11 @@ const DisplayProfile = ({
     >
       <Grid item>
         <Grid container gap={2} alignItems="center">
-          <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
+          <Avatar
+            alt={`Display Photo`}
+            src={displayPhoto}
+            sx={{ width: 50, height: 50 }}
+          />
           <Typography variant="h3">{fullName}</Typography>
         </Grid>
       </Grid>
@@ -65,14 +68,22 @@ const DisplayProfile = ({
           {specialization ? (
             <Grid item>
               <Typography variant="h4" style={{ fontWeight: 400 }}>
-                <span style={{ color: theme.palette.common.lightGrey }}>Specialization:</span>{" "}
-                <Chip label={specialization} color="success" className={classes.badge} />
+                <span style={{ color: theme.palette.common.lightGrey }}>
+                  Specialization:
+                </span>{" "}
+                <Chip
+                  label={specialization}
+                  color="success"
+                  className={classes.badge}
+                />
               </Typography>
             </Grid>
           ) : status ? (
             <Grid item>
               <Typography variant="h4">
-                <span style={{ color: theme.palette.common.lightGrey }}>Status:</span>{" "}
+                <span style={{ color: theme.palette.common.lightGrey }}>
+                  Status:
+                </span>{" "}
                 <Chip
                   label={status}
                   color={status === "Active" ? "success" : "error"}
@@ -83,7 +94,9 @@ const DisplayProfile = ({
                         ? theme.palette.common.lightGreen
                         : theme.palette.common.lightRed,
                     color:
-                      status === "Active" ? theme.palette.common.green : theme.palette.common.red,
+                      status === "Active"
+                        ? theme.palette.common.green
+                        : theme.palette.common.red,
                   }}
                 />
               </Typography>
@@ -93,7 +106,10 @@ const DisplayProfile = ({
       </Grid>
       <Grid item>
         <Typography variant="h4" color="error" style={{ fontWeight: 400 }}>
-          <span style={{ color: theme.palette.common.lightGrey }}>{medicalTitle}:</span> {statusId}
+          <span style={{ color: theme.palette.common.lightGrey }}>
+            {medicalTitle}:
+          </span>{" "}
+          {statusId}
         </Typography>
       </Grid>
       {type !== "" ? (
@@ -124,7 +140,6 @@ DisplayProfile.propTypes = {
   status: PropTypes.string,
   chatPath: PropTypes.string,
   type: PropTypes.string,
-  setChatMediaActive: PropTypes.func,
 };
 
 export default DisplayProfile;

@@ -20,16 +20,16 @@ import { patientsHeadCells } from "components/Utilities/tableHeaders";
 import {
   genderType,
   patientsPageDefaultFilterValues,
-  planFilterBy,
+  /* planFilterBy,
   providerFilterBy,
-  statusFilterBy,
+  statusFilterBy, */
 } from "../../helpers/mockData";
 import {
   changeTableLimit,
   fetchMoreData,
   onFilterValueChange,
   resetFilters,
-} from "../../helpers/filterHelperFunctions";
+} from "helpers/filterHelperFunctions";
 import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles((theme) => ({
@@ -183,36 +183,7 @@ const Patients = () => {
               value={filterValues.gender}
             />
           </Grid>
-          {/* FILTER BY STATUS */}
-          <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={statusFilterBy}
-              name="status"
-              placeholder="By status"
-              value={filterValues.status}
-            />
-          </Grid>
-          {/* FILTER BY PROVIDER */}
-          <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={providerFilterBy}
-              name="status"
-              placeholder="By provider"
-              value={filterValues.provider}
-            />
-          </Grid>
-          {/* FILTER BY PLAN */}
-          <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={planFilterBy}
-              name="status"
-              placeholder="By plan"
-              value={filterValues.plan}
-            />
-          </Grid>
+
           {/* ==== CLEAR FILTERS BUTTON ===== */}
           <Grid item>
             <ClearFiltersBtn

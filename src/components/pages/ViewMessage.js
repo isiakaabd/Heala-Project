@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -29,18 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
+const ViewMessage = () => {
   const classes = useStyles();
   const { messageId } = useParams();
   const { loading, data, error } = useQuery(getAMessage, {
     variables: { id: messageId },
   });
 
-  useEffect(() => {
-    setSelectedMenu(5);
-
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   const [message, setMessage] = useState([]);
   useEffect(() => {
     if (data) setMessage(data.getMessage);
@@ -57,12 +51,20 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
         </Grid>
         <Divider />
 
-        <Grid item direction="column" className={classes.gridWrapper} container gap={2}>
+        <Grid
+          item
+          direction="column"
+          className={classes.gridWrapper}
+          container
+          gap={2}
+        >
           <Grid item container gap={2} alignItems="center">
             <Grid item>
               <Avatar
                 src={recipientData ? recipientData.image : displayPhoto}
-                alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
+                alt={`Display photo of the sender ${
+                  recipientData && recipientData.firstName
+                }`}
               />
             </Grid>
             <Grid item>
@@ -95,13 +97,6 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
       </Grid>
     </Grid>
   );
-};
-
-ViewMessage.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default ViewMessage;

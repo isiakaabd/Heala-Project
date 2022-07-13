@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import { ReactComponent as Administrator } from "assets/images/administrator.svg";
 import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
@@ -64,7 +63,6 @@ const Settings = () => {
           <Link
             to="/settings/list-management"
             style={{ textDecoration: "none" }}
-            /* onClick={() => setSelectedSubMenu(12)} */
           >
             <Card
               alt="list management Icon"
@@ -78,11 +76,6 @@ const Settings = () => {
       </Grid>
     </Grid>
   );
-};
-
-Settings.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default Settings;

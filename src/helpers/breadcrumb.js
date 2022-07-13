@@ -50,6 +50,7 @@ export const patterns = {
   Settings: "settings",
   Administrator: "settings/administrator",
   "Roles management": "settings/management",
+  Role: "settings/management/{id}",
   "Permissions management": "settings/permissions",
   "List management": "settings/list-management",
   Tests: "settings/list-management/tests",

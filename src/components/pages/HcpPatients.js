@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Avatar, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Avatar,
+  TableRow,
+  Checkbox,
+  TableCell,
+  Button,
+  Chip,
+} from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -15,6 +24,7 @@ import { Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
+import displayPhoto from "assets/images/avatar.svg";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -51,24 +61,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpPatients = (props) => {
+const HcpPatients = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-  const { selectedMenu, setSelectedMenu } = props;
 
   const { hcpId } = useParams();
 
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
 
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-
-  const [fetchDoctorsPatients, { loading, error, data, refetch }] = useLazyQuery(getDoctorPatients);
+  const [fetchDoctorsPatients, { loading, error, data, refetch }] =
+    useLazyQuery(getDoctorPatients);
 
   useEffect(() => {
     fetchDoctorsPatients({
@@ -107,88 +111,92 @@ const HcpPatients = (props) => {
             fetchData={fetchDoctorsPatients}
             dataPageInfo={pageInfo}
           >
-            {profiles
+            {profiles.map((row, index) => {
+              const { _id, patientData } = row;
+              const isItemSelected = isSelected(_id, selectedRows);
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const { _id, doctorData, patientData } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={_id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() =>
+                        handleSelectedRows(_id, selectedRows, setSelectedRows)
+                      }
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.grey }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
+                    {patientData && patientData?.dociId?.split("-")[1]}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "left",
+                      }}
                     >
-                      {doctorData ? doctorData?.dociId?.split("-")[1] : "No Doctor ID"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          textAlign: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar alt="Remy Sharp" src={row.image} sx={{ width: 24, height: 24 }} />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {patientData?.firstName
-                            ? `${patientData?.firstName} ${patientData?.lastName}`
-                            : "No Patient Name"}
-                          {row.lastName}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`/hcps/${hcpId}/profile`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Doctor Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={row.image}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {patientData?.firstName
+                          ? `${patientData?.firstName} ${patientData?.lastName}`
+                          : "No Patient Name"}
+                        {row.lastName}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    {patientData?.gender && patientData?.gender}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      className={classes.button}
+                      component={Link}
+                      to={`/patients/${patientData?._id}/profile`}
+                      endIcon={<ArrowForwardIosIcon />}
+                    >
+                      View Patient Profile
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
+        <EmptyTable
+          headCells={hcpPatientsHeadCells}
+          paginationLabel="List  per page"
+        />
       )}
     </Grid>
   );
-};
-
-HcpPatients.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default HcpPatients;

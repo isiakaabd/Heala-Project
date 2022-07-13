@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -37,12 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListManagment = ({
-  selectedMenu,
-  setSelectedMenu,
-  /* selectedSubMenu,
-  setSelectedSubMenu, */
-}) => {
+const ListManagment = () => {
   const theme = useTheme();
   const classes = useStyles();
   return (
@@ -59,20 +53,12 @@ const ListManagment = ({
       >
         <SettingsCard
           link="/settings/list-management/tests"
-          /* setSelectedSubMenu={setSelectedSubMenu} */
           title="Tests"
           icon={<ConsulationIcon fill={theme.palette.common.red} />}
         />
       </Grid>
     </>
   );
-};
-
-ListManagment.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default ListManagment;

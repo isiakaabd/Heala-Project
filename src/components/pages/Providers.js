@@ -2,11 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
-import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
-import { CustomButton, Loader, Search, Modals, FilterList } from "components/Utilities";
+import {
+  Grid,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Alert,
+  Button,
+  Avatar,
+} from "@mui/material";
+import {
+  CustomButton,
+  Loader,
+  Search,
+  Modals,
+  FilterList,
+} from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -131,10 +144,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Providers = ({ selectedMenu, setSelectedMenu }) => {
+const Providers = () => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchProviders, { error, loading, refetch }] = useLazyQuery(getProviders);
+  const [fetchProviders, { error, loading, refetch }] =
+    useLazyQuery(getProviders);
   const { data: dat, error: err, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
@@ -201,11 +215,6 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
     }
   };
 
-  //   openDeletePartner
-  useEffect(() => {
-    setSelectedMenu(12);
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
   const [searchHcp, setSearchHcp] = useState("");
   const [editId, setEditId] = useState(null);
   const [isOpens, setIsOpens] = useState(false);
@@ -250,7 +259,13 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
   if (error || err) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -260,7 +275,12 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
             {alert.message}
           </Alert>
         )}
-        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ md: "row", sm: "column" }}>
+        <Grid
+          item
+          gap={{ sm: 4, xs: 2 }}
+          container
+          direction={{ md: "row", sm: "column" }}
+        >
           <Grid item flex={1}>
             <Search
               value={searchHcp}
@@ -271,7 +291,7 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
           </Grid>
           <Grid item container justifyContent="space-between">
             <Grid item>
-              <FilterList title="Filter partner" onClick={handleDialogOpens1} />
+              {/* <FilterList title="Filter partner" onClick={handleDialogOpens1} /> */}
             </Grid>
             <Grid item>
               <CustomButton
@@ -314,7 +334,13 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -371,7 +397,10 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+          <EmptyTable
+            headCells={partnersHeadCells2}
+            paginationLabel="Providers  per page"
+          />
         )}
       </Grid>
 
@@ -417,7 +446,12 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -438,7 +472,10 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                  <Grid
+                    item
+                    style={{ marginBottom: "18rem", marginTop: "3rem" }}
+                  >
                     <Grid container>
                       <Grid item container>
                         <FormikControl
@@ -467,12 +504,6 @@ const Providers = ({ selectedMenu, setSelectedMenu }) => {
       </Modals>
     </>
   );
-};
-Providers.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Providers;

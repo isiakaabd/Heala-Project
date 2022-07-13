@@ -63,7 +63,13 @@ const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
 
   return (
-    <Grid container flex={1} flexDirection="column" justifyContent="center" rowGap={1}>
+    <Grid
+      container
+      flex={1}
+      flexDirection="column"
+      justifyContent="center"
+      rowGap={1}
+    >
       <Grid item container flexWrap="nowrap" alignItems="center">
         <Link to={`/${path}`} className={classes.link}>
           <Typography variant="h3" classes={{ root: classes.title }}>
@@ -157,12 +163,17 @@ const CustomSubHeaderText = (props) => {
       </Typography>
       {scopedMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+          <KeyboardArrowRightIcon
+            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
+          />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
             style={{
-              color: scopedSubMenu === 0 ? theme.palette.common.red : theme.palette.common.grey,
+              color:
+                scopedSubMenu === 0
+                  ? theme.palette.common.red
+                  : theme.palette.common.grey,
             }}
           >
             {subSubTitle}
@@ -172,7 +183,9 @@ const CustomSubHeaderText = (props) => {
 
       {scopedSubMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+          <KeyboardArrowRightIcon
+            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
+          />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
@@ -198,9 +211,7 @@ CustomSubHeaderText.propTypes = {
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
-const HeaderText = (props) => {
-  const { selectedMenu } = props;
-
+const HeaderText = () => {
   const classes = useStyles();
   const { pathname } = useLocation();
   const email = localStorage.getItem("email");
@@ -210,7 +221,7 @@ const HeaderText = (props) => {
 
   const breadcrumbs = useMemo(
     () => predicateBreadcrumbFromUrl(patterns, pathname.substring(1)),
-    [pathname],
+    [pathname]
   );
 
   const [profile, { data }] = useLazyQuery(findAccounts, {
@@ -235,7 +246,8 @@ const HeaderText = (props) => {
     (async () => {
       patient();
       doctor();
-      if (patientContent.data) setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
+      if (patientContent.data)
+        setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
       if (doctorContent.data) setDocCount(doctorContent.data.DoctorCount);
     })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
@@ -245,8 +257,8 @@ const HeaderText = (props) => {
     Patients: patientCount,
   };
 
-  switch (selectedMenu) {
-    case 0:
+  switch (pathname) {
+    case "/dashboard":
       return (
         <div>
           <Typography variant="h5" className={classes.text} gutterBottom>
@@ -266,21 +278,17 @@ HeaderText.propTypes = {
   selectedMenu: PropTypes.number,
 };
 
-const HeaderContent = (props) => {
-  const { selectedMenu, data } = props;
+const HeaderContent = () => {
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
-      <HeaderText selectedMenu={selectedMenu} />
-      <HeaderProfile data={data} />
+      <HeaderText />
+      <HeaderProfile />
     </Toolbar>
   );
 };
 
-HeaderContent.propTypes = {
-  selectedMenu: PropTypes.number,
-  data: PropTypes.object,
-};
+HeaderContent.propTypes = {};
 
 const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
   const theme = useTheme();
@@ -305,7 +313,11 @@ const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
                   />
                 </Grid>
                 {counts[text] && (
-                  <Grid item sx={{ marginLeft: "0.5rem", display: "flex" }} alignContent="center">
+                  <Grid
+                    item
+                    sx={{ marginLeft: "0.5rem", display: "flex" }}
+                    alignContent="center"
+                  >
                     <Grid container alignContent="center">
                       <ArrowUpwardIcon color="success" />
                       <Typography variant="h5" className={classes.subtitle}>

@@ -1,108 +1,36 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import * as Yup from "yup";
-import LoginInput from "components/validation/LoginInput";
+import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
+import { useSnackbar } from "notistack";
+/* import { makeStyles } from "@mui/styles"; */
+import { useMutation } from "@apollo/client";
+import { useTheme } from "@mui/material/styles";
 import { Link, useHistory } from "react-router-dom";
-import { Grid, Checkbox, InputAdornment, Typography, Alert } from "@mui/material";
-import { CustomButton } from "components/Utilities";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import people from "assets/images/login-page-photo.png";
-import loginBackground from "assets/images/login-background.svg";
+import { Grid, Checkbox, InputAdornment, Typography } from "@mui/material";
+
 import logo from "assets/images/logo.svg";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { useActions } from "components/hooks/useActions";
 import { useSelector } from "react-redux";
-import { Login_USER } from "components/graphQL/Mutation";
-import { useMutation } from "@apollo/client";
 import { setAccessToken } from "../../accessToken";
-
-const useStyles = makeStyles((theme) => ({
-  gridContainer: {
-    "&.MuiGrid-root": {
-      minHeight: "100vh",
-      display: "grid !important",
-      gridTemplateColumns: "repeat(2,1fr)",
-      "@media(max-width:600px)": {
-        gridTemplateColumns: "1fr",
-        "& >*:first-child": {
-          display: "none !important",
-        },
-      },
-    },
-  },
-  leftParentGrid: {
-    "&.MuiGrid-root": {
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundImage: `url(${people}),
-      linear-gradient(89.63deg, rgba(1, 2, 2, 0.49) 0.3%, rgba(1, 2, 2, 0) 99.66%)`,
-      backgroundBlendMode: "darken",
-    },
-  },
-  overlay: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
-  },
-  peopleBgImage: {
-    width: "100%",
-    height: "100%",
-    backgroundSize: "cover",
-    overflow: "hidden",
-    backgroundPosition: "25% 50%",
-  },
-  heading: {
-    "&.MuiTypography-root": {
-      fontSize: "clamp(3rem, 3vw, 4.8rem)",
-      "@media(max-width:600px)": {
-        textAlign: "center",
-      },
-    },
-  },
-  logoAlign: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  logo: {
-    width: "min(28rem, 40vw)",
-    position: "relative",
-    textAlign: "center",
-  },
-  rightParentGrid: {
-    backgroundImage: `url(${loginBackground})`,
-    // padding: "5rem 8rem",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-
-  link: {
-    textDecoration: "none",
-  },
-}));
+import { useStyles } from "styles/loginPageStyles";
+import { CustomButton } from "components/Utilities";
+/* import people from "assets/images/login-page-photo.png"; */
+import { useActions } from "components/hooks/useActions";
+import { Login_USER } from "components/graphQL/Mutation";
+import LoginInput from "components/validation/LoginInput";
+import { showErrorMsg } from "../../helpers/filterHelperFunctions";
+/* import loginBackground from "assets/images/login-background.svg"; */
 
 const Login = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { authError } = useSelector((state) => state.auth);
   const theme = useTheme();
   const history = useHistory();
-  const [loginInfo] = useMutation(Login_USER); //{ data, loading, error }
+  const [loginInfo] = useMutation(Login_USER);
   const { loginUser, loginFailue } = useActions();
-  // const { authError } = useSelector((state) => state.auth);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [showPassword, setShowPassword] = useState(false);
   const buttonColors = {
@@ -161,6 +89,10 @@ const Login = () => {
     return () => (isMounted = false);
   };
 
+  React.useEffect(() => {
+    Object.keys(authError).length > 0 && showErrorMsg(enqueueSnackbar, authError?.message);
+  }, [authError, enqueueSnackbar]);
+
   return (
     <>
       <Grid container className={classes.gridContainer}>
@@ -187,17 +119,6 @@ const Login = () => {
                           <Typography variant="h2" className={classes.heading}>
                             Sign into your account
                           </Typography>
-                        </Grid>
-                        <Grid item style={{ marginBottom: "2rem" }}>
-                          {Object.keys(authError).length > 0 && (
-                            <Alert
-                              variant="filled"
-                              severity={authError.type}
-                              sx={{ justifyContent: "center" }}
-                            >
-                              {authError.message}
-                            </Alert>
-                          )}
                         </Grid>
                         <Grid item style={{ marginBottom: "2rem", width: "100%" }}>
                           <Grid container direction="column">
@@ -244,7 +165,11 @@ const Login = () => {
                               <Checkbox
                                 {...label}
                                 defaultChecked
-                                sx={{ "& .MuiSvgIcon-root": { fontSize: "min(28, 5vw)" } }}
+                                sx={{
+                                  "& .MuiSvgIcon-root": {
+                                    fontSize: "min(28, 5vw)",
+                                  },
+                                }}
                                 color="success"
                               />
 

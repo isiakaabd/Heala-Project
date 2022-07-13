@@ -1,11 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 import AddIcon from "@mui/icons-material/Add";
+import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
 import { NoData, EmptyTable } from "components/layouts";
-import { useLazyQuery } from "@apollo/client";
 
 import { TestListRow } from "components/Rows/TestListRow";
 import ConfirmModal from "components/modals/ConfirmModal";
@@ -14,27 +13,31 @@ import { deleteItem } from "helpers/filterHelperFunctions";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import { UploadTestForm } from "components/Forms/UploadTestForm";
-import { DELETE_TEST, getListOfLabTests } from "components/graphQL/useQuery";
 import { testTableHeadCells } from "components/Utilities/tableHeaders";
-import { CustomButton, Loader, PreviousButton, Modals } from "components/Utilities";
+import { DELETE_TEST, getListOfLabTests } from "components/graphQL/useQuery";
+import {
+  CustomButton,
+  Loader,
+  PreviousButton,
+  Modals,
+} from "components/Utilities";
 import { EditTestForm } from "components/Forms/EditTestForm";
 
 const TestList = () => {
   const theme = useTheme();
-  /* const { setSelectedRows } = useActions(); */
   const { enqueueSnackbar } = useSnackbar();
   const [list, setList] = React.useState([]);
   const [delete_test] = useLazyQuery(DELETE_TEST);
   const [editData, setEditData] = React.useState(null);
   const [isDeleting, setIsDeleting] = React.useState({});
-  /* const { selectedRows } = useSelector((state) => state.tables); */
   const [addTestModal, setAddTestModal] = React.useState(false);
   const [confirmModal, setConfirmModal] = React.useState(false);
   const [testToDelete, setTestToDelete] = React.useState(null);
   const [editTestModal, setEditTestModal] = React.useState(false);
   const [uploadListModal, setUploadListModal] = React.useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = React.useState(false);
-  const [fetchLabTestList, { loading, error, data, refetch }] = useLazyQuery(getListOfLabTests);
+  const [fetchLabTestList, { loading, error, data, refetch }] =
+    useLazyQuery(getListOfLabTests);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -60,11 +63,17 @@ const TestList = () => {
         return null;
       });
     }
-  }, [data, isDeleting]);
+  }, [data]);
 
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid item container justifyContent="space-between">
           <PreviousButton path="/settings/list-management" />
 
@@ -93,7 +102,10 @@ const TestList = () => {
         ) : loading ? (
           <Loader />
         ) : !list ? (
-          <EmptyTable headCells={testTableHeadCells} paginationLabel="Test per page" />
+          <EmptyTable
+            headCells={testTableHeadCells}
+            paginationLabel="Test per page"
+          />
         ) : list.length > 0 ? (
           /* ================= TESTS TABLE ================= */
           <Grid item container height="100%" direction="column">
@@ -128,7 +140,10 @@ const TestList = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={testTableHeadCells} paginationLabel="Patients per page" />
+          <EmptyTable
+            headCells={testTableHeadCells}
+            paginationLabel="Patients per page"
+          />
         )}
 
         {/* ==== ADD TEST MODAL ==== */}
@@ -210,7 +225,7 @@ const TestList = () => {
               Typography,
               enqueueSnackbar,
               setIsDeleting,
-              isDeleting,
+              isDeleting
             );
             setUploadListModal(false);
           }}
@@ -222,11 +237,6 @@ const TestList = () => {
       </Grid>
     </>
   );
-};
-
-TestList.propTypes = {
-  setSelectedSubMenu: PropTypes.func.isRequired,
-  setSelectedPatientMenu: PropTypes.func.isRequired,
 };
 
 export default TestList;

@@ -2,7 +2,7 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import PropTypes from "prop-types";
 import { InputAdornment, OutlinedInput, Grid } from "@mui/material";
-// import { makeStyles } from "@mui/styles";
+
 const SearchContainer = ({
   width,
   placeholder,

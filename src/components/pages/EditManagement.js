@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
 import { isSelected } from "helpers/isSelected";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -10,13 +10,19 @@ import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { EnhancedTable, NoData } from "components/layouts";
 import { editManagement } from "components/Utilities/tableHeaders";
-import { PreviousButton, CustomButton, Loader, Modals } from "components/Utilities";
+import {
+  PreviousButton,
+  CustomButton,
+  Loader,
+  Modals,
+} from "components/Utilities";
 import { editRole } from "components/graphQL/Mutation";
 import { getRoles, getRole } from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { TableRow, TableCell, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { arrangeItems } from "../../helpers/func";
+import { handleError, showSuccessMsg } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   filterBtnGrid: {
@@ -83,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const EditManagement = () => {
   let history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const { editId } = useParams();
   const [last, setLast] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +102,7 @@ const EditManagement = () => {
   const { data, loading, error } = useQuery(getRole, {
     variables: { id: editId },
   });
-  console.log(role);
+
   useEffect(() => {
     if (data) {
       const { name, description, permissions } = data.getRole;
@@ -103,7 +110,7 @@ const EditManagement = () => {
         name,
         description,
       });
-      console.log(permissions);
+
       setLast(permissions);
       setRole(permissions === null ? [] : arrangeItems(permissions)); //h);  arrangeItems(
     }
@@ -131,17 +138,25 @@ const EditManagement = () => {
     refetchQueries: [{ query: getRoles }],
   });
   const onSubmit = async (values) => {
-    const { name, description, permissions } = values;
-    await editRoles({
-      variables: {
-        id: editId,
-        name,
-        description,
-        permissions,
-      },
-    });
-
-    history.push("/settings/management");
+    try {
+      const { name, description, permissions } = values;
+      await editRoles({
+        variables: {
+          id: editId,
+          name,
+          description,
+          permissions,
+        },
+      });
+      showSuccessMsg(
+        enqueueSnackbar,
+        Typography,
+        "Premissions updated successfully."
+      );
+      history.push("/settings/management");
+    } catch (error) {
+      handleError(error, enqueueSnackbar, Typography);
+    }
   };
 
   const theme = useTheme();
@@ -166,7 +181,7 @@ const EditManagement = () => {
     <>
       <Grid container direction="column" rowSpacing={2}>
         <Grid item>
-          <PreviousButton path="/settings/management" /* onClick={() => setSelectedSubMenu(0)} */ />
+          <PreviousButton path="/settings/management" />
         </Grid>
         <Formik
           initialValues={initialValues}
@@ -177,7 +192,7 @@ const EditManagement = () => {
           validateOnBlur={false}
           enableReinitialize
         >
-          {({ isSubmitting, values }) => {
+          {({ isSubmitting }) => {
             return (
               <>
                 <Form>
@@ -189,7 +204,12 @@ const EditManagement = () => {
                     style={{ paddingBottom: "3rem" }}
                   >
                     <Grid item container alignItems="center">
-                      <Typography noWrap variant="h1" component="div" color="#2D2F39">
+                      <Typography
+                        noWrap
+                        variant="h1"
+                        component="div"
+                        color="#2D2F39"
+                      >
                         User Permissions
                       </Typography>
                     </Grid>
@@ -243,7 +263,10 @@ const EditManagement = () => {
                             key={index}
                             selected={isItemSelected}
                           >
-                            <TableCell role="checkbox" sx={{ padding: "0 5rem" }}></TableCell>
+                            <TableCell
+                              role="checkbox"
+                              sx={{ padding: "0 5rem" }}
+                            ></TableCell>
                             <TableCell
                               id={labelId}
                               scope="row"
@@ -257,20 +280,28 @@ const EditManagement = () => {
                               id={labelId}
                               scope="row"
                               align="left"
-                              //  className={classes.tableCell}
                               style={{
                                 color: theme.palette.common.black,
                                 display: "flex",
                               }}
                             >
-                              {row.value.map((i, index) => {
+                              {[
+                                row.name === "account" ? "count" : "create",
+                                "get-all",
+                                "get",
+                                "delete",
+                                "update",
+                              ].map((type, index) => {
+                                const value = row.value.includes(type)
+                                  ? `${row.name}:${type}`
+                                  : "";
                                 return (
                                   <FormikControl
                                     control="check"
                                     name="permissions"
-                                    label={i}
+                                    label={type}
                                     key={index}
-                                    value={`${row.name}:${i}`}
+                                    value={value}
                                   />
                                 );
                               })}
@@ -286,7 +317,12 @@ const EditManagement = () => {
           }}
         </Formik>
       </Grid>
-      <Modals isOpen={isOpen} title="Add New Role" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Add New Role"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -317,7 +353,11 @@ const EditManagement = () => {
                   </Grid>
                 </Grid>
                 <Grid item container xs={12} marginTop={20}>
-                  <CustomButton title="Add New Role" width="100%" type={buttonType} />
+                  <CustomButton
+                    title="Add New Role"
+                    width="100%"
+                    type={buttonType}
+                  />
                 </Grid>
               </Form>
             );
@@ -326,14 +366,6 @@ const EditManagement = () => {
       </Modals>
     </>
   );
-};
-
-EditManagement.propTypes = {
-  handleDialogClose: PropTypes.func,
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default EditManagement;

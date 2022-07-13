@@ -16,6 +16,7 @@ export const timeConverter = (str) => {
 
 export const hours = (z) => {
   let time = z.split(":")[0];
+  if (time < 1 && time > -1) return `12 AM`;
   if (time < 12) return `${z} AM`;
   if (time > 12) {
     let newTime = +time - 12;
@@ -71,6 +72,6 @@ export const unformat = (amount, locale) => {
   return parseFloat(
     amount
       .replace(new RegExp("\\" + thousandSeparator, "g"), "")
-      .replace(new RegExp("\\" + decimalSeparator), ","),
+      .replace(new RegExp("\\" + decimalSeparator), ",")
   );
 };

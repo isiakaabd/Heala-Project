@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
-import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Success from "components/modals/Success";
+import { handleError, showSuccessMsg } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -106,8 +107,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
+const ViewHCP = () => {
   const { viewId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
@@ -149,26 +151,32 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     reason: Yup.string("Enter Reason ").required("Reason is required"),
   });
   const onSubmit = async (values) => {
-    const { reason } = values;
-
-    await reject({
-      variables: {
-        reason,
-        id: viewId,
-      },
-      refetchQueries: [
-        {
-          query: getVerification,
+    try {
+      const { reason } = values;
+      const trimedReason = reason.trim();
+      console.log("trimmed reason", trimedReason);
+      await reject({
+        variables: {
+          reason: trimedReason,
+          id: viewId,
         },
-      ],
-    });
-    setCancel(false);
-
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-      history.push("/verification");
-    }, 3000);
+        refetchQueries: [
+          {
+            query: getVerification,
+          },
+        ],
+      });
+      setCancel(false);
+      showSuccessMsg(enqueueSnackbar, Typography, "Reject verification successful.");
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+        history.push("/verification");
+      }, 3000);
+    } catch (error) {
+      console.log("Error from reject verification", error);
+      handleError(error, enqueueSnackbar, Typography);
+    }
   };
 
   const theme = useTheme();
@@ -227,7 +235,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     status,
     // eslint-disable-next-line
   } = respondData;
-  console.log(doctorData);
 
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
@@ -259,11 +266,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     }
   };
   const classes = useStyles();
-  useEffect(() => {
-    setSelectedMenu(7);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -406,7 +408,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
           container
           display="grid"
           gap={3}
-          gridTemplateColumns={{ md: "repeat(2,1fr)", sm: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+          gridTemplateColumns={{
+            md: "repeat(2,1fr)",
+            sm: "repeat(2,1fr)",
+            xs: "repeat(1,1fr)",
+          }}
         >
           <Grid item>
             <Grid
@@ -471,7 +477,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                   container
                   alignItems="center"
                   flexWrap="wrap"
-                  justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                  justifyContent={{
+                    md: "center",
+                    sm: "center",
+                    xs: "flex-start",
+                  }}
                   gap={2}
                 >
                   {license.number && (
@@ -522,7 +532,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
                 gap={2}
                 alignItems="center"
                 flexWrap="wrap"
@@ -577,7 +591,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent={{ md: "center", sm: "center", xs: "flex-start" }}
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
                 gap={2}
               >
                 {alumni_association.facebook_group_name && (
@@ -624,7 +642,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               item
               container
               // justifyContent="center"
-              justifyContent={{ md: "center", sm: "space-between", xs: "space-around" }}
+              justifyContent={{
+                md: "center",
+                sm: "space-between",
+                xs: "space-around",
+              }}
               gap={2}
               flexWrap="nowrap"
             >
@@ -741,15 +763,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
       />
     </>
   );
-};
-
-ViewHCP.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  doctorView: PropTypes.number,
-  setDoctorView: PropTypes.func, */
 };
 
 export default ViewHCP;

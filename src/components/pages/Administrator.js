@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
 import { Loader, Button, Modals, CustomButton, Search, FilterList } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
-import PropTypes from "prop-types";
 import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
 import { signup } from "components/graphQL/Mutation";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
@@ -123,10 +122,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Administrator = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const Administrator = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
@@ -239,13 +235,6 @@ const Administrator = ({
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
 
-  useEffect(() => {
-    setSelectedMenu(11);
-    /* setSelectedSubMenu(12); */
-
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
-
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -267,7 +256,11 @@ const Administrator = ({
           </Grid>
           <Grid item container flex={{ md: 1, sm: 1, xs: 1 }} justifyContent="space-between">
             <Grid item>
-              <FilterList onClick={handleDialogOpen} title="Filter" options={optionss} />
+              {/* <FilterList
+                onClick={handleDialogOpen}
+                title="Filter"
+                options={optionss}
+              /> */}
             </Grid>
             <Grid item>
               <CustomButton
@@ -332,7 +325,7 @@ const Administrator = ({
                         {role}
                       </TableCell>
 
-                      <TableCell align="left" className={classes.tableCell}>
+                      {/* <TableCell align="left" className={classes.tableCell}>
                         <Grid
                           style={{
                             height: "100%",
@@ -345,16 +338,19 @@ const Administrator = ({
                             variant="contained"
                             disableRipple
                             className={`${classes.button} ${classes.greenBtn}`}
-                            endIcon={<EditIcon style={{ color: theme.palette.common.green }} />}
+                            endIcon={
+                              <EditIcon
+                                style={{ color: theme.palette.common.green }}
+                              />
+                            }
                           >
                             Edit Admin
                           </Button>
                         </Grid>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}
-              )
             </EnhancedTable>
           </Grid>
         ) : (
@@ -467,12 +463,6 @@ const Administrator = ({
       </Modals>
     </>
   );
-};
-Administrator.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Administrator;

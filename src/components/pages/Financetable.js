@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
+import {
+  timeMoment,
+  dateMoment,
+  formatNumber,
+} from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -72,14 +75,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, setSelectedMenu }) => {
+const Financetable = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
+  const [fetchEarningData, { loading, data, error }] =
+    useLazyQuery(getEarningData);
 
   useEffect(() => {
     fetchEarningData({
@@ -96,12 +100,6 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
       setPageInfo(data.getEarningStats.earningData.PageInfo);
     }
   }, [earning, data]);
-
-  useEffect(() => {
-    setSelectedMenu(8);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -147,7 +145,13 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -209,18 +213,14 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
+          <EmptyTable
+            headCells={financeHeader}
+            paginationLabel="Finance  per page"
+          />
         )}
       </>
     </Grid>
   );
-};
-
-Financetable.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Financetable;

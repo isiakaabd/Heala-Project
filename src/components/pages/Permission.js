@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, setSelectedMenu }) => {
+const Permission = () => {
   const [singlePermission, setSinglePermission] = useState();
 
   const checkbox = [
@@ -138,9 +138,13 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission").trim().required("permission is required"),
+    name: Yup.string("Enter your Permission")
+      .trim()
+      .required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category").trim().required("Category is required"),
+    category: Yup.string("Select Category")
+      .trim()
+      .required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);
@@ -148,8 +152,12 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
-    name: Yup.string("Enter your Permission").required("permission is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
+    name: Yup.string("Enter your Permission").required(
+      "permission is required"
+    ),
+    description: Yup.string("Enter Description").required(
+      "Description is required"
+    ),
   });
 
   const classes = useStyles();
@@ -209,7 +217,8 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchPermissions, { loading, data, error }] = useLazyQuery(getPermissions);
+  const [fetchPermissions, { loading, data, error }] =
+    useLazyQuery(getPermissions);
 
   useEffect(() => {
     fetchPermissions({
@@ -221,12 +230,6 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
   }, [fetchPermissions, pageInfo]);
 
   const [deletPlan] = useMutation(DELETE_PERMISSION);
-
-  useEffect(() => {
-    setSelectedMenu(11);
-
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
   const [permission, setPermission] = useState([]);
 
   useEffect(() => {
@@ -298,7 +301,13 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -385,11 +394,19 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
+          <EmptyTable
+            headCells={PermissionHeader}
+            paginationLabel="Permission  per page"
+          />
         )}
       </Grid>
 
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -451,7 +468,11 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
 
       {/* // modal */}
 
-      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Add new permission"
+        handleClose={handleDialogClose}
+      >
         <PermissionModal
           handleDialogClose={handleDialogClose}
           type="add"
@@ -463,7 +484,11 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
       </Modals>
 
       {/* edit modala */}
-      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+      <Modals
+        isOpen={isEdit}
+        title="Edit permission"
+        handleClose={handleEditCloseDialog}
+      >
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"
@@ -489,10 +514,3 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
   );
 };
 export default Permission;
-Permission.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /*  selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
-};

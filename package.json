@@ -69,7 +69,7 @@
     "lint": "eslint --fix .",
     "lint-check": "eslint .",
     "eject": "react-scripts eject",
-    "start:react": "react-scripts start",
+    "start": "react-scripts start",
     "build:css-current": "postcss 'frontend/src/*.css' -d public",
     "build:css-works-for-me": "postcss frontend/src/*.css -d public"
   },

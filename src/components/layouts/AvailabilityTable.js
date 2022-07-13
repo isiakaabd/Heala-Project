@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
+import {
+  TableRow,
+  Grid,
+  Typography,
+  TableCell,
+  Avatar,
+  Chip,
+} from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -79,6 +86,7 @@ const AvailabilityTable = ({ data }) => {
             paginationLabel="List per page"
             title="Availability Calendar"
             hasCheckbox={false}
+            hasPagination={false}
           >
             {avaliablity
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -133,7 +141,9 @@ const AvailabilityTable = ({ data }) => {
                               return (
                                 <Chip
                                   key={index}
-                                  label={`${hours(time.start)} - ${hours(time.stop)} `}
+                                  label={`${hours(time.start)} - ${hours(
+                                    time.stop
+                                  )} `}
                                   className={classes.badge}
                                   style={{
                                     background: theme.palette.common.lightGreen,
@@ -151,7 +161,10 @@ const AvailabilityTable = ({ data }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
+        <EmptyTable
+          headCells={availabilityHeadCells}
+          paginationLabel="Availability  per page"
+        />
       )}
     </Grid>
   );

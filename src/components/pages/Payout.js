@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Chip,
+  Checkbox,
+  TableRow,
+  TableCell,
+} from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -17,7 +24,11 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Filter from "components/Forms/Filters";
-import { defaultPageInfo, payoutFilterBy, payoutPageDefaultFilterValues } from "helpers/mockData";
+import {
+  defaultPageInfo,
+  payoutFilterBy,
+  payoutPageDefaultFilterValues,
+} from "helpers/mockData";
 import {
   changeTableLimit,
   fetchMoreData,
@@ -79,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
+const Payout = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,13 +98,8 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
   const { setSelectedRows } = useActions();
 
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-
-  useEffect(() => {
-    setSelectedMenu(8);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-  const [fetchPayout, { loading, error, data, refetch, variables }] = useLazyQuery(getPayoutData);
+  const [fetchPayout, { loading, error, data, refetch, variables }] =
+    useLazyQuery(getPayoutData);
 
   useEffect(() => {
     fetchPayout({
@@ -112,14 +118,21 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
     }
   }, [data]);
 
-  const [filterValues, setFilterValues] = useState(payoutPageDefaultFilterValues);
+  const [filterValues, setFilterValues] = useState(
+    payoutPageDefaultFilterValues
+  );
 
   if (error) return <NoData error={error} />;
 
   return (
     <Grid container direction="column" rowSpacing={2}>
       <>
-        <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingBottom: "3rem" }}
+        >
           <Grid item container spacing={3} alignItems="center">
             <Grid item flex={1}>
               <Typography noWrap variant="h1" color="#2D2F39">
@@ -136,7 +149,7 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
                     setFilterValues,
                     fetchPayout,
                     variables,
-                    refetch,
+                    refetch
                   )
                 }
                 options={payoutFilterBy}
@@ -164,9 +177,7 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
               {payout
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { amount, createdAt, doctorData, status, _id } = row;
-                  // console.log(row);
-                  console.log(doctorData);
+                  const { amount, createdAt, status, _id } = row;
                   /*   const { firstName, picture, lastName specialization } = doctorData;*/
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -182,7 +193,13 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -260,18 +277,14 @@ const Payout = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedS
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={payoutHeader} paginationLabel="Payout  per page" />
+          <EmptyTable
+            headCells={payoutHeader}
+            paginationLabel="Payout  per page"
+          />
         )}
       </>
     </Grid>
   );
-};
-
-Payout.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Payout;

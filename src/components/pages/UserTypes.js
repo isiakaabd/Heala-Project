@@ -6,8 +6,22 @@ import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
-import { CustomButton, Loader, Modals, Search, FilterList } from "components/Utilities";
+import {
+  Grid,
+  TableRow,
+  Button,
+  Avatar,
+  TableCell,
+  Checkbox,
+  Alert,
+} from "@mui/material";
+import {
+  CustomButton,
+  Loader,
+  Modals,
+  Search,
+  FilterList,
+} from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -139,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
+const UserTypes = () => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -171,7 +185,8 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error, refetch }] = useLazyQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error, refetch }] =
+    useLazyQuery(getUserTypes);
 
   useEffect(() => {
     fetchUserTypes({
@@ -195,7 +210,9 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { rowsPerPage, selectedRows, page } = useSelector(
+    (state) => state.tables
+  );
   const { setSelectedRows } = useActions();
   const initialValues = {
     name: "",
@@ -203,10 +220,6 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
     description: "",
   };
 
-  useEffect(() => {
-    setSelectedMenu(12);
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
@@ -247,7 +260,13 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -257,7 +276,12 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
             {alert.message}
           </Alert>
         )}
-        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ sm: "row", xs: "column" }}>
+        <Grid
+          item
+          gap={{ sm: 4, xs: 2 }}
+          container
+          direction={{ sm: "row", xs: "column" }}
+        >
           <Grid item flex={{ sm: 1, xs: 1 }}>
             <Search
               value={searchHcp}
@@ -276,7 +300,7 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
             justifyContent="space-between"
           >
             <Grid item>
-              <FilterList title="Filter" onClick={handleDialogOpens1} />
+              {/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}
             </Grid>
             <Grid item>
               <CustomButton
@@ -318,7 +342,13 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -335,9 +365,14 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
+                            <Avatar
+                              src={row.icon}
+                              sx={{ width: 24, height: 24 }}
+                            />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {row.name}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -375,7 +410,10 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
+          <EmptyTable
+            headCells={partnersHeadCells2}
+            paginationLabel="Providers  per page"
+          />
         )}
       </Grid>
       <Modals
@@ -419,7 +457,12 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -467,12 +510,6 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
       </Modals>
     </>
   );
-};
-UserTypes.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default UserTypes;

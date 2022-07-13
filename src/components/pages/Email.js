@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, Search, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
+import {
+  TableRow,
+  Alert,
+  TableCell,
+  Checkbox,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 // import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -84,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, setSelectedMenu }) => {
+const Email = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [
@@ -119,19 +126,19 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
     disabled: theme.palette.common.black,
   };
 
-  useEffect(() => {
-    setSelectedMenu(6);
-
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
-
   // const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
 
   return (
     <>
-      <Grid container direction="column" height="100%" flexWrap="nowrap" gap={2}>
+      <Grid
+        container
+        direction="column"
+        height="100%"
+        flexWrap="nowrap"
+        gap={2}
+      >
         {response ? (
           <Grid
             item
@@ -146,7 +153,12 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
             </Alert>
           </Grid>
         ) : null}
-        <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
+        <Grid
+          item
+          direction={{ sm: "row", xs: "column" }}
+          container
+          gap={{ md: 4, sm: 4, xs: 2 }}
+        >
           <Grid item flex={1}>
             <Search
               value={searchMail}
@@ -228,7 +240,13 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                            onClick={() =>
+                              handleSelectedRows(
+                                _id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -283,7 +301,10 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
+          <EmptyTable
+            headCells={emailHeader}
+            paginationLabel="Email  per page"
+          />
         )}
       </Grid>
     </>
@@ -291,9 +312,3 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
 };
 
 export default Email;
-Email.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
-};

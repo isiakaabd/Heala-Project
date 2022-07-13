@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { NoData } from "components/layouts";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
@@ -10,7 +9,11 @@ import { CircularProgressBar, Loader, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
-import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
+import {
+  financialPercent,
+  selectOptions,
+  formatNumber,
+} from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -100,13 +103,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpEarnings = (props) => {
+const HcpEarnings = () => {
   const classes = useStyles();
   // const theme = useTheme();
 
   const { hcpId } = useParams();
-
-  const { selectedMenu, setSelectedMenu } = props;
 
   const [form, setForm] = useState("");
   const { data, error, loading, refetch } = useQuery(getEarningStats, {
@@ -146,12 +147,6 @@ const HcpEarnings = (props) => {
     }
   }, [form, data, datas]);
   // const classes = useStyles();
-
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -207,16 +202,27 @@ const HcpEarnings = (props) => {
             container
             alignItems="center"
             rowGap={4}
-            justifyContent={{ md: "space-around", xs: "flex-start", sm: "space-around" }}
+            justifyContent={{
+              md: "space-around",
+              xs: "flex-start",
+              sm: "space-around",
+            }}
           >
-            <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+            <Grid
+              item
+              spacing={2}
+              sx={{ justifyContent: "center", alignItems: "center" }}
+            >
               <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
                 <Grid
                   className={classes.iconWrapper}
                   sx={{ background: theme.palette.common.lightGreen }}
                 >
                   <Grid item>
-                    <TrendingDownIcon color="success" className={classes.cardIcon} />
+                    <TrendingDownIcon
+                      color="success"
+                      className={classes.cardIcon}
+                    />
                   </Grid>
                 </Grid>
                 <Grid item>
@@ -250,7 +256,10 @@ const HcpEarnings = (props) => {
                   sx={{ background: theme.palette.common.lightRed }}
                 >
                   <Grid item>
-                    <TrendingUpIcon color="error" className={classes.cardIcon} />
+                    <TrendingUpIcon
+                      color="error"
+                      className={classes.cardIcon}
+                    />
                   </Grid>
                 </Grid>
                 <Grid item>
@@ -283,11 +292,6 @@ const HcpEarnings = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-HcpEarnings.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default HcpEarnings;
