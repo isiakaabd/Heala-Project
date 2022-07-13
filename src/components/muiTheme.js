@@ -11,6 +11,7 @@ const lightGreen = "#f7f7f7";
 const gold = "rgb(243, 173, 83)";
 const black = "#2D2F39";
 const disable = "#cccccc";
+const danger = "#f21818";
 
 export const muiTheme = createTheme({
   palette: {
@@ -26,6 +27,7 @@ export const muiTheme = createTheme({
       lightGreen,
       gold,
       black,
+      danger,
     },
     primary: {
       main: dark,
@@ -50,7 +52,12 @@ export const muiTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Euclid Circular"', '"Circular Std Medium"', "Roboto", "sans-serif"].join(", "),
+    fontFamily: [
+      '"Euclid Circular"',
+      '"Circular Std Medium"',
+      "Roboto",
+      "sans-serif",
+    ].join(", "),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {

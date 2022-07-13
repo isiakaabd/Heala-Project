@@ -56,6 +56,7 @@ import {
 } from "components/pages";
 import ListManagment from "components/pages/ListManagment";
 import TestList from "components/pages/TestList";
+import SubscriptionIncome from "components/pages/SubscriptionIncome";
 
 const Routes = () => {
   return (
@@ -218,6 +219,11 @@ const Routes = () => {
 
       <PrivateRoute exact path="/finance/payouts" component={Payout} />
       <PrivateRoute exact path="/finance/pending" component={PendingPayout} />
+      <PrivateRoute
+        exact
+        path="/finance/sub-income"
+        component={SubscriptionIncome}
+      />
 
       {/*  =====  REFERRALS ROUTES STARTS HERE ===== */}
       <PrivateRoute path="/referrals/:referralId" component={ViewReferral} />

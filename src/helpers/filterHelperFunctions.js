@@ -5,43 +5,109 @@ import { Typography } from "@mui/material";
 import { removeEmptyStringValues } from "./func";
 
 export const showErrorMsg = (enqueueSnackbar, errorMsg) => {
-  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{errorMsg}</Typography>, {
-    variant: "error",
-    preventDuplicate: true,
-    anchorOrigin: {
-      horizontal: "center",
-      vertical: "top",
-    },
-    autoHideDuration: 10000,
-  });
+  enqueueSnackbar(
+    <Typography style={{ fontSize: "1.2rem" }}>{`${errorMsg}`}</Typography>,
+    {
+      variant: "error",
+      preventDuplicate: true,
+      anchorOrigin: {
+        horizontal: "center",
+        vertical: "top",
+      },
+      autoHideDuration: 10000,
+    }
+  );
 };
 
 export const showSuccessMsg = (enqueueSnackbar, Typography, successMsg) => {
-  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>, {
-    variant: "success",
-    preventDuplicate: true,
-    anchorOrigin: {
-      horizontal: "right",
-      vertical: "top",
-    },
-    autoHideDuration: 5000,
-  });
+  enqueueSnackbar(
+    <Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>,
+    {
+      variant: "success",
+      preventDuplicate: true,
+      anchorOrigin: {
+        horizontal: "right",
+        vertical: "top",
+      },
+      autoHideDuration: 5000,
+    }
+  );
 };
 
-export const handleError = (error, enqueueSnackbar, Typography) => {
-  if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
-    (error?.graphQLErrors || []).map((err) =>
-      showErrorMsg(enqueueSnackbar, Typography, err.message),
-    );
-  } else if (error?.networkError) {
-    error.networkError?.result?.errors?.map((err) =>
-      showErrorMsg(enqueueSnackbar, Typography, err.message || "Something went wrong, try again."),
-    );
-  } else if (error?.message) {
-    showErrorMsg(enqueueSnackbar, Typography, error.message);
+export const getErrorMsg = (error) => {
+  try {
+    if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+      const errMsgs = (error?.graphQLErrors || []).map((err) => err.message);
+      return errMsgs || "Something went wrong. Try again!!!";
+    } else if (error?.networkError) {
+      const errMsgs = error?.networkError?.result?.errors?.map(
+        (err) => err.message
+      );
+      return errMsgs || "Something went wrong. Try again!!!";
+    } else if (error?.message) {
+      return error.message;
+    }
+  } catch (error) {
+    console.error("error from get error func.", error);
+    return "Something went wrong. Try again!!!";
   }
 };
 
+export const handleError = (error, enqueueSnackbar) => {
+  try {
+    if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+      (error?.graphQLErrors || []).map((err) =>
+        showErrorMsg(enqueueSnackbar, err.message)
+      );
+    } else if (error?.networkError) {
+      error.networkError?.result?.errors?.map((err) =>
+        showErrorMsg(
+          enqueueSnackbar,
+          err.message || "Something went wrong, try again."
+        )
+      );
+    } else if (error?.message) {
+      console.log(error?.message);
+      showErrorMsg(enqueueSnackbar, error.message);
+    }
+  } catch (error) {
+    showErrorMsg(enqueueSnackbar, "Something went wrong. Try again!!!");
+  }
+};
+
+export const deleteVar = (variable) => {
+  for (const key in variable) {
+    delete variable[key];
+  }
+};
+
+export const filterData = async (filterVaribles, queryParams) => {
+  try {
+    const { fetchData, refetch, variables } = queryParams;
+    const newFilterVaribles = removeEmptyStringValues(filterVaribles);
+    const getData = () => {
+      if (newFilterVaribles === {}) {
+        deleteVar(variables);
+        return refetch();
+      } else {
+        return fetchData({ variables: newFilterVaribles });
+      }
+    };
+
+    const { data } = await getData();
+
+    if (!data) {
+      throw Error("something went wrong while filtering by status");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// DON'T USE ...
 export const onFilterValueChange = async (
   e,
   name,
@@ -49,7 +115,7 @@ export const onFilterValueChange = async (
   setFilterValues,
   fetchData,
   variables,
-  refetchData,
+  refetchData
 ) => {
   const value = e?.target?.value;
   const newFilterData = { ...filterValues, [name]: value };
@@ -65,8 +131,12 @@ export const onFilterValueChange = async (
   }
 };
 
-export const resetFilters = (setFilterValues, values, variables, refetchData) => {
-  console.log(setFilterValues, values, variables, refetchData);
+export const resetFilters = (
+  setFilterValues,
+  values,
+  variables,
+  refetchData
+) => {
   setFilterValues(values);
   for (const key in variables) {
     delete variables[key];
@@ -74,46 +144,41 @@ export const resetFilters = (setFilterValues, values, variables, refetchData) =>
   refetchData();
 };
 
-export const changeTableLimit = async (limit, fetchFunc) => {
+export const changeTableLimit = async (fetchFunc, variables) => {
   try {
-    fetchFunc({
-      variables: {
-        first: limit,
-      },
+    return fetchFunc({
+      variables: variables,
     });
   } catch (error) {
     console.log("couldn't change table limit", error);
   }
 };
 
-export const handlePageChange = (fetchDataFN, type, pageInfo) => {
+export const handlePageChange = (fetchDataFN, type, pageInfo, variables) => {
   const getData = (pageNumber) => {
-    fetchDataFN({
+    return fetchDataFN({
       variables: {
         page: pageNumber,
-        first: pageInfo.limit,
+        first: pageInfo?.limit || 10,
+        ...variables,
       },
     });
   };
   switch (type) {
     case "FIRSTPAGE":
-      getData(1);
-      break;
+      return getData(1);
 
     case "NEXTPAGE":
-      getData(pageInfo?.nextPage || 1);
-      break;
+      return getData(pageInfo?.nextPage || 1);
 
     case "PREVPAGE":
-      getData(pageInfo?.prevPage || 1);
-      break;
+      return getData(pageInfo?.prevPage || 1);
 
     case "LASTPAGE":
-      getData(pageInfo?.totalPages || 1);
-      break;
+      return getData(pageInfo?.totalPages || 1);
 
     default:
-      break;
+      return;
   }
 };
 
@@ -149,7 +214,7 @@ export const compressAndUploadImage = async (
   setFieldValue,
   setProgress,
   isCompressing,
-  setIsCompleted,
+  setIsCompleted
 ) => {
   try {
     if (!img) throw new Error("No file passed to upload function");
@@ -206,7 +271,7 @@ export const deleteItem = async (
   Typography,
   enqueueSnackbar,
   setIsDeleting,
-  isDeleting,
+  isDeleting
 ) => {
   const newIsDeleting = isDeleting;
 
@@ -228,7 +293,11 @@ export const deleteItem = async (
     }
 
     refresh();
-    showSuccessMsg(enqueueSnackbar, Typography, "Partner deleted successfully.");
+    showSuccessMsg(
+      enqueueSnackbar,
+      Typography,
+      "Partner deleted successfully."
+    );
     resetId(null);
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
@@ -237,12 +306,14 @@ export const deleteItem = async (
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
     console.log("couldn't delete partner from deletePartner FN", error);
-    handleError(error, enqueueSnackbar, Typography);
+    handleError(error, enqueueSnackbar);
   }
 };
 
 export const IsImg = (file) => {
-  const imgFormatsRegex = new RegExp(/(jpeg|png|jpg|webp|jpg|jpeg|jfif|pjpeg|pjp|svg)/);
+  const imgFormatsRegex = new RegExp(
+    /(jpeg|png|jpg|webp|jpg|jpeg|jfif|pjpeg|pjp|svg)/
+  );
   try {
     const fileArr = file?.name.split(".");
     const lastItem = fileArr[fileArr.length - 1];

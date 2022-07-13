@@ -1,7 +1,6 @@
 import React from "react";
 import t from "prop-types";
 import { ErrorMessage } from "formik";
-import { useSnackbar } from "notistack";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Typography } from "@mui/material";
@@ -76,9 +75,9 @@ const errorContainer = {
 const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
   const theme = useTheme();
   const [preview, setPreview] = React.useState("");
-  const [progress, setProgress] = React.useState();
-  const [isCompleted, setIsCompleted] = React.useState(null);
-  const [isCompressing, setIsCompressing] = React.useState(false);
+  const [progress] = React.useState();
+  const [isCompleted] = React.useState(null);
+  const [isCompressing] = React.useState(false);
   const [file, setFile] = React.useState(null);
   const {
     getRootProps,
@@ -97,9 +96,20 @@ const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
         const reader = new FileReader();
         reader.readAsDataURL(acceptedFiles[0]);
         reader.onloadend = (e) => setPreview(reader.result);
+        // call the upload func
+        /* compressAndUploadImage(
+          acceptedFiles[0],
+          uploadImage,
+          setPreview,
+          name,
+          setFieldValue,
+          setProgress,
+          setIsCompressing,
+          setIsCompleted
+        ); */
+      } else {
+        uploadFunc(acceptedFiles[0]);
       }
-
-      uploadFunc(acceptedFiles[0]);
     },
   });
 

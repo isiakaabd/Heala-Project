@@ -5,6 +5,93 @@ export const genderType = [
   { key: "Female", value: "Female" },
 ];
 
+export const patientSearchOptions = [
+  { key: "By ID", value: "id" },
+  { key: "By first name", value: "firstName" },
+  { key: "By last name", value: "lastName" },
+];
+
+export const doctorsSearchOptions = [
+  { key: "By ID", value: "id" },
+  { key: "By first name", value: "firstName" },
+  { key: "By last name", value: "lastName" },
+];
+
+export const doctorsProfileDefaultFilterByValues = {
+  gender: "",
+  cadre: "",
+  specialization: "",
+  providerId: "",
+};
+
+export const patientsProfileDefaultFilterByValues = {
+  gender: "",
+  provider: "",
+};
+
+export const cadreOptions = [
+  {
+    key: "House Officer",
+    value: "House Officer",
+  },
+  {
+    key: "Medical officer (MO)",
+    value: "Medical officer (MO)",
+  },
+  {
+    key: "Registrar",
+    value: "Registrar",
+  },
+  {
+    key: "Senior Registrar",
+    value: "Senior Registrar",
+  },
+  {
+    key: "Consultant",
+    value: "Consultant",
+  },
+];
+
+export const specializationOptions = [
+  { key: "Internal medicine", value: "Internal medicine" },
+  { key: "Family medicine", value: "Family medicine" },
+  { key: "General Practitioner (GP)", value: "General Practitioner (GP)" },
+  { key: "Pediatrics", value: "Pediatrics" },
+  { key: "Emergency medicine", value: "Emergency medicine" },
+  { key: "Obstetrics gynecology", value: "Obstetrics gynecology" },
+  { key: "Neurology", value: "Neurology" },
+  { key: "Geriatrics", value: "Geriatrics" },
+  { key: "Psychiatry", value: "Psychiatry" },
+  { key: "Anesthesiology", value: "Anesthesiology" },
+  { key: "Cardiology", value: "Cardiology" },
+  { key: "Dermatology", value: "Dermatology" },
+  { key: "Intensive medicine", value: "Intensive medicine" },
+  { key: "Endocrinology", value: "Endocrinology" },
+  { key: "Radiology", value: "Radiology" },
+  { key: "Otorhinolaryngology", value: "Otorhinolaryngology" },
+  { key: "Ophthalmology", value: "Ophthalmology" },
+  { key: "Oncology", value: "Oncology" },
+  { key: "General surgery", value: "General surgery" },
+  { key: "Gynaecology", value: "Gynaecology" },
+  { key: "Infectious disease", value: "Infectious disease" },
+  { key: "Rheumatology", value: "Rheumatology" },
+  { key: "Nephrology", value: "Nephrology" },
+  { key: "Infectious disease", value: "Infectious disease" },
+  { key: "Pulmonology", value: "Pulmonology" },
+  { key: "Gastroenterology", value: "Gastroenterology" },
+  { key: "Osteopathy", value: "Osteopathy" },
+  { key: "Clinical  physiology", value: "Clinical physiology" },
+  { key: "Allergology", value: "Allergology" },
+  { key: "Adolescent medicine ", value: "Adolescent medicine " },
+  { key: "Aviation medicine", value: "Aviation medicine" },
+  {
+    key: "Child and adolescent psychiatry",
+    value: "Child and adolescent psychiatry",
+  },
+  { key: "occupational medicine ", value: "occupational medicine " },
+  { key: "Neonatology", value: "Neonatology" },
+];
+
 export const planFilterBy = [
   { key: "Basic", value: "Basic" },
   { key: "Premium", value: "Premium" },
@@ -12,8 +99,8 @@ export const planFilterBy = [
 ];
 
 export const statusFilterBy = [
-  { key: "blocked", value: "Blocked" },
-  { key: "Active", value: "Active" },
+  { key: "Inactive", value: false },
+  { key: "Active", value: true },
 ];
 
 export const docVerifyStatusFilterBy = [

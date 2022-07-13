@@ -6,6 +6,7 @@ import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
 
 import Typography from "@mui/material/Typography";
 import { TextError } from "components/Utilities/TextError";
+import { CloseBtn } from "components/Buttons/CloseBtn";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -76,28 +77,55 @@ Selects.propTypes = {
 };
 
 export const CustomSelect = (props) => {
-  const { value, options, name, onChange, onBlur, placeholder } = props;
+  const {
+    value,
+    options,
+    name,
+    onChange,
+    onBlur,
+    placeholder,
+    label,
+    onClickClearBtn,
+    hasClearBtn,
+  } = props;
   const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
+      {label && <FormLabel className={classes.FormLabel}>{label}</FormLabel>}
       <FormControl fullWidth>
-        <Select
-          name={name}
-          displayEmpty
-          onBlur={onBlur}
-          value={value}
-          onChange={onChange}
-          className={classes.select}
-        >
-          <MenuItem value="">
-            <Typography>{placeholder}</Typography>
-          </MenuItem>
-          {options.map((option) => (
-            <MenuItem key={option.key} value={option.value}>
-              {option.key}
+        <Grid item container direction="column" sx={{ position: "relative" }}>
+          {hasClearBtn && value !== "" ? (
+            <Grid
+              sx={{
+                position: "absolute",
+                top: "-10px",
+                right: "-10px",
+                zIndex: "5",
+              }}
+            >
+              <CloseBtn onHandleClick={() => onClickClearBtn()} />
+            </Grid>
+          ) : (
+            ""
+          )}
+          <Select
+            name={name}
+            displayEmpty
+            onBlur={onBlur}
+            value={value}
+            onChange={onChange}
+            className={classes.select}
+          >
+            <MenuItem value="">
+              <Typography>{placeholder}</Typography>
             </MenuItem>
-          ))}
-        </Select>
+            {options.map((option) => (
+              <MenuItem key={option.key} value={option.value}>
+                {option.key}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
       </FormControl>
     </Grid>
   );
@@ -110,6 +138,8 @@ CustomSelect.propTypes = {
   placeholder: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
+  onClickClearBtn: PropTypes.func,
+  hasClearBtn: PropTypes.bool,
 };
 
 export default Selects;

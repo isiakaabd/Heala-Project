@@ -186,7 +186,7 @@ const ViewHCP = () => {
       }, 3000);
     } catch (error) {
       console.log("Error from reject verification", error);
-      handleError(error, enqueueSnackbar, Typography);
+      handleError(error, enqueueSnackbar);
     }
   };
 

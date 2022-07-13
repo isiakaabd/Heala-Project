@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { debounce } from "lodash";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
+import { NetworkStatus } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   Button,
   Avatar,
@@ -13,113 +14,61 @@ import {
   TableRow,
   Grid,
 } from "@mui/material";
-import Filter from "components/Forms/Filters";
 import { useTheme } from "@mui/material/styles";
+
+import useAlert from "../../hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
-import { Loader, Search } from "components/Utilities";
+import { Loader } from "components/Utilities";
+import { useStyles } from "styles/patientsPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { getPatients } from "components/graphQL/useQuery";
+import CompoundSearch from "components/Forms/CompoundSearch";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { ClearFiltersBtn } from "components/Buttons/ClearFiltersBtn";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
+import { defaultPageInfo, patientSearchOptions } from "../../helpers/mockData";
 import {
-  genderType,
-  patientsPageDefaultFilterValues,
-  /* planFilterBy,
-  providerFilterBy,
-  statusFilterBy, */
-} from "../../helpers/mockData";
+  getPatients,
+  getPatientsByPlan,
+  getPatientsByStatus,
+} from "components/graphQL/useQuery";
 import {
   changeTableLimit,
-  fetchMoreData,
-  onFilterValueChange,
-  resetFilters,
+  handlePageChange,
 } from "../../helpers/filterHelperFunctions";
-import { makeStyles } from "@mui/styles";
-
-export const useStyles = makeStyles((theme) => ({
-  searchFilterContainer: {
-    "&.MuiGrid-root": {
-      justifyContent: "space-between",
-    },
-  },
-
-  button: {
-    "&.MuiButton-root": {
-      background: "#fff",
-      color: theme.palette.common.grey,
-      textTransform: "none",
-      borderRadius: "2rem",
-      display: "flex",
-      alignItems: "center",
-      padding: "1rem",
-      maxWidth: "10rem",
-      whiteSpace: "nowrap",
-
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.2rem",
-      },
-
-      "& .MuiButton-endIcon": {
-        marginLeft: ".3rem",
-        marginTop: "-.2rem",
-      },
-    },
-  },
-
-  tableCell: {
-    "&.MuiTableCell-root": {
-      fontSize: "1.25rem",
-      textAlign: "left",
-    },
-  },
-
-  badge: {
-    "&.MuiChip-root": {
-      fontSize: "1.25rem !important",
-      height: "2.7rem",
-
-      borderRadius: "1.3rem",
-    },
-  },
-  searchFilterBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      background: theme.palette.common.black,
-      width: "100%",
-    },
-  },
-
-  filterText: {
-    "&.MuiTypography-root": {
-      height: "100%",
-      display: "flex",
-      alignItems: "center",
-    },
-  },
-}));
 
 const Patients = () => {
-  const classes = useStyles();
   const theme = useTheme();
+  const classes = useStyles();
+  const { displayAlert } = useAlert();
+  const { setSelectedRows } = useActions();
   const [profiles, setProfiles] = useState([]);
-
-  const [filterValues, setFilterValues] = useState(
-    patientsPageDefaultFilterValues
-  );
-  const [fetchPatient, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getPatients);
+  const { selectedRows } = useSelector((state) => state.tables);
+  const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
+    useLazyQuery(getPatients, {
+      notifyOnNetworkStatusChange: true,
+    });
+  const [
+    fetchPatientByStatus,
+    {
+      loading: byStatusLoading,
+      variables: byStatusVaribles,
+      refetch: byStatusRefetch,
+    },
+  ] = useLazyQuery(getPatientsByStatus, {
+    notifyOnNetworkStatusChange: true,
+  });
+  const [
+    fetchPatientByPlan,
+    {
+      loading: byPlanLoading,
+      variables: byPlanVaribles,
+      refetch: byPlanRefetch,
+    },
+  ] = useLazyQuery(getPatientsByPlan, {
+    notifyOnNetworkStatusChange: true,
+  });
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -130,25 +79,41 @@ const Patients = () => {
     totalDocs: 0,
   });
 
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
-  //eslint-disable-next-line
-  const debouncer = useCallback(debounce(fetchPatient, 3000), []);
-
   useEffect(() => {
     fetchPatient({
       variables: {
         first: pageInfo.limit,
       },
+    }).then(({ data }) => {
+      if (data) {
+        setPageInfo(data?.profiles?.pageInfo || []);
+        setProfiles(data?.profiles?.data || defaultPageInfo);
+      }
     });
-  }, [fetchPatient, pageInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  useEffect(() => {
-    if (data) {
-      setPageInfo(data.profiles.pageInfo);
-      setProfiles(data.profiles.data);
-    }
-  }, [data]);
+  const getSearchPlaceholder = (filterBy) => {
+    return filterBy === "id"
+      ? "Search by ID e.g 7NE6ELLO"
+      : filterBy === "firstName"
+      ? "Search by first name e.g John"
+      : filterBy === "lastName"
+      ? "Search by last name e.g Doe"
+      : "";
+  };
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setPageInfo(data?.profiles?.pageInfo || []);
+        setProfiles(data?.profiles?.data || defaultPageInfo);
+      })
+      .catch((error) => {
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
 
   if (error) return <NoData error={error} />;
 
@@ -161,91 +126,39 @@ const Patients = () => {
         className={classes.searchFilterContainer}
       >
         {/*  ======= SEARCH INPUT(S) ==========*/}
-        <Grid item flex={1} width="100%">
-          <Search
-            onChange={(e) => {
-              let value = e.target.value;
-
-              if (value !== "") {
-                return debouncer({
-                  variables: { dociId: `HEALA-${value.toUpperCase()}` },
-                });
-              }
+        <CompoundSearch
+          queryParams={{ fetchData: fetchPatient, variables, loading }}
+          setPageInfo={(data) => setPageInfo(data?.profiles?.pageInfo || {})}
+          setProfiles={(data) => setProfiles(data?.profiles?.data || [])}
+          getSearchPlaceholder={(filterBy) => getSearchPlaceholder(filterBy)}
+          filterOptions={patientSearchOptions}
+        />
+        {/* ========= FILTERS =========== */}
+        <Grid item container flexWrap="wrap" spacing={4}>
+          <PatientFilters
+            setProfiles={setProfiles}
+            setPageInfo={setPageInfo}
+            queryParams={{
+              patientsParams: { fetchPatient, loading, refetch, variables },
+              patientsByStatusParams: {
+                byStatusLoading,
+                byStatusVaribles,
+                byStatusRefetch,
+                fetchPatientByStatus,
+              },
+              patientsByPlanParams: {
+                byPlanLoading,
+                byPlanVaribles,
+                byPlanRefetch,
+                fetchPatientByPlan,
+              },
             }}
-            // onChange={debouncedChangeHandler}
-            placeholder="Search by ID e.g 7NE6ELLO "
-            height="5rem"
           />
         </Grid>
-        {/* ========= FILTERS =========== */}
-        <Grid item container flexWrap="wrap" spacing={2}>
-          {/* FILTER BY GENDER */}
-          <Grid item>
-            <Filter
-              onHandleChange={(e) =>
-                onFilterValueChange(
-                  e,
-                  "gender",
-                  filterValues,
-                  setFilterValues,
-                  fetchPatient,
-                  variables,
-                  refetch
-                )
-              }
-              options={genderType}
-              name="gender"
-              placeholder="By gender"
-              value={filterValues.gender}
-            />
-          </Grid>
-          {/* FILTER BY STATUS */}
-          {/* <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={statusFilterBy}
-              name="status"
-              placeholder="By status"
-              value={filterValues.status}
-            />
-          </Grid> */}
-          {/* FILTER BY PROVIDER */}
-          {/* <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={providerFilterBy}
-              name="status"
-              placeholder="By provider"
-              value={filterValues.provider}
-            />
-          </Grid> */}
-          {/* FILTER BY PLAN */}
-          {/* <Grid item>
-            <Filter
-              onHandleChange={(e) => console.log(e)}
-              options={planFilterBy}
-              name="status"
-              placeholder="By plan"
-              value={filterValues.plan}
-            />
-          </Grid> */}
-          {/* ==== CLEAR FILTERS BUTTON ===== */}
-          <Grid item>
-            <ClearFiltersBtn
-              title="Clear filters"
-              onHandleClick={() => {
-                resetFilters(
-                  setFilterValues,
-                  patientsPageDefaultFilterValues,
-                  variables,
-                  fetchPatient
-                );
-              }}
-            />
-          </Grid>
-        </Grid>
       </Grid>
-      {loading ? (
+      {loading || byStatusLoading || byPlanLoading ? (
+        <Loader />
+      ) : networkStatus === NetworkStatus.refetch ? (
         <Loader />
       ) : profiles.length > 0 ? (
         /* ================= PATIENTS TABLE ================= */
@@ -260,11 +173,18 @@ const Patients = () => {
             headCells={patientsHeadCells}
             rows={profiles}
             paginationLabel="Patients per page"
-            handleChangePage={fetchMoreData}
             hasCheckbox={true}
-            changeLimit={changeTableLimit}
-            fetchData={fetchPatient}
+            changeLimit={async (e) => {
+              const res = changeTableLimit(fetchPatient, {
+                first: e,
+              });
+              await setTableData(res, "Failed to change table limit.");
+            }}
             dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              const res = handlePageChange(fetchPatient, page, pageInfo, {});
+              await setTableData(res, "Failed to change page.");
+            }}
           >
             {profiles.map((row, index) => {
               const {
@@ -344,7 +264,9 @@ const Patients = () => {
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Chip
-                      label={status ? status : "No Status"}
+                      label={
+                        status && status === "Active" ? "Active" : "Inactive"
+                      }
                       className={classes.badge}
                       style={{
                         background:

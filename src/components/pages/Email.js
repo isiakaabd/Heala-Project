@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
-import { Loader, Search, CustomButton } from "components/Utilities";
+import { Loader, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   TableRow,
@@ -117,7 +117,7 @@ const Email = () => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [response] = useState("");
-  const [searchMail, setSearchMail] = useState("");
+  /* const [searchMail, setSearchMail] = useState(""); */
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -159,14 +159,14 @@ const Email = () => {
           container
           gap={{ md: 4, sm: 4, xs: 2 }}
         >
-          <Grid item flex={1}>
+          {/* <Grid item flex={1}>
             <Search
               value={searchMail}
               onChange={(e) => setSearchMail(e.target.value)}
               placeholder="Enter your email here..."
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           {/*<Grid item>
             <Filter
               onHandleChange={(e) =>

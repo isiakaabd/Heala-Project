@@ -63,6 +63,7 @@ const TestList = () => {
         return null;
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
@@ -118,14 +119,9 @@ const TestList = () => {
             >
               {list.map((row, index) => {
                 const { _id } = row;
-                /* const isItemSelected = isSelected(_id, selectedRows); */
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TestListRow
-                    /* isItemSelected={isItemSelected} */
-                    /* handleSelectedRows={handleSelectedRows}
-                    selectedRows={selectedRows}
-                    setSelectedRows={setSelectedRows} */
                     key={_id}
                     data={row}
                     labelId={labelId}

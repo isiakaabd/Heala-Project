@@ -6,21 +6,27 @@ import { formatNumber } from "components/Utilities/Time";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
-import { getSinglePlan, getPlans, getUsertypess } from "components/graphQL/useQuery";
+import {
+  getSinglePlan,
+  getPlans,
+  getUsertypess,
+} from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
+import useAlert from "hooks/useAlert";
 
 export const SubscriptionModal = ({
   handleDialogClose,
   type,
-  setAlert,
   editId,
   setSingleData,
   initialValues,
   singleData,
+  refresh,
 }) => {
   const theme = useTheme();
+  const { watchFunction } = useAlert();
   const [createPlan] = useMutation(CREATE_PLAN, {
     refetchQueries: [{ query: getPlans }],
   });
@@ -39,9 +45,15 @@ export const SubscriptionModal = ({
       .typeError(" Enter a valid amount")
       .min(0, "Min value is  1")
       .required("Amount is required"),
-    description: Yup.string("Enter Description").trim().required("Description is required"),
-    provider: Yup.string("Enter Provider").trim().required("Provider is required"),
-    duration: Yup.string("Enter Duration").trim().required("Duration is required"),
+    description: Yup.string("Enter Description")
+      .trim()
+      .required("Description is required"),
+    provider: Yup.string("Enter Provider")
+      .trim()
+      .required("Provider is required"),
+    duration: Yup.string("Enter Duration")
+      .trim()
+      .required("Duration is required"),
   });
 
   useEffect(() => {
@@ -69,7 +81,7 @@ export const SubscriptionModal = ({
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          }),
+          })
       );
     }
   }, [data]);
@@ -77,9 +89,14 @@ export const SubscriptionModal = ({
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description, duration, provider } = values;
 
+    const reset = () => {
+      onSubmitProps.resetForm();
+      refresh();
+      handleDialogClose();
+    };
     if (type === "edit") {
       try {
-        await updatePlan({
+        const updatePlanRes = updatePlan({
           variables: {
             id: editId,
             name,
@@ -89,19 +106,20 @@ export const SubscriptionModal = ({
             provider,
           },
         });
-        setAlert({
-          message: "Plan successfully updated",
-          type: "success",
+
+        watchFunction(
+          "Plan edited successfully.",
+          "Couldn't edit plan. Try again.",
+          updatePlanRes
+        ).then(() => {
+          reset();
         });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
       } catch (error) {
         console.log(error);
       }
     } else if (type === "add") {
       try {
-        await createPlan({
+        const createPlanRes = createPlan({
           variables: {
             name,
             amount: Number(amount),
@@ -110,26 +128,17 @@ export const SubscriptionModal = ({
             provider,
           },
         });
-        setAlert({
-          message: "Plan successfully created",
-          type: "success",
+        watchFunction(
+          "Plan created successfully.",
+          "Couldn't create plan. Try again.",
+          createPlanRes
+        ).then(() => {
+          reset();
         });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
       } catch (errors) {
-        setAlert({
-          message: errors.message,
-          type: "danger",
-        });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
         console.log(errors);
       }
     }
-    handleDialogClose();
-    onSubmitProps.resetForm();
   };
 
   const buttonType = {

@@ -6,9 +6,7 @@ export const useStyles = makeStyles((theme) => ({
       justifyContent: "space-between",
     },
   },
-  searchGrid: {
-    "&.MuiGrid-root": {},
-  },
+
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -36,54 +34,6 @@ export const useStyles = makeStyles((theme) => ({
       "& .MuiButton-endIcon": {
         marginLeft: ".3rem",
         marginTop: "-.2rem",
-      },
-    },
-  },
-
-  tableBtn: {
-    "&.MuiButton-root": {
-      ...theme.typography.btn,
-      height: "3rem",
-      fontSize: "1.25rem",
-      borderRadius: "2rem",
-      boxShadow: "none",
-
-      "&:hover": {
-        "& .MuiButton-endIcon>*:nth-of-type(1)": {
-          color: "#fff",
-        },
-      },
-
-      "&:active": {
-        boxShadow: "none",
-      },
-
-      "& .MuiButton-endIcon>*:nth-of-type(1)": {
-        fontSize: "1.5rem",
-      },
-    },
-  },
-
-  redBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightRed,
-      color: theme.palette.common.red,
-
-      "&:hover": {
-        background: theme.palette.common.errorColor,
-        color: "#ffffff",
-      },
-    },
-  },
-
-  warningBtn: {
-    "&.MuiButton-root": {
-      background: theme.palette.common.lightRed,
-      color: theme.palette.common.red,
-
-      "&:hover": {
-        background: "#EDD94C",
-        color: "#ffffff",
       },
     },
   },

@@ -415,4 +415,6 @@ export const testTableHeadCells = [
   { id: 0, label: "Test Name" },
   { id: 1, label: "Price (Naira)" },
   { id: 2, label: "Turnaround time (TAT)" },
+  { id: 3, label: "" },
+  { id: 4, label: "" },
 ];

@@ -17,7 +17,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
-import { getEarningData } from "components/graphQL/useQuery";
+import { getSubscriptionsIncome } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -78,31 +78,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = () => {
+const SubscriptionIncome = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] =
-    useLazyQuery(getEarningData);
+  const [subIncome, setSubIncome] = useState([]);
+  const [fetchSubIncome, { loading, data, error }] = useLazyQuery(
+    getSubscriptionsIncome
+  );
 
   useEffect(() => {
-    fetchEarningData({
+    fetchSubIncome({
       variables: {
         first: pageInfo.limit,
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchEarningData, pageInfo]);
+  }, [fetchSubIncome, pageInfo]);
 
   useEffect(() => {
     if (data) {
-      setEarning(data.getEarningStats.earningData.data);
-      setPageInfo(data.getEarningStats.earningData.PageInfo);
+      setSubIncome(data.getEarningStats.subscriptionIncomeData.data);
+      setPageInfo(data.getEarningStats.subscriptionIncomeData.PageInfo);
     }
-  }, [earning, data]);
+  }, [setSubIncome, data]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -112,30 +113,30 @@ const Financetable = () => {
         <Grid item container gap={1} alignItems="center">
           <Grid item flex={1}>
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
-              Doctors Earnings table
+              Subscription Earnings table
             </Typography>
           </Grid>
           <Grid item className={classes.iconWrapper}>
             <TrendingDownIcon color="success" className={classes.cardIcon} />
           </Grid>
         </Grid>
-        {earning.length > 0 ? (
+        {subIncome.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={financeHeader}
-              rows={earning}
+              rows={subIncome}
               paginationLabel="finance per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                await changeTableLimit(fetchEarningData, { first: e });
+                await changeTableLimit(fetchSubIncome, { first: e });
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                await handlePageChange(fetchEarningData, page, pageInfo, {});
+                await handlePageChange(fetchSubIncome, page, pageInfo, {});
               }}
             >
-              {earning.map((row, index) => {
-                const { createdAt, balance } = row;
+              {subIncome.map((row, index) => {
+                const { createdAt, amount } = row;
                 // const { firstName, picture, lastName, specialization } = doctorData[0];
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -183,35 +184,12 @@ const Financetable = () => {
                     >
                       {timeMoment(createdAt)}
                     </TableCell>
-                    {/* <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={firstName ? firstName : "image"}
-                            src={doctorData ? picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {doctorData && `${firstName} ${lastName}`}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {specialization ? specialization : "No Value"}
-                    </TableCell> */}
                     <TableCell
                       align="left"
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.red }}
                     >
-                      {formatNumber(balance.toFixed(2))}
+                      {formatNumber(amount.toFixed(2))}
                     </TableCell>
                   </TableRow>
                 );
@@ -229,4 +207,4 @@ const Financetable = () => {
   );
 };
 
-export default Financetable;
+export default SubscriptionIncome;

@@ -155,7 +155,7 @@ const EditManagement = () => {
       );
       history.push("/settings/management");
     } catch (error) {
-      handleError(error, enqueueSnackbar, Typography);
+      handleError(error, enqueueSnackbar);
     }
   };
 

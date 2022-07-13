@@ -19,7 +19,7 @@ import EnhancedTableHeader from "./EnhancedTableHeader";
 import { paginationActionTypes } from "helpers/mockData";
 import { useActions } from "components/hooks/useActions";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
-import { handlePageChange } from "helpers/filterHelperFunctions";
+//import { handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   pagination: {
@@ -51,11 +51,10 @@ const EnhancedTable = ({
   title,
   type,
   hasCheckbox,
-  handleChangePage,
   changeLimit,
-  fetchData,
   dataPageInfo,
   hasPagination = true,
+  handlePagination,
 }) => {
   const classes = useStyles();
   const { setSelectedRows } = useActions();
@@ -93,21 +92,19 @@ const EnhancedTable = ({
               rowsPerPageOptions={[5, 10, 15, 25]}
               component="div"
               count={dataPageInfo?.totalDocs || 0}
-              rowsPerPage={dataPageInfo?.limit || 10}
+              rowsPerPage={dataPageInfo?.limit || 5}
               page={dataPageInfo?.page - 1}
               labelRowsPerPage={paginationLabel}
-              onPageChange={(e, pageNum) => {
-                handleChangePage(e, pageNum);
-              }}
+              onPageChange={(e) => e}
               onRowsPerPageChange={(e) => {
-                changeLimit(parseInt(e.target.value, 10), fetchData);
+                changeLimit(parseInt(e.target.value, 10));
               }}
               className={classes.pagination}
               ActionsComponent={() => (
                 <EnhancedTableAction
                   {...{
-                    fetchData,
                     dataPageInfo,
+                    handlePagination,
                   }}
                 />
               )}
@@ -119,49 +116,58 @@ const EnhancedTable = ({
 };
 
 EnhancedTable.propTypes = {
-  children: PropTypes.node,
   rows: PropTypes.array,
+  children: PropTypes.node,
   headCells: PropTypes.array,
   paginationLabel: PropTypes.string,
   title: PropTypes.string,
-  handleChangePage: PropTypes.func,
-  hasCheckbox: PropTypes.bool,
   type: PropTypes.string,
+  hasCheckbox: PropTypes.bool,
   changeLimit: PropTypes.func,
-  fetchData: PropTypes.func,
   dataPageInfo: PropTypes.object,
   hasPagination: PropTypes.bool,
+  handlePagination: PropTypes.func,
 };
 
-const EnhancedTableAction = ({ fetchData, dataPageInfo }) => {
+const EnhancedTableAction = ({ dataPageInfo, handlePagination }) => {
   const theme = useTheme();
   const { FIRSTPAGE, NEXTPAGE, PREVPAGE, LASTPAGE } = paginationActionTypes;
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
       <IconButton
-        onClick={() => handlePageChange(fetchData, FIRSTPAGE, dataPageInfo)}
+        onClick={() => handlePagination(FIRSTPAGE)}
         disabled={!dataPageInfo?.hasPrevPage}
         aria-label="first page"
       >
         {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
-        onClick={() => handlePageChange(fetchData, PREVPAGE, dataPageInfo)}
+        onClick={() => handlePagination(PREVPAGE)}
         disabled={!dataPageInfo?.hasPrevPage}
         aria-label="previous page"
       >
-        {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
-        onClick={() => handlePageChange(fetchData, NEXTPAGE, dataPageInfo)}
+        onClick={() => {
+          handlePagination(NEXTPAGE);
+        }}
         disabled={!dataPageInfo?.hasNextPage}
         aria-label="next page"
       >
-        {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
-        onClick={() => handlePageChange(fetchData, LASTPAGE, dataPageInfo)}
+        onClick={() => handlePagination(LASTPAGE)}
         disabled={!dataPageInfo?.hasNextPage}
         aria-label="last page"
       >
@@ -172,17 +178,8 @@ const EnhancedTableAction = ({ fetchData, dataPageInfo }) => {
 };
 
 EnhancedTableAction.propTypes = {
-  count: PropTypes.number,
-  page: PropTypes.number,
-  pagnumber: PropTypes.number,
-  totalPages: PropTypes.number,
   dataPageInfo: PropTypes.object,
-  rowsPerPage: PropTypes.number,
-  hasPrevPage: PropTypes.bool,
-  setPageNumber: PropTypes.func,
-  handleChangePage: PropTypes.func,
-  hasNextPage: PropTypes.bool,
-  fetchData: PropTypes.func,
+  handlePagination: PropTypes.func,
 };
 
 export default EnhancedTable;

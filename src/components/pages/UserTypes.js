@@ -37,7 +37,11 @@ import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import { deleteUserType } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -229,7 +233,7 @@ const UserTypes = () => {
     setEdit(false);
   };
   const [alert, setAlert] = useState(null);
-  const handleDialogOpens1 = () => setIsOpens(true);
+  /*   const handleDialogOpens1 = () => setIsOpens(true); */
   const initialValues1 = {
     name: "",
     userTypeId: "",
@@ -282,14 +286,14 @@ const UserTypes = () => {
           container
           direction={{ sm: "row", xs: "column" }}
         >
-          <Grid item flex={{ sm: 1, xs: 1 }}>
+          {/* <Grid item flex={{ sm: 1, xs: 1 }}>
             <Search
               value={searchHcp}
               placeholder="Type to search User types..."
               onChange={(e) => onChange(e.target.value)}
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           <Grid
             item
             flex={{ sm: 1, xs: 1 }}
@@ -318,11 +322,14 @@ const UserTypes = () => {
               headCells={partnersHeadCells2}
               rows={userType}
               paginationLabel="Patients per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchUserTypes}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchUserTypes, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchUserTypes, page, pageInfo, {});
+              }}
             >
               {userType
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
