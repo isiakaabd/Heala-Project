@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import {
-  Avatar,
-  Typography,
-  TableRow,
-  Button,
-  TableCell,
-  Checkbox,
-  Grid,
-} from "@mui/material";
+import { Avatar, Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
@@ -24,10 +16,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Loader, PreviousButton } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -81,8 +70,7 @@ const HcpConsultations = (props) => {
   const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
 
-  const [fetchDocConsultations, { loading, data, error }] =
-    useLazyQuery(getDocConsult);
+  const [fetchDocConsultations, { loading, data, error }] = useLazyQuery(getDocConsult);
 
   useEffect(() => {
     fetchDocConsultations({
@@ -106,9 +94,7 @@ const HcpConsultations = (props) => {
   return (
     <Grid container direction="column" height="100%" gap={2}>
       <Grid item>
-        <PreviousButton
-          path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */
-        />
+        <PreviousButton path={`/hcps/${hcpId}`} /* onClick={() => setSelectedHcpMenu(0)} */ />
       </Grid>
 
       <Grid item container justifyContent="space-between" alignItems="center">
@@ -169,9 +155,7 @@ const HcpConsultations = (props) => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(_id, selectedRows, setSelectedRows)
-                      }
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -198,11 +182,7 @@ const HcpConsultations = (props) => {
                       <span style={{ marginRight: "1rem" }}>
                         <Avatar
                           alt={`Display Photo of ${patientData.firstName}`}
-                          src={
-                            patientData.picture
-                              ? patientData.picture
-                              : displayPhoto
-                          }
+                          src={patientData.picture ? patientData.picture : displayPhoto}
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
@@ -274,10 +254,7 @@ const HcpConsultations = (props) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={consultationsHeadCells}
-          paginationLabel="Consultation  per page"
-        />
+        <EmptyTable headCells={consultationsHeadCells} paginationLabel="Consultation  per page" />
       )}
     </Grid>
   );

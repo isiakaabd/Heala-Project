@@ -7,15 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Button,
-  Checkbox,
-  TableCell,
-  Avatar,
-  TableRow,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Button, Checkbox, TableCell, Avatar, TableRow, Grid, Typography } from "@mui/material";
 
 import { isSelected } from "helpers/isSelected";
 import { useStyles } from "styles/partnersPageStyles";
@@ -112,7 +104,7 @@ const Partners = () => {
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          })
+          }),
       );
     }
   }, [da]);
@@ -123,7 +115,7 @@ const Partners = () => {
     }
   }, [data, categoryData, setCategoryDatas]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     partner.map((p) => {
       const newIsDeleting = isDeleting;
       setIsDeleting({ [p._id]: false, ...newIsDeleting });
@@ -183,22 +175,10 @@ const Partners = () => {
     } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
   }; */
 
-  if (error || categoryData.error)
-    return <NoData error={error || categoryData.error} />;
+  if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
   return (
-    <Grid
-      container
-      direction="column"
-      gap={{ sm: 4, xs: 2 }}
-      flexWrap="nowrap"
-      height="100%"
-    >
-      <Grid
-        item
-        container
-        gap={2}
-        direction={{ md: "row", sm: "row", xs: "column" }}
-      >
+    <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
+      <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
         {/* <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
           <Search
             value={searchPartner}
@@ -207,12 +187,7 @@ const Partners = () => {
             height="5rem"
           />
         </Grid> */}
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          flex={{ sm: 1, xs: 1, md: 1 }}
-        >
+        <Grid item container justifyContent="space-between" flex={{ sm: 1, xs: 1, md: 1 }}>
           {/* <Grid item>
             <FilterList
               title="Filter"
@@ -260,13 +235,7 @@ const Partners = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -330,10 +299,7 @@ const Partners = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={partnersHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={partnersHeadCells} paginationLabel="Doctors per page" />
       )}
       <Modals
         isOpen={openFilterPartner}
@@ -376,12 +342,7 @@ const Partners = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid
-                  item
-                  container
-                  spacing={2}
-                  style={{ marginBottom: "10rem" }}
-                >
+                <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
                   <Grid item xs={6}>
                     <FormikControl
                       control="select"
@@ -577,7 +538,7 @@ const Partners = () => {
             Typography,
             enqueueSnackbar,
             setIsDeleting,
-            isDeleting
+            isDeleting,
           );
           setOpenDeletePartner(false);
         }}

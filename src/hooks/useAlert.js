@@ -16,23 +16,20 @@ const useAlert = () => {
           vertical: "top",
         },
         autoHideDuration: 10000,
-      }
+      },
     );
   };
 
   const showSuccessMsg = (successMsg) => {
-    return enqueueSnackbar(
-      <Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>,
-      {
-        variant: "success",
-        preventDuplicate: true,
-        anchorOrigin: {
-          horizontal: "right",
-          vertical: "top",
-        },
-        autoHideDuration: 5000,
-      }
-    );
+    return enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>, {
+      variant: "success",
+      preventDuplicate: true,
+      anchorOrigin: {
+        horizontal: "right",
+        vertical: "top",
+      },
+      autoHideDuration: 5000,
+    });
   };
 
   const getErrorMsg = (error) => {
@@ -41,9 +38,7 @@ const useAlert = () => {
         const errMsgs = (error?.graphQLErrors || []).map((err) => err.message);
         return errMsgs || "Something went wrong. Try again!!!";
       } else if (error?.networkError) {
-        const errMsgs = error?.networkError?.result?.errors?.map(
-          (err) => err.message
-        );
+        const errMsgs = error?.networkError?.result?.errors?.map((err) => err.message);
         return errMsgs || "Something went wrong. Try again!!!";
       } else if (error?.message) {
         return error.message;

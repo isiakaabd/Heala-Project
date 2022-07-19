@@ -3,17 +3,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import {
-  Grid,
-  Button,
-  Avatar,
-  Chip,
-  TableRow,
-  TableCell,
-  Checkbox,
-} from "@mui/material";
-
-import useAlert from "../../hooks/useAlert";
+import { Grid, Button, Avatar, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
+import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
@@ -125,13 +116,7 @@ const HCP = () => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
           {/* {response ? (
             <Grid
@@ -191,8 +176,7 @@ const HCP = () => {
               {respondData
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const { createdAt, status, qualification, doctorData, _id } =
-                    row;
+                  const { createdAt, status, qualification, doctorData, _id } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -208,13 +192,7 @@ const HCP = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -242,12 +220,8 @@ const HCP = () => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${
-                                doctorData && doctorData.firstName
-                              }`}
-                              src={
-                                doctorData ? doctorData.picture : displayPhoto
-                              }
+                              alt={`image of ${doctorData && doctorData.firstName}`}
+                              src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
@@ -314,10 +288,7 @@ const HCP = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={HCPHeader}
-            paginationLabel="Verification  per page"
-          />
+          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
         )}
       </Grid>
     </>

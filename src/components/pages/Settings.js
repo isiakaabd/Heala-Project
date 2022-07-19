@@ -60,10 +60,7 @@ const Settings = () => {
       </Grid>
       <Grid item container md={5} sm={5} xs={12}>
         <Grid item container flexDirection="column">
-          <Link
-            to="/settings/list-management"
-            style={{ textDecoration: "none" }}
-          >
+          <Link to="/settings/list-management" style={{ textDecoration: "none" }}>
             <Card
               alt="list management Icon"
               title="List management"

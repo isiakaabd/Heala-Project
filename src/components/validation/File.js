@@ -4,14 +4,7 @@ import { useSnackbar } from "notistack";
 import { makeStyles } from "@mui/styles";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-import {
-  FormControl,
-  FormLabel,
-  Grid,
-  Avatar,
-  Button,
-  Typography,
-} from "@mui/material";
+import { FormControl, FormLabel, Grid, Avatar, Button, Typography } from "@mui/material";
 
 import { Loader } from "components/Utilities";
 import { RequiredIcon } from "components/Typography";
@@ -20,7 +13,7 @@ import {
   showErrorMsg,
   showSuccessMsg,
   uploadImage,
-} from "../../helpers/filterHelperFunctions";
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -65,6 +58,7 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
     if (isCompleted === "failed") {
       showErrorMsg(enqueueSnackbar, "Image upload failed, Try again.");
     }
+    //eslint-disable-next-line
   }, [isCompleted]);
 
   const onChange = async (e) => {
@@ -78,7 +72,7 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
       setFieldValue,
       setProgress,
       setIsCompressing,
-      setIsCompleted
+      setIsCompleted,
     );
 
     const reader = new FileReader();
@@ -89,13 +83,7 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
   return (
     <Grid container spacing={2} alignItems="center">
       {progress < 100 || isCompressing ? (
-        <Grid
-          container
-          item
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Grid container item direction="row" justifyContent="center" alignItems="center">
           <Typography display={"inline"}>
             {isCompressing ? "Compressing image" : "Uploading image"}
           </Typography>

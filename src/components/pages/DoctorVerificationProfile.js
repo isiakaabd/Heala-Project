@@ -119,13 +119,7 @@ const DoctorVerificationProfile = () => {
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        gap={5}
-        sx={{ width: "100%" }}
-      >
+      <Grid item container justifyContent="space-between" gap={5} sx={{ width: "100%" }}>
         {/* GENDER GRID */}
         <Grid item md className={classes.cardGrid}>
           <Grid
@@ -139,11 +133,7 @@ const DoctorVerificationProfile = () => {
               <Typography variant="h4">Gender</Typography>
             </Grid>
             <Grid item>
-              <Chip
-                variant="outlined"
-                label={gender}
-                className={classes.infoBadge}
-              />
+              <Chip variant="outlined" label={gender} className={classes.infoBadge} />
             </Grid>
           </Grid>
         </Grid>
@@ -240,9 +230,7 @@ const DoctorVerificationProfile = () => {
               {hospital ? (
                 <a href={email} className={classes.link}>
                   <span>{hospital}</span>
-                  <LocationOnIcon
-                    className={`${classes.linkIcon} ${classes.locationIcon}`}
-                  />
+                  <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
                 </a>
               ) : (
                 <span className={classes.link}>No Hospital attached</span>

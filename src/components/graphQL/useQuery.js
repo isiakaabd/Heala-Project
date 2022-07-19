@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { PageInfo } from "./fragment";
 
 export const doctor = gql`

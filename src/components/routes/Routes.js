@@ -156,11 +156,7 @@ const Routes = () => {
 
       <PrivateRoute exact path="/finance/payouts" component={Payout} />
       <PrivateRoute exact path="/finance/pending" component={PendingPayout} />
-      <PrivateRoute
-        exact
-        path="/finance/sub-income"
-        component={SubscriptionIncome}
-      />
+      <PrivateRoute exact path="/finance/sub-income" component={SubscriptionIncome} />
 
       {/*  =====  REFERRALS ROUTES STARTS HERE ===== */}
       <PrivateRoute path="/referrals/:referralId" component={ViewReferral} />

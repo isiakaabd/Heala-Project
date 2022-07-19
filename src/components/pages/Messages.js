@@ -18,10 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useLazyQuery } from "@apollo/client";
 import { getMessage } from "components/graphQL/useQuery";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -151,13 +148,7 @@ const Messages = () => {
   if (loading) return <Loader />;
   else {
     return (
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid
           item
           gap={{ md: 4, sm: 4, xs: 2 }}
@@ -217,13 +208,7 @@ const Messages = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -246,9 +231,7 @@ const Messages = () => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of  ${
-                                recipientData && recipientData.firstName
-                              }`}
+                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
                               src={
                                 recipientData && recipientData.image
                                   ? recipientData.image
@@ -303,10 +286,7 @@ const Messages = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={messagesHeadCells}
-            paginationLabel="Messages  per page"
-          />
+          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
         )}
       </Grid>
     );

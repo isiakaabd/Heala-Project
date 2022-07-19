@@ -1,13 +1,5 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Avatar,
-  Checkbox,
-} from "@mui/material";
+import React from "react";
+import { Grid, Typography, TableRow, TableCell, Avatar, Checkbox } from "@mui/material";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -86,9 +78,7 @@ const PendingPayout = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { rowsPerPage, selectedRows, page } = useSelector(
-    (state) => state.tables
-  );
+  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
   const buttonType = {
@@ -99,17 +89,10 @@ const PendingPayout = () => {
   return (
     <Grid container direction="column" rowSpacing={2}>
       <Grid item>
-        <PreviousButton
-          path="/finance" /* onClick={() => setSelectedSubMenu(0)} */
-        />
+        <PreviousButton path="/finance" /* onClick={() => setSelectedSubMenu(0)} */ />
       </Grid>
 
-      <Grid
-        item
-        container
-        justifyContent="space-between"
-        style={{ paddingBottom: "3rem" }}
-      >
+      <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
         <Grid item>
           <Grid item container alignItems="center">
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
@@ -140,107 +123,96 @@ const PendingPayout = () => {
             hasCheckbox={true}
             hasPagination={false}
           >
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                    {row.entryDate}
+                  </TableCell>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.black }}
+                  >
+                    {row.medical}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      {row.entryDate}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {row.medical}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {row.firstName} {row.lastName}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {row.amount}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {row.account}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.green }}
-                    >
-                      {row.bank}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {row.firstName} {row.lastName}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.red }}
+                  >
+                    {row.amount}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.red }}
+                  >
+                    {row.account}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.green }}
+                  >
+                    {row.bank}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={pendingHeader}
-          paginationLabel="Payout  per page"
-        />
+        <EmptyTable headCells={pendingHeader} paginationLabel="Payout  per page" />
       )}
     </Grid>
   );

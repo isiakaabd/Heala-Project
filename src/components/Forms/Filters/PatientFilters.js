@@ -3,7 +3,7 @@ import t from "prop-types";
 import { Grid } from "@mui/material";
 
 import Filter from ".";
-import useAlert from "../../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import {
   genderType,
   patientsProfileDefaultFilterByValues,
@@ -21,12 +21,11 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   const [fetchProviders] = useLazyQuery(getProviders);
   const [providerId, setProviderId] = useState(null);
   const [filterPlanValue, setFilterPlanValue] = useState("");
-  const [statusFilterValue, setStatusFilterValue] = useState("");
-  const { patientsParams, patientsByStatusParams, patientsByPlanParams } =
-    queryParams;
+  const [, setStatusFilterValue] = useState("");
+  const { patientsParams, patientsByStatusParams, patientsByPlanParams } = queryParams;
   const { fetchPatient, loading, refetch, variables } = patientsParams;
   const [profileFilterValues, setProfileFilterValues] = useState(
-    patientsProfileDefaultFilterByValues
+    patientsProfileDefaultFilterByValues,
   );
   const {
     byStatusLoading,
@@ -34,8 +33,7 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
     byStatusRefetch,
     fetchPatientByStatus, */
   } = patientsByStatusParams;
-  const { byPlanLoading, byPlanVaribles, byPlanRefetch, fetchPatientByPlan } =
-    patientsByPlanParams;
+  const { byPlanLoading, byPlanVaribles, byPlanRefetch, fetchPatientByPlan } = patientsByPlanParams;
 
   useEffect(() => {
     fetchProviders()
@@ -176,9 +174,7 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
       <Grid item>
         <Filter
           label="By Gender"
-          onHandleChange={(e) =>
-            onFilterProfileChange("gender", e?.target?.value)
-          }
+          onHandleChange={(e) => onFilterProfileChange("gender", e?.target?.value)}
           onClickClearBtn={() => onFilterProfileChange("gender", "")}
           options={genderType}
           name="gender"
@@ -193,9 +189,7 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
       <Grid item>
         <Filter
           label="By Provider and Plan"
-          onHandleChange={(e) =>
-            onFilterProfileChange("provider", e?.target?.value)
-          }
+          onHandleChange={(e) => onFilterProfileChange("provider", e?.target?.value)}
           onClickClearBtn={() => onFilterProfileChange("provider", "")}
           options={providers}
           name="provider"

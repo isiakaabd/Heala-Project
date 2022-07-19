@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-import PropTypes from "prop-types";
+
 import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import {
-  Grid,
-  TableRow,
-  Button,
-  Avatar,
-  TableCell,
-  Checkbox,
-  Alert,
-} from "@mui/material";
-import {
-  CustomButton,
-  Loader,
-  Modals,
-  Search,
-  FilterList,
-} from "components/Utilities";
+import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
+import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -37,11 +23,7 @@ import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import { deleteUserType } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import {
-  changeTableLimit,
-  fetchMoreData,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -189,8 +171,7 @@ const UserTypes = () => {
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error, refetch }] =
-    useLazyQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error /*refetch*/ }] = useLazyQuery(getUserTypes);
 
   useEffect(() => {
     fetchUserTypes({
@@ -200,12 +181,12 @@ const UserTypes = () => {
     });
   }, [fetchUserTypes, pageInfo]);
 
-  const onChange = async (e) => {
-    setSearchHcp(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ recipient: e });
-  };
+  // const onChange = async (e) => {
+  //   setSearchHcp(e);
+  //   if (e == "") {
+  //     refetch();
+  //   } else refetch({ recipient: e });
+  // };
   const [userType, setUsertypes] = useState([]);
 
   useEffect(() => {
@@ -214,9 +195,7 @@ const UserTypes = () => {
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
-  const { rowsPerPage, selectedRows, page } = useSelector(
-    (state) => state.tables
-  );
+  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const initialValues = {
     name: "",
@@ -224,7 +203,7 @@ const UserTypes = () => {
     description: "",
   };
 
-  const [searchHcp, setSearchHcp] = useState("");
+  // const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
   const [editId, setEditId] = useState(null);
@@ -264,13 +243,7 @@ const UserTypes = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -280,12 +253,7 @@ const UserTypes = () => {
             {alert.message}
           </Alert>
         )}
-        <Grid
-          item
-          gap={{ sm: 4, xs: 2 }}
-          container
-          direction={{ sm: "row", xs: "column" }}
-        >
+        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ sm: "row", xs: "column" }}>
           {/* <Grid item flex={{ sm: 1, xs: 1 }}>
             <Search
               value={searchHcp}
@@ -303,9 +271,7 @@ const UserTypes = () => {
             gap={1}
             justifyContent="space-between"
           >
-            <Grid item>
-              {/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}
-            </Grid>
+            <Grid item>{/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}</Grid>
             <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
@@ -349,13 +315,7 @@ const UserTypes = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -372,14 +332,9 @@ const UserTypes = () => {
                           }}
                         >
                           <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              src={row.icon}
-                              sx={{ width: 24, height: 24 }}
-                            />
+                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.name}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                         </div>
                       </TableCell>
                       <TableCell align="center" className={classes.tableCell}>
@@ -417,10 +372,7 @@ const UserTypes = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={partnersHeadCells2}
-            paginationLabel="Providers  per page"
-          />
+          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
         )}
       </Grid>
       <Modals
@@ -464,12 +416,7 @@ const UserTypes = () => {
         btnValue="Delete"
       />
 
-      <Modals
-        isOpen={isOpens}
-        title="Filter"
-        rowSpacing={5}
-        handleClose={handleDialogCloses}
-      >
+      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}

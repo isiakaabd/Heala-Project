@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import PropTypes from "prop-types";
 import { Grid, Divider, Typography } from "@mui/material";
 import ChipInput from "material-ui-chip-input";
 import { PreviousButton, CustomButton } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useActions } from "components/hooks/useActions";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";
@@ -115,9 +113,7 @@ const CreateEmail = () => {
     email: "Sule@gmail.com",
   };
   const validationSchema = Yup.object({
-    name: Yup.array().of(
-      Yup.string().email("Enter a valid email").required("Email is required")
-    ),
+    name: Yup.array().of(Yup.string().email("Enter a valid email").required("Email is required")),
     message: Yup.string("Enter your subject").required("Subject is required"),
     textarea: Yup.string("Enter your message").required("Message is required"),
   });
@@ -145,12 +141,7 @@ const CreateEmail = () => {
                   </Typography>
                 </Grid>
 
-                <Grid
-                  item
-                  container
-                  direction="column"
-                  className={classes.gridWrapper}
-                >
+                <Grid item container direction="column" className={classes.gridWrapper}>
                   <Grid item style={{ marginBottom: "3rem" }}>
                     <Grid container alignItems="center">
                       <Grid item>
@@ -184,9 +175,7 @@ const CreateEmail = () => {
                                     }
                                   }}
                                   onDelete={(deletedVal) => {
-                                    const newArr = value.filter(
-                                      (state) => state !== deletedVal
-                                    );
+                                    const newArr = value.filter((state) => state !== deletedVal);
                                     if (isEvent(newArr)) {
                                       onChange(newArr);
                                     } else {
@@ -229,12 +218,7 @@ const CreateEmail = () => {
                           Message:{" "}
                         </Typography>
                       </Grid>
-                      <Grid
-                        item
-                        container
-                        sx={{ marginBottom: "2rem" }}
-                        maxWidth="100%"
-                      >
+                      <Grid item container sx={{ marginBottom: "2rem" }} maxWidth="100%">
                         <Field name="textarea">
                           {({ field, form }) => {
                             return (
@@ -246,10 +230,7 @@ const CreateEmail = () => {
                                   data={field.value}
                                   editor={ClassicEditor}
                                   onChange={(e, editor) => {
-                                    form.setFieldValue(
-                                      "textarea",
-                                      editor.getData("text")
-                                    );
+                                    form.setFieldValue("textarea", editor.getData("text"));
                                   }}
                                 />
                               </Wrapper>
@@ -261,10 +242,7 @@ const CreateEmail = () => {
                     <ErrorMessage name="textarea" component={TextError} />
                     <Divider className={classes.divider} />
                   </Grid>
-                  <Grid
-                    item
-                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
-                  >
+                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
                     <CustomButton
                       title="Send Mail"
                       width="100%"

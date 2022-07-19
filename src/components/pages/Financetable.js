@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, TableCell, TableRow, Checkbox } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import {
-  timeMoment,
-  dateMoment,
-  formatNumber,
-} from "components/Utilities/Time";
+import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -19,10 +15,7 @@ import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getEarningData } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -85,8 +78,7 @@ const Financetable = () => {
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] =
-    useLazyQuery(getEarningData);
+  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
 
   useEffect(() => {
     fetchEarningData({
@@ -151,13 +143,7 @@ const Financetable = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
+                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -219,10 +205,7 @@ const Financetable = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={financeHeader}
-            paginationLabel="Finance  per page"
-          />
+          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
         )}
       </>
     </Grid>

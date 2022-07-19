@@ -3,12 +3,7 @@ import { Grid, Typography } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
-import {
-  NoData,
-  AvailabilityTable,
-  DashboardCharts,
-  EmptyTable,
-} from "components/layouts";
+import { NoData, AvailabilityTable, DashboardCharts, EmptyTable } from "components/layouts";
 import { Loader, FormSelect } from "components/Utilities";
 
 const Dashboard = () => {
@@ -27,7 +22,7 @@ const Dashboard = () => {
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          })
+          }),
       );
     }
   }, [da]);

@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import {
-  CustomButton,
-  /* FilterList, */ Modals,
-  Loader,
-} from "components/Utilities";
+import { CustomButton, /* FilterList, */ Modals, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import {
@@ -35,11 +31,7 @@ import { useParams } from "react-router-dom";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
-import {
-  changeTableLimit,
-  fetchMoreData,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -185,9 +177,7 @@ const PatientAppointment = () => {
     status: Yup.string("Select your status").required("Status is required"),
   });
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required(
-      "Date  and time is required"
-    ),
+    date: Yup.string("select date and time ").required("Date  and time is required"),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
@@ -223,8 +213,7 @@ const PatientAppointment = () => {
     console.log(values);
   };
 
-  const [getPatientsAppointment, { loading, data, error }] =
-    useLazyQuery(getAppoint);
+  const [getPatientsAppointment, { loading, data, error }] = useLazyQuery(getAppoint);
 
   useEffect(() => {
     getPatientsAppointment({
@@ -288,21 +277,9 @@ const PatientAppointment = () => {
           {alert.message}
         </Alert>
       )}
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <>
-          <Grid
-            item
-            container
-            flexWrap="nowrap"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Grid item container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
             <Grid item flex={1}>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
@@ -326,11 +303,7 @@ const PatientAppointment = () => {
                 }}
                 dataPageInfo={pageInfo}
                 handlePagination={async (page) => {
-                  await handlePageChange(
-                    getPatientsAppointment,
-                    page,
-                    pageInfo
-                  );
+                  await handlePageChange(getPatientsAppointment, page, pageInfo);
                 }}
               >
                 {patientAppointment
@@ -350,11 +323,7 @@ const PatientAppointment = () => {
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
-                              handleSelectedRows(
-                                row.id,
-                                selectedRows,
-                                setSelectedRows
-                              )
+                              handleSelectedRows(row.id, selectedRows, setSelectedRows)
                             }
                             color="primary"
                             checked={isItemSelected}
@@ -378,11 +347,7 @@ const PatientAppointment = () => {
                             <span style={{ marginRight: "1rem" }}>
                               <Avatar
                                 alt={`Display Photo of ${row.doctorData.firstName}`}
-                                src={
-                                  row.doctorData.picture
-                                    ? row.doctorData.picture
-                                    : displayPhoto
-                                }
+                                src={row.doctorData.picture ? row.doctorData.picture : displayPhoto}
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
@@ -473,13 +438,7 @@ const PatientAppointment = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    container
-                    alignItems="flex-end"
-                    marginTop={5}
-                    xs={12}
-                  >
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"
@@ -558,13 +517,7 @@ const PatientAppointment = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    container
-                    alignItems="flex-end"
-                    marginTop={5}
-                    xs={12}
-                  >
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
                     <CustomButton
                       title=" Apply Filter"
                       width="100%"

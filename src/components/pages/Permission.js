@@ -31,10 +31,7 @@ import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
 import { defaultPageInfo } from "helpers/mockData";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -140,13 +137,9 @@ const Permission = () => {
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission")
-      .trim()
-      .required("permission is required"),
+    name: Yup.string("Enter your Permission").trim().required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category")
-      .trim()
-      .required("Category is required"),
+    category: Yup.string("Select Category").trim().required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);
@@ -154,12 +147,8 @@ const Permission = () => {
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
-    name: Yup.string("Enter your Permission").required(
-      "permission is required"
-    ),
-    description: Yup.string("Enter Description").required(
-      "Description is required"
-    ),
+    name: Yup.string("Enter your Permission").required("permission is required"),
+    description: Yup.string("Enter Description").required("Description is required"),
   });
 
   const classes = useStyles();
@@ -219,8 +208,7 @@ const Permission = () => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchPermissions, { loading, data, error }] =
-    useLazyQuery(getPermissions);
+  const [fetchPermissions, { loading, data, error }] = useLazyQuery(getPermissions);
 
   useEffect(() => {
     fetchPermissions({
@@ -306,13 +294,7 @@ const Permission = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -399,19 +381,11 @@ const Permission = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={PermissionHeader}
-            paginationLabel="Permission  per page"
-          />
+          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
         )}
       </Grid>
 
-      <Modals
-        isOpen={isOpen}
-        title="Filter"
-        rowSpacing={5}
-        handleClose={handleDialogClose}
-      >
+      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -473,11 +447,7 @@ const Permission = () => {
 
       {/* // modal */}
 
-      <Modals
-        isOpen={isOpen}
-        title="Add new permission"
-        handleClose={handleDialogClose}
-      >
+      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
         <PermissionModal
           handleDialogClose={handleDialogClose}
           type="add"
@@ -489,11 +459,7 @@ const Permission = () => {
       </Modals>
 
       {/* edit modala */}
-      <Modals
-        isOpen={isEdit}
-        title="Edit permission"
-        handleClose={handleEditCloseDialog}
-      >
+      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"

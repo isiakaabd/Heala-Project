@@ -51,20 +51,12 @@ const ViewMessage = () => {
         </Grid>
         <Divider />
 
-        <Grid
-          item
-          direction="column"
-          className={classes.gridWrapper}
-          container
-          gap={2}
-        >
+        <Grid item direction="column" className={classes.gridWrapper} container gap={2}>
           <Grid item container gap={2} alignItems="center">
             <Grid item>
               <Avatar
                 src={recipientData ? recipientData.image : displayPhoto}
-                alt={`Display photo of the sender ${
-                  recipientData && recipientData.firstName
-                }`}
+                alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
               />
             </Grid>
             <Grid item>
