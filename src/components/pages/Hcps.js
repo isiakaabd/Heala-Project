@@ -14,7 +14,7 @@ import {
   Avatar,
 } from "@mui/material";
 
-import useAlert from "../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
@@ -151,8 +151,8 @@ const Hcps = () => {
   const setTableData = async (response, errMsg) => {
     response
       .then(({ data }) => {
-        setPageInfo(data.doctorProfiles.pageInfo || []);
-        setProfiles(data.doctorProfiles.profile || defaultPageInfo);
+        setPageInfo(data.doctorProfiles.pageInfo || defaultPageInfo);
+        setProfiles(data.doctorProfiles.profile || []);
       })
       .catch((error) => {
         console.error(error);

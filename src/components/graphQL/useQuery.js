@@ -1161,14 +1161,32 @@ export const getEmailList = gql`
   }
 `;
 export const getPartners = gql`
-  query getPartners {
-    getPartners {
+  query getPartners($page: Int, $first: Int, $category: String) {
+    getPartners(
+      filterBy: { category: $category }
+      orderBy: "-createdAt"
+      page: $page
+      first: $first
+    ) {
       data {
         _id
         name
         email
         category
         logoImageUrl
+        profileUrl
+      }
+      pageInfo {
+        totalDocs
+        limit
+        offset
+        hasPrevPage
+        hasNextPage
+        page
+        totalPages
+        pagingCounter
+        prevPage
+        nextPage
       }
     }
   }

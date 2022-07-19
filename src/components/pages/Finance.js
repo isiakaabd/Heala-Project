@@ -263,7 +263,7 @@ const Finance = () => {
                         color: theme.palette.common.lightGrey,
                       }}
                     >
-                      Total withdrawal
+                      Total Expenditure
                     </Typography>
                   </Grid>
                 </Grid>

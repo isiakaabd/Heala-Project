@@ -13,7 +13,7 @@ import {
   Checkbox,
 } from "@mui/material";
 
-import useAlert from "../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";

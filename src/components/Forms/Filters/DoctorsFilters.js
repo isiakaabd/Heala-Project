@@ -3,7 +3,7 @@ import t from "prop-types";
 import { Grid } from "@mui/material";
 
 import Filter from ".";
-import useAlert from "../../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import {
   cadreOptions,
   defaultPageInfo,

@@ -1,5 +1,11 @@
 /* ============ FILTER VALUES ========== */
 
+export const categoryFilterOptions = [
+  { key: "Diagnostics", value: "diagnostics" },
+  { key: "Pharmacy", value: "pharmacy" },
+  { key: "Hospital", value: "hospital" },
+];
+
 export const genderType = [
   { key: "Male", value: "Male" },
   { key: "Female", value: "Female" },
