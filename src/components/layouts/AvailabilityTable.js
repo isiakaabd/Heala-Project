@@ -80,84 +80,77 @@ const AvailabilityTable = ({ data }) => {
           maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
         >
           <EnhancedTable
+            title="Availability Calendar"
             headCells={availabilityHeadCells}
             rows={avaliablity}
-            page={page}
             paginationLabel="List per page"
-            title="Availability Calendar"
             hasCheckbox={false}
             hasPagination={false}
           >
-            {avaliablity
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const { _id, dates, doctorData } = row;
-                const labelId = `enhanced-table-checkbox-${index}`;
-                return (
-                  <TableRow hover tabIndex={-1} key={_id}>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
+            {avaliablity.map((row, index) => {
+              const { _id, doctorData, times, day } = row;
+              const labelId = `enhanced-table-checkbox-${index}`;
+              const rowdata = doctorData && (
+                <TableRow hover tabIndex={-1} key={_id}>
+                  <TableCell
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ color: theme.palette.common.grey }}
+                  >
+                    {doctorData ? doctorData?.dociId : "no doctor"}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "left",
+                      }}
                     >
-                      {doctorData ? doctorData?.dociId : "no doctor"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          textAlign: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={doctorData ? doctorData.picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {doctorData
-                            ? `${doctorData?.firstName} ${doctorData?.lastName}`
-                            : "no name"}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {dates &&
-                        dates.map((times) => {
-                          return times.day;
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={doctorData ? doctorData.picture : displayPhoto}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {doctorData
+                          ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                          : "no name"}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    {day && day}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <Grid container gap={1}>
+                      {times &&
+                        times.map((time) => {
+                          return (
+                            <Chip
+                              key={index}
+                              label={`${hours(time.start)} - ${hours(
+                                time.stop
+                              )} `}
+                              className={classes.badge}
+                              style={{
+                                background: theme.palette.common.lightGreen,
+                                color: theme.palette.common.green,
+                              }}
+                            />
+                          );
                         })}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid container gap={1}>
-                        {dates &&
-                          dates.map((times) => {
-                            return times.times.map((time, index) => {
-                              return (
-                                <Chip
-                                  key={index}
-                                  label={`${hours(time.start)} - ${hours(
-                                    time.stop
-                                  )} `}
-                                  className={classes.badge}
-                                  style={{
-                                    background: theme.palette.common.lightGreen,
-                                    color: theme.palette.common.green,
-                                  }}
-                                />
-                              );
-                            });
-                          })}
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              );
+              return rowdata;
+            })}
           </EnhancedTable>
         </Grid>
       ) : (

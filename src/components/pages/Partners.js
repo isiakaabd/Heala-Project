@@ -32,13 +32,7 @@ import {
   getProviders,
   DELETE_PARTNER,
 } from "components/graphQL/useQuery";
-import {
-  FilterList,
-  CustomButton,
-  Loader,
-  Modals,
-  Search,
-} from "components/Utilities";
+import { CustomButton, Loader, Modals } from "components/Utilities";
 import {
   addNewPartnerValidationSchema,
   addPartnerValidationSchema,
@@ -56,7 +50,7 @@ const Partners = () => {
   const [addPartners] = useMutation(addPartner);
   const categoryData = useQuery(getSingleProvider);
   const [delete_partner] = useLazyQuery(DELETE_PARTNER);
-  const [searchPartner, setSearchPartner] = useState("");
+  /*   const [searchPartner, setSearchPartner] = useState(""); */
   const [isDeleting, setIsDeleting] = React.useState({});
   const [addPartnerCat] = useMutation(addPartnerCategory);
   const { data: da, loading: load } = useQuery(getProviders);
@@ -135,6 +129,7 @@ const Partners = () => {
       setIsDeleting({ [p._id]: false, ...newIsDeleting });
       return null;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [partner]);
 
   const onSubmit = (values) => {
@@ -181,12 +176,12 @@ const Partners = () => {
     }
   };
 
-  const onChange = async (e) => {
+  /* const onChange = async (e) => {
     setSearchPartner(e);
     if (e == "") {
       refetch();
     } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
-  };
+  }; */
 
   if (error || categoryData.error)
     return <NoData error={error || categoryData.error} />;
@@ -204,14 +199,14 @@ const Partners = () => {
         gap={2}
         direction={{ md: "row", sm: "row", xs: "column" }}
       >
-        <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
+        {/* <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
           <Search
             value={searchPartner}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Partner..."
             height="5rem"
           />
-        </Grid>
+        </Grid> */}
         <Grid
           item
           container
@@ -235,7 +230,9 @@ const Partners = () => {
           </Grid>
         </Grid>
       </Grid>
-      {partner.length > 0 ? (
+      {load || loading ? (
+        <Loader />
+      ) : partner.length > 0 ? (
         <Grid item container height="100%" direction="column">
           <EnhancedTable
             headCells={partnersHeadCells}

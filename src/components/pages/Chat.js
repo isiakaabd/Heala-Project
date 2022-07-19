@@ -121,7 +121,7 @@ const Chat = () => {
       });
       showSuccessMsg(enqueueSnackbar, Typography, "Message sent");
     } catch (error) {
-      handleError(error, enqueueSnackbar, Typography);
+      handleError(error, enqueueSnackbar);
       console.log(error);
     }
     onSubmitProps.resetForm();

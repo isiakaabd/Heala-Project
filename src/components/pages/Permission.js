@@ -3,7 +3,6 @@ import { Loader, CustomButton, Modals } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import PropTypes from "prop-types";
 import {
   Grid,
   Typography,
@@ -32,7 +31,10 @@ import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -276,11 +278,14 @@ const Permission = () => {
               headCells={PermissionHeader}
               rows={Permission}
               paginationLabel="permission per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchPermissions}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchPermissions, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                handlePageChange(fetchPermissions, page, pageInfo, {});
+              }}
             >
               {permission
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

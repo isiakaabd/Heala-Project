@@ -23,8 +23,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Loader, FilterList } from "components/Utilities";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { Loader } from "components/Utilities";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -63,11 +66,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const filterOptions = [
+/* const filterOptions = [
   { id: 0, value: "Name" },
   { id: 1, value: "Date" },
   { id: 2, value: "Description" },
-];
+]; */
 
 const Consultations = () => {
   const [pageInfo, setPageInfo] = useState({});
@@ -125,127 +128,133 @@ const Consultations = () => {
             headCells={consultationsHeadCells4}
             rows={consultations}
             paginationLabel="Patients per page"
-            handleChangePage={fetchMoreData}
             hasCheckbox={true}
-            changeLimit={changeTableLimit}
-            fetchData={fetchConsultations}
+            changeLimit={async (e) => {
+              await changeTableLimit(fetchConsultations, {
+                first: e,
+                id: patientId,
+              });
+            }}
             dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              await handlePageChange(fetchConsultations, page, pageInfo, {
+                id: patientId,
+              });
+            }}
           >
-            {consultations
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const { doctorData } = row;
-                const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
+            {consultations.map((row, index) => {
+              const { doctorData } = row;
+              const isItemSelected = isSelected(row._id, selectedRows);
+              const labelId = `enhanced-table-checkbox-${index}`;
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row._id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() =>
+                        handleSelectedRows(
+                          row._id,
+                          selectedRows,
+                          setSelectedRows
+                        )
+                      }
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    {dateMoment(row.createdAt)}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ maxWidth: "25rem" }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row._id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {dateMoment(row.createdAt)}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ maxWidth: "25rem" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${doctorData.firstName}`}
-                            src={
-                              doctorData.picture
-                                ? doctorData.picture
-                                : displayPhoto
-                            }
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {doctorData.firstName
-                            ? `${doctorData.firstName} ${doctorData.lastName}`
-                            : "No Doctor"}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid container gap={1}>
-                        {row.symptoms
-                          ? row.symptoms.map((i) => {
-                              return <p key={i.name}>{i.name}</p>;
-                            })
-                          : "No Value"}
-                      </Grid>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
+                    <div
                       style={{
-                        color: theme.palette.common.grey,
-                        width: "4rem",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
-                      {row.contactMedium ? row.contactMedium : "No Value"}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{
-                        color: theme.palette.common.grey,
-                      }}
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt={`Display Photo of ${doctorData.firstName}`}
+                          src={
+                            doctorData.picture
+                              ? doctorData.picture
+                              : displayPhoto
+                          }
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>
+                        {doctorData.firstName
+                          ? `${doctorData.firstName} ${doctorData.lastName}`
+                          : "No Doctor"}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <Grid container gap={1}>
+                      {row.symptoms
+                        ? row.symptoms.map((i) => {
+                            return <p key={i.name}>{i.name}</p>;
+                          })
+                        : "No Value"}
+                    </Grid>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                      width: "4rem",
+                    }}
+                  >
+                    {row.contactMedium ? row.contactMedium : "No Value"}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                    }}
+                  >
+                    {row.type ? row.type : "No Value"}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                    }}
+                  >
+                    {row.status ? row.status : "No Value"}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button
+                      variant="contained"
+                      className={classes.button}
+                      component={Link}
+                      to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
+                      endIcon={<ArrowForwardIosIcon />}
                     >
-                      {row.type ? row.type : "No Value"}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{
-                        color: theme.palette.common.grey,
-                      }}
-                    >
-                      {row.status ? row.status : "No Value"}
-                    </TableCell>
-                    <TableCell align="left">
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Details
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      View Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </EnhancedTable>
         </Grid>
       ) : (

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import {
   Grid,
   Typography,
@@ -8,7 +7,6 @@ import {
   Checkbox,
   TableCell,
   Button,
-  Chip,
 } from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -23,8 +21,10 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
-import { changeTableLimit } from "helpers/filterHelperFunctions";
-import displayPhoto from "assets/images/avatar.svg";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -71,7 +71,7 @@ const HcpPatients = () => {
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
 
-  const [fetchDoctorsPatients, { loading, error, data, refetch }] =
+  const [fetchDoctorsPatients, { loading, error, data }] =
     useLazyQuery(getDoctorPatients);
 
   useEffect(() => {
@@ -88,9 +88,6 @@ const HcpPatients = () => {
       setPageInfo(data.getDoctorPatients.pageInfo);
     }
   }, [data]);
-  const fetchMoreFunc = (e, newPage) => {
-    refetch({ page: newPage });
-  };
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -105,11 +102,19 @@ const HcpPatients = () => {
             headCells={hcpPatientsHeadCells}
             rows={profiles}
             paginationLabel="List Per Page"
-            handleChangePage={fetchMoreFunc}
             hasCheckbox={true}
-            changeLimit={changeTableLimit}
-            fetchData={fetchDoctorsPatients}
+            changeLimit={async (e) => {
+              await changeTableLimit(fetchDoctorsPatients, {
+                first: e,
+                id: hcpId,
+              });
+            }}
             dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              await handlePageChange(fetchDoctorsPatients, page, pageInfo, {
+                id: hcpId,
+              });
+            }}
           >
             {profiles.map((row, index) => {
               const { _id, patientData } = row;

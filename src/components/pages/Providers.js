@@ -13,13 +13,7 @@ import {
   Button,
   Avatar,
 } from "@mui/material";
-import {
-  CustomButton,
-  Loader,
-  Search,
-  Modals,
-  FilterList,
-} from "components/Utilities";
+import { CustomButton, Loader, Search, Modals } from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -35,7 +29,11 @@ import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -230,7 +228,7 @@ const Providers = () => {
     setSingleData();
   };
 
-  const handleDialogOpens1 = () => setIsOpens(true);
+  /*   const handleDialogOpens1 = () => setIsOpens(true); */
   const initialValues1 = {
     name: "",
     userTypeId: "",
@@ -281,14 +279,14 @@ const Providers = () => {
           container
           direction={{ md: "row", sm: "column" }}
         >
-          <Grid item flex={1}>
+          {/* <Grid item flex={1}>
             <Search
               value={searchHcp}
               placeholder="Type to search Providers by Hospital name e.g Lagoon Hospital"
               onChange={(e) => onChange(e.target.value)}
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           <Grid item container justifyContent="space-between">
             <Grid item>
               {/* <FilterList title="Filter partner" onClick={handleDialogOpens1} /> */}
@@ -309,91 +307,88 @@ const Providers = () => {
               headCells={partnersHeadCells2}
               rows={providers}
               paginationLabel="Providers per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchProviders}
+              changeLimit={async (e) => {
+                await changeTableLimit(fetchProviders, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchProviders, page, pageInfo, {});
+              }}
             >
-              {providers
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const { _id, name, icon } = row;
-                  const isItemSelected = isSelected(_id, selectedRows);
+              {providers.map((row, index) => {
+                const { _id, name, icon } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
 
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={_id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={_id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() =>
+                          handleSelectedRows(_id, selectedRows, setSelectedRows)
+                        }
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar src={icon} sx={{ width: 24, height: 24 }} />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.greenBtn}`}
+                          onClick={() => handleEditOpenDialog(_id)}
+                          endIcon={<EditIcon color="success" />}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={icon} sx={{ width: 24, height: 24 }} />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-around",
-                          }}
+                          Edit Provider
+                        </Button>
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          onClick={() => handleDeleteOpenDialog(_id)}
+                          endIcon={<DeleteIcon color="error" />}
                         >
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            onClick={() => handleEditOpenDialog(_id)}
-                            endIcon={<EditIcon color="success" />}
-                          >
-                            Edit Provider
-                          </Button>
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(_id)}
-                            endIcon={<DeleteIcon color="error" />}
-                          >
-                            Delete Provider
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                          Delete Provider
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </EnhancedTable>
           </Grid>
         ) : (

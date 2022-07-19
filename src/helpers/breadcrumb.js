@@ -38,6 +38,7 @@ export const patterns = {
   "Earnings table": "finance/earnings",
   Payouts: "finance/payouts",
   "Pending payouts": "finance/pending",
+  "Subscription earnings": "finance/sub-income",
 
   // REFERRALS PATTERNS
   Referrals: "referrals",

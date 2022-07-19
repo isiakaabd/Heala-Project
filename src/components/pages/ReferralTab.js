@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableRow,
-  Grid,
-  Checkbox,
-  TableCell,
-  Avatar,
-  Button,
-} from "@mui/material";
+import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
-import { Loader, Search } from "components/Utilities";
+import { Loader } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
@@ -26,6 +19,7 @@ import Filter from "components/Forms/Filters";
 import {
   changeTableLimit,
   fetchMoreData,
+  handlePageChange,
   onFilterValueChange,
 } from "helpers/filterHelperFunctions";
 import {
@@ -85,18 +79,17 @@ const ReferralTab = () => {
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const theme = useTheme();
 
-  const onChange = async (e) => {
+  /*   const onChange = async (e) => {
     setSearchMail(e);
-    if (e == "") {
+    if (searchMail === "" || searchMail.length < 2) {
       refetch();
-    } else refetch({ id: e });
-  };
+    } else refetch({ id: searchMail });
+  }; */
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [searchMail, setSearchMail] = useState("");
-  const [fetchRefferals, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getRefferals);
+  /*   const [searchMail, setSearchMail] = useState(""); */
+  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(getRefferals);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -115,35 +108,14 @@ const ReferralTab = () => {
     }
   }, [data]);
 
-  const [filterValues, setFilterValues] = useState(
-    referralPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(referralPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
-
+  if (loading) return <Loader />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        height="100%"
-        gap={2}
-        flexWrap="nowrap"
-      >
-        <Grid
-          item
-          direction={{ sm: "row", xs: "column" }}
-          gap={{ sm: 4, xs: 2 }}
-          container
-        >
-          <Grid item flex={1}>
-            <Search
-              value={searchMail}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="Type to search referrals by ID e.g 1Ntqaazu..."
-              height="5rem"
-            />
-          </Grid>
+      <Grid container direction="column" height="100%" gap={2} flexWrap="nowrap">
+        <Grid item direction={{ sm: "row", xs: "column" }} gap={{ sm: 4, xs: 2 }} container>
           <Grid item>
             <Filter
               onHandleChange={(e) =>
@@ -154,7 +126,7 @@ const ReferralTab = () => {
                   setFilterValues,
                   fetchRefferals,
                   variables,
-                  refetch
+                  refetch,
                 )
               }
               options={referralFilterBy}
@@ -164,145 +136,126 @@ const ReferralTab = () => {
             />
           </Grid>
         </Grid>
-        {loading ? (
-          <Loader />
-        ) : referral?.length > 0 ? (
+        {referral.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
               rows={referral}
               paginationLabel="referral per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchRefferals}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchRefferals, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchRefferals, page, pageInfo, {});
+              }}
+              handleChangePage={fetchMoreData}
+              fetchData={fetchRefferals}
             >
-              {referral
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const { _id, createdAt, type, doctorData, patientData } = row;
-                  // const { firstName, lastName, picture } = row?.doctorData;
-                  // const {
-                  //   firstName: patientName,
-                  //   lastName: lastName,
-                  //   picture: picture,
-                  // } = patientData;
-                  const isItemSelected = isSelected(_id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={_id}
-                      selected={isItemSelected}
+              {referral.map((row, index) => {
+                const { _id, createdAt, type, doctorData, patientData } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={_id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
+                      {dateMoment(createdAt)}
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      {/* {new Date(updatedAt)} */}
+                      {_id ? _id : "No Value"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
                       >
-                        {dateMoment(createdAt)}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`image of ${
+                              doctorData?.firstName
+                                ? doctorData.firstName
+                                : "placeholder Display Image"
+                            }`}
+                            src={doctorData?.picture ? doctorData?.picture : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {doctorData?.firstName
+                            ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                            : "No Doctor"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
                       >
-                        {/* {new Date(updatedAt)} */}
-                        {_id ? _id : "No Value"}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`image of ${
-                                doctorData?.firstName
-                                  ? doctorData.firstName
-                                  : "placeholder Display Image"
-                              }`}
-                              src={
-                                doctorData?.picture
-                                  ? doctorData?.picture
-                                  : displayPhoto
-                              }
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData?.firstName
-                              ? `${doctorData?.firstName} ${doctorData?.lastName}`
-                              : "No Doctor"}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`image of ${
-                                patientData?.firstName
-                                  ? patientData?.firstName
-                                  : "placeholder Display Image"
-                              }`}
-                              src={
-                                patientData?.picture
-                                  ? patientData?.picture
-                                  : displayPhoto
-                              }
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {patientData?.firstName
-                              ? `${patientData?.firstName} ${patientData?.lastName}`
-                              : "No Patient"}
-                          </span>
-                        </div>
-                      </TableCell>
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`image of ${
+                              patientData?.firstName
+                                ? patientData?.firstName
+                                : "placeholder Display Image"
+                            }`}
+                            src={patientData?.picture ? patientData?.picture : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {patientData?.firstName
+                            ? `${patientData?.firstName} ${patientData?.lastName}`
+                            : "No Patient"}
+                        </span>
+                      </div>
+                    </TableCell>
 
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {type}
-                      </TableCell>
-                      {/* <TableCell
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      {type}
+                    </TableCell>
+                    {/* <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
@@ -310,30 +263,27 @@ const ReferralTab = () => {
                         {type == "hcp" ? specialization : testType}
                       </TableCell> */}
 
-                      <TableCell align="left" className={classes.tableCell}>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          component={Link}
-                          to={`referrals/${_id}`}
-                          endIcon={<ArrowForwardIosIcon />}
-                          /* onClick={() => {
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`referrals/${_id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                        /* onClick={() => {
                             setSelectedSubMenu(10);
                           }} */
-                        >
-                          View Referral
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                      >
+                        View Referral
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={referralHeader}
-            paginationLabel="Referral  per page"
-          />
+          <EmptyTable headCells={referralHeader} paginationLabel="Referral  per page" />
         )}
       </Grid>
     </>

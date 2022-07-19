@@ -1,19 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
-import { debounce } from "lodash";
-import Filter from "../Forms/Filters/index";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
+
+import useAlert from "../../hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
@@ -23,73 +16,67 @@ import { timeConverter } from "components/Utilities/Time";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { useStyles } from "../../styles/doctorsPageStyles";
 import FormikControl from "components/validation/FormikControl";
-import { getDoctorsProfile } from "components/graphQL/useQuery";
+import { getDoctorsProfile, getDoctorsProfileByStatus } from "components/graphQL/useQuery";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
 import { createDOctorProfile } from "components/graphQL/Mutation";
-import { ClearFiltersBtn } from "components/Buttons/ClearFiltersBtn";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
-import { Search, Loader, Modals, CustomButton } from "components/Utilities";
-import {
-  changeTableLimit,
-  fetchMoreData,
-  onFilterValueChange,
-  resetFilters,
-} from "../../helpers/filterHelperFunctions";
+import { addDoctorValidationSchema } from "helpers/validationSchemas";
+import { Loader, Modals, CustomButton } from "components/Utilities";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 import {
   addDocInitialValues,
-  cadreFilterBy,
+  /* cadreFilterBy, */
   defaultPageInfo,
   docCadreOptions,
   docSpecializationsOptions,
-  doctorsPageDefaultFilterValues,
+  doctorsSearchOptions,
   genderType,
-  providerFilterBy,
+  /*  providerFilterBy,
   specializationFilterBy,
-  statusFilterBy,
-} from "../../helpers/mockData";
+  statusFilterBy, */
+} from "helpers/mockData";
+import CompoundSearch from "components/Forms/CompoundSearch";
+import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
 
 const Hcps = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const { displayAlert } = useAlert();
   const [profiles, setProfiles] = useState("");
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  // const [searchHcp, setSearchHcp] = useState("");
   const [openAddHcp, setOpenAddHcp] = useState(false);
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [filterValues, setFilterValues] = useState(
-    doctorsPageDefaultFilterValues
+  const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] = useLazyQuery(
+    getDoctorsProfile,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
   );
-
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
-
-  const [fetchDoctors, { data, error, loading, refetch, variables }] =
-    useLazyQuery(getDoctorsProfile);
-
-  //eslint-disable-next-line
-  const debouncer = useCallback(debounce(fetchDoctors, 3000), []);
+  const [
+    fetchDoctorsByStatus,
+    { loading: byStatusLoading, refetch: byStatusRefetch, variables: byStatusVariables },
+  ] = useLazyQuery(getDoctorsProfileByStatus);
 
   useEffect(() => {
     fetchDoctors({
       variables: {
         first: pageInfo.limit,
       },
-    });
-  }, [fetchDoctors, pageInfo]);
-
-  useEffect(() => {
-    if (data) {
-      setProfiles(data.doctorProfiles.profile);
-      setPageInfo(data.doctorProfiles.pageInfo);
-    }
-  }, [data]);
+    })
+      .then(({ data }) => {
+        if (data) {
+          setPageInfo(data.doctorProfiles.pageInfo || []);
+          setProfiles(data.doctorProfiles.profile || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (values) => {
     const {
@@ -129,6 +116,32 @@ const Hcps = () => {
     });
     setOpenAddHcp(false);
   };
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
+  const getSearchPlaceholder = (filterBy) => {
+    return filterBy === "id"
+      ? "Search by ID e.g 7NE6ELLO"
+      : filterBy === "firstName"
+      ? "Search by first name e.g John"
+      : filterBy === "lastName"
+      ? "Search by last name e.g Doe"
+      : "";
+  };
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setPageInfo(data.doctorProfiles.pageInfo || []);
+        setProfiles(data.doctorProfiles.profile || defaultPageInfo);
+      })
+      .catch((error) => {
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
 
   if (error) return <NoData error={error} />;
   return (
@@ -141,19 +154,12 @@ const Hcps = () => {
         justifyContent="space-between"
       >
         <Grid item container flex={1}>
-          <Search
-            onChange={(e) => {
-              let value = e.target.value;
-
-              if (value !== "") {
-                return debouncer({
-                  variables: { dociId: `HEALA-${value.toUpperCase()}` },
-                });
-              }
-            }}
-            // onChange={(e) => onChange(e.target.value)}
-            placeholder="Type to search Doctors by Heala ID e.g AJV9WVIP6M"
-            height="5rem"
+          <CompoundSearch
+            queryParams={{ fetchData: fetchDoctors, variables, loading }}
+            setPageInfo={(data) => setPageInfo(data.doctorProfiles.pageInfo || {})}
+            setProfiles={(data) => setProfiles(data.doctorProfiles.profile || [])}
+            getSearchPlaceholder={(filterBy) => getSearchPlaceholder(filterBy)}
+            filterOptions={doctorsSearchOptions}
           />
         </Grid>
         <Grid item>
@@ -166,6 +172,7 @@ const Hcps = () => {
         </Grid>
       </Grid>
       {/* ========= FILTERS =========== */}
+
       <Grid
         container
         gap={2}
@@ -173,105 +180,25 @@ const Hcps = () => {
         justifyContent="flex-start"
         className={classes.searchFilterContainer}
       >
-        {/* FILTER BY GENDER */}
-        <Grid item>
-          <Filter
-            onHandleChange={(e) =>
-              onFilterValueChange(
-                e,
-                "gender",
-                filterValues,
-                setFilterValues,
-                fetchDoctors,
-                variables,
-                refetch
-              )
-            }
-            options={genderType}
-            name="Gender"
-            placeholder=" gender"
-            value={filterValues.gender}
-          />
-        </Grid>
-        {/* ========= FILTER BY SPECIALIZATION =========== */}
-        {/* <Grid item>
-          <Filter
-            onHandleChange={(e) =>
-              onFilterValueChange(
-                e,
-                "specialization",
-                filterValues,
-                setFilterValues,
-                fetchDoctors,
-                variables,
-                refetch,
-              )
-            }
-            options={specializationFilterBy}
-            name="status"
-            placeholder=" Specialization"
-            value={filterValues.specialization}
-          />
-        </Grid> */}
-
-        {/* FILTER BY CADRE */}
-        {/* <Grid item>
-          <Filter
-            onHandleChange={(e) =>
-              onFilterValueChange(
-                e,
-                "cadre",
-                filterValues,
-                setFilterValues,
-                fetchDoctors,
-                variables,
-                refetch,
-              )
-            }
-            options={cadreFilterBy}
-            name="status"
-            placeholder=" Cadre"
-            value={filterValues.provider}
-          />
-        </Grid> */}
-
-        {/* FILTER BY STATUS */}
-        {/* <Grid item>
-          <Filter
-            onHandleChange={(e) => console.log(e)}
-            options={statusFilterBy}
-            name="status"
-            placeholder=" Status"
-            value={filterValues.status}
-            disable={true}
-          />
-        </Grid> */}
-        {/* FILTER BY PROVIDER */}
-        {/* <Grid item>
-          <Filter
-            onHandleChange={(e) => console.log(e)}
-            options={providerFilterBy}
-            name="status"
-            placeholder=" provider"
-            value={filterValues.provider}
-            disable={true}
-          />
-        </Grid> */}
-        <Grid item>
-          <ClearFiltersBtn
-            title="Clear filters"
-            onHandleClick={() =>
-              resetFilters(
-                setFilterValues,
-                doctorsPageDefaultFilterValues,
-                variables,
-                fetchDoctors
-              )
-            }
-          />
-        </Grid>
+        <DoctorFilters
+          setProfiles={setProfiles}
+          setPageInfo={setPageInfo}
+          queryParams={{
+            doctorsParams: { fetchDoctors, loading, refetch, variables },
+            doctorsByStatusParams: {
+              byStatusLoading,
+              byStatusVariables,
+              byStatusRefetch,
+              fetchDoctorsByStatus,
+            },
+          }}
+        />
       </Grid>
       {loading ? (
+        <Loader />
+      ) : byStatusLoading ? (
+        <Loader />
+      ) : networkStatus === NetworkStatus.refetch ? (
         <Loader />
       ) : profiles.length > 0 ? (
         <Grid item container height="100%" direction="column">
@@ -279,11 +206,18 @@ const Hcps = () => {
             headCells={hcpsHeadCells}
             rows={profiles}
             paginationLabel="Doctors per page"
-            handleChangePage={fetchMoreData}
             hasCheckbox={true}
-            changeLimit={changeTableLimit}
-            fetchData={fetchDoctors}
+            changeLimit={async (e) => {
+              const res = changeTableLimit(fetchDoctors, {
+                first: e,
+              });
+              await setTableData(res, "Failed to change table limit");
+            }}
             dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              const res = handlePageChange(fetchDoctors, page, pageInfo, {});
+              await setTableData(res, "Failed to change page.");
+            }}
           >
             {profiles.map((row, index) => {
               const {
@@ -310,9 +244,7 @@ const Hcps = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(_id, selectedRows, setSelectedRows)
-                      }
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -330,7 +262,7 @@ const Hcps = () => {
                       minWidth: "10rem",
                     }}
                   >
-                    {dociId && dociId.split("-")[1]}
+                    {dociId?.split("-")[1]}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <div
@@ -371,7 +303,7 @@ const Hcps = () => {
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Chip
-                      label={status ? status : "No Status"}
+                      label={status === "Active" ? "Active" : "Inactive"}
                       className={classes.badge}
                       style={{
                         background:
@@ -402,10 +334,7 @@ const Hcps = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpsHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
       {/* ADD Doctor MODAL */}
       <Modals

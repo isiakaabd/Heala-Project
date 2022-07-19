@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { CustomButton, FilterList, Modals, Loader } from "components/Utilities";
+import {
+  CustomButton,
+  /* FilterList, */ Modals,
+  Loader,
+} from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import {
@@ -31,7 +35,11 @@ import { useParams } from "react-router-dom";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -94,11 +102,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const filterOptions = [
+/* const filterOptions = [
   { id: 0, value: "Name" },
   { id: 1, value: "Date" },
   { id: 2, value: "Description" },
-];
+]; */
 
 const PatientAppointment = () => {
   const [updateAppoint] = useMutation(updateAppointment);
@@ -155,7 +163,7 @@ const PatientAppointment = () => {
   const [isPatient, setIsPatient] = useState(false);
   const [isPatients, setIsPatients] = useState(false);
   const [id, setId] = useState(null);
-  const handlePatientOpen = () => setIsPatient(true);
+  /* const handlePatientOpen = () => setIsPatient(true); */
   const handlePatientClose = () => setIsPatient(false);
   const handlePatientCloses = () => setIsPatients(false);
   const { patientId } = useParams();
@@ -312,11 +320,18 @@ const PatientAppointment = () => {
                 headCells={consultationsHeadCells2}
                 rows={patientAppointment}
                 paginationLabel="Patients per page"
-                handleChangePage={fetchMoreData}
                 hasCheckbox={true}
-                changeLimit={changeTableLimit}
-                fetchData={getPatientsAppointment}
+                changeLimit={async (e) => {
+                  await changeTableLimit(getPatientsAppointment, { first: e });
+                }}
                 dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(
+                    getPatientsAppointment,
+                    page,
+                    pageInfo
+                  );
+                }}
               >
                 {patientAppointment
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

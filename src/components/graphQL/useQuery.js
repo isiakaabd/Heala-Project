@@ -27,8 +27,13 @@ export const doctor = gql`
 
 export const getPlans = gql`
   ${PageInfo}
-  query getPlans($amount: Float, $page: Int, $first: Int) {
-    getPlans(filterBy: { amount: $amount }, page: $page, orderBy: "-createdAt", first: $first) {
+  query getPlans($amount: Float, $page: Int, $first: Int, $provider: String) {
+    getPlans(
+      filterBy: { amount: $amount, provider: $provider }
+      page: $page
+      orderBy: "-createdAt"
+      first: $first
+    ) {
       plan {
         _id
         name
@@ -75,8 +80,8 @@ export const getUserType = gql`
   }
 `;
 export const dashboard = gql`
-  query getStats($providerId: String, $q: String) {
-    getStats(filterBy: { providerId: $providerId }, q: $q) {
+  query getStats {
+    getStats(filterBy: { providerId: "61db6f8968b248001aec4fcb" }) {
       patientStats
       doctorStats
       totalEarnings
@@ -87,13 +92,11 @@ export const dashboard = gql`
         _id
         doctor
         doctorData
-        dates {
-          day
-          available
-          times {
-            start
-            stop
-          }
+        day
+        available
+        times {
+          start
+          stop
         }
         createdAt
         updatedAt
@@ -112,21 +115,44 @@ export const getEarningStats = gql`
     }
   }
 `;
+
+export const getFinanceStats = gql`
+  query getEarningStats($q: String, $page: Int) {
+    getEarningStats(q: $q, page: $page) {
+      subscriptionIncome
+      totalPayout
+    }
+  }
+`;
 // pageInfo {
 //   ...pageDetails
 // }
 
 export const getEarningData = gql`
   query getEarningStats($first: Int, $page: Int) {
-    getEarningStats(q: "365", page: $page, first: $first) {
+    getEarningStats(q: "365", page: $page, first: $first, orderBy: "-createdAt") {
       earningData
     }
   }
 `;
 
-export const getPayoutData = gql`
+export const getSubscriptionsIncome = gql`
   query getEarningStats($first: Int, $page: Int) {
-    getEarningStats(q: "365", page: $page, first: $first) {
+    getEarningStats(q: "365", page: $page, first: $first, orderBy: "-createdAt") {
+      subscriptionIncomeData
+    }
+  }
+`;
+
+export const getPayoutData = gql`
+  query getEarningStats($first: Int, $page: Int, $status: String) {
+    getEarningStats(
+      filterBy: { status: $status }
+      q: "365"
+      page: $page
+      first: $first
+      orderBy: "-createdAt"
+    ) {
       payoutData
     }
   }
@@ -669,9 +695,23 @@ export const getMyEarnings = gql`
 
 export const getPatients = gql`
   ${PageInfo}
-  query findProfiles($gender: String, $page: Int, $dociId: String, $first: Int) {
+  query findProfiles(
+    $gender: String
+    $page: Int
+    $first: Int
+    $firstName: String
+    $lastName: String
+    $id: String
+    $provider: String
+  ) {
     profiles(
-      filterBy: { gender: $gender, dociId: $dociId }
+      filterBy: {
+        gender: $gender
+        dociId: $id
+        firstName: $firstName
+        lastName: $lastName
+        providerId: $provider
+      }
       orderBy: "-createdAt"
       page: $page
       first: $first
@@ -701,18 +741,121 @@ export const getPatients = gql`
   }
 `;
 
+export const getPatientsByStatus = gql`
+  ${PageInfo}
+  query findProfiles($status: Boolean, $first: Int) {
+    profilesByStatus(filterBy: { isActive: $status }, orderBy: "-createdAt", first: $first) {
+      data {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        dociId
+        genotype
+        gender
+        phoneNumber
+        provider
+        plan
+        status
+        consultations
+        createdAt
+        image
+      }
+      pageInfo {
+        ...pageDetails
+      }
+    }
+  }
+`;
+
+export const getPatientsByPlan = gql`
+  ${PageInfo}
+  query findProfiles($planId: String, $first: Int) {
+    profilesByPlan(filterBy: { planId: $planId }, orderBy: "-createdAt", first: $first) {
+      data {
+        _id
+        firstName
+        lastName
+        height
+        weight
+        bloodGroup
+        dociId
+        genotype
+        gender
+        phoneNumber
+        provider
+        plan
+        status
+        consultations
+        createdAt
+        image
+      }
+      pageInfo {
+        ...pageDetails
+      }
+    }
+  }
+`;
+
 export const getDoctorsProfile = gql`
   ${PageInfo}
   query doctorProfiles(
-    $specialization: String
-    $dociId: String
+    $id: String
+    $firstName: String
+    $lastName: String
     $gender: String
     $cadre: String
+    $providerId: String
+    $specialization: String
     $page: Int
     $first: Int
   ) {
     doctorProfiles(
-      filterBy: { specialization: $specialization, dociId: $dociId, gender: $gender, cadre: $cadre }
+      filterBy: {
+        dociId: $id
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        cadre: $cadre
+        providerId: $providerId
+        specialization: $specialization
+      }
+      first: $first
+      page: $page
+    ) {
+      profile {
+        _id
+        firstName
+        lastName
+        gender
+        phoneNumber
+        createdAt
+        updatedAt
+        email
+        hospital
+        specialization
+        dob
+        cadre
+        picture
+        provider
+        consultations
+        status
+        dociId
+      }
+      pageInfo {
+        ...pageDetails
+      }
+    }
+  }
+`;
+
+export const getDoctorsProfileByStatus = gql`
+  ${PageInfo}
+  query doctorProfiles($status: Boolean, $first: Int, $page: Int) {
+    doctorProfilesByStatus(
+      filterBy: { isActive: $status, role: "doctor" }
       first: $first
       page: $page
     ) {
@@ -882,13 +1025,11 @@ export const getAvailability = gql`
         _id
         createdAt
         updatedAt
-        dates {
-          day
-          available
-          times {
-            start
-            stop
-          }
+        day
+        available
+        times {
+          start
+          stop
         }
       }
       errors {
@@ -1194,15 +1335,15 @@ export const DELETE_PARTNER = gql`
   }
 `;
 
-export const UserProfile = (id) => {
-  const { data, error, loading } = useQuery(getUserDetails, {
-    variables: {
-      id,
-    },
-  });
-  return {
-    data,
-    error,
-    loading,
-  };
-};
+// export const UserProfile = (id) => {
+//   const { data, error, loading } = useQuery(getUserDetails, {
+//     variables: {
+//       id,
+//     },
+//   });
+//   return {
+//     data,
+//     error,
+//     loading,
+//   };
+// };

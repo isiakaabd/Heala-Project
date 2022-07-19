@@ -54,7 +54,7 @@ const DeleteOrDisable = ({
 
   const disableButton = {
     background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
+    hover: theme.palette.common.danger,
     active: theme.palette.primary.dark,
   };
 
@@ -76,7 +76,12 @@ const DeleteOrDisable = ({
           width={{ md: "30vw", sm: "30vw", xs: "80vw" }}
           padding={{ sm: 2, xs: 2, md: 4 }}
         >
-          <Grid container direction="column" alignItems="center" justifyContent="center">
+          <Grid
+            container
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+          >
             <Grid item alignSelf="flex-end">
               <CloseIcon
                 color="primary"
@@ -92,7 +97,10 @@ const DeleteOrDisable = ({
                   color={theme.palette.warning.main}
                 />
               ) : (
-                <BsExclamationCircle size="10rem" color={theme.palette.warning.main} />
+                <BsExclamationCircle
+                  size="10rem"
+                  color={theme.palette.warning.main}
+                />
               )}
             </Grid>
             <Grid item style={{ marginBottom: "2rem" }}>

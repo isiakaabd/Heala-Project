@@ -1,5 +1,4 @@
-import React, { useLayoutEffect, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
 import { useQuery } from "@apollo/client";

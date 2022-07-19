@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "components/validation/FormikControl";
-import { Loader, Button, Modals, CustomButton, Search, FilterList } from "components/Utilities";
+import {
+  Loader,
+  /* Button, */
+  Modals,
+  CustomButton,
+} from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
 import { signup } from "components/graphQL/Mutation";
@@ -13,7 +18,6 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
@@ -144,12 +148,12 @@ const Administrator = () => {
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-  const onChange = async (e) => {
+  /*   const onChange = async (e) => {
     setSearchMail(e);
     if (e == "") {
       refetch();
     } else refetch({ role: e });
-  };
+  }; */
   const specializations = [
     { key: "Doctor", value: "doctor" },
     { key: "Super-admin", value: "super-admin" },
@@ -170,7 +174,7 @@ const Administrator = () => {
     }
   }, [data]);
 
-  const optionss = [
+  /*   const optionss = [
     {
       label: "option 1",
       value: "option 1",
@@ -183,7 +187,7 @@ const Administrator = () => {
       label: "option 3",
       value: "three",
     },
-  ];
+  ]; */
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").trim(),
@@ -227,11 +231,11 @@ const Administrator = () => {
     onSubmitProps.resetForm();
   };
 
-  const [searchMail, setSearchMail] = useState("");
+  /*   const [searchMail, setSearchMail] = useState(""); */
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const handleAdminClose = () => setIsAdmin(false);
-  const handleDialogOpen = () => setIsOpen(true);
+  /*   const handleDialogOpen = () => setIsOpen(true); */
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
 
@@ -246,14 +250,14 @@ const Administrator = () => {
           direction={{ md: "row", sm: "row", xs: "column" }}
           container
         >
-          <Grid item flex={{ md: 1, sm: 2, xs: 1 }}>
+          {/* <Grid item flex={{ md: 1, sm: 2, xs: 1 }}>
             <Search
               value={searchMail}
               onChange={(e) => onChange(e.target.value)}
               placeholder="Type to search referrals by role..."
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           <Grid item container flex={{ md: 1, sm: 1, xs: 1 }} justifyContent="space-between">
             <Grid item>
               {/* <FilterList
@@ -324,30 +328,6 @@ const Administrator = () => {
                       >
                         {role}
                       </TableCell>
-
-                      {/* <TableCell align="left" className={classes.tableCell}>
-                        <Grid
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.button} ${classes.greenBtn}`}
-                            endIcon={
-                              <EditIcon
-                                style={{ color: theme.palette.common.green }}
-                              />
-                            }
-                          >
-                            Edit Admin
-                          </Button>
-                        </Grid>
-                      </TableCell> */}
                     </TableRow>
                   );
                 })}

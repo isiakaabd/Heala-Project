@@ -9,7 +9,10 @@ import { CustomButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
 import { addTest } from "components/graphQL/Mutation";
 import { addTestValidation } from "helpers/validationSchemas";
-import { handleError, showSuccessMsg } from "../../helpers/filterHelperFunctions";
+import {
+  handleError,
+  showSuccessMsg,
+} from "../../helpers/filterHelperFunctions";
 
 export const AddTestForm = ({ onSuccess }) => {
   const theme = useTheme();
@@ -39,7 +42,7 @@ export const AddTestForm = ({ onSuccess }) => {
         onSuccess();
       }
     } catch (err) {
-      handleError(err, enqueueSnackbar, Typography);
+      handleError(err, enqueueSnackbar);
       console.log("failed to add test", err);
     }
   };

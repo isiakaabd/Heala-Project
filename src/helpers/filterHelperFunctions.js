@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import { removeEmptyStringValues } from "./func";
 
 export const showErrorMsg = (enqueueSnackbar, errorMsg) => {
-  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{errorMsg}</Typography>, {
+  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{`${errorMsg}`}</Typography>, {
     variant: "error",
     preventDuplicate: true,
     anchorOrigin: {
@@ -28,20 +28,73 @@ export const showSuccessMsg = (enqueueSnackbar, Typography, successMsg) => {
   });
 };
 
-export const handleError = (error, enqueueSnackbar, Typography) => {
-  if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
-    (error?.graphQLErrors || []).map((err) =>
-      showErrorMsg(enqueueSnackbar, Typography, err.message),
-    );
-  } else if (error?.networkError) {
-    error.networkError?.result?.errors?.map((err) =>
-      showErrorMsg(enqueueSnackbar, Typography, err.message || "Something went wrong, try again."),
-    );
-  } else if (error?.message) {
-    showErrorMsg(enqueueSnackbar, Typography, error.message);
+export const getErrorMsg = (error) => {
+  try {
+    if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+      const errMsgs = (error?.graphQLErrors || []).map((err) => err.message);
+      return errMsgs || "Something went wrong. Try again!!!";
+    } else if (error?.networkError) {
+      const errMsgs = error?.networkError?.result?.errors?.map((err) => err.message);
+      return errMsgs || "Something went wrong. Try again!!!";
+    } else if (error?.message) {
+      return error.message;
+    }
+  } catch (error) {
+    console.error("error from get error func.", error);
+    return "Something went wrong. Try again!!!";
   }
 };
 
+export const handleError = (error, enqueueSnackbar) => {
+  try {
+    if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
+      (error?.graphQLErrors || []).map((err) => showErrorMsg(enqueueSnackbar, err.message));
+    } else if (error?.networkError) {
+      error.networkError?.result?.errors?.map((err) =>
+        showErrorMsg(enqueueSnackbar, err.message || "Something went wrong, try again."),
+      );
+    } else if (error?.message) {
+      console.log(error?.message);
+      showErrorMsg(enqueueSnackbar, error.message);
+    }
+  } catch (error) {
+    showErrorMsg(enqueueSnackbar, "Something went wrong. Try again!!!");
+  }
+};
+
+export const deleteVar = (variable) => {
+  for (const key in variable) {
+    delete variable[key];
+  }
+};
+
+export const filterData = async (filterVaribles, queryParams) => {
+  try {
+    const { fetchData, refetch, variables } = queryParams;
+    const newFilterVaribles = removeEmptyStringValues(filterVaribles);
+    const getData = () => {
+      if (newFilterVaribles === {}) {
+        deleteVar(variables);
+        return refetch();
+      } else {
+        return fetchData({ variables: newFilterVaribles });
+      }
+    };
+
+    const { data } = await getData();
+
+    if (!data) {
+      throw Error("something went wrong while filtering by status");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// DON'T USE ...
 export const onFilterValueChange = async (
   e,
   name,
@@ -66,7 +119,6 @@ export const onFilterValueChange = async (
 };
 
 export const resetFilters = (setFilterValues, values, variables, refetchData) => {
-  console.log(setFilterValues, values, variables, refetchData);
   setFilterValues(values);
   for (const key in variables) {
     delete variables[key];
@@ -74,46 +126,41 @@ export const resetFilters = (setFilterValues, values, variables, refetchData) =>
   refetchData();
 };
 
-export const changeTableLimit = async (limit, fetchFunc) => {
+export const changeTableLimit = async (fetchFunc, variables) => {
   try {
-    fetchFunc({
-      variables: {
-        first: limit,
-      },
+    return fetchFunc({
+      variables: variables,
     });
   } catch (error) {
     console.log("couldn't change table limit", error);
   }
 };
 
-export const handlePageChange = (fetchDataFN, type, pageInfo) => {
+export const handlePageChange = (fetchDataFN, type, pageInfo, variables) => {
   const getData = (pageNumber) => {
-    fetchDataFN({
+    return fetchDataFN({
       variables: {
         page: pageNumber,
-        first: pageInfo.limit,
+        first: pageInfo?.limit || 10,
+        ...variables,
       },
     });
   };
   switch (type) {
     case "FIRSTPAGE":
-      getData(1);
-      break;
+      return getData(1);
 
     case "NEXTPAGE":
-      getData(pageInfo?.nextPage || 1);
-      break;
+      return getData(pageInfo?.nextPage || 1);
 
     case "PREVPAGE":
-      getData(pageInfo?.prevPage || 1);
-      break;
+      return getData(pageInfo?.prevPage || 1);
 
     case "LASTPAGE":
-      getData(pageInfo?.totalPages || 1);
-      break;
+      return getData(pageInfo?.totalPages || 1);
 
     default:
-      break;
+      return;
   }
 };
 
@@ -237,7 +284,7 @@ export const deleteItem = async (
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
     console.log("couldn't delete partner from deletePartner FN", error);
-    handleError(error, enqueueSnackbar, Typography);
+    handleError(error, enqueueSnackbar);
   }
 };
 

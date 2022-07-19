@@ -15,7 +15,7 @@ const HcpAvailability = () => {
     },
   });
   useEffect(() => {
-    if (data) setAvailabiltyArray(data.getAvailabilities.availability);
+    if (data) setAvailabiltyArray(data?.getAvailabilities?.availability);
   }, [data]);
 
   if (loading) return <Loader />;
@@ -35,10 +35,10 @@ const HcpAvailability = () => {
       >
         {availabiltyArray.length > 0 ? (
           availabiltyArray.map((availability, index) => {
-            if (availability.dates[0].times) {
+            if (availability?.times) {
               return (
                 <Grid item key={index}>
-                  <AvailabilityCard availability={availability.dates[0]} />
+                  <AvailabilityCard availability={availability} />
                 </Grid>
               );
             } else {
