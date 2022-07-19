@@ -40,11 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export const CloseBtn = ({ onHandleClick, ...props }) => {
   const classes = useStyles();
   return (
-    <button
-      {...props}
-      onClick={() => onHandleClick()}
-      className={`button ${classes.closeBtn}`}
-    >
+    <button {...props} onClick={() => onHandleClick()} className={`button ${classes.closeBtn}`}>
       <CloseIcon sx={{ height: "10px", weight: "10px !important" }} />
     </button>
   );

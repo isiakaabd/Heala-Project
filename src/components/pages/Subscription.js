@@ -17,10 +17,7 @@ import { getPlans } from "components/graphQL/useQuery";
 import { DELETE_PLAN } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
 import useAlert from "hooks/useAlert";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 import { PlanListRow } from "components/Rows/PlanListRow";
 
 const Subscription = () => {
@@ -35,8 +32,7 @@ const Subscription = () => {
   const [edit, setEdit] = useState(false);
   const [singleData, setSingleData] = useState("");
   const [deleteModal, setdeleteModal] = useState(false);
-  const [fetchPlans, { loading, data, error, refetch }] =
-    useLazyQuery(getPlans);
+  const [fetchPlans, { loading, data, error, refetch }] = useLazyQuery(getPlans);
 
   const handleDialogOpen = () => {
     setIsOpen(true);
@@ -73,11 +69,7 @@ const Subscription = () => {
         refetchQueries: [{ query: getPlans }],
       });
 
-      watchFunction(
-        "Plan deleted succesfully",
-        "Couldn't delete plan.",
-        deletePlanRes
-      ).then(() => {
+      watchFunction("Plan deleted succesfully", "Couldn't delete plan.", deletePlanRes).then(() => {
         refetch();
         stopDeleting();
       });
@@ -141,19 +133,8 @@ const Subscription = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        flexWrap="nowrap"
-        gap={2}
-        height="100%"
-      >
-        <Grid
-          item
-          direction={{ sm: "row", xs: "column" }}
-          container
-          gap={{ md: 4, sm: 4, xs: 2 }}
-        >
+      <Grid container direction="column" flexWrap="nowrap" gap={2} height="100%">
+        <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
           {/* <Grid item flex={1}>
             <Search
               value={searchMail}
@@ -195,6 +176,7 @@ const Subscription = () => {
                 return (
                   <PlanListRow
                     plan={row}
+                    key={index}
                     isItemSelected={isItemSelected}
                     handleSelectedRows={handleSelectedRows}
                     selectedRows={selectedRows}
@@ -209,10 +191,7 @@ const Subscription = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={subscriptionHeader}
-            paginationLabel="Subscription  per page"
-          />
+          <EmptyTable headCells={subscriptionHeader} paginationLabel="Subscription  per page" />
         )}
       </Grid>
 
@@ -232,12 +211,7 @@ const Subscription = () => {
       </Modals>
 
       {/* edit plan Modal */}
-      <Modals
-        isOpen={edit}
-        title="Edit plan"
-        rowSpacing={5}
-        handleClose={handleEditCloseDialog}
-      >
+      <Modals isOpen={edit} title="Edit plan" rowSpacing={5} handleClose={handleEditCloseDialog}>
         <SubscriptionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"

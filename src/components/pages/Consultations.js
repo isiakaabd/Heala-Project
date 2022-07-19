@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Button,
-  Avatar,
-} from "@mui/material";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -24,10 +16,7 @@ import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
 import { Loader } from "components/Utilities";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -82,8 +71,7 @@ const Consultations = () => {
   const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const [fetchConsultations, { loading, data, error }] =
-    useLazyQuery(getConsultations);
+  const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
 
   useEffect(() => {
     fetchConsultations({
@@ -157,13 +145,7 @@ const Consultations = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(
-                          row._id,
-                          selectedRows,
-                          setSelectedRows
-                        )
-                      }
+                      onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -189,11 +171,7 @@ const Consultations = () => {
                       <span style={{ marginRight: "1rem" }}>
                         <Avatar
                           alt={`Display Photo of ${doctorData.firstName}`}
-                          src={
-                            doctorData.picture
-                              ? doctorData.picture
-                              : displayPhoto
-                          }
+                          src={doctorData.picture ? doctorData.picture : displayPhoto}
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
@@ -258,10 +236,7 @@ const Consultations = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={consultationsHeadCells4}
-          paginationLabel="Patients per page"
-        />
+        <EmptyTable headCells={consultationsHeadCells4} paginationLabel="Patients per page" />
       )}
     </Grid>
   );

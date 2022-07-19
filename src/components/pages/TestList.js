@@ -15,12 +15,7 @@ import DeletePartner from "components/modals/DeleteOrDisable";
 import { UploadTestForm } from "components/Forms/UploadTestForm";
 import { testTableHeadCells } from "components/Utilities/tableHeaders";
 import { DELETE_TEST, getListOfLabTests } from "components/graphQL/useQuery";
-import {
-  CustomButton,
-  Loader,
-  PreviousButton,
-  Modals,
-} from "components/Utilities";
+import { CustomButton, Loader, PreviousButton, Modals } from "components/Utilities";
 import { EditTestForm } from "components/Forms/EditTestForm";
 
 const TestList = () => {
@@ -36,8 +31,7 @@ const TestList = () => {
   const [editTestModal, setEditTestModal] = React.useState(false);
   const [uploadListModal, setUploadListModal] = React.useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = React.useState(false);
-  const [fetchLabTestList, { loading, error, data, refetch }] =
-    useLazyQuery(getListOfLabTests);
+  const [fetchLabTestList, { loading, error, data, refetch }] = useLazyQuery(getListOfLabTests);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -68,13 +62,7 @@ const TestList = () => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container justifyContent="space-between">
           <PreviousButton path="/settings/list-management" />
 
@@ -103,10 +91,7 @@ const TestList = () => {
         ) : loading ? (
           <Loader />
         ) : !list ? (
-          <EmptyTable
-            headCells={testTableHeadCells}
-            paginationLabel="Test per page"
-          />
+          <EmptyTable headCells={testTableHeadCells} paginationLabel="Test per page" />
         ) : list.length > 0 ? (
           /* ================= TESTS TABLE ================= */
           <Grid item container height="100%" direction="column">
@@ -136,10 +121,7 @@ const TestList = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={testTableHeadCells}
-            paginationLabel="Patients per page"
-          />
+          <EmptyTable headCells={testTableHeadCells} paginationLabel="Patients per page" />
         )}
 
         {/* ==== ADD TEST MODAL ==== */}
@@ -221,7 +203,7 @@ const TestList = () => {
               Typography,
               enqueueSnackbar,
               setIsDeleting,
-              isDeleting
+              isDeleting,
             );
             setUploadListModal(false);
           }}

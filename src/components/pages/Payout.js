@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Grid,
-  Typography,
-  Chip,
-  Checkbox,
-  TableRow,
-  TableCell,
-  Avatar,
-} from "@mui/material";
+import { Grid, Typography, Chip, Checkbox, TableRow, TableCell, Avatar } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -98,18 +90,15 @@ const Payout = () => {
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
   const [statusFilterValue, setStatusFilterValue] = useState("");
-  const [fetchPayout, { loading, error, refetch, variables }] =
-    useLazyQuery(getPayoutData);
+  const [fetchPayout, { loading, error, refetch, variables }] = useLazyQuery(getPayoutData);
 
   useEffect(() => {
     try {
-      fetchPayout({ variables: { first: pageInfo?.limit } }).then(
-        ({ data }) => {
-          if (!data) throw Error("Couldn't fetch doctors payout data");
-          setPageInfo(data?.getEarningStats?.payoutData?.PageInfo);
-          setPayout(data?.getEarningStats?.payoutData?.data);
-        }
-      );
+      fetchPayout({ variables: { first: pageInfo?.limit } }).then(({ data }) => {
+        if (!data) throw Error("Couldn't fetch doctors payout data");
+        setPageInfo(data?.getEarningStats?.payoutData?.PageInfo);
+        setPayout(data?.getEarningStats?.payoutData?.data);
+      });
     } catch (error) {
       console.error(error);
     }
@@ -159,9 +148,7 @@ const Payout = () => {
   const setTableData = async (response, errMsg) => {
     response
       .then(({ data }) => {
-        setPageInfo(
-          data?.getEarningStats?.payoutData?.PageInfo || defaultPageInfo
-        );
+        setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || defaultPageInfo);
         setPayout(data?.getEarningStats?.payoutData?.data || []);
       })
       .catch((error) => {
@@ -175,12 +162,7 @@ const Payout = () => {
   return (
     <Grid container direction="column" rowSpacing={2}>
       <>
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          style={{ paddingBottom: "3rem" }}
-        >
+        <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
           <Grid item container spacing={3} alignItems="center">
             <Grid item flex={1}>
               <Typography noWrap variant="h1" color="#2D2F39">
@@ -215,12 +197,7 @@ const Payout = () => {
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = await handlePageChange(
-                  fetchPayout,
-                  page,
-                  pageInfo,
-                  {}
-                );
+                const res = await handlePageChange(fetchPayout, page, pageInfo, {});
                 await setTableData(res, "Failed to change table page.");
               }}
               fetchData={fetchPayout}
@@ -244,9 +221,7 @@ const Payout = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -288,9 +263,9 @@ const Payout = () => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>{`${
-                            firstName && firstName
-                          } ${lastName && lastName}`}</span>
+                          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${
+                            lastName && lastName
+                          }`}</span>
                         </div>
                       ) : (
                         "No Name"
@@ -329,10 +304,7 @@ const Payout = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={payoutHeader}
-            paginationLabel="Payout  per page"
-          />
+          <EmptyTable headCells={payoutHeader} paginationLabel="Payout  per page" />
         )}
       </>
     </Grid>

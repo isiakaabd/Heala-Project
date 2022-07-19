@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableRow,
-  Grid,
-  Checkbox,
-  TableCell,
-  Avatar,
-  Button,
-} from "@mui/material";
+import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
@@ -96,8 +89,7 @@ const ReferralTab = () => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   /*   const [searchMail, setSearchMail] = useState(""); */
-  const [fetchRefferals, { loading, error, data, refetch, variables }] =
-    useLazyQuery(getRefferals);
+  const [fetchRefferals, { loading, error, data, refetch, variables }] = useLazyQuery(getRefferals);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -116,35 +108,14 @@ const ReferralTab = () => {
     }
   }, [data]);
 
-  const [filterValues, setFilterValues] = useState(
-    referralPageDefaultFilterValues
-  );
+  const [filterValues, setFilterValues] = useState(referralPageDefaultFilterValues);
 
   if (error) return <NoData error={error} />;
-
+  if (loading) return <Loader />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        height="100%"
-        gap={2}
-        flexWrap="nowrap"
-      >
-        <Grid
-          item
-          direction={{ sm: "row", xs: "column" }}
-          gap={{ sm: 4, xs: 2 }}
-          container
-        >
-          {/* <Grid item flex={1}>
-            <Search
-              value={searchMail}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="Type to search referrals by ID e.g 1Ntqaazu..."
-              height="5rem"
-            />
-          </Grid> */}
+      <Grid container direction="column" height="100%" gap={2} flexWrap="nowrap">
+        <Grid item direction={{ sm: "row", xs: "column" }} gap={{ sm: 4, xs: 2 }} container>
           <Grid item>
             <Filter
               onHandleChange={(e) =>
@@ -155,7 +126,7 @@ const ReferralTab = () => {
                   setFilterValues,
                   fetchRefferals,
                   variables,
-                  refetch
+                  refetch,
                 )
               }
               options={referralFilterBy}
@@ -165,9 +136,7 @@ const ReferralTab = () => {
             />
           </Grid>
         </Grid>
-        {loading ? (
-          <Loader />
-        ) : referral?.length > 0 ? (
+        {referral.length > 0 ? (
           <Grid item container>
             <EnhancedTable
               headCells={referralHeader}
@@ -199,9 +168,7 @@ const ReferralTab = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
+                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -243,11 +210,7 @@ const ReferralTab = () => {
                                 ? doctorData.firstName
                                 : "placeholder Display Image"
                             }`}
-                            src={
-                              doctorData?.picture
-                                ? doctorData?.picture
-                                : displayPhoto
-                            }
+                            src={doctorData?.picture ? doctorData?.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -273,11 +236,7 @@ const ReferralTab = () => {
                                 ? patientData?.firstName
                                 : "placeholder Display Image"
                             }`}
-                            src={
-                              patientData?.picture
-                                ? patientData?.picture
-                                : displayPhoto
-                            }
+                            src={patientData?.picture ? patientData?.picture : displayPhoto}
                             sx={{ width: 24, height: 24 }}
                           />
                         </span>
@@ -324,10 +283,7 @@ const ReferralTab = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={referralHeader}
-            paginationLabel="Referral  per page"
-          />
+          <EmptyTable headCells={referralHeader} paginationLabel="Referral  per page" />
         )}
       </Grid>
     </>

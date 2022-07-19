@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  Avatar,
-  TableRow,
-  Checkbox,
-  TableCell,
-  Button,
-} from "@mui/material";
+import { Grid, Typography, Avatar, TableRow, Checkbox, TableCell, Button } from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -21,10 +13,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -71,8 +60,7 @@ const HcpPatients = () => {
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
 
-  const [fetchDoctorsPatients, { loading, error, data }] =
-    useLazyQuery(getDoctorPatients);
+  const [fetchDoctorsPatients, { loading, error, data }] = useLazyQuery(getDoctorPatients);
 
   useEffect(() => {
     fetchDoctorsPatients({
@@ -132,9 +120,7 @@ const HcpPatients = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(_id, selectedRows, setSelectedRows)
-                      }
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -161,11 +147,7 @@ const HcpPatients = () => {
                       }}
                     >
                       <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={row.image}
-                          sx={{ width: 24, height: 24 }}
-                        />
+                        <Avatar alt="Remy Sharp" src={row.image} sx={{ width: 24, height: 24 }} />
                       </span>
                       <span style={{ fontSize: "1.25rem" }}>
                         {patientData?.firstName
@@ -195,10 +177,7 @@ const HcpPatients = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpPatientsHeadCells}
-          paginationLabel="List  per page"
-        />
+        <EmptyTable headCells={hcpPatientsHeadCells} paginationLabel="List  per page" />
       )}
     </Grid>
   );

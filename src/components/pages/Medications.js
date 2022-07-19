@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import {
-  Grid,
-  Avatar,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -99,13 +91,7 @@ const Medications = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
+                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -161,9 +147,7 @@ const Medications = () => {
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {row.doctor}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -172,10 +156,7 @@ const Medications = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={medicationsHeadCells}
-            paginationLabel="Medications per page"
-          />
+          <EmptyTable headCells={medicationsHeadCells} paginationLabel="Medications per page" />
         )}
       </Grid>
     </Grid>

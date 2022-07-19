@@ -5,33 +5,27 @@ import { Typography } from "@mui/material";
 import { removeEmptyStringValues } from "./func";
 
 export const showErrorMsg = (enqueueSnackbar, errorMsg) => {
-  enqueueSnackbar(
-    <Typography style={{ fontSize: "1.2rem" }}>{`${errorMsg}`}</Typography>,
-    {
-      variant: "error",
-      preventDuplicate: true,
-      anchorOrigin: {
-        horizontal: "center",
-        vertical: "top",
-      },
-      autoHideDuration: 10000,
-    }
-  );
+  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{`${errorMsg}`}</Typography>, {
+    variant: "error",
+    preventDuplicate: true,
+    anchorOrigin: {
+      horizontal: "center",
+      vertical: "top",
+    },
+    autoHideDuration: 10000,
+  });
 };
 
 export const showSuccessMsg = (enqueueSnackbar, Typography, successMsg) => {
-  enqueueSnackbar(
-    <Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>,
-    {
-      variant: "success",
-      preventDuplicate: true,
-      anchorOrigin: {
-        horizontal: "right",
-        vertical: "top",
-      },
-      autoHideDuration: 5000,
-    }
-  );
+  enqueueSnackbar(<Typography style={{ fontSize: "1.2rem" }}>{successMsg}</Typography>, {
+    variant: "success",
+    preventDuplicate: true,
+    anchorOrigin: {
+      horizontal: "right",
+      vertical: "top",
+    },
+    autoHideDuration: 5000,
+  });
 };
 
 export const getErrorMsg = (error) => {
@@ -40,9 +34,7 @@ export const getErrorMsg = (error) => {
       const errMsgs = (error?.graphQLErrors || []).map((err) => err.message);
       return errMsgs || "Something went wrong. Try again!!!";
     } else if (error?.networkError) {
-      const errMsgs = error?.networkError?.result?.errors?.map(
-        (err) => err.message
-      );
+      const errMsgs = error?.networkError?.result?.errors?.map((err) => err.message);
       return errMsgs || "Something went wrong. Try again!!!";
     } else if (error?.message) {
       return error.message;
@@ -56,15 +48,10 @@ export const getErrorMsg = (error) => {
 export const handleError = (error, enqueueSnackbar) => {
   try {
     if (error?.graphQLErrors && error?.graphQLErrors?.length > 0) {
-      (error?.graphQLErrors || []).map((err) =>
-        showErrorMsg(enqueueSnackbar, err.message)
-      );
+      (error?.graphQLErrors || []).map((err) => showErrorMsg(enqueueSnackbar, err.message));
     } else if (error?.networkError) {
       error.networkError?.result?.errors?.map((err) =>
-        showErrorMsg(
-          enqueueSnackbar,
-          err.message || "Something went wrong, try again."
-        )
+        showErrorMsg(enqueueSnackbar, err.message || "Something went wrong, try again."),
       );
     } else if (error?.message) {
       console.log(error?.message);
@@ -115,7 +102,7 @@ export const onFilterValueChange = async (
   setFilterValues,
   fetchData,
   variables,
-  refetchData
+  refetchData,
 ) => {
   const value = e?.target?.value;
   const newFilterData = { ...filterValues, [name]: value };
@@ -131,12 +118,7 @@ export const onFilterValueChange = async (
   }
 };
 
-export const resetFilters = (
-  setFilterValues,
-  values,
-  variables,
-  refetchData
-) => {
+export const resetFilters = (setFilterValues, values, variables, refetchData) => {
   setFilterValues(values);
   for (const key in variables) {
     delete variables[key];
@@ -199,9 +181,7 @@ export const trucateString = (word, length, startFrom = "front") => {
     }
 
     if (startFrom === "back") {
-      const newWord = `...${wordArr
-        .slice(wordArr.length - length, wordArr.length - 1)
-        .join("")}`;
+      const newWord = `...${wordArr.slice(wordArr.length - length, wordArr.length - 1).join("")}`;
       return newWord;
     }
   } catch (error) {
@@ -219,9 +199,7 @@ export const trucateProfileLink = (word) => {
   try {
     const wordArr = word.split("");
     const start = `${wordArr.slice(0, 8).join("")}`;
-    const end = `${wordArr
-      .slice(wordArr.length - 7, wordArr.length - 1)
-      .join("")}`;
+    const end = `${wordArr.slice(wordArr.length - 7, wordArr.length - 1).join("")}`;
     return `${start}...${end}`;
   } catch (error) {
     console.error("Error from trucateString FN", error);
@@ -237,7 +215,7 @@ export const compressAndUploadImage = async (
   setFieldValue,
   setProgress,
   isCompressing,
-  setIsCompleted
+  setIsCompleted,
 ) => {
   try {
     if (!img) throw new Error("No file passed to upload function");
@@ -294,7 +272,7 @@ export const deleteItem = async (
   Typography,
   enqueueSnackbar,
   setIsDeleting,
-  isDeleting
+  isDeleting,
 ) => {
   const newIsDeleting = isDeleting;
 
@@ -315,11 +293,7 @@ export const deleteItem = async (
       return;
     }
 
-    showSuccessMsg(
-      enqueueSnackbar,
-      Typography,
-      "Partner deleted successfully."
-    );
+    showSuccessMsg(enqueueSnackbar, Typography, "Partner deleted successfully.");
     resetId(null);
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
@@ -334,9 +308,7 @@ export const deleteItem = async (
 };
 
 export const IsImg = (file) => {
-  const imgFormatsRegex = new RegExp(
-    /(jpeg|png|jpg|webp|jpg|jpeg|jfif|pjpeg|pjp|svg)/
-  );
+  const imgFormatsRegex = new RegExp(/(jpeg|png|jpg|webp|jpg|jpeg|jfif|pjpeg|pjp|svg)/);
   try {
     const fileArr = file?.name.split(".");
     const lastItem = fileArr[fileArr.length - 1];

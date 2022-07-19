@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Alert, Divider, Avatar, Typography } from "@mui/material";
+import { Grid, Divider, Avatar, Typography } from "@mui/material";
 import { Modals, CustomButton, Loader } from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
@@ -12,6 +12,7 @@ import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
+import useAlert from "hooks/useAlert";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
@@ -51,6 +52,7 @@ const HcpAppointments = () => {
   const { hcpId } = useParams();
   const classes = useStyles();
   const theme = useTheme();
+  const { displayAlert } = useAlert();
   const [appointment, setAppointment] = useState([]);
   const [updateAppoint] = useMutation(updateAppointment);
   const { loading, data, error } = useQuery(getDOCAppoint, {
@@ -84,7 +86,6 @@ const HcpAppointments = () => {
   const [id, setId] = useState(null);
   const [isPatients, setIsPatients] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
-  const [alert, setAlert] = useState(null);
   const onConfirm = async () => {
     try {
       await deleteAppointments({
@@ -100,22 +101,10 @@ const HcpAppointments = () => {
           },
         ],
       });
-      setAlert({
-        message: "appointment deleted successfully",
-        type: "success",
-      });
-      setTimeout(() => {
-        setAlert(null);
-      }, 5000);
+      displayAlert("success", "Appointment Deleted Successfully");
     } catch (error) {
-      setAlert({
-        message: "appointment  not successfully deleted",
-        type: "danger",
-      });
-      setTimeout(() => {
-        setAlert(null);
-      }, 5000);
       console.log(error);
+      displayAlert("error", error);
     }
   };
   const buttonType = {
@@ -136,40 +125,44 @@ const HcpAppointments = () => {
     date: "",
   };
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required(
-      "Date  and time is required"
-    ),
+    date: Yup.string("select date and time ").required("Date  and time is required"),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
 
     const timeValue = timeMoment(date);
     const dateValue = timeConverter(date);
-    await updateAppoint({
-      variables: {
-        id: editId,
-        date: dateValue,
-        time: timeValue,
-        doctor: hcpId,
-        patient: patientId,
-      },
-      refetchQueries: [
-        {
-          query: getAppoint,
-          variables: {
-            id: patientId,
-            orderBy: "-createdAt",
-          },
+    try {
+      await updateAppoint({
+        variables: {
+          id: editId,
+          date: dateValue,
+          time: timeValue,
+          doctor: hcpId,
+          patient: patientId,
         },
-        {
-          query: getDOCAppoint,
-          variables: {
-            id: hcpId,
-            orderBy: "-createdAt",
+        refetchQueries: [
+          {
+            query: getAppoint,
+            variables: {
+              id: patientId,
+              orderBy: "-createdAt",
+            },
           },
-        },
-      ],
-    });
+          {
+            query: getDOCAppoint,
+            variables: {
+              id: hcpId,
+              orderBy: "-createdAt",
+            },
+          },
+        ],
+      });
+      displayAlert("success", "Appointment Updated Successfully");
+    } catch (error) {
+      console.log(error);
+      displayAlert("error", error);
+    }
     handlePatientCloses();
   };
 
@@ -177,23 +170,7 @@ const HcpAppointments = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid
-        container
-        gap={2}
-        flexWrap="nowrap"
-        direction="column"
-        height="100%"
-      >
-        {alert && Object.keys(alert).length > 0 && (
-          <Alert
-            variant="filled"
-            severity={alert.type}
-            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
-          >
-            {alert.message}
-          </Alert>
-        )}
-
+      <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
           <Typography variant="h2">Doctor Appointments</Typography>
         </Grid>
@@ -206,17 +183,8 @@ const HcpAppointments = () => {
               key={appoint._id}
               className={classes.parentGridWrapper}
             >
-              <Grid
-                item
-                container
-                style={{ maxWidth: "60rem", padding: "4rem 5rem" }}
-              >
-                <Grid
-                  item
-                  container
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
+              <Grid item container style={{ maxWidth: "60rem", padding: "4rem 5rem" }}>
+                <Grid item container alignItems="center" justifyContent="space-between">
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Consultation Date:
@@ -258,11 +226,7 @@ const HcpAppointments = () => {
                   </Grid>
                   <Grid item>
                     <Avatar
-                      src={
-                        appoint.patientData.picture
-                          ? appoint.patientData.picture
-                          : displayPhoto
-                      }
+                      src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
                       alt="Display Photo of the patient"
                     />
                   </Grid>
@@ -288,20 +252,14 @@ const HcpAppointments = () => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item>
-                <Grid
-                  container
-                  justifyContent="flex-end"
-                  style={{ padding: "2rem 5rem" }}
-                >
+                <Grid container justifyContent="flex-end" style={{ padding: "2rem 5rem" }}>
                   <Grid item style={{ marginRight: "3rem" }}>
                     <CustomButton
                       title="Reschedule"
                       type={greenButton}
                       height="3.5rem"
                       textColorOnHover="#fff"
-                      onClick={() =>
-                        handleSchedule(appoint._id, appoint.patient)
-                      }
+                      onClick={() => handleSchedule(appoint._id, appoint.patient)}
                       textColor={theme.palette.common.green}
                       endIcon={<AssignmentIcon color="success" />}
                       borderRadius="3rem"
@@ -369,13 +327,7 @@ const HcpAppointments = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    container
-                    alignItems="flex-end"
-                    marginTop={5}
-                    xs={12}
-                  >
+                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"

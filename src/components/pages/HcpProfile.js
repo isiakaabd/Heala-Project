@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -107,10 +106,7 @@ const HcpProfile = () => {
           <ProfileCard text="Gender" value={gender} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard
-            text="Date Of Birth"
-            value={dob ? dateMoment(dob) : "DOB not Provided"}
-          />
+          <ProfileCard text="Date Of Birth" value={dob ? dateMoment(dob) : "DOB not Provided"} />
         </Grid>
 
         <Grid item container md={6} sm={6} xs={12} mx="auto">
@@ -148,9 +144,7 @@ const HcpProfile = () => {
               hospital ? (
                 <a href={email} className={classes.link}>
                   <span>{hospital}</span>
-                  <LocationOnIcon
-                    className={`${classes.linkIcon} ${classes.locationIcon}`}
-                  />
+                  <LocationOnIcon className={`${classes.linkIcon} ${classes.locationIcon}`} />
                 </a>
               ) : (
                 "No Hospital attached"

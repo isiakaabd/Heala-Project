@@ -25,14 +25,7 @@ const HcpAvailability = () => {
       <Grid item>
         <Typography variant="h2">HCP Availability</Typography>
       </Grid>
-      <Grid
-        item
-        container
-        direction="column"
-        gap={2}
-        flexWrap="nowrap"
-        height="100%"
-      >
+      <Grid item container direction="column" gap={2} flexWrap="nowrap" height="100%">
         {availabiltyArray.length > 0 ? (
           availabiltyArray.map((availability, index) => {
             if (availability?.times) {

@@ -5,17 +5,8 @@ import { useLazyQuery } from "@apollo/client";
 import { NetworkStatus } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
+import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
@@ -24,19 +15,12 @@ import { useStyles } from "styles/patientsPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import CompoundSearch from "components/Forms/CompoundSearch";
-import EnhancedTable from "components/layouts/EnhancedTable";
+import { EnhancedTable } from "components/layouts";
 import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo, patientSearchOptions } from "../../helpers/mockData";
-import {
-  getPatients,
-  getPatientsByPlan,
-  getPatientsByStatus,
-} from "components/graphQL/useQuery";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "../../helpers/filterHelperFunctions";
+import { defaultPageInfo, patientSearchOptions } from "helpers/mockData";
+import { getPatients, getPatientsByPlan, getPatientsByStatus } from "components/graphQL/useQuery";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const Patients = () => {
   const theme = useTheme();
@@ -46,29 +30,15 @@ const Patients = () => {
   const [profiles, setProfiles] = useState([]);
   const { selectedRows } = useSelector((state) => state.tables);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
-    useLazyQuery(getPatients, {
-      notifyOnNetworkStatusChange: true,
-    });
+    useLazyQuery(getPatients);
   const [
     fetchPatientByStatus,
-    {
-      loading: byStatusLoading,
-      variables: byStatusVaribles,
-      refetch: byStatusRefetch,
-    },
-  ] = useLazyQuery(getPatientsByStatus, {
-    notifyOnNetworkStatusChange: true,
-  });
+    { loading: byStatusLoading, variables: byStatusVaribles, refetch: byStatusRefetch },
+  ] = useLazyQuery(getPatientsByStatus);
   const [
     fetchPatientByPlan,
-    {
-      loading: byPlanLoading,
-      variables: byPlanVaribles,
-      refetch: byPlanRefetch,
-    },
-  ] = useLazyQuery(getPatientsByPlan, {
-    notifyOnNetworkStatusChange: true,
-  });
+    { loading: byPlanLoading, variables: byPlanVaribles, refetch: byPlanRefetch },
+  ] = useLazyQuery(getPatientsByPlan);
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -123,12 +93,7 @@ const Patients = () => {
 
   return (
     <Grid item flex={1} container direction="column" rowGap={2}>
-      <Grid
-        item
-        container
-        spacing={2}
-        className={classes.searchFilterContainer}
-      >
+      <Grid item container spacing={2} className={classes.searchFilterContainer}>
         {/*  ======= SEARCH INPUT(S) ==========*/}
         <CompoundSearch
           queryParams={{ fetchData: fetchPatient, variables, loading }}
@@ -215,9 +180,7 @@ const Patients = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(_id, selectedRows, setSelectedRows)
-                      }
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -252,9 +215,7 @@ const Patients = () => {
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
-                      <span
-                        style={{ fontSize: "1.25rem" }}
-                      >{`${firstName} ${lastName}`}</span>
+                      <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
@@ -268,9 +229,7 @@ const Patients = () => {
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Chip
-                      label={
-                        status && status === "Active" ? "Active" : "Inactive"
-                      }
+                      label={status && status === "Active" ? "Active" : "Inactive"}
                       className={classes.badge}
                       style={{
                         background:
@@ -301,10 +260,7 @@ const Patients = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={patientsHeadCells}
-          paginationLabel="Patients per page"
-        />
+        <EmptyTable headCells={patientsHeadCells} paginationLabel="Patients per page" />
       )}
     </Grid>
   );

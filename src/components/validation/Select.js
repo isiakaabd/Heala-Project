@@ -2,9 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { Field, ErrorMessage } from "formik";
-import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
-
-import Typography from "@mui/material/Typography";
+import { FormControl, Typography, FormLabel, Select, MenuItem, Grid } from "@mui/material";
 import { TextError } from "components/Utilities/TextError";
 import { CloseBtn } from "components/Buttons/CloseBtn";
 
@@ -133,6 +131,7 @@ export const CustomSelect = (props) => {
 CustomSelect.propTypes = {
   value: PropTypes.string,
   options: PropTypes.string,
+  label: PropTypes.string,
   name: PropTypes.func,
   children: PropTypes.node,
   placeholder: PropTypes.string,

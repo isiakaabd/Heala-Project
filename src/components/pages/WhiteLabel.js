@@ -21,11 +21,7 @@ const WhiteLabel = () => {
         <Grid item container md={5} sm={5} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/label/provider" style={{ textDecoration: "none" }}>
-              <Card
-                alt="providers "
-                title="Providers"
-                background={theme.palette.common.lightGreen}
-              >
+              <Card alt="providers " title="Providers" background={theme.palette.common.lightGreen}>
                 <Administrator fill={theme.palette.common.green} />
               </Card>
             </Link>
@@ -34,11 +30,7 @@ const WhiteLabel = () => {
         <Grid item container md={5} sm={5} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/label/types" style={{ textDecoration: "none" }}>
-              <Card
-                alt="User Types"
-                title="User Types"
-                background={theme.palette.common.lightRed}
-              >
+              <Card alt="User Types" title="User Types" background={theme.palette.common.lightRed}>
                 <ConsulationIcon fill={theme.palette.common.red} />
               </Card>
             </Link>

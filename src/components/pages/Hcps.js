@@ -4,15 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
 
 import useAlert from "hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,20 +16,14 @@ import { timeConverter } from "components/Utilities/Time";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { useStyles } from "../../styles/doctorsPageStyles";
 import FormikControl from "components/validation/FormikControl";
-import {
-  getDoctorsProfile,
-  getDoctorsProfileByStatus,
-} from "components/graphQL/useQuery";
+import { getDoctorsProfile, getDoctorsProfileByStatus } from "components/graphQL/useQuery";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
 import { createDOctorProfile } from "components/graphQL/Mutation";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { addDoctorValidationSchema } from "../../helpers/validationSchemas";
+import { addDoctorValidationSchema } from "helpers/validationSchemas";
 import { Loader, Modals, CustomButton } from "components/Utilities";
-import {
-  changeTableLimit,
-  handlePageChange,
-} from "../../helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 import {
   addDocInitialValues,
   /* cadreFilterBy, */
@@ -49,7 +35,7 @@ import {
   /*  providerFilterBy,
   specializationFilterBy,
   statusFilterBy, */
-} from "../../helpers/mockData";
+} from "helpers/mockData";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
 
@@ -63,24 +49,16 @@ const Hcps = () => {
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] =
-    useLazyQuery(getDoctorsProfile, {
+  const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] = useLazyQuery(
+    getDoctorsProfile,
+    {
       notifyOnNetworkStatusChange: true,
-    });
+    },
+  );
   const [
     fetchDoctorsByStatus,
-    {
-      loading: byStatusLoading,
-      refetch: byStatusRefetch,
-      variables: byStatusVariables,
-    },
+    { loading: byStatusLoading, refetch: byStatusRefetch, variables: byStatusVariables },
   ] = useLazyQuery(getDoctorsProfileByStatus);
-
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
 
   useEffect(() => {
     fetchDoctors({
@@ -138,6 +116,11 @@ const Hcps = () => {
     });
     setOpenAddHcp(false);
   };
+  const buttonType = {
+    background: theme.palette.common.black,
+    hover: theme.palette.primary.main,
+    active: theme.palette.primary.dark,
+  };
   const getSearchPlaceholder = (filterBy) => {
     return filterBy === "id"
       ? "Search by ID e.g 7NE6ELLO"
@@ -173,12 +156,8 @@ const Hcps = () => {
         <Grid item container flex={1}>
           <CompoundSearch
             queryParams={{ fetchData: fetchDoctors, variables, loading }}
-            setPageInfo={(data) =>
-              setPageInfo(data.doctorProfiles.pageInfo || {})
-            }
-            setProfiles={(data) =>
-              setProfiles(data.doctorProfiles.profile || [])
-            }
+            setPageInfo={(data) => setPageInfo(data.doctorProfiles.pageInfo || {})}
+            setProfiles={(data) => setProfiles(data.doctorProfiles.profile || [])}
             getSearchPlaceholder={(filterBy) => getSearchPlaceholder(filterBy)}
             filterOptions={doctorsSearchOptions}
           />
@@ -265,9 +244,7 @@ const Hcps = () => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() =>
-                        handleSelectedRows(_id, selectedRows, setSelectedRows)
-                      }
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -285,7 +262,7 @@ const Hcps = () => {
                       minWidth: "10rem",
                     }}
                   >
-                    {dociId && dociId.split("-")[1]}
+                    {dociId?.split("-")[1]}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <div
@@ -326,9 +303,7 @@ const Hcps = () => {
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Chip
-                      label={
-                        status && status === "Active" ? "Active" : "Inactive"
-                      }
+                      label={status === "Active" ? "Active" : "Inactive"}
                       className={classes.badge}
                       style={{
                         background:
@@ -359,10 +334,7 @@ const Hcps = () => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={hcpsHeadCells}
-          paginationLabel="Doctors per page"
-        />
+        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
       )}
       {/* ADD Doctor MODAL */}
       <Modals

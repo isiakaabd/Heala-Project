@@ -9,14 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import { Link, useHistory } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {
-  Grid,
-  Checkbox,
-  InputAdornment,
-  Typography,
-  Alert,
-} from "@mui/material";
-
+import { Grid, Checkbox, InputAdornment, Typography } from "@mui/material";
 import logo from "assets/images/logo.svg";
 import { useSelector } from "react-redux";
 import { setAccessToken } from "../../accessToken";
@@ -51,10 +44,7 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string()
-      .email("Enter a valid email")
-      .trim()
-      .required("Email is required"),
+    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
     password: Yup.string().trim().required("password is required"),
   });
 
@@ -78,8 +68,7 @@ const Login = () => {
           },
         });
         if (data) {
-          const { email, access_token, _id, userTypeId, dociId } =
-            data.login.account;
+          const { email, access_token, _id, userTypeId, dociId } = data.login.account;
           setAccessToken(access_token);
           localStorage.setItem("email", email);
           localStorage.setItem("_id", _id);
@@ -100,20 +89,14 @@ const Login = () => {
   };
 
   React.useEffect(() => {
-    Object.keys(authError).length > 0 &&
-      showErrorMsg(enqueueSnackbar, authError?.message);
+    Object.keys(authError).length > 0 && showErrorMsg(enqueueSnackbar, authError?.message);
   }, [authError, enqueueSnackbar]);
 
   return (
     <>
       <Grid container className={classes.gridContainer}>
         <Grid item container className={classes.leftParentGrid}></Grid>
-        <Grid
-          container
-          item
-          className={classes.rightParentGrid}
-          sx={{ justifyContent: "center" }}
-        >
+        <Grid container item className={classes.rightParentGrid} sx={{ justifyContent: "center" }}>
           <Grid item container md={8} xs={10} margin="auto">
             <Grid item className={classes.logoAlign}>
               <img src={logo} alt="Brand logo" className={classes.logo} />
@@ -129,22 +112,14 @@ const Login = () => {
               >
                 {({ isSubmitting, isValid, dirty }) => {
                   return (
-                    <Grid
-                      item
-                      container
-                      direction="column"
-                      justifyContent="center"
-                    >
+                    <Grid item container direction="column" justifyContent="center">
                       <Form>
                         <Grid item style={{ marginBottom: "3rem" }}>
                           <Typography variant="h2" className={classes.heading}>
                             Sign into your account
                           </Typography>
                         </Grid>
-                        <Grid
-                          item
-                          style={{ marginBottom: "2rem", width: "100%" }}
-                        >
+                        <Grid item style={{ marginBottom: "2rem", width: "100%" }}>
                           <Grid container direction="column">
                             <LoginInput
                               label="Email address"
@@ -169,16 +144,10 @@ const Login = () => {
                               endAdornment={
                                 <InputAdornment
                                   position="end"
-                                  onClick={() =>
-                                    setShowPassword((prev) => !prev)
-                                  }
+                                  onClick={() => setShowPassword((prev) => !prev)}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  {showPassword ? (
-                                    <VisibilityOffIcon />
-                                  ) : (
-                                    <VisibilityIcon />
-                                  )}
+                                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                 </InputAdornment>
                               }
                             />
@@ -236,12 +205,7 @@ const Login = () => {
                             disabled={!(dirty || isValid)}
                           />
                         </Grid>
-                        <Grid
-                          item
-                          container
-                          alignItems="center"
-                          style={{ marginTop: "2rem" }}
-                        >
+                        <Grid item container alignItems="center" style={{ marginTop: "2rem" }}>
                           <Grid item>
                             <Typography
                               variant="body2"

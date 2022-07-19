@@ -2,8 +2,6 @@ import React from "react";
 import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-
-import { PreviousButton } from "components/Utilities";
 import { SettingsCard } from "components/cards/SettingsCard";
 import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
 
@@ -41,9 +39,6 @@ const ListManagment = () => {
   const classes = useStyles();
   return (
     <>
-      <Grid item>
-        <PreviousButton path="/settings" />
-      </Grid>
       <Grid
         container
         justifyContent="space-between"

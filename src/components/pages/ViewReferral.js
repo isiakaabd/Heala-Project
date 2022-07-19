@@ -61,13 +61,7 @@ const ViewReferral = () => {
 
   return (
     <Grid container direction="column" gap={2} padding="0 2rem">
-      <Grid
-        item
-        container
-        direction="column"
-        margin="auto"
-        className={classes.parentGrid}
-      >
+      <Grid item container direction="column" margin="auto" className={classes.parentGrid}>
         <Grid
           item
           container
@@ -85,11 +79,7 @@ const ViewReferral = () => {
             <Grid item container alignItems="center" gap={2}>
               <Grid item>
                 <Avatar
-                  src={
-                    patientData && patientData.picture
-                      ? patientData.picture
-                      : displayPhoto
-                  }
+                  src={patientData && patientData.picture ? patientData.picture : displayPhoto}
                   alt={`Display photo of the  ${
                     patientData ? patientData.firstName : "placeholder"
                   }`}
@@ -97,9 +87,7 @@ const ViewReferral = () => {
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {patientData
-                    ? `${patientData.firstName} ${patientData.lastName}`
-                    : "No Patient"}
+                  {patientData ? `${patientData.firstName} ${patientData.lastName}` : "No Patient"}
                 </Typography>
               </Grid>
             </Grid>
@@ -114,21 +102,13 @@ const ViewReferral = () => {
             <Grid item container gap={2} alignItems="center">
               <Grid item>
                 <Avatar
-                  src={
-                    doctorData && doctorData.picture
-                      ? doctorData.picture
-                      : displayPhoto
-                  }
-                  alt={`Display photo of the doctor ${
-                    doctorData ? doctorData.firstName : ""
-                  }`}
+                  src={doctorData && doctorData.picture ? doctorData.picture : displayPhoto}
+                  alt={`Display photo of the doctor ${doctorData ? doctorData.firstName : ""}`}
                 />
               </Grid>
               <Grid item>
                 <Typography variant="h5">
-                  {doctorData
-                    ? `${doctorData.firstName} ${doctorData.lastName}`
-                    : "No Doctor"}
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -175,8 +155,8 @@ const ViewReferral = () => {
               {tests &&
                 tests.map((test, index) => {
                   return (
-                    <Grid item>
-                      <Chip key={index} label={test?.name} />
+                    <Grid item key={index}>
+                      <Chip label={test?.name} />
                     </Grid>
                   );
                 })}
@@ -214,13 +194,7 @@ const ViewReferral = () => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            xs={4}
-            gap={2}
-            direction={{ sm: "column", xs: "column" }}
-          >
+          <Grid item container xs={4} gap={2} direction={{ sm: "column", xs: "column" }}>
             <Grid item>
               <Typography variant="body1" className={classes.title}>
                 Referral ID
@@ -232,14 +206,7 @@ const ViewReferral = () => {
           </Grid>
         </Grid>
         <Divider />
-        <Grid
-          item
-          container
-          gap={2}
-          padding="2rem"
-          flexDirection="column"
-          margin="auto"
-        >
+        <Grid item container gap={2} padding="2rem" flexDirection="column" margin="auto">
           <Grid item>
             <Typography variant="body1" className={classes.title}>
               Referral Notes

@@ -17,8 +17,7 @@ import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const App = ({ window }) => {
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
@@ -64,20 +63,14 @@ const App = ({ window }) => {
       <Router>
         <div className="container">
           {!isAuthenticated && (
-            <Route
-              path={["/login", "/"]}
-              render={(props) => <Login {...props} />}
-            />
+            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
           )}
           {isAuthenticated && state && <Loader color="success" />}
           {isAuthenticated && !state && (
             <>
               <Box sx={{ display: "flex" }}>
                 <CssBaseline />
-                <Header
-                  handleDrawerToggle={handleDrawerToggle}
-                  drawerWidth={drawerWidth}
-                />
+                <Header handleDrawerToggle={handleDrawerToggle} drawerWidth={drawerWidth} />
 
                 <Box
                   component="nav"
@@ -99,10 +92,7 @@ const App = ({ window }) => {
                       "& .MuiBackdrop-root": { backgroundColor: "rgba(0, 0, 0, 0.2)" },
                     }}
                   >
-                    <SideMenu
-                      drawerWidth={drawerWidth}
-                      handleDrawerToggle={handleDrawerToggle}
-                    />
+                    <SideMenu drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
                   </Drawer>
                   <Drawer
                     variant="permanent"

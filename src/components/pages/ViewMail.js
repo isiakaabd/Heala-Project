@@ -64,9 +64,7 @@ const ViewMail = () => {
                 <Chip
                   variant="outlined"
                   deleteIcon={<ArrowForwardIosIcon />}
-                  onClick={() =>
-                    window.open(`mailto:${details.email}`, "_blank")
-                  }
+                  onClick={() => window.open(`mailto:${details.email}`, "_blank")}
                   onDelete={() => console.log(" ")}
                   label={details.email}
                   className={classes.chip}
@@ -94,11 +92,7 @@ const ViewMail = () => {
           </Grid>
         </Grid>
         <Divider />
-        <Grid
-          item
-          className={classes.gridWrapper}
-          style={{ lineHeight: 1.85, fontSize: "1.5rem" }}
-        >
+        <Grid item className={classes.gridWrapper} style={{ lineHeight: 1.85, fontSize: "1.5rem" }}>
           {/* <Typography variant="body1" style={{ lineHeight: 1.85 }}> */}
           {parseTextArea}
           {/* </Typography> */}

@@ -5,17 +5,8 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  TableRow,
-  Alert,
-  TableCell,
-  Checkbox,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-// import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import { useTheme } from "@mui/material/styles";
 import { dateMoment } from "components/Utilities/Time";
@@ -23,11 +14,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
-// import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-// import { onFilterValueChange } from "helpers/filterHelperFunctions";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-// import { emailPageDefaultFilterValues } from "helpers/mockData";
-//roleFilterBy
 const useStyles = makeStyles((theme) => ({
   chip: {
     "&.MuiChip-root": {
@@ -132,13 +119,7 @@ const Email = () => {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        height="100%"
-        flexWrap="nowrap"
-        gap={2}
-      >
+      <Grid container direction="column" height="100%" flexWrap="nowrap" gap={2}>
         {response ? (
           <Grid
             item
@@ -153,12 +134,7 @@ const Email = () => {
             </Alert>
           </Grid>
         ) : null}
-        <Grid
-          item
-          direction={{ sm: "row", xs: "column" }}
-          container
-          gap={{ md: 4, sm: 4, xs: 2 }}
-        >
+        <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
           {/* <Grid item flex={1}>
             <Search
               value={searchMail}
@@ -240,13 +216,7 @@ const Email = () => {
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                _id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
+                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -301,10 +271,7 @@ const Email = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable
-            headCells={emailHeader}
-            paginationLabel="Email  per page"
-          />
+          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
         )}
       </Grid>
     </>

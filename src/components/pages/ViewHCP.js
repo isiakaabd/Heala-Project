@@ -9,15 +9,8 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  verification,
-  getVerification,
-  getCategory,
-} from "components/graphQL/useQuery"; //
-import {
-  rejectVerification,
-  updateDoctorProvider,
-} from "components/graphQL/Mutation";
+import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
+import { rejectVerification, updateDoctorProvider } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
@@ -174,11 +167,7 @@ const ViewHCP = () => {
         ],
       });
       setCancel(false);
-      showSuccessMsg(
-        enqueueSnackbar,
-        Typography,
-        "Reject verification successful."
-      );
+      showSuccessMsg(enqueueSnackbar, Typography, "Reject verification successful.");
       setOpen(true);
       setTimeout(() => {
         setOpen(false);
@@ -213,7 +202,7 @@ const ViewHCP = () => {
     }
   }, [data, ref]);
   const [verifyState, setVerifyState] = useState(
-    respondData.status ? "Doctor Verified!" : "Verify Doctor"
+    respondData.status ? "Doctor Verified!" : "Verify Doctor",
   );
   const [process, setProcess] = useState(undefined);
   useEffect(() => {
@@ -326,9 +315,7 @@ const ViewHCP = () => {
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData
-                    ? `${doctorData.firstName} ${doctorData.lastName}`
-                    : "No Doctor"}
+                  {doctorData ? `${doctorData.firstName} ${doctorData.lastName}` : "No Doctor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -338,9 +325,7 @@ const ViewHCP = () => {
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData && doctorData.hospital !== ""
-                    ? doctorData.hospital
-                    : "No Hospital"}
+                  {doctorData && doctorData.hospital !== "" ? doctorData.hospital : "No Hospital"}
                 </Typography>
               </Grid>
             </Grid>
@@ -370,9 +355,7 @@ const ViewHCP = () => {
               </Grid>
               <Grid item width="100%">
                 <Typography variant="h4">
-                  {doctorData
-                    ? `${doctorData.specialization}`
-                    : "No specialization "}
+                  {doctorData ? `${doctorData.specialization}` : "No specialization "}
                 </Typography>
               </Grid>
             </Grid>
@@ -394,10 +377,7 @@ const ViewHCP = () => {
                 <Typography
                   variant="h4"
                   style={{
-                    color:
-                      status === true
-                        ? theme.palette.common.green
-                        : theme.palette.common.red,
+                    color: status === true ? theme.palette.common.green : theme.palette.common.red,
                     width: "max-content",
                   }}
                 >
@@ -447,12 +427,7 @@ const ViewHCP = () => {
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
-                <Grid
-                  item
-                  container
-                  gap={2}
-                  justifyContent={{ xs: "left", sm: "center" }}
-                >
+                <Grid item container gap={2} justifyContent={{ xs: "left", sm: "center" }}>
                   {qualification?.degree && (
                     <Grid item>
                       <Typography variant="h5" className={classes.link}>
@@ -696,14 +671,8 @@ const ViewHCP = () => {
                     type={trasparentButton}
                     width="100%"
                     isSubmitting={submit}
-                    onClick={() =>
-                      handleUpdateProVider(reference?.reference_code)
-                    }
-                    disabled={
-                      doctorData?.providerId === reference?.reference_code
-                        ? true
-                        : false
-                    }
+                    onClick={() => handleUpdateProVider(reference?.reference_code)}
+                    disabled={doctorData?.providerId === reference?.reference_code ? true : false}
                   />
                 </Grid>
               )}

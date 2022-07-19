@@ -76,11 +76,7 @@ const CompoundSearch = ({
           }}
           placeholder={getSearchPlaceholder(searchValue.filterBy)}
           height="5rem"
-          startIcon={
-            searchValue.filterBy === "id" ? (
-              <Typography>HEALA-</Typography>
-            ) : null
-          }
+          startIcon={searchValue.filterBy === "id" ? <Typography>HEALA-</Typography> : null}
         />
       </Grid>
       <Grid item>

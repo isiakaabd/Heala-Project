@@ -147,11 +147,7 @@ const EnhancedTableAction = ({ dataPageInfo, handlePagination }) => {
         disabled={!dataPageInfo?.hasPrevPage}
         aria-label="previous page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={() => {
@@ -160,11 +156,7 @@ const EnhancedTableAction = ({ dataPageInfo, handlePagination }) => {
         disabled={!dataPageInfo?.hasNextPage}
         aria-label="next page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
+        {theme.direction === "rtl" ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={() => handlePagination(LASTPAGE)}

@@ -6,6 +6,7 @@ import { useTheme } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { formatNumber } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -249,4 +250,16 @@ export const PlanListRow = ({
       </TableCell>
     </TableRow>
   );
+};
+
+PlanListRow.propTypes = {
+  plan: PropTypes.object,
+  isItemSelected: PropTypes.bool,
+  handleSelectedRows: PropTypes.func,
+  selectedRows: PropTypes.array,
+  setSelectedRows: PropTypes.func,
+  labelId: PropTypes.string,
+  handleDeleteOpenDialog: PropTypes.func,
+  handleEditOpenDialog: PropTypes.func,
+  deleting: PropTypes.bool,
 };

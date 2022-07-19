@@ -14,7 +14,6 @@ import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams, useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
 // import ReferPatient from "components/modals/ReferPatient";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
@@ -167,12 +166,7 @@ const SinglePatient = () => {
   if (error) return <NoData error={error} />;
   else {
     return (
-      <Grid
-        container
-        direction="column"
-        className={classes.gridContainer}
-        gap={2}
-      >
+      <Grid container direction="column" className={classes.gridContainer} gap={2}>
         <Grid
           item
           justifyContent="space-between"
@@ -235,11 +229,7 @@ const SinglePatient = () => {
                 p={0}
                 to={`/patients/${patientId}/${card.path}`}
               >
-                <Card
-                  title={card.title}
-                  background={card.background}
-                  header="h4"
-                >
+                <Card title={card.title} background={card.background} header="h4">
                   {createElement(card.icon, {
                     fill: card.fill,
                     color: "success",

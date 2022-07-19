@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableRow,
-  Grid,
-  Typography,
-  TableCell,
-  Avatar,
-  Chip,
-} from "@mui/material";
+import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -64,7 +57,7 @@ const AvailabilityTable = ({ data }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { page, rowsPerPage } = useSelector((state) => state.tables);
+  // const { page, rowsPerPage } = useSelector((state) => state.tables);
 
   return (
     <Grid item container direction="column" height="100%" rowGap={2}>
@@ -134,9 +127,7 @@ const AvailabilityTable = ({ data }) => {
                           return (
                             <Chip
                               key={index}
-                              label={`${hours(time.start)} - ${hours(
-                                time.stop
-                              )} `}
+                              label={`${hours(time.start)} - ${hours(time.stop)} `}
                               className={classes.badge}
                               style={{
                                 background: theme.palette.common.lightGreen,
@@ -154,10 +145,7 @@ const AvailabilityTable = ({ data }) => {
           </EnhancedTable>
         </Grid>
       ) : (
-        <EmptyTable
-          headCells={availabilityHeadCells}
-          paginationLabel="Availability  per page"
-        />
+        <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
       )}
     </Grid>
   );

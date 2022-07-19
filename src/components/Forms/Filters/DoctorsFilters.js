@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import t from "prop-types";
+import ProPtypes from "prop-types";
 import { Grid } from "@mui/material";
 
 import Filter from ".";
@@ -21,28 +21,22 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   const [statusFilterValue, setStatusFilterValue] = useState("");
   const [providers, setProviders] = useState([]);
   const [profileFilterValues, setProfileFilterValues] = useState(
-    doctorsProfileDefaultFilterByValues
+    doctorsProfileDefaultFilterByValues,
   ); // gender cadre specialization providerId
   const [fetchProviders] = useLazyQuery(getProviders);
   const { doctorsParams, doctorsByStatusParams } = queryParams;
   const { fetchDoctors, loading, refetch, variables } = doctorsParams;
-  const {
-    byStatusLoading,
-    byStatusVaribles,
-    byStatusRefetch,
-    fetchDoctorsByStatus,
-  } = doctorsByStatusParams;
+  const { byStatusLoading, byStatusVaribles, byStatusRefetch, fetchDoctorsByStatus } =
+    doctorsByStatusParams;
 
   useEffect(() => {
     fetchProviders()
       .then(({ data }) => {
-        if (!data) throw Error("Couldn't get list of providers");
-        const providersList = (data?.getProviders?.provider || []).map(
-          (provider) => {
-            const { _id, name } = provider;
-            return { key: name, value: _id };
-          }
-        );
+        if (!data) throw Error("Couldn'ProPtypes get list of providers");
+        const providersList = (data?.getProviders?.provider || []).map((provider) => {
+          const { _id, name } = provider;
+          return { key: name, value: _id };
+        });
         setProviders(providersList);
       })
       .catch((error) => {
@@ -88,7 +82,6 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
         variables: byStatusVaribles,
       })
         .then((data) => {
-          console.log(data);
           setProfiles(data?.doctorProfilesByStatus?.profile || []);
           setPageInfo(data?.doctorProfilesByStatus?.pageInfo || {});
         })
@@ -125,8 +118,7 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
           {[
             {
               label: "By Profile",
-              onHandleChange: (e) =>
-                onFilterProfileChange("gender", e?.target?.value),
+              onHandleChange: (e) => onFilterProfileChange("gender", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("gender", ""),
               options: genderType,
               name: "gender",
@@ -137,8 +129,7 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) =>
-                onFilterProfileChange("cadre", e?.target?.value),
+              onHandleChange: (e) => onFilterProfileChange("cadre", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("cadre", ""),
               options: cadreOptions,
               name: "cadre",
@@ -149,10 +140,8 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) =>
-                onFilterProfileChange("specialization", e?.target?.value),
-              onClickClearBtn: () =>
-                onFilterProfileChange("specialization", ""),
+              onHandleChange: (e) => onFilterProfileChange("specialization", e?.target?.value),
+              onClickClearBtn: () => onFilterProfileChange("specialization", ""),
               options: specializationOptions,
               name: "specialization",
               placeholder: "By specialization",
@@ -162,8 +151,7 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) =>
-                onFilterProfileChange("providerId", e?.target?.value),
+              onHandleChange: (e) => onFilterProfileChange("providerId", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("providerId", ""),
               options: providers,
               name: "providerId",
@@ -210,9 +198,9 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   );
 };
 DoctorFilters.propTypes = {
-  setProfiles: t.func.isRequired,
-  setPageInfo: t.func.isRequired,
-  queryParams: t.object.isRequired,
+  setProfiles: ProPtypes.func,
+  setPageInfo: ProPtypes.func,
+  queryParams: ProPtypes.object,
 };
 
 export default DoctorFilters;

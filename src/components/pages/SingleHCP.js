@@ -154,13 +154,7 @@ const SingleHCP = () => {
   if (profile.loading) return <Loader />;
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        gap={2}
-        rowSpacing={2}
-        className={classes.gridContainer}
-      >
+      <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
         <Grid
           item
           container
@@ -224,15 +218,10 @@ const SingleHCP = () => {
                 component={Link}
                 to={`/hcps/${hcpId}/${card.path}`}
               >
-                <Card
-                  title={card.title}
-                  background={card.background}
-                  header="h4"
-                >
+                <Card title={card.title} background={card.background} header="h4">
                   {createElement(card.icon, {
                     fill: card.fill,
-                    color:
-                      card.id === 4 || card.id === 6 ? "success" : undefined,
+                    color: card.id === 4 || card.id === 6 ? "success" : undefined,
                     style: { fontSize: "clamp(2.5rem, 3vw,4rem)" },
                   })}
                 </Card>

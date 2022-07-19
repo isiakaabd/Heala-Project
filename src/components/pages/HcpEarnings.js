@@ -9,11 +9,7 @@ import { CircularProgressBar, Loader, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
-import {
-  financialPercent,
-  selectOptions,
-  formatNumber,
-} from "components/Utilities/Time";
+import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -208,21 +204,14 @@ const HcpEarnings = () => {
               sm: "space-around",
             }}
           >
-            <Grid
-              item
-              spacing={2}
-              sx={{ justifyContent: "center", alignItems: "center" }}
-            >
+            <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
               <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
                 <Grid
                   className={classes.iconWrapper}
                   sx={{ background: theme.palette.common.lightGreen }}
                 >
                   <Grid item>
-                    <TrendingDownIcon
-                      color="success"
-                      className={classes.cardIcon}
-                    />
+                    <TrendingDownIcon color="success" className={classes.cardIcon} />
                   </Grid>
                 </Grid>
                 <Grid item>
@@ -256,10 +245,7 @@ const HcpEarnings = () => {
                   sx={{ background: theme.palette.common.lightRed }}
                 >
                   <Grid item>
-                    <TrendingUpIcon
-                      color="error"
-                      className={classes.cardIcon}
-                    />
+                    <TrendingUpIcon color="error" className={classes.cardIcon} />
                   </Grid>
                 </Grid>
                 <Grid item>
