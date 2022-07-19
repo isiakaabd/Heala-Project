@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Fragment } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
 import { Modals, CustomButton, Loader } from "components/Utilities";
 import Copy from "components/Copy";
@@ -57,13 +56,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CaseNotes = ({ selectedMenu }) => {
+const CaseNotes = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { rowId } = useParams();
-  useEffect(() => {
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   const [caseNoteState, setCaseNoteState] = useState([]);
 
   const { loading, data, error } = useQuery(getConsult, {
@@ -151,7 +147,9 @@ const CaseNotes = ({ selectedMenu }) => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="body1">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="body1">
+                        {trucateString(referralId, 10, "front")}
+                      </Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
@@ -170,7 +168,7 @@ const CaseNotes = ({ selectedMenu }) => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="h5">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="h5">{trucateString(referralId, 10, "front")}</Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
@@ -392,14 +390,16 @@ const CaseNotes = ({ selectedMenu }) => {
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
           <Grid item container style={{ padding: "2rem 3rem" }} justifyContent="flex-end">
-            <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
-              <CustomButton
-                title="View Prescription"
-                width="100%"
-                type={buttonType}
-                onClick={handleDialogOpen}
-              />
-            </Grid>
+            {prescription && (
+              <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
+                <CustomButton
+                  title="View Prescription"
+                  width="100%"
+                  type={buttonType}
+                  onClick={handleDialogOpen}
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -588,10 +588,6 @@ const CaseNotes = ({ selectedMenu }) => {
       </Modals>
     </>
   );
-};
-
-CaseNotes.propTypes = {
-  selectedMenu: PropTypes.number,
 };
 
 export default CaseNotes;

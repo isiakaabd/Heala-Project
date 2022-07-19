@@ -10,17 +10,19 @@ import { getSinglePlan, getPlans, getUsertypess } from "components/graphQL/useQu
 import { useMutation, useQuery } from "@apollo/client";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
+import useAlert from "hooks/useAlert";
 
 export const SubscriptionModal = ({
   handleDialogClose,
   type,
-  setAlert,
   editId,
   setSingleData,
   initialValues,
   singleData,
+  refresh,
 }) => {
   const theme = useTheme();
+  const { watchFunction } = useAlert();
   const [createPlan] = useMutation(CREATE_PLAN, {
     refetchQueries: [{ query: getPlans }],
   });
@@ -77,9 +79,14 @@ export const SubscriptionModal = ({
   const onSubmit = async (values, onSubmitProps) => {
     const { name, amount, description, duration, provider } = values;
 
+    const reset = () => {
+      onSubmitProps.resetForm();
+      refresh();
+      handleDialogClose();
+    };
     if (type === "edit") {
       try {
-        await updatePlan({
+        const updatePlanRes = updatePlan({
           variables: {
             id: editId,
             name,
@@ -89,19 +96,20 @@ export const SubscriptionModal = ({
             provider,
           },
         });
-        setAlert({
-          message: "Plan successfully updated",
-          type: "success",
+
+        watchFunction(
+          "Plan edited successfully.",
+          "Couldn't edit plan. Try again.",
+          updatePlanRes,
+        ).then(() => {
+          reset();
         });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
       } catch (error) {
         console.log(error);
       }
     } else if (type === "add") {
       try {
-        await createPlan({
+        const createPlanRes = createPlan({
           variables: {
             name,
             amount: Number(amount),
@@ -110,26 +118,17 @@ export const SubscriptionModal = ({
             provider,
           },
         });
-        setAlert({
-          message: "Plan successfully created",
-          type: "success",
+        watchFunction(
+          "Plan created successfully.",
+          "Couldn't create plan. Try again.",
+          createPlanRes,
+        ).then(() => {
+          reset();
         });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
       } catch (errors) {
-        setAlert({
-          message: errors.message,
-          type: "danger",
-        });
-        setTimeout(() => {
-          setAlert(null);
-        }, 5000);
         console.log(errors);
       }
     }
-    handleDialogClose();
-    onSubmitProps.resetForm();
   };
 
   const buttonType = {
@@ -226,4 +225,6 @@ SubscriptionModal.propTypes = {
   validationSchema: PropTypes.object,
   singleData: PropTypes.object,
   setSingleData: PropTypes.func,
+  refresh: PropTypes.func,
+  label: PropTypes.string,
 };

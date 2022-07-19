@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { Grid, Typography, TableCell, TableRow, Checkbox } from "@mui/material";
+import { Grid, Typography, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
-// import displayPhoto from "assets/images/avatar.svg";
+import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -16,7 +15,7 @@ import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getEarningData } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -72,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Financetable = ({ selectedMenu, setSelectedMenu }) => {
+const Financetable = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -97,12 +96,6 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
     }
   }, [earning, data]);
 
-  useEffect(() => {
-    setSelectedMenu(8);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -111,7 +104,7 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
         <Grid item container gap={1} alignItems="center">
           <Grid item flex={1}>
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
-              Earnings table
+              Doctors Earnings table
             </Typography>
           </Grid>
           <Grid item className={classes.iconWrapper}>
@@ -124,15 +117,18 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
               headCells={financeHeader}
               rows={earning}
               paginationLabel="finance per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchEarningData}
+              changeLimit={async (e) => {
+                await changeTableLimit(fetchEarningData, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchEarningData, page, pageInfo, {});
+              }}
             >
               {earning.map((row, index) => {
-                const { createdAt, balance } = row;
-                // const { firstName, picture, lastName, specialization } = doctorData[0];
+                const { createdAt, balance, doctorData } = row;
+                const { firstName, picture, lastName } = doctorData[0] || {};
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -173,26 +169,31 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
                     >
                       {timeMoment(createdAt)}
                     </TableCell>
-                    {/* <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={firstName ? firstName : "image"}
-                            src={doctorData ? picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {doctorData && `${firstName} ${lastName}`}
-                        </span>
-                      </div>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {doctorData && doctorData[0] !== {} ? (
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={firstName ? firstName : "image"}
+                              src={doctorData ? picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData && `${firstName && firstName} ${lastName && lastName}`}
+                          </span>
+                        </div>
+                      ) : (
+                        "No name"
+                      )}
                     </TableCell>
+                    {/* 
                     <TableCell align="left" className={classes.tableCell}>
                       {specialization ? specialization : "No Value"}
                     </TableCell> */}
@@ -214,13 +215,6 @@ const Financetable = ({ selectedMenu, setSelectedMenu }) => {
       </>
     </Grid>
   );
-};
-
-Financetable.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Financetable;

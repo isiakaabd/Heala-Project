@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { Typography, Grid, Avatar, Divider } from "@mui/material";
+import { Typography, Grid, Avatar, Divider, Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
@@ -32,17 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
+const ViewReferral = () => {
   const classes = useStyles();
   const { referralId } = useParams();
   const { loading, data, error } = useQuery(getRefferal, {
     variables: { id: referralId },
   });
-  useEffect(() => {
-    setSelectedMenu(9);
 
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   const [referral, setReferral] = useState([]);
 
   useEffect(() => {
@@ -53,11 +48,10 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const {
-    specialization,
     type,
     reason,
     note,
-    testType,
+    tests,
     createdAt,
     patientData,
     doctorData,
@@ -157,8 +151,15 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
                 Test Type:
               </Typography>
             </Grid>
-            <Grid item>
-              <Typography variant="h5">{testType ? testType : "No Value"}</Typography>
+            <Grid item container flexWrap="wrap" columnGap={2} rowGap={2}>
+              {tests &&
+                tests.map((test, index) => {
+                  return (
+                    <Grid item key={index}>
+                      <Chip label={test?.name} />
+                    </Grid>
+                  );
+                })}
             </Grid>
           </Grid>
 
@@ -193,16 +194,6 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid item container xs={4} direction="column" gap={2}>
-            <Grid item>
-              <Typography variant="body1" className={classes.title}>
-                Specialization
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">{specialization}</Typography>
-            </Grid>
-          </Grid>
           <Grid item container xs={4} gap={2} direction={{ sm: "column", xs: "column" }}>
             <Grid item>
               <Typography variant="body1" className={classes.title}>
@@ -230,13 +221,6 @@ const ViewReferral = ({ selectedMenu, setSelectedMenu }) => {
       </Grid>
     </Grid>
   );
-};
-
-ViewReferral.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewReferral;

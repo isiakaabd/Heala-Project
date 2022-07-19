@@ -31,7 +31,6 @@ const DisplayProfile = ({
   statusId,
   specialization,
   status,
-  /* setSelectedSubMenu, */
   type,
 }) => {
   const classes = useStyles();
@@ -108,7 +107,6 @@ const DisplayProfile = ({
                 ? `/patients/${patientId}/profile/chat`
                 : `/hcps/${hcpId}/profile/chat`
             }
-            /* onClick={() => setSelectedSubMenu(6)} */
           />
         </Grid>
       ) : null}
@@ -125,12 +123,6 @@ DisplayProfile.propTypes = {
   status: PropTypes.string,
   chatPath: PropTypes.string,
   type: PropTypes.string,
-  setChatMediaActive: PropTypes.func,
-  /* setSelectedSubMenu: PropTypes.func,
-  selectedMenu: PropTypes.number,
-  setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default DisplayProfile;

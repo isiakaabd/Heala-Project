@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -54,8 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpProfile = (props) => {
-  const { selectedMenu, setSelectedMenu, chatMediaActive, setChatMediaActive } = props;
+const HcpProfile = () => {
   const classes = useStyles();
 
   const { hcpId } = useParams();
@@ -73,13 +71,6 @@ const HcpProfile = (props) => {
       setDoctorProfile(data.doctorProfile);
     }
   }, [data, hcpId]);
-
-  useLayoutEffect(() => {
-    setSelectedMenu(2);
-    setChatMediaActive(false);
-
-    // eslint-disable-next-line
-  }, [selectedMenu, chatMediaActive]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -103,21 +94,16 @@ const HcpProfile = (props) => {
           fullName={`${firstName} ${lastName}`}
           displayPhoto={picture}
           medicalTitle="Medical ID"
-          statusId={dociId && dociId.split("-")[1]}
+          statusId={dociId?.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
           chatPath={`/hcps/${hcpId}/profile/chat`}
-          setChatMediaActive={setChatMediaActive}
-          selectedMenu={selectedMenu}
           type="doctor"
         />
       </Grid>
       {/* PERSONAL INFO SECTION */}
       <Grid item container spacing={4} justifyContent="space-between">
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard
-            text="Gender"
-            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
-          />
+          <ProfileCard text="Gender" value={gender} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
           <ProfileCard text="Date Of Birth" value={dob ? dateMoment(dob) : "DOB not Provided"} />
@@ -169,13 +155,6 @@ const HcpProfile = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-HcpProfile.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
 };
 
 export default HcpProfile;

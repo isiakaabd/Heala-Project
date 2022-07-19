@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect, useCallback } from "react";
+import { debounce } from "lodash";
 import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
 import { Link } from "react-router-dom";
 import { TableRow, TableCell } from "@mui/material";
-import { Loader, Search, CustomButton } from "components/Utilities";
+import { Loader, CustomButton } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { dateMoment, timeMoment } from "components/Utilities/Time";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,7 +18,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useLazyQuery } from "@apollo/client";
 import { getMessage } from "components/graphQL/useQuery";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */ }) => {
+const Messages = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState({
@@ -111,10 +111,10 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
     active: theme.palette.primary.dark,
   };
 
-  const [searchMessage, setSearchMessage] = useState("");
+  /*   const [searchMessage, setSearchMessage] = useState(""); */
   const [message, setMessage] = useState([]);
 
-  const [fetchMessages, { loading, data, error, refetch }] = useLazyQuery(getMessage);
+  const [fetchMessages, { loading, data, error }] = useLazyQuery(getMessage);
 
   useEffect(() => {
     fetchMessages({
@@ -125,12 +125,12 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
     });
   }, [fetchMessages, pageInfo]);
 
-  const onChange = async (e) => {
+  /*   const onChange = async (e) => {
     setSearchMessage(e);
-    if (e == "") {
+    if (e === "") {
       refetch();
     } else refetch({ recipient: e });
-  };
+  }; */
 
   useEffect(() => {
     if (data) {
@@ -141,11 +141,9 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
 
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  //eslint-disable-next-line
+  const debouncer = useCallback(debounce(fetchMessages, 3000), []);
 
-  useEffect(() => {
-    setSelectedMenu(5);
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
   else {
@@ -158,7 +156,7 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
           container
           justifyContent="space-between"
         >
-          <Grid item flex={1}>
+          {/* <Grid item flex={1}>
             <Search
               value={searchMessage}
               onChange={(e) => onChange(e.target.value)}
@@ -166,7 +164,7 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
               "
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
@@ -183,11 +181,14 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
               headCells={messagesHeadCells}
               rows={message}
               paginationLabel="Message per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchMessages, { first: e });
+              }}
               fetchData={fetchMessages}
-              dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                handlePageChange(fetchMessages, page, pageInfo, {});
+              }}
             >
               {message
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -290,13 +291,6 @@ const Messages = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
       </Grid>
     );
   }
-};
-
-Messages.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default Messages;

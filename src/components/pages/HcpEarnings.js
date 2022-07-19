@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { NoData } from "components/layouts";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
@@ -100,13 +99,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpEarnings = (props) => {
+const HcpEarnings = () => {
   const classes = useStyles();
   // const theme = useTheme();
 
   const { hcpId } = useParams();
-
-  const { selectedMenu, setSelectedMenu } = props;
 
   const [form, setForm] = useState("");
   const { data, error, loading, refetch } = useQuery(getEarningStats, {
@@ -146,12 +143,6 @@ const HcpEarnings = (props) => {
     }
   }, [form, data, datas]);
   // const classes = useStyles();
-
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -207,7 +198,11 @@ const HcpEarnings = (props) => {
             container
             alignItems="center"
             rowGap={4}
-            justifyContent={{ md: "space-around", xs: "flex-start", sm: "space-around" }}
+            justifyContent={{
+              md: "space-around",
+              xs: "flex-start",
+              sm: "space-around",
+            }}
           >
             <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
               <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
@@ -283,11 +278,6 @@ const HcpEarnings = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-HcpEarnings.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default HcpEarnings;

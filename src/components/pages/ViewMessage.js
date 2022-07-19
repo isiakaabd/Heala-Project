@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -29,22 +28,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
+const ViewMessage = () => {
   const classes = useStyles();
   const { messageId } = useParams();
   const { loading, data, error } = useQuery(getAMessage, {
     variables: { id: messageId },
   });
 
-  useEffect(() => {
-    setSelectedMenu(5);
-
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
   const [message, setMessage] = useState([]);
   useEffect(() => {
     if (data) setMessage(data.getMessage);
   }, [message, data]);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   const { body, recipientData, subject } = message;
@@ -66,8 +61,8 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {recipientData
-                  ? `${recipientData.firstName} ${recipientData.lastName}`
+                {recipientData && Object.keys(recipientData).length > 0
+                  ? `${recipientData?.firstName} ${recipientData?.lastName}`
                   : "No Value"}
               </Typography>
             </Grid>
@@ -75,7 +70,11 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
           <Grid item>
             <Chip
               variant="outlined"
-              label={recipientData ? recipientData?.dociId : "No Heala ID"}
+              label={
+                recipientData && Object.keys(recipientData).length > 0
+                  ? recipientData.dociId
+                  : "No Heala ID"
+              }
               className={classes.badge}
             />
           </Grid>
@@ -84,19 +83,12 @@ const ViewMessage = ({ selectedMenu, setSelectedMenu }) => {
         <Divider />
         <Grid item className={classes.gridWrapper}>
           <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-            {body}
+            {body ? body : "No Value"}
           </Typography>
         </Grid>
       </Grid>
     </Grid>
   );
-};
-
-ViewMessage.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default ViewMessage;

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-import PropTypes from "prop-types";
+
 import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
 import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
-import { CustomButton, Loader, Modals, Search, FilterList } from "components/Utilities";
+import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -23,7 +23,7 @@ import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import { deleteUserType } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -139,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
+const UserTypes = () => {
   const classes = useStyles();
   const theme = useTheme();
   const buttonType = {
@@ -171,7 +171,7 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error, refetch }] = useLazyQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error /*refetch*/ }] = useLazyQuery(getUserTypes);
 
   useEffect(() => {
     fetchUserTypes({
@@ -181,12 +181,12 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
     });
   }, [fetchUserTypes, pageInfo]);
 
-  const onChange = async (e) => {
-    setSearchHcp(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ recipient: e });
-  };
+  // const onChange = async (e) => {
+  //   setSearchHcp(e);
+  //   if (e == "") {
+  //     refetch();
+  //   } else refetch({ recipient: e });
+  // };
   const [userType, setUsertypes] = useState([]);
 
   useEffect(() => {
@@ -203,11 +203,7 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
     description: "",
   };
 
-  useEffect(() => {
-    setSelectedMenu(12);
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-  const [searchHcp, setSearchHcp] = useState("");
+  // const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
   const [editId, setEditId] = useState(null);
@@ -216,7 +212,7 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
     setEdit(false);
   };
   const [alert, setAlert] = useState(null);
-  const handleDialogOpens1 = () => setIsOpens(true);
+  /*   const handleDialogOpens1 = () => setIsOpens(true); */
   const initialValues1 = {
     name: "",
     userTypeId: "",
@@ -258,14 +254,14 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
           </Alert>
         )}
         <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ sm: "row", xs: "column" }}>
-          <Grid item flex={{ sm: 1, xs: 1 }}>
+          {/* <Grid item flex={{ sm: 1, xs: 1 }}>
             <Search
               value={searchHcp}
               placeholder="Type to search User types..."
               onChange={(e) => onChange(e.target.value)}
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           <Grid
             item
             flex={{ sm: 1, xs: 1 }}
@@ -275,9 +271,7 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
             gap={1}
             justifyContent="space-between"
           >
-            <Grid item>
-              <FilterList title="Filter" onClick={handleDialogOpens1} />
-            </Grid>
+            <Grid item>{/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}</Grid>
             <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
@@ -294,11 +288,14 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
               headCells={partnersHeadCells2}
               rows={userType}
               paginationLabel="Patients per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchUserTypes}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchUserTypes, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchUserTypes, page, pageInfo, {});
+              }}
             >
               {userType
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -467,12 +464,6 @@ const UserTypes = ({ selectedMenu, setSelectedMenu }) => {
       </Modals>
     </>
   );
-};
-UserTypes.propTypes = {
-  selectedMenu: PropTypes.number.isRequired,
-  setSelectedMenu: PropTypes.func.isRequired,
-  /* selectedSubMenu: PropTypes.number.isRequired,
-  setSelectedSubMenu: PropTypes.func.isRequired, */
 };
 
 export default UserTypes;

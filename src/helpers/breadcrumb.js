@@ -38,6 +38,7 @@ export const patterns = {
   "Earnings table": "finance/earnings",
   Payouts: "finance/payouts",
   "Pending payouts": "finance/pending",
+  "Subscription earnings": "finance/sub-income",
 
   // REFERRALS PATTERNS
   Referrals: "referrals",
@@ -50,6 +51,7 @@ export const patterns = {
   Settings: "settings",
   Administrator: "settings/administrator",
   "Roles management": "settings/management",
+  Role: "settings/management/{id}",
   "Permissions management": "settings/permissions",
   "List management": "settings/list-management",
   Tests: "settings/list-management/tests",

@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Grid, Typography, TableRow, TableCell, Avatar, Checkbox } from "@mui/material";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -75,22 +74,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PendingPayout = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu,  setSelectedSubMenu */,
-}) => {
+const PendingPayout = () => {
   const classes = useStyles();
   const theme = useTheme();
 
   const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  useEffect(() => {
-    setSelectedMenu(8);
-    /* setSelectedSubMenu(9); */
-
-    // eslint-disable-next-line
-  }, [selectedMenu /*  selectedSubMenu */]);
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -131,6 +121,7 @@ const PendingPayout = ({
             page={page}
             paginationLabel="payout per page"
             hasCheckbox={true}
+            hasPagination={false}
           >
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
               const isItemSelected = isSelected(row.id, selectedRows);
@@ -225,13 +216,6 @@ const PendingPayout = ({
       )}
     </Grid>
   );
-};
-
-PendingPayout.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
 };
 
 export default PendingPayout;

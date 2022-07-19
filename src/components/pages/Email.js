@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
-import { Loader, Search, CustomButton } from "components/Utilities";
+import { Loader, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-// import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import { useTheme } from "@mui/material/styles";
 import { dateMoment } from "components/Utilities/Time";
@@ -16,11 +14,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
-// import DownloadSharpIcon from "@mui/icons-material/DownloadSharp";
-// import { onFilterValueChange } from "helpers/filterHelperFunctions";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-// import { emailPageDefaultFilterValues } from "helpers/mockData";
-//roleFilterBy
 const useStyles = makeStyles((theme) => ({
   chip: {
     "&.MuiChip-root": {
@@ -84,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Email = ({ selectedMenu, setSelectedMenu }) => {
+const Email = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [
@@ -110,7 +104,7 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [response] = useState("");
-  const [searchMail, setSearchMail] = useState("");
+  /* const [searchMail, setSearchMail] = useState(""); */
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -118,12 +112,6 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
     active: theme.palette.primary.dark,
     disabled: theme.palette.common.black,
   };
-
-  useEffect(() => {
-    setSelectedMenu(6);
-
-    //   eslint-disable-next-line
-  }, [selectedMenu]);
 
   // const [filterValues, setFilterValues] = useState(emailPageDefaultFilterValues);
 
@@ -147,14 +135,14 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
           </Grid>
         ) : null}
         <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
-          <Grid item flex={1}>
+          {/* <Grid item flex={1}>
             <Search
               value={searchMail}
               onChange={(e) => setSearchMail(e.target.value)}
               placeholder="Enter your email here..."
               height="5rem"
             />
-          </Grid>
+          </Grid> */}
           {/*<Grid item>
             <Filter
               onHandleChange={(e) =>
@@ -291,9 +279,3 @@ const Email = ({ selectedMenu, setSelectedMenu }) => {
 };
 
 export default Email;
-Email.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
-};

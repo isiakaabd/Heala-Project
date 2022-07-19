@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Chip, Grid, Typography } from "@mui/material";
 import { NoData } from "components/layouts";
@@ -12,7 +11,7 @@ import { doctor } from "components/graphQL/useQuery";
 import { Loader, DisplayProfile } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 
-const DoctorVerificationProfile = ({ selectedMenu, setChatMediaActive, chatMediaActive }) => {
+const DoctorVerificationProfile = () => {
   const useStyles = makeStyles((theme) => ({
     gridsWrapper: {
       background: "#fff",
@@ -116,8 +115,6 @@ const DoctorVerificationProfile = ({ selectedMenu, setChatMediaActive, chatMedia
           medicalTitle="Medical ID"
           statusId={dociId && dociId.split("-")[1]}
           specialization={specialization ? specialization : "Not assigned"}
-          setChatMediaActive={setChatMediaActive}
-          selectedMenu={selectedMenu}
           type=""
         />
       </Grid>
@@ -247,16 +244,4 @@ const DoctorVerificationProfile = ({ selectedMenu, setChatMediaActive, chatMedia
   );
 };
 
-DoctorVerificationProfile.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  chatMediaActive: PropTypes.number,
-  setChatMediaActive: PropTypes.func,
-  /* scopedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  doctorView: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setScopedMenu: PropTypes.func,
-  setDoctorView: PropTypes.func, */
-};
 export default DoctorVerificationProfile;

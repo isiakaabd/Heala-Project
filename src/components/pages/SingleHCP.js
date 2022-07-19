@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material/styles";
 import { useQuery, useMutation } from "@apollo/client";
 import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { Card, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
@@ -13,7 +12,6 @@ import { ReactComponent as ConsultationIcon } from "assets/images/consultation.s
 import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { Link, useParams, useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
 import { deleteDoctor } from "components/graphQL/Mutation";
 //
 
@@ -65,8 +63,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SingleHCP = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const SingleHCP = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -108,17 +105,17 @@ const SingleHCP = (props) => {
     },
     {
       id: 2,
-      title: "Appointments",
+      title: "Availability",
       background: theme.palette.common.lightGreen,
-      path: "appointments",
-      icon: CalendarIcon,
+      path: "availability",
+      icon: ConsultationIcon,
       fill: theme.palette.common.green,
     },
     {
       id: 3,
-      title: "Availability",
+      title: "Consultations",
       background: theme.palette.common.lightRed,
-      path: "availability",
+      path: "consultations",
       icon: ConsultationIcon,
       fill: theme.palette.common.red,
     },
@@ -140,11 +137,11 @@ const SingleHCP = (props) => {
     },
     {
       id: 6,
-      title: "Consultations",
+      title: "Appointments",
       background: theme.palette.common.lightGreen,
-      path: "consultations",
-      icon: AssignmentIcon,
-      fill: theme.palette.common.red,
+      path: "appointments",
+      icon: CalendarIcon,
+      fill: theme.palette.common.green,
     },
   ];
 
@@ -154,11 +151,6 @@ const SingleHCP = (props) => {
     active: "#f4f4f4",
   };
 
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   if (profile.loading) return <Loader />;
   return (
     <>
@@ -249,11 +241,6 @@ const SingleHCP = (props) => {
       />
     </>
   );
-};
-
-SingleHCP.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default SingleHCP;

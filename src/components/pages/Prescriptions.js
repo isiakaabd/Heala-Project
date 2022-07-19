@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Typography, Grid, Avatar, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -42,17 +41,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Prescriptions = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const Prescriptions = () => {
   const classes = useStyles();
 
   const { patientId } = useParams();
-
-  useEffect(() => {
-    setSelectedMenu(1);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   const { loading, error, data } = useQuery(getConsultations, {
     variables: {
@@ -253,11 +245,6 @@ const Prescriptions = (props) => {
       )}
     </Grid>
   );
-};
-
-Prescriptions.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default Prescriptions;

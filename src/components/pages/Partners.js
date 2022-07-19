@@ -1,45 +1,87 @@
 import React, { useState, useEffect } from "react";
-import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import FormikControl from "components/validation/FormikControl";
-import { Button, Checkbox, TableCell, Avatar, TableRow, Grid } from "@mui/material";
-import { FilterList, CustomButton, Loader, Modals, Search } from "components/Utilities";
-import DeletePartner from "components/modals/DeleteOrDisable";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useTheme } from "@mui/material/styles";
-import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FormikControl from "components/validation/FormikControl";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { Button, Checkbox, TableCell, Avatar, TableRow, Grid, Typography } from "@mui/material";
+
+import useAlert from "hooks/useAlert";
+import { isSelected } from "helpers/isSelected";
+import { categoryFilterOptions, defaultPageInfo } from "helpers/mockData";
+import { useStyles } from "styles/partnersPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { useQuery, useMutation } from "@apollo/client";
-import { getPartners, getSingleProvider, getProviders } from "components/graphQL/useQuery";
-import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
+import {
+  changeTableLimit,
+  deleteItem,
+  deleteVar,
+  filterData,
+  handlePageChange,
+  trucateProfileLink,
+} from "helpers/filterHelperFunctions";
+import DeletePartner from "components/modals/DeleteOrDisable";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
-import { useStyles } from "styles/partnersPageStyles";
-import { useSnackbar } from "notistack";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
+import {
+  getPartners,
+  getSingleProvider,
+  getProviders,
+  DELETE_PARTNER,
+} from "components/graphQL/useQuery";
+import { CustomButton, Loader, Modals } from "components/Utilities";
+import {
+  addNewPartnerValidationSchema,
+  addPartnerValidationSchema,
+  filterPartnersValidationSchema,
+} from "helpers/validationSchemas";
+import Copy from "components/Copy";
+import Filter from "components/Forms/Filters";
 
 const Partners = () => {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
-  const [dropDown, setDropDown] = useState([]);
-  const { data: da, loading: load } = useQuery(getProviders);
-
-  useEffect(() => {
-    if (da) {
-      const datas = da.getProviders.provider;
-      setDropDown(
-        datas &&
-          datas.map((i) => {
-            return { key: i.name, value: i._id };
-          }),
-      );
-    }
-  }, [da]);
-
-  const [addPartnerCat] = useMutation(addPartnerCategory);
   const theme = useTheme();
+  const classes = useStyles();
+  const { displayAlert } = useAlert();
+  /* const [setCategoryDatas] = useState([]); */
+  const { setSelectedRows } = useActions();
+  const { enqueueSnackbar } = useSnackbar();
+  const [partner, setPartners] = useState([]);
+  const [dropDown, setDropDown] = useState([]);
+  const [addPartners] = useMutation(addPartner);
+  const categoryData = useQuery(getSingleProvider);
+  const [delete_partner] = useLazyQuery(DELETE_PARTNER);
+  /*   const [searchPartner, setSearchPartner] = useState(""); */
+  const [isDeleting, setIsDeleting] = useState({});
+  const [addPartnerCat] = useMutation(addPartnerCategory);
+  const { data: da, loading: load } = useQuery(getProviders);
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const [openAddPartner, setOpenAddPartner] = useState(false);
+  const [openFilterPartner, setOpenFilterPartner] = useState(false);
+  const [openDeletePartner, setOpenDeletePartner] = useState(false);
+  const [partnerToDelete, setPartnerToDelete] = useState(null);
+  const [partnerFilterValues, setPartnerFilterValues] = useState({
+    category: "",
+  });
+  const { selectedRows /* page */ } = useSelector((state) => state.tables);
+  const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
+  const [fetchPartners, { loading, error, refetch, variables }] = useLazyQuery(getPartners, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const specializations = [
+    { key: "Diagnostics", value: "Diagnostics" },
+    { key: "Pharmacy", value: "Pharmacy" },
+    { key: "Hospital", value: "Hospital" },
+  ];
+  const specializations5 = [
+    { key: "Diagnostics", value: "Diagnostics" },
+    { key: "Pharmacy", value: "Pharmacy" },
+    { key: "Hospital", value: "Hospital" },
+  ];
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -59,14 +101,6 @@ const Partners = () => {
     category: "",
   };
 
-  const validationSchema = Yup.object({
-    Name: Yup.string("Select your Name").trim().required("Name is required"),
-    cadre: Yup.string("Select your Cadre").trim().required("Cadre is required"),
-    date: Yup.string("Date your hospital").required("Date is required"),
-    specialization: Yup.string("select your specialization")
-      .trim()
-      .required("specialization is required"),
-  });
   const initialValues1 = {
     name: "",
     email: "",
@@ -74,51 +108,93 @@ const Partners = () => {
     image: null,
     provider: "",
   };
+
   const initialValues2 = {
     category: "",
   };
-  const validationSchema2 = Yup.object({
-    category: Yup.string("select your Category").trim().required("Category is required"),
-  });
-  const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your name").trim().required("name is required"),
-    image: Yup.string("Upload a single Image").required("Image is required"),
-    email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
-    provider: Yup.string("select a provider").trim(),
-    specialization: Yup.string("select your Specialization").required("Specialization is required"),
-  });
-  const [addPartners] = useMutation(addPartner);
+
+  const setTableData = async (response, errMsg) => {
+    console.log("entered");
+    response
+      .then((res) => {
+        const { data } = res;
+        if (data) {
+          setPartners(data?.getPartners?.data || []);
+          setPageInfo(data?.getPartners?.pageInfo || defaultPageInfo);
+        }
+        if (!data) {
+          setPartners(res?.getPartners?.data || []);
+          setPageInfo(res?.getPartners?.pageInfo || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
+
+  const fetchPartnersData = async () => {
+    const res = fetchPartners({
+      variables: {
+        first: pageInfo.limit,
+      },
+    });
+    setTableData(res, "Couldn't fetch Partners data");
+  };
+
+  useEffect(() => {
+    fetchPartnersData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (da) {
+      const datas = da.getProviders.provider;
+      setDropDown(
+        datas &&
+          datas.map((i) => {
+            return { key: i.name, value: i._id };
+          }),
+      );
+    }
+  }, [da]);
+
+  useEffect(() => {
+    (partner || []).map((p) => {
+      const newIsDeleting = isDeleting;
+      setIsDeleting({ [p._id]: false, ...newIsDeleting });
+      return null;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [partner]);
 
   const onSubmit = (values) => {
     console.log(values);
   };
+
   const onSubmit2 = async (values, onSubmitProps) => {
     const { category } = values;
 
-    await addPartnerCat({
-      variables: {
-        name: category,
-      },
-    });
-    setAddPartnerCategory(false);
-    onSubmitProps.resetForm();
+    try {
+      const addCatRes = await addPartnerCat({
+        variables: {
+          name: category,
+        },
+      });
+
+      if (addCatRes?.addPartner?.partner) {
+        setAddPartnerCategory(false);
+        onSubmitProps.resetForm();
+        const res = refetch();
+        setTableData(res, "Couldn't fetch partners.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const onConfirm = async () => {
-    // try {
-    //   await disableUser({
-    //     variables: { id: hcpId },
-    //     refetchQueries: [{ query: getDoctorsProfile }],
-    //   });
-    //   history.push("/hcps");
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // console.log(values);
-  };
+
   const onSubmit1 = async (values, onSubmitProps) => {
     let { name, email, specialization, provider, image } = values;
-    console.log(provider);
-
     name = name.trim();
 
     try {
@@ -145,59 +221,72 @@ const Partners = () => {
     }
   };
 
-  const [searchPartner, setSearchPartner] = useState("");
-  const [openFilterPartner, setOpenFilterPartner] = useState(false);
-  const [openAddPartner, setOpenAddPartner] = useState(false);
-  const [openDeletePartner, setOpenDeletePartner] = useState(false);
-  const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
-
-  const specializations = [
-    { key: "Diagnostics", value: "Diagnostics" },
-    { key: "Pharmacy", value: "Pharmacy" },
-    { key: "Hospital", value: "Hospital" },
-  ];
-  const specializations5 = [
-    { key: "Diagnostics", value: "Diagnostics" },
-    { key: "Pharmacy", value: "Pharmacy" },
-    { key: "Hospital", value: "Hospital" },
-  ];
-  const [setCategoryDatas] = useState([]);
-  const { loading, error, data, refetch } = useQuery(getPartners, {
-    notifyOnNetworkStatusChange: true,
-  });
-  const categoryData = useQuery(getSingleProvider);
-  const [partner, setPartners] = useState([]);
-  const onChange = async (e) => {
+  /* const onChange = async (e) => {
     setSearchPartner(e);
     if (e == "") {
       refetch();
     } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
-  };
-  useEffect(() => {
-    if (data) {
-      setPartners(data.getPartners.data);
-    }
-  }, [data, categoryData, setCategoryDatas]);
+  }; */
 
-  const { selectedRows, page } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
+  const onFilterCategoryChange = async (value) => {
+    try {
+      deleteVar(variables);
+      setPartnerFilterValues({ ...partnerFilterValues, category: value });
+      const filterVariables = { category: value };
+
+      const res = filterData(filterVariables, {
+        fetchData: fetchPartners,
+        refetch: refetch,
+        variables: variables,
+      });
+      await setTableData(res, "couldn't filter table.");
+    } catch (error) {
+      console.error(error);
+      refresh(setPartnerFilterValues, "");
+    }
+  };
+
+  const refresh = async (setFilterValue, defaultVal) => {
+    displayAlert("error", `Something went wrong while filtering. Try again.`);
+    setFilterValue(defaultVal);
+
+    deleteVar(variables);
+
+    const res = refetch();
+    await setTableData(res, "couldn't filter table.");
+  };
 
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
-  if (loading || load) return <Loader />;
   return (
     <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
       <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
-        <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
+        {/* <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
           <Search
             value={searchPartner}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Type to search Partner..."
             height="5rem"
           />
-        </Grid>
-        <Grid item container justifyContent="space-between" flex={{ sm: 1, xs: 1, md: 1 }}>
+        </Grid> */}
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          flex={{ sm: 1, xs: 1, md: 1 }}
+        >
           <Grid item>
-            <FilterList title="Filter" onClick={() => setOpenFilterPartner(true)} />
+            <Filter
+              label="By Category"
+              onHandleChange={(e) => onFilterCategoryChange(e?.target?.value)}
+              onClickClearBtn={() => onFilterCategoryChange("")}
+              options={categoryFilterOptions}
+              name="category"
+              placeholder="None"
+              value={partnerFilterValues.category}
+              hasClearBtn={true}
+              disable={loading}
+            />
           </Grid>
 
           <Grid item>
@@ -210,88 +299,129 @@ const Partners = () => {
           </Grid>
         </Grid>
       </Grid>
-      {partner.length > 0 ? (
+      {load || loading ? (
+        <Loader />
+      ) : partner.length > 0 ? (
         <Grid item container height="100%" direction="column">
           <EnhancedTable
             headCells={partnersHeadCells}
             rows={partner}
-            page={page}
-            type="editRole"
             paginationLabel="Partner per page"
             hasCheckbox={true}
+            changeLimit={async (e) => {
+              const res = changeTableLimit(fetchPartners, {
+                first: e,
+              });
+              await setTableData(res, "Failed to change table limit.");
+            }}
+            dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              const res = handlePageChange(fetchPartners, page, pageInfo, {});
+              await setTableData(res, "Failed to change page.");
+            }}
           >
-            {partner
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
+            {partner.map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row._id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ maxWidth: "20rem" }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ maxWidth: "20rem" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${row.name}`}
-                            src={row.logoImageUrl}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
+                    <div
                       style={{
-                        color: theme.palette.common.grey,
-                        maxWidth: "20rem",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "left",
                       }}
                     >
-                      {row.category}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt={`Display Photo of ${row.name}`}
+                          src={row.logoImageUrl}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                      maxWidth: "20rem",
+                    }}
+                  >
+                    {row.category}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                      maxWidth: "20rem",
+                    }}
+                  >
+                    {row?.profileUrl ? (
+                      <Typography
+                        style={{
+                          color: theme.palette.common.grey,
+                          maxWidth: "20rem",
+                        }}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        {trucateProfileLink(row?.profileUrl)}
+                        <div style={{ marginLeft: "1rem" }}>
+                          <Copy name="Profile Link" text={row?.profileUrl} />
+                        </div>
+                      </Typography>
+                    ) : (
+                      "No Link"
+                    )}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    {isDeleting[row._id] ? (
+                      <Loader />
+                    ) : (
                       <Button
                         variant="contained"
                         disableRipple
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         endIcon={<DeleteIcon color="error" />}
-                        onClick={() => setOpenDeletePartner(true)}
+                        onClick={() => {
+                          setPartnerToDelete(row?._id || "");
+                          setOpenDeletePartner(true);
+                        }}
                       >
                         Delete partner
                       </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </EnhancedTable>
         </Grid>
       ) : (
@@ -308,7 +438,7 @@ const Partners = () => {
           initialValues={initialValues}
           onSubmit={onSubmit}
           validateOnBlur={false}
-          validationSchema={validationSchema}
+          validationSchema={filterPartnersValidationSchema}
           validateOnChange={false}
           validateOnMount={false}
         >
@@ -376,13 +506,12 @@ const Partners = () => {
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
-          validationSchema={validationSchema1}
+          validationSchema={addNewPartnerValidationSchema}
           validateOnChange={false}
           validateOnMount={false}
           validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty, values, setFieldValue }) => {
-            console.log(values);
             return (
               <Form style={{ marginTop: "3rem" }}>
                 <Grid container direction="column" gap={4}>
@@ -395,7 +524,7 @@ const Partners = () => {
                             label="Name"
                             id="name"
                             name="name"
-                            placeholder="Enter last name"
+                            placeholder="Enter Partner name"
                           />
                         </Grid>
                       </Grid>
@@ -417,9 +546,9 @@ const Partners = () => {
                             control="select"
                             options={
                               [
-                                { key: "Diagnostics", value: "Diagnostics" },
-                                { key: "Pharmacy", value: "Pharmacy" },
-                                { key: "Hospital", value: "Hospital" },
+                                { key: "Diagnostics", value: "diagnostics" },
+                                { key: "Pharmacy", value: "pharmacy" },
+                                { key: "Hospital", value: "hospital" },
                               ] || ""
                             }
                             name="specialization"
@@ -428,7 +557,7 @@ const Partners = () => {
                           />
                         </Grid>
                       </Grid>
-                      {values.specialization === "Hospital" ? (
+                      {values.specialization === "hospital" ? (
                         <Grid item container>
                           <Grid item container>
                             <FormikControl
@@ -484,7 +613,7 @@ const Partners = () => {
         <Formik
           initialValues={initialValues2}
           onSubmit={onSubmit2}
-          validationSchema={validationSchema2}
+          validationSchema={addPartnerValidationSchema}
           validateOnChange={false}
           validateOnMount={false}
           validateOnBlur={false}
@@ -526,8 +655,24 @@ const Partners = () => {
         setOpen={setOpenDeletePartner}
         title="Delete Partner"
         btnValue="delete"
-        onConfirm={onConfirm}
+        onConfirm={async () => {
+          const res = deleteItem(
+            delete_partner,
+            partnerToDelete,
+            setPartnerToDelete,
+            refetch,
+            Typography,
+            enqueueSnackbar,
+            setIsDeleting,
+            isDeleting,
+          );
+          setOpenDeletePartner(false);
+          await setTableData(res, "Couldn't refetch Partners");
+        }}
         confirmationMsg="delete partner"
+        onCancel={() => {
+          setPartnerToDelete(null);
+        }}
       />
     </Grid>
   );

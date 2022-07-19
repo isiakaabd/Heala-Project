@@ -39,7 +39,7 @@ export const AddTestForm = ({ onSuccess }) => {
         onSuccess();
       }
     } catch (err) {
-      handleError(err, enqueueSnackbar, Typography);
+      handleError(err, enqueueSnackbar);
       console.log("failed to add test", err);
     }
   };

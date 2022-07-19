@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Grid, Chip, Divider, Typography, Avatar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewMail = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelectedSubMenu  */ }) => {
+const ViewMail = () => {
   const { emailId } = useParams();
 
   const classes = useStyles();
@@ -41,11 +40,6 @@ const ViewMail = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
   const details = emailData[emailId];
   const parseTextArea = ReactHTMLParser(details.textarea);
 
-  useEffect(() => {
-    setSelectedMenu(6);
-    /* setSelectedSubMenu(7); */
-    //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
   return (
     <Grid container direction="column">
       <Grid item style={{ marginBottom: "3rem" }}>
@@ -106,13 +100,6 @@ const ViewMail = ({ selectedMenu, setSelectedMenu /* selectedSubMenu, setSelecte
       </Grid>
     </Grid>
   );
-};
-
-ViewMail.propTypes = {
-  selectedMenu: PropTypes.number,
-  selectedSubMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* setSelectedSubMenu: PropTypes.func, */
 };
 
 export default ViewMail;

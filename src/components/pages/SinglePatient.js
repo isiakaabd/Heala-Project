@@ -14,7 +14,6 @@ import { ReactComponent as UserIcon } from "assets/images/user.svg";
 import { ReactComponent as PrescriptionIcon } from "assets/images/prescription.svg";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Link, useParams, useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
 // import ReferPatient from "components/modals/ReferPatient";
 import { useQuery, useMutation } from "@apollo/client";
 import { getPatients } from "components/graphQL/useQuery";
@@ -68,8 +67,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const SinglePatient = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const SinglePatient = () => {
   const history = useHistory();
 
   const classes = useStyles();
@@ -99,22 +97,6 @@ const SinglePatient = (props) => {
       fill: theme.palette.common.red,
     },
     {
-      id: 2,
-      title: "Appointments",
-      background: theme.palette.common.lightGreen,
-      path: "appointments",
-      icon: ConsultationIcon,
-      fill: theme.palette.common.green,
-    },
-    {
-      id: 3,
-      title: "Prescriptions",
-      background: theme.palette.common.lightRed,
-      path: "prescriptions",
-      icon: PrescriptionIcon,
-      fill: theme.palette.common.red,
-    },
-    {
       id: 4,
       title: "Medical Records",
       background: theme.palette.common.lightGreen,
@@ -131,13 +113,29 @@ const SinglePatient = (props) => {
       fill: theme.palette.common.red,
     },
     {
+      id: 3,
+      title: "Prescriptions",
+      background: theme.palette.common.lightRed,
+      path: "prescriptions",
+      icon: PrescriptionIcon,
+      fill: theme.palette.common.red,
+    },
+    {
+      id: 2,
+      title: "Appointments",
+      background: theme.palette.common.lightGreen,
+      path: "appointments",
+      icon: ConsultationIcon,
+      fill: theme.palette.common.green,
+    },
+    /* {
       id: 6,
       title: "Medications",
       background: theme.palette.common.lightGreen,
       path: "medications",
       icon: UserIcon,
       fill: theme.palette.common.green,
-    },
+    }, */
   ];
 
   const trasparentButton = {
@@ -164,10 +162,6 @@ const SinglePatient = (props) => {
 
   const [openDisablePatient, setOpenDisablePatient] = useState(false);
 
-  useEffect(() => {
-    setSelectedMenu(1);
-    // eslint-disable-next-line
-  }, [selectedMenu]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   else {
@@ -257,11 +251,6 @@ const SinglePatient = (props) => {
       </Grid>
     );
   }
-};
-
-SinglePatient.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default memo(SinglePatient);

@@ -8,8 +8,8 @@ import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { Card } from "components/Utilities";
-import { useQuery } from "@apollo/client";
-import { getEarningStats } from "components/graphQL/useQuery";
+import { useLazyQuery } from "@apollo/client";
+import { getFinanceStats } from "components/graphQL/useQuery";
 import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
@@ -97,31 +97,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Finance = () => {
-  const [form, setForm] = useState("");
-  const { data, error, loading, refetch } = useQuery(getEarningStats, {
-    variables: { q: "365" },
-  });
-  const [totalEarning, setTotalEarning] = useState([]);
-  const [totalPayouts, setTotalPayouts] = useState([]);
-  const financialValue = financialPercent(totalEarning, totalPayouts);
-  const [finances, setFinances] = useState(financialValue);
-
-  const onChange = async (e) => {
-    setForm(e.target.value);
-    await refetch({ q: e.target.value });
-  };
-
   const theme = useTheme();
-  useEffect(() => {
-    if (data) {
-      const { totalEarnings, totalPayout } = data.getEarningStats;
-      setTotalEarning(totalEarnings);
-      setTotalPayouts(totalPayout);
-      const value = financialPercent(totalEarnings, totalPayout);
-      setFinances(value);
-    }
-  }, [form, data]);
   const classes = useStyles();
+  const [range, setRange] = useState("365");
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpenditure, setTotalExpenditure] = useState(0);
+  const financialValue = financialPercent(totalIncome, totalExpenditure);
+  const [finances, setFinances] = useState(financialValue);
+  const [fetchFinanceStats, { error, loading }] = useLazyQuery(getFinanceStats);
+
+  useEffect(() => {
+    try {
+      fetchFinanceStats({ variables: { q: range } }).then(({ data }) => {
+        if (!data) throw Error("couldn't fetch data");
+        const { subscriptionIncome, totalPayout } = data.getEarningStats;
+        setTotalIncome(subscriptionIncome);
+        setTotalExpenditure(totalPayout);
+        const value = financialPercent(subscriptionIncome, totalPayout);
+        setFinances(value);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [range, fetchFinanceStats]);
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
 
@@ -145,8 +144,8 @@ const Finance = () => {
           <Grid item>
             <FormSelect
               placeholder="Select days"
-              value={form}
-              onChange={onChange}
+              value={range}
+              onChange={(e) => setRange(e?.target?.value)}
               options={selectOptions}
               name="finance"
             />
@@ -174,7 +173,11 @@ const Finance = () => {
               container
               alignItems="center"
               rowGap={4}
-              justifyContent={{ md: "space-around", xs: "flex-start", sm: "space-around" }}
+              justifyContent={{
+                md: "space-around",
+                xs: "flex-start",
+                sm: "space-around",
+              }}
             >
               <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
                 <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
@@ -196,7 +199,7 @@ const Finance = () => {
                       >
                         N{""}
                       </span>
-                      {formatNumber(totalEarning)}
+                      {formatNumber(totalIncome)}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -230,7 +233,7 @@ const Finance = () => {
                       >
                         N{""}
                       </span>
-                      {formatNumber(+totalPayouts)}
+                      {formatNumber(+totalExpenditure)}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -238,7 +241,7 @@ const Finance = () => {
                         color: theme.palette.common.lightGrey,
                       }}
                     >
-                      Total withdrawal
+                      Total Expenditure
                     </Typography>
                   </Grid>
                 </Grid>
@@ -255,7 +258,7 @@ const Finance = () => {
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/finance/payouts" style={{ textDecoration: "none" }}>
-              <Card title="Payouts Table" background={theme.palette.common.lightRed}>
+              <Card title="Doctor Payout" background={theme.palette.common.lightRed}>
                 <TrendingUpIcon color="error" className={classes.cardIcon} />
               </Card>
             </Link>
@@ -265,7 +268,7 @@ const Finance = () => {
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
             <Link to="/finance/earnings" style={{ textDecoration: "none" }}>
-              <Card title="Earnings Table" background={theme.palette.common.lightGreen}>
+              <Card title="Doctor Earnings" background={theme.palette.common.lightGreen}>
                 <Grid className={classes.iconWrapper}>
                   <TrendingDownIcon color="success" className={classes.cardIcon} />
                 </Grid>
@@ -276,8 +279,8 @@ const Finance = () => {
         {/* 3 */}
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
-            <Link to="/finance/payout" style={{ textDecoration: "none" }}>
-              <Card title="Payout Table" background={theme.palette.common.lightGreen}>
+            <Link to="/finance/sub-income" style={{ textDecoration: "none" }}>
+              <Card title="Subscription Income" background={theme.palette.common.lightGreen}>
                 <Grid className={classes.iconWrapper}>
                   <TrendingDownIcon color="success" className={classes.cardIcon} />
                 </Grid>

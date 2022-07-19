@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import PropTypes from "prop-types";
 import { Grid, Divider, Typography } from "@mui/material";
 import ChipInput from "material-ui-chip-input";
 import { PreviousButton, CustomButton } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useActions } from "components/hooks/useActions";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import * as Yup from "yup";
@@ -83,10 +81,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateEmail = ({
-  selectedMenu,
-  setSelectedMenu /* selectedSubMenu, setSelectedSubMenu */,
-}) => {
+const CreateEmail = () => {
   const isEvent = (event) =>
     event && (event instanceof Event || event.nativeEvent instanceof Event);
   const history = useHistory();
@@ -94,13 +89,6 @@ const CreateEmail = ({
   const theme = useTheme();
 
   const { emailData } = useActions();
-
-  useEffect(() => {
-    setSelectedMenu(6);
-    /* setSelectedSubMenu(7); */
-
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -287,11 +275,5 @@ const Wrapper = styled.div`
 const ChipWrapper = styled.div`
   font-size: 1.4rem;
 `;
-CreateEmail.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func, */
-};
 
 export default CreateEmail;

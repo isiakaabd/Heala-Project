@@ -3,7 +3,6 @@ import { Loader, CustomButton, Modals } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import PropTypes from "prop-types";
 import {
   Grid,
   Typography,
@@ -32,7 +31,7 @@ import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -116,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const referralOptions = ["Hello", "World", "Goodbye", "World"];
-const Permission = ({ selectedMenu, setSelectedMenu }) => {
+const Permission = () => {
   const [singlePermission, setSinglePermission] = useState();
 
   const checkbox = [
@@ -221,12 +220,6 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
   }, [fetchPermissions, pageInfo]);
 
   const [deletPlan] = useMutation(DELETE_PERMISSION);
-
-  useEffect(() => {
-    setSelectedMenu(11);
-
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu */]);
   const [permission, setPermission] = useState([]);
 
   useEffect(() => {
@@ -273,11 +266,14 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
               headCells={PermissionHeader}
               rows={Permission}
               paginationLabel="permission per page"
-              handleChangePage={fetchMoreData}
               hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchPermissions}
+              changeLimit={async (e) => {
+                changeTableLimit(fetchPermissions, { first: e });
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                handlePageChange(fetchPermissions, page, pageInfo, {});
+              }}
             >
               {permission
                 // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -489,10 +485,3 @@ const Permission = ({ selectedMenu, setSelectedMenu }) => {
   );
 };
 export default Permission;
-Permission.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /*  selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
-};

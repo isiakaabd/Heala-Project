@@ -70,10 +70,6 @@ export const adminHeader = [
     id: 1,
     label: "Role",
   },
-  {
-    id: 2,
-    label: "",
-  },
 ];
 export const roleHeader = [
   {
@@ -129,10 +125,10 @@ export const financeHeader = [
     id: 1,
     label: "Time",
   },
-  // {
-  //   id: 2,
-  //   label: "Name",
-  // },
+  {
+    id: 2,
+    label: "Name",
+  },
 
   // {
   //   id: 3,
@@ -165,10 +161,6 @@ export const referralHeader = [
   {
     id: 8,
     label: "Type",
-  },
-  {
-    id: 18,
-    label: "Category",
   },
   {
     id: 6,
@@ -211,15 +203,10 @@ export const payoutHeader = [
     id: 1,
     label: "Time",
   },
-  // {
-  //   id: 2,
-  //   label: " Name",
-  // },
-
-  // {
-  //   id: 3,
-  //   label: "Specialization",
-  // },
+  {
+    id: 2,
+    label: "Name",
+  },
   {
     id: 4,
     label: "Amount Paid out",
@@ -386,7 +373,7 @@ export const hcpsHeadCells = [
   { id: 1, label: "Name" },
   { id: 2, label: "Category" },
   { id: 3, label: "Consultations" },
-  { id: 4, label: "Hospital" },
+  { id: 4, label: "Provider" },
   { id: 5, label: "Status" },
   { id: 6, label: "" },
 ];
@@ -395,7 +382,8 @@ export const hcpsHeadCells = [
 export const partnersHeadCells = [
   { id: 0, label: "Partner's Name" },
   { id: 1, label: "Category" },
-  { id: 2, label: "" },
+  { id: 2, label: "Deep link" },
+  { id: 3, label: "" },
 ];
 export const partnersHeadCells2 = [
   { id: 0, label: "Provider" },
@@ -413,8 +401,9 @@ export const messagesHeadCells = [
 ];
 // Doctor Patients HEADCELLS
 export const hcpPatientsHeadCells = [
-  { id: 0, label: "User ID" },
+  { id: 0, label: "Patient ID" },
   { id: 1, label: "Patient Name" },
+  { id: 2, label: "Gender" },
   { id: 2, label: "" },
 ];
 
@@ -422,4 +411,6 @@ export const testTableHeadCells = [
   { id: 0, label: "Test Name" },
   { id: 1, label: "Price (Naira)" },
   { id: 2, label: "Turnaround time (TAT)" },
+  { id: 3, label: "" },
+  { id: 4, label: "" },
 ];

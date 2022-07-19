@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
@@ -25,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Medications = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const Medications = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -54,14 +52,6 @@ const Medications = (props) => {
       setPageInfo(data.getMedications.pageInfo);
     }
   }, [data]);
-
-  useEffect(() => {
-    setSelectedMenu(1);
-    /* setSelectedSubMenu(2);
-    setSelectedPatientMenu(6); */
-
-    // eslint-disable-next-line
-  }, [selectedMenu /*  selectedSubMenu, selectedPatientMenu */]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -171,15 +161,6 @@ const Medications = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-Medications.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default Medications;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { CustomButton, FilterList, Modals, Loader } from "components/Utilities";
+import { CustomButton, /* FilterList, */ Modals, Loader } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-import PropTypes from "prop-types";
 import {
   Grid,
   Alert,
@@ -32,7 +31,7 @@ import { useParams } from "react-router-dom";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
 import { updateAppointment } from "components/graphQL/Mutation";
-import { changeTableLimit, fetchMoreData } from "helpers/filterHelperFunctions";
+import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.css-1jilxo7-MuiTableCell-root": {
@@ -95,15 +94,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const filterOptions = [
+/* const filterOptions = [
   { id: 0, value: "Name" },
   { id: 1, value: "Date" },
   { id: 2, value: "Description" },
-];
+]; */
 
-const PatientAppointment = (props) => {
+const PatientAppointment = () => {
   const [updateAppoint] = useMutation(updateAppointment);
-  const { selectedMenu, setSelectedMenu } = props;
   const [deleteAppointments] = useMutation(deleteAppointment);
   const [pageInfo, setPageInfo] = useState([]);
   const [alert, setAlert] = useState(null);
@@ -157,7 +155,7 @@ const PatientAppointment = (props) => {
   const [isPatient, setIsPatient] = useState(false);
   const [isPatients, setIsPatients] = useState(false);
   const [id, setId] = useState(null);
-  const handlePatientOpen = () => setIsPatient(true);
+  /* const handlePatientOpen = () => setIsPatient(true); */
   const handlePatientClose = () => setIsPatient(false);
   const handlePatientCloses = () => setIsPatients(false);
   const { patientId } = useParams();
@@ -237,12 +235,6 @@ const PatientAppointment = (props) => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
 
-  useEffect(() => {
-    setSelectedMenu(1);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-
   const buttonType = {
     background: theme.palette.common.black,
     hover: theme.palette.primary.main,
@@ -291,9 +283,13 @@ const PatientAppointment = (props) => {
             <Grid item flex={1}>
               <Typography variant="h2">Appointments</Typography>
             </Grid>
-            <Grid item>
-              <FilterList onClick={handlePatientOpen} options={filterOptions} title="Filter" />
-            </Grid>
+            {/* <Grid item>
+              <FilterList
+                onClick={handlePatientOpen}
+                options={filterOptions}
+                title="Filter"
+              />
+            </Grid> */}
           </Grid>
           {patientAppointment.length > 0 ? (
             <Grid item container height="100%" direction="column">
@@ -301,11 +297,14 @@ const PatientAppointment = (props) => {
                 headCells={consultationsHeadCells2}
                 rows={patientAppointment}
                 paginationLabel="Patients per page"
-                handleChangePage={fetchMoreData}
                 hasCheckbox={true}
-                changeLimit={changeTableLimit}
-                fetchData={getPatientsAppointment}
+                changeLimit={async (e) => {
+                  await changeTableLimit(getPatientsAppointment, { first: e });
+                }}
                 dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(getPatientsAppointment, page, pageInfo);
+                }}
               >
                 {patientAppointment
                   // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -553,15 +552,6 @@ const PatientAppointment = (props) => {
       />
     </>
   );
-};
-
-PatientAppointment.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedPatientMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func, */
 };
 
 export default PatientAppointment;

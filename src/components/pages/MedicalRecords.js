@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography } from "@mui/material";
 import { Loader, ProfileCard } from "components/Utilities";
 import { useParams } from "react-router-dom";
@@ -8,8 +7,7 @@ import { calculateBMI } from "components/Utilities/bMI";
 import { getProfile, findAllergies, getLabResult } from "components/graphQL/useQuery";
 import { NoData } from "components/layouts";
 
-const MedicalRecords = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const MedicalRecords = () => {
   const { patientId } = useParams();
   const [patientProfile, setPatientProfile] = useState(undefined);
 
@@ -38,11 +36,6 @@ const MedicalRecords = (props) => {
   }, [alergy, patients, patientId, labResult, allergyResult.data, labResults.data]);
 
   useEffect(() => {
-    setSelectedMenu(1);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
-  useEffect(() => {
     if (data && data.profile) {
       setPatientProfile(data.profile);
     }
@@ -54,14 +47,8 @@ const MedicalRecords = (props) => {
     const value =
       alergies.length > 0 && alergies?.map((alergy) => alergy.name).filter((i) => i !== undefined);
 
-    const labResult = lab?.map((alergy, index) => alergy);
-    //  <a
-    //   rel="noreferrer"
-    //   key={alergy._id}
-    //   className={classes.link}
-    //   href={alergy.url}
-    //   target="_blank"
-    // ></a>
+    const labResult = lab?.map((alergy) => alergy);
+
     return (
       <Grid
         container
@@ -124,10 +111,6 @@ const MedicalRecords = (props) => {
       </Grid>
     );
   } else return <NoData />;
-};
-MedicalRecords.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
 };
 
 export default MedicalRecords;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
-import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { Grid, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Success from "components/modals/Success";
+import { handleError, showSuccessMsg } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     borderRadius: "1rem",
     minHeight: "14.1rem",
+    paddingInline: "1rem",
     boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
@@ -105,8 +107,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
+const ViewHCP = () => {
   const { viewId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const { loading, data, error } = useQuery(verification, {
     variables: { id: viewId },
   });
@@ -148,26 +151,32 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     reason: Yup.string("Enter Reason ").required("Reason is required"),
   });
   const onSubmit = async (values) => {
-    const { reason } = values;
-
-    await reject({
-      variables: {
-        reason,
-        id: viewId,
-      },
-      refetchQueries: [
-        {
-          query: getVerification,
+    try {
+      const { reason } = values;
+      const trimedReason = reason.trim();
+      console.log("trimmed reason", trimedReason);
+      await reject({
+        variables: {
+          reason: trimedReason,
+          id: viewId,
         },
-      ],
-    });
-    setCancel(false);
-
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-      history.push("/verification");
-    }, 3000);
+        refetchQueries: [
+          {
+            query: getVerification,
+          },
+        ],
+      });
+      setCancel(false);
+      showSuccessMsg(enqueueSnackbar, Typography, "Reject verification successful.");
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+        history.push("/verification");
+      }, 3000);
+    } catch (error) {
+      console.log("Error from reject verification", error);
+      handleError(error, enqueueSnackbar);
+    }
   };
 
   const theme = useTheme();
@@ -226,7 +235,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     status,
     // eslint-disable-next-line
   } = respondData;
-  console.log(doctorData);
 
   const [verify, { data: verifyData }] = useMutation(verifyHCP);
   const [button, setButtonValue] = useState(respondData.status); //button
@@ -258,11 +266,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
     }
   };
   const classes = useStyles();
-  useEffect(() => {
-    setSelectedMenu(7);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -302,7 +305,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
             gridTemplateColumns={{
               md: "repeat(4,minmax(15rem,1fr))",
               sm: "repeat(3,minmax(15rem,auto))",
-              xs: "repeat(2,minmax(15rem,1fr))",
+              xs: "repeat(2,1fr)",
             }}
             className={classes.cardContainer}
           >
@@ -405,7 +408,11 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
           container
           display="grid"
           gap={3}
-          gridTemplateColumns={{ md: "repeat(2,1fr)", sm: "repeat(2,1fr)", xs: "repeat(1,1fr)" }}
+          gridTemplateColumns={{
+            md: "repeat(2,1fr)",
+            sm: "repeat(2,1fr)",
+            xs: "repeat(1,1fr)",
+          }}
         >
           <Grid item>
             <Grid
@@ -420,7 +427,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Typography variant="h4">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
-                <Grid item container gap={2}>
+                <Grid item container gap={2} justifyContent={{ xs: "left", sm: "center" }}>
                   {qualification?.degree && (
                     <Grid item>
                       <Typography variant="h5" className={classes.link}>
@@ -468,9 +475,13 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
                 <Grid
                   item
                   container
-                  justifyContent="center"
                   alignItems="center"
                   flexWrap="wrap"
+                  justifyContent={{
+                    md: "center",
+                    sm: "center",
+                    xs: "flex-start",
+                  }}
                   gap={2}
                 >
                   {license.number && (
@@ -521,10 +532,14 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Grid
                 item
                 container
-                justifyContent="center"
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
+                gap={2}
                 alignItems="center"
                 flexWrap="wrap"
-                gap={2}
               >
                 {yearbook && yearbook?.graduation_year !== "Invalid date" ? (
                   <Typography className={classes.link} variant="h5">
@@ -573,7 +588,16 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
               <Typography variant="h4">Alumni</Typography>
             </Grid>
             {alumni_association?.facebook_group_name ? (
-              <Grid item container gap={2}>
+              <Grid
+                item
+                container
+                justifyContent={{
+                  md: "center",
+                  sm: "center",
+                  xs: "flex-start",
+                }}
+                gap={2}
+              >
                 {alumni_association.facebook_group_name && (
                   <a
                     href={alumni_association.image}
@@ -617,8 +641,13 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
             <Grid
               item
               container
-              justifyContent="center"
-              gap={{ md: 10, sm: 6, xs: 4 }}
+              // justifyContent="center"
+              justifyContent={{
+                md: "center",
+                sm: "space-between",
+                xs: "space-around",
+              }}
+              gap={2}
               flexWrap="nowrap"
             >
               {reference?.reference_code ? (
@@ -659,6 +688,7 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
           justifyContent="center"
           alignItems="center"
           gap={2}
+          flexWrap="nowrap"
           className={classes.cardGrid}
         >
           <Grid item>
@@ -733,15 +763,6 @@ const ViewHCP = ({ selectedMenu, setSelectedMenu }) => {
       />
     </>
   );
-};
-
-ViewHCP.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  doctorView: PropTypes.number,
-  setDoctorView: PropTypes.func, */
 };
 
 export default ViewHCP;

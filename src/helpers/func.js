@@ -22,7 +22,6 @@ export const arrangeItems = (array) => {
     }
   });
   finalArray.shift();
-  console.log(finalArray);
   return finalArray;
 };
 
@@ -38,5 +37,23 @@ export const removeEmptyStringValues = (obj) => {
   } catch (err) {
     console.err("error from removeEmptyStringValues FN", err);
     return obj;
+  }
+};
+
+export const setSideNav = (appNavData, pathname, setNav) => {
+  try {
+    const pathArr = pathname.split("/");
+    if (pathArr.length < 2) {
+      setNav(0);
+      return;
+    }
+
+    appNavData.map((data) => {
+      if (data.path === `/${pathArr[1]}`) {
+        setNav(data?.id);
+      }
+    });
+  } catch (error) {
+    console.log("Something sent wrong with setSideNav FN", error);
   }
 };

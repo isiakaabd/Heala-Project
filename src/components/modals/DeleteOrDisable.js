@@ -54,7 +54,7 @@ const DeleteOrDisable = ({
 
   const disableButton = {
     background: theme.palette.primary.main,
-    hover: theme.palette.primary.light,
+    hover: theme.palette.common.danger,
     active: theme.palette.primary.dark,
   };
 

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { PropTypes } from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { hours } from "components/Utilities/Time";
+
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
     background: "#fff",
@@ -13,12 +14,6 @@ const useStyles = makeStyles((theme) => ({
 
 const AvailabilityCard = ({ availability }) => {
   const classes = useStyles();
-  const [state, setState] = useState([]);
-  useEffect(() => {
-    setState(availability.dates[0]);
-  }, [availability.dates]);
-
-  console.log(state.times);
   return (
     <Grid container direction="column" className={classes.cardGrid}>
       <Grid item style={{ padding: "2rem" }}>
@@ -27,7 +22,7 @@ const AvailabilityCard = ({ availability }) => {
             <Typography variant="body1">Day:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body1">{state?.day} </Typography>
+            <Typography variant="body1">{availability?.day} </Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -38,7 +33,7 @@ const AvailabilityCard = ({ availability }) => {
             <Typography variant="body1">Time: </Typography>
           </Grid>
           <Grid container>
-            {state?.times?.map((time, index) => {
+            {availability?.times?.map((time, index) => {
               return (
                 <Grid
                   container
@@ -57,7 +52,7 @@ const AvailabilityCard = ({ availability }) => {
                         <Typography variant="body1">-</Typography>
                       </Grid>
                       <Grid item>
-                        <Typography variant="body1">{`${hours(time?.start)}`} </Typography>
+                        <Typography variant="body1">{`${hours(time?.stop)}`} </Typography>
                       </Grid>
                     </Grid>
                   </Grid>

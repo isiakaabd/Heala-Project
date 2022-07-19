@@ -1,6 +1,6 @@
 import React from "react";
 import t from "prop-types";
-import { CustomButton } from "../Utilities";
+import { CustomButton } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 
 export const ClearFiltersBtn = ({ title, onHandleClick }) => {

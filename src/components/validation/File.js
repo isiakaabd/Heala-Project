@@ -1,11 +1,19 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useSnackbar } from "notistack";
+import { makeStyles } from "@mui/styles";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-import LinearWithValueLabel from "components/Utilities/LinearProgress";
-import PropTypes from "prop-types";
-import { FormControl, FormLabel, Grid, Avatar, Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import axios from "axios";
+import { FormControl, FormLabel, Grid, Avatar, Button, Typography } from "@mui/material";
+
+import { Loader } from "components/Utilities";
+import { RequiredIcon } from "components/Typography";
+import {
+  compressAndUploadImage,
+  showErrorMsg,
+  showSuccessMsg,
+  uploadImage,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -13,11 +21,14 @@ const useStyles = makeStyles((theme) => ({
       ...theme.typography.FormLabel,
     },
   },
+
   uploadBtn: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
       background: "#f2f2f2",
       boxShadow: "none",
+      borderRadius: "5px",
+      fontSize: "1.4rem",
       color: theme.palette.common.black,
 
       "&:hover": {
@@ -33,72 +44,85 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Formiks = ({ name, setFieldValue, onBlur }) => {
-  const [preview, setPreview] = useState("");
-  const [progress, setProgress] = useState();
+  const fileRef = useRef(null);
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const [preview, setPreview] = useState("");
+  const [isCompleted, setIsCompleted] = React.useState(null);
+  const [progress, setProgress] = useState();
+  const [isCompressing, setIsCompressing] = React.useState(false);
 
-  const uploadImage = async (file) => {
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      const data = await axios({
-        method: "post",
-        url: "https://api.heala.io/rest/media/upload/",
-        data: form,
-        headers: {
-          "Content-Type": `multipart/form-data; boundary=${form._boundary}`,
-        },
-        onUploadProgress: (data) => {
-          //Set the progress value to show the progress bar
-          setProgress(Math.round((100 * data.loaded) / data.total));
-        },
-      });
-      return data.data.data.mediaUrl; //data.data.mediaUrl
-    } catch (error) {
-      console.error(error);
+  React.useEffect(() => {
+    isCompleted === "passed" &&
+      showSuccessMsg(enqueueSnackbar, Typography, "Image upload complete.");
+    if (isCompleted === "failed") {
+      showErrorMsg(enqueueSnackbar, "Image upload failed, Try again.");
     }
-  };
+    //eslint-disable-next-line
+  }, [isCompleted]);
 
   const onChange = async (e) => {
     const file = e.target.files[0];
-    const files = await uploadImage(file);
-    setPreview(files);
+    setProgress(1);
+    compressAndUploadImage(
+      file,
+      uploadImage,
+      setPreview,
+      name,
+      setFieldValue,
+      setProgress,
+      setIsCompressing,
+      setIsCompleted,
+    );
 
-    setFieldValue(name, files);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = (e) => setPreview(reader.result);
   };
-  const fileRef = useRef(null);
+
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item>
-        <FormControl fullWidth>
-          <Grid item container>
-            <input
-              accept="image/*"
-              onChange={onChange}
-              type="file"
-              name={name}
-              onBlur={onBlur}
-              hidden
-              ref={fileRef}
-            />
-            <Button
-              variant="contained"
-              onClick={() => fileRef.current.click()}
-              component="span"
-              className={classes.uploadBtn}
-            >
-              Upload Photo
-            </Button>
+      {progress < 100 || isCompressing ? (
+        <Grid container item direction="row" justifyContent="center" alignItems="center">
+          <Typography display={"inline"}>
+            {isCompressing ? "Compressing image" : "Uploading image"}
+          </Typography>
+          <Loader />
+        </Grid>
+      ) : (
+        <>
+          <Grid item>
+            <FormControl fullWidth>
+              <Grid item container>
+                <input
+                  accept="image/*"
+                  onChange={onChange}
+                  type="file"
+                  name={name}
+                  onBlur={onBlur}
+                  hidden
+                  ref={fileRef}
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => fileRef.current.click()}
+                  component="span"
+                  className={classes.uploadBtn}
+                >
+                  Upload Photo
+                </Button>
+              </Grid>
+            </FormControl>
           </Grid>
-        </FormControl>
-      </Grid>
-      <Grid item>
-        {progress < 100 ? (
-          <LinearWithValueLabel progres={progress} />
-        ) : (
-          preview && <Avatar src={preview} />
-        )}
-      </Grid>
+          <Grid item>
+            {preview && isCompleted !== "failed" ? (
+              <Avatar sx={{ backgroundColor: "#eaeaea" }} src={preview} />
+            ) : (
+              ""
+            )}
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 };
@@ -107,18 +131,20 @@ Formiks.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
-  children: PropTypes.node,
-  name: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
   onBlur: PropTypes.func,
   setFieldValue: PropTypes.func,
 };
 
 const Files = (props) => {
-  const { name, label, ...rest } = props;
+  const { name, label, isRequired, ...rest } = props;
   const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
-      <FormLabel className={classes.FormLabel}>{label}</FormLabel>
+      <FormLabel className={classes.FormLabel}>
+        {label} {isRequired && <RequiredIcon />}
+      </FormLabel>
       <Field name={name} as={Formiks} label={label} {...rest} />
       <ErrorMessage name={name} component={TextError} />
     </Grid>
@@ -127,9 +153,10 @@ const Files = (props) => {
 
 Files.propTypes = {
   label: PropTypes.string,
-  name: PropTypes.string,
-  options: PropTypes.array,
+  name: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired,
   placeholder: PropTypes.string,
+  isRequired: PropTypes.bool,
 };
 
 export default Files;

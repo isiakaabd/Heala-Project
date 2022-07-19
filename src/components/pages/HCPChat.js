@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Grid, Typography, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { CustomButton, Loader, PreviousButton } from "components/Utilities";
@@ -58,14 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HCPChat = ({
-  selectedMenu,
-  setSelectedMenu,
-  /* selectedSubMenu,
-  setSelectedSubMenu,
-  setSelectedHcpMenu,
-  setSelectedScopedMenu, */
-}) => {
+const HCPChat = () => {
   const { hcpId } = useParams();
 
   const classes = useStyles();
@@ -118,18 +110,9 @@ const HCPChat = ({
       console.log(error);
     }
     onSubmitProps.resetForm();
-    history.push(`/hcps/${hcpId}/profile`);
-
-    /* setSelectedScopedMenu(0); */
+    history.goBack();
   };
 
-  useEffect(() => {
-    setSelectedMenu(2);
-    /* setSelectedSubMenu(3);
-    setSelectedHcpMenu(1);
-    setSelectedScopedMenu(3); */
-    //   eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, setSelectedHcpMenu, setSelectedScopedMenu */]);
   if (loading) return <Loader />;
   return (
     <Formik
@@ -234,17 +217,6 @@ const HCPChat = ({
       }}
     </Formik>
   );
-};
-
-HCPChat.propTypes = {
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func, */
 };
 
 export default HCPChat;

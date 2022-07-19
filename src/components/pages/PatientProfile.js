@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import { NoData } from "components/layouts";
 import { Grid } from "@mui/material";
@@ -58,12 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PatientProfile = ({
-  chatMediaActive,
-  setChatMediaActive,
-  setSelectedSubMenu,
-  selectedMenu,
-}) => {
+const PatientProfile = () => {
   const { patientId } = useParams();
   const doci = localStorage.getItem("userDociId");
   const { loading, data, error } = useQuery(getProfile, {
@@ -98,7 +92,10 @@ const PatientProfile = ({
   const history = useHistory();
   const onConfirm = async () => {
     try {
-      await disableUser({ variables: { id: patientId }, refetchQueries: [{ query: getPatients }] });
+      await disableUser({
+        variables: { id: patientId },
+        refetchQueries: [{ query: getPatients }],
+      });
       history.push("/patients");
     } catch (error) {
       console.log(error);
@@ -112,11 +109,6 @@ const PatientProfile = ({
     hover: "#fafafa",
     active: "#f4f4f4",
   };
-  useLayoutEffect(() => {
-    setChatMediaActive(false);
-
-    // eslint-disable-next-line
-  }, [chatMediaActive]);
 
   if (loading || emailLoading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -142,18 +134,12 @@ const PatientProfile = ({
           statusId={dociId?.split("-")[1]}
           status={status ? status : "No Value"}
           chatPath={`/patients/${patientId}/profile/chat`}
-          setChatMediaActive={setChatMediaActive}
-          setSelectedSubMenu={setSelectedSubMenu}
-          selectedMenu={selectedMenu}
         />
       </Grid>
       {/* <Grid item container> */}
       <Grid item container spacing={4} justifyContent="space-between">
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard
-            text="Gender"
-            value={gender == 0 ? "Male" : gender == 1 ? "Female" : "Prefer not to say"}
-          />
+          <ProfileCard text="Gender" value={gender} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
           <ProfileCard text="Created At" value={dateMoment(createdAt)} />
@@ -222,15 +208,6 @@ const PatientProfile = ({
       </Grid>
     </Grid>
   );
-};
-
-PatientProfile.propTypes = {
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
-  setSelectedSubMenu: PropTypes.func,
-  selectedMenu: PropTypes.func,
-  setSelectedPatientMenu: PropTypes.func,
-  setSelectedScopedMenu: PropTypes.func,
 };
 
 export default PatientProfile;

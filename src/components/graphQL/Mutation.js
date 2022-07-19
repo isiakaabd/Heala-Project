@@ -718,3 +718,37 @@ export const addTest = gql`
     }
   }
 `;
+
+export const uploadTests = gql`
+  mutation uploadDiagnosticLabTests($fileUrl: String!) {
+    uploadDiagnosticLabTests(data: { fileUrl: $fileUrl, bucket: "heala-media" }) {
+      result {
+        fileUrl
+        totalInserted
+        bucket
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const UPDATE_TEST = gql`
+  mutation updateDiagnosticLabTest($id: String!, $name: String!, $price: Float!, $tat: String!) {
+    updateDiagnosticLabTest(data: { id: $id, name: $name, price: $price, tat: $tat }) {
+      diagnosticLabTest {
+        _id
+        partner
+        name
+        price
+        tat
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

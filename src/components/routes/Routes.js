@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import PrivateRoute from "components/routes/PrivateRoute";
 import { CircularChart } from "components/Utilities";
@@ -57,184 +56,61 @@ import {
 } from "components/pages";
 import ListManagment from "components/pages/ListManagment";
 import TestList from "components/pages/TestList";
+import SubscriptionIncome from "components/pages/SubscriptionIncome";
 
-const Routes = (props) => {
-  const { selectedMenu, setSelectedMenu, chatMediaActive, setChatMediaActive } = props;
-
+const Routes = () => {
   return (
     <Switch>
       {/*  =====  DASHBORD ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        path={["/", "/dashboard"]}
-        exact
-        component={Dashboard}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
+      <PrivateRoute path={["/", "/dashboard"]} exact component={Dashboard} />
 
       {/*  =====  PATENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/patients" component={Patients} />
 
-      <PrivateRoute
-        exact
-        path="/patients/:patientId"
-        component={SinglePatient}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/patients/:patientId" component={SinglePatient} />
 
-      <PrivateRoute
-        exact
-        path="/patients/:patientId/profile"
-        component={PatientProfile}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
+      <PrivateRoute exact path="/patients/:patientId/profile" component={PatientProfile} />
 
-      <PrivateRoute
-        exact
-        path="/patients/:patientId/profile/chat"
-        component={Chat}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
+      <PrivateRoute exact path="/patients/:patientId/profile/chat" component={Chat} />
 
-      <PrivateRoute
-        path="/patients/:patientId/consultations"
-        exact
-        component={Consultations}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/patients/:patientId/consultations" exact component={Consultations} />
 
-      <PrivateRoute
-        path="/patients/:patientId/prescriptions"
-        component={Prescriptions}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/patients/:patientId/prescriptions" component={Prescriptions} />
 
-      <PrivateRoute
-        path="/patients/:patientId/appointments"
-        component={PatientAppointment}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/patients/:patientId/appointments" component={PatientAppointment} />
 
-      <PrivateRoute
-        path="/patients/:patientId/records"
-        component={MedicalRecords}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/patients/:patientId/records" component={MedicalRecords} />
 
       <PrivateRoute
         path="/patients/:patientId/consultations/case-notes/:rowId"
         component={CaseNotes}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
       />
 
-      <PrivateRoute
-        path="/patients/:patientId/medications"
-        component={Medications}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/patients/:patientId/medications" component={Medications} />
 
       {/*  =====  DOCTORS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hcps" component={Hcps} />
 
-      <PrivateRoute
-        exact
-        path="/hcps/:hcpId"
-        component={SingleHCP}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/hcps/:hcpId" component={SingleHCP} />
 
-      <PrivateRoute
-        exact
-        path="/hcps/:hcpId/profile"
-        component={HcpProfile}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
+      <PrivateRoute exact path="/hcps/:hcpId/profile" component={HcpProfile} />
 
-      <PrivateRoute
-        exact
-        path="/hcps/:hcpId/profile/chat"
-        component={HCPChat}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
-      <PrivateRoute
-        exact
-        path="/hcps/:hcpId/verification"
-        component={ViewDoctorVerification}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        chatMediaActive={chatMediaActive}
-        setChatMediaActive={setChatMediaActive}
-      />
+      <PrivateRoute exact path="/hcps/:hcpId/profile/chat" component={HCPChat} />
+      <PrivateRoute exact path="/hcps/:hcpId/verification" component={ViewDoctorVerification} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/appointments"
-        component={HcpAppointments}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/appointments" component={HcpAppointments} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/availability"
-        component={HcpAvailability}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/availability" component={HcpAvailability} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/earnings"
-        component={HcpEarnings}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/earnings" component={HcpEarnings} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/earnings"
-        component={HcpEarnings}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/earnings" component={HcpEarnings} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/doctor-patients"
-        component={HcpPatients}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/doctor-patients" component={HcpPatients} />
 
-      <PrivateRoute
-        exact
-        path="/hcps/:hcpId/consultations"
-        component={HcpConsultations}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/hcps/:hcpId/consultations" component={HcpConsultations} />
 
-      <PrivateRoute
-        path="/hcps/:hcpId/consultations/case-notes/:rowId"
-        component={HcpCaseNote}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/hcps/:hcpId/consultations/case-notes/:rowId" component={HcpCaseNote} />
 
       {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
@@ -242,139 +118,48 @@ const Routes = (props) => {
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
 
-      <PrivateRoute
-        exact
-        path="/appointments/waiting-list"
-        component={WaitingList}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/appointments/waiting-list" component={WaitingList} />
 
-      <PrivateRoute
-        path="/appointments/waiting-list/:listId"
-        component={WaitingListDetails}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/appointments/waiting-list/:listId" component={WaitingListDetails} />
 
       <PrivateRoute exact path="/appointments/consultation" component={CircularChart} />
 
       {/*  =====  MESSAGES ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        exact
-        path="/messages"
-        component={Messages}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/messages" component={Messages} />
 
-      <PrivateRoute
-        path="/messages/create-message"
-        component={CreateMessage}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/messages/create-message" component={CreateMessage} />
 
-      <PrivateRoute
-        path="/messages/:messageId"
-        component={ViewMessage}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/messages/:messageId" component={ViewMessage} />
 
       {/*  =====  EMAILS ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        path="/email/create-email"
-        component={CreateEmail}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/email/create-email" component={CreateEmail} />
 
-      <PrivateRoute
-        path="/email/:emailId"
-        component={ViewMail}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/email/:emailId" component={ViewMail} />
 
-      <PrivateRoute
-        path="/email"
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-        component={Email}
-      />
+      <PrivateRoute path="/email" component={Email} />
 
       {/*  =====  DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/verification" component={HCP} />
 
-      <PrivateRoute
-        exact
-        path="/verification"
-        component={HCP}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/verification" component={HCP} />
 
       {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        exact
-        path="/label"
-        component={WhiteLabel}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <PrivateRoute
-        path="/label/provider"
-        component={Providers}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/label" component={WhiteLabel} />
+      <PrivateRoute path="/label/provider" component={Providers} />
 
-      <PrivateRoute
-        path="/label/types"
-        component={UserTypes}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/label/types" component={UserTypes} />
 
       {/*  =====  FINANCE ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        exact
-        path="/finance"
-        component={Finance}
-        /* setSelectedSubMenu={setSelectedSubMenu} */
-      />
+      <PrivateRoute exact path="/finance" component={Finance} />
 
-      <PrivateRoute
-        exact
-        path="/finance/earnings"
-        component={Financetable}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/finance/earnings" component={Financetable} />
 
-      <PrivateRoute
-        exact
-        path="/finance/payouts"
-        component={Payout}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <PrivateRoute
-        exact
-        path="/finance/pending"
-        component={PendingPayout}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/finance/payouts" component={Payout} />
+      <PrivateRoute exact path="/finance/pending" component={PendingPayout} />
+      <PrivateRoute exact path="/finance/sub-income" component={SubscriptionIncome} />
 
       {/*  =====  REFERRALS ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        path="/referrals/:referralId"
-        component={ViewReferral}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/referrals/:referralId" component={ViewReferral} />
 
       <PrivateRoute path="/referrals" component={ReferralTab} />
 
@@ -382,82 +167,27 @@ const Routes = (props) => {
       <PrivateRoute path="/plans" component={Subscription} />
 
       {/*  =====  VIEW DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        path="/verification/view/:viewId"
-        exact
-        component={ViewHCP}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/verification/view/:viewId" exact component={ViewHCP} />
       <PrivateRoute
         exact
-        path="/verification/view/:viewId/doctor/:id" ///verification/view/${viewId}/doctor
+        path="/verification/view/:viewId/doctor/:id"
         component={DoctorVerificationProfile}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
       />
 
       {/*  =====  SETTINGS ROUTES STARTS HERE ===== */}
-      <PrivateRoute
-        exact
-        path="/settings"
-        component={Settings}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/settings" component={Settings} />
 
-      <PrivateRoute
-        path="/settings/administrator"
-        component={Administrator}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/settings/administrator" component={Administrator} />
 
-      <PrivateRoute
-        path="/settings/permissions"
-        component={Permission}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute path="/settings/permissions" component={Permission} />
 
-      <PrivateRoute
-        exact
-        path="/settings/management"
-        component={Management}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <PrivateRoute
-        exact
-        path="/settings/management/:editId"
-        component={EditManagement}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <PrivateRoute
-        exact
-        path="/settings/list-management"
-        component={ListManagment}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <PrivateRoute
-        exact
-        path="/settings/list-management/tests"
-        component={TestList}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
+      <PrivateRoute exact path="/settings/management" component={Management} />
+      <PrivateRoute exact path="/settings/management/:editId" component={EditManagement} />
+      <PrivateRoute exact path="/settings/list-management" component={ListManagment} />
+      <PrivateRoute exact path="/settings/list-management/tests" component={TestList} />
     </Switch>
   );
   // }
-};
-
-Routes.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  chatMediaActive: PropTypes.bool,
-  setChatMediaActive: PropTypes.func,
 };
 
 export default Routes;

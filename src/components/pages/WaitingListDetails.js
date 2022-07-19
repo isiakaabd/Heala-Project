@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { Chip, Typography, Grid } from "@mui/material";
 import { DisplayProfile, PreviousButton } from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
@@ -22,27 +21,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WaitingListDetails = (props) => {
-  const { selectedMenu, setSelectedMenu } = props;
+const WaitingListDetails = () => {
   const classes = useStyles();
 
   const symptoms = ["Headache", "Sore Throat", "Fever"];
 
-  useEffect(() => {
-    setSelectedMenu(4);
-    /* setSelectedSubMenu(5);
-    setSelectedAppointmentMenu(1);
-    setWaitingListMenu(1); */
-
-    // eslint-disable-next-line
-  }, [selectedMenu /* selectedSubMenu, waitingListMenu, selectedAppointmentMenu */]);
-
   return (
     <Grid container direction="column" style={{ paddingBottom: "10rem" }}>
       <Grid item style={{ marginBottom: "3rem" }}>
-        <PreviousButton
-          path="/appointments/waiting-list" /* onClick={() => setWaitingListMenu(0)} */
-        />
+        <PreviousButton path="/appointments/waiting-list" />
       </Grid>
       <Grid item>
         <DisplayProfile
@@ -131,17 +118,6 @@ const WaitingListDetails = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-WaitingListDetails.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedAppointmentMenu: PropTypes.number,
-  waitingListMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setWaitingListMenu: PropTypes.func,
-  setSelectedAppointmentMenu: PropTypes.func.isRequired, */
 };
 
 export default WaitingListDetails;

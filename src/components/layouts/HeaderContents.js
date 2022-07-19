@@ -95,9 +95,7 @@ const CustomHeaderTitle = ({ title, path, onClick = null }) => {
     <div className={classes.titleWrapper}>
       {!onClick ? (
         <Link to={`/${path}`} className={classes.link}>
-          <Typography variant="h3" classes={{ root: classes.title }}>
-            {title}
-          </Typography>
+          <Typography>{title}</Typography>
         </Link>
       ) : (
         <Typography
@@ -200,9 +198,7 @@ CustomSubHeaderText.propTypes = {
 };
 
 // HEADER DYNAMIC RENDERING COMPONENT
-const HeaderText = (props) => {
-  const { selectedMenu } = props;
-
+const HeaderText = () => {
   const classes = useStyles();
   const { pathname } = useLocation();
   const email = localStorage.getItem("email");
@@ -247,8 +243,8 @@ const HeaderText = (props) => {
     Patients: patientCount,
   };
 
-  switch (selectedMenu) {
-    case 0:
+  switch (pathname) {
+    case "/dashboard":
       return (
         <div>
           <Typography variant="h5" className={classes.text} gutterBottom>
@@ -268,21 +264,17 @@ HeaderText.propTypes = {
   selectedMenu: PropTypes.number,
 };
 
-const HeaderContent = (props) => {
-  const { selectedMenu, data } = props;
+const HeaderContent = () => {
   const classes = useStyles();
   return (
     <Toolbar className={classes.toolbar}>
-      <HeaderText selectedMenu={selectedMenu} />
-      <HeaderProfile data={data} />
+      <HeaderText />
+      <HeaderProfile />
     </Toolbar>
   );
 };
 
-HeaderContent.propTypes = {
-  selectedMenu: PropTypes.number,
-  data: PropTypes.object,
-};
+HeaderContent.propTypes = {};
 
 const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
   const theme = useTheme();

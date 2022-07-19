@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { Grid, Alert, Divider, Avatar, Typography } from "@mui/material";
+import { Grid, Divider, Avatar, Typography } from "@mui/material";
 import { Modals, CustomButton, Loader } from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
@@ -13,6 +12,7 @@ import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
 import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
+import useAlert from "hooks/useAlert";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as CalendarIcon } from "assets/images/calendar.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer.svg";
@@ -48,10 +48,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpAppointments = (props) => {
+const HcpAppointments = () => {
   const { hcpId } = useParams();
   const classes = useStyles();
   const theme = useTheme();
+  const { displayAlert } = useAlert();
   const [appointment, setAppointment] = useState([]);
   const [updateAppoint] = useMutation(updateAppointment);
   const { loading, data, error } = useQuery(getDOCAppoint, {
@@ -70,7 +71,6 @@ const HcpAppointments = (props) => {
     setId(id);
     setdeleteModal(true);
   };
-  const { selectedMenu, setSelectedMenu } = props;
 
   const greenButton = {
     background: theme.palette.common.lightGreen,
@@ -86,7 +86,6 @@ const HcpAppointments = (props) => {
   const [id, setId] = useState(null);
   const [isPatients, setIsPatients] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
-  const [alert, setAlert] = useState(null);
   const onConfirm = async () => {
     try {
       await deleteAppointments({
@@ -102,22 +101,10 @@ const HcpAppointments = (props) => {
           },
         ],
       });
-      setAlert({
-        message: "appointment deleted successfully",
-        type: "success",
-      });
-      setTimeout(() => {
-        setAlert(null);
-      }, 5000);
+      displayAlert("success", "Appointment Deleted Successfully");
     } catch (error) {
-      setAlert({
-        message: "appointment  not successfully deleted",
-        type: "danger",
-      });
-      setTimeout(() => {
-        setAlert(null);
-      }, 5000);
       console.log(error);
+      displayAlert("error", error);
     }
   };
   const buttonType = {
@@ -145,54 +132,45 @@ const HcpAppointments = (props) => {
 
     const timeValue = timeMoment(date);
     const dateValue = timeConverter(date);
-    await updateAppoint({
-      variables: {
-        id: editId,
-        date: dateValue,
-        time: timeValue,
-        doctor: hcpId,
-        patient: patientId,
-      },
-      refetchQueries: [
-        {
-          query: getAppoint,
-          variables: {
-            id: patientId,
-            orderBy: "-createdAt",
-          },
+    try {
+      await updateAppoint({
+        variables: {
+          id: editId,
+          date: dateValue,
+          time: timeValue,
+          doctor: hcpId,
+          patient: patientId,
         },
-        {
-          query: getDOCAppoint,
-          variables: {
-            id: hcpId,
-            orderBy: "-createdAt",
+        refetchQueries: [
+          {
+            query: getAppoint,
+            variables: {
+              id: patientId,
+              orderBy: "-createdAt",
+            },
           },
-        },
-      ],
-    });
+          {
+            query: getDOCAppoint,
+            variables: {
+              id: hcpId,
+              orderBy: "-createdAt",
+            },
+          },
+        ],
+      });
+      displayAlert("success", "Appointment Updated Successfully");
+    } catch (error) {
+      console.log(error);
+      displayAlert("error", error);
+    }
     handlePatientCloses();
   };
-  useEffect(() => {
-    setSelectedMenu(2);
-
-    // eslint-disable-next-line
-  }, [selectedMenu]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
     <>
       <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
-        {alert && Object.keys(alert).length > 0 && (
-          <Alert
-            variant="filled"
-            severity={alert.type}
-            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
-          >
-            {alert.message}
-          </Alert>
-        )}
-
         <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
           <Typography variant="h2">Doctor Appointments</Typography>
         </Grid>
@@ -366,15 +344,6 @@ const HcpAppointments = (props) => {
       </Modals>
     </>
   );
-};
-
-HcpAppointments.propTypes = {
-  selectedMenu: PropTypes.number,
-  setSelectedMenu: PropTypes.func,
-  /* selectedSubMenu: PropTypes.number,
-  selectedHcpMenu: PropTypes.number,
-  setSelectedSubMenu: PropTypes.func,
-  setSelectedHcpMenu: PropTypes.func, */
 };
 
 export default HcpAppointments;
