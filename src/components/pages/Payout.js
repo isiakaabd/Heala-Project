@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
+import { Grid, Typography, Chip, Checkbox, TableRow, TableCell, Avatar } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -9,12 +9,13 @@ import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeader } from "components/Utilities/tableHeaders";
-import useAlert from "../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Filter from "components/Forms/Filters";
+import displayPhoto from "assets/images/avatar.svg";
 import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -147,8 +148,8 @@ const Payout = () => {
   const setTableData = async (response, errMsg) => {
     response
       .then(({ data }) => {
-        setPageInfo(data?.getEarningStats?.payoutData?.PageInfo);
-        setPayout(data?.getEarningStats?.payoutData?.data);
+        setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || defaultPageInfo);
+        setPayout(data?.getEarningStats?.payoutData?.data || []);
       })
       .catch((error) => {
         console.error(error);
@@ -203,7 +204,9 @@ const Payout = () => {
               handleChangePage={fetchMoreData}
             >
               {payout.map((row, index) => {
-                const { amount, createdAt, status, _id } = row;
+                const { amount, createdAt, status, _id, doctorData } = row;
+                const data = doctorData || [];
+                const { firstName, lastName, picture } = data[0] || {};
                 const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -243,6 +246,30 @@ const Payout = () => {
                       style={{ color: theme.palette.common.black }}
                     >
                       {timeMoment(createdAt)}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {row?.doctorData && row?.doctorData[0] !== {} ? (
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={`Display Photo of ${firstName}`}
+                              src={picture ? picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${
+                            lastName && lastName
+                          }`}</span>
+                        </div>
+                      ) : (
+                        "No Name"
+                      )}
                     </TableCell>
                     <TableCell
                       align="left"

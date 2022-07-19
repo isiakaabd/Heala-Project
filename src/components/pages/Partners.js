@@ -9,11 +9,20 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { Button, Checkbox, TableCell, Avatar, TableRow, Grid, Typography } from "@mui/material";
 
+import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
+import { categoryFilterOptions, defaultPageInfo } from "helpers/mockData";
 import { useStyles } from "styles/partnersPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { deleteItem } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  deleteItem,
+  deleteVar,
+  filterData,
+  handlePageChange,
+  trucateProfileLink,
+} from "helpers/filterHelperFunctions";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
@@ -30,11 +39,14 @@ import {
   addPartnerValidationSchema,
   filterPartnersValidationSchema,
 } from "helpers/validationSchemas";
+import Copy from "components/Copy";
+import Filter from "components/Forms/Filters";
 
 const Partners = () => {
   const theme = useTheme();
   const classes = useStyles();
-  const [setCategoryDatas] = useState([]);
+  const { displayAlert } = useAlert();
+  /* const [setCategoryDatas] = useState([]); */
   const { setSelectedRows } = useActions();
   const { enqueueSnackbar } = useSnackbar();
   const [partner, setPartners] = useState([]);
@@ -43,16 +55,20 @@ const Partners = () => {
   const categoryData = useQuery(getSingleProvider);
   const [delete_partner] = useLazyQuery(DELETE_PARTNER);
   /*   const [searchPartner, setSearchPartner] = useState(""); */
-  const [isDeleting, setIsDeleting] = React.useState({});
+  const [isDeleting, setIsDeleting] = useState({});
   const [addPartnerCat] = useMutation(addPartnerCategory);
   const { data: da, loading: load } = useQuery(getProviders);
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [openAddPartner, setOpenAddPartner] = useState(false);
   const [openFilterPartner, setOpenFilterPartner] = useState(false);
   const [openDeletePartner, setOpenDeletePartner] = useState(false);
-  const [partnerToDelete, setPartnerToDelete] = React.useState(null);
-  const { selectedRows, page } = useSelector((state) => state.tables);
+  const [partnerToDelete, setPartnerToDelete] = useState(null);
+  const [partnerFilterValues, setPartnerFilterValues] = useState({
+    category: "",
+  });
+  const { selectedRows /* page */ } = useSelector((state) => state.tables);
   const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
-  const { loading, error, data, refetch } = useQuery(getPartners, {
+  const [fetchPartners, { loading, error, refetch, variables }] = useLazyQuery(getPartners, {
     notifyOnNetworkStatusChange: true,
   });
 
@@ -97,6 +113,40 @@ const Partners = () => {
     category: "",
   };
 
+  const setTableData = async (response, errMsg) => {
+    console.log("entered");
+    response
+      .then((res) => {
+        const { data } = res;
+        if (data) {
+          setPartners(data?.getPartners?.data || []);
+          setPageInfo(data?.getPartners?.pageInfo || defaultPageInfo);
+        }
+        if (!data) {
+          setPartners(res?.getPartners?.data || []);
+          setPageInfo(res?.getPartners?.pageInfo || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
+
+  const fetchPartnersData = async () => {
+    const res = fetchPartners({
+      variables: {
+        first: pageInfo.limit,
+      },
+    });
+    setTableData(res, "Couldn't fetch Partners data");
+  };
+
+  useEffect(() => {
+    fetchPartnersData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (da) {
       const datas = da.getProviders.provider;
@@ -110,13 +160,7 @@ const Partners = () => {
   }, [da]);
 
   useEffect(() => {
-    if (data) {
-      setPartners(data.getPartners.data);
-    }
-  }, [data, categoryData, setCategoryDatas]);
-
-  useEffect(() => {
-    partner.map((p) => {
+    (partner || []).map((p) => {
       const newIsDeleting = isDeleting;
       setIsDeleting({ [p._id]: false, ...newIsDeleting });
       return null;
@@ -131,13 +175,22 @@ const Partners = () => {
   const onSubmit2 = async (values, onSubmitProps) => {
     const { category } = values;
 
-    await addPartnerCat({
-      variables: {
-        name: category,
-      },
-    });
-    setAddPartnerCategory(false);
-    onSubmitProps.resetForm();
+    try {
+      const addCatRes = await addPartnerCat({
+        variables: {
+          name: category,
+        },
+      });
+
+      if (addCatRes?.addPartner?.partner) {
+        setAddPartnerCategory(false);
+        onSubmitProps.resetForm();
+        const res = refetch();
+        setTableData(res, "Couldn't fetch partners.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onSubmit1 = async (values, onSubmitProps) => {
@@ -175,6 +228,34 @@ const Partners = () => {
     } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
   }; */
 
+  const onFilterCategoryChange = async (value) => {
+    try {
+      deleteVar(variables);
+      setPartnerFilterValues({ ...partnerFilterValues, category: value });
+      const filterVariables = { category: value };
+
+      const res = filterData(filterVariables, {
+        fetchData: fetchPartners,
+        refetch: refetch,
+        variables: variables,
+      });
+      await setTableData(res, "couldn't filter table.");
+    } catch (error) {
+      console.error(error);
+      refresh(setPartnerFilterValues, "");
+    }
+  };
+
+  const refresh = async (setFilterValue, defaultVal) => {
+    displayAlert("error", `Something went wrong while filtering. Try again.`);
+    setFilterValue(defaultVal);
+
+    deleteVar(variables);
+
+    const res = refetch();
+    await setTableData(res, "couldn't filter table.");
+  };
+
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
   return (
     <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
@@ -187,13 +268,26 @@ const Partners = () => {
             height="5rem"
           />
         </Grid> */}
-        <Grid item container justifyContent="space-between" flex={{ sm: 1, xs: 1, md: 1 }}>
-          {/* <Grid item>
-            <FilterList
-              title="Filter"
-              onClick={() => setOpenFilterPartner(true)}
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          flex={{ sm: 1, xs: 1, md: 1 }}
+        >
+          <Grid item>
+            <Filter
+              label="By Category"
+              onHandleChange={(e) => onFilterCategoryChange(e?.target?.value)}
+              onClickClearBtn={() => onFilterCategoryChange("")}
+              options={categoryFilterOptions}
+              name="category"
+              placeholder="None"
+              value={partnerFilterValues.category}
+              hasClearBtn={true}
+              disable={loading}
             />
-          </Grid> */}
+          </Grid>
 
           <Grid item>
             <CustomButton
@@ -212,90 +306,122 @@ const Partners = () => {
           <EnhancedTable
             headCells={partnersHeadCells}
             rows={partner}
-            page={page}
-            type="editRole"
             paginationLabel="Partner per page"
             hasCheckbox={true}
+            changeLimit={async (e) => {
+              const res = changeTableLimit(fetchPartners, {
+                first: e,
+              });
+              await setTableData(res, "Failed to change table limit.");
+            }}
+            dataPageInfo={pageInfo}
+            handlePagination={async (page) => {
+              const res = handlePageChange(fetchPartners, page, pageInfo, {});
+              await setTableData(res, "Failed to change page.");
+            }}
           >
-            {partner
-              // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
+            {partner.map((row, index) => {
+              const isItemSelected = isSelected(row.id, selectedRows);
 
-                const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                  tabIndex={-1}
+                  key={row._id}
+                  selected={isItemSelected}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{ maxWidth: "20rem" }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ maxWidth: "20rem" }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${row.name}`}
-                            src={row.logoImageUrl}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
+                    <div
                       style={{
-                        color: theme.palette.common.grey,
-                        maxWidth: "20rem",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "left",
                       }}
                     >
-                      {row.category}
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      {isDeleting[row._id] ? (
-                        <Loader />
-                      ) : (
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          endIcon={<DeleteIcon color="error" />}
-                          onClick={() => {
-                            setPartnerToDelete(row?._id || "");
-                            setOpenDeletePartner(true);
-                          }}
-                        >
-                          Delete partner
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt={`Display Photo of ${row.name}`}
+                          src={row.logoImageUrl}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                      maxWidth: "20rem",
+                    }}
+                  >
+                    {row.category}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={classes.tableCell}
+                    style={{
+                      color: theme.palette.common.grey,
+                      maxWidth: "20rem",
+                    }}
+                  >
+                    {row?.profileUrl ? (
+                      <Typography
+                        style={{
+                          color: theme.palette.common.grey,
+                          maxWidth: "20rem",
+                        }}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        {trucateProfileLink(row?.profileUrl)}
+                        <div style={{ marginLeft: "1rem" }}>
+                          <Copy name="Profile Link" text={row?.profileUrl} />
+                        </div>
+                      </Typography>
+                    ) : (
+                      "No Link"
+                    )}
+                  </TableCell>
+                  <TableCell align="center" className={classes.tableCell}>
+                    {isDeleting[row._id] ? (
+                      <Loader />
+                    ) : (
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        className={`${classes.tableBtn} ${classes.redBtn}`}
+                        endIcon={<DeleteIcon color="error" />}
+                        onClick={() => {
+                          setPartnerToDelete(row?._id || "");
+                          setOpenDeletePartner(true);
+                        }}
+                      >
+                        Delete partner
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </EnhancedTable>
         </Grid>
       ) : (
@@ -529,8 +655,8 @@ const Partners = () => {
         setOpen={setOpenDeletePartner}
         title="Delete Partner"
         btnValue="delete"
-        onConfirm={() => {
-          deleteItem(
+        onConfirm={async () => {
+          const res = deleteItem(
             delete_partner,
             partnerToDelete,
             setPartnerToDelete,
@@ -541,6 +667,7 @@ const Partners = () => {
             isDeleting,
           );
           setOpenDeletePartner(false);
+          await setTableData(res, "Couldn't refetch Partners");
         }}
         confirmationMsg="delete partner"
         onCancel={() => {

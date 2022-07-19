@@ -16,7 +16,7 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { getPlans } from "components/graphQL/useQuery";
 import { DELETE_PLAN } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import useAlert from "../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 import { PlanListRow } from "components/Rows/PlanListRow";
 

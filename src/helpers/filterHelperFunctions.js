@@ -172,11 +172,18 @@ export const fetchMoreData = async (newPage, fetchData) => {
   });
 };
 
-export const trucateString = (word, length) => {
+export const trucateString = (word, length, startFrom = "front") => {
   try {
     const wordArr = word.split("");
-    const newWord = `${wordArr.slice(0, length).join("")}...`;
-    return newWord;
+    if (startFrom === "front") {
+      const newWord = `${wordArr.slice(0, length).join("")}...`;
+      return newWord;
+    }
+
+    if (startFrom === "back") {
+      const newWord = `...${wordArr.slice(wordArr.length - length, wordArr.length - 1).join("")}`;
+      return newWord;
+    }
   } catch (error) {
     console.error("Error from trucateString FN", error);
     return word;
@@ -186,6 +193,18 @@ export const trucateString = (word, length) => {
 trucateString.PropTypes = {
   word: t.string.isRequired,
   length: t.number.isRequired,
+};
+
+export const trucateProfileLink = (word) => {
+  try {
+    const wordArr = word.split("");
+    const start = `${wordArr.slice(0, 8).join("")}`;
+    const end = `${wordArr.slice(wordArr.length - 7, wordArr.length - 1).join("")}`;
+    return `${start}...${end}`;
+  } catch (error) {
+    console.error("Error from trucateString FN", error);
+    return word;
+  }
 };
 
 export const compressAndUploadImage = async (
@@ -274,11 +293,11 @@ export const deleteItem = async (
       return;
     }
 
-    refresh();
     showSuccessMsg(enqueueSnackbar, Typography, "Partner deleted successfully.");
     resetId(null);
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
+    return refresh();
   } catch (error) {
     resetId(null);
     newIsDeleting[id] = false;

@@ -7,7 +7,7 @@ import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import useAlert from "../../hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
@@ -54,12 +54,16 @@ const Patients = () => {
       variables: {
         first: pageInfo.limit,
       },
-    }).then(({ data }) => {
-      if (data) {
-        setPageInfo(data?.profiles?.pageInfo || []);
-        setProfiles(data?.profiles?.data || defaultPageInfo);
-      }
-    });
+    })
+      .then(({ data }) => {
+        if (data) {
+          setPageInfo(data?.profiles?.pageInfo || []);
+          setProfiles(data?.profiles?.data || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,8 +80,8 @@ const Patients = () => {
   const setTableData = async (response, errMsg) => {
     response
       .then(({ data }) => {
-        setPageInfo(data?.profiles?.pageInfo || []);
-        setProfiles(data?.profiles?.data || defaultPageInfo);
+        setPageInfo(data?.profiles?.pageInfo || defaultPageInfo);
+        setProfiles(data?.profiles?.data || []);
       })
       .catch((error) => {
         console.error(error);

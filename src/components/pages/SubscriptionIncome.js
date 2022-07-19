@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, TableCell, TableRow, Checkbox } from "@mui/material";
+import { Grid, Typography, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader } from "components/Utilities/tableHeaders";
-// import displayPhoto from "assets/images/avatar.svg";
+import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -127,8 +127,8 @@ const SubscriptionIncome = () => {
               }}
             >
               {subIncome.map((row, index) => {
-                const { createdAt, amount } = row;
-                // const { firstName, picture, lastName, specialization } = doctorData[0];
+                const { createdAt, amount, patientData } = row;
+                const { firstName, image, lastName } = patientData || {};
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -168,6 +168,30 @@ const SubscriptionIncome = () => {
                       style={{ color: theme.palette.common.black }}
                     >
                       {timeMoment(createdAt)}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {patientData && patientData !== {} ? (
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt={firstName ? firstName : "image"}
+                              src={patientData ? image : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {patientData && `${firstName && firstName} ${lastName && lastName}`}
+                          </span>
+                        </div>
+                      ) : (
+                        "No name"
+                      )}
                     </TableCell>
                     <TableCell
                       align="left"

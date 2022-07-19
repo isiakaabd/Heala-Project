@@ -150,7 +150,9 @@ const HcpCaseNotes = () => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="body1">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="body1">
+                        {trucateString(referralId, 10, "front")}
+                      </Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
@@ -169,7 +171,7 @@ const HcpCaseNotes = () => {
                 <Grid item>
                   {referralId ? (
                     <Grid item container gap={2}>
-                      <Typography variant="h5">{trucateString(referralId, 10)}</Typography>
+                      <Typography variant="h5">{trucateString(referralId, 10, "front")}</Typography>
                       <Copy text={referralId} name="Consultation ID" />
                     </Grid>
                   ) : (
