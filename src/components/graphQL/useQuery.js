@@ -82,25 +82,27 @@ export const getUserType = gql`
 export const dashboard = gql`
   query getStats {
     getStats(filterBy: { providerId: "61db6f8968b248001aec4fcb" }) {
-      patientStats
-      doctorStats
-      totalEarnings
-      totalPayout
-      appointmentStats
-      subscribers
-      availabilityCalendar {
-        _id
-        doctor
-        doctorData
-        day
-        available
-        times {
-          start
-          stop
-        }
-        createdAt
-        updatedAt
+      patientStats {
+        totalActive
+        totalInactive
+        activeChartData
+        inactiveChartData
       }
+      doctorStats {
+        totalActive
+        totalInactive
+        activeChartData
+        inactiveChartData
+      }
+      partnerStats {
+        total
+        chartData
+        hospitalChartData
+        diagnosticsChartData
+        pharmacyChartData
+      }
+      totalActiveSubscribers
+      totalInactiveSubscribers
     }
   }
 `;
