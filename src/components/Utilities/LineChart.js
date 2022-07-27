@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type }) => {
+const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [actives, setActives] = useState([]);
@@ -36,18 +36,17 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
   // const [times, setTimes] = useState([])
 
   useEffect(() => {
-    const doc = doctorStats.oneYear;
-    if (doc && doc.inactiveCount) {
-      const z = doc.inactiveCount.map((i) => i.count);
+    if (inactiveChartData) {
+      const z = inactiveChartData.map((i) => i?.sum);
       setInActives(z);
     }
-    if (doc && doc.activeCount) {
-      const z = doc && doc.activeCount.map((i) => i.count);
+    if (activeChartData) {
+      const z = activeChartData.map((i) => i?.sum);
       setActives(z);
     }
-  }, [doctorStats, type]);
+  }, [activeChartData, inactiveChartData, type]);
   const data = {
-    labels: ["ONE DAY", "FIVE DAYS", "ONE MONTH", "THREE MONTHS", "ONE YEAR"],
+    labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
       {
         label: "Active",
@@ -123,8 +122,6 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
     },
   };
   function hover(event, chartElement) {
-    console.log(event);
-
     event.target.style.cursor = chartElement[0] ? "pointer" : "default";
   }
   function colorItem(tooltipItem) {
@@ -133,7 +130,7 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
     return tooltipTitleColor;
   }
   return (
-    <Grid item container>
+    <Grid item container justifyContent="center">
       <Grid item container>
         <Line data={data} options={options} />
       </Grid>
@@ -155,10 +152,11 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
                     label={timeFrame}
                     color={timeFrame === timeFrame.id ? "success" : undefined}
                     clickable
-                    className={`${classes.chip} ${
-                      selectedTimeframe === timeFrame.id ? classes.active : undefined
-                    }`}
-                    onClick={() => setSelectedTimeframe(timeFrame.id)}
+                    //   className={`${classes.chip} ${
+                    //     selectedTimeframe === timeFrame.id ? classes.active : undefined
+                    //   }`}
+                    //   onClick={() => setSelectedTimeframe(timeFrame.id)}
+                    //
                   />
                 </Grid>
               ))}
@@ -170,6 +168,8 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
 
 LineChart.propTypes = {
   timeFrames: PropTypes.array,
+  activeChartData: PropTypes.array,
+  inactiveChartData: PropTypes.array,
   selectedTimeframe: PropTypes.number,
   setSelectedTimeframe: PropTypes.func,
   type: PropTypes.string,
