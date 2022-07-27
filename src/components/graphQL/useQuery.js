@@ -94,6 +94,13 @@ export const dashboard = gql`
         activeChartData
         inactiveChartData
       }
+      partnerStats {
+        total
+        chartData
+        hospitalChartData
+        diagnosticsChartData
+        pharmacyChartData
+      }
       totalActiveSubscribers
       totalInactiveSubscribers
     }

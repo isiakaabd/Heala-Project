@@ -117,6 +117,7 @@ const DashboardCharts = ({ data, refetch }) => {
   const [activeChartDoctorsData, setActiveDoctorChartData] = useState([]);
   const [inActiveChartPatientsData, setInActiveChartPatientsData] = useState([]);
   const [inActiveChartDoctorsData, setInActiveChartDoctorssData] = useState([]);
+  const [partnersData, setPartnersData] = useState([]);
 
   useEffect(() => {
     const {
@@ -126,7 +127,7 @@ const DashboardCharts = ({ data, refetch }) => {
       totalActiveSubscribers,
       totalInactiveSubscribers,
       appointmentStats,
-      // subscribers,
+      partnerStats,
       totalEarnings,
       totalPayout,
     } = data?.getStats;
@@ -135,6 +136,7 @@ const DashboardCharts = ({ data, refetch }) => {
     setActivePatientsChartData(patientStats?.activeChartData);
     setInActiveChartPatientsData(patientStats?.inactiveChartData);
     setAppointmentStats(appointmentStats);
+    setPartnersData(partnerStats);
     setActiveDoctorChartData(doctorStats?.activeChartData);
     setInActiveChartDoctorssData(doctorStats?.inactiveChartData);
     setAppointmentStats(appointmentStats);
@@ -154,6 +156,7 @@ const DashboardCharts = ({ data, refetch }) => {
   const { totalActive: activeDoctors, totalInactive: inactiveDoctors } = doctorStats;
   const { totalActive: activePatients, totalInactive: inactivePatients } = patients;
   const totalDoc = activeDoctors + inactiveDoctors;
+  const { diagnosticsChartData, hospitalChartData, pharmacyChartData } = partnersData;
   const totalPatient = activePatients + inactivePatients;
   const patientPercentage = returnpercent(activePatients, inactivePatients);
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
@@ -163,7 +166,6 @@ const DashboardCharts = ({ data, refetch }) => {
     setForms(e.target.value);
     await refetch({ q: e.target.value });
   };
-  console.log(data);
 
   return (
     <Grid
@@ -409,8 +411,80 @@ const DashboardCharts = ({ data, refetch }) => {
           </Grid>
         </Grid>
       </Grid>
+      {/* partners */}
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Partners Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
 
-      {/* active subscriber */}
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          paddingY={{ md: 2, sm: 2, xs: 2 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            gap={{ sm: 3, xs: 2, md: 3 }}
+            alignItems="center"
+            flexWrap={"nowrap"}
+            container
+            flex={3}
+          >
+            <Grid item className={classes.groupIconGrid}>
+              <GroupIcon color="success" className={classes.groupIcon} />
+            </Grid>
+            <Grid item alignItems="center" container flex={1}>
+              <Grid item container direction="column">
+                <Grid item container gap={1}>
+                  <Typography variant="h1">{data && partnersData.total}</Typography>
+                  {/* <Grid item>
+                    {patientPercentage < 1 ? (
+                      <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
+                    ) : (
+                      <ArrowUpwardIcon color="success" />
+                    )}
+                  </Grid>
+                  <Typography
+                    style={{
+                      color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
+                    }}
+                    variant="body2"
+                  >
+                    {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
+                  </Typography> */}
+                </Grid>
+              </Grid>
+              <Typography
+                variant="body2"
+                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Total Partners
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid item display={{ sm: "block", xs: "none" }}>
+            <img src={chart1} sx={{ objectFit: "contain" }} alt="Arc chart" />
+          </Grid>
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart
+            timeFrames={timeFrames}
+            selectedTimeframe={selectedTimeframe}
+            setSelectedTimeframe={setSelectedTimeframe}
+            inactiveChartData={diagnosticsChartData}
+            activeChartData={pharmacyChartData}
+            hospitalChartData={hospitalChartData}
+            type="partner"
+          />
+        </Grid>
+      </Grid>
+
       <Grid item container className={classes.chartCard}>
         <Grid item className={classes.headerGrid}>
           <Typography variant="h5">Subscribers Stats</Typography>
@@ -475,7 +549,6 @@ const DashboardCharts = ({ data, refetch }) => {
           </Grid>
         </Grid>
       </Grid>
-
       {/* financial */}
       <Grid item direction="column" className={classes.chartCard}>
         <Grid item container rowGap={{ sm: 6, xs: 0 }} flexDirection={{ xs: "column" }}>

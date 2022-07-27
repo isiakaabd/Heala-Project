@@ -27,10 +27,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) => {
+const LineChart = ({
+  activeChartData,
+  inactiveChartData,
+  hospitalChartData,
+  doctorStats,
+  type,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [actives, setActives] = useState([]);
+  const [hospital, setHospital] = useState([]);
   // const [results, setResults] = useState([])
   const [inActives, setInActives] = useState([]);
   // const [times, setTimes] = useState([])
@@ -44,7 +51,47 @@ const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) =>
       const z = activeChartData.map((i) => i?.sum);
       setActives(z);
     }
-  }, [activeChartData, inactiveChartData, type]);
+    if (hospitalChartData) {
+      const z = hospitalChartData.map((i) => i?.sum);
+      setHospital(z);
+    }
+  }, [activeChartData, hospitalChartData, inactiveChartData, type]);
+  const details = {
+    fill: false,
+    pointBorderColor: "#fff",
+    cursor: "pointer",
+    pointRadius: 5,
+    pointHoverRadius: 7,
+    pointBorderWidth: 2,
+    tension: 0.5,
+  };
+  const partner = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Pharmacy",
+        data: actives,
+        borderColor: theme.palette.common.green,
+        pointBackgroundColor: theme.palette.common.green,
+        ...details,
+      },
+      {
+        label: "Diagnostics",
+        data: inActives,
+        borderColor: theme.palette.common.red,
+        pointBackgroundColor: theme.palette.common.red,
+        pointBorderColor: "#fff",
+        ...details,
+      },
+      {
+        label: "Hospital",
+        data: hospital,
+        borderColor: theme.palette.common.gold,
+        pointBackgroundColor: theme.palette.common.gold,
+        ...details,
+      },
+    ],
+  };
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
@@ -121,6 +168,7 @@ const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) =>
       },
     },
   };
+
   function hover(event, chartElement) {
     event.target.style.cursor = chartElement[0] ? "pointer" : "default";
   }
@@ -132,7 +180,7 @@ const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) =>
   return (
     <Grid item container justifyContent="center">
       <Grid item container>
-        <Line data={data} options={options} />
+        <Line data={type === "partner" ? partner : data} options={options} />
       </Grid>
       <Grid item container>
         <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
@@ -169,6 +217,7 @@ const LineChart = ({ activeChartData, inactiveChartData, doctorStats, type }) =>
 LineChart.propTypes = {
   timeFrames: PropTypes.array,
   activeChartData: PropTypes.array,
+  hospitalChartData: PropTypes.array,
   inactiveChartData: PropTypes.array,
   selectedTimeframe: PropTypes.number,
   setSelectedTimeframe: PropTypes.func,
