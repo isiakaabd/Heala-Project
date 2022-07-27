@@ -27,27 +27,73 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type }) => {
+const LineChart = ({
+  activeChartData,
+  inactiveChartData,
+  hospitalChartData,
+  doctorStats,
+  type,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [actives, setActives] = useState([]);
+  const [hospital, setHospital] = useState([]);
   // const [results, setResults] = useState([])
   const [inActives, setInActives] = useState([]);
   // const [times, setTimes] = useState([])
 
   useEffect(() => {
-    const doc = doctorStats.oneYear;
-    if (doc && doc.inactiveCount) {
-      const z = doc.inactiveCount.map((i) => i.count);
+    if (inactiveChartData) {
+      const z = inactiveChartData.map((i) => i?.sum);
       setInActives(z);
     }
-    if (doc && doc.activeCount) {
-      const z = doc && doc.activeCount.map((i) => i.count);
+    if (activeChartData) {
+      const z = activeChartData.map((i) => i?.sum);
       setActives(z);
     }
-  }, [doctorStats, type]);
+    if (hospitalChartData) {
+      const z = hospitalChartData.map((i) => i?.sum);
+      setHospital(z);
+    }
+  }, [activeChartData, hospitalChartData, inactiveChartData, type]);
+  const details = {
+    fill: false,
+    pointBorderColor: "#fff",
+    cursor: "pointer",
+    pointRadius: 5,
+    pointHoverRadius: 7,
+    pointBorderWidth: 2,
+    tension: 0.5,
+  };
+  const partner = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Pharmacy",
+        data: actives,
+        borderColor: theme.palette.common.green,
+        pointBackgroundColor: theme.palette.common.green,
+        ...details,
+      },
+      {
+        label: "Diagnostics",
+        data: inActives,
+        borderColor: theme.palette.common.red,
+        pointBackgroundColor: theme.palette.common.red,
+        pointBorderColor: "#fff",
+        ...details,
+      },
+      {
+        label: "Hospital",
+        data: hospital,
+        borderColor: theme.palette.common.gold,
+        pointBackgroundColor: theme.palette.common.gold,
+        ...details,
+      },
+    ],
+  };
   const data = {
-    labels: ["ONE DAY", "FIVE DAYS", "ONE MONTH", "THREE MONTHS", "ONE YEAR"],
+    labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
       {
         label: "Active",
@@ -122,9 +168,8 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
       },
     },
   };
-  function hover(event, chartElement) {
-    console.log(event);
 
+  function hover(event, chartElement) {
     event.target.style.cursor = chartElement[0] ? "pointer" : "default";
   }
   function colorItem(tooltipItem) {
@@ -133,9 +178,9 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
     return tooltipTitleColor;
   }
   return (
-    <Grid item container>
+    <Grid item container justifyContent="center">
       <Grid item container>
-        <Line data={data} options={options} />
+        <Line data={type === "partner" ? partner : data} options={options} />
       </Grid>
       <Grid item container>
         <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
@@ -155,10 +200,11 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
                     label={timeFrame}
                     color={timeFrame === timeFrame.id ? "success" : undefined}
                     clickable
-                    className={`${classes.chip} ${
-                      selectedTimeframe === timeFrame.id ? classes.active : undefined
-                    }`}
-                    onClick={() => setSelectedTimeframe(timeFrame.id)}
+                    //   className={`${classes.chip} ${
+                    //     selectedTimeframe === timeFrame.id ? classes.active : undefined
+                    //   }`}
+                    //   onClick={() => setSelectedTimeframe(timeFrame.id)}
+                    //
                   />
                 </Grid>
               ))}
@@ -170,6 +216,9 @@ const LineChart = ({ selectedTimeframe, setSelectedTimeframe, doctorStats, type 
 
 LineChart.propTypes = {
   timeFrames: PropTypes.array,
+  activeChartData: PropTypes.array,
+  hospitalChartData: PropTypes.array,
+  inactiveChartData: PropTypes.array,
   selectedTimeframe: PropTypes.number,
   setSelectedTimeframe: PropTypes.func,
   type: PropTypes.string,
