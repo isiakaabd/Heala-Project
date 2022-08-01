@@ -535,7 +535,7 @@ const DashboardCharts = ({ data, refetch }) => {
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
           <LineChart graphState={partnerGraphState} />
         </Grid>
-        <Grid item container justifyContent="space-around" paddingTop={{ sm: 3, xs: 2 }}>
+        <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
           <Grid item>
             <Grid container direction="column">
               <Grid item>
