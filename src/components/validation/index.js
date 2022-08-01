@@ -1,4 +1,3 @@
-export { default as Checkbox } from "./Checkbox";
 export { default as Checkboxes } from "./Checkboxs";
 export { default as Input } from "./Input";
 export { default as Selects } from "./Select";
