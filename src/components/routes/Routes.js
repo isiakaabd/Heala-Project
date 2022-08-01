@@ -45,8 +45,6 @@ import {
   Finance,
   Payout,
   HCPChat,
-  CreateEmail,
-  ViewMail,
   EditManagement,
   PendingPayout,
   WhiteLabel,
@@ -132,9 +130,6 @@ const Routes = () => {
       <PrivateRoute path="/messages/:messageId" component={ViewMessage} />
 
       {/*  =====  EMAILS ROUTES STARTS HERE ===== */}
-      <PrivateRoute path="/email/create-email" component={CreateEmail} />
-
-      <PrivateRoute path="/email/:emailId" component={ViewMail} />
 
       <PrivateRoute path="/email" component={Email} />
 
