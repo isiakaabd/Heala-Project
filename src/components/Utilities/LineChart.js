@@ -1,122 +1,39 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Grid, Chip } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";
 
-const useStyles = makeStyles((theme) => ({
-  intervalButtonsGrid: {
-    background: theme.palette.common.lightGreen,
-    borderRadius: "20rem",
-    padding: ".5rem 0",
-  },
-
-  chip: {
-    "&.MuiChip-root": {
-      background: "#fff",
-      fontSize: "1.05rem",
-    },
-  },
-
-  active: {
-    "&.MuiChip-root": {
-      background: theme.palette.common.green,
-      color: "#fff",
-    },
-  },
-}));
-
-const LineChart = ({
-  activeChartData,
-  inactiveChartData,
-  hospitalChartData,
-  doctorStats,
-  type,
-}) => {
-  const classes = useStyles();
+const LineChart2 = ({ graphState }) => {
   const theme = useTheme();
-  const [actives, setActives] = useState([]);
-  const [hospital, setHospital] = useState([]);
-  // const [results, setResults] = useState([])
-  const [inActives, setInActives] = useState([]);
-  // const [times, setTimes] = useState([])
-
+  const [state, setState] = useState("active");
+  const [chartData, setChartData] = useState([]);
+  const lightGreen = "rgba(45, 211, 158, .3)";
+  const lightBlue = "rgba(62, 94, 169, .3)";
+  const lightGold = "rgb(243, 173, 83,.3)";
+  const gold = theme.palette.common.gold;
+  const green = theme.palette.common.green;
+  const red = theme.palette.common.red;
   useEffect(() => {
-    if (inactiveChartData) {
-      const z = inactiveChartData.map((i) => i?.sum);
-      setInActives(z);
-    }
-    if (activeChartData) {
-      const z = activeChartData.map((i) => i?.sum);
-      setActives(z);
-    }
-    if (hospitalChartData) {
-      const z = hospitalChartData.map((i) => i?.sum);
-      setHospital(z);
-    }
-  }, [activeChartData, hospitalChartData, inactiveChartData, type]);
-  const details = {
-    fill: false,
-    pointBorderColor: "#fff",
-    cursor: "pointer",
-    pointRadius: 5,
-    pointHoverRadius: 7,
-    pointBorderWidth: 2,
-    tension: 0.5,
-  };
-  const partner = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [
-      {
-        label: "Pharmacy",
-        data: actives,
-        borderColor: theme.palette.common.green,
-        pointBackgroundColor: theme.palette.common.green,
-        ...details,
-      },
-      {
-        label: "Diagnostics",
-        data: inActives,
-        borderColor: theme.palette.common.red,
-        pointBackgroundColor: theme.palette.common.red,
-        pointBorderColor: "#fff",
-        ...details,
-      },
-      {
-        label: "Hospital",
-        data: hospital,
-        borderColor: theme.palette.common.gold,
-        pointBackgroundColor: theme.palette.common.gold,
-        ...details,
-      },
-    ],
-  };
+    const z = graphState?.data?.map((i) => i?.sum);
+    setState(graphState?.state);
+    setChartData(z);
+  }, [graphState]);
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    backgroundColor: "rgba(90,165,60,0.6)",
     datasets: [
       {
-        label: "Active",
-        data: actives,
-        fill: false,
+        label: state,
+        data: chartData,
+        fill: true,
         cursor: "pointer",
-        borderColor: theme.palette.common.green,
-        pointBackgroundColor: theme.palette.common.green,
-        pointBorderColor: "#fff",
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointBorderWidth: 2,
-        tension: 0.5,
-      },
-      {
-        label: "Inactive",
-        data: inActives,
-        fill: false,
-        borderColor: theme.palette.common.red,
-        pointBackgroundColor: theme.palette.common.red,
-        pointBorderColor: "#fff",
-        pointRadius: 5,
-        pointHoverRadius: 7,
+        borderColor: state === "active" ? green : state === "inactive" ? red : gold,
+        pointBackgroundColor: state === "active" ? green : state === "inactive" ? red : gold,
+        pointBorderColor: state === "active" ? green : state === "inactive" ? red : gold,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointHoverColor: "#00f",
         pointBorderWidth: 2,
         tension: 0.5,
       },
@@ -124,18 +41,28 @@ const LineChart = ({
   };
 
   const options = {
+    responsive: true,
     locale: "fr",
     scales: {
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
+        fillColor: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
         grid: {
-          color: "rgba(0, 0, 0, 0.12)",
-          borderDash: [5, 8],
+          color: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+          borderColor:
+            state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+          borderDash: [2, 2],
           display: true,
         },
       },
       x: {
-        display: false,
+        grid: {
+          color: state === "active" ? lightGreen : lightBlue,
+          borderDash: [2, 2],
+          borderColor: state === "active" ? lightGreen : lightBlue,
+          display: true,
+        },
+        display: true,
       },
     },
     plugins: {
@@ -144,22 +71,25 @@ const LineChart = ({
       },
       tooltip: {
         backgroundColor: "#fff",
+        cursor: "pointer",
         titleColor: colorItem,
         onHover: hover,
-        bodyColor: theme.palette.common.lightGrey,
+        bodyColor: state === "active" ? green : red,
+        // theme.palette.common.lightGrey,
         titleAlign: "left",
         bodyAlign: "left",
-        borderColor: "rgba(0, 0, 0, 0.05)",
-        borderWidth: 2,
+        borderColor: state === "active" ? green : red,
+        // "rgba(0, 0, 0, 0.05)",
+        borderWidth: 1,
         displayColors: true,
         boxHeight: 0,
         boxWidth: 0,
-        yAlign: "bottom",
+        yAlign: "top",
         usePointStyle: true,
         callbacks: {
           labelPointStyle: (context) => {
             return {
-              pointStyle: "triangle",
+              pointStyle: "rectangle",
               rotation: 0,
               cursor: "pointer",
             };
@@ -168,9 +98,9 @@ const LineChart = ({
       },
     },
   };
-
   function hover(event, chartElement) {
-    event.target.style.cursor = chartElement[0] ? "pointer" : "default";
+    const x = (event.target.style.cursor = "pointer");
+    return x;
   }
   function colorItem(tooltipItem) {
     const tooltipTitleColor = tooltipItem.tooltip.labelColors[0].backgroundColor;
@@ -178,51 +108,18 @@ const LineChart = ({
     return tooltipTitleColor;
   }
   return (
-    <Grid item container justifyContent="center">
-      <Grid item container>
-        <Line data={type === "partner" ? partner : data} options={options} />
-      </Grid>
-      <Grid item container>
-        <Grid container justifyContent="space-evenly" className={classes.intervalButtonsGrid}>
-          {doctorStats &&
-            Object.keys(doctorStats)
-              .filter((timeFrame) => timeFrame != "activeDoctors" && timeFrame != "inactiveDoctors")
-              .filter(
-                (timeFrame) => timeFrame != "activePatients" && timeFrame != "inactivePatients",
-              )
-              .filter(
-                (timeFrame) =>
-                  timeFrame != "totalActiveSubscribers" && timeFrame != "totalInactiveSubscribers",
-              )
-              .map((timeFrame, index) => (
-                <Grid item key={index}>
-                  <Chip
-                    label={timeFrame}
-                    color={timeFrame === timeFrame.id ? "success" : undefined}
-                    clickable
-                    //   className={`${classes.chip} ${
-                    //     selectedTimeframe === timeFrame.id ? classes.active : undefined
-                    //   }`}
-                    //   onClick={() => setSelectedTimeframe(timeFrame.id)}
-                    //
-                  />
-                </Grid>
-              ))}
-        </Grid>
-      </Grid>
+    <Grid item container>
+      <Line data={data} options={options} />
     </Grid>
   );
 };
 
-LineChart.propTypes = {
+LineChart2.propTypes = {
   timeFrames: PropTypes.array,
-  activeChartData: PropTypes.array,
-  hospitalChartData: PropTypes.array,
-  inactiveChartData: PropTypes.array,
   selectedTimeframe: PropTypes.number,
   setSelectedTimeframe: PropTypes.func,
-  type: PropTypes.string,
   doctorStats: PropTypes.array,
+  graphState: PropTypes.object,
 };
 
-export default LineChart;
+export default LineChart2;
