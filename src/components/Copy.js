@@ -7,11 +7,7 @@ const Copy = ({ text, name, ...props }) => {
   const { copyToClipBoard } = useCopy();
 
   return (
-    <div
-      style={{ cursor: "pointer" }}
-      onClick={() => copyToClipBoard(text, name)}
-      {...props}
-    >
+    <div style={{ cursor: "pointer" }} onClick={() => copyToClipBoard(text, name)} {...props}>
       <ContentCopyIcon />
     </div>
   );
