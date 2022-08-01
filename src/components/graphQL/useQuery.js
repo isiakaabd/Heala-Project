@@ -101,11 +101,11 @@ export const dashboard = gql`
         diagnosticsChartData
         pharmacyChartData
       }
-      totalActiveSubscribers
-      totalInactiveSubscribers
     }
   }
 `;
+//   totalActiveSubscribers
+// totalInactiveSubscribers
 // ${PageInfo}
 export const getEarningStats = gql`
   query getEarningStats($q: String, $page: Int, $providerId: String, $status: String) {

@@ -6,7 +6,15 @@ export const dateMoment = (dateString) => {
 export const timeMoment = (dateString) => {
   return moment(dateString).format("hh:mm A");
 };
-
+export const newOptions = [
+  { key: "Active", value: "active" },
+  { key: "Inactive", value: "inactive" },
+];
+export const partnerOptions = [
+  { key: "hospital", value: "active" },
+  { key: "pharmacy", value: "inactive" },
+  { key: "diagnostic", value: "" },
+];
 export const timeConverter = (str) => {
   const date = new Date(str),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
