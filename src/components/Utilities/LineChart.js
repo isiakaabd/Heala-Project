@@ -57,9 +57,10 @@ const LineChart2 = ({ graphState }) => {
       },
       x: {
         grid: {
-          color: state === "active" ? lightGreen : lightBlue,
+          color: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
           borderDash: [2, 2],
-          borderColor: state === "active" ? lightGreen : lightBlue,
+          borderColor:
+            state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
           display: true,
         },
         display: true,
