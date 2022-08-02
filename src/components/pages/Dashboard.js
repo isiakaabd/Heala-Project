@@ -34,7 +34,7 @@ const Dashboard = () => {
   if (loading) return <Loader />;
 
   if (error) return <NoData error={error} />;
-
+  console.log(data);
   return (
     <Grid container direction="column" gap={3}>
       <Grid item container alignItems="center" flexWrap={"nowrap"}>
@@ -55,10 +55,10 @@ const Dashboard = () => {
       {data ? (
         <>
           {/* <Grid item container sx={{ overflow: "hidden" }}> */}
-          <DashboardCharts data={data} refetch={refetch} />
+          <DashboardCharts data={data} />
           {/* </Grid> */}
 
-          <AvailabilityTable data={data?.getStats.availabilityCalendar} />
+          <AvailabilityTable data={data?.getStats?.availabilityCalender} />
         </>
       ) : (
         <EmptyTable />

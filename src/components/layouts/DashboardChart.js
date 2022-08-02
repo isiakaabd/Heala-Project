@@ -98,14 +98,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardCharts = ({ data, refetch }) => {
+const DashboardCharts = ({ data }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
+
+  const [payoutArray, setPayoutArray] = useState([]);
+  const [earningArray, setEarningArray] = useState([]);
   // const [appointmentStats, setAppointmentStats] = useState([]);
-  const [totalActiveSubscribers, setTotalActiveSubscribers] = useState(0);
-  const [totalInactiveSubscribers, setTotalInactiveSubscribers] = useState(0);
   const [totalEarning, setTotalEarning] = useState(0);
   const [totalPayouts, setTotalPayouts] = useState(0);
   const [activePatientsChartData, setActivePatientsChartData] = useState([]);
@@ -115,11 +116,31 @@ const DashboardCharts = ({ data, refetch }) => {
   const [partnersData, setPartnersData] = useState([]);
   const [hospital, setHospital] = useState([]);
   const [pharmacy, setPharmacy] = useState([]);
+  const [activeSubs, setActiveSubs] = useState([]);
+  const [inActiveSubs, setInActiveSubs] = useState([]);
   const [diagnostic, setDiagnostic] = useState([]);
   const [graphState, setGraphState] = useState({
     state: "active",
     data: data?.getStats?.doctorStats.activeChartData,
   });
+  const [subScriptionState, setSubScriptionState] = useState({
+    state: "active",
+    data: data?.getStats?.subscriptionStats?.chartData,
+  });
+  const subGraphFunc = (e) => {
+    const { value } = e.target;
+    if (value === "active") {
+      setSubScriptionState({
+        state: "active",
+        data: activeSubs,
+      });
+    } else if (value === "inactive") {
+      setSubScriptionState({
+        state: "inactive",
+        data: inActiveSubs,
+      });
+    }
+  };
   // hospital is active, pharmacy is inactive, diagnostic is nothing
   const [partnerGraphState, setPartnerGraphState] = useState({
     state: "active",
@@ -142,8 +163,27 @@ const DashboardCharts = ({ data, refetch }) => {
       state: "active",
       data: data?.getStats?.partnerStats.hospitalChartData,
     });
+    setActiveSubs({
+      state: "active",
+      data: data?.getStats?.subscriptionStats.totalActive,
+    });
   }, [data]);
-
+  const onChange = async (e) => {
+    const { value } = e.target;
+    setForms(value);
+    //eslint-disable-next-line
+    earningArray?.map((item) => {
+      if (item?.month === value) {
+        setTotalEarning(item?.sum);
+      }
+    });
+    //eslint-disable-next-line
+    payoutArray?.map((item) => {
+      if (item?.month === value) {
+        setTotalPayouts(item?.sum);
+      }
+    });
+  };
   const graphFunc = (e) => {
     const { value } = e.target;
     if (value === "active") {
@@ -192,16 +232,18 @@ const DashboardCharts = ({ data, refetch }) => {
     }
   };
   useEffect(() => {
+    setPayoutArray(data?.getStats?.payoutStats?.chartData);
+    setEarningArray(data?.getStats?.earningStats?.chartData);
+  }, [data]);
+  useEffect(() => {
     const {
-      // eslint-disable-next-line
       patientStats,
       doctorStats,
-      totalActiveSubscribers,
-      totalInactiveSubscribers,
-      // appointmentStats,
+
       partnerStats,
-      totalEarnings,
-      totalPayout,
+      earningStats,
+      subscriptionStats,
+      payoutStats,
     } = data?.getStats;
     setPatients(patientStats);
     setDoctorStats(doctorStats);
@@ -209,22 +251,23 @@ const DashboardCharts = ({ data, refetch }) => {
     setHospital(partnerStats?.hospitalChartData);
     setDiagnostic(partnerStats?.diagnosticsChartData);
     setPharmacy(partnerStats?.pharmacyChartData);
+    setActiveSubs(subscriptionStats?.totalActive);
+    setInActiveSubs(subscriptionStats?.totalInactive);
     setInActiveChartPatientsData(patientStats?.inactiveChartData);
     setPartnersData(partnerStats);
     setActiveDoctorChartData(doctorStats?.activeChartData);
     setInActiveChartDoctorssData(doctorStats?.inactiveChartData);
-    setTotalActiveSubscribers(totalActiveSubscribers);
-    setTotalInactiveSubscribers(totalInactiveSubscribers);
-    setTotalEarning(totalEarnings ? totalEarning : 0);
-    setTotalPayouts(totalPayout ? totalPayout : 0);
-    const value = financialPercent(totalEarnings, totalPayout);
+    setTotalEarning(earningStats?.total);
+    setTotalPayouts(payoutStats?.total);
+    setPayoutArray(payoutStats?.chartData);
+    setEarningArray(earningStats?.chartData);
+    const value = financialPercent(totalEarning, totalPayouts);
+
     setFinances(value);
     //eslint-disable-next-line
   }, [data]);
 
-  const financialValue = financialPercent(0, 0);
-  // financialPercent(totalEarning, totalPayouts);
-
+  const financialValue = financialPercent(totalEarning, totalPayouts);
   const [finances, setFinances] = useState(financialValue);
   const { totalActive: activeDoctors, totalInactive: inactiveDoctors } = doctorStats;
   const { totalActive: activePatients, totalInactive: inactivePatients } = patients;
@@ -233,11 +276,6 @@ const DashboardCharts = ({ data, refetch }) => {
   const patientPercentage = returnpercent(activePatients, inactivePatients);
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
   const [forms, setForms] = useState("");
-  const subscribers = totalActiveSubscribers + totalInactiveSubscribers;
-  const onChange = async (e) => {
-    setForms(e.target.value);
-    await refetch({ q: e.target.value });
-  };
 
   return (
     <Grid
@@ -629,7 +667,7 @@ const DashboardCharts = ({ data, refetch }) => {
             <Grid item alignItems="center" container flex={1}>
               <Grid item container direction="column">
                 <Grid item container gap={1}>
-                  <Typography variant="h1">{subscribers ? subscribers : 0}</Typography>
+                  <Typography variant="h1"> {activeSubs + inActiveSubs}</Typography>
                 </Grid>
               </Grid>
               <Typography
@@ -644,16 +682,17 @@ const DashboardCharts = ({ data, refetch }) => {
           <Grid item>
             <FormSelect
               value={"active"}
-              onChange={(e) => console.log(e)}
+              onChange={subGraphFunc}
               options={newOptions}
               name="partner-select"
+              disabled
             />
           </Grid>
         </Grid>
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={patientGraphState} />
+          <LineChart graphState={subScriptionState} />
 
           {/* Line */}
         </Grid>
@@ -668,7 +707,7 @@ const DashboardCharts = ({ data, refetch }) => {
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {totalActiveSubscribers ? totalActiveSubscribers : 0}
+                  {data && activeSubs}
                 </Typography>
               </Grid>
               <Grid item>
@@ -689,7 +728,7 @@ const DashboardCharts = ({ data, refetch }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {totalInactiveSubscribers ? totalInactiveSubscribers : 0}
+                  {data && inActiveSubs}
                 </Typography>
               </Grid>
               <Grid item>
