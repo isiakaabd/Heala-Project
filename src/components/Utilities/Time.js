@@ -60,11 +60,18 @@ export const financialPercent = (a, b) => {
 };
 
 export const selectOptions = [
-  { key: "One day", value: "1" },
-  { key: "Five Days", value: "5" },
-  { key: "One Month", value: "30" },
-  { key: "Three Months", value: "90" },
-  { key: "One Year", value: "365" },
+  { key: "Jan", value: "1" },
+  { key: "Feb", value: "2" },
+  { key: "Mar", value: "3" },
+  { key: "Apr", value: "4" },
+  { key: "May", value: "5" },
+  { key: "Jun", value: "6" },
+  { key: "Jul", value: "7" },
+  { key: "Aug", value: "8" },
+  { key: "Sept", value: "9" },
+  { key: "Oct", value: "10" },
+  { key: "Nov", value: "11" },
+  { key: "Dec", value: "12" },
 ];
 export const formatNumber = (num) => {
   return new Intl.NumberFormat().format(num);
