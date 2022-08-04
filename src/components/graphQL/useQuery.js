@@ -117,13 +117,19 @@ export const dashboard = gql`
       availabilityCalender {
         today
         availableDoctors {
-          _id
           dociId
           firstName
           lastName
-          email
-
           providerId
+          availability {
+            day
+            times {
+              start
+              stop
+            }
+            createdAt
+            updatedAt
+          }
         }
       }
     }
@@ -707,14 +713,24 @@ export const verification = gql`
 `;
 
 export const getMyEarnings = gql`
-  query getMyEarnings {
-    getMyEarnings {
+  ${PageInfo}
+  query getMyEarnings($id: ID!, $page: Int, $first: Int) {
+    getMyEarnings(filterBy: { doctor: $id }, first: $first, page: $page, orderBy: "-createdAt") {
       data {
         _id
         doctor
         balance
+        doctorData
         createdAt
         updatedAt
+      }
+      totalEarnings
+      pageInfo {
+        ...pageDetails
+      }
+      errors {
+        field
+        message
       }
     }
   }

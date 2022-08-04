@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { NoData } from "components/layouts";
 import { Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { CircularProgressBar, Loader, FormSelect } from "components/Utilities";
+import { CircularProgressBar, Card, Loader, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
@@ -112,9 +113,7 @@ const HcpEarnings = () => {
   const { data: datas } = useQuery(getMyEarningDoc, {
     variables: { doc: hcpId },
   });
-
-  // console.log(datas.getMyEarnings.data[0].balance, "kkk");
-  const [x, setX] = useState(0);
+  const [, setX] = useState(0);
 
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
@@ -147,132 +146,154 @@ const HcpEarnings = () => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid
-      container
-      padding={{ md: "2rem 4rem", sm: "2rem, 4rem", xs: "1rem" }}
-      className={classes.mainContainer}
-      gap={3}
-    >
-      <Grid
-        item
-        flexWrap="nowrap"
-        // flexDirection={{ md: "row", sm: "column", xs: "column" }}
-        container
-        className={classes.flexContainer}
-      >
-        <Grid item flex={1}>
-          <Typography variant="h5" fontSize="clamp(2rem, 2vw, 3.3rem)">
-            Earnings
-          </Typography>
-        </Grid>
-        <Grid item>
-          <FormSelect
-            placeholder="Select days"
-            value={form}
-            onChange={onChange}
-            options={selectOptions}
-            name="finance"
-          />
-        </Grid>
-      </Grid>
-
+    <Grid container gap={3}>
       <Grid
         item
         container
         rowGap={4}
+        padding={{ md: "2rem 4rem", sm: "2rem, 4rem", xs: "1rem" }}
+        className={classes.mainContainer}
         flexDirection={{ md: "row", sm: "row", xs: "column" }}
         sx={{ alignItems: "center", justifyContent: "space-between" }}
       >
-        <Grid item>
-          <CircularProgressBar
-            height="17rem"
-            width="17rem"
-            color={theme.palette.common.green}
-            trailColor={theme.palette.common.red}
-            value={finances}
-            strokeWidth={8}
-          />
+        <Grid item container className={classes.flexContainer}>
+          <Grid item>
+            <Typography variant="h1" color="#2D2F39">
+              Earning
+            </Typography>
+          </Grid>
+          <Grid item>
+            <FormSelect
+              placeholder="Select days"
+              value={form}
+              onChange={onChange}
+              options={selectOptions}
+              name="finance"
+            />
+          </Grid>
         </Grid>
-        <Grid item flex={1}>
-          <Grid
-            container
-            alignItems="center"
-            rowGap={4}
-            justifyContent={{
-              md: "space-around",
-              xs: "flex-start",
-              sm: "space-around",
-            }}
-          >
-            <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
-              <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
-                <Grid
-                  className={classes.iconWrapper}
-                  sx={{ background: theme.palette.common.lightGreen }}
-                >
-                  <Grid item>
-                    <TrendingDownIcon color="success" className={classes.cardIcon} />
+        <Grid
+          item
+          container
+          alignItems="center"
+          flexDirection={{ md: "row", sm: "row", xs: "column" }}
+          spacing={{ md: 2, xs: 2, sm: 2 }}
+        >
+          <Grid item>
+            <CircularProgressBar
+              height="17rem"
+              width="17rem"
+              color={theme.palette.common.green}
+              trailColor={theme.palette.common.red}
+              value={finances}
+              strokeWidth={8}
+            />
+          </Grid>
+          <Grid item flex={1}>
+            <Grid
+              container
+              alignItems="center"
+              rowGap={4}
+              justifyContent={{
+                md: "space-around",
+                xs: "flex-start",
+                sm: "space-around",
+              }}
+            >
+              <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
+                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                  <Grid
+                    className={classes.iconWrapper}
+                    sx={{ background: theme.palette.common.lightGreen }}
+                  >
+                    <Grid item>
+                      <TrendingDownIcon color="success" className={classes.cardIcon} />
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid item>
-                  <Typography noWrap variant="h2">
-                    <span
+                  <Grid item>
+                    <Typography noWrap variant="h2">
+                      <span
+                        style={{
+                          textDecoration: "line-through",
+                          textDecorationStyle: "double",
+                        }}
+                      >
+                        N{""}
+                      </span>
+                      {formatNumber(totalEarning)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
                       style={{
-                        textDecoration: "line-through",
-                        textDecorationStyle: "double",
+                        color: theme.palette.common.lightGrey,
                       }}
                     >
-                      N{""}
-                    </span>
-                    {formatNumber(+x)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: theme.palette.common.lightGrey,
-                    }}
-                  >
-                    Total earnings
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            {/* second */}
-            <Grid item>
-              <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
-                <Grid
-                  className={classes.iconWrapper}
-                  sx={{ background: theme.palette.common.lightRed }}
-                >
-                  <Grid item>
-                    <TrendingUpIcon color="error" className={classes.cardIcon} />
+                      Total Earnings
+                    </Typography>
                   </Grid>
                 </Grid>
-                <Grid item>
-                  <Typography noWrap variant="h2">
-                    <span
+              </Grid>
+              {/* second */}
+              <Grid item>
+                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                  <Grid
+                    className={classes.iconWrapper}
+                    sx={{ background: theme.palette.common.lightRed }}
+                  >
+                    <Grid item>
+                      <TrendingUpIcon color="error" className={classes.cardIcon} />
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography noWrap variant="h2">
+                      <span
+                        style={{
+                          textDecoration: "line-through",
+                          textDecorationStyle: "double",
+                        }}
+                      >
+                        N{""}
+                      </span>
+                      {formatNumber(+totalPayouts)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
                       style={{
-                        textDecoration: "line-through",
-                        textDecorationStyle: "double",
+                        color: theme.palette.common.lightGrey,
                       }}
                     >
-                      N{""}
-                    </span>
-                    {formatNumber(+totalPayouts)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    style={{
-                      color: theme.palette.common.lightGrey,
-                      // fontSize: "clamp(2,3vw,2.275rem)",
-                    }}
-                  >
-                    Total withdrawal
-                  </Typography>
+                      Total Expenditure
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
+              {/* second */}
             </Grid>
-            {/* second */}
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* iterms */}
+      <Grid item container justifyContent="space-between">
+        {/* 1 */}
+        <Grid item container md={4} sm={4} xs={12}>
+          <Grid item container flexDirection="column">
+            <Link to={`/hcps/${hcpId}/earnings/payout`} style={{ textDecoration: "none" }}>
+              <Card title="Total Payout" background={theme.palette.common.lightRed}>
+                <TrendingUpIcon color="error" className={classes.cardIcon} />
+              </Card>
+            </Link>
+          </Grid>
+        </Grid>
+        {/* 2 */}
+        <Grid item container md={4} sm={4} xs={12}>
+          <Grid item container flexDirection="column">
+            <Link to={`/hcps/${hcpId}/earnings/earn`} style={{ textDecoration: "none" }}>
+              <Card title="Total Earnings" background={theme.palette.common.lightGreen}>
+                <Grid className={classes.iconWrapper}>
+                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                </Grid>
+              </Card>
+            </Link>
           </Grid>
         </Grid>
       </Grid>

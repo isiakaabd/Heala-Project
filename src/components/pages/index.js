@@ -40,6 +40,8 @@ export { default as ReferralTab } from "./ReferralTab";
 export { default as Settings } from "./Settings";
 export { default as SingleHCP } from "./SingleHCP";
 export { default as SinglePatient } from "./SinglePatient";
+export { default as DoctorPayout } from "./DoctorPayout";
+export { default as DoctorEarning } from "./DoctorEarning";
 export { default as Subscription } from "./Subscription";
 export { default as UserTypes } from "./UserTypes";
 export { default as VideoCall } from "./VideoCall";

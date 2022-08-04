@@ -7,11 +7,13 @@ import {
   Chat,
   Patients,
   Subscription,
+  DoctorPayout,
   Hcps,
   ViewDoctorVerification,
   SingleHCP,
   DoctorVerificationProfile,
   Appointments,
+  DoctorEarning,
   HcpEarnings,
   HcpAvailability,
   HcpPatients,
@@ -100,16 +102,17 @@ const Routes = () => {
 
       <PrivateRoute path="/hcps/:hcpId/availability" component={HcpAvailability} />
 
-      <PrivateRoute path="/hcps/:hcpId/earnings" component={HcpEarnings} />
+      <PrivateRoute exact path="/hcps/:hcpId/earnings" component={HcpEarnings} />
 
-      <PrivateRoute path="/hcps/:hcpId/earnings" component={HcpEarnings} />
+      <PrivateRoute exact path="/hcps/:hcpId/earnings/payout" component={DoctorPayout} />
+      <PrivateRoute exact path="/hcps/:hcpId/earnings/earn" component={DoctorEarning} />
+      <PrivateRoute exact path="/hcps/:hcpId/earnings" component={HcpEarnings} />
 
       <PrivateRoute path="/hcps/:hcpId/doctor-patients" component={HcpPatients} />
 
       <PrivateRoute exact path="/hcps/:hcpId/consultations" component={HcpConsultations} />
 
       <PrivateRoute path="/hcps/:hcpId/consultations/case-notes/:rowId" component={HcpCaseNote} />
-
       {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
 
@@ -150,6 +153,7 @@ const Routes = () => {
       <PrivateRoute exact path="/finance/earnings" component={Financetable} />
 
       <PrivateRoute exact path="/finance/payouts" component={Payout} />
+
       <PrivateRoute exact path="/finance/pending" component={PendingPayout} />
       <PrivateRoute exact path="/finance/sub-income" component={SubscriptionIncome} />
 

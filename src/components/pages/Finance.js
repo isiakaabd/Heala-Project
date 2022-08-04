@@ -231,7 +231,7 @@ const Finance = () => {
                           textDecorationStyle: "double",
                         }}
                       >
-                        N{""}
+                        N
                       </span>
                       {formatNumber(+totalExpenditure)}
                     </Typography>

@@ -211,10 +211,10 @@ export const payoutHeader = [
     id: 4,
     label: "Amount Paid out",
   },
-  {
-    id: 5,
-    label: "Payout status",
-  },
+  // {
+  //   id: 5,
+  //   label: "Payout status",
+  // },
 ];
 export const pendingHeader = [
   {
