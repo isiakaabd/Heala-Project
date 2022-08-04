@@ -56,7 +56,6 @@ const AvailabilityTable = ({ data }) => {
 
   const classes = useStyles();
   const theme = useTheme();
-
   return (
     <Grid item container direction="column" height="100%" rowGap={2}>
       <Grid item>
@@ -79,7 +78,7 @@ const AvailabilityTable = ({ data }) => {
             hasPagination={false}
           >
             {avaliablity.map((row, index) => {
-              const { _id, doctorData, dociId, times, day } = row;
+              const { _id, firstName, picture, lastName, dociId, availability } = row;
               const labelId = `enhanced-table-checkbox-${index}`;
               return (
                 <TableRow hover tabIndex={-1} key={_id}>
@@ -90,7 +89,6 @@ const AvailabilityTable = ({ data }) => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.grey }}
                   >
-                    {/* {doctorData ? doctorData?.dociId : "no doctor"} */}
                     {dociId ? dociId?.split("-")[1] : "No Value"}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
@@ -98,31 +96,30 @@ const AvailabilityTable = ({ data }) => {
                       style={{
                         height: "100%",
                         display: "flex",
+                        flexWrap: "nowrap",
                         alignItems: "center",
                         textAlign: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
+                      <span style={{ marginRight: "1rem", display: "inline-block" }}>
                         <Avatar
-                          alt="Remy Sharp"
-                          src={doctorData ? doctorData.picture : displayPhoto}
+                          alt={`${firstName} ${lastName}`}
+                          src={picture ? picture : displayPhoto}
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {doctorData
-                          ? `${doctorData?.firstName} ${doctorData?.lastName}`
-                          : "no name"}
-                      </span>
+                      <span
+                        style={{ fontSize: "1.25rem", display: "inline-block" }}
+                      >{`${firstName} ${lastName}`}</span>
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    {day ? day : "No Value"}
+                    {availability ? availability?.day : "No Value"}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Grid container gap={1}>
-                      {times
-                        ? times?.map((time) => {
+                      {availability?.times
+                        ? availability?.times?.map((time) => {
                             return (
                               <Chip
                                 key={index}
