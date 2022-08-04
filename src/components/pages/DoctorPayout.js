@@ -95,7 +95,6 @@ const DoctorPayout = () => {
   useEffect(() => {
     try {
       fetchPayout({ variables: { first: pageInfo?.limit } }).then(({ data }) => {
-        console.log(data);
         if (!data) throw Error("Couldn't fetch doctors payout data");
         setPageInfo(data?.getEarningStats?.payoutData?.PageInfo);
         setPayout(data?.getEarningStats?.payoutData?.data);
