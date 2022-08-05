@@ -364,7 +364,7 @@ export const waitingHeadCells = [
 export const availabilityHeadCells = [
   { id: 0, label: "Doctor ID" },
   { id: 1, label: "Name" },
-  { id: 2, label: "Day" },
+  { id: 2, label: "Availability Status" },
   { id: 3, label: "Available Time" },
 ];
 

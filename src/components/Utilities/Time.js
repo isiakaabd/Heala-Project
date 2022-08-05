@@ -15,6 +15,13 @@ export const partnerOptions = [
   { key: "pharmacy", value: "inactive" },
   { key: "diagnostic", value: "" },
 ];
+export const consultationsOptions = [
+  { key: "Accepted", value: "Accepted" },
+  { key: "Completed", value: "Completed" },
+  { key: "Declined", value: "Declined" },
+  { key: "Ongoing", value: "Ongoing" },
+  { key: "Cancelled", value: "Cancelled" },
+];
 export const timeConverter = (str) => {
   const date = new Date(str),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
