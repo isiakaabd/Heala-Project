@@ -19,6 +19,15 @@ const LineChart2 = ({ graphState }) => {
     setState(graphState?.state);
     setChartData(z);
   }, [graphState]);
+
+  // switch (key) {
+  //   case value:
+
+  //     break;
+
+  //   default:
+  //     break;
+  // }
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     backgroundColor: "rgba(90,165,60,0.6)",
@@ -28,9 +37,24 @@ const LineChart2 = ({ graphState }) => {
         data: chartData,
         fill: true,
         cursor: "pointer",
-        borderColor: state === "active" ? green : state === "inactive" ? red : gold,
-        pointBackgroundColor: state === "active" ? green : state === "inactive" ? red : gold,
-        pointBorderColor: state === "active" ? green : state === "inactive" ? red : gold,
+        borderColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? green
+            : state === "inactive" || state === "Ongoing"
+            ? red
+            : gold,
+        pointBackgroundColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? green
+            : state === "inactive" || state === "Ongoing"
+            ? red
+            : gold,
+        pointBorderColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? green
+            : state === "inactive" || state === "Ongoing"
+            ? red
+            : gold,
         pointRadius: 1,
         pointHoverRadius: 5,
         pointHoverColor: "#00f",
@@ -46,21 +70,44 @@ const LineChart2 = ({ graphState }) => {
     scales: {
       y: {
         beginAtZero: false,
-        fillColor: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+        fillColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? lightGreen
+            : state === "inactive" || state === "Ongoing"
+            ? lightBlue
+            : lightGold,
         grid: {
-          color: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+          color:
+            state === "active" || state === "Completed" || state === "Accepted"
+              ? lightGreen
+              : state === "inactive" || state === "Ongoing"
+              ? lightBlue
+              : lightGold,
           borderColor:
-            state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+            state === "active" || state === "Completed" || state === "Accepted"
+              ? lightGreen
+              : state === "inactive" || state === "Ongoing"
+              ? lightBlue
+              : lightGold,
           borderDash: [2, 2],
           display: true,
         },
       },
       x: {
         grid: {
-          color: state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+          color:
+            state === "active" || state === "Completed" || state === "Accepted"
+              ? lightGreen
+              : state === "inactive" || state === "Ongoing"
+              ? lightBlue
+              : lightGold,
           borderDash: [2, 2],
           borderColor:
-            state === "active" ? lightGreen : state === "inactive" ? lightBlue : lightGold,
+            state === "active" || state === "Completed" || state === "Accepted"
+              ? lightGreen
+              : state === "inactive" || state === "Ongoing"
+              ? lightBlue
+              : lightGold,
           display: true,
         },
         display: true,
@@ -75,11 +122,21 @@ const LineChart2 = ({ graphState }) => {
         cursor: "pointer",
         titleColor: colorItem,
         onHover: hover,
-        bodyColor: state === "active" ? green : red,
+        bodyColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? green
+            : state === "inactive" || state === "Ongoing"
+            ? red
+            : gold,
         // theme.palette.common.lightGrey,
         titleAlign: "left",
         bodyAlign: "left",
-        borderColor: state === "active" ? green : red,
+        borderColor:
+          state === "active" || state === "Completed" || state === "Accepted"
+            ? green
+            : state === "inactive" || state === "Ongoing"
+            ? red
+            : gold,
         // "rgba(0, 0, 0, 0.05)",
         borderWidth: 1,
         displayColors: true,

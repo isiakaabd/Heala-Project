@@ -100,11 +100,16 @@ export const dashboard = gql`
         hospitalChartData
         diagnosticsChartData
         pharmacyChartData
+        totalHospitals
+        totalPharmacies
+        totalDiagnostics
       }
       subscriptionStats {
         totalActive
         totalInactive
         chartData
+        activeChartData
+        inactiveChartData
       }
       earningStats {
         total
@@ -114,16 +119,34 @@ export const dashboard = gql`
         total
         chartData
       }
+      consultationStats {
+        totalOngoing
+        totalAccepted
+        totalCompleted
+        totalDeclined
+        totalCancelled
+        ongoingChartData
+        acceptedChartData
+        completedChartData
+        declinedChartData
+        cancelledChartData
+      }
       availabilityCalender {
         today
         availableDoctors {
-          _id
           dociId
           firstName
           lastName
-          email
-
           providerId
+          availability {
+            times {
+              start
+              stop
+              available
+            }
+            createdAt
+            updatedAt
+          }
         }
       }
     }
@@ -707,14 +730,24 @@ export const verification = gql`
 `;
 
 export const getMyEarnings = gql`
-  query getMyEarnings {
-    getMyEarnings {
+  ${PageInfo}
+  query getMyEarnings($id: ID!, $page: Int, $first: Int) {
+    getMyEarnings(filterBy: { doctor: $id }, first: $first, page: $page, orderBy: "-createdAt") {
       data {
         _id
         doctor
         balance
+        doctorData
         createdAt
         updatedAt
+      }
+      totalEarnings
+      pageInfo {
+        ...pageDetails
+      }
+      errors {
+        field
+        message
       }
     }
   }
