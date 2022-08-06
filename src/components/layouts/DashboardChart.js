@@ -6,6 +6,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
 import {
   financialPercent,
+  consultationsOptions,
   returnpercent,
   selectOptions,
   partnerOptions,
@@ -99,14 +100,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCharts = ({ data }) => {
+  console.log(data);
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
-
+  const [totalSubs, setTotalSub] = useState(0);
   const [payoutArray, setPayoutArray] = useState([]);
   const [earningArray, setEarningArray] = useState([]);
-  // const [appointmentStats, setAppointmentStats] = useState([]);
+  const [totalConsultations, setTotalConsultations] = useState("");
   const [totalEarning, setTotalEarning] = useState(0);
   const [totalPayouts, setTotalPayouts] = useState(0);
   const [activePatientsChartData, setActivePatientsChartData] = useState([]);
@@ -119,13 +121,24 @@ const DashboardCharts = ({ data }) => {
   const [activeSubs, setActiveSubs] = useState([]);
   const [inActiveSubs, setInActiveSubs] = useState([]);
   const [diagnostic, setDiagnostic] = useState([]);
+  const [accepted, setAccepted] = useState([]);
+  const [cancelled, setCancelled] = useState([]);
+  const [ongoing, setOngoing] = useState([]);
+  const [completed, setCompleted] = useState([]);
+  const [activeSubsNumber, setActiveSubsNumber] = useState(0);
+  const [inActiveSubsNumber, setInActiveSubsNumber] = useState(0);
+  const [declined, setDeclined] = useState([]);
   const [graphState, setGraphState] = useState({
     state: "active",
     data: data?.getStats?.doctorStats.activeChartData,
   });
   const [subScriptionState, setSubScriptionState] = useState({
     state: "active",
-    data: data?.getStats?.subscriptionStats?.chartData,
+    data: data?.getStats?.subscriptionStats?.activeChartData,
+  });
+  const [consultationState, setConsultationState] = useState({
+    state: "Completed",
+    data: data?.getStats?.consultationStats?.completedChartData,
   });
   const subGraphFunc = (e) => {
     const { value } = e.target;
@@ -165,7 +178,7 @@ const DashboardCharts = ({ data }) => {
     });
     setActiveSubs({
       state: "active",
-      data: data?.getStats?.subscriptionStats.totalActive,
+      data: data?.getStats?.subscriptionStats?.activeChartData,
     });
   }, [data]);
   const onChange = async (e) => {
@@ -231,6 +244,70 @@ const DashboardCharts = ({ data }) => {
       });
     }
   };
+  const consultationFunc = (e) => {
+    const { value } = e.target;
+
+    switch (value) {
+      case "Cancelled":
+        setConsultationState({
+          state: "Cancelled",
+          data: cancelled,
+        });
+        break;
+      case "Accepted":
+        setConsultationState({
+          state: "Accepted",
+          data: accepted,
+        });
+        break;
+      case "Ongoing":
+        setConsultationState({
+          state: "Ongoing",
+          data: ongoing,
+        });
+        break;
+      case "Completed":
+        setConsultationState({
+          state: "Completed",
+          data: completed,
+        });
+        break;
+      case "Declined":
+        setConsultationState({
+          state: "Declined",
+          data: declined,
+        });
+        break;
+    }
+
+    // if (value === "Cancelled") {
+    //   setSubScriptionState({
+    //     state: "inactive",
+    //     data: cancelled,
+    //   });
+    // } else if (value === "Accepted") {
+    //   setSubScriptionState({
+    //     state: "active",
+    //     data: accepted,
+    //   });
+    // } else if (value === "Ongoing") {
+    //   setSubScriptionState({
+    //     state: "inactive",
+    //     data: ongoing,
+    //   });
+
+    // } else if (value === "Completed") {
+    //   setSubScriptionState({
+    //     state: "active",
+    //     data: completed,
+    //   });
+    // } else if (value === "Declined") {
+    //   setSubScriptionState({
+    //     state: "inactive",
+    //     data: declined,
+    //   });
+    // }
+  };
   useEffect(() => {
     setPayoutArray(data?.getStats?.payoutStats?.chartData);
     setEarningArray(data?.getStats?.earningStats?.chartData);
@@ -239,7 +316,7 @@ const DashboardCharts = ({ data }) => {
     const {
       patientStats,
       doctorStats,
-
+      consultationStats,
       partnerStats,
       earningStats,
       subscriptionStats,
@@ -247,12 +324,18 @@ const DashboardCharts = ({ data }) => {
     } = data?.getStats;
     setPatients(patientStats);
     setDoctorStats(doctorStats);
+    setCancelled(consultationStats.cancelledChartData);
+    setTotalConsultations(consultationStats);
+    setOngoing(consultationStats.ongoingChartData);
+    setDeclined(consultationStats.declinedChartData);
+    setCompleted(consultationStats.completedChartData);
+    setAccepted(consultationStats.acceptedChartData);
     setActivePatientsChartData(patientStats?.activeChartData);
     setHospital(partnerStats?.hospitalChartData);
     setDiagnostic(partnerStats?.diagnosticsChartData);
     setPharmacy(partnerStats?.pharmacyChartData);
-    setActiveSubs(subscriptionStats?.totalActive);
-    setInActiveSubs(subscriptionStats?.totalInactive);
+    setActiveSubs(subscriptionStats?.activeChartData);
+    setInActiveSubs(subscriptionStats?.inactiveChartData);
     setInActiveChartPatientsData(patientStats?.inactiveChartData);
     setPartnersData(partnerStats);
     setActiveDoctorChartData(doctorStats?.activeChartData);
@@ -261,13 +344,19 @@ const DashboardCharts = ({ data }) => {
     setTotalPayouts(payoutStats?.total);
     setPayoutArray(payoutStats?.chartData);
     setEarningArray(earningStats?.chartData);
+    setActiveSubsNumber(subscriptionStats?.totalActive);
+    setInActiveSubsNumber(subscriptionStats?.totalInactive);
+    setTotalSub(subscriptionStats?.totalActive + subscriptionStats?.totalInactive);
     const value = financialPercent(totalEarning, totalPayouts);
 
     setFinances(value);
     //eslint-disable-next-line
   }, [data]);
 
+  const { totalAccepted, totalCancelled, totalOngoing, totalDeclined, totalCompleted } =
+    totalConsultations;
   const financialValue = financialPercent(totalEarning, totalPayouts);
+  const total = totalAccepted + totalCancelled + totalOngoing + totalDeclined + totalCompleted;
   const [finances, setFinances] = useState(financialValue);
   const { totalActive: activeDoctors, totalInactive: inactiveDoctors } = doctorStats;
   const { totalActive: activePatients, totalInactive: inactivePatients } = patients;
@@ -578,7 +667,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {hospital?.length}
+                  {data?.getStats?.partnerStats?.totalHospitals}
                 </Typography>
               </Grid>
               <Grid item>
@@ -599,7 +688,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {pharmacy?.length}
+                  {data?.getStats?.partnerStats?.totalPharmacies}
                 </Typography>
               </Grid>
               <Grid item>
@@ -620,7 +709,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {diagnostic?.length}
+                  {data?.getStats?.partnerStats?.totalDiagnostics}
                 </Typography>
               </Grid>
               <Grid item>
@@ -631,6 +720,168 @@ const DashboardCharts = ({ data }) => {
                   <Grid item>
                     <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
                       Diagnostics
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Consultations Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          paddingY={{ md: 2, sm: 2, xs: 2 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            gap={{ sm: 3, xs: 2, md: 3 }}
+            alignItems="center"
+            flexWrap={"nowrap"}
+            container
+            flex={3}
+          >
+            <Grid item className={classes.groupIconGrid}>
+              <GroupIcon color="success" className={classes.groupIcon} />
+            </Grid>
+            <Grid item alignItems="center" container flex={1}>
+              <Grid item container direction="column">
+                <Grid item container gap={1}>
+                  <Typography variant="h1">{data && total}</Typography>
+                </Grid>
+              </Grid>
+              <Typography
+                variant="body2"
+                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Total Consultations
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid item>
+            <FormSelect
+              value={consultationState?.state}
+              onChange={consultationFunc}
+              options={consultationsOptions}
+              name="consulation-select"
+            />
+          </Grid>
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart graphState={consultationState} />
+        </Grid>
+        <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
+          <Grid item>
+            <Grid container direction="column">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {data?.getStats?.consultationStats?.totalAccepted}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Accepted
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid container direction="column" justifyContent="center">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {data?.getStats?.consultationStats?.totalCompleted}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Completed
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid container direction="column" justifyContent="center">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {data?.getStats?.consultationStats?.totalCancelled}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.gold}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Cancelled
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item>
+            <Grid container direction="column" justifyContent="center">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {data?.getStats?.consultationStats?.totalDeclined}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.gold}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Declined
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid container direction="column" justifyContent="center">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {data?.getStats?.consultationStats?.totalOngoing}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Ongoing
                     </Typography>
                   </Grid>
                 </Grid>
@@ -667,7 +918,7 @@ const DashboardCharts = ({ data }) => {
             <Grid item alignItems="center" container flex={1}>
               <Grid item container direction="column">
                 <Grid item container gap={1}>
-                  <Typography variant="h1"> {activeSubs + inActiveSubs}</Typography>
+                  <Typography variant="h1"> {totalSubs}</Typography>
                 </Grid>
               </Grid>
               <Typography
@@ -685,7 +936,6 @@ const DashboardCharts = ({ data }) => {
               onChange={subGraphFunc}
               options={newOptions}
               name="partner-select"
-              disabled
             />
           </Grid>
         </Grid>
@@ -707,7 +957,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data && activeSubs}
+                  {data && activeSubsNumber}
                 </Typography>
               </Grid>
               <Grid item>
@@ -728,7 +978,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data && inActiveSubs}
+                  {data && inActiveSubsNumber}
                 </Typography>
               </Grid>
               <Grid item>
@@ -749,7 +999,13 @@ const DashboardCharts = ({ data }) => {
       </Grid>
       {/* financial */}
       <Grid item direction="column" className={classes.chartCard}>
-        <Grid item container rowGap={{ sm: 6, xs: 0 }} flexDirection={{ xs: "column" }}>
+        <Grid
+          item
+          container
+          rowGap={{ sm: 10, xs: 0 }}
+          justifyContent="space-between"
+          flexDirection={{ xs: "column" }}
+        >
           <Grid
             container
             justifyContent="space-between"
@@ -775,9 +1031,11 @@ const DashboardCharts = ({ data }) => {
             item
             container
             justifySelf={{ xs: "center", sm: "space-between" }}
+            alignSelf="center"
+            sx={{ height: "100%", marginTop: "2rem" }}
             justifyContent="space-between"
             flexWrap={{ sm: "nowrap" }}
-            flexDirection={{ xs: "column", sm: "column", md: "row" }}
+            flexDirection={{ xs: "column", sm: "column", md: "column" }}
             alignItems="center"
             rowGap={{ xs: "2rem" }}
             paddingY={{ xs: "1rem" }}
@@ -785,16 +1043,17 @@ const DashboardCharts = ({ data }) => {
           >
             <Grid item marginRight={{ sm: "2rem", md: "2rem" }}>
               <CircularProgressBar
-                height="8rem"
-                width="8rem"
+                height="20rem"
+                width="20rem"
                 color={theme.palette.common.green}
                 trailColor={theme.palette.common.red}
                 value={finances}
                 strokeWidth={8}
               />
             </Grid>
-            <Grid item container flexWrap="nowrap" flexDirection={{ xs: "row" }}>
-              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center">
+            <Grid item container flexWrap="nowrap"  alignItems="center" flexDirection={{ xs: "row" }}>
+              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center"             justifyContent={{ xs: "center", sm: "center" }}
+ >
                 <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
                   <TrendingDownIcon color="success" />
                 </Grid>
@@ -861,58 +1120,6 @@ const DashboardCharts = ({ data }) => {
               </Grid>
             </Grid>
           </Grid>
-
-          {/* <Grid container flex={{ sm: 1 }} direction="column" className={classes.chartCard}>
-            <Grid item>
-              <Typography variant="h5">Appointment Stats</Typography>
-            </Grid>
-
-            <Grid item container paddingY={{ sm: 3, md: 3, xs: 2 }}>
-              <Grid item container justifyContent="space-between">
-                <Grid item>
-                  <Grid container gap={2}>
-                    <Grid item className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}>
-                      <NotificationsActiveIcon className={classes.notificationIcon} />
-                    </Grid>
-
-                    <Grid item direction="column">
-                      <Typography variant="h5">
-                        {appointmentStats?.totalUpcoming ? appointmentStats?.totalUpcoming : 0}
-                      </Typography>
-
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                        Total Upcoming
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <Grid container>
-                    <Grid item className={`${classes.iconWrapper} ${classes.greenNotificationBg}`}>
-                      <NotificationsActiveIcon className={classes.notificationIcon} />
-                    </Grid>
-                    <Grid item style={{ marginLeft: "1em" }}>
-                      <Grid container direction="column">
-                        <Grid item>
-                          <Typography variant="h4">
-                            {appointmentStats?.totalPast ? appointmentStats?.totalPast : 0}{" "}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography
-                            variant="body2"
-                            style={{ color: theme.palette.common.lightGrey }}
-                          >
-                            Total Past
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid> */}
         </Grid>
       </Grid>
     </Grid>

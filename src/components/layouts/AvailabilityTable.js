@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, Grid, Typography, TableCell, Avatar, Chip } from "@mui/material";
+import { TableRow, Grid, Badge, Typography, TableCell, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 // import { useSelector } from "react-redux";
@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
       fontSize: "1.25rem",
+    },
+  },
+  badge1: {
+    "&.MuiBadge-root": {
+      color: "#232 !Important",
     },
   },
   button: {
@@ -114,22 +119,34 @@ const AvailabilityTable = ({ data }) => {
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    {availability ? availability?.day : "No Value"}
+                    {availability?.day ? availability?.day : "No Value"}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Grid container gap={1}>
-                      {availability?.times
+                    <Grid container alignItems="center" gap={1}>
+                      {availability
                         ? availability?.times?.map((time) => {
                             return (
-                              <Chip
-                                key={index}
-                                label={`${hours(time.start)} - ${hours(time.stop)} `}
-                                className={classes.badge}
-                                style={{
-                                  background: theme.palette.common.lightGreen,
-                                  color: theme.palette.common.green,
-                                }}
-                              />
+                              <>
+                                {/* <Badge
+                                  color="success"
+                                  anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "right",
+                                  }}
+                                  className={classes.badge1}
+                                  variant="dot"
+                                > */}
+                                  <Chip
+                                    key={index}
+                                    label={`${hours(time.start)} - ${hours(time.stop)} `}
+                                    className={classes.badge}
+                                    style={{
+                                      background: theme.palette.common.lightGreen,
+                                      color: theme.palette.common.green,
+                                    }}
+                                  />
+                                {/* </Badge> */}
+                              </>
                             );
                           })
                         : "No Time"}
