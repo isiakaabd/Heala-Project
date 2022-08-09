@@ -273,7 +273,7 @@ const HcpEarnings = () => {
         </Grid>
       </Grid>
       {/* iterms */}
-      <Grid item container justifyContent="space-between">
+      <Grid item container justifyContent="space-evenly">
         {/* 1 */}
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">

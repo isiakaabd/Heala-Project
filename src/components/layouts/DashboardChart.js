@@ -100,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCharts = ({ data }) => {
-  console.log(data);
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
@@ -279,34 +278,6 @@ const DashboardCharts = ({ data }) => {
         });
         break;
     }
-
-    // if (value === "Cancelled") {
-    //   setSubScriptionState({
-    //     state: "inactive",
-    //     data: cancelled,
-    //   });
-    // } else if (value === "Accepted") {
-    //   setSubScriptionState({
-    //     state: "active",
-    //     data: accepted,
-    //   });
-    // } else if (value === "Ongoing") {
-    //   setSubScriptionState({
-    //     state: "inactive",
-    //     data: ongoing,
-    //   });
-
-    // } else if (value === "Completed") {
-    //   setSubScriptionState({
-    //     state: "active",
-    //     data: completed,
-    //   });
-    // } else if (value === "Declined") {
-    //   setSubScriptionState({
-    //     state: "inactive",
-    //     data: declined,
-    //   });
-    // }
   };
   useEffect(() => {
     setPayoutArray(data?.getStats?.payoutStats?.chartData);
@@ -932,7 +903,7 @@ const DashboardCharts = ({ data }) => {
 
           <Grid item>
             <FormSelect
-              value={"active"}
+              value={subScriptionState?.state}
               onChange={subGraphFunc}
               options={newOptions}
               name="partner-select"
