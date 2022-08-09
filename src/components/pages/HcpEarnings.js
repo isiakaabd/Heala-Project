@@ -102,8 +102,6 @@ const useStyles = makeStyles((theme) => ({
 
 const HcpEarnings = () => {
   const classes = useStyles();
-  // const theme = useTheme();
-
   const { hcpId } = useParams();
 
   const [form, setForm] = useState("");
@@ -113,7 +111,6 @@ const HcpEarnings = () => {
   const { data: datas } = useQuery(getMyEarningDoc, {
     variables: { doc: hcpId },
   });
-  const [, setX] = useState(0);
 
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
@@ -126,15 +123,8 @@ const HcpEarnings = () => {
 
   const theme = useTheme();
   useEffect(() => {
-    if (datas !== undefined) {
-      if (datas.getMyEarnings.length > 0) {
-        setX(datas?.getMyEarnings?.data[0]?.balance);
-      }
-    }
-
     if (data) {
       const { totalEarnings, totalPayout } = data.getEarningStats;
-
       setTotalEarning(totalEarnings);
       setTotalPayouts(totalPayout);
       const value = financialPercent(totalEarnings, totalPayout);
@@ -273,7 +263,7 @@ const HcpEarnings = () => {
         </Grid>
       </Grid>
       {/* iterms */}
-      <Grid item container justifyContent="space-between">
+      <Grid item container justifyContent="space-evenly">
         {/* 1 */}
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
