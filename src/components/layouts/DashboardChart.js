@@ -100,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCharts = ({ data }) => {
+  console.log(data);
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
@@ -277,6 +278,7 @@ const DashboardCharts = ({ data }) => {
           data: declined,
         });
         break;
+      default:
     }
   };
   useEffect(() => {
@@ -973,7 +975,7 @@ const DashboardCharts = ({ data }) => {
         <Grid
           item
           container
-          rowGap={{ sm: 16, xs: 0 }}
+          rowGap={{ sm: 10, xs: 0 }}
           justifyContent="space-between"
           flexDirection={{ xs: "column" }}
         >
@@ -1006,7 +1008,7 @@ const DashboardCharts = ({ data }) => {
             sx={{ height: "100%", marginTop: "2rem" }}
             justifyContent="space-between"
             flexWrap={{ sm: "nowrap" }}
-            flexDirection={{ xs: "column", sm: "column", md: "row" }}
+            flexDirection={{ xs: "column", sm: "column", md: "column" }}
             alignItems="center"
             rowGap={{ xs: "2rem" }}
             paddingY={{ xs: "1rem" }}
@@ -1014,16 +1016,28 @@ const DashboardCharts = ({ data }) => {
           >
             <Grid item marginRight={{ sm: "2rem", md: "2rem" }}>
               <CircularProgressBar
-                height="8rem"
-                width="8rem"
+                height="20rem"
+                width="20rem"
                 color={theme.palette.common.green}
                 trailColor={theme.palette.common.red}
                 value={finances}
                 strokeWidth={8}
               />
             </Grid>
-            <Grid item container flexWrap="nowrap" flexDirection={{ xs: "row" }}>
-              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center">
+            <Grid
+              item
+              container
+              flexWrap="nowrap"
+              alignItems="center"
+              flexDirection={{ xs: "row" }}
+            >
+              <Grid
+                item
+                container
+                gap={{ sm: 2, xs: 1 }}
+                alignItems="center"
+                justifyContent={{ xs: "center", sm: "center" }}
+              >
                 <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
                   <TrendingDownIcon color="success" />
                 </Grid>

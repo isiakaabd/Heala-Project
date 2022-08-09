@@ -8,7 +8,7 @@ import { getMyEarnings } from "components/graphQL/useQuery";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { payoutHeader } from "components/Utilities/tableHeaders";
+import { payoutHeaders } from "components/Utilities/tableHeaders";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -93,13 +93,12 @@ const DoctorEarning = () => {
 
   const [statusFilterValue, setStatusFilterValue] = useState("");
   const [fetchPayout, { loading, error, refetch, variables }] = useLazyQuery(getMyEarnings);
-  console.log(pageInfo);
+
   useEffect(() => {
     try {
-      fetchPayout({ variables: { first: pageInfo?.limit, id: hcpId } }).then(({ data }) => {
-        console.log(data?.getMyEarnings?.pageInfo);
+      fetchPayout({ variables: { first: pageInfo?.limit, doctor: hcpId } }).then(({ data }) => {
         if (!data) throw Error("Couldn't fetch doctors payout data");
-        setPageInfo(data?.getMyEarnings?.PageInfo);
+        setPageInfo(data?.getMyEarnings?.pageInfo);
         setPayout(data?.getMyEarnings?.data);
       });
     } catch (error) {
@@ -120,7 +119,7 @@ const DoctorEarning = () => {
       })
         .then((data) => {
           setPayout(data?.getMyEarnings?.data || []);
-          setPageInfo(data?.getMyEarnings?.PageInfo || {});
+          setPageInfo(data?.getMyEarnings?.pageInfo || {});
         })
         .catch(() => {
           refresh(setStatusFilterValue, "");
@@ -138,7 +137,7 @@ const DoctorEarning = () => {
     refetch()
       .then(({ data }) => {
         setPayout(data?.getMyEarnings?.data || []);
-        setPageInfo(data?.getMyEarnings?.PageInfo || {});
+        setPageInfo(data?.getMyEarnings?.pageInfo || {});
       })
       .catch((error) => {
         console.error(error);
@@ -147,15 +146,16 @@ const DoctorEarning = () => {
   };
 
   const setTableData = async (response, errMsg) => {
-    response
-      .then(({ data }) => {
-        setPageInfo(data?.getMyEarnings?.PageInfo || defaultPageInfo);
+    const data = response?.data;
+    try {
+      if (data) {
+        setPageInfo(data?.getMyEarnings?.pageInfo || defaultPageInfo);
         setPayout(data?.getMyEarnings?.data || []);
-      })
-      .catch((error) => {
-        console.error(error);
-        displayAlert("error", errMsg);
-      });
+      }
+    } catch (error) {
+      console.error(error);
+      displayAlert("error", errMsg);
+    }
   };
 
   if (error) return <NoData error={error} />;
@@ -186,17 +186,17 @@ const DoctorEarning = () => {
         {payout.length > 0 ? (
           <Grid item container>
             <EnhancedTable
-              headCells={payoutHeader}
+              headCells={payoutHeaders}
               rows={payout}
               paginationLabel="Earning per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, { first: e });
+                const res = await changeTableLimit(fetchPayout, { first: e, doctor: hcpId });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = await handlePageChange(fetchPayout, page, pageInfo, {});
+                const res = await handlePageChange(fetchPayout, page, pageInfo, { doctor: hcpId });
                 await setTableData(res, "Failed to change table page.");
               }}
               fetchData={fetchPayout}
@@ -303,7 +303,7 @@ const DoctorEarning = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={payoutHeader} paginationLabel="Earnings  per page" />
+          <EmptyTable headCells={payoutHeaders} paginationLabel="Earnings  per page" />
         )}
       </>
     </Grid>

@@ -195,9 +195,9 @@ export const getSubscriptionsIncome = gql`
 `;
 
 export const getPayoutData = gql`
-  query getEarningStats($first: Int, $page: Int, $status: String) {
+  query getEarningStats($first: Int, $doctor: String, $page: Int, $status: String) {
     getEarningStats(
-      filterBy: { status: $status }
+      filterBy: { status: $status, doctor: $doctor }
       q: "365"
       page: $page
       first: $first
@@ -731,8 +731,13 @@ export const verification = gql`
 
 export const getMyEarnings = gql`
   ${PageInfo}
-  query getMyEarnings($id: ID!, $page: Int, $first: Int) {
-    getMyEarnings(filterBy: { doctor: $id }, first: $first, page: $page, orderBy: "-createdAt") {
+  query getMyEarnings($doctor: String, $page: Int, $first: Int) {
+    getMyEarnings(
+      filterBy: { doctor: $doctor }
+      first: $first
+      page: $page
+      orderBy: "-createdAt"
+    ) {
       data {
         _id
         doctor

@@ -211,10 +211,28 @@ export const payoutHeader = [
     id: 4,
     label: "Amount Paid out",
   },
-  // {
-  //   id: 5,
-  //   label: "Payout status",
-  // },
+  {
+    id: 5,
+    label: "Payout status",
+  },
+];
+export const payoutHeaders = [
+  {
+    id: 0,
+    label: "Date",
+  },
+  {
+    id: 1,
+    label: "Time",
+  },
+  {
+    id: 2,
+    label: "Name",
+  },
+  {
+    id: 4,
+    label: "Amount",
+  },
 ];
 export const pendingHeader = [
   {
@@ -364,7 +382,7 @@ export const waitingHeadCells = [
 export const availabilityHeadCells = [
   { id: 0, label: "Doctor ID" },
   { id: 1, label: "Name" },
-  { id: 2, label: "Availability Status" },
+  { id: 2, label: "Day" },
   { id: 3, label: "Available Time" },
 ];
 

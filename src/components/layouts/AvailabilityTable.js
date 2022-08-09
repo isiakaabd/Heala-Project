@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, Grid, Badge, Typography, TableCell, Avatar, Chip } from "@mui/material";
+import { TableRow, Grid, Typography, Checkbox, TableCell, Avatar, Chip } from "@mui/material";
 import EnhancedTable from "./EnhancedTable";
+import { isSelected } from "helpers/isSelected";
+import { useSelector } from "react-redux";
+import { useActions } from "components/hooks/useActions";
+import { handleSelectedRows } from "helpers/selectedRows";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
-// import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
@@ -60,7 +63,11 @@ const AvailabilityTable = ({ data }) => {
   }, [data]);
 
   const classes = useStyles();
+  const { selectedRows } = useSelector((state) => state.tables);
+
+  const { setSelectedRows } = useActions();
   const theme = useTheme();
+  console.log(data);
   return (
     <Grid item container direction="column" height="100%" rowGap={2}>
       <Grid item>
@@ -79,14 +86,26 @@ const AvailabilityTable = ({ data }) => {
             rows={avaliablity}
             paginationLabel="List per page"
             title="Availability Calendar"
-            hasCheckbox={false}
+            hasCheckbox={true}
             hasPagination={false}
           >
             {avaliablity.map((row, index) => {
-              const { _id, firstName, picture, lastName, dociId, availability } = row;
+              const { _id, picture, availability, firstName, lastName, dociId } = row;
               const labelId = `enhanced-table-checkbox-${index}`;
+              const isItemSelected = isSelected(_id, selectedRows);
+
               return (
                 <TableRow hover tabIndex={-1} key={_id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </TableCell>
                   <TableCell
                     id={labelId}
                     scope="row"
@@ -119,34 +138,29 @@ const AvailabilityTable = ({ data }) => {
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    {availability?.day ? availability?.day : "No Value"}
+                    {data.today ? data.today : "No Value"}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Grid container alignItems="center" gap={1}>
                       {availability
-                        ? availability?.times?.map((time) => {
+                        ? availability?.times?.map((time, ind) => {
+                            const { start, stop, available } = time;
+                            const Bool = Boolean(available);
                             return (
-                              <>
-                                <Badge
-                                  color="success"
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                  }}
-                                  className={classes.badge1}
-                                  variant="dot"
-                                >
-                                  <Chip
-                                    key={index}
-                                    label={`${hours(time.start)} - ${hours(time.stop)} `}
-                                    className={classes.badge}
-                                    style={{
-                                      background: theme.palette.common.lightGreen,
-                                      color: theme.palette.common.green,
-                                    }}
-                                  />
-                                </Badge>
-                              </>
+                              <Chip
+                                key={ind}
+                                label={`${hours(start)} - ${hours(stop)} `}
+                                className={classes.badge}
+                                style={{
+                                  background: Bool
+                                    ? theme.palette.common.lightGreen
+                                    : theme.palette.common.lightRed,
+                                  color: Bool
+                                    ? theme.palette.common.green
+                                    : theme.palette.common.red,
+                                  textDecoration: Bool ? "" : "line-through",
+                                }}
+                              />
                             );
                           })
                         : "No Time"}
