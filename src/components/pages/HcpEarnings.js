@@ -9,7 +9,7 @@ import { makeStyles } from "@mui/styles";
 import { CircularProgressBar, Card, Loader, FormSelect } from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getEarningStats, getMyEarningDoc } from "components/graphQL/useQuery";
+import { getMyEarnings } from "components/graphQL/useQuery";
 import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
@@ -105,13 +105,15 @@ const HcpEarnings = () => {
   const { hcpId } = useParams();
 
   const [form, setForm] = useState("");
-  const { data, error, loading, refetch } = useQuery(getEarningStats, {
-    variables: { q: "365" },
+  const { data, error, loading, refetch } = useQuery(getMyEarnings, {
+    variables: {
+      doctor: hcpId,
+    },
   });
-  const { data: datas } = useQuery(getMyEarningDoc, {
-    variables: { doc: hcpId },
-  });
-
+  // const { data: datas } = useQuery(getMyEarningDoc, {
+  //   variables: { doc: hcpId },
+  // });
+  console.log(data);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
   const financialValue = financialPercent(totalEarning, totalPayouts);
@@ -124,13 +126,13 @@ const HcpEarnings = () => {
   const theme = useTheme();
   useEffect(() => {
     if (data) {
-      const { totalEarnings, totalPayout } = data.getEarningStats;
+      const { totalEarnings, totalPayouts } = data?.getMyEarnings;
       setTotalEarning(totalEarnings);
-      setTotalPayouts(totalPayout);
-      const value = financialPercent(totalEarnings, totalPayout);
+      setTotalPayouts(totalPayouts);
+      const value = financialPercent(totalEarnings, totalPayouts);
       setFinances(value);
     }
-  }, [form, data, datas]);
+  }, [form, data]);
   // const classes = useStyles();
 
   if (loading) return <Loader />;

@@ -23,7 +23,6 @@ import displayPhoto from "assets/images/avatar.svg";
 import { hours } from "components/Utilities/Time";
 import { EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
-import PropTypes from "prop-types";
 import { useLazyQuery } from "@apollo/client";
 import { defaultPageInfo } from "helpers/mockData";
 import { getAvailabilities, getDoctorAvailabilityForDate } from "components/graphQL/useQuery";
@@ -74,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AvailabilityTable = ({ data }) => {
+const AvailabilityTable = () => {
   const [pageInfo, setPageInfo] = useState({
     page: 0,
     totalPages: 1,
@@ -186,7 +185,7 @@ const AvailabilityTable = ({ data }) => {
               }}
             >
               {availabilities?.map((row, index) => {
-                const { _id, picture, firstName, lastName, dociId, day, times, doctor } = row;
+                const { _id, picture, doctorData, day, times, doctor } = row;
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const isItemSelected = isSelected(_id, selectedRows);
 
@@ -209,7 +208,7 @@ const AvailabilityTable = ({ data }) => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.grey }}
                     >
-                      {dociId ? dociId?.split("-")[1] : "No Value"}
+                      {doctorData?.dociId ? doctorData?.dociId?.split("-")[1] : "No Value"}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -228,7 +227,9 @@ const AvailabilityTable = ({ data }) => {
                           />
                         </span>
                         <span style={{ fontSize: "1.25rem" }}>
-                          {firstName ? `${firstName} ${lastName}` : "no name"}
+                          {doctorData?.firstName
+                            ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                            : "no name"}
                         </span>
                       </div>
                     </TableCell>
@@ -325,9 +326,6 @@ const AvailabilityTable = ({ data }) => {
       </Modals>
     </>
   );
-};
-AvailabilityTable.propTypes = {
-  data: PropTypes.object,
 };
 
 export default AvailabilityTable;

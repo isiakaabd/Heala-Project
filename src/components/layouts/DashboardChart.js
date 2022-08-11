@@ -129,15 +129,15 @@ const DashboardCharts = ({ data }) => {
   const [declined, setDeclined] = useState([]);
   const [graphState, setGraphState] = useState({
     state: "active",
-    data: data?.getStats?.doctorStats.activeChartData,
+    data: data?.doctorStats.activeChartData,
   });
   const [subScriptionState, setSubScriptionState] = useState({
     state: "active",
-    data: data?.getStats?.subscriptionStats?.activeChartData,
+    data: data?.subscriptionStats?.activeChartData,
   });
   const [consultationState, setConsultationState] = useState({
     state: "Completed",
-    data: data?.getStats?.consultationStats?.completedChartData,
+    data: data?.consultationStats?.completedChartData,
   });
   const subGraphFunc = (e) => {
     const { value } = e.target;
@@ -156,28 +156,28 @@ const DashboardCharts = ({ data }) => {
   // hospital is active, pharmacy is inactive, diagnostic is nothing
   const [partnerGraphState, setPartnerGraphState] = useState({
     state: "active",
-    data: data?.getStats?.partnerStats.hospitalChartData,
+    data: data?.partnerStats.hospitalChartData,
   });
   const [patientGraphState, setPatientGraphState] = useState({
     state: "active",
-    data: data?.getStats?.patientStats.activeChartData,
+    data: data?.patientStats.activeChartData,
   });
   useEffect(() => {
     setGraphState({
       state: "active",
-      data: data?.getStats?.doctorStats.activeChartData,
+      data: data?.doctorStats.activeChartData,
     });
     setPatientGraphState({
       state: "active",
-      data: data?.getStats?.patientStats.activeChartData,
+      data: data?.patientStats.activeChartData,
     });
     setPartnerGraphState({
       state: "active",
-      data: data?.getStats?.partnerStats.hospitalChartData,
+      data: data?.partnerStats.hospitalChartData,
     });
     setActiveSubs({
       state: "active",
-      data: data?.getStats?.subscriptionStats?.activeChartData,
+      data: data?.subscriptionStats?.activeChartData,
     });
   }, [data]);
   const onChange = async (e) => {
@@ -280,9 +280,10 @@ const DashboardCharts = ({ data }) => {
       default:
     }
   };
+
   useEffect(() => {
-    setPayoutArray(data?.getStats?.payoutStats?.chartData);
-    setEarningArray(data?.getStats?.earningStats?.chartData);
+    setPayoutArray(data?.payoutStats?.chartData);
+    setEarningArray(data?.earningStats?.chartData);
   }, [data]);
   useEffect(() => {
     const {
@@ -293,7 +294,7 @@ const DashboardCharts = ({ data }) => {
       earningStats,
       subscriptionStats,
       payoutStats,
-    } = data?.getStats;
+    } = data;
     setPatients(patientStats);
     setDoctorStats(doctorStats);
     setCancelled(consultationStats.cancelledChartData);
@@ -444,7 +445,7 @@ const DashboardCharts = ({ data }) => {
               <Grid container direction="column" justifyContent="center">
                 <Grid item>
                   <Typography variant="h3" gutterBottom>
-                    {doctorStats?.totalInactive}{" "}
+                    {doctorStats?.totalInactive}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -639,7 +640,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.partnerStats?.totalHospitals}
+                  {data?.partnerStats?.totalHospitals}
                 </Typography>
               </Grid>
               <Grid item>
@@ -660,7 +661,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.partnerStats?.totalPharmacies}
+                  {data?.partnerStats?.totalPharmacies}
                 </Typography>
               </Grid>
               <Grid item>
@@ -681,7 +682,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.partnerStats?.totalDiagnostics}
+                  {data?.partnerStats?.totalDiagnostics}
                 </Typography>
               </Grid>
               <Grid item>
@@ -758,7 +759,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.consultationStats?.totalAccepted}
+                  {data?.consultationStats?.totalAccepted}
                 </Typography>
               </Grid>
               <Grid item>
@@ -779,7 +780,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.consultationStats?.totalCompleted}
+                  {data?.consultationStats?.totalCompleted}
                 </Typography>
               </Grid>
               <Grid item>
@@ -800,7 +801,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.consultationStats?.totalCancelled}
+                  {data?.consultationStats?.totalCancelled}
                 </Typography>
               </Grid>
               <Grid item>
@@ -822,7 +823,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.consultationStats?.totalDeclined}
+                  {data?.consultationStats?.totalDeclined}
                 </Typography>
               </Grid>
               <Grid item>
@@ -843,7 +844,7 @@ const DashboardCharts = ({ data }) => {
             <Grid container direction="column" justifyContent="center">
               <Grid item>
                 <Typography variant="h3" gutterBottom>
-                  {data?.getStats?.consultationStats?.totalOngoing}
+                  {data?.consultationStats?.totalOngoing}
                 </Typography>
               </Grid>
               <Grid item>
