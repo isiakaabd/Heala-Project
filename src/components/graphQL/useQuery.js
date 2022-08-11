@@ -80,8 +80,8 @@ export const getUserType = gql`
   }
 `;
 export const dashboard = gql`
-  query getStats {
-    getStats(filterBy: { providerId: "61db6f8968b248001aec4fcb" }) {
+  query getStats($providerId: String) {
+    getStats(filterBy: { providerId: $providerId }) {
       patientStats {
         totalActive
         totalInactive
@@ -788,6 +788,7 @@ export const getMyEarnings = gql`
         updatedAt
       }
       totalEarnings
+      totalPayouts
       pageInfo {
         ...pageDetails
       }
