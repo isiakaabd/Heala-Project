@@ -155,7 +155,7 @@ const DoctorPayout = () => {
       }
     } catch (error) {
       console.error(error);
-      displayAlert("error", errMsg);
+      displayAlert("error", error.message);
     }
   };
 

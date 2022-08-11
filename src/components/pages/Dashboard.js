@@ -58,7 +58,7 @@ const Dashboard = () => {
           <DashboardCharts data={data} />
           {/* </Grid> */}
 
-          <AvailabilityTable data={data?.getStats?.availabilityCalender} />
+          <AvailabilityTable />
         </>
       ) : (
         <EmptyTable />

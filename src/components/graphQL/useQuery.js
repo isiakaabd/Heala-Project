@@ -728,7 +728,48 @@ export const verification = gql`
     }
   }
 `;
-
+export const getDoctorAvailabilityForDate = gql`
+  query getDoctorAvailabilityForDate($doctor: String!, $day: String) {
+    getDoctorAvailabilityForDate(doctorId: $doctor, day: $day) {
+      day
+      available
+      times {
+        start
+        stop
+        available
+      }
+    }
+  }
+`;
+export const getAvailabilities = gql`
+  ${PageInfo}
+  query getAvailabilities($id: String, $page: Int, $first: Int) {
+    getAvailabilities(filterBy: { doctor: $id }, page: $page, first: $first) {
+      availability {
+        _id
+        doctor
+        doctorData
+        createdAt
+        updatedAt
+        providerId
+        day
+        available
+        times {
+          start
+          stop
+          available
+        }
+      }
+      pageInfo {
+        ...pageDetails
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const getMyEarnings = gql`
   ${PageInfo}
   query getMyEarnings($doctor: String, $page: Int, $first: Int) {

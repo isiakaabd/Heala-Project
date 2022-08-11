@@ -100,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCharts = ({ data }) => {
-  console.log(data);
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
