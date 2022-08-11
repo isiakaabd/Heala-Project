@@ -164,17 +164,6 @@ const DoctorEarning = () => {
                 Doctors Earnings Table
               </Typography>
             </Grid>
-            {/* <Grid item>
-              <Filter
-                onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-                onClickClearBtn={() => onFilterStatusChange("")}
-                options={payoutFilterBy}
-                name="status"
-                placeholder="None"
-                value={statusFilterValue}
-                hasClearBtn={true}
-              />
-            </Grid> */}
           </Grid>
         </Grid>
         {payout.length > 0 ? (

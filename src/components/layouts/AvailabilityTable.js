@@ -84,7 +84,7 @@ const AvailabilityTable = ({ data }) => {
     totalDocs: 0,
   });
   const [modal, setModal] = useState(false);
-  const [fetchAvailabilities] = useLazyQuery(getAvailabilities);
+  const [fetchAvailabilities, { loading: load }] = useLazyQuery(getAvailabilities);
   const [fetchDay, { loading, data: dt }] = useLazyQuery(getDoctorAvailabilityForDate);
   const [avail, setAvail] = useState("");
   useEffect(() => {
@@ -151,6 +151,7 @@ const AvailabilityTable = ({ data }) => {
     });
     //eslint-disable-next-line
   }, []);
+  if (load) return <Loader />;
   const { day, available, times } = avail;
   return (
     <>
