@@ -252,7 +252,7 @@ const HcpEarnings = () => {
                         color: theme.palette.common.lightGrey,
                       }}
                     >
-                      Total Expenditure
+                      Total Payouts
                     </Typography>
                   </Grid>
                 </Grid>
