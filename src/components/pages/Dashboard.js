@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { dashboard } from "components/graphQL/useQuery";
-import { NoData, AvailabilityTable, DashboardCharts, EmptyTable } from "components/layouts";
+import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
 import { Loader, FormSelect } from "components/Utilities";
 
 const Dashboard = () => {
   const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
+  const [state, setState] = useState("");
   const { data: da } = useQuery(getProviders);
 
-  const { data, error, loading, refetch } = useQuery(dashboard, {
-    notifyOnNetworkStatusChange: true,
+  const { data, error, loading } = useQuery(dashboard, {
+    variables: {
+      providerId: "61db6f8968b248001aec4fcb",
+    },
   });
+  const [provider, setProvider] = useState("61db6f8968b248001aec4fcb");
+  const [fetchData, { data: newData, error: err, loading: load }] = useLazyQuery(dashboard);
 
   useEffect(() => {
     if (da) {
@@ -26,14 +31,36 @@ const Dashboard = () => {
       );
     }
   }, [da]);
+  useEffect(() => {
+    if (data) {
+      setState(data);
+    }
+    //eslint-disable-next-line
+  }, []);
   const onChange = async (e) => {
+    setProvider(e.target.value);
     setForm(e.target.value);
-    await refetch({ providerId: e.target.value });
   };
 
-  if (loading) return <Loader />;
+  useEffect(() => {
+    fetchData({
+      variables: {
+        providerId: provider,
+      },
+    });
+    //eslint-disable-next-line
+  }, [provider]);
 
-  if (error) return <NoData error={error} />;
+  console.log(state);
+  useEffect(() => {
+    if (newData) {
+      setState(newData);
+    }
+  }, [form, newData, provider]);
+
+  if (loading || load) return <Loader />;
+
+  if (error || err) return <NoData error={error} />;
 
   return (
     <Grid container direction="column" gap={3}>
@@ -52,16 +79,16 @@ const Dashboard = () => {
           />
         </Grid>
       </Grid>
-      {data ? (
+      {state ? (
         <>
           {/* <Grid item container sx={{ overflow: "hidden" }}> */}
-          <DashboardCharts data={data} />
+          <DashboardCharts data={state?.getStats} />
           {/* </Grid> */}
 
           <AvailabilityTable />
         </>
       ) : (
-        <EmptyTable />
+        <NoData />
       )}
     </Grid>
   );

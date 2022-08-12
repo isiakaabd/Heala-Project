@@ -118,33 +118,12 @@ const HCP = () => {
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
         <Grid item container>
-          {/* {response ? (
-            <Grid
-              item
-              width={300}
-              margin="0 auto"
-              justifyContent="left"
-              alignItems="center"
-            >
-              <Alert severity="success">
-                <Typography variant="h1">{response}</Typography>
-              </Alert>
-            </Grid>
-          ) : null} */}
           <Grid
             item
             direction={{ sm: "row", xs: "column" }}
             gap={{ md: 4, sm: 4, xs: 2 }}
             container
           >
-            {/* <Grid item flex={1}>
-              <Search
-                value={searchMail}
-                onChange={(e) => setSearchMail(e.target.value)}
-                placeholder="Type to search Doctors..."
-                height="5rem"
-              />
-            </Grid> */}
             <Grid item>
               <Filter
                 onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
@@ -220,14 +199,12 @@ const HCP = () => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`image of ${doctorData && doctorData.firstName}`}
+                              alt={`image of ${doctorData?.firstName}`}
                               src={doctorData ? doctorData.picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData && doctorData.firstName}
-                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{doctorData?.firstName}</span>
                         </div>
                       </TableCell>
                       <TableCell
@@ -237,10 +214,10 @@ const HCP = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.black }}
                       >
-                        {doctorData && doctorData.lastName}
+                        {doctorData?.lastName}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {qualification && qualification.degree}
+                        {doctorData?.specialization}
                       </TableCell>
                       <TableCell
                         align="left"
@@ -263,7 +240,7 @@ const HCP = () => {
                         />
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        {qualification && dateMoment(qualification.year)}
+                        {dateMoment(qualification?.year)}
                       </TableCell>
 
                       <TableCell>
@@ -279,7 +256,7 @@ const HCP = () => {
                           endIcon={<ArrowForwardIosIcon />}
                           to={`/verification/view/${_id}`}
                         >
-                          View Verification{" "}
+                          View Verification
                         </Button>
                       </TableCell>
                     </TableRow>
