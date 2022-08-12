@@ -70,19 +70,9 @@ const LineChart2 = ({ graphState }) => {
     scales: {
       y: {
         beginAtZero: false,
-        fillColor:
-          state === "active" || state === "Completed" || state === "Accepted"
-            ? lightGreen
-            : state === "inactive" || state === "Ongoing"
-            ? lightBlue
-            : lightGold,
+        fillColor: "#fff",
         grid: {
-          color:
-            state === "active" || state === "Completed" || state === "Accepted"
-              ? lightGreen
-              : state === "inactive" || state === "Ongoing"
-              ? lightBlue
-              : lightGold,
+          color: "#fff",
           borderColor:
             state === "active" || state === "Completed" || state === "Accepted"
               ? lightGreen
@@ -95,12 +85,7 @@ const LineChart2 = ({ graphState }) => {
       },
       x: {
         grid: {
-          color:
-            state === "active" || state === "Completed" || state === "Accepted"
-              ? lightGreen
-              : state === "inactive" || state === "Ongoing"
-              ? lightBlue
-              : lightGold,
+          color: "#fff",
           borderDash: [2, 2],
           borderColor:
             state === "active" || state === "Completed" || state === "Accepted"
