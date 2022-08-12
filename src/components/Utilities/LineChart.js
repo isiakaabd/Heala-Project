@@ -55,7 +55,7 @@ const LineChart2 = ({ graphState }) => {
             : state === "inactive" || state === "Ongoing"
             ? red
             : gold,
-        pointRadius: 1,
+        pointRadius: 2,
         pointHoverRadius: 5,
         pointHoverColor: "#00f",
         pointBorderWidth: 0.9,
