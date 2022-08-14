@@ -9,23 +9,28 @@ import {
   Button,
   Checkbox,
 } from "@mui/material";
+import { NoData } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useSelector } from "react-redux";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { Modals, Loader } from "components/Utilities";
+import { Modals, Loader, FormSelect } from "components/Utilities";
 import { isSelected } from "helpers/isSelected";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import { hours } from "components/Utilities/Time";
+import { hours, days } from "components/Utilities/Time";
 import { EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { defaultPageInfo } from "helpers/mockData";
-import { getAvailabilities, getDoctorAvailabilityForDate } from "components/graphQL/useQuery";
+import {
+  getAvailabilities,
+  getDoctorAvailabilityForDate,
+  getProviders,
+} from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
@@ -82,10 +87,55 @@ const AvailabilityTable = () => {
     limit: 10,
     totalDocs: 0,
   });
+
+  const { data: da } = useQuery(getProviders);
+  const [availabilities, setAvailabilities] = useState([]);
+  const [provider, setProvider] = useState("61db6f8968b248001aec4fcb");
   const [modal, setModal] = useState(false);
-  const [fetchAvailabilities, { loading: load }] = useLazyQuery(getAvailabilities);
-  const [fetchDay, { loading, data: dt }] = useLazyQuery(getDoctorAvailabilityForDate);
+  const [form, setForm] = useState("61db6f8968b248001aec4fcb");
+  const [dropDown, setDropDown] = useState([]);
+  const [select, setSelect] = useState("");
   const [avail, setAvail] = useState("");
+
+  const onChange = async (e) => {
+    setProvider(e.target.value);
+    setForm(e.target.value);
+  };
+
+  const classes = useStyles();
+  const theme = useTheme();
+
+  // redux
+  const { selectedRows } = useSelector((state) => state.tables);
+  const { setSelectedRows } = useActions();
+  //queries
+  const [fetchAvailabilities, { loading: load, data, error }] = useLazyQuery(getAvailabilities);
+
+  // providers drop down
+  useEffect(() => {
+    if (da) {
+      const data = da.getProviders.provider;
+      const options = data?.map((i) => {
+        return {
+          key: i.name,
+          value: i._id,
+        };
+      });
+      setDropDown(options);
+    }
+  }, [da]);
+
+  const [fetchDay, { loading, data: dt }] = useLazyQuery(getDoctorAvailabilityForDate);
+
+  const setTableData = async (response, errMsg) => {
+    if (response) {
+      setPageInfo(response?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(response?.getAvailabilities?.availability || defaultPageInfo);
+    } else {
+      console.error(errMsg);
+    }
+  };
+
   useEffect(() => {
     if (dt) {
       const { available, day, times } = dt?.getDoctorAvailabilityForDate;
@@ -102,44 +152,36 @@ const AvailabilityTable = () => {
       });
     }
   }, [dt]);
-  useEffect(() => {
-    fetchAvailabilities({
-      variables: {
-        first: 5,
-      },
-    });
-  }, [fetchAvailabilities]);
 
   useEffect(() => {
     fetchAvailabilities({
       variables: {
         first: 5,
+        providerId: provider,
       },
-    }).then(({ data }) => {
-      if (data) {
-        setPageInfo(data?.getAvailabilities?.pageInfo || []);
-        setAvailabilities(data?.getAvailabilities?.availability || defaultPageInfo);
-      }
     });
+
+    if (data) {
+      setPageInfo(data?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(data?.getAvailabilities?.availability || defaultPageInfo);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const { selectedRows } = useSelector((state) => state.tables);
+  }, [data, provider]);
 
-  const { setSelectedRows } = useActions();
-  const [availabilities, setAvailabilities] = useState([]);
+  const handleSelectChange = async (e) => {
+    const { value } = e.target;
 
-  const setTableData = async (response, errMsg) => {
-    response
-      .then(({ data }) => {
-        setPageInfo(data?.getAvailabilities?.pageInfo || []);
-        setAvailabilities(data?.getAvailabilities?.availability || defaultPageInfo);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    await fetchAvailabilities({
+      variables: {
+        first: 5,
+        providerId: provider,
+        day: value.toLowerCase(),
+      },
+    });
+    setSelect(value);
   };
-  const classes = useStyles();
-  const theme = useTheme();
+
   const handleCheckDay = useCallback((day, doctor) => {
     setModal(true);
     fetchDay({
@@ -151,12 +193,33 @@ const AvailabilityTable = () => {
     //eslint-disable-next-line
   }, []);
   if (load) return <Loader />;
+  if (error) return <NoData />;
   const { day, available, times } = avail;
   return (
     <>
       <Grid item container direction="column" height="100%" rowGap={2}>
-        <Grid item>
-          <Typography variant="h4">Availability Table</Typography>
+        <Grid item container alignItems="center" gap={2}>
+          <Grid item flex={1}>
+            <Typography variant="h4">Availability Table</Typography>
+          </Grid>
+          <Grid item>
+            <FormSelect
+              value={select}
+              onChange={handleSelectChange}
+              options={days}
+              placeholder="Days"
+              name="select"
+              disabled={availabilities?.length === 0}
+            />
+          </Grid>
+          <Grid item>
+            <FormSelect
+              value={form}
+              onChange={onChange}
+              options={dropDown}
+              name="availability-dropdown"
+            />
+          </Grid>
         </Grid>
         {availabilities?.length > 0 ? (
           <Grid

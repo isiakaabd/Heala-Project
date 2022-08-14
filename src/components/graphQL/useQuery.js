@@ -743,8 +743,12 @@ export const getDoctorAvailabilityForDate = gql`
 `;
 export const getAvailabilities = gql`
   ${PageInfo}
-  query getAvailabilities($id: String, $page: Int, $first: Int) {
-    getAvailabilities(filterBy: { doctor: $id }, page: $page, first: $first) {
+  query getAvailabilities($id: String, $providerId: String, $page: Int, $first: Int) {
+    getAvailabilities(
+      filterBy: { doctor: $id, providerId: $providerId }
+      page: $page
+      first: $first
+    ) {
       availability {
         _id
         doctor

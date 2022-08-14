@@ -7,20 +7,46 @@ export const timeMoment = (dateString) => {
   return moment(dateString).format("hh:mm A");
 };
 export const newOptions = [
+  { key: "All Stats", value: "all" },
   { key: "Active", value: "active" },
   { key: "Inactive", value: "inactive" },
 ];
 export const partnerOptions = [
-  { key: "hospital", value: "active" },
-  { key: "pharmacy", value: "inactive" },
-  { key: "diagnostic", value: "" },
+  { key: "All Stats", value: "all" },
+  { key: "hospital", value: "hospital" },
+  { key: "pharmacy", value: "pharmacy" },
+  { key: "diagnostic", value: "diagnostic" },
+];
+export const days = [
+  { key: "Sunday", value: "Sunday" },
+  { key: "Monday", value: "Monday" },
+  { key: "Tuesday", value: "Tuesday" },
+  { key: "Wednesday", value: "Wednesday" },
+  { key: "Thursday", value: "Thursday" },
+  { key: "Friday", value: "Friday" },
+  { key: "Saturday", value: "Saturday" },
 ];
 export const consultationsOptions = [
+  { key: "All Stats", value: "all" },
   { key: "Accepted", value: "Accepted" },
   { key: "Completed", value: "Completed" },
   { key: "Declined", value: "Declined" },
   { key: "Ongoing", value: "Ongoing" },
   { key: "Cancelled", value: "Cancelled" },
+];
+export const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 export const timeConverter = (str) => {
   const date = new Date(str),
