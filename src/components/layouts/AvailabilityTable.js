@@ -128,9 +128,9 @@ const AvailabilityTable = () => {
   const [fetchDay, { loading, data: dt }] = useLazyQuery(getDoctorAvailabilityForDate);
 
   const setTableData = async (response, errMsg) => {
-    if (response) {
-      setPageInfo(response?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(response?.getAvailabilities?.availability || defaultPageInfo);
+    if (response?.data) {
+      setPageInfo(response?.data?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(response?.data?.getAvailabilities?.availability || defaultPageInfo);
     } else {
       console.error(errMsg);
     }
@@ -167,7 +167,7 @@ const AvailabilityTable = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, provider]);
+  }, [data, provider, select]);
 
   const handleSelectChange = async (e) => {
     const { value } = e.target;
@@ -176,7 +176,7 @@ const AvailabilityTable = () => {
       variables: {
         first: 5,
         providerId: provider,
-        day: value.toLowerCase(),
+        day: value,
       },
     });
     setSelect(value);
@@ -209,7 +209,6 @@ const AvailabilityTable = () => {
               options={days}
               placeholder="Days"
               name="select"
-              disabled={availabilities?.length === 0}
             />
           </Grid>
           <Grid item>
@@ -235,15 +234,19 @@ const AvailabilityTable = () => {
               paginationLabel="Availabilities per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                const res = changeTableLimit(fetchAvailabilities, {
+                console.log(e);
+                const res = await changeTableLimit(fetchAvailabilities, {
                   first: e,
+                  providerId: provider,
                 });
 
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchAvailabilities, page, pageInfo);
+                const res = handlePageChange(fetchAvailabilities, page, pageInfo, {
+                  providerId: provider,
+                });
                 await setTableData(res, "Failed to change page.");
               }}
             >
