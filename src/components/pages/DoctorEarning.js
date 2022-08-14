@@ -8,23 +8,17 @@ import { getMyEarnings } from "components/graphQL/useQuery";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { payoutHeader } from "components/Utilities/tableHeaders";
+import { payoutHeaders } from "components/Utilities/tableHeaders";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Filter from "components/Forms/Filters";
+// import Filter from "components/Forms/Filters";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
-import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
-import {
-  changeTableLimit,
-  deleteVar,
-  fetchMoreData,
-  filterData,
-  handlePageChange,
-} from "helpers/filterHelperFunctions";
+import { defaultPageInfo } from "helpers/mockData";
+import { changeTableLimit, fetchMoreData, handlePageChange } from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   iconWrapper: {
@@ -91,15 +85,14 @@ const DoctorEarning = () => {
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
-  const [statusFilterValue, setStatusFilterValue] = useState("");
-  const [fetchPayout, { loading, error, refetch, variables }] = useLazyQuery(getMyEarnings);
-  console.log(pageInfo);
+  // const [statusFilterValue, setStatusFilterValue] = useState("");
+  const [fetchPayout, { loading, error }] = useLazyQuery(getMyEarnings);
+  // refetch, variables
   useEffect(() => {
     try {
-      fetchPayout({ variables: { first: pageInfo?.limit, id: hcpId } }).then(({ data }) => {
-        console.log(data?.getMyEarnings?.pageInfo);
+      fetchPayout({ variables: { first: pageInfo?.limit, doctor: hcpId } }).then(({ data }) => {
         if (!data) throw Error("Couldn't fetch doctors payout data");
-        setPageInfo(data?.getMyEarnings?.PageInfo);
+        setPageInfo(data?.getMyEarnings?.pageInfo);
         setPayout(data?.getMyEarnings?.data);
       });
     } catch (error) {
@@ -107,55 +100,56 @@ const DoctorEarning = () => {
     }
   }, [fetchPayout, pageInfo?.limit, hcpId]);
 
-  const onFilterStatusChange = async (value) => {
-    try {
-      deleteVar(variables);
-      setStatusFilterValue(value);
-      const filterVariables = { status: value };
+  // const onFilterStatusChange = async (value) => {
+  //   try {
+  //     deleteVar(variables);
+  //     setStatusFilterValue(value);
+  //     const filterVariables = { status: value };
 
-      filterData(filterVariables, {
-        fetchData: fetchPayout,
-        refetch: refetch,
-        variables: variables,
-      })
-        .then((data) => {
-          setPayout(data?.getMyEarnings?.data || []);
-          setPageInfo(data?.getMyEarnings?.PageInfo || {});
-        })
-        .catch(() => {
-          refresh(setStatusFilterValue, "");
-        });
-    } catch (error) {
-      console.error(error);
-      refresh(setStatusFilterValue, "");
-    }
-  };
+  //     filterData(filterVariables, {
+  //       fetchData: fetchPayout,
+  //       refetch: refetch,
+  //       variables: variables,
+  //     })
+  //       .then((data) => {
+  //         setPayout(data?.getMyEarnings?.data || []);
+  //         setPageInfo(data?.getMyEarnings?.pageInfo || {});
+  //       })
+  //       .catch(() => {
+  //         refresh(setStatusFilterValue, "");
+  //       });
+  //   } catch (error) {
+  //     console.error(error);
+  //     refresh(setStatusFilterValue, "");
+  //   }
+  // };
 
-  const refresh = async (setFilterValue, defaultVal) => {
-    displayAlert("error", `Something went wrong while filtering. Try again.`);
-    setFilterValue(defaultVal);
-    deleteVar(variables);
-    refetch()
-      .then(({ data }) => {
-        setPayout(data?.getMyEarnings?.data || []);
-        setPageInfo(data?.getMyEarnings?.PageInfo || {});
-      })
-      .catch((error) => {
-        console.error(error);
-        displayAlert("error", `Failed to get patients data, Try again`);
-      });
-  };
+  // const refresh = async (setFilterValue, defaultVal) => {
+  //   displayAlert("error", `Something went wrong while filtering. Try again.`);
+  //   setFilterValue(defaultVal);
+  //   deleteVar(variables);
+  //   refetch()
+  //     .then(({ data }) => {
+  //       setPayout(data?.getMyEarnings?.data || []);
+  //       setPageInfo(data?.getMyEarnings?.pageInfo || {});
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       displayAlert("error", `Failed to get patients data, Try again`);
+  //     });
+  // };
 
   const setTableData = async (response, errMsg) => {
-    response
-      .then(({ data }) => {
-        setPageInfo(data?.getMyEarnings?.PageInfo || defaultPageInfo);
+    const data = response?.data;
+    try {
+      if (data) {
+        setPageInfo(data?.getMyEarnings?.pageInfo || defaultPageInfo);
         setPayout(data?.getMyEarnings?.data || []);
-      })
-      .catch((error) => {
-        console.error(error);
-        displayAlert("error", errMsg);
-      });
+      }
+    } catch (error) {
+      console.error(error);
+      displayAlert("error", errMsg);
+    }
   };
 
   if (error) return <NoData error={error} />;
@@ -170,33 +164,22 @@ const DoctorEarning = () => {
                 Doctors Earnings Table
               </Typography>
             </Grid>
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-                onClickClearBtn={() => onFilterStatusChange("")}
-                options={payoutFilterBy}
-                name="status"
-                placeholder="None"
-                value={statusFilterValue}
-                hasClearBtn={true}
-              />
-            </Grid>
           </Grid>
         </Grid>
         {payout.length > 0 ? (
           <Grid item container>
             <EnhancedTable
-              headCells={payoutHeader}
+              headCells={payoutHeaders}
               rows={payout}
               paginationLabel="Earning per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, { first: e });
+                const res = await changeTableLimit(fetchPayout, { first: e, doctor: hcpId });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = await handlePageChange(fetchPayout, page, pageInfo, {});
+                const res = await handlePageChange(fetchPayout, page, pageInfo, { doctor: hcpId });
                 await setTableData(res, "Failed to change table page.");
               }}
               fetchData={fetchPayout}
@@ -303,7 +286,7 @@ const DoctorEarning = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={payoutHeader} paginationLabel="Earnings  per page" />
+          <EmptyTable headCells={payoutHeaders} paginationLabel="Earnings  per page" />
         )}
       </>
     </Grid>

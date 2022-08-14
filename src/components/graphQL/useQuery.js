@@ -80,8 +80,8 @@ export const getUserType = gql`
   }
 `;
 export const dashboard = gql`
-  query getStats {
-    getStats(filterBy: { providerId: "61db6f8968b248001aec4fcb" }) {
+  query getStats($providerId: String) {
+    getStats(filterBy: { providerId: $providerId }) {
       patientStats {
         totalActive
         totalInactive
@@ -195,9 +195,9 @@ export const getSubscriptionsIncome = gql`
 `;
 
 export const getPayoutData = gql`
-  query getEarningStats($first: Int, $page: Int, $status: String) {
+  query getEarningStats($first: Int, $doctor: String, $page: Int, $status: String) {
     getEarningStats(
-      filterBy: { status: $status }
+      filterBy: { status: $status, doctor: $doctor }
       q: "365"
       page: $page
       first: $first
@@ -728,11 +728,61 @@ export const verification = gql`
     }
   }
 `;
-
+export const getDoctorAvailabilityForDate = gql`
+  query getDoctorAvailabilityForDate($doctor: String!, $day: String) {
+    getDoctorAvailabilityForDate(doctorId: $doctor, day: $day) {
+      day
+      available
+      times {
+        start
+        stop
+        available
+      }
+    }
+  }
+`;
+export const getAvailabilities = gql`
+  ${PageInfo}
+  query getAvailabilities($id: String, $providerId: String, $day: String, $page: Int, $first: Int) {
+    getAvailabilities(
+      filterBy: { doctor: $id, providerId: $providerId, day: $day }
+      page: $page
+      first: $first
+    ) {
+      availability {
+        _id
+        doctor
+        doctorData
+        createdAt
+        updatedAt
+        providerId
+        day
+        available
+        times {
+          start
+          stop
+          available
+        }
+      }
+      pageInfo {
+        ...pageDetails
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const getMyEarnings = gql`
   ${PageInfo}
-  query getMyEarnings($id: ID!, $page: Int, $first: Int) {
-    getMyEarnings(filterBy: { doctor: $id }, first: $first, page: $page, orderBy: "-createdAt") {
+  query getMyEarnings($doctor: String, $page: Int, $first: Int) {
+    getMyEarnings(
+      filterBy: { doctor: $doctor }
+      first: $first
+      page: $page
+      orderBy: "-createdAt"
+    ) {
       data {
         _id
         doctor
@@ -742,6 +792,7 @@ export const getMyEarnings = gql`
         updatedAt
       }
       totalEarnings
+      totalPayouts
       pageInfo {
         ...pageDetails
       }

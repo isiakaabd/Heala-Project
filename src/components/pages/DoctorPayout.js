@@ -15,6 +15,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Filter from "components/Forms/Filters";
+import { useParams } from "react-router-dom";
 import displayPhoto from "assets/images/avatar.svg";
 import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
 import {
@@ -84,6 +85,7 @@ const DoctorPayout = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { displayAlert } = useAlert();
+  const { hcpId } = useParams();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [payout, setPayout] = useState([]);
@@ -94,7 +96,7 @@ const DoctorPayout = () => {
 
   useEffect(() => {
     try {
-      fetchPayout({ variables: { first: pageInfo?.limit } }).then(({ data }) => {
+      fetchPayout({ variables: { first: pageInfo?.limit, doctor: hcpId } }).then(({ data }) => {
         if (!data) throw Error("Couldn't fetch doctors payout data");
         setPageInfo(data?.getEarningStats?.payoutData?.PageInfo);
         setPayout(data?.getEarningStats?.payoutData?.data);
@@ -102,7 +104,7 @@ const DoctorPayout = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [fetchPayout, pageInfo?.limit]);
+  }, [fetchPayout, pageInfo?.limit, hcpId]);
 
   const onFilterStatusChange = async (value) => {
     try {
@@ -144,17 +146,17 @@ const DoctorPayout = () => {
         displayAlert("error", `Failed to get patients data, Try again`);
       });
   };
-
   const setTableData = async (response, errMsg) => {
-    response
-      .then(({ data }) => {
+    const data = response?.data;
+    try {
+      if (data) {
         setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || defaultPageInfo);
         setPayout(data?.getEarningStats?.payoutData?.data || []);
-      })
-      .catch((error) => {
-        console.error(error);
-        displayAlert("error", errMsg);
-      });
+      }
+    } catch (error) {
+      console.error(error);
+      displayAlert("error", error.message);
+    }
   };
 
   if (error) return <NoData error={error} />;
@@ -190,18 +192,18 @@ const DoctorPayout = () => {
               paginationLabel="payout per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, { first: e });
+                const res = await changeTableLimit(fetchPayout, { first: e, doctor: hcpId });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = await handlePageChange(fetchPayout, page, pageInfo, {});
+                const res = await handlePageChange(fetchPayout, page, pageInfo, { doctor: hcpId });
                 await setTableData(res, "Failed to change table page.");
               }}
               fetchData={fetchPayout}
               handleChangePage={fetchMoreData}
             >
-              {payout.map((row, index) => {
+              {payout?.map((row, index) => {
                 const { amount, createdAt, status, _id, doctorData } = row;
                 const data = doctorData || [];
                 const { firstName, lastName, picture } = data[0] || {};
