@@ -110,76 +110,163 @@ const DashboardCharts = ({ data }) => {
   const [totalConsultations, setTotalConsultations] = useState("");
   const [totalEarning, setTotalEarning] = useState(0);
   const [totalPayouts, setTotalPayouts] = useState(0);
-  const [activePatientsChartData, setActivePatientsChartData] = useState([]);
-  const [activeChartDoctorsData, setActiveDoctorChartData] = useState([]);
-  const [inActiveChartPatientsData, setInActiveChartPatientsData] = useState([]);
-  const [inActiveChartDoctorsData, setInActiveChartDoctorssData] = useState([]);
   const [partnersData, setPartnersData] = useState([]);
-  const [hospital, setHospital] = useState([]);
-  const [pharmacy, setPharmacy] = useState([]);
-  const [activeSubs, setActiveSubs] = useState([]);
-  const [inActiveSubs, setInActiveSubs] = useState([]);
-  const [diagnostic, setDiagnostic] = useState([]);
-  const [accepted, setAccepted] = useState([]);
-  const [cancelled, setCancelled] = useState([]);
-  const [ongoing, setOngoing] = useState([]);
-  const [completed, setCompleted] = useState([]);
   const [activeSubsNumber, setActiveSubsNumber] = useState(0);
   const [inActiveSubsNumber, setInActiveSubsNumber] = useState(0);
-  const [declined, setDeclined] = useState([]);
+  const [consultationState, setConsultationState] = useState({
+    state: "all",
+    data: {
+      complete: data?.consultationStats.completedChartData,
+      ongoing: data?.consultationStats.ongoingChartData,
+      accept: data?.consultationStats.acceptedChartData,
+      decline: data?.consultationStats.declinedChartData,
+      cancel: data?.consultationStats.cancelledChartData,
+    },
+  });
+
   const [graphState, setGraphState] = useState({
-    state: "active",
-    data: data?.doctorStats.activeChartData,
+    state: "all",
+    data: {
+      active: data?.doctorStats.activeChartData,
+      inactive: data?.doctorStats.inactiveChartData,
+    },
   });
   const [subScriptionState, setSubScriptionState] = useState({
-    state: "active",
-    data: data?.subscriptionStats?.activeChartData,
-  });
-  const [consultationState, setConsultationState] = useState({
-    state: "Completed",
-    data: data?.consultationStats?.completedChartData,
-  });
-  const subGraphFunc = (e) => {
-    const { value } = e.target;
-    if (value === "active") {
-      setSubScriptionState({
-        state: "active",
-        data: activeSubs,
-      });
-    } else if (value === "inactive") {
-      setSubScriptionState({
-        state: "inactive",
-        data: inActiveSubs,
-      });
-    }
-  };
-  // hospital is active, pharmacy is inactive, diagnostic is nothing
-  const [partnerGraphState, setPartnerGraphState] = useState({
-    state: "active",
-    data: data?.partnerStats.hospitalChartData,
+    state: "all",
+    data: {
+      active: data?.subscriptionStats.activeChartData,
+      inactive: data?.subscriptionStats.inactiveChartData,
+    },
   });
   const [patientGraphState, setPatientGraphState] = useState({
-    state: "active",
-    data: data?.patientStats.activeChartData,
+    state: "all",
+    data: {
+      active: data?.patientStats.activeChartData,
+      inactive: data?.patientStats.inactiveChartData,
+    },
   });
-  useEffect(() => {
-    setGraphState({
-      state: "active",
-      data: data?.doctorStats.activeChartData,
-    });
-    setPatientGraphState({
-      state: "active",
-      data: data?.patientStats.activeChartData,
-    });
-    setPartnerGraphState({
-      state: "active",
-      data: data?.partnerStats.hospitalChartData,
-    });
-    setActiveSubs({
-      state: "active",
-      data: data?.subscriptionStats?.activeChartData,
-    });
-  }, [data]);
+  const [partnerGraphState, setPartnerGraphState] = useState({
+    state: "all",
+    data: {
+      hospital: data?.partnerStats.hospitalChartData,
+      diagnostic: data?.partnerStats.diagnosticsChartData,
+      pharmacy: data?.partnerStats.pharmacyChartData,
+    },
+  });
+
+  const consultationFunc = (e) => {
+    const { value } = e.target;
+    switch (value) {
+      case "Cancelled":
+        return setConsultationState({
+          ...consultationState,
+          state: "Cancelled",
+        });
+
+      case "Accepted":
+        return setConsultationState({
+          ...consultationState,
+          state: "Accepted",
+        });
+
+      case "Ongoing":
+        return setConsultationState({
+          ...consultationState,
+          state: "Ongoing",
+        });
+
+      case "Completed":
+        return setConsultationState({
+          ...consultationState,
+          state: "Completed",
+        });
+
+      case "Declined":
+        return setConsultationState({
+          ...consultationState,
+          state: "Declined",
+        });
+      case "all":
+        return setConsultationState({
+          ...consultationState,
+          state: "all",
+        });
+      default:
+        setConsultationState({
+          ...consultationState,
+          state: "all",
+        });
+    }
+  };
+  const graphFunc = (e) => {
+    const { value } = e.target;
+    switch (value) {
+      case "active":
+        return setGraphState({
+          ...graphState,
+          state: "active",
+        });
+
+      case "inactive":
+        return setGraphState({
+          ...graphState,
+          state: "inactive",
+        });
+
+      case "all":
+        return setGraphState({
+          ...graphState,
+          state: "all",
+        });
+    }
+  };
+  const patientGraphFunc = (e) => {
+    const { value } = e.target;
+
+    switch (value) {
+      case "active":
+        return setPatientGraphState({
+          ...patientGraphState,
+          state: "active",
+        });
+      case "inactive":
+        return setPatientGraphState({
+          ...patientGraphState,
+          state: "inactive",
+        });
+      case "all":
+        return setPatientGraphState({
+          ...patientGraphState,
+          state: "all",
+        });
+    }
+  };
+  const subGraphFunc = (e) => {
+    const { value } = e.target;
+    switch (value) {
+      case "active":
+        return setSubScriptionState({
+          ...subScriptionState,
+          state: "active",
+        });
+      case "inactive":
+        return setSubScriptionState({
+          ...subScriptionState,
+          state: "inactive",
+        });
+      case "all":
+        return setSubScriptionState({
+          ...subScriptionState,
+          state: "all",
+        });
+      default:
+        setSubScriptionState({
+          ...subScriptionState,
+          state: "all",
+        });
+    }
+  };
+
   const onChange = async (e) => {
     const { value } = e.target;
     setForms(value);
@@ -196,90 +283,76 @@ const DashboardCharts = ({ data }) => {
       }
     });
   };
-  const graphFunc = (e) => {
-    const { value } = e.target;
-    if (value === "active") {
-      setGraphState({
-        state: "active",
-        data: activeChartDoctorsData,
-      });
-    } else if (value === "inactive") {
-      setGraphState({
-        state: "inactive",
-        data: inActiveChartDoctorsData,
-      });
-    }
-  };
-  const patientGraphFunc = (e) => {
-    const { value } = e.target;
-    if (value === "active") {
-      setPatientGraphState({
-        state: "active",
-        data: activePatientsChartData,
-      });
-    } else if (value === "inactive") {
-      setPatientGraphState({
-        state: "inactive",
-        data: inActiveChartPatientsData,
-      });
-    }
-  };
+
   const partnerFunc = (e) => {
-    const { value } = e.target;
-    if (value === "active") {
-      setPartnerGraphState({
-        state: "active",
-        data: hospital,
-      });
-    } else if (value === "inactive") {
-      setPartnerGraphState({
-        state: "inactive",
-        data: pharmacy,
-      });
-    } else if (value === "") {
-      setPartnerGraphState({
-        state: "",
-        data: diagnostic,
-      });
-    }
-  };
-  const consultationFunc = (e) => {
     const { value } = e.target;
 
     switch (value) {
-      case "Cancelled":
-        setConsultationState({
-          state: "Cancelled",
-          data: cancelled,
+      case "hospital":
+        return setPartnerGraphState({
+          ...partnerGraphState,
+          state: "hospital",
         });
-        break;
-      case "Accepted":
-        setConsultationState({
-          state: "Accepted",
-          data: accepted,
+      case "diagnostic":
+        return setPartnerGraphState({
+          ...partnerGraphState,
+          state: "diagnostic",
         });
-        break;
-      case "Ongoing":
-        setConsultationState({
-          state: "Ongoing",
-          data: ongoing,
+      case "pharmacy":
+        return setPartnerGraphState({
+          ...partnerGraphState,
+          state: "pharmacy",
         });
-        break;
-      case "Completed":
-        setConsultationState({
-          state: "Completed",
-          data: completed,
+
+      case "all":
+        return setPartnerGraphState({
+          ...partnerGraphState,
+          state: "all",
         });
-        break;
-      case "Declined":
-        setConsultationState({
-          state: "Declined",
-          data: declined,
-        });
-        break;
       default:
+        setPartnerGraphState({
+          ...partnerGraphState,
+          state: "all",
+        });
     }
   };
+  // const consultationFunc = (e) => {
+  //   const { value } = e.target;
+
+  //   switch (value) {
+  //     case "Cancelled":
+  //       setConsultationState({
+  //         state: "Cancelled",
+  //         data: cancelled,
+  //       });
+  //       break;
+  //     case "Accepted":
+  //       setConsultationState({
+  //         state: "Accepted",
+  //         data: accepted,
+  //       });
+  //       break;
+  //     case "Ongoing":
+  //       setConsultationState({
+  //         state: "Ongoing",
+  //         data: ongoing,
+  //       });
+  //       break;
+  //     case "Completed":
+  //       setConsultationState({
+  //         state: "Completed",
+  //         data: completed,
+  //       });
+  //       break;
+  //     case "Declined":
+  //       setConsultationState({
+  //         state: "Declined",
+  //         data: declined,
+  //       });
+  //       break;
+  //     default:
+  //   }
+  // };
 
   useEffect(() => {
     setPayoutArray(data?.payoutStats?.chartData);
@@ -297,22 +370,8 @@ const DashboardCharts = ({ data }) => {
     } = data;
     setPatients(patientStats);
     setDoctorStats(doctorStats);
-    setCancelled(consultationStats.cancelledChartData);
     setTotalConsultations(consultationStats);
-    setOngoing(consultationStats.ongoingChartData);
-    setDeclined(consultationStats.declinedChartData);
-    setCompleted(consultationStats.completedChartData);
-    setAccepted(consultationStats.acceptedChartData);
-    setActivePatientsChartData(patientStats?.activeChartData);
-    setHospital(partnerStats?.hospitalChartData);
-    setDiagnostic(partnerStats?.diagnosticsChartData);
-    setPharmacy(partnerStats?.pharmacyChartData);
-    setActiveSubs(subscriptionStats?.activeChartData);
-    setInActiveSubs(subscriptionStats?.inactiveChartData);
-    setInActiveChartPatientsData(patientStats?.inactiveChartData);
     setPartnersData(partnerStats);
-    setActiveDoctorChartData(doctorStats?.activeChartData);
-    setInActiveChartDoctorssData(doctorStats?.inactiveChartData);
     setTotalEarning(earningStats?.total);
     setTotalPayouts(payoutStats?.total);
     setPayoutArray(payoutStats?.chartData);
@@ -416,7 +475,7 @@ const DashboardCharts = ({ data }) => {
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={graphState} />
+          <LineChart graphState={graphState} optionsValue={newOptions} />
 
           {/* Line */}
           <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
@@ -532,7 +591,7 @@ const DashboardCharts = ({ data }) => {
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={patientGraphState} />
+          <LineChart graphState={patientGraphState} optionsValue={newOptions} />
 
           {/* Line */}
           <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
@@ -633,7 +692,7 @@ const DashboardCharts = ({ data }) => {
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={partnerGraphState} />
+          <LineChart graphState={partnerGraphState} optionsValue={partnerOptions} type="partners" />
         </Grid>
         <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
           <Grid item>
@@ -752,7 +811,11 @@ const DashboardCharts = ({ data }) => {
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={consultationState} />
+          <LineChart
+            graphState={consultationState}
+            optionsValue={consultationsOptions}
+            type="consultation"
+          />
         </Grid>
         <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
           <Grid item>
@@ -915,7 +978,7 @@ const DashboardCharts = ({ data }) => {
 
         <Divider color={theme.palette.common.lighterGrey} />
         <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={subScriptionState} />
+          <LineChart graphState={subScriptionState} optionsValue={newOptions} />
 
           {/* Line */}
         </Grid>

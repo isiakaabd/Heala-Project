@@ -7,7 +7,7 @@ import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
 import { Loader, FormSelect } from "components/Utilities";
 
 const Dashboard = () => {
-  const [form, setForm] = useState("");
+  const [form, setForm] = useState("61db6f8968b248001aec4fcb");
   const [dropDown, setDropDown] = useState([]);
   const [state, setState] = useState("");
   const { data: da } = useQuery(getProviders);
@@ -23,12 +23,14 @@ const Dashboard = () => {
   useEffect(() => {
     if (da) {
       const datas = da.getProviders.provider;
-      setDropDown(
-        datas &&
-          datas.map((i) => {
-            return { key: i.name, value: i._id };
-          }),
-      );
+      const options = datas?.map((i) => {
+        return {
+          key: i.name,
+          value: i._id,
+        };
+      });
+
+      setDropDown(options);
     }
   }, [da]);
   useEffect(() => {
@@ -51,7 +53,6 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, [provider]);
 
-  console.log(state);
   useEffect(() => {
     if (newData) {
       setState(newData);
@@ -70,21 +71,12 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item>
-          <FormSelect
-            placeholder="All Stats"
-            value={form}
-            onChange={onChange}
-            options={dropDown}
-            name="finance"
-          />
+          <FormSelect value={form} onChange={onChange} options={dropDown} name="finance" />
         </Grid>
       </Grid>
       {state ? (
         <>
-          {/* <Grid item container sx={{ overflow: "hidden" }}> */}
           <DashboardCharts data={state?.getStats} />
-          {/* </Grid> */}
-
           <AvailabilityTable />
         </>
       ) : (
