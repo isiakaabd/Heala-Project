@@ -151,7 +151,7 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     locale: "fr",
     scales: {
       y: {
@@ -167,6 +167,7 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
           color: "rgba(0,0,0,0.05)",
           borderColor: "rgba(0,0,0,0.05)",
           borderDash: [10, 10],
+          speechSynthesis: true,
           display: true,
         },
       },
@@ -193,12 +194,6 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
         titleAlign: "left",
         bodyAlign: "left",
         borderColor: "rgba(0, 0, 0, 0.05)",
-        // state === "active" || state === "Completed" || state === "Accepted"
-        //   ? green
-        //   : state === "inactive" || state === "Ongoing"
-        //   ? red
-        //   : gold,
-        // "rgba(0, 0, 0, 0.05)",
         borderWidth: 3,
         displayColors: true,
         boxHeight: 0,

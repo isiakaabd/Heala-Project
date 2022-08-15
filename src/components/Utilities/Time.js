@@ -64,6 +64,12 @@ export const hours = (z) => {
     return `${newTime} PM`;
   } else return `${time} Noon`;
 };
+export const today = () => {
+  const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  const d = new Date();
+  return weekday[d.getDay()];
+};
 
 export const daily = (value) => {
   let result = "";
