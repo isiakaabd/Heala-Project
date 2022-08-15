@@ -158,36 +158,44 @@ const DashboardCharts = ({ data }) => {
     const { value } = e.target;
     switch (value) {
       case "Cancelled":
-        setConsultationState({
+        return setConsultationState({
           ...consultationState,
           state: "Cancelled",
         });
-        break;
+
       case "Accepted":
-        setConsultationState({
+        return setConsultationState({
           ...consultationState,
           state: "Accepted",
         });
-        break;
+
       case "Ongoing":
-        setConsultationState({
+        return setConsultationState({
           ...consultationState,
           state: "Ongoing",
         });
-        break;
+
       case "Completed":
-        setConsultationState({
+        return setConsultationState({
           ...consultationState,
           state: "Completed",
         });
-        break;
+
       case "Declined":
-        setConsultationState({
+        return setConsultationState({
           ...consultationState,
           state: "Declined",
         });
-        break;
+      case "all":
+        return setConsultationState({
+          ...consultationState,
+          state: "all",
+        });
       default:
+        setConsultationState({
+          ...consultationState,
+          state: "all",
+        });
     }
   };
   const graphFunc = (e) => {

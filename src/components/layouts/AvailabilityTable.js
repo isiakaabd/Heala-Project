@@ -21,7 +21,7 @@ import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
-import { hours, days } from "components/Utilities/Time";
+import { hours, days, today } from "components/Utilities/Time";
 import { EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
 import { useLazyQuery, useQuery } from "@apollo/client";
@@ -94,7 +94,7 @@ const AvailabilityTable = () => {
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState("61db6f8968b248001aec4fcb");
   const [dropDown, setDropDown] = useState([]);
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState(today());
   const [avail, setAvail] = useState("");
 
   const onChange = async (e) => {
@@ -158,6 +158,7 @@ const AvailabilityTable = () => {
       variables: {
         first: 5,
         providerId: provider,
+        day: select,
       },
     });
 
@@ -203,13 +204,7 @@ const AvailabilityTable = () => {
             <Typography variant="h4">Availability Table</Typography>
           </Grid>
           <Grid item>
-            <FormSelect
-              value={select}
-              onChange={handleSelectChange}
-              options={days}
-              placeholder="Days"
-              name="select"
-            />
+            <FormSelect value={select} onChange={handleSelectChange} options={days} name="select" />
           </Grid>
           <Grid item>
             <FormSelect
@@ -234,7 +229,6 @@ const AvailabilityTable = () => {
               paginationLabel="Availabilities per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                console.log(e);
                 const res = await changeTableLimit(fetchAvailabilities, {
                   first: e,
                   providerId: provider,
@@ -246,6 +240,7 @@ const AvailabilityTable = () => {
               handlePagination={async (page) => {
                 const res = handlePageChange(fetchAvailabilities, page, pageInfo, {
                   providerId: provider,
+                  day: select,
                 });
                 await setTableData(res, "Failed to change page.");
               }}
