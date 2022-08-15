@@ -169,10 +169,10 @@ const AvailabilityTable = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, provider, select]);
-
+  const [loadings, setLoading] = useState(false);
   const handleSelectChange = async (e) => {
     const { value } = e.target;
-
+    setLoading(true);
     await fetchAvailabilities({
       variables: {
         first: 5,
@@ -180,6 +180,7 @@ const AvailabilityTable = () => {
         day: value,
       },
     });
+    setLoading(false);
     setSelect(value);
   };
 
@@ -193,7 +194,7 @@ const AvailabilityTable = () => {
     });
     //eslint-disable-next-line
   }, []);
-  if (load) return <Loader />;
+  if (load || loadings) return <Loader />;
   if (error) return <NoData />;
   const { day, available, times } = avail;
   return (
@@ -247,99 +248,106 @@ const AvailabilityTable = () => {
             >
               {availabilities?.map((row, index) => {
                 const { _id, picture, doctorData, day, times, doctor } = row;
-                const labelId = `enhanced-table-checkbox-${index}`;
-                const isItemSelected = isSelected(_id, selectedRows);
 
-                return (
-                  <TableRow hover tabIndex={-1} key={_id}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
-                    >
-                      {doctorData?.dociId ? doctorData?.dociId?.split("-")[1] : "No Value"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          textAlign: "left",
-                        }}
+                if (doctorData?.firstName && doctorData?.lastName) {
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  const isItemSelected = isSelected(_id, selectedRows);
+
+                  return (
+                    <TableRow hover tabIndex={-1} key={_id}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.grey }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={picture ? picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {doctorData?.firstName
-                            ? `${doctorData?.firstName} ${doctorData?.lastName}`
-                            : "no name"}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {day ? day : "No Value"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Grid container gap={1}>
-                        {times
-                          ? times?.map((time, ind) => {
-                              const { start, stop } = time;
-                              return (
-                                <Chip
-                                  key={ind}
-                                  label={`${hours(start)} - ${hours(stop)} `}
-                                  className={classes.badge}
-                                  style={{
-                                    // background: !!available
-                                    //   ? theme.palette.common.lightGreen
-                                    //   :
-                                    background: theme.palette.common.lightRed,
-                                    color:
-                                      // !!available
-                                      //   ? theme.palette.common.green
+                        {
+                          // doctorData?.dociId ?
+                          doctorData?.dociId?.split("-")[1]
+                          // : "No Value"
+                        }
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            textAlign: "left",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={picture ? picture : displayPhoto}
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData?.firstName
+                              ? `${doctorData?.firstName} ${doctorData?.lastName}`
+                              : "no name"}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {day}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Grid container gap={1}>
+                          {times
+                            ? times?.map((time, ind) => {
+                                const { start, stop } = time;
+                                return (
+                                  <Chip
+                                    key={ind}
+                                    label={`${hours(start)} - ${hours(stop)} `}
+                                    className={classes.badge}
+                                    style={{
+                                      // background: !!available
+                                      //   ? theme.palette.common.lightGreen
                                       //   :
-                                      theme.palette.common.red,
-                                    // textDecoration: !!available
-                                    //   ? ""
-                                    //   : "line-through",
-                                  }}
-                                />
-                              );
-                            })
-                          : "No Time"}
-                      </Grid>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        // component={Link}
-                        onClick={() => handleCheckDay(day, doctor)}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Time
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
+                                      background: theme.palette.common.lightRed,
+                                      color:
+                                        // !!available
+                                        //   ? theme.palette.common.green
+                                        //   :
+                                        theme.palette.common.red,
+                                      // textDecoration: !!available
+                                      //   ? ""
+                                      //   : "line-through",
+                                    }}
+                                  />
+                                );
+                              })
+                            : "No Time"}
+                        </Grid>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          // component={Link}
+                          onClick={() => handleCheckDay(day, doctor)}
+                          endIcon={<ArrowForwardIosIcon />}
+                        >
+                          View Time
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
               })}
             </EnhancedTable>
           </Grid>
