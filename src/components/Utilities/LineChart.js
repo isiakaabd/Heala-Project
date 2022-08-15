@@ -7,12 +7,7 @@ import { monthNames } from "components/Utilities/Time";
 const LineChart2 = ({ graphState, optionsValue, type }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
-  // const lightGreen = "rgba(45, 211, 158, .3)";
-  // const lightBlue = "rgba(62, 94, 169, .3)";
-  // const lightGold = "rgb(243, 173, 83,.3)";
   const gold = theme.palette.common.gold;
-  // const green = theme.palette.common.green;
-  // const red = theme.palette.common.red;
   const [arr, setArr] = useState([]);
   useEffect(() => {
     setState(graphState?.state);
