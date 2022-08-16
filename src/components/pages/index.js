@@ -44,6 +44,7 @@ export { default as DoctorPayout } from "./DoctorPayout";
 export { default as DoctorEarning } from "./DoctorEarning";
 export { default as Subscription } from "./Subscription";
 export { default as UserTypes } from "./UserTypes";
+export { default as Illness } from "./Illness";
 export { default as VideoCall } from "./VideoCall";
 export { default as ViewHCP } from "./ViewHCP";
 export { default as ViewReferral } from "./ViewReferral";

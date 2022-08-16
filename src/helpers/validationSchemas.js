@@ -68,3 +68,7 @@ export const addNewPartnerValidationSchema = Yup.object({
   provider: Yup.string("select a provider").trim(),
   specialization: Yup.string("select your Specialization").required("Specialization is required"),
 });
+export const illnessSchema = Yup.object({
+  name: Yup.string("Enter illness name").trim().required("illness name is required"),
+  description: Yup.string("Enter illness description").required("description is required"),
+});

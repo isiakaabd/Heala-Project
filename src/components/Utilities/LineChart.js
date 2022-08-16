@@ -48,7 +48,14 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
     () => graphState?.data?.diagnostic?.map((i) => i?.sum),
     [graphState?.data?.diagnostic],
   );
-
+  const earning = useMemo(
+    () => graphState?.data?.earning?.map((i) => i?.sum),
+    [graphState?.data?.earning],
+  );
+  const payout = useMemo(
+    () => graphState?.data?.payout?.map((i) => i?.sum),
+    [graphState?.data?.payout],
+  );
   const ongoing = useMemo(
     () => graphState?.data?.ongoing?.map((i) => i?.sum),
     [graphState?.data?.ongoing],
@@ -84,6 +91,18 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
         default:
           return setArr([hospital, pharmacy, diagnostic]);
       }
+    } else if (type === "finance") {
+      setArr([earning, payout]);
+      switch (state) {
+        case "all":
+          return setArr([earning, payout]);
+        case "Earnings":
+          return setArr([earning, []]);
+        case "Payouts":
+          return setArr([[], payout]);
+        default:
+          return setArr([earning, payout]);
+      }
     } else {
       switch (state) {
         case "all":
@@ -107,6 +126,8 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
     active,
     ongoing,
     cancel,
+    earning,
+    payout,
     accept,
     complete,
     inactive,
@@ -119,15 +140,29 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
       data: arr[index],
       fill: false,
       borderColor:
-        value === "active" || value === "Completed" || value === "hospital" || value === "Accepted"
+        value === "active" ||
+        value === "Completed" ||
+        value === "hospital" ||
+        value === "Accepted" ||
+        value === "Earnings"
           ? theme.palette.common.green
-          : value === "inactive" || value === "pharmacy" || value === "Ongoing"
+          : value === "inactive" ||
+            value === "pharmacy" ||
+            value === "Ongoing" ||
+            value === "Payouts"
           ? theme.palette.common.red
           : gold,
       pointBackgroundColor:
-        value === "active" || value === "Completed" || value === "hospital" || value === "Accepted"
+        value === "active" ||
+        value === "Completed" ||
+        value === "hospital" ||
+        value === "Accepted" ||
+        value === "Earnings"
           ? theme.palette.common.green
-          : value === "inactive" || value === "pharmacy" || value === "Ongoing"
+          : value === "inactive" ||
+            value === "pharmacy" ||
+            value === "Ongoing" ||
+            value === "Payouts"
           ? theme.palette.common.red
           : gold,
       pointBorderColor: "#fff",
@@ -153,11 +188,13 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
         ticks: {
           beginAtZero: true,
           callback: function (value) {
+            console.log(value);
             if (value % 1 === 0) {
               return value;
             }
           },
         },
+        min: 0,
         grid: {
           color: "rgba(0,0,0,0.05)",
           borderColor: "rgba(0,0,0,0.05)",

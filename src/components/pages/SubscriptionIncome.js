@@ -5,7 +5,7 @@ import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time"
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { financeHeader } from "components/Utilities/tableHeaders";
+import { financeHeader2 } from "components/Utilities/tableHeaders";
 import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -114,7 +114,7 @@ const SubscriptionIncome = () => {
         {subIncome.length > 0 ? (
           <Grid item container>
             <EnhancedTable
-              headCells={financeHeader}
+              headCells={financeHeader2}
               rows={subIncome}
               paginationLabel="finance per page"
               hasCheckbox={true}
@@ -127,7 +127,7 @@ const SubscriptionIncome = () => {
               }}
             >
               {subIncome.map((row, index) => {
-                const { createdAt, amount, patientData } = row;
+                const { createdAt, amount, patientData, providerId, planId } = row;
                 const { firstName, image, lastName } = patientData || {};
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -198,6 +198,20 @@ const SubscriptionIncome = () => {
                       className={classes.tableCell}
                       style={{ color: theme.palette.common.red }}
                     >
+                      {planId}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.red }}
+                    >
+                      {providerId}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.red }}
+                    >
                       {formatNumber(amount.toFixed(2))}
                     </TableCell>
                   </TableRow>
@@ -206,7 +220,7 @@ const SubscriptionIncome = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
+          <EmptyTable headCells={financeHeader2} paginationLabel="Finance  per page" />
         )}
       </>
     </Grid>

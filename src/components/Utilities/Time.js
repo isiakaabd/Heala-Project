@@ -11,6 +11,11 @@ export const newOptions = [
   { key: "Active", value: "active" },
   { key: "Inactive", value: "inactive" },
 ];
+export const financeOptions = [
+  { key: "All Stats", value: "all" },
+  { key: "Earnings", value: "Earnings" },
+  { key: "Payouts", value: "Payouts" },
+];
 export const partnerOptions = [
   { key: "All Stats", value: "all" },
   { key: "hospital", value: "hospital" },
