@@ -90,9 +90,9 @@ const AvailabilityTable = () => {
 
   const { data: da } = useQuery(getProviders);
   const [availabilities, setAvailabilities] = useState([]);
-  const [provider, setProvider] = useState("61db6f8968b248001aec4fcb");
+  const [provider, setProvider] = useState("");
   const [modal, setModal] = useState(false);
-  const [form, setForm] = useState("61db6f8968b248001aec4fcb");
+  const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
   const [select, setSelect] = useState(today());
   const [avail, setAvail] = useState("");
@@ -113,6 +113,10 @@ const AvailabilityTable = () => {
 
   // providers drop down
   useEffect(() => {
+    const x = {
+      key: "All Stats",
+      value: "",
+    };
     if (da) {
       const data = da.getProviders.provider;
       const options = data?.map((i) => {
@@ -121,7 +125,7 @@ const AvailabilityTable = () => {
           value: i._id,
         };
       });
-      setDropDown(options);
+      setDropDown([x, ...options]);
     }
   }, [da]);
 
