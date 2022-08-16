@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TableCell, TableRow, Button } from "@mui/material";
 
-import { Loader } from "../Utilities";
+import { Loader } from "components/Utilities";
 import { useStyles } from "../../styles/patientsPageStyles";
 
 export const TestListRow = ({
@@ -40,7 +40,7 @@ export const TestListRow = ({
         <Button
           variant="contained"
           disableRipple
-          className={`${classes.tableBtn} ${classes.warningBtn}`}
+          className={` ${classes.button} ${classes.tableBtn} ${classes.warningBtn}`}
           endIcon={<EditIcon color="error" />}
           onClick={() => {
             setEditData(data);
@@ -57,7 +57,7 @@ export const TestListRow = ({
           <Button
             variant="contained"
             disableRipple
-            className={`${classes.tableBtn} ${classes.redBtn}`}
+            className={`${classes.button} ${classes.tableBtn} ${classes.redBtn}`}
             endIcon={<DeleteIcon color="error" />}
             onClick={() => {
               setTestIdToDelete(_id);

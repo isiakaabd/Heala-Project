@@ -285,18 +285,18 @@ const ViewHCP = () => {
           padding={{ sm: "2.5rem", xs: "1.5rem", md: "3rem" }}
           className={`${classes.cardGrid} ${classes.firstContainer}`}
         >
-          <Grid item container justifyContent="center" height="100%">
-            <Grid item>
-              <Avatar
-                src={doctorData ? doctorData.picture : displayPhoto}
-                sx={{
-                  minWidth: "150px",
-                  minHeight: "150px",
-                  marginRight: "2rem",
-                }}
-              />
-            </Grid>
+          {/* <Grid item container sx={{ background: "yellow" }} justifyContent="center" height="100%"> */}
+          <Grid item>
+            <Avatar
+              src={doctorData ? doctorData.picture : displayPhoto}
+              sx={{
+                minWidth: "150px",
+                minHeight: "150px",
+                marginRight: "2rem",
+              }}
+            />
           </Grid>
+          {/* </Grid> */}
           <Grid
             item
             flex={1}
