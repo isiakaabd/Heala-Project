@@ -35,6 +35,7 @@ import {
   ViewMessage,
   CreateMessage,
   Messages,
+  Illness,
   WaitingListDetails,
   WaitingList,
   Permission,
@@ -184,6 +185,7 @@ const Routes = () => {
       <PrivateRoute exact path="/settings/management/:editId" component={EditManagement} />
       <PrivateRoute exact path="/settings/list-management" component={ListManagment} />
       <PrivateRoute exact path="/settings/list-management/tests" component={TestList} />
+      <PrivateRoute exact path="/settings/list-management/illness" component={Illness} />
     </Switch>
   );
   // }

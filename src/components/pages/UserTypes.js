@@ -15,7 +15,7 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import { UserTypeModal } from "components/modals/UserTypeModal";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -149,9 +149,9 @@ const UserTypes = () => {
     disabled: theme.palette.common.black,
   };
   const [deleteUser] = useMutation(deleteUserType);
-  const handleDialogOpen = () => {
-    setIsOpen(true);
-  };
+  // const handleDialogOpen = () => {
+  //   setIsOpen(true);
+  // };
   const handleDeleteOpenDialog = (id) => {
     setId(id);
     setdeleteModal(true);
@@ -163,7 +163,7 @@ const UserTypes = () => {
         refetchQueries: [{ query: getUserTypes }],
       });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 
@@ -272,14 +272,14 @@ const UserTypes = () => {
             justifyContent="space-between"
           >
             <Grid item>{/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}</Grid>
-            <Grid item>
+            {/* <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
                 onClick={handleDialogOpen}
                 title="Add new User Types"
                 type={buttonType}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
         {userType.length > 0 ? (
@@ -392,7 +392,7 @@ const UserTypes = () => {
       {/* edit Modal */}
       <Modals
         isOpen={edit}
-        title="Edit Provider"
+        title="Edit User Type"
         rowSpacing={5}
         handleClose={handleEditCloseDialog}
       >

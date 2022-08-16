@@ -5,20 +5,19 @@ import GroupIcon from "@mui/icons-material/Group";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
 import {
-  financialPercent,
   consultationsOptions,
   returnpercent,
-  selectOptions,
+  financeOptions,
   partnerOptions,
   newOptions,
   formatNumber,
 } from "components/Utilities/Time";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 // import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { LineChart, CircularProgressBar, FormSelect } from "components/Utilities";
+import { LineChart, FormSelect } from "components/Utilities";
 import "chartjs-plugin-style";
 
 const useStyles = makeStyles((theme) => ({
@@ -105,8 +104,6 @@ const DashboardCharts = ({ data }) => {
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
   const [totalSubs, setTotalSub] = useState(0);
-  const [payoutArray, setPayoutArray] = useState([]);
-  const [earningArray, setEarningArray] = useState([]);
   const [totalConsultations, setTotalConsultations] = useState("");
   const [totalEarning, setTotalEarning] = useState(0);
   const [totalPayouts, setTotalPayouts] = useState(0);
@@ -143,6 +140,13 @@ const DashboardCharts = ({ data }) => {
     data: {
       active: data?.patientStats.activeChartData,
       inactive: data?.patientStats.inactiveChartData,
+    },
+  });
+  const [financialState, setFinancialState] = useState({
+    state: "all",
+    data: {
+      earning: data?.earningStats?.chartData,
+      payout: data?.payoutStats?.chartData,
     },
   });
   const [partnerGraphState, setPartnerGraphState] = useState({
@@ -267,21 +271,25 @@ const DashboardCharts = ({ data }) => {
     }
   };
 
-  const onChange = async (e) => {
+  const financeFunc = async (e) => {
     const { value } = e.target;
-    setForms(value);
-    //eslint-disable-next-line
-    earningArray?.map((item) => {
-      if (item?.month === value) {
-        setTotalEarning(item?.sum);
-      }
-    });
-    //eslint-disable-next-line
-    payoutArray?.map((item) => {
-      if (item?.month === value) {
-        setTotalPayouts(item?.sum);
-      }
-    });
+    switch (value) {
+      case "Earnings":
+        return setFinancialState({
+          ...financialState,
+          state: "Earnings",
+        });
+      case "Payouts":
+        return setFinancialState({
+          ...financialState,
+          state: "Payouts",
+        });
+      case "all":
+        return setFinancialState({
+          ...financialState,
+          state: "all",
+        });
+    }
   };
 
   const partnerFunc = (e) => {
@@ -316,48 +324,7 @@ const DashboardCharts = ({ data }) => {
         });
     }
   };
-  // const consultationFunc = (e) => {
-  //   const { value } = e.target;
 
-  //   switch (value) {
-  //     case "Cancelled":
-  //       setConsultationState({
-  //         state: "Cancelled",
-  //         data: cancelled,
-  //       });
-  //       break;
-  //     case "Accepted":
-  //       setConsultationState({
-  //         state: "Accepted",
-  //         data: accepted,
-  //       });
-  //       break;
-  //     case "Ongoing":
-  //       setConsultationState({
-  //         state: "Ongoing",
-  //         data: ongoing,
-  //       });
-  //       break;
-  //     case "Completed":
-  //       setConsultationState({
-  //         state: "Completed",
-  //         data: completed,
-  //       });
-  //       break;
-  //     case "Declined":
-  //       setConsultationState({
-  //         state: "Declined",
-  //         data: declined,
-  //       });
-  //       break;
-  //     default:
-  //   }
-  // };
-
-  useEffect(() => {
-    setPayoutArray(data?.payoutStats?.chartData);
-    setEarningArray(data?.earningStats?.chartData);
-  }, [data]);
   useEffect(() => {
     const {
       patientStats,
@@ -374,36 +341,32 @@ const DashboardCharts = ({ data }) => {
     setPartnersData(partnerStats);
     setTotalEarning(earningStats?.total);
     setTotalPayouts(payoutStats?.total);
-    setPayoutArray(payoutStats?.chartData);
-    setEarningArray(earningStats?.chartData);
+    // setPayoutArray(payoutStats?.chartData);
+    // setEarningArray(earningStats?.chartData);
     setActiveSubsNumber(subscriptionStats?.totalActive);
     setInActiveSubsNumber(subscriptionStats?.totalInactive);
     setTotalSub(subscriptionStats?.totalActive + subscriptionStats?.totalInactive);
-    const value = financialPercent(totalEarning, totalPayouts);
 
-    setFinances(value);
     //eslint-disable-next-line
   }, [data]);
 
   const { totalAccepted, totalCancelled, totalOngoing, totalDeclined, totalCompleted } =
     totalConsultations;
-  const financialValue = financialPercent(totalEarning, totalPayouts);
+  // const financialValue = financialPercent(totalEarning, totalPayouts);
   const total = totalAccepted + totalCancelled + totalOngoing + totalDeclined + totalCompleted;
-  const [finances, setFinances] = useState(financialValue);
   const { totalActive: activeDoctors, totalInactive: inactiveDoctors } = doctorStats;
   const { totalActive: activePatients, totalInactive: inactivePatients } = patients;
   const totalDoc = activeDoctors + inactiveDoctors;
   const totalPatient = activePatients + inactivePatients;
   const patientPercentage = returnpercent(activePatients, inactivePatients);
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
-  const [forms, setForms] = useState("");
 
   return (
     <Grid
       container
       justifyContent="space-between"
       display="grid"
-      padding=".5rem" //repeat(auto-fit, minmax(250px, 1fr));
+      padding=".5rem"
       gridTemplateColumns={{ sm: "repeat(2,1fr)", xs: "1fr" }}
       gap={2}
       rowSpacing={3}
@@ -760,6 +723,8 @@ const DashboardCharts = ({ data }) => {
           </Grid>
         </Grid>
       </Grid>
+
+      {/* consultations */}
       <Grid item container className={classes.chartCard}>
         <Grid item className={classes.headerGrid}>
           <Typography variant="h5">Consultations Stats</Typography>
@@ -926,7 +891,7 @@ const DashboardCharts = ({ data }) => {
           </Grid>
         </Grid>
       </Grid>
-
+      {/* subscribers */}
       <Grid item container className={classes.chartCard}>
         <Grid item className={classes.headerGrid}>
           <Typography variant="h5">Subscribers Stats</Typography>
@@ -1033,8 +998,115 @@ const DashboardCharts = ({ data }) => {
           </Grid>
         </Grid>
       </Grid>
+      {/* finance */}
+      <Grid item container className={classes.chartCard}>
+        <Grid item className={classes.headerGrid}>
+          <Typography variant="h5">Financial Stats</Typography>
+        </Grid>
+        <Divider color={theme.palette.common.lighterGrey} />
+
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          paddingY={{ md: 2, sm: 2, xs: 2 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            gap={{ sm: 3, xs: 2, md: 3 }}
+            alignItems="center"
+            flexWrap={"nowrap"}
+            container
+            flex={3}
+          >
+            <Grid item className={classes.groupIconGrid}>
+              <GroupIcon color="success" className={classes.groupIcon} />
+            </Grid>
+            <Grid item alignItems="center" container flex={1}>
+              <Grid item container direction="column">
+                <Grid item container gap={1}>
+                  <Typography variant="h1"> {formatNumber(totalEarning + totalPayouts)}</Typography>
+                </Grid>
+              </Grid>
+              <Typography
+                variant="body2"
+                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
+              >
+                Total Finances
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid item>
+            <FormSelect
+              value={financialState?.state}
+              onChange={financeFunc}
+              options={financeOptions}
+              name="partner-select"
+            />
+          </Grid>
+        </Grid>
+
+        <Divider color={theme.palette.common.lighterGrey} />
+        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
+          <LineChart graphState={financialState} optionsValue={financeOptions} type="finance" />
+
+          {/* Line */}
+        </Grid>
+        <Grid
+          item
+          container
+          flexWrap="nowrap"
+          justifyContent="space-between"
+          paddingTop={{ sm: 3, xs: 2 }}
+        >
+          <Grid item>
+            <Grid container direction="column">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {formatNumber(totalEarning)}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Total Earnings
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid container direction="column" justifyContent="center">
+              <Grid item>
+                <Typography variant="h3" gutterBottom>
+                  {formatNumber(totalPayouts)}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item style={{ marginRight: "1rem" }}>
+                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
+                      Total Payouts
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       {/* financial */}
-      <Grid item direction="column" className={classes.chartCard}>
+      {/* <Grid item direction="column" className={classes.chartCard}>
         <Grid
           item
           container
@@ -1168,7 +1240,7 @@ const DashboardCharts = ({ data }) => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

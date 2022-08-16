@@ -37,8 +37,8 @@ export const updateDoctorProvider = gql`
   }
 `;
 export const editUserType = gql`
-  mutation updateUserType($id: String!, $name: String, $icon: String!) {
-    updateUserType(data: { id: $id, name: $name, icon: $icon }) {
+  mutation updateUserType($id: String!, $name: String, $description: String, $icon: String!) {
+    updateUserType(data: { id: $id, name: $name, icon: $icon, description: $description }) {
       userType {
         _id
         name
@@ -46,6 +46,35 @@ export const editUserType = gql`
         createdAt
         updatedAt
       }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const updateIllness = gql`
+  mutation updateIllness($id: String!, $name: String, $description: String) {
+    updateIllness(data: { id: $id, name: $name, description: $description }) {
+      illness {
+        _id
+        name
+        description
+        updatedAt
+        createdAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const deleteIllness = gql`
+  mutation deleteIllness($id: String!) {
+    deleteIllness(data: { id: $id }) {
+      count
+      message
       errors {
         field
         message
@@ -67,6 +96,23 @@ export const verifyHCP = gql`
       createdAt
       updatedAt
       profileId
+    }
+  }
+`;
+export const createIllness = gql`
+  mutation createIllness($name: String!, $description: String) {
+    createIllness(data: { name: $name, description: $description }) {
+      illness {
+        _id
+        name
+        description
+        updatedAt
+        createdAt
+      }
+      errors {
+        field
+        message
+      }
     }
   }
 `;

@@ -70,10 +70,11 @@ export const DoctorCount = gql`
 `;
 export const getUserType = gql`
   query getUserType($id: ID!) {
-    getUserType(id: $id, orderBy: "-createdAt") {
+    getUserType(id: $id) {
       _id
       name
       icon
+      description
       createdAt
       updatedAt
     }
@@ -190,6 +191,42 @@ export const getSubscriptionsIncome = gql`
   query getEarningStats($first: Int, $page: Int) {
     getEarningStats(q: "365", page: $page, first: $first, orderBy: "-createdAt") {
       subscriptionIncomeData
+    }
+  }
+`;
+export const getIllnesses = gql`
+  query getIllnesses($name: String, $page: Int, $first: Int) {
+    getIllnesses(filterBy: { name: $name }, first: $first, orderBy: "-createdAt", page: $page) {
+      data {
+        _id
+        name
+        description
+        updatedAt
+        createdAt
+      }
+      pageInfo {
+        totalDocs
+        limit
+        offset
+        hasPrevPage
+        hasNextPage
+        page
+        totalPages
+        pagingCounter
+        prevPage
+        nextPage
+      }
+    }
+  }
+`;
+export const getIllness = gql`
+  query getIllness($id: ID!) {
+    getIllness(id: $id) {
+      _id
+      name
+      description
+      updatedAt
+      createdAt
     }
   }
 `;

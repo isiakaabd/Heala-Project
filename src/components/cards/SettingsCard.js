@@ -39,11 +39,19 @@ export const SettingsCard = ({ link, /* setSelectedSubMenu, */ title, icon }) =>
   const theme = useTheme();
   const classes = useStyles();
   return (
-    <Grid item className={classes.parentGrid} style={{ marginRight: "2em" }} lg md={12} sm={12}>
+    <Grid
+      item
+      className={classes.parentGrid}
+      container
+      flexDirection="column"
+      style={{ marginRight: "2em" }}
+      lg
+      md={4}
+      sm={12}
+    >
       <Link
         to={link} // "/settings/administrator"
         style={{ textDecoration: "none" }}
-        /* onClick={() => setSelectedSubMenu(12)} */
       >
         <Card
           alt="A administrator icon used as a representation for the administrator "

@@ -19,6 +19,7 @@ export const UserTypeModal = ({
   initialValues,
 }) => {
   const theme = useTheme();
+
   const [createType] = useMutation(createUserType, {
     refetchQueries: [{ query: getUserTypes }],
   });
@@ -38,6 +39,7 @@ export const UserTypeModal = ({
         name: single.data.getUserType.name,
         image: single.data.getUserType.icon,
         id: single.data.getUserType._id,
+        description: single.data.getUserType.description,
       });
     }
   }, [single.data, setSingleData]);
@@ -63,11 +65,12 @@ export const UserTypeModal = ({
       }
     }
     if (type === "edit") {
-      const { name, image, id } = values;
+      const { description, name, image, id } = values;
       await editType({
         variables: {
           id,
           name,
+          description,
           icon: image,
         },
       });
@@ -99,10 +102,10 @@ export const UserTypeModal = ({
               <Grid item container rowSpacing={3}>
                 <Grid item container>
                   <FormikControl
-                    control="input"
-                    name="name"
-                    label="Name of UserType"
-                    placeholder="Enter UserType Name"
+                    control="textarea"
+                    name="description"
+                    label="Description"
+                    placeholder="Description..."
                   />
                 </Grid>
                 <Grid item md display="flex" alignItems="center">
