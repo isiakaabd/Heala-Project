@@ -188,11 +188,13 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
         ticks: {
           beginAtZero: true,
           callback: function (value) {
+            console.log(value);
             if (value % 1 === 0) {
               return value;
             }
           },
         },
+        min: 0,
         grid: {
           color: "rgba(0,0,0,0.05)",
           borderColor: "rgba(0,0,0,0.05)",
