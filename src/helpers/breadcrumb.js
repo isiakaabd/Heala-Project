@@ -58,6 +58,7 @@ export const patterns = {
   "Permissions management": "settings/permissions",
   "List management": "settings/list-management",
   Tests: "settings/list-management/tests",
+  Illness: "settings/list-management/illness",
 
   // GENERIC PATTERNS
   Records: "{id}/records",

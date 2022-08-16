@@ -39,17 +39,16 @@ const ListManagment = () => {
   const classes = useStyles();
   return (
     <>
-      <Grid
-        container
-        justifyContent="space-between"
-        className={classes.containerGrid}
-        columnGap={4}
-        rowSpacing={4}
-      >
+      <Grid container justifyContent="space-between" className={classes.containerGrid} gap={2}>
         <SettingsCard
           link="/settings/list-management/tests"
           title="Tests"
           icon={<ConsulationIcon fill={theme.palette.common.red} />}
+        />
+        <SettingsCard
+          link="/settings/list-management/illness"
+          title="Past Illness"
+          icon={<ConsulationIcon fill={theme.palette.common.green} />}
         />
       </Grid>
     </>

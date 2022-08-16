@@ -119,7 +119,7 @@ export const HCPHeader = [
 export const financeHeader = [
   {
     id: 0,
-    label: "Entry Date",
+    label: " Date",
   },
   {
     id: 1,
@@ -131,9 +131,40 @@ export const financeHeader = [
   },
 
   // {
-  //   id: 3,
-  //   label: "Specialization",
+  //   id: 30,
+  //   label: "Plan Type",
   // },
+  // {
+  //   id: 34,
+  //   label: "Provider",
+  // },
+  {
+    id: 4,
+    label: "Amount",
+  },
+];
+export const financeHeader2 = [
+  {
+    id: 0,
+    label: " Date",
+  },
+  {
+    id: 1,
+    label: "Time",
+  },
+  {
+    id: 2,
+    label: "Name",
+  },
+
+  {
+    id: 30,
+    label: "Plan Type",
+  },
+  {
+    id: 34,
+    label: "Provider",
+  },
   {
     id: 4,
     label: "Amount",
@@ -402,6 +433,13 @@ export const partnersHeadCells = [
   { id: 0, label: "Partner's Name" },
   { id: 1, label: "Category" },
   { id: 2, label: "Deep link" },
+  { id: 3, label: "" },
+];
+export const illnesssHeadCells = [
+  { id: 0, label: "Date" },
+  { id: 1, label: "Description" },
+  { id: 2, label: "Name" },
+  { id: 30, label: "" },
   { id: 3, label: "" },
 ];
 export const partnersHeadCells2 = [

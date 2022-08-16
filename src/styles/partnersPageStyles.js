@@ -53,6 +53,7 @@ export const useStyles = makeStyles((theme) => ({
     "&.MuiButton-root": {
       ...theme.typography.btn,
       height: "3rem",
+      width: "100% !important",
       fontSize: "1.25rem",
       borderRadius: "2rem",
       boxShadow: "none",
@@ -72,14 +73,25 @@ export const useStyles = makeStyles((theme) => ({
       },
     },
   },
-
   redBtn: {
     "&.MuiButton-root": {
       background: theme.palette.common.lightRed,
       color: theme.palette.common.red,
+      width: "100%",
 
       "&:hover": {
         background: theme.palette.error.light,
+        color: "#fff",
+      },
+    },
+  },
+  greenBtn: {
+    "&.MuiButton-root": {
+      background: theme.palette.common.lightGreen,
+      color: theme.palette.common.green,
+
+      "&:hover": {
+        background: theme.palette.success.light,
         color: "#fff",
       },
     },

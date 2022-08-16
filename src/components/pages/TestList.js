@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
 import AddIcon from "@mui/icons-material/Add";
 import { useLazyQuery } from "@apollo/client";
@@ -15,22 +15,22 @@ import DeletePartner from "components/modals/DeleteOrDisable";
 import { UploadTestForm } from "components/Forms/UploadTestForm";
 import { testTableHeadCells } from "components/Utilities/tableHeaders";
 import { DELETE_TEST, getListOfLabTests } from "components/graphQL/useQuery";
-import { CustomButton, Loader, PreviousButton, Modals } from "components/Utilities";
+import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EditTestForm } from "components/Forms/EditTestForm";
 
 const TestList = () => {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const [list, setList] = React.useState([]);
+  const [list, setList] = useState([]);
   const [delete_test] = useLazyQuery(DELETE_TEST);
-  const [editData, setEditData] = React.useState(null);
-  const [isDeleting, setIsDeleting] = React.useState({});
-  const [addTestModal, setAddTestModal] = React.useState(false);
-  const [confirmModal, setConfirmModal] = React.useState(false);
-  const [testToDelete, setTestToDelete] = React.useState(null);
-  const [editTestModal, setEditTestModal] = React.useState(false);
-  const [uploadListModal, setUploadListModal] = React.useState(false);
-  const [confirmDeleteModal, setConfirmDeleteModal] = React.useState(false);
+  const [editData, setEditData] = useState(null);
+  const [isDeleting, setIsDeleting] = useState({});
+  const [addTestModal, setAddTestModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [testToDelete, setTestToDelete] = useState(null);
+  const [editTestModal, setEditTestModal] = useState(false);
+  const [uploadListModal, setUploadListModal] = useState(false);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const [fetchLabTestList, { loading, error, data, refetch }] = useLazyQuery(getListOfLabTests);
 
   const buttonType = {
@@ -39,17 +39,17 @@ const TestList = () => {
     active: theme.palette.primary.dark,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchLabTestList();
   }, [fetchLabTestList]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setList(data?.getDiagnosticLabTests?.data);
     }
   }, [data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       (data?.getDiagnosticLabTests?.data || []).map((test) => {
         const newIsDeleting = isDeleting;
@@ -63,9 +63,7 @@ const TestList = () => {
   return (
     <>
       <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-        <Grid item container justifyContent="space-between">
-          <PreviousButton path="/settings/list-management" />
-
+        <Grid item container justifyContent="flex-end">
           {/* === ADD BUTTONS === */}
           <Grid item>
             <Grid container>
