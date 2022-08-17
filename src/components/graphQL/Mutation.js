@@ -70,6 +70,26 @@ export const updateIllness = gql`
     }
   }
 `;
+export const regeneratePartnerProfileUrl = gql`
+  mutation regeneratePartnerProfileUrl($id: String) {
+    regeneratePartnerProfileUrl(data: { id: $id }) {
+      partner {
+        _id
+        name
+        email
+        category
+        logoImageUrl
+        profileUrl
+        accountId
+        dociId
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const deleteIllness = gql`
   mutation deleteIllness($id: String!) {
     deleteIllness(data: { id: $id }) {
