@@ -207,7 +207,7 @@ const Finance = () => {
                         color: theme.palette.common.lightGrey,
                       }}
                     >
-                      Total earnings
+                      Subscription Earnings
                     </Typography>
                   </Grid>
                 </Grid>
@@ -241,7 +241,7 @@ const Finance = () => {
                         color: theme.palette.common.lightGrey,
                       }}
                     >
-                      Total Expenditure
+                      Total Payouts
                     </Typography>
                   </Grid>
                 </Grid>

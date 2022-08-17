@@ -26,7 +26,11 @@ import {
 import DeletePartner from "components/modals/DeleteOrDisable";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { addPartner, addPartnerCategory } from "components/graphQL/Mutation";
+import {
+  addPartner,
+  addPartnerCategory,
+  regeneratePartnerProfileUrl,
+} from "components/graphQL/Mutation";
 import {
   getPartners,
   getSingleProvider,
@@ -41,6 +45,7 @@ import {
 } from "helpers/validationSchemas";
 import Copy from "components/Copy";
 import Filter from "components/Forms/Filters";
+import { PageInfo } from "components/graphQL/fragment";
 
 const Partners = () => {
   const theme = useTheme();
@@ -68,9 +73,8 @@ const Partners = () => {
   });
   const { selectedRows /* page */ } = useSelector((state) => state.tables);
   const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
-  const [fetchPartners, { loading, error, refetch, variables }] = useLazyQuery(getPartners, {
-    notifyOnNetworkStatusChange: true,
-  });
+  const [fetchPartners, { loading, error, refetch, variables }] = useLazyQuery(getPartners);
+  const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
 
   const specializations = [
     { key: "Diagnostics", value: "Diagnostics" },
@@ -114,7 +118,6 @@ const Partners = () => {
   };
 
   const setTableData = async (response, errMsg) => {
-    console.log("entered");
     response
       .then((res) => {
         const { data } = res;
@@ -221,13 +224,6 @@ const Partners = () => {
     }
   };
 
-  /* const onChange = async (e) => {
-    setSearchPartner(e);
-    if (e == "") {
-      refetch();
-    } else refetch({ dociId: `DOCI-${e.toUpperCase()}` });
-  }; */
-
   const onFilterCategoryChange = async (value) => {
     try {
       deleteVar(variables);
@@ -255,19 +251,59 @@ const Partners = () => {
     const res = refetch();
     await setTableData(res, "couldn't filter table.");
   };
+  const [newProfileUrl, setNewProfileUrl] = useState("");
 
+  console.log(pageInfo);
+
+  useEffect(() => {
+    setNewProfileUrl(daa?.regeneratePartnerProfileUrl?.partner?.profileUrl);
+  }, [daa]);
+  const [Id, setId] = useState("");
+  const handleGenerateLink = async (id) => {
+    setId(id);
+    await regenerate({
+      variables: {
+        id,
+      },
+      refetchQueries: [
+        {
+          query: getPartners,
+          variables: {
+            variables: pageInfo.page,
+            limit: PageInfo.limit,
+          },
+        },
+      ],
+    });
+  };
+
+  const z = (id) => {
+    let b = "";
+    const m = daa?.regeneratePartnerProfileUrl?.partner?._id;
+    console.log(m, "from z");
+    if (id === m) {
+      b = m;
+    } else {
+      b = "";
+    }
+    return b;
+  };
+  useEffect(() => {
+    partner.map((item) => {
+      if (item._id === Id) {
+        return {
+          ...item,
+          profileUrl: newProfileUrl,
+        };
+      }
+    });
+
+    //eslint-disable-next-line
+  }, [Id, newProfileUrl]);
   if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
   return (
     <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
       <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
-        {/* <Grid item flex={{ sm: 2, xs: 2, md: 2 }}>
-          <Search
-            value={searchPartner}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Type to search Partner..."
-            height="5rem"
-          />
-        </Grid> */}
         <Grid
           item
           container
@@ -321,7 +357,8 @@ const Partners = () => {
             }}
           >
             {partner.map((row, index) => {
-              const isItemSelected = isSelected(row.id, selectedRows);
+              const { _id, logoImageUrl, name, category, profileUrl } = row;
+              const isItemSelected = isSelected(_id, selectedRows);
 
               const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -331,12 +368,12 @@ const Partners = () => {
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row._id}
+                  key={_id}
                   selected={isItemSelected}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -358,12 +395,12 @@ const Partners = () => {
                     >
                       <span style={{ marginRight: "1rem" }}>
                         <Avatar
-                          alt={`Display Photo of ${row.name}`}
-                          src={row.logoImageUrl}
+                          alt={`Display Photo of ${name}`}
+                          src={logoImageUrl}
                           sx={{ width: 24, height: 24 }}
                         />
                       </span>
-                      <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
+                      <span style={{ fontSize: "1.25rem" }}>{name}</span>
                     </div>
                   </TableCell>
                   <TableCell
@@ -374,7 +411,7 @@ const Partners = () => {
                       maxWidth: "20rem",
                     }}
                   >
-                    {row.category}
+                    {category}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -384,7 +421,7 @@ const Partners = () => {
                       maxWidth: "20rem",
                     }}
                   >
-                    {row?.profileUrl ? (
+                    {profileUrl || z(_id) !== "" ? (
                       <Typography
                         style={{
                           color: theme.palette.common.grey,
@@ -392,17 +429,24 @@ const Partners = () => {
                         }}
                         sx={{ display: "flex", alignItems: "center" }}
                       >
-                        {trucateProfileLink(row?.profileUrl)}
+                        {trucateProfileLink(profileUrl ? profileUrl : z(_id))}
                         <div style={{ marginLeft: "1rem" }}>
-                          <Copy name="Profile Link" text={row?.profileUrl} />
+                          <Copy name="Profile Link" text={profileUrl ? profileUrl : z(_id)} />
                         </div>
                       </Typography>
                     ) : (
-                      "No Link"
+                      <Button
+                        variant="contained"
+                        disableRipple
+                        className={`${classes.tableBtn} ${classes.redBtn}`}
+                        onClick={() => handleGenerateLink(_id)}
+                      >
+                        Generate Link
+                      </Button>
                     )}
                   </TableCell>
                   <TableCell align="center" className={classes.tableCell}>
-                    {isDeleting[row._id] ? (
+                    {isDeleting[_id] ? (
                       <Loader />
                     ) : (
                       <Button
@@ -411,7 +455,7 @@ const Partners = () => {
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         endIcon={<DeleteIcon color="error" />}
                         onClick={() => {
-                          setPartnerToDelete(row?._id || "");
+                          setPartnerToDelete(_id || "");
                           setOpenDeletePartner(true);
                         }}
                       >
