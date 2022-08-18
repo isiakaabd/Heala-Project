@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
+import { Grid, Typography, Button, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import { Link } from "react-router-dom";
 import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { financeHeader } from "components/Utilities/tableHeaders";
+import { payoutHeaderss1 } from "components/Utilities/tableHeaders";
 import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -42,6 +44,35 @@ const useStyles = makeStyles((theme) => ({
       },
 
       "& .css-9tj150-MuiButton-endIcon": {
+        marginLeft: ".3rem",
+        marginTop: "-.2rem",
+      },
+    },
+  },
+  buttons: {
+    "&.MuiButton-root": {
+      background: "#fff",
+      color: theme.palette.common.grey,
+      textTransform: "none",
+      borderRadius: "2rem",
+      display: "flex",
+      alignItems: "center",
+      padding: "1rem",
+      maxWidth: "10rem",
+
+      "&:hover": {
+        background: "#fcfcfc",
+      },
+
+      "&:active": {
+        background: "#fafafa",
+      },
+
+      "& .MuiButton-endIcon>*:nth-of-type(1)": {
+        fontSize: "1.2rem",
+      },
+
+      "& .MuiButton-endIcon": {
         marginLeft: ".3rem",
         marginTop: "-.2rem",
       },
@@ -95,7 +126,6 @@ const Financetable = () => {
       setPageInfo(data.getEarningStats.earningData.PageInfo);
     }
   }, [earning, data]);
-
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -114,7 +144,7 @@ const Financetable = () => {
         {earning.length > 0 ? (
           <Grid item container>
             <EnhancedTable
-              headCells={financeHeader}
+              headCells={payoutHeaderss1}
               rows={earning}
               paginationLabel="finance per page"
               hasCheckbox={true}
@@ -127,7 +157,7 @@ const Financetable = () => {
               }}
             >
               {earning.map((row, index) => {
-                const { createdAt, balance, doctorData } = row;
+                const { createdAt, providerId, balance, doctorData } = row;
                 const { firstName, picture, lastName } = doctorData[0] || {};
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -152,22 +182,11 @@ const Financetable = () => {
                       />
                     </TableCell>
                     <TableCell
-                      id={labelId}
-                      scope="row"
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                      style={{ color: theme.palette.common.red }}
                     >
-                      {dateMoment(createdAt)}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {timeMoment(createdAt)}
+                      {formatNumber(balance.toFixed(2))}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       {doctorData && doctorData[0] !== {} ? (
@@ -193,16 +212,40 @@ const Financetable = () => {
                         "No name"
                       )}
                     </TableCell>
-                    {/* 
-                    <TableCell align="left" className={classes.tableCell}>
-                      {specialization ? specialization : "No Value"}
-                    </TableCell> */}
                     <TableCell
+                      id={labelId}
+                      scope="row"
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      {formatNumber(balance.toFixed(2))}
+                      {providerId}
+                    </TableCell>
+
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.black }}
+                    >
+                      {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.buttons}
+                        style={{
+                          whiteSpace: "nowrap",
+                          padding: "5% 50%",
+                          marginLeft: "-10%",
+                        }}
+                        component={Link}
+                        endIcon={<ArrowForwardIosIcon />}
+                        to={`/hcps/${doctorData[0]._id}/consultations`}
+                      >
+                        View Consultation
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -210,7 +253,7 @@ const Financetable = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={financeHeader} paginationLabel="Finance  per page" />
+          <EmptyTable headCells={payoutHeaderss1} paginationLabel="Finance  per page" />
         )}
       </>
     </Grid>

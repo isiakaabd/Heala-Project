@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { dashboard } from "components/graphQL/useQuery";
+import { dashboard, dashboard1 } from "components/graphQL/useQuery";
 import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
 import { Loader, FormSelect } from "components/Utilities";
 
 const Dashboard = () => {
-  const [form, setForm] = useState("61db6f8968b248001aec4fcb");
+  const [form, setForm] = useState("");
   const [dropDown, setDropDown] = useState([]);
   const [state, setState] = useState("");
   const { data: da } = useQuery(getProviders);
 
-  const { data, error, loading } = useQuery(dashboard, {
-    variables: {
-      providerId: "61db6f8968b248001aec4fcb",
-    },
-  });
-  const [provider, setProvider] = useState("61db6f8968b248001aec4fcb");
+  const [provider, setProvider] = useState("");
   const [fetchData, { data: newData, error: err, loading: load }] = useLazyQuery(dashboard);
+  const [fetchData2, { data: newData2, error, loading }] = useLazyQuery(dashboard1);
 
   useEffect(() => {
+    const all = {
+      key: "All Stats",
+      value: "",
+    };
     if (da) {
       const datas = da.getProviders.provider;
       const options = datas?.map((i) => {
@@ -30,12 +30,13 @@ const Dashboard = () => {
         };
       });
 
-      setDropDown(options);
+      setDropDown([all, ...options]);
     }
   }, [da]);
+
   useEffect(() => {
-    if (data) {
-      setState(data);
+    if (newData2) {
+      setState(newData2);
     }
     //eslint-disable-next-line
   }, []);
@@ -45,11 +46,15 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchData({
-      variables: {
-        providerId: provider,
-      },
-    });
+    if (provider === "") {
+      fetchData2();
+    } else {
+      fetchData({
+        variables: {
+          providerId: provider,
+        },
+      });
+    }
     //eslint-disable-next-line
   }, [provider]);
 
@@ -58,6 +63,11 @@ const Dashboard = () => {
       setState(newData);
     }
   }, [form, newData, provider]);
+  useEffect(() => {
+    if (newData2) {
+      setState(newData2);
+    }
+  }, [form, newData2, provider]);
 
   if (loading || load) return <Loader />;
 

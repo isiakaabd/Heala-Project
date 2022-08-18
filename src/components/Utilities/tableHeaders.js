@@ -146,28 +146,46 @@ export const financeHeader = [
 export const financeHeader2 = [
   {
     id: 0,
-    label: " Date",
+    label: " Amount",
   },
   {
     id: 1,
-    label: "Time",
+    label: "Customer",
   },
   {
     id: 2,
-    label: "Name",
+    label: "Plan Type",
   },
 
   {
     id: 30,
-    label: "Plan Type",
-  },
-  {
-    id: 34,
     label: "Provider",
   },
   {
-    id: 4,
+    id: 34,
+    label: "Paid On",
+  },
+];
+export const payoutHeaderss1 = [
+  {
+    id: 234,
     label: "Amount",
+  },
+  {
+    id: 235,
+    label: "Customer",
+  },
+  {
+    id: 2350,
+    label: "Provider",
+  },
+  {
+    id: 2,
+    label: "Received On",
+  },
+  {
+    id: 4,
+    label: "Consultation",
   },
 ];
 export const referralHeader = [
