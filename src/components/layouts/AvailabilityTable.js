@@ -30,6 +30,7 @@ import {
   getAvailabilities,
   getDoctorAvailabilityForDate,
   getProviders,
+  getAvailabilities1,
 } from "components/graphQL/useQuery";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -110,6 +111,8 @@ const AvailabilityTable = () => {
   const { setSelectedRows } = useActions();
   //queries
   const [fetchAvailabilities, { loading: load, data, error }] = useLazyQuery(getAvailabilities);
+  const [fetchAvailabilities1, { loading: load1, data: data1, error: error1 }] =
+    useLazyQuery(getAvailabilities1);
 
   // providers drop down
   useEffect(() => {
@@ -158,13 +161,23 @@ const AvailabilityTable = () => {
   }, [dt]);
 
   useEffect(() => {
-    fetchAvailabilities({
-      variables: {
-        first: 5,
-        providerId: provider,
-        day: select,
-      },
-    });
+    if (provider === "") {
+      fetchAvailabilities1({
+        variables: {
+          pageInfo: pageInfo,
+          first: 5,
+          day: select,
+        },
+      });
+    } else {
+      fetchAvailabilities({
+        variables: {
+          first: 5,
+          providerId: provider,
+          day: select,
+        },
+      });
+    }
 
     if (data) {
       setPageInfo(data?.getAvailabilities?.pageInfo || []);
@@ -173,6 +186,12 @@ const AvailabilityTable = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, provider, select]);
+  useEffect(() => {
+    if (data1) {
+      setPageInfo(data1?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(data1?.getAvailabilities?.availability || defaultPageInfo);
+    }
+  }, [select, data1]);
   const [loadings, setLoading] = useState(false);
   const handleSelectChange = async (e) => {
     const { value } = e.target;
@@ -198,8 +217,8 @@ const AvailabilityTable = () => {
     });
     //eslint-disable-next-line
   }, []);
-  if (load || loadings) return <Loader />;
-  if (error) return <NoData />;
+  if (load || loadings || load1) return <Loader />;
+  if (error || error1) return <NoData />;
   const { day, available, times } = avail;
   return (
     <>

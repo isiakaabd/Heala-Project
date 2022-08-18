@@ -166,6 +166,79 @@ export const getEarningStats = gql`
     }
   }
 `;
+export const dashboard1 = gql`
+  query getStats {
+    getStats(filterBy: {}) {
+      patientStats {
+        totalActive
+        totalInactive
+        activeChartData
+        inactiveChartData
+      }
+      doctorStats {
+        totalActive
+        totalInactive
+        activeChartData
+        inactiveChartData
+      }
+      partnerStats {
+        total
+        chartData
+        hospitalChartData
+        diagnosticsChartData
+        pharmacyChartData
+        totalHospitals
+        totalPharmacies
+        totalDiagnostics
+      }
+      subscriptionStats {
+        totalActive
+        totalInactive
+        chartData
+        activeChartData
+        inactiveChartData
+      }
+      earningStats {
+        total
+        chartData
+      }
+      payoutStats {
+        total
+        chartData
+      }
+      consultationStats {
+        totalOngoing
+        totalAccepted
+        totalCompleted
+        totalDeclined
+        totalCancelled
+        ongoingChartData
+        acceptedChartData
+        completedChartData
+        declinedChartData
+        cancelledChartData
+      }
+      availabilityCalender {
+        today
+        availableDoctors {
+          dociId
+          firstName
+          lastName
+          providerId
+          availability {
+            times {
+              start
+              stop
+              available
+            }
+            createdAt
+            updatedAt
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const getFinanceStats = gql`
   query getEarningStats($q: String, $page: Int) {
@@ -786,6 +859,35 @@ export const getAvailabilities = gql`
       page: $page
       first: $first
     ) {
+      availability {
+        _id
+        doctor
+        doctorData
+        createdAt
+        updatedAt
+        providerId
+        day
+        available
+        times {
+          start
+          stop
+          available
+        }
+      }
+      pageInfo {
+        ...pageDetails
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const getAvailabilities1 = gql`
+  ${PageInfo}
+  query getAvailabilities($day: String, $page: Int, $first: Int) {
+    getAvailabilities(filterBy: { day: $day }, page: $page, first: $first) {
       availability {
         _id
         doctor
