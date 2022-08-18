@@ -18,15 +18,18 @@ import { SnackbarProvider } from "notistack";
 import { getAccessToken } from "./accessToken";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-
+// import dotenv
+import "dotenv/config";
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "https://api-staging.heala.io/",
+    //eslint-disable-next-line
+    url: process.env.REACT_APP_BASE_URL,
   }),
 );
 
 const httpLink = new HttpLink({
-  uri: "https://api-staging.heala.io",
+  //eslint-disable-next-line
+  uri: process.env.REACT_APP_BASE_URL,
 });
 
 const splitLink = split(
