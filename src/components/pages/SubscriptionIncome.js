@@ -152,22 +152,11 @@ const SubscriptionIncome = () => {
                       />
                     </TableCell>
                     <TableCell
-                      id={labelId}
-                      scope="row"
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                      style={{ color: theme.palette.common.red }}
                     >
-                      {dateMoment(createdAt)}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {timeMoment(createdAt)}
+                      {formatNumber(amount.toFixed(2))}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       {patientData && patientData !== {} ? (
@@ -207,12 +196,15 @@ const SubscriptionIncome = () => {
                     >
                       {providerId}
                     </TableCell>
+
                     <TableCell
+                      id={labelId}
+                      scope="row"
                       align="left"
                       className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
+                      style={{ color: theme.palette.common.black }}
                     >
-                      {formatNumber(amount.toFixed(2))}
+                      {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
                     </TableCell>
                   </TableRow>
                 );
