@@ -4,12 +4,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
+import { Grid, TableRow, TableCell, Button, Checkbox, Chip } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { useActions } from "components/hooks/useActions";
 import { timeConverter } from "components/Utilities/Time";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -227,7 +226,6 @@ const Hcps = () => {
                 status,
                 specialization,
                 consultations,
-                picture,
                 lastName,
               } = row;
               const isItemSelected = isSelected(_id, selectedRows);
@@ -271,13 +269,6 @@ const Hcps = () => {
                         alignItems: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${firstName}`}
-                          src={picture ? picture : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>
                         {firstName} {lastName}
                       </span>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Divider, Avatar, Typography } from "@mui/material";
+import { Grid, Divider, Typography } from "@mui/material";
 import { Modals, CustomButton, Loader } from "components/Utilities";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
 import * as Yup from "yup";
@@ -10,7 +10,6 @@ import FormikControl from "components/validation/FormikControl";
 import { useQuery, useMutation } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { deleteAppointment } from "components/graphQL/Mutation";
-import displayPhoto from "assets/images/avatar.svg";
 import { makeStyles } from "@mui/styles";
 import useAlert from "hooks/useAlert";
 import { useTheme } from "@mui/material/styles";
@@ -224,12 +223,7 @@ const HcpAppointments = () => {
                       Patient:
                     </Typography>
                   </Grid>
-                  <Grid item>
-                    <Avatar
-                      src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
-                      alt="Display Photo of the patient"
-                    />
-                  </Grid>
+
                   <Grid item>
                     <Typography variant="body1">{`${appoint.patientData.firstName} ${appoint.patientData.lastName}`}</Typography>
                   </Grid>

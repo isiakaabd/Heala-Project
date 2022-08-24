@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NoData } from "components/layouts";
 import { useSnackbar } from "notistack";
 import { CustomButton, Loader, Modals } from "components/Utilities";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
@@ -12,7 +12,6 @@ import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { verification, getVerification, getCategory } from "components/graphQL/useQuery"; //
 import { rejectVerification, updateDoctorProvider } from "components/graphQL/Mutation";
 import { verifyHCP } from "components/graphQL/Mutation";
-import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import { FormikControl } from "components/validation";
 import { Formik, Form } from "formik";
@@ -154,7 +153,6 @@ const ViewHCP = () => {
     try {
       const { reason } = values;
       const trimedReason = reason.trim();
-      console.log("trimmed reason", trimedReason);
       await reject({
         variables: {
           reason: trimedReason,
@@ -286,16 +284,7 @@ const ViewHCP = () => {
           className={`${classes.cardGrid} ${classes.firstContainer}`}
         >
           {/* <Grid item container sx={{ background: "yellow" }} justifyContent="center" height="100%"> */}
-          <Grid item>
-            <Avatar
-              src={doctorData ? doctorData.picture : displayPhoto}
-              sx={{
-                minWidth: "150px",
-                minHeight: "150px",
-                marginRight: "2rem",
-              }}
-            />
-          </Grid>
+
           {/* </Grid> */}
           <Grid
             item
@@ -345,7 +334,7 @@ const ViewHCP = () => {
               </Grid>
               <Grid item>
                 <Typography variant="h4">
-                  {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
+                  {doctorData ? `${doctorData?.dociId?.split("-")[1]}` : "No ID "}
                 </Typography>
               </Grid>
             </Grid>

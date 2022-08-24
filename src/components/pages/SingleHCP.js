@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createElement } from "react";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useQuery, useMutation } from "@apollo/client";
 import { doctor, getDoctorsProfile } from "components/graphQL/useQuery";
@@ -172,14 +172,6 @@ const SingleHCP = () => {
             className="detailsContainer"
             sx={{ flex: 1 }}
           >
-            <Grid item>
-              <Avatar
-                alt={doctorProfile?.firstName}
-                src={doctorProfile?.picture}
-                sx={{ width: 50, height: 50 }}
-              />
-            </Grid>
-
             <Typography variant="h2">{`${doctorProfile.firstName} ${doctorProfile.lastName}`}</Typography>
           </Grid>
           {/* Action Buttons grid */}

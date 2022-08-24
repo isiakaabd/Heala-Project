@@ -4,7 +4,7 @@ import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
-import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
+import { Grid, TableRow, TableCell, Checkbox, Alert, Button } from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -293,7 +293,7 @@ const Providers = () => {
               }}
             >
               {providers.map((row, index) => {
-                const { _id, name, icon } = row;
+                const { _id, name } = row; //icon
                 const isItemSelected = isSelected(_id, selectedRows);
 
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -325,9 +325,9 @@ const Providers = () => {
                           alignItems: "center",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
+                        {/* <span style={{ marginRight: "1rem" }}>
                           <Avatar src={icon} sx={{ width: 24, height: 24 }} />
-                        </span>
+                        </span> */}
                         <span style={{ fontSize: "1.25rem" }}>{name}</span>
                       </div>
                     </TableCell>

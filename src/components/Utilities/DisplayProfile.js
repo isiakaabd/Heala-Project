@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Typography, Chip, Avatar, Grid } from "@mui/material";
+import { Typography, Chip, Grid } from "@mui/material";
 import CustomButton from "./CustomButton";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -53,12 +53,6 @@ const DisplayProfile = ({
       className={classes.gridsWrapper}
       rowGap={2}
     >
-      <Grid item>
-        <Grid container gap={2} alignItems="center">
-          <Avatar alt={`Display Photo`} src={displayPhoto} sx={{ width: 50, height: 50 }} />
-          <Typography variant="h3">{fullName}</Typography>
-        </Grid>
-      </Grid>
       <Grid item>
         <Grid container alignItems="center" justifyContent="space-between">
           {specialization ? (

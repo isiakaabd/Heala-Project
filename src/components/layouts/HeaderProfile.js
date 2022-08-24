@@ -43,14 +43,14 @@ const HeaderProfile = () => {
   const [profileAcc, setProfileAcc] = useState([]);
   const [num, setNum] = useState(null);
   const [notifications, setNotifications] = useState([]);
-  const [profile, { data, loading }] = useLazyQuery(findAccounts, {
+  const [profile, { data }] = useLazyQuery(findAccounts, {
     variables: { email },
   });
   const { data: notData } = useQuery(getNotifications, {
     variables: { user: id },
   });
   useEffect(() => {
-    setNum(notifications && notifications.length);
+    setNum(notifications?.length);
 
     // eslint-disable-next-line
   }, []);
@@ -63,15 +63,11 @@ const HeaderProfile = () => {
   useEffect(() => {
     (async () => {
       profile();
-      if (data && data.accounts.data) {
-        setProfileAcc(data.accounts.data[0]);
-      }
+      setProfileAcc(data?.accounts?.data[0]);
     })();
   }, [profile, email, data]);
   useEffect(() => {
-    if (notData) {
-      setNotifications(notData.getNotifications.data);
-    }
+    setNotifications(notData?.getNotifications?.data);
   }, [notData]);
 
   function notificationsLabel(count) {
@@ -83,7 +79,6 @@ const HeaderProfile = () => {
     }
     return `${count} notifications`;
   }
-  if (loading) return <p style={{ display: "hidden" }}>Loading</p>;
 
   return (
     <header className={classes.HeaderProfile}>
@@ -101,12 +96,12 @@ const HeaderProfile = () => {
         <Grid item container justifyContent="space-between">
           <Grid item container direction="column" justifyContent="space-evenly">
             <Typography variant="body1" className={classes.name}>
-              {profileAcc && profileAcc.role}
+              {profileAcc?.role}
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
-              {profileAcc && profileAcc.email}
+              {profileAcc?.email}
             </Typography>
           </Grid>
         </Grid>

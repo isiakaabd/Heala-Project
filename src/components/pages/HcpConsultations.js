@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import { Avatar, Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
+import { Typography, TableRow, Button, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
@@ -11,7 +11,6 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Loader } from "components/Utilities";
 import { useParams } from "react-router-dom";
@@ -97,13 +96,6 @@ const HcpConsultations = (props) => {
         <Grid item>
           <Typography variant="h2">Consultations</Typography>
         </Grid>
-        {/* <Grid item>
-          <FilterList
-            options={filterOptions}
-            title="Filter consultations"
-            width="18.7rem"
-          />
-        </Grid> */}
       </Grid>
       {consultations.length > 0 ? (
         <Grid item>
@@ -175,13 +167,6 @@ const HcpConsultations = (props) => {
                         alignItems: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${patientData.firstName}`}
-                          src={patientData.picture ? patientData.picture : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span
                         style={{ fontSize: "1.25rem" }}
                       >{`${patientData.firstName} ${patientData.lastName}`}</span>

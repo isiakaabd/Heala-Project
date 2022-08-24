@@ -1,11 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@mui/material/Grid";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import Avatar from "@mui/material/Avatar";
+import { TableCell, Grid, TableRow, Checkbox, Button } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EnhancedTable from "./EnhancedTable";
 import { waitingHeadCells } from "components/Utilities/tableHeaders";
@@ -15,7 +10,6 @@ import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { Link, useLocation } from "react-router-dom";
-import displayPhoto from "assets/images/avatar.svg";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { waitingListRows } from "components/Utilities/tableData";
 
@@ -119,9 +113,6 @@ const WaitingListTable = ({ path, onClick }) => {
                       textAlign: "left",
                     }}
                   >
-                    <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
-                    </span>
                     <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                   </div>
                 </TableCell>

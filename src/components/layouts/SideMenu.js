@@ -1,4 +1,4 @@
-import React, { useState, createElement } from "react";
+import React, { useState, useEffect, createElement } from "react";
 import PropTypes from "prop-types";
 import { List, ListItemText, ListItemButton, ListItemIcon, Grid } from "@mui/material";
 import { menus } from "helpers/asideMenus";
@@ -18,7 +18,7 @@ const SideMenu = (props) => {
   const { logout } = useActions();
   const [Logout, setLogout] = useState(false);
   const [logout_user] = useMutation(LOGOUT_USER);
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
+  const [selectedMenu, setSelectedMenu] = useState(0);
 
   const useStyles = makeStyles((theme) => ({
     aside: {
@@ -139,7 +139,7 @@ const SideMenu = (props) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSideNav(menus, location?.pathname, setSelectedMenu);
   }, [location?.pathname]);
 

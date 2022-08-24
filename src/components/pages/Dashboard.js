@@ -60,11 +60,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (newData) {
+      console.log(newData, "new");
       setState(newData);
     }
   }, [form, newData, provider]);
   useEffect(() => {
     if (newData2) {
+      console.log(newData2, "old");
       setState(newData2);
     }
   }, [form, newData2, provider]);

@@ -6,7 +6,7 @@ import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
+import { Grid, TableRow, Button, TableCell, Checkbox, Alert } from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -331,9 +331,6 @@ const UserTypes = () => {
                             alignItems: "center",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                         </div>
                       </TableCell>

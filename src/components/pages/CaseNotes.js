@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Grid, Typography, Divider, Chip, Avatar } from "@mui/material";
+import { Grid, Typography, Divider, Chip } from "@mui/material";
 import { Modals, CustomButton, Loader } from "components/Utilities";
 import Copy from "components/Copy";
 import { makeStyles } from "@mui/styles";
@@ -196,12 +196,7 @@ const CaseNotes = () => {
                 </Grid>
                 {doctorData && Object.keys(doctorData).length > 0 ? (
                   <Grid item container alignItems="center">
-                    <Grid item marginRight={2}>
-                      <Avatar
-                        src={doctorData.image}
-                        alt={`Display photo of the ${doctorData.firstName}`}
-                      />
-                    </Grid>
+                    <Grid item marginRight={2}></Grid>
                     <Grid item>
                       <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>
@@ -433,12 +428,6 @@ const CaseNotes = () => {
                 </Grid>
                 {doctorData && Object.keys(doctorData).length > 0 ? (
                   <Grid container alignItems="center">
-                    <Grid item marginRight={2}>
-                      <Avatar
-                        src={doctorData.image}
-                        alt={`Display photo of the ${doctorData.firstName}`}
-                      />
-                    </Grid>
                     <Grid item>
                       <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>

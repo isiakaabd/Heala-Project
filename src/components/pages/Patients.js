@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
-
 import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Button, Avatar, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
+import { Button, Chip, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { useStyles } from "styles/patientsPageStyles";
 import { useActions } from "components/hooks/useActions";
@@ -156,17 +154,8 @@ const Patients = () => {
             }}
           >
             {profiles.map((row, index) => {
-              const {
-                dociId,
-                firstName,
-                lastName,
-                plan,
-                provider,
-                image,
-                consultations,
-                _id,
-                status,
-              } = row;
+              const { dociId, firstName, lastName, plan, provider, consultations, _id, status } =
+                row;
               const isItemSelected = isSelected(_id, selectedRows);
               const labelId = `enhanced-table-checkbox-${index}`;
               return (
@@ -208,13 +197,6 @@ const Patients = () => {
                         alignItems: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${firstName}`}
-                          src={image ? image : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
                     </div>
                   </TableCell>

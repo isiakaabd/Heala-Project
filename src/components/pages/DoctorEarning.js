@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Checkbox, TableRow, TableCell, Avatar } from "@mui/material";
+import { Grid, Typography, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -15,7 +15,6 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 // import Filter from "components/Forms/Filters";
-import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit, fetchMoreData, handlePageChange } from "helpers/filterHelperFunctions";
@@ -236,13 +235,6 @@ const DoctorEarning = () => {
                             alignItems: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${doctorData?.firstName}`}
-                              src={doctorData ? doctorData?.picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>
                             {doctorData
                               ? `${doctorData?.lastName} ${doctorData?.lastName}`

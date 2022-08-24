@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import { Grid, Button, Avatar, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
+import { Grid, Button, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 import { useActions } from "components/hooks/useActions";
@@ -197,13 +196,6 @@ const HCP = () => {
                             alignItems: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`image of ${doctorData?.firstName}`}
-                              src={doctorData ? doctorData.picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>{doctorData?.firstName}</span>
                         </div>
                       </TableCell>

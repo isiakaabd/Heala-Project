@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { Button, Checkbox, TableCell, Avatar, TableRow, Grid, Typography } from "@mui/material";
+import { Button, Checkbox, TableCell, TableRow, Grid, Typography } from "@mui/material";
 
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
@@ -253,8 +253,6 @@ const Partners = () => {
   };
   const [newProfileUrl, setNewProfileUrl] = useState("");
 
-  console.log(pageInfo);
-
   useEffect(() => {
     setNewProfileUrl(daa?.regeneratePartnerProfileUrl?.partner?.profileUrl);
   }, [daa]);
@@ -280,7 +278,6 @@ const Partners = () => {
   const z = (id) => {
     let b = "";
     const m = daa?.regeneratePartnerProfileUrl?.partner?._id;
-    console.log(m, "from z");
     if (id === m) {
       b = m;
     } else {
@@ -357,7 +354,7 @@ const Partners = () => {
             }}
           >
             {partner.map((row, index) => {
-              const { _id, logoImageUrl, name, category, profileUrl } = row;
+              const { _id, name, category, profileUrl } = row; //logoImageUrl
               const isItemSelected = isSelected(_id, selectedRows);
 
               const labelId = `enhanced-table-checkbox-${index}`;
@@ -393,13 +390,13 @@ const Partners = () => {
                         alignItems: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${name}`}
-                          src={logoImageUrl}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
+                      {/* //   <span style={{ marginRight: "1rem" }}>
+                    //     <Avatar
+                    //       alt={`Display Photo of ${name}`}
+                    //       src={logoImageUrl}
+                    //       sx={{ width: 24, height: 24 }}
+                    //     />
+                    //   </span> */}
                       <span style={{ fontSize: "1.25rem" }}>{name}</span>
                     </div>
                   </TableCell>

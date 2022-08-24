@@ -1,11 +1,10 @@
 import React from "react";
-import { Grid, Typography, TableRow, TableCell, Avatar, Checkbox } from "@mui/material";
+import { Grid, Typography, TableRow, TableCell, Checkbox } from "@mui/material";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { rows } from "components/Utilities/DataHeader";
 import { pendingHeader } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
@@ -125,7 +124,7 @@ const PendingPayout = () => {
           >
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
               const isItemSelected = isSelected(row.id, selectedRows);
-
+              const { _id, entryDate, medical, firstName, lastName, amount, account, bank } = row;
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
@@ -134,12 +133,12 @@ const PendingPayout = () => {
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.id}
+                  key={_id}
                   selected={isItemSelected}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
                       color="primary"
                       checked={isItemSelected}
                       inputProps={{
@@ -154,7 +153,7 @@ const PendingPayout = () => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.black }}
                   >
-                    {row.entryDate}
+                    {entryDate}
                   </TableCell>
                   <TableCell
                     id={labelId}
@@ -163,7 +162,7 @@ const PendingPayout = () => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.black }}
                   >
-                    {row.medical}
+                    {medical}
                   </TableCell>
                   <TableCell align="center" className={classes.tableCell}>
                     <div
@@ -173,15 +172,8 @@ const PendingPayout = () => {
                         alignItems: "center",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>
-                        {row.firstName} {row.lastName}
+                        {firstName} {lastName}
                       </span>
                     </div>
                   </TableCell>
@@ -190,21 +182,21 @@ const PendingPayout = () => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.red }}
                   >
-                    {row.amount}
+                    {amount}
                   </TableCell>
                   <TableCell
                     align="center"
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.red }}
                   >
-                    {row.account}
+                    {account}
                   </TableCell>
                   <TableCell
                     align="center"
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.green }}
                   >
-                    {row.bank}
+                    {bank}
                   </TableCell>
                 </TableRow>
               );

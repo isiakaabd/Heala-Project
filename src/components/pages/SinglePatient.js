@@ -1,12 +1,11 @@
 import React, { useEffect, useState, memo, createElement } from "react";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 // import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { Card, CustomButton, Loader } from "components/Utilities";
 import DisablePatient from "components/modals/DeleteOrDisable";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.svg";
 import { NoData } from "components/layouts";
 import { findProfile } from "components/graphQL/useQuery";
 import { ReactComponent as ConsultationIcon } from "assets/images/consultation.svg";
@@ -183,14 +182,6 @@ const SinglePatient = () => {
             className="detailsContainer"
             sx={{ flex: 1 }}
           >
-            <Grid item>
-              <Avatar
-                alt={patientProfile.firstName}
-                src={patientProfile.image ? patientProfile.image : displayPhoto}
-                sx={{ width: 50, height: 50 }}
-              />
-            </Grid>
-
             <Typography variant="h2">
               {patientProfile.firstName} {patientProfile.lastName}
             </Typography>

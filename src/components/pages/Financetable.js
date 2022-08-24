@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Button, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
+import { Grid, Typography, Button, TableCell, TableRow, Checkbox } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeaderss1 } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -126,7 +125,6 @@ const Financetable = () => {
       setPageInfo(data.getEarningStats.earningData.PageInfo);
     }
   }, [earning, data]);
-  console.log(data);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -159,7 +157,7 @@ const Financetable = () => {
             >
               {earning.map((row, index) => {
                 const { createdAt, providerId, balance, doctorData } = row;
-                const { firstName, picture, lastName } = doctorData[0] || {};
+                const { firstName, lastName } = doctorData[0] || {};
                 const isItemSelected = isSelected(row._id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -198,13 +196,6 @@ const Financetable = () => {
                             alignItems: "center",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={firstName ? firstName : "image"}
-                              src={doctorData ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>
                             {doctorData && `${firstName && firstName} ${lastName && lastName}`}
                           </span>
