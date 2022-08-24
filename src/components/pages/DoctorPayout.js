@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Chip, Checkbox, TableRow, TableCell, Avatar } from "@mui/material";
+import { Grid, Typography, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -16,7 +16,6 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import Filter from "components/Forms/Filters";
 import { useParams } from "react-router-dom";
-import displayPhoto from "assets/images/avatar.svg";
 import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -206,7 +205,7 @@ const DoctorPayout = () => {
               {payout?.map((row, index) => {
                 const { amount, createdAt, status, _id, doctorData } = row;
                 const data = doctorData || [];
-                const { firstName, lastName, picture } = data[0] || {};
+                const { firstName, lastName } = data[0] || {};
                 const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -256,13 +255,6 @@ const DoctorPayout = () => {
                             alignItems: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${firstName}`}
-                              src={picture ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${
                             lastName && lastName
                           }`}</span>

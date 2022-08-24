@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Avatar, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
+import { Grid, Checkbox, TableCell, TableRow, Typography } from "@mui/material";
 import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { medicationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { Loader } from "components/Utilities";
-import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { myMedic } from "components/graphQL/useQuery";
@@ -140,13 +139,6 @@ const Medications = () => {
                             justifyContent: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${row.caregiver}`}
-                              src={displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>{row.doctor}</span>
                         </div>
                       </TableCell>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Avatar, TableRow, Checkbox, TableCell, Button } from "@mui/material";
+import { Grid, Typography, TableRow, Checkbox, TableCell, Button } from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
@@ -135,7 +135,7 @@ const HcpPatients = () => {
                     className={classes.tableCell}
                     style={{ color: theme.palette.common.grey }}
                   >
-                    {patientData && patientData?.dociId?.split("-")[1]}
+                    {patientData?.dociId?.split("-")[1]}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <div
@@ -146,9 +146,6 @@ const HcpPatients = () => {
                         textAlign: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar alt="Remy Sharp" src={row.image} sx={{ width: 24, height: 24 }} />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>
                         {patientData?.firstName
                           ? `${patientData?.firstName} ${patientData?.lastName}`

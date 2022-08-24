@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import { Link } from "react-router-dom";
-import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
+import { Grid, Typography, TableRow, TableCell, Checkbox, Button } from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -10,7 +10,6 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { handleSelectedRows } from "helpers/selectedRows";
-import displayPhoto from "assets/images/avatar.svg";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
@@ -168,13 +167,6 @@ const Consultations = () => {
                         alignItems: "center",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${doctorData.firstName}`}
-                          src={doctorData.picture ? doctorData.picture : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>
                         {doctorData.firstName
                           ? `${doctorData.firstName} ${doctorData.lastName}`

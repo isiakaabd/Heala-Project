@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useState } from "react";
-import { Grid, Chip, Avatar, Typography, Divider } from "@mui/material";
+import { Grid, Chip, Typography, Divider } from "@mui/material";
 import { Modals, Loader, CustomButton } from "components/Utilities";
 import { NoData } from "components/layouts";
 import { useQuery } from "@apollo/client";
@@ -199,12 +199,6 @@ const HcpCaseNotes = () => {
                 </Grid>
                 {patientData && Object.keys(patientData).length > 0 ? (
                   <Grid item container alignItems="center">
-                    <Grid item marginRight={2}>
-                      <Avatar
-                        src={patientData.image}
-                        alt={`Display photo of the ${patientData.firstName}`}
-                      />
-                    </Grid>
                     <Grid item>
                       <Typography variant="h5">{`${patientData.firstName} ${patientData.lastName}`}</Typography>
                     </Grid>
@@ -435,12 +429,6 @@ const HcpCaseNotes = () => {
                 </Grid>
                 {doctorData && Object.keys(doctorData).length > 0 ? (
                   <Grid container alignItems="center">
-                    <Grid item marginRight={2}>
-                      <Avatar
-                        src={doctorData.image}
-                        alt={`Display photo of the ${doctorData.firstName}`}
-                      />
-                    </Grid>
                     <Grid item>
                       <Typography variant="h5">{`${doctorData.firstName} ${doctorData.lastName}`}</Typography>
                     </Grid>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Typography, Avatar, Chip, Divider } from "@mui/material";
+import { Grid, Typography, Chip, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { useQuery } from "@apollo/client";
 import { getAMessage } from "components/graphQL/useQuery";
@@ -53,12 +52,6 @@ const ViewMessage = () => {
 
         <Grid item direction="column" className={classes.gridWrapper} container gap={2}>
           <Grid item container gap={2} alignItems="center">
-            <Grid item>
-              <Avatar
-                src={recipientData ? recipientData.image : displayPhoto}
-                alt={`Display photo of the sender ${recipientData && recipientData.firstName}`}
-              />
-            </Grid>
             <Grid item>
               <Typography variant="h5">
                 {recipientData && Object.keys(recipientData).length > 0

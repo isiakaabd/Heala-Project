@@ -113,7 +113,6 @@ const HcpEarnings = () => {
   // const { data: datas } = useQuery(getMyEarningDoc, {
   //   variables: { doc: hcpId },
   // });
-  console.log(data);
   const [totalEarning, setTotalEarning] = useState([]);
   const [totalPayouts, setTotalPayouts] = useState([]);
   const financialValue = financialPercent(totalEarning, totalPayouts);

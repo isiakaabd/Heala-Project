@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, Grid, Checkbox, TableCell, Avatar, Button } from "@mui/material";
+import { TableRow, Grid, Checkbox, TableCell, Button } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
+// import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -203,17 +203,6 @@ const ReferralTab = () => {
                           alignItems: "center",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`image of ${
-                              doctorData?.firstName
-                                ? doctorData.firstName
-                                : "placeholder Display Image"
-                            }`}
-                            src={doctorData?.picture ? doctorData?.picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {doctorData?.firstName
                             ? `${doctorData?.firstName} ${doctorData?.lastName}`
@@ -229,17 +218,6 @@ const ReferralTab = () => {
                           alignItems: "center",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`image of ${
-                              patientData?.firstName
-                                ? patientData?.firstName
-                                : "placeholder Display Image"
-                            }`}
-                            src={patientData?.picture ? patientData?.picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {patientData?.firstName
                             ? `${patientData?.firstName} ${patientData?.lastName}`

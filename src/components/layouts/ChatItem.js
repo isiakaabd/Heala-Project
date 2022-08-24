@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 
@@ -48,13 +48,7 @@ const ChatItem = ({ chatList: { name, photo, message, time } }) => {
     >
       <Grid item>
         <Grid container alignItems="center">
-          <Grid item style={{ marginRight: "1rem" }}>
-            <Avatar
-              src={photo}
-              alt={`A display photo of ${name}`}
-              style={{ width: 50, height: 50 }}
-            />
-          </Grid>
+          <Grid item style={{ marginRight: "1rem" }}></Grid>
           <Grid item>
             <Grid container direction="column">
               <Grid item>

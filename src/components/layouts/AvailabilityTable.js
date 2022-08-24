@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  TableRow,
-  Grid,
-  Typography,
-  TableCell,
-  Avatar,
-  Chip,
-  Button,
-  Checkbox,
-} from "@mui/material";
+import { TableRow, Grid, Typography, TableCell, Chip, Button, Checkbox } from "@mui/material";
 import { NoData } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useSelector } from "react-redux";
@@ -20,7 +11,6 @@ import { isSelected } from "helpers/isSelected";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import displayPhoto from "assets/images/avatar.svg";
 import { hours, days, today } from "components/Utilities/Time";
 import { EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
@@ -270,7 +260,7 @@ const AvailabilityTable = () => {
               }}
             >
               {availabilities?.map((row, index) => {
-                const { _id, picture, doctorData, day, times, doctor } = row;
+                const { _id, doctorData, day, times, doctor } = row;
 
                 if (doctorData?.firstName && doctorData?.lastName) {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -310,13 +300,6 @@ const AvailabilityTable = () => {
                             textAlign: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src={picture ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>
                             {doctorData?.firstName
                               ? `${doctorData?.firstName} ${doctorData?.lastName}`

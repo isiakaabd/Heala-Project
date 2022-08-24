@@ -14,9 +14,6 @@ import {
 } from "components/Utilities/Time";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-// import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-// import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { LineChart, FormSelect } from "components/Utilities";
 import "chartjs-plugin-style";
 
@@ -99,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCharts = ({ data }) => {
-  console.log(data);
   const classes = useStyles();
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
@@ -342,13 +338,9 @@ const DashboardCharts = ({ data }) => {
     setPartnersData(partnerStats);
     setTotalEarning(earningStats?.total);
     setTotalPayouts(payoutStats?.total);
-    // setPayoutArray(payoutStats?.chartData);
-    // setEarningArray(earningStats?.chartData);
     setActiveSubsNumber(subscriptionStats?.totalActive);
     setInActiveSubsNumber(subscriptionStats?.totalInactive);
     setTotalSub(subscriptionStats?.totalActive + subscriptionStats?.totalInactive);
-
-    //eslint-disable-next-line
   }, [data]);
 
   const { totalAccepted, totalCancelled, totalOngoing, totalDeclined, totalCompleted } =
