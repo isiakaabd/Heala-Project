@@ -6,7 +6,16 @@ import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import { Grid, TableRow, Button, Avatar, TableCell, Checkbox, Alert } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  Grid,
+  TableRow,
+  Button,
+  Avatar,
+  TableCell,
+  Checkbox,
+  Alert,
+} from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -23,7 +32,11 @@ import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import { deleteUserType } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -171,7 +184,8 @@ const UserTypes = () => {
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error /*refetch*/ }] = useLazyQuery(getUserTypes);
+  const [fetchUserTypes, { loading, data, error /*refetch*/ }] =
+    useLazyQuery(getUserTypes);
 
   useEffect(() => {
     fetchUserTypes({
@@ -195,7 +209,9 @@ const UserTypes = () => {
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
-  const { rowsPerPage, selectedRows, page } = useSelector((state) => state.tables);
+  const { rowsPerPage, selectedRows, page } = useSelector(
+    (state) => state.tables
+  );
   const { setSelectedRows } = useActions();
   const initialValues = {
     name: "",
@@ -212,7 +228,7 @@ const UserTypes = () => {
     setEdit(false);
   };
   const [alert, setAlert] = useState(null);
-  /*   const handleDialogOpens1 = () => setIsOpens(true); */
+  const handleDialogOpens1 = () => setIsOpens(true);
   const initialValues1 = {
     name: "",
     userTypeId: "",
@@ -243,7 +259,13 @@ const UserTypes = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -253,15 +275,12 @@ const UserTypes = () => {
             {alert.message}
           </Alert>
         )}
-        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ sm: "row", xs: "column" }}>
-          {/* <Grid item flex={{ sm: 1, xs: 1 }}>
-            <Search
-              value={searchHcp}
-              placeholder="Type to search User types..."
-              onChange={(e) => onChange(e.target.value)}
-              height="5rem"
-            />
-          </Grid> */}
+        <Grid
+          item
+          gap={{ sm: 4, xs: 2 }}
+          container
+          direction={{ sm: "row", xs: "column" }}
+        >
           <Grid
             item
             flex={{ sm: 1, xs: 1 }}
@@ -271,109 +290,125 @@ const UserTypes = () => {
             gap={1}
             justifyContent="space-between"
           >
-            <Grid item>{/* <FilterList title="Filter" onClick={handleDialogOpens1} /> */}</Grid>
-            {/* <Grid item>
+            <Grid item></Grid>
+            <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
-                onClick={handleDialogOpen}
+                onClick={handleDialogOpens1}
                 title="Add new User Types"
                 type={buttonType}
               />
-            </Grid> */}
+            </Grid>
           </Grid>
         </Grid>
-        {userType.length > 0 ? (
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
+        <TableLayout>
+          {userType.length > 0 ? (
+            <Grid item container height="100%" direction="column">
+              <EnhancedTable
+                headCells={partnersHeadCells2}
+                rows={userType}
+                paginationLabel="Patients per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  changeTableLimit(fetchUserTypes, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(fetchUserTypes, page, pageInfo, {});
+                }}
+              >
+                {userType
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row._id, selectedRows);
+
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row._id}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onClick={() =>
+                              handleSelectedRows(
+                                row.id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell align="center" className={classes.tableCell}>
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span style={{ marginRight: "1rem" }}>
+                              <Avatar
+                                src={row.icon}
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {row.name}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center" className={classes.tableCell}>
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              className={`${classes.tableBtn} ${classes.greenBtn}`}
+                              onClick={() => handleEditOpenDialog(row._id)}
+                              endIcon={<EditIcon color="success" />}
+                            >
+                              Edit UserType
+                            </Button>
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              className={`${classes.tableBtn} ${classes.redBtn}`}
+                              onClick={() => handleDeleteOpenDialog(row._id)}
+                              endIcon={<DeleteIcon color="error" />}
+                            >
+                              Delete UserType
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
               headCells={partnersHeadCells2}
-              rows={userType}
-              paginationLabel="Patients per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                changeTableLimit(fetchUserTypes, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                await handlePageChange(fetchUserTypes, page, pageInfo, {});
-              }}
-            >
-              {userType
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
-
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar src={row.icon} sx={{ width: 24, height: 24 }} />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            onClick={() => handleEditOpenDialog(row._id)}
-                            endIcon={<EditIcon color="success" />}
-                          >
-                            Edit UserType
-                          </Button>
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(row._id)}
-                            endIcon={<DeleteIcon color="error" />}
-                          >
-                            Delete UserType
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
-        )}
+              paginationLabel="Providers  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
       <Modals
         isOpen={isOpen}
@@ -416,7 +451,12 @@ const UserTypes = () => {
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}

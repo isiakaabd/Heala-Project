@@ -82,6 +82,6 @@ const useAlert = () => {
         throw error;
       });
 
-  return { displayAlert, watchFunction };
+  return { displayAlert, watchFunction, getErrorMsg };
 };
 export default useAlert;

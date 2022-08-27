@@ -20,6 +20,10 @@ export const patterns = {
   // PARTNERS PATTERNS
   Partners: "partners",
 
+  // HMO PATTERNS
+  HMO: "hmo",
+  "Hmo view": "hmo/{id}",
+
   // MESSAGES PATTERNS
   Messages: "messages",
   "View message": "messages/{id}",
@@ -49,6 +53,10 @@ export const patterns = {
 
   // SUBSCRIPTION PATTERNS
   Subscriptions: "plans",
+  "Heala subscriptions": "plans/heala-plans",
+  Hospitals: "plans/hospitals",
+  "Hospital subscriptions": "plans/hospitals/{id}",
+  "HMO plans": "plans/hmo-plans",
 
   //SETTINGS PATTERNS
   Settings: "settings",
@@ -89,6 +97,15 @@ export const pathParamsRegex = {
   id: `(\\w|\\d)+`,
 };
 
+export const predictHistoryIndex = (breadcrumbs = []) => {
+  const breadcrumbInfo = breadcrumbs.map((breadcrumb, index) => {
+    const pageIndex = index - (breadcrumbs.length - 1);
+    return { pageIndex: pageIndex, pageTitle: breadcrumb };
+  });
+
+  return breadcrumbInfo;
+};
+
 export function predicateBreadcrumbFromUrl(pattern, url) {
   const breadcrumbs = [];
 
@@ -100,5 +117,5 @@ export function predicateBreadcrumbFromUrl(pattern, url) {
     }
   }
 
-  return breadcrumbs;
+  return predictHistoryIndex(breadcrumbs);
 }

@@ -44,12 +44,16 @@ const EmptyCell = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%" }} elevation={0}>
         <EnhancedTableToolbar title={title} />
 
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <EnhancedTableHeader rowCount={10} headCells={headCells} hasCheckbox />
+            <EnhancedTableHeader
+              rowCount={10}
+              headCells={headCells}
+              hasCheckbox
+            />
             <TableBody>
               <TableRow
                 style={{

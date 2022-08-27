@@ -63,8 +63,12 @@ export const handleError = (error, enqueueSnackbar) => {
 };
 
 export const deleteVar = (variable) => {
-  for (const key in variable) {
-    delete variable[key];
+  try {
+    for (const key in variable) {
+      delete variable[key];
+    }
+  } catch (error) {
+    console.error("couldn't delete variables", error);
   }
 };
 
@@ -264,6 +268,24 @@ export const uploadImage = async (file, setProgress) => {
   }
 };
 
+export const uploadFile = async (file) => {
+  try {
+    const form = new FormData();
+    form.append("file", file);
+    const data = await axios({
+      method: "post",
+      url: "https://api.heala.io/rest/media/upload/",
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form._boundary}`,
+      },
+      data: form,
+    });
+    return data.data.data.mediaUrl;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const deleteItem = async (
   deleteMutation,
   id = "",
@@ -319,6 +341,21 @@ export const IsImg = (file) => {
     }
   } catch (error) {
     console.log("couldn't check if file is an image", error);
+    return false;
+  }
+};
+
+export const isFile = (file, fileType) => {
+  try {
+    const fileArr = file?.name.split(".");
+    const lastItem = fileArr[fileArr.length - 1];
+    if (lastItem === fileType) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log("couldn't check file type", error);
     return false;
   }
 };

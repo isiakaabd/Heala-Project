@@ -1,12 +1,11 @@
-import { Button, Checkbox, TableCell, TableRow } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import React from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import { useTheme } from "@mui/styles";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { formatNumber } from "components/Utilities/Time";
-import { Loader } from "components/Utilities";
 import PropTypes from "prop-types";
+import { useTheme } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
+import { Loader } from "components/Utilities";
+import { formatNumber } from "components/Utilities/Time";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
+import { Checkbox, TableCell, TableRow } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -144,7 +143,7 @@ export const PlanListRow = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { _id, name, amount, duration, providerData, description } = plan;
+  const { _id, name, amount, duration, description } = plan;
   return (
     <TableRow
       hover
@@ -153,6 +152,8 @@ export const PlanListRow = ({
       tabIndex={-1}
       key={_id}
       selected={isItemSelected}
+      sx={{ cursor: "pointer" }}
+      onClick={() => handleEditOpenDialog()}
     >
       <TableCell padding="checkbox">
         <Checkbox
@@ -201,16 +202,6 @@ export const PlanListRow = ({
           maxWidth: "20rem",
         }}
       >
-        {providerData ? providerData?.name : "No Value"}
-      </TableCell>
-      <TableCell
-        align="left"
-        className={classes.tableCell}
-        style={{
-          color: theme.palette.common.black,
-          maxWidth: "20rem",
-        }}
-      >
         {duration}
       </TableCell>
 
@@ -223,28 +214,14 @@ export const PlanListRow = ({
             justifyContent: "space-around",
           }}
         >
-          <Button
-            variant="contained"
-            disableRipple
-            onClick={() => handleEditOpenDialog(_id)}
-            className={`${classes.tableBtn} ${classes.greenBtn}`}
-            endIcon={<EditIcon color="success" />}
-          >
-            Edit plan
-          </Button>
           {deleting ? (
             <Loader />
           ) : (
-            <Button
-              variant="contained"
-              disableRipple
-              onClick={() => handleDeleteOpenDialog(_id)}
-              className={`${classes.tableBtn} ${classes.redBtn}`}
-              /* to="/view" */
-              endIcon={<DeleteIcon color="error" />}
-            >
-              Delete plan
-            </Button>
+            <EditDelBtn
+              type="delete"
+              text="Delete plan"
+              onHandleClick={() => handleDeleteOpenDialog()}
+            />
           )}
         </div>
       </TableCell>

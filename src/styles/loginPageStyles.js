@@ -1,29 +1,15 @@
 import { makeStyles } from "@mui/styles";
-import people from "../assets/images/login-page-photo.png";
-import loginBackground from "../assets/images/login-background.svg";
+/* import loginBackground from "../assets/images/login-background.svg"; */
 
 export const useStyles = makeStyles((theme) => ({
   gridContainer: {
     "&.MuiGrid-root": {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      backgroundColor: "#f8f8f8",
       minHeight: "100vh",
-      display: "grid !important",
-      gridTemplateColumns: "repeat(2,1fr)",
-      "@media(max-width:600px)": {
-        gridTemplateColumns: "1fr",
-        "& >*:first-child": {
-          display: "none !important",
-        },
-      },
-    },
-  },
-  leftParentGrid: {
-    "&.MuiGrid-root": {
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundImage: `url(${people}),
-        linear-gradient(89.63deg, rgba(1, 2, 2, 0.49) 0.3%, rgba(1, 2, 2, 0) 99.66%)`,
-      backgroundBlendMode: "darken",
+      width: "100%",
     },
   },
   overlay: {
@@ -42,38 +28,52 @@ export const useStyles = makeStyles((theme) => ({
   },
   heading: {
     "&.MuiTypography-root": {
-      fontSize: "clamp(3rem, 3vw, 4.8rem)",
-      "@media(max-width:600px)": {
-        textAlign: "center",
-      },
+      fontSize: "clamp(1em, 3.4em, 5em)",
+      textAlign: "center",
+      lineHeight: "28px",
+      fontWeight: "600 !important",
+      padding: "23px",
+      color: "#333333",
     },
   },
   logoAlign: {
     width: "100%",
     display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
     justifyContent: "center",
-    alignItems: "center",
+    flexGrow: 0,
+    paddingBottom: "2rem",
   },
 
   logo: {
-    width: "min(28rem, 40vw)",
+    width: "clamp(100px, 150px, 200px)",
     position: "relative",
     textAlign: "center",
   },
   rightParentGrid: {
-    backgroundImage: `url(${loginBackground})`,
-    // padding: "5rem 8rem",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundColor: "#FCFCFC",
+    borderRadius: "11px",
   },
 
   link: {
     textDecoration: "none",
+  },
+  loginBtn: {
+    width: "100%",
+    height: "54.62px",
+    border: "none",
+    fontWeight: "500 !important",
+    fontSize: "1.6rem !important",
+    textTransform: "initial !important",
+    color: "#ffffff !important",
+    lineHeight: "20px",
+    background: "linear-gradient(98.44deg, #3E5EA9 1.92%, #7EEDBA 122.04%)",
+    borderRadius: "7px",
+    cursor: "pointer",
+    "&:hover": {
+      boxShadow: "0px 6.82771px 20.4831px rgba(62, 165, 132, 0.15)",
+    },
   },
 }));

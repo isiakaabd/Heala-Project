@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import moment from "moment";
+
 export const arrangeItems = (array) => {
   let finalArray = [];
   let n = 0;
@@ -55,5 +58,62 @@ export const setSideNav = (appNavData, pathname, setNav) => {
     });
   } catch (error) {
     console.log("Something sent wrong with setSideNav FN", error);
+  }
+};
+
+export const dateMoment = (dateString) => {
+  const formatedDate = moment(dateString).utc().format("YYYY-MM-DD");
+  if (formatedDate === "Invalid date") {
+    return null;
+  } else {
+    return formatedDate;
+  }
+};
+
+export const getSearchPlaceholder = (filterBy) => {
+  return filterBy === "id"
+    ? "Search by ID e.g 7NE6ELLO"
+    : filterBy === "firstName"
+    ? "Search by first name e.g John"
+    : filterBy === "lastName"
+    ? "Search by last name e.g Doe"
+    : "";
+};
+
+export const getDynamicSearchPlaceholder = (
+  filterBy,
+  obj = { hmoId: "Search by HMO ID" }
+) => {
+  let placeHolder = "";
+  Object.keys(obj).forEach((key) => {
+    if (key === filterBy) placeHolder = obj[key];
+  });
+  return placeHolder;
+};
+
+export const getInitials = (name) => {
+  try {
+    const splitedNamesArr = name.split(" ");
+
+    const initailsArr = splitedNamesArr.map((name) => {
+      const splitedNameArr = name.split("");
+      return splitedNameArr[0];
+    });
+
+    return initailsArr.join("");
+  } catch (error) {
+    console.error("error from getInitials func.", error);
+    return "";
+  }
+};
+
+export const formatDate = (date, formatType) => {
+  try {
+    const parsedDate = Date.parse(date);
+    const formatedDate = format(parsedDate, formatType);
+    return formatedDate;
+  } catch (error) {
+    console.error(error);
+    return "No date";
   }
 };

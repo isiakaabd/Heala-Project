@@ -5,7 +5,15 @@ import { useLazyQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Loader, CustomButton } from "components/Utilities";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { TableRow, Alert, TableCell, Checkbox, Button, Grid, Typography } from "@mui/material";
+import {
+  TableRow,
+  Alert,
+  TableCell,
+  Checkbox,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { isSelected } from "helpers/isSelected";
 import { useTheme } from "@mui/material/styles";
@@ -15,6 +23,9 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { getEmailList } from "components/graphQL/useQuery";
 import { emailHeader } from "components/Utilities/tableHeaders";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import TableLayout from "components/layouts/TableLayout";
+// import { emailPageDefaultFilterValues } from "helpers/mockData";
+//roleFilterBy
 const useStyles = makeStyles((theme) => ({
   chip: {
     "&.MuiChip-root": {
@@ -119,7 +130,13 @@ const Email = () => {
 
   return (
     <>
-      <Grid container direction="column" height="100%" flexWrap="nowrap" gap={2}>
+      <Grid
+        container
+        direction="column"
+        height="100%"
+        flexWrap="nowrap"
+        gap={2}
+      >
         {response ? (
           <Grid
             item
@@ -134,41 +151,13 @@ const Email = () => {
             </Alert>
           </Grid>
         ) : null}
-        <Grid item direction={{ sm: "row", xs: "column" }} container gap={{ md: 4, sm: 4, xs: 2 }}>
-          {/* <Grid item flex={1}>
-            <Search
-              value={searchMail}
-              onChange={(e) => setSearchMail(e.target.value)}
-              placeholder="Enter your email here..."
-              height="5rem"
-            />
-          </Grid> */}
-          {/*<Grid item>
-            <Filter
-              onHandleChange={(e) =>
-                onFilterValueChange(
-                  e,
-                  "role",
-                  filterValues,
-                  setFilterValues,
-                  fetchEmails,
-                  variables,
-                  refetch,
-                )
-              }
-              options={roleFilterBy}
-              name="role"
-              placeholder="All roles"
-              value={filterValues.role}
-            />
-          </Grid>
-         <Grid item>
-            <CustomButton
-              endIcon={<DownloadSharpIcon />}
-              title="Download Email"
-              type={buttonType}
-            />
-          </Grid> */}
+        <Grid
+          item
+          direction={{ sm: "row", xs: "column" }}
+          container
+          justifyContent={"flex-end"}
+          gap={{ md: 4, sm: 4, xs: 2 }}
+        >
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
@@ -179,100 +168,110 @@ const Email = () => {
             />
           </Grid>
         </Grid>
-        {/* The Search and Filter ends here */}
 
-        {loading ? (
-          <Loader />
-        ) : emails && emails.length > 0 ? (
-          <Grid item container direction="column" height="100%">
-            <EnhancedTable
-              headCells={emailHeader}
-              rows={emails}
-              paginationLabel="email per page"
-              handleChangePage={() => console.log("")}
-              hasCheckbox={true}
-              changeLimit={() => console.log("")}
-              fetchData={() => console.log("")}
-              dataPageInfo={{}}
-              hasPagination={false}
-            >
-              {emails &&
-                emails
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const { _id, email, createdAt, role } = row;
-                    const isItemSelected = isSelected(_id, selectedRows);
+        <TableLayout>
+          {loading ? (
+            <Loader />
+          ) : emails && emails.length > 0 ? (
+            <Grid item container direction="column" height="100%">
+              <EnhancedTable
+                headCells={emailHeader}
+                rows={emails}
+                paginationLabel="email per page"
+                handleChangePage={() => console.log("")}
+                hasCheckbox={true}
+                changeLimit={() => console.log("")}
+                fetchData={() => console.log("")}
+                dataPageInfo={{}}
+                hasPagination={false}
+              >
+                {emails &&
+                  emails
+                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const { _id, email, createdAt, role } = row;
+                      const isItemSelected = isSelected(_id, selectedRows);
 
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={_id}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="left"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={_id}
+                          selected={isItemSelected}
                         >
-                          {dateMoment(createdAt)}
-                        </TableCell>
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="left"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
-                        >
-                          {email}
-                        </TableCell>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              onClick={() =>
+                                handleSelectedRows(
+                                  _id,
+                                  selectedRows,
+                                  setSelectedRows
+                                )
+                              }
+                              color="primary"
+                              checked={isItemSelected}
+                              inputProps={{
+                                "aria-labelledby": labelId,
+                              }}
+                            />
+                          </TableCell>
 
-                        <TableCell
-                          align="left"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.red }}
-                        >
-                          {role}
-                        </TableCell>
-
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            component={Link}
-                            disabled
-                            to={`email/${index}`}
-                            endIcon={<ArrowForwardIosIcon />}
-                            /* onClick={() => setSelectedSubMenu(7)} */
+                          <TableCell
+                            id={labelId}
+                            scope="row"
+                            align="left"
+                            className={classes.tableCell}
+                            style={{ color: theme.palette.common.black }}
                           >
-                            View mail
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={emailHeader} paginationLabel="Email  per page" />
-        )}
+                            {dateMoment(createdAt)}
+                          </TableCell>
+                          <TableCell
+                            id={labelId}
+                            scope="row"
+                            align="left"
+                            className={classes.tableCell}
+                            style={{ color: theme.palette.common.black }}
+                          >
+                            {email}
+                          </TableCell>
+
+                          <TableCell
+                            align="left"
+                            className={classes.tableCell}
+                            style={{ color: theme.palette.common.red }}
+                          >
+                            {role}
+                          </TableCell>
+
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              component={Link}
+                              disabled
+                              to={`email/${index}`}
+                              endIcon={<ArrowForwardIosIcon />}
+                              /* onClick={() => setSelectedSubMenu(7)} */
+                            >
+                              View mail
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={emailHeader}
+              paginationLabel="Email  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
     </>
   );

@@ -17,7 +17,8 @@ import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 
 const App = ({ window }) => {
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { logout } = useActions();
@@ -45,8 +46,6 @@ const App = ({ window }) => {
       }
       if (token && isAuthenticated && !time && state) {
         setstate(false);
-
-        // logout_user();
         setAccessToken(token);
       } else if (token && isAuthenticated && !time && !state) {
         setAccessToken(token);
@@ -56,21 +55,25 @@ const App = ({ window }) => {
     // })();
   }, [logout_user, logout, state, isAuthenticated]);
 
-  /*   const [chatMediaActive, setChatMediaActive] = useState(false); */
-
   return (
     <ThemeProvider theme={muiTheme}>
       <Router>
         <div className="container">
           {!isAuthenticated && (
-            <Route path={["/login", "/"]} render={(props) => <Login {...props} />} />
+            <Route
+              path={["/login", "/"]}
+              render={(props) => <Login {...props} />}
+            />
           )}
           {isAuthenticated && state && <Loader color="success" />}
           {isAuthenticated && !state && (
             <>
               <Box sx={{ display: "flex" }}>
                 <CssBaseline />
-                <Header handleDrawerToggle={handleDrawerToggle} drawerWidth={drawerWidth} />
+                <Header
+                  handleDrawerToggle={handleDrawerToggle}
+                  drawerWidth={drawerWidth}
+                />
 
                 <Box
                   component="nav"
@@ -88,11 +91,19 @@ const App = ({ window }) => {
                     elevation={0}
                     sx={{
                       display: { xs: "block", md: "none" },
-                      "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
-                      "& .MuiBackdrop-root": { backgroundColor: "rgba(0, 0, 0, 0.2)" },
+                      "& .MuiDrawer-paper": {
+                        boxSizing: "border-box",
+                        width: drawerWidth,
+                      },
+                      "& .MuiBackdrop-root": {
+                        backgroundColor: "rgba(0, 0, 0, 0.2)",
+                      },
                     }}
                   >
-                    <SideMenu drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
+                    <SideMenu
+                      drawerWidth={drawerWidth}
+                      handleDrawerToggle={handleDrawerToggle}
+                    />
                   </Drawer>
                   <Drawer
                     variant="permanent"
@@ -114,6 +125,7 @@ const App = ({ window }) => {
                   sx={{
                     flex: 1,
                     p: 3,
+                    marginTop: "1.5rem",
                     width: { xs: `calc(100% - ${drawerWidth}px)` },
                   }}
                 >

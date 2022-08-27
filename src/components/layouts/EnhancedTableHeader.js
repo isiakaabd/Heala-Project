@@ -5,13 +5,15 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   tableHeader: {
-    "&.MuiTableHead-root": {
-      background: "rgb(251, 251, 251)",
-    },
+    "&.MuiTableHead-root": {},
   },
   tableHeaderCell: {
     "&.MuiTableCell-root, &.MuiTableCell-root": {
-      fontSize: "1.65rem",
+      background: theme.palette.common.gray300,
+      fontSize: "12px",
+      color: theme.palette.common.grey,
+      borderBottom: "0px",
+      whiteSpace: "nowrap",
     },
 
     "&.MuiTableCell-root": {
@@ -23,13 +25,21 @@ const useStyles = makeStyles((theme) => ({
 function EnhancedTableHead(props) {
   const classes = useStyles();
 
-  const { onSelectAllClick, numSelected, rowCount, headCells, hasCheckbox } = props;
+  const { onSelectAllClick, numSelected, rowCount, headCells, hasCheckbox } =
+    props;
 
   return (
     <TableHead className={classes.tableHeader}>
       <TableRow>
         {hasCheckbox && (
-          <TableCell padding="checkbox">
+          <TableCell
+            padding="checkbox"
+            sx={{
+              borderBottom: "0px",
+              backgroundColor: "#F8F8F8",
+              borderRadius: "8px 0px 0px 8px",
+            }}
+          >
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -41,16 +51,23 @@ function EnhancedTableHead(props) {
             />
           </TableCell>
         )}
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            className={classes.tableHeaderCell}
-            align="left"
-            padding={headCell.disablePadding ? "none" : "normal"}
-          >
-            {headCell.label}
-          </TableCell>
-        ))}
+        {headCells.map((headCell, idx) => {
+          const isFirst = hasCheckbox ? false : idx === 0;
+          const isLast = idx === headCells.length - 1;
+          const firstBorder = { borderRadius: "8px 0px 0px 8px" };
+          const lastBorder = { borderRadius: "0px 8px 8px 0px" };
+          return (
+            <TableCell
+              key={headCell.id}
+              className={classes.tableHeaderCell}
+              align="left"
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sx={isFirst ? firstBorder : isLast && lastBorder}
+            >
+              {headCell.label}
+            </TableCell>
+          );
+        })}
       </TableRow>
     </TableHead>
   );

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
       "&:hover": {
         cursor: "pointer",
-        color: theme.palette.common.lightGreen,
+        color: theme.palette.common.danger,
       },
     },
   },
@@ -48,7 +48,7 @@ const DeleteOrDisable = ({
 
   const discardButton = {
     background: theme.palette.info.main,
-    hover: theme.palette.info.light,
+    hover: theme.palette.common.gold,
     active: theme.palette.info.dark,
   };
 
@@ -109,18 +109,19 @@ const DeleteOrDisable = ({
               container
               justifyContent="space-between"
               rowGap={3}
+              spacing={4}
               sx={{ justifyContent: "space-between" }}
             >
-              <Grid item columms={{ md: 4, sm: 4, xs: 3 }}>
+              <Grid item columms={{ lg: 6, md: 4, sm: 4, xs: 3 }} flex={1}>
                 <CustomButton
-                  title="Discard"
+                  title="Cancel"
                   textColor={theme.palette.common.black}
                   type={discardButton}
                   width="100%"
                   onClick={() => setOpen(false)}
                 />
               </Grid>
-              <Grid item columms={{ md: 4, sm: 4, xs: 3 }}>
+              <Grid item columms={{ md: 4, sm: 4, xs: 3 }} flex={1}>
                 <CustomButton
                   title={`Yes, ${btnValue}`}
                   type={disableButton}

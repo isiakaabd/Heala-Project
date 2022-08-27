@@ -13,6 +13,7 @@ const Filter = ({
   onClickClearBtn,
   hasClearBtn,
   label,
+  variant,
 }) => {
   return (
     <div>
@@ -29,6 +30,7 @@ const Filter = ({
             label={label}
             onClickClearBtn={onClickClearBtn}
             hasClearBtn={hasClearBtn}
+            variant={variant}
           />
         </Grid>
       </Grid>
@@ -46,6 +48,7 @@ Filter.propTypes = {
   disable: t.bool,
   hasClearBtn: t.bool,
   label: t.string,
+  variant: t.oneOf(["small", "medium"]),
 };
 
 export default Filter;

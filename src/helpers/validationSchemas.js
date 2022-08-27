@@ -1,16 +1,25 @@
 import * as Yup from "yup";
+import { isFile } from "./filterHelperFunctions";
 
 export const addDoctorValidationSchema = Yup.object({
-  firstName: Yup.string("Enter your firstName").trim().required("firstName is required"),
-  hospital: Yup.string("Enter your hosptial").trim().required("hospital is required"),
-  dob: Yup.date("required").typeError(" Enter a valid DOB").required(" DOB required"),
+  firstName: Yup.string("Enter your firstName")
+    .trim()
+    .required("firstName is required"),
+  hospital: Yup.string("Enter your hosptial")
+    .trim()
+    .required("hospital is required"),
+  dob: Yup.date("required")
+    .typeError(" Enter a valid DOB")
+    .required(" DOB required"),
   dociId: Yup.string("Enter dociId").trim().required("DociId required"),
   gender: Yup.string("select your Gender").required("Select a gender"),
   phone: Yup.number("Enter your Phone Number")
     .typeError(" Enter a valid phone number")
     .min(11, "min value is  11 digits")
     .required("Phone number is required"),
-  lastName: Yup.string("Enter your lastName").trim().required("LastName is required"),
+  lastName: Yup.string("Enter your lastName")
+    .trim()
+    .required("LastName is required"),
   image: Yup.string("Upload a single Image")
     .typeError("Pick correct image")
     .required("Image is required"),
@@ -21,7 +30,9 @@ export const addDoctorValidationSchema = Yup.object({
 });
 
 export const addTestValidation = Yup.object({
-  name: Yup.string("Enter name of test").trim().required("Test name is required"),
+  name: Yup.string("Enter name of test")
+    .trim()
+    .required("Test name is required"),
   price: Yup.number("Enter test amount")
     .typeError(" Enter a number a price")
     .required("Test price is required"),
@@ -32,19 +43,33 @@ export const addTestValidation = Yup.object({
 
 export const editTestValidation = Yup.object({
   id: Yup.string().trim().required(),
-  name: Yup.string("Enter name of test").trim().required("Test name is required"),
+  name: Yup.string("Enter name of test")
+    .trim()
+    .required("Test name is required"),
   price: Yup.number("Enter test amount")
     .typeError(" Enter a number a price")
     .required("Test price is required"),
   tatNumber: Yup.string("Enter TAT for this test").required("TAT is required"),
-  tatDuration: Yup.string("Select an option").required("This field is required."),
+  tatDuration: Yup.string("Select an option").required(
+    "This field is required."
+  ),
 });
 
-export const uploadTestFileValidation = Yup.object({
+export const uploadFileValidationSchema = Yup.object({
   testFile: Yup.mixed()
-    .required("Select a JSON file to proceed.")
-    .test("type", "Only JSON files are supported", (value) => {
+    .required("Select a .JSON file to proceed.")
+    .test("type", "Only .JSON files are supported", (value) => {
       return value && value.type === "application/json";
+    }),
+});
+
+export const uploadEnrolleeFileValidationSchema = Yup.object({
+  planId: Yup.string("Please select a plan").required("Plan is required."),
+  file: Yup.mixed()
+    .required("Select a .CSV file to proceed.")
+    .test("type", "Only .CSV files are supported", (value) => {
+      const isCSVFile = isFile(value, "csv");
+      return isCSVFile;
     }),
 });
 
@@ -58,15 +83,81 @@ export const filterPartnersValidationSchema = Yup.object({
 });
 
 export const addPartnerValidationSchema = Yup.object({
-  category: Yup.string("select your Category").trim().required("Category is required"),
+  category: Yup.string("select your Category")
+    .trim()
+    .required("Category is required"),
 });
 
 export const addNewPartnerValidationSchema = Yup.object({
   name: Yup.string("Enter your name").trim().required("name is required"),
   image: Yup.string("Upload a single Image").required("Image is required"),
-  email: Yup.string().email("Enter a valid email").trim().required("Email is required"),
+  email: Yup.string()
+    .email("Enter a valid email")
+    .trim()
+    .required("Email is required"),
   provider: Yup.string("select a provider").trim(),
-  specialization: Yup.string("select your Specialization").required("Specialization is required"),
+  specialization: Yup.string("select your Specialization").required(
+    "Specialization is required"
+  ),
+});
+
+export const hmoValidationSchema = Yup.object({
+  name: Yup.string("Enter HMO name").trim().required("HMO name is required"),
+  iconAlt: Yup.string("provide alternative icon").trim(),
+  icon: Yup.string("provide icon").trim().required("Icon is required"),
+  userTypeId: Yup.string("Select type of provider")
+    .trim()
+    .required("Provider type is required"),
+  email: Yup.string("Enter email address")
+    .email("Enter a valid email")
+    .trim()
+    .required("Email is required"),
+  phone: Yup.number("Enter your Phone Number")
+    .typeError(" Enter a valid phone number")
+    .min(11, "min value is  11 digits")
+    .required("Phone number is required"),
+  address: Yup.string("Enter HMO address").required(" Address is required"),
+});
+
+export const addHMOEnrolleeValidationSchema = Yup.object({
+  id: Yup.string("enter id").trim(),
+  firstName: Yup.string("Enter first name")
+    .trim()
+    .required("First name is required"),
+  lastName: Yup.string("Enter last name")
+    .trim()
+    .required("Last name is required"),
+  email: Yup.string("Enter email address")
+    .email("Enter a valid email")
+    .trim()
+    .required("Email is required"),
+  phone: Yup.number("Enter your Phone Number")
+    .typeError(" Enter a valid phone number")
+    .min(11, "min value is  11 digits")
+    .required("Phone number is required"),
+  photo: Yup.string("provide photo")
+    .typeError("Please provider a photo")
+    .trim(),
+  hmoId: Yup.string("Enter HMO ID").trim().required("HMO ID is required"),
+  noc: Yup.string("Enter NOC").trim(),
+  plan: Yup.string("Enter HMO plan").trim().required("HMO Plan is required"),
+  planId: Yup.string("Select Heala plan")
+    .trim()
+    .required("Heala Plan is required"),
+  expiryDate: Yup.date("Enter HMO plan expiry date")
+    .typeError("Please select a valid date")
+    .required("Expiry date is Required"),
+});
+
+export const addEditPlansValidationSchema = Yup.object({
+  id: Yup.string("Enter Description").trim(),
+  name: Yup.string("Enter your Name").trim().required("Name is required"),
+  amount: Yup.number("Enter your Amount").typeError(" Enter a valid amount"),
+  description: Yup.string("Enter Description")
+    .trim()
+    .required("Description is required"),
+  provider: Yup.string("Enter Provider").trim(),
+  accessType: Yup.string("Enter Duration").trim(),
 });
 export const illnessSchema = Yup.object({
   name: Yup.string("Enter illness name").trim().required("illness name is required"),

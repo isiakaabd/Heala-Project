@@ -2,9 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { Field, ErrorMessage } from "formik";
-import { FormControl, Typography, FormLabel, Select, MenuItem, Grid } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { FormControl, FormLabel, Select, MenuItem, Grid } from "@mui/material";
+
+import Typography from "@mui/material/Typography";
 import { TextError } from "components/Utilities/TextError";
 import { CloseBtn } from "components/Buttons/CloseBtn";
+import ChervonDownIcon from "components/Icons/ChervonDownIcon";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -13,15 +17,47 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   select: {
-    fontWeight: 200,
-    color: theme.palette.common.lightGrey,
-    minHeight: 50,
-    fontSize: "1.6rem !important",
+    "&.MuiOutlinedInput-root": {
+      fontWeight: "200 !important",
+      color: `${theme.palette.common.grey} !important`,
+      backgroundColor: "#FAFAFA",
+      height: ({ height }) => `${height}`,
+      fontSize: "14px !important",
+      borderRadius: "12px",
+      border: "1px solid #E0E0E0 !important",
+
+      "&:disabled": {
+        backgroundColor: "#E0E0E0 !important",
+      },
+
+      "&>fieldset": {
+        border: 0,
+      },
+    },
+
+    "&.MuiTypography-root": {
+      fontWeight: "200 !important",
+      color: `${theme.palette.common.grey} !important`,
+      minHeight: 50,
+      fontSize: "14px !important",
+      borderRadius: "12px",
+    },
   },
 }));
 
-export const Formiks = ({ value, name, onChange, onBlur, children }) => {
-  const classes = useStyles();
+export const Formiks = ({
+  value,
+  name,
+  onChange,
+  onBlur,
+  children,
+  variant = "small",
+}) => {
+  const height = variant === "small" ? "40px" : "60px";
+  const props = {
+    height: height,
+  };
+  const classes = useStyles(props);
   return (
     <FormControl fullWidth>
       <Select
@@ -31,6 +67,12 @@ export const Formiks = ({ value, name, onChange, onBlur, children }) => {
         value={value}
         onChange={onChange}
         className={classes.select}
+        IconComponent={() => (
+          <KeyboardArrowDownIcon
+            fontSize="large"
+            sx={{ marginRight: "1rem" }}
+          />
+        )}
       >
         {children}
       </Select>
@@ -45,16 +87,61 @@ Formiks.propTypes = {
   children: PropTypes.node,
   name: PropTypes.string,
   onBlur: PropTypes.func,
+  variant: PropTypes.oneOf(["small", "medium"]),
+};
+
+export const FromikSelect = ({
+  value,
+  name,
+  onChange,
+  onBlur,
+  children,
+  variant = "medium",
+}) => {
+  const height = variant === "small" ? "40px" : "60px";
+  const props = {
+    height: height,
+  };
+  const classes = useStyles(props);
+  return (
+    <FormControl fullWidth>
+      <Select
+        name={name}
+        displayEmpty
+        onBlur={onBlur}
+        value={value}
+        onChange={onChange}
+        className={classes.select}
+        IconComponent={() => (
+          <KeyboardArrowDownIcon
+            fontSize="large"
+            sx={{ marginRight: "1rem" }}
+          />
+        )}
+      >
+        {children}
+      </Select>
+    </FormControl>
+  );
+};
+
+FromikSelect.propTypes = {
+  value: PropTypes.string,
+  label: PropTypes.string,
+  onChange: PropTypes.func,
+  children: PropTypes.node,
+  name: PropTypes.string,
+  onBlur: PropTypes.func,
+  variant: PropTypes.oneOf(["small", "medium"]),
 };
 
 const Selects = (props) => {
-  const { name, label, options, placeholder } = props;
+  const { name, label, options } = props;
   const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
       <FormLabel className={classes.FormLabel}>{label}</FormLabel>
-      <Field name={name} as={Formiks} label={label}>
-        <MenuItem value="">{placeholder}</MenuItem>
+      <Field name={name} as={FromikSelect} label={label}>
         {options.map((option) => (
           <MenuItem key={option.key} value={option.value}>
             {option.key}
@@ -85,34 +172,47 @@ export const CustomSelect = (props) => {
     label,
     onClickClearBtn,
     hasClearBtn,
+    disabled = false,
+    variant = "small",
   } = props;
-  const classes = useStyles();
+
+  const height = variant === "small" ? "48px" : "60px";
+  const styleProps = {
+    height: height,
+  };
+  const classes = useStyles(styleProps);
   return (
-    <Grid container direction="column" gap={1}>
+    <Grid container direction="column">
       {label && <FormLabel className={classes.FormLabel}>{label}</FormLabel>}
-      <FormControl fullWidth>
-        <Grid item container direction="column" sx={{ position: "relative" }}>
-          {hasClearBtn && value !== "" ? (
-            <Grid
-              sx={{
-                position: "absolute",
-                top: "-10px",
-                right: "-10px",
-                zIndex: "5",
-              }}
-            >
-              <CloseBtn onHandleClick={() => onClickClearBtn()} />
-            </Grid>
-          ) : (
-            ""
-          )}
+      <Grid item container direction="column" sx={{ position: "relative" }}>
+        {hasClearBtn && value !== "" ? (
+          <Grid
+            sx={{
+              position: "absolute",
+              top: "-10px",
+              right: "-10px",
+              zIndex: "5",
+            }}
+          >
+            <CloseBtn onHandleClick={() => onClickClearBtn()} />
+          </Grid>
+        ) : (
+          ""
+        )}
+        <FormControl fullWidth>
           <Select
             name={name}
             displayEmpty
             onBlur={onBlur}
+            disabled={disabled}
             value={value}
             onChange={onChange}
             className={classes.select}
+            IconComponent={() => (
+              <ChervonDownIcon
+                sx={{ color: "transparent", marginRight: "0.8rem" }}
+              />
+            )}
           >
             <MenuItem value="">
               <Typography>{placeholder}</Typography>
@@ -123,8 +223,8 @@ export const CustomSelect = (props) => {
               </MenuItem>
             ))}
           </Select>
-        </Grid>
-      </FormControl>
+        </FormControl>
+      </Grid>
     </Grid>
   );
 };
@@ -139,6 +239,7 @@ CustomSelect.propTypes = {
   onChange: PropTypes.func,
   onClickClearBtn: PropTypes.func,
   hasClearBtn: PropTypes.bool,
+  variant: PropTypes.oneOf(["small", "medium"]),
 };
 
 export default Selects;

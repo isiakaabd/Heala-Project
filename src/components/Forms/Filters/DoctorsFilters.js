@@ -21,22 +21,28 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   const [statusFilterValue, setStatusFilterValue] = useState("");
   const [providers, setProviders] = useState([]);
   const [profileFilterValues, setProfileFilterValues] = useState(
-    doctorsProfileDefaultFilterByValues,
+    doctorsProfileDefaultFilterByValues
   ); // gender cadre specialization providerId
   const [fetchProviders] = useLazyQuery(getProviders);
   const { doctorsParams, doctorsByStatusParams } = queryParams;
   const { fetchDoctors, loading, refetch, variables } = doctorsParams;
-  const { byStatusLoading, byStatusVaribles, byStatusRefetch, fetchDoctorsByStatus } =
-    doctorsByStatusParams;
+  const {
+    byStatusLoading,
+    byStatusVaribles,
+    byStatusRefetch,
+    fetchDoctorsByStatus,
+  } = doctorsByStatusParams;
 
   useEffect(() => {
     fetchProviders()
       .then(({ data }) => {
         if (!data) throw Error("Couldn'ProPtypes get list of providers");
-        const providersList = (data?.getProviders?.provider || []).map((provider) => {
-          const { _id, name } = provider;
-          return { key: name, value: _id };
-        });
+        const providersList = (data?.getProviders?.provider || []).map(
+          (provider) => {
+            const { _id, name } = provider;
+            return { key: name, value: _id };
+          }
+        );
         setProviders(providersList);
       })
       .catch((error) => {
@@ -117,10 +123,11 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
         <Grid container flexWrap="wrap" spacing={2} alignItems="flex-end">
           {[
             {
-              label: "By Profile",
-              onHandleChange: (e) => onFilterProfileChange("gender", e?.target?.value),
+              label: "",
+              onHandleChange: (e) =>
+                onFilterProfileChange("gender", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("gender", ""),
-              options: genderType,
+              options: [{ key: "Gender", value: "" }, ...genderType],
               name: "gender",
               placeholder: "By gender",
               value: profileFilterValues.gender,
@@ -129,9 +136,10 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) => onFilterProfileChange("cadre", e?.target?.value),
+              onHandleChange: (e) =>
+                onFilterProfileChange("cadre", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("cadre", ""),
-              options: cadreOptions,
+              options: [{ key: "Cadre", value: "" }, ...cadreOptions],
               name: "cadre",
               placeholder: "By cadre",
               value: profileFilterValues.cadre,
@@ -140,9 +148,14 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) => onFilterProfileChange("specialization", e?.target?.value),
-              onClickClearBtn: () => onFilterProfileChange("specialization", ""),
-              options: specializationOptions,
+              onHandleChange: (e) =>
+                onFilterProfileChange("specialization", e?.target?.value),
+              onClickClearBtn: () =>
+                onFilterProfileChange("specialization", ""),
+              options: [
+                { key: "Specialization", value: "" },
+                ...specializationOptions,
+              ],
               name: "specialization",
               placeholder: "By specialization",
               value: profileFilterValues.specialization,
@@ -151,9 +164,10 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
             },
             {
               label: "",
-              onHandleChange: (e) => onFilterProfileChange("providerId", e?.target?.value),
+              onHandleChange: (e) =>
+                onFilterProfileChange("providerId", e?.target?.value),
               onClickClearBtn: () => onFilterProfileChange("providerId", ""),
-              options: providers,
+              options: [{ key: "Provider", value: "" }, ...providers],
               name: "providerId",
               placeholder: "By provider",
               value: profileFilterValues.providerId,
@@ -177,22 +191,22 @@ const DoctorFilters = ({ setProfiles, setPageInfo, queryParams }) => {
               </Grid>
             );
           })}
-        </Grid>
-      </Grid>
 
-      {/* FILTER BY STATUS */}
-      <Grid item>
-        <Filter
-          label="By Status"
-          onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-          onClickClearBtn={() => onFilterStatusChange("")}
-          options={statusFilterBy}
-          name="status"
-          placeholder="None"
-          value={statusFilterValue}
-          hasClearBtn={true}
-          disable={loading || byStatusLoading}
-        />
+          {/* FILTER BY STATUS */}
+          <Grid item>
+            <Filter
+              label=""
+              onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
+              onClickClearBtn={() => onFilterStatusChange("")}
+              options={[{ key: "Status", value: "" }, ...statusFilterBy]}
+              name="status"
+              placeholder="None"
+              value={statusFilterValue}
+              hasClearBtn={true}
+              disable={loading || byStatusLoading}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

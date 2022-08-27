@@ -230,10 +230,37 @@ export const subscriptionHeader = [
     id: 2,
     label: " Description",
   },
-  {
+  /* {
     id: 4,
     label: " Provider",
+  }, */
+  {
+    id: 6,
+    label: "Duration",
   },
+  {
+    id: 8,
+    label: "",
+  },
+];
+
+export const hmoPlansTableHeader = [
+  {
+    id: 8,
+    label: "Name of plan",
+  },
+  /*   {
+    id: 1,
+    label: "Amount",
+  }, */
+  {
+    id: 2,
+    label: " Description",
+  },
+  /* {
+    id: 4,
+    label: " Provider",
+  }, */
   {
     id: 6,
     label: "Duration",
@@ -488,4 +515,22 @@ export const testTableHeadCells = [
   { id: 2, label: "Turnaround time (TAT)" },
   { id: 3, label: "" },
   { id: 4, label: "" },
+];
+
+export const singleHmoTableHeadCells = [
+  { id: 1, label: "HMO ID" },
+  { id: 0, label: "NAME" },
+  { id: 2, label: "NOC" },
+  { id: 5, label: "HMO PLAN" },
+  { id: 6, label: "EXPIRY" },
+  { id: 7, label: "STATUS" },
+  { id: 9, label: "" },
+];
+
+export const hospitalTableHeadCells = [
+  { id: 1, label: "HOSPITAL ID" },
+  { id: 0, label: "HOSPITAL NAME" },
+  { id: 3, label: "EMAIL" },
+  { id: 4, label: "NO. OF PLANS" },
+  { id: 2, label: "" },
 ];

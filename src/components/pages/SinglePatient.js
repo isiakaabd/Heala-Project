@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   parentGrid: {
     textDecoration: "none",
     color: theme.palette.primary.main,
+
+    "& > .MuiGrid-root.MuiGrid-container": {
+      backgroundColor: "#ffffff",
+    },
   },
 
   icon: {
@@ -140,7 +144,7 @@ const SinglePatient = () => {
 
   const trasparentButton = {
     background: "transparent",
-    hover: "#fafafa",
+    hover: theme.palette.common.danger,
     active: "#f4f4f4",
   };
 
@@ -166,7 +170,12 @@ const SinglePatient = () => {
   if (error) return <NoData error={error} />;
   else {
     return (
-      <Grid container direction="column" className={classes.gridContainer} gap={2}>
+      <Grid
+        container
+        direction="column"
+        className={classes.gridContainer}
+        gap={2}
+      >
         <Grid
           item
           justifyContent="space-between"
@@ -200,7 +209,8 @@ const SinglePatient = () => {
               endIcon={<PersonRemoveIcon />}
               title="Disable Patient"
               type={trasparentButton}
-              textColor={theme.palette.common.red}
+              textColor={theme.palette.common.danger}
+              textColorOnHover="#ffffff"
               onClick={() => setOpenDisablePatient(true)}
             />
           </Grid>
@@ -229,7 +239,7 @@ const SinglePatient = () => {
                 p={0}
                 to={`/patients/${patientId}/${card.path}`}
               >
-                <Card title={card.title} background={card.background} header="h4">
+                <Card title={card.title} header="h4">
                   {createElement(card.icon, {
                     fill: card.fill,
                     color: "success",

@@ -114,7 +114,7 @@ const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
 
   return (
     <div>
-      <div className="container">
+      <div className="">
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           <Typography>

@@ -55,9 +55,15 @@ import {
   Providers,
   Financetable,
 } from "components/pages";
-import ListManagment from "components/pages/ListManagment";
+import Hmo from "components/pages/Hmo";
 import TestList from "components/pages/TestList";
+import ListManagment from "components/pages/ListManagment";
 import SubscriptionIncome from "components/pages/SubscriptionIncome";
+import SingleHMO from "components/pages/SingleHMO";
+import SubscriptionPlans from "components/pages/SubscriptionPlans";
+import Hospitals from "components/pages/Hospitals";
+import HealaPlans from "components/pages/HealaPlans";
+import HmoPlans from "components/pages/HmoPlans";
 
 const Routes = () => {
   return (
@@ -117,6 +123,10 @@ const Routes = () => {
       {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
 
+      {/*  =====  HMO ROUTES STARTS HERE ===== */}
+      <PrivateRoute exact path="/hmo" component={Hmo} />
+      <PrivateRoute exact path="/hmo/:hmoId" component={SingleHMO} />
+
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
 
@@ -164,7 +174,15 @@ const Routes = () => {
       <PrivateRoute path="/referrals" component={ReferralTab} />
 
       {/*  =====  SUBSCRIPTION ROUTES STARTS HERE ===== */}
-      <PrivateRoute path="/plans" component={Subscription} />
+      <PrivateRoute exact path="/plans" component={SubscriptionPlans} />
+      <PrivateRoute exact path="/plans/heala-plans" component={HealaPlans} />
+      <PrivateRoute exact path="/plans/hmo-plans" component={HmoPlans} />
+      <PrivateRoute exact path="/plans/hospitals" component={Hospitals} />
+      <PrivateRoute
+        exact
+        path="/plans/hospitals/:id"
+        component={Subscription}
+      />
 
       {/*  =====  VIEW DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
       <PrivateRoute path="/verification/view/:viewId" exact component={ViewHCP} />

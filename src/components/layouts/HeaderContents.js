@@ -1,17 +1,24 @@
 import React, { Fragment, useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
+import HeaderProfile from "./HeaderProfile";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import { Typography, Toolbar, Grid } from "@mui/material";
+import {
+  Typography,
+  Toolbar,
+  Grid,
+  ClickAwayListener,
+  Paper,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { findAccounts } from "components/graphQL/useQuery";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Link, useLocation, useHistory } from "react-router-dom";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import HeaderProfile from "./HeaderProfile";
-import { findAccounts } from "components/graphQL/useQuery";
 import { getPatients, DoctorCount } from "components/graphQL/useQuery";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { patterns, predicateBreadcrumbFromUrl } from "helpers/breadcrumb";
-import { propTypes } from "react-bootstrap/esm/Image";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -39,12 +46,58 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     // fontSize: "clamp(1.2rem, 1vw+1rem, 2.4rem )",
-    fontSize: "clamp(1.5rem, 1.5vw, 2.25rem)",
-    color: theme.palette.common.red,
+    fontSize: "clamp(1.5rem, 2vw, 2.25rem)",
+    color: theme.palette.common.black,
     "&.MuiTypography-root": {
       marginRight: ".5rem",
     },
   },
+  history: {
+    "&.MuiTypography-root": {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      color: "#3E5EA9",
+      fontSize: "14px",
+      fontWeight: 500,
+      lineHeight: "20px",
+    },
+  },
+
+  options: {
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#ffffff",
+    borderRadius: "8px",
+    position: "absolute",
+    top: 28,
+    right: 5,
+    zIndex: 1,
+
+    "&>:last-child": {
+      borderBottom: "none",
+    },
+  },
+
+  btn: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: "1rem 2rem",
+    fontSize: "14px",
+    fontWeight: 400,
+    color: "#2D2F39",
+    border: "none",
+    borderBottom: "1px solid #E5E5E5",
+    textAlign: "left",
+    whiteSpace: "nowrap",
+
+    "&:hover": {
+      color: "#ffffff",
+      backgroundColor: theme.palette.common.blue,
+    },
+  },
+
   subtitle: {
     color: theme.palette.common.green,
     "&.MuiTypography-root": {
@@ -63,7 +116,13 @@ const CustomHeaderText = ({ title, total, path }) => {
   const classes = useStyles();
 
   return (
-    <Grid container flex={1} flexDirection="column" justifyContent="center" rowGap={1}>
+    <Grid
+      container
+      flex={1}
+      flexDirection="column"
+      justifyContent="center"
+      rowGap={1}
+    >
       <Grid item container flexWrap="nowrap" alignItems="center">
         <Link to={`/${path}`} className={classes.link}>
           <Typography variant="h3" classes={{ root: classes.title }}>
@@ -88,36 +147,24 @@ CustomHeaderText.propTypes = {
   data: PropTypes.object,
 };
 
-const CustomHeaderTitle = ({ title, path, onClick = null }) => {
+const CustomHeaderTitle = ({ title }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.titleWrapper}>
-      {!onClick ? (
-        <Link to={`/${path}`} className={classes.link}>
-          <Typography>{title}</Typography>
-        </Link>
-      ) : (
-        <Typography
-          sx={{
-            cursor: "pointer",
-          }}
-          onClick={onClick}
-          variant="h3"
-          classes={{ root: classes.title }}
-        >
-          {title}
-        </Typography>
-      )}
+      {
+        <Grid>
+          <Typography variant="h3" classes={{ root: classes.title }}>
+            {title}
+          </Typography>
+        </Grid>
+      }
     </div>
   );
 };
 
 CustomHeaderTitle.propTypes = {
-  onClick: propTypes.func,
   title: PropTypes.string,
-  path: PropTypes.string,
-  variant: PropTypes.string,
 };
 
 // SUBMENU HEADERS
@@ -157,12 +204,17 @@ const CustomSubHeaderText = (props) => {
       </Typography>
       {scopedMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+          <KeyboardArrowRightIcon
+            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
+          />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
             style={{
-              color: scopedSubMenu === 0 ? theme.palette.common.red : theme.palette.common.grey,
+              color:
+                scopedSubMenu === 0
+                  ? theme.palette.common.red
+                  : theme.palette.common.grey,
             }}
           >
             {subSubTitle}
@@ -172,7 +224,9 @@ const CustomSubHeaderText = (props) => {
 
       {scopedSubMenu !== 0 && (
         <Fragment>
-          <KeyboardArrowRightIcon style={{ fontSize: "2rem", color: theme.palette.common.grey }} />
+          <KeyboardArrowRightIcon
+            style={{ fontSize: "2rem", color: theme.palette.common.grey }}
+          />
           <Typography
             variant="h3"
             classes={{ root: classes.title }}
@@ -208,7 +262,7 @@ const HeaderText = () => {
 
   const breadcrumbs = useMemo(
     () => predicateBreadcrumbFromUrl(patterns, pathname.substring(1)),
-    [pathname],
+    [pathname]
   );
 
   const [profile, { data }] = useLazyQuery(findAccounts, {
@@ -233,7 +287,8 @@ const HeaderText = () => {
     (async () => {
       patient();
       doctor();
-      if (patientContent.data) setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
+      if (patientContent.data)
+        setPatientCount(patientContent.data.profiles.pageInfo.totalDocs);
       if (doctorContent.data) setDocCount(doctorContent.data.DoctorCount);
     })();
   }, [doctor, patient, patientContent.data, doctorContent.data]);
@@ -276,60 +331,114 @@ const HeaderContent = () => {
 
 HeaderContent.propTypes = {};
 
-const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
-  const theme = useTheme();
+const Crumb = ({ breadcrumbs }) => {
   const classes = useStyles();
   const history = useHistory();
+  const [isOpen, setIsOpen] = useState(false);
+  const previousText = breadcrumbs[breadcrumbs.length - 2].pageTitle;
+  const previousIndex = breadcrumbs[breadcrumbs.length - 2].pageIndex;
+
+  const handleClickAway = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <Grid container alignItems="center" sx={{ position: "relative" }}>
+      <Grid item>
+        <Grid
+          container
+          alignItems="center"
+          onClick={() => history.go(previousIndex)}
+          sx={{ cursor: "pointer" }}
+        >
+          <ArrowBackIcon
+            fontSize="small"
+            sx={{ marginRight: "0.5rem", color: "#3E5EA9" }}
+          />{" "}
+          <Typography variant="p" classes={{ root: classes.history }}>
+            Back to {previousText}{" "}
+          </Typography>
+        </Grid>
+      </Grid>
+      {breadcrumbs.length > 2 ? (
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <Grid
+            onClick={() => setIsOpen(!isOpen)}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: "0.5rem",
+              cursor: "pointer",
+            }}
+          >
+            <KeyboardArrowDownIcon
+              fontSize="medium"
+              sx={{ color: "#3E5EA9" }}
+            />
+          </Grid>
+        </ClickAwayListener>
+      ) : null}
+      {isOpen && (
+        <Paper className={classes.options}>
+          {breadcrumbs.map((crumb, index) => {
+            const isLast = index === breadcrumbs.length - 1;
+            const borderRadius =
+              index === breadcrumbs.length - 2
+                ? "0px 0px 8px 8px"
+                : "8px 8px 0px 0px";
+            if (isLast) {
+              return null;
+            } else {
+              return (
+                <button
+                  key={index}
+                  className={classes.btn}
+                  style={{ borderRadius: borderRadius }}
+                  onClick={() => history.go(crumb.pageIndex)}
+                >
+                  {crumb.pageTitle}
+                </button>
+              );
+            }
+          })}
+        </Paper>
+      )}
+    </Grid>
+  );
+};
+
+const Breadcrumb = ({ breadcrumbs = [], counts = {} }) => {
+  const classes = useStyles();
+  const text = breadcrumbs[breadcrumbs.length - 1]?.pageTitle || "";
 
   return (
     <Grid container justifyContent="flex-start" alignItems="center">
-      {breadcrumbs.map((text, index) => {
-        return (
-          <>
-            {breadcrumbs.length < 2 ? (
+      {breadcrumbs.length < 2 ? (
+        <Grid container alignContent="center">
+          <Grid item>
+            <CustomHeaderTitle title={text} />
+          </Grid>
+          {counts[text] && (
+            <Grid
+              item
+              sx={{ marginLeft: "0.5rem", display: "flex" }}
+              alignContent="center"
+            >
               <Grid container alignContent="center">
-                <Grid item>
-                  <CustomHeaderTitle
-                    title={text}
-                    variant="h2"
-                    onClick={() => {
-                      const page = index - (breadcrumbs.length - 1);
-                      history.go(page);
-                    }}
-                  />
-                </Grid>
-                {counts[text] && (
-                  <Grid item sx={{ marginLeft: "0.5rem", display: "flex" }} alignContent="center">
-                    <Grid container alignContent="center">
-                      <ArrowUpwardIcon color="success" />
-                      <Typography variant="h5" className={classes.subtitle}>
-                        {counts[text]} total
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                )}
+                <ArrowUpwardIcon color="success" />
+                <Typography variant="h2" className={classes.subtitle}>
+                  {counts[text]} total
+                </Typography>
               </Grid>
-            ) : (
-              <CustomHeaderTitle
-                title={text}
-                onClick={() => {
-                  const page = index - (breadcrumbs.length - 1);
-                  history.go(page);
-                }}
-              />
-            )}
-
-            {breadcrumbs.length > 0 && breadcrumbs.length - 1 > index ? (
-              <KeyboardArrowRightIcon
-                size={10}
-                style={{
-                  color: theme.palette.common.grey,
-                }}
-              />
-            ) : null}
-          </>
-        );
-      })}
+            </Grid>
+          )}
+        </Grid>
+      ) : (
+        <Grid>
+          <Crumb breadcrumbs={breadcrumbs} />
+          <CustomHeaderTitle title={text} />
+        </Grid>
+      )}
     </Grid>
   );
 };

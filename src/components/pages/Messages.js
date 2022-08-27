@@ -18,7 +18,11 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useLazyQuery } from "@apollo/client";
 import { getMessage } from "components/graphQL/useQuery";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -148,23 +152,20 @@ const Messages = () => {
   if (loading) return <Loader />;
   else {
     return (
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid
           item
           gap={{ md: 4, sm: 4, xs: 2 }}
           direction={{ sm: "row", xs: "column" }}
           container
-          justifyContent="space-between"
+          justifyContent="flex-end"
         >
-          {/* <Grid item flex={1}>
-            <Search
-              value={searchMessage}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="Type to search Messages by recipient e.g HEALA-7NE6ELLO
-              "
-              height="5rem"
-            />
-          </Grid> */}
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
@@ -175,24 +176,23 @@ const Messages = () => {
             />
           </Grid>
         </Grid>
-        {message.length > 0 ? (
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
-              headCells={messagesHeadCells}
-              rows={message}
-              paginationLabel="Message per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                changeTableLimit(fetchMessages, { first: e });
-              }}
-              fetchData={fetchMessages}
-              handlePagination={async (page) => {
-                handlePageChange(fetchMessages, page, pageInfo, {});
-              }}
-            >
-              {message
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+        <TableLayout>
+          {message.length > 0 ? (
+            <Grid item container height="100%" direction="column">
+              <EnhancedTable
+                headCells={messagesHeadCells}
+                rows={message}
+                paginationLabel="Message per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  changeTableLimit(fetchMessages, { first: e });
+                }}
+                fetchData={fetchMessages}
+                handlePagination={async (page) => {
+                  handlePageChange(fetchMessages, page, pageInfo, {});
+                }}
+              >
+                {message.map((row, index) => {
                   const { subject, createdAt, _id, recipientData } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
@@ -208,7 +208,13 @@ const Messages = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -231,7 +237,9 @@ const Messages = () => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt={`Display Photo of  ${recipientData && recipientData.firstName}`}
+                              alt={`Display Photo of  ${
+                                recipientData && recipientData.firstName
+                              }`}
                               src={
                                 recipientData && recipientData.image
                                   ? recipientData.image
@@ -283,11 +291,15 @@ const Messages = () => {
                     </TableRow>
                   );
                 })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={messagesHeadCells} paginationLabel="Messages  per page" />
-        )}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={messagesHeadCells}
+              paginationLabel="Messages  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
     );
   }

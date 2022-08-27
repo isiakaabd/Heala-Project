@@ -125,7 +125,9 @@ const HcpAppointments = () => {
     date: "",
   };
   const validationSchema1 = Yup.object({
-    date: Yup.string("select date and time ").required("Date  and time is required"),
+    date: Yup.string("select date and time ").required(
+      "Date  and time is required"
+    ),
   });
   const onSubmit1 = async (values) => {
     const { date } = values;
@@ -170,10 +172,13 @@ const HcpAppointments = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container gap={2} flexWrap="nowrap" direction="column" height="100%">
-        <Grid item style={{ marginBottom: "3rem", padding: "2rem" }}>
-          <Typography variant="h2">Doctor Appointments</Typography>
-        </Grid>
+      <Grid
+        container
+        gap={2}
+        flexWrap="nowrap"
+        direction="column"
+        height="100%"
+      >
         {appointment.length > 0 ? (
           appointment.map((appoint) => (
             <Grid
@@ -183,8 +188,17 @@ const HcpAppointments = () => {
               key={appoint._id}
               className={classes.parentGridWrapper}
             >
-              <Grid item container style={{ maxWidth: "60rem", padding: "4rem 5rem" }}>
-                <Grid item container alignItems="center" justifyContent="space-between">
+              <Grid
+                item
+                container
+                style={{ maxWidth: "60rem", padding: "4rem 5rem" }}
+              >
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Grid item>
                     <Typography variant="body1" className={classes.title}>
                       Consultation Date:
@@ -226,7 +240,11 @@ const HcpAppointments = () => {
                   </Grid>
                   <Grid item>
                     <Avatar
-                      src={appoint.patientData.picture ? appoint.patientData.picture : displayPhoto}
+                      src={
+                        appoint.patientData.picture
+                          ? appoint.patientData.picture
+                          : displayPhoto
+                      }
                       alt="Display Photo of the patient"
                     />
                   </Grid>
@@ -252,14 +270,20 @@ const HcpAppointments = () => {
               </Grid>
               <Divider color={theme.palette.common.lighterGrey} />
               <Grid item>
-                <Grid container justifyContent="flex-end" style={{ padding: "2rem 5rem" }}>
+                <Grid
+                  container
+                  justifyContent="flex-end"
+                  style={{ padding: "2rem 5rem" }}
+                >
                   <Grid item style={{ marginRight: "3rem" }}>
                     <CustomButton
                       title="Reschedule"
                       type={greenButton}
                       height="3.5rem"
                       textColorOnHover="#fff"
-                      onClick={() => handleSchedule(appoint._id, appoint.patient)}
+                      onClick={() =>
+                        handleSchedule(appoint._id, appoint.patient)
+                      }
                       textColor={theme.palette.common.green}
                       endIcon={<AssignmentIcon color="success" />}
                       borderRadius="3rem"
@@ -327,7 +351,13 @@ const HcpAppointments = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item container alignItems="flex-end" marginTop={5} xs={12}>
+                  <Grid
+                    item
+                    container
+                    alignItems="flex-end"
+                    marginTop={5}
+                    xs={12}
+                  >
                     <CustomButton
                       title="Reschedule Appointment"
                       width="100%"

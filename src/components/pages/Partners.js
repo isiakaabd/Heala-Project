@@ -7,7 +7,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import { Button, Checkbox, TableCell, Avatar, TableRow, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  Avatar,
+  TableRow,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
@@ -46,6 +54,7 @@ import {
 import Copy from "components/Copy";
 import Filter from "components/Forms/Filters";
 import { PageInfo } from "components/graphQL/fragment";
+import TableLayout from "components/layouts/TableLayout";
 
 const Partners = () => {
   const theme = useTheme();
@@ -73,7 +82,8 @@ const Partners = () => {
   });
   const { selectedRows /* page */ } = useSelector((state) => state.tables);
   const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
-  const [fetchPartners, { loading, error, refetch, variables }] = useLazyQuery(getPartners);
+  const [fetchPartners, { loading, error, refetch, variables }] =
+    useLazyQuery(getPartners);
   const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
 
   const specializations = [
@@ -157,7 +167,7 @@ const Partners = () => {
         datas &&
           datas.map((i) => {
             return { key: i.name, value: i._id };
-          }),
+          })
       );
     }
   }, [da]);
@@ -253,7 +263,6 @@ const Partners = () => {
   };
   const [newProfileUrl, setNewProfileUrl] = useState("");
 
-
   useEffect(() => {
     setNewProfileUrl(daa?.regeneratePartnerProfileUrl?.partner?.profileUrl);
   }, [daa]);
@@ -298,31 +307,29 @@ const Partners = () => {
 
     //eslint-disable-next-line
   }, [Id, newProfileUrl]);
-  if (error || categoryData.error) return <NoData error={error || categoryData.error} />;
+  if (error || categoryData.error)
+    return <NoData error={error || categoryData.error} />;
   return (
-    <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
-      <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
+    <Grid
+      container
+      direction="column"
+      gap={{ sm: 4, xs: 2 }}
+      flexWrap="nowrap"
+      height="100%"
+    >
+      <Grid
+        item
+        container
+        gap={2}
+        direction={{ md: "row", sm: "row", xs: "column" }}
+      >
         <Grid
           item
           container
-          justifyContent="space-between"
+          justifyContent="flex-end"
           alignItems="center"
           flex={{ sm: 1, xs: 1, md: 1 }}
         >
-          <Grid item>
-            <Filter
-              label="By Category"
-              onHandleChange={(e) => onFilterCategoryChange(e?.target?.value)}
-              onClickClearBtn={() => onFilterCategoryChange("")}
-              options={categoryFilterOptions}
-              name="category"
-              placeholder="None"
-              value={partnerFilterValues.category}
-              hasClearBtn={true}
-              disable={loading}
-            />
-          </Grid>
-
           <Grid item>
             <CustomButton
               endIcon={<PersonAddAlt1Icon />}
@@ -333,142 +340,164 @@ const Partners = () => {
           </Grid>
         </Grid>
       </Grid>
-      {load || loading ? (
-        <Loader />
-      ) : partner.length > 0 ? (
-        <Grid item container height="100%" direction="column">
-          <EnhancedTable
-            headCells={partnersHeadCells}
-            rows={partner}
-            paginationLabel="Partner per page"
-            hasCheckbox={true}
-            changeLimit={async (e) => {
-              const res = changeTableLimit(fetchPartners, {
-                first: e,
-              });
-              await setTableData(res, "Failed to change table limit.");
-            }}
-            dataPageInfo={pageInfo}
-            handlePagination={async (page) => {
-              const res = handlePageChange(fetchPartners, page, pageInfo, {});
-              await setTableData(res, "Failed to change page.");
-            }}
-          >
-            {partner.map((row, index) => {
-              const { _id, logoImageUrl, name, category, profileUrl } = row;
-              const isItemSelected = isSelected(_id, selectedRows);
+      <TableLayout
+        filters={
+          <Filter
+            onHandleChange={(e) => onFilterCategoryChange(e?.target?.value)}
+            onClickClearBtn={() => onFilterCategoryChange("")}
+            options={[{ key: "Category", value: "" }, ...categoryFilterOptions]}
+            name="category"
+            placeholder="None"
+            value={partnerFilterValues.category}
+            hasClearBtn={true}
+            disable={loading}
+          />
+        }
+      >
+        {load || loading ? (
+          <Loader />
+        ) : partner.length > 0 ? (
+          <Grid item container height="100%" direction="column">
+            <EnhancedTable
+              headCells={partnersHeadCells}
+              rows={partner}
+              paginationLabel="Partner per page"
+              hasCheckbox={true}
+              changeLimit={async (e) => {
+                const res = changeTableLimit(fetchPartners, {
+                  first: e,
+                });
+                await setTableData(res, "Failed to change table limit.");
+              }}
+              dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                const res = handlePageChange(fetchPartners, page, pageInfo, {});
+                await setTableData(res, "Failed to change page.");
+              }}
+            >
+              {partner.map((row, index) => {
+                const isItemSelected = isSelected(row.id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                const { _id, logoImageUrl, name, category, profileUrl } = row;
 
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={_id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "20rem" }}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={_id}
+                    selected={isItemSelected}
                   >
-                    <div
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() =>
+                          handleSelectedRows(_id, selectedRows, setSelectedRows)
+                        }
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "20rem" }}
+                    >
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${name}`}
+                            src={logoImageUrl}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>{name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
                       style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "left",
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${name}`}
-                          src={logoImageUrl}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>{name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                      maxWidth: "20rem",
-                    }}
-                  >
-                    {category}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                      maxWidth: "20rem",
-                    }}
-                  >
-                    {profileUrl || z(_id) !== "" ? (
-                      <Typography
-                        style={{
-                          color: theme.palette.common.grey,
-                          maxWidth: "20rem",
-                        }}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        {trucateProfileLink(profileUrl ? profileUrl : z(_id))}
-                        <div style={{ marginLeft: "1rem" }}>
-                          <Copy name="Profile Link" text={profileUrl ? profileUrl : z(_id)} />
-                        </div>
-                      </Typography>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        onClick={() => handleGenerateLink(_id)}
-                      >
-                        Generate Link
-                      </Button>
-                    )}
-                  </TableCell>
-                  <TableCell align="center" className={classes.tableCell}>
-                    {isDeleting[_id] ? (
-                      <Loader />
-                    ) : (
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        endIcon={<DeleteIcon color="error" />}
-                        onClick={() => {
-                          setPartnerToDelete(_id || "");
-                          setOpenDeletePartner(true);
-                        }}
-                      >
-                        Delete partner
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </EnhancedTable>
-        </Grid>
-      ) : (
-        <EmptyTable headCells={partnersHeadCells} paginationLabel="Doctors per page" />
-      )}
+                      {category}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
+                    >
+                      {profileUrl || z(_id) !== "" ? (
+                        <Typography
+                          style={{
+                            color: theme.palette.common.grey,
+                            maxWidth: "20rem",
+                          }}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          {trucateProfileLink(profileUrl ? profileUrl : z(_id))}
+                          <div style={{ marginLeft: "1rem" }}>
+                            <Copy
+                              name="Profile Link"
+                              text={profileUrl ? profileUrl : z(_id)}
+                            />
+                          </div>
+                        </Typography>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          onClick={() => handleGenerateLink(_id)}
+                        >
+                          Generate Link
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell align="center" className={classes.tableCell}>
+                      {isDeleting[_id] ? (
+                        <Loader />
+                      ) : (
+                        <Button
+                          variant="contained"
+                          disableRipple
+                          className={`${classes.tableBtn} ${classes.redBtn}`}
+                          endIcon={<DeleteIcon color="error" />}
+                          onClick={() => {
+                            setPartnerToDelete(_id || "");
+                            setOpenDeletePartner(true);
+                          }}
+                        >
+                          Delete partner
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </EnhancedTable>
+          </Grid>
+        ) : (
+          <EmptyTable
+            headCells={partnersHeadCells}
+            paginationLabel="Doctors per page"
+          />
+        )}
+      </TableLayout>
       <Modals
         isOpen={openFilterPartner}
         title="Filter"
@@ -510,7 +539,12 @@ const Partners = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item container spacing={2} style={{ marginBottom: "10rem" }}>
+                <Grid
+                  item
+                  container
+                  spacing={2}
+                  style={{ marginBottom: "10rem" }}
+                >
                   <Grid item xs={6}>
                     <FormikControl
                       control="select"
@@ -706,7 +740,7 @@ const Partners = () => {
             Typography,
             enqueueSnackbar,
             setIsDeleting,
-            isDeleting,
+            isDeleting
           );
           setOpenDeletePartner(false);
           await setTableData(res, "Couldn't refetch Partners");

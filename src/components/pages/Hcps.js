@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { Grid, TableRow, TableCell, Button, Checkbox, Chip, Avatar } from "@mui/material";
+import {
+  Grid,
+  TableRow,
+  TableCell,
+  Button,
+  Checkbox,
+  Chip,
+  Avatar,
+} from "@mui/material";
 import useAlert from "hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
@@ -15,14 +23,20 @@ import { timeConverter } from "components/Utilities/Time";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { useStyles } from "../../styles/doctorsPageStyles";
 import FormikControl from "components/validation/FormikControl";
-import { getDoctorsProfile, getDoctorsProfileByStatus } from "components/graphQL/useQuery";
+import {
+  getDoctorsProfile,
+  getDoctorsProfileByStatus,
+} from "components/graphQL/useQuery";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
 import { createDOctorProfile } from "components/graphQL/Mutation";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { addDoctorValidationSchema } from "helpers/validationSchemas";
 import { Loader, Modals, CustomButton } from "components/Utilities";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 import {
   addDocInitialValues,
   /* cadreFilterBy, */
@@ -37,6 +51,7 @@ import {
 } from "helpers/mockData";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
+import TableLayout from "components/layouts/TableLayout";
 
 const Hcps = () => {
   const classes = useStyles();
@@ -48,15 +63,17 @@ const Hcps = () => {
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
-  const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] = useLazyQuery(
-    getDoctorsProfile,
-    {
+  const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] =
+    useLazyQuery(getDoctorsProfile, {
       notifyOnNetworkStatusChange: true,
-    },
-  );
+    });
   const [
     fetchDoctorsByStatus,
-    { loading: byStatusLoading, refetch: byStatusRefetch, variables: byStatusVariables },
+    {
+      loading: byStatusLoading,
+      refetch: byStatusRefetch,
+      variables: byStatusVariables,
+    },
   ] = useLazyQuery(getDoctorsProfileByStatus);
 
   useEffect(() => {
@@ -150,17 +167,8 @@ const Hcps = () => {
         gap={{ md: 4, sm: 4, xs: 2 }}
         direction={{ sm: "row", xs: "column" }}
         container
-        justifyContent="space-between"
+        justifyContent="flex-end"
       >
-        <Grid item container flex={1}>
-          <CompoundSearch
-            queryParams={{ fetchData: fetchDoctors, variables, loading }}
-            setPageInfo={(data) => setPageInfo(data.doctorProfiles.pageInfo || {})}
-            setProfiles={(data) => setProfiles(data.doctorProfiles.profile || [])}
-            getSearchPlaceholder={(filterBy) => getSearchPlaceholder(filterBy)}
-            filterOptions={doctorsSearchOptions}
-          />
-        </Grid>
         <Grid item>
           <CustomButton
             endIcon={<AddIcon />}
@@ -172,169 +180,186 @@ const Hcps = () => {
       </Grid>
       {/* ========= FILTERS =========== */}
 
-      <Grid
-        container
-        gap={2}
-        flexWrap="wrap"
-        justifyContent="flex-start"
-        className={classes.searchFilterContainer}
+      <TableLayout
+        filters={
+          <DoctorFilters
+            setProfiles={setProfiles}
+            setPageInfo={setPageInfo}
+            queryParams={{
+              doctorsParams: { fetchDoctors, loading, refetch, variables },
+              doctorsByStatusParams: {
+                byStatusLoading,
+                byStatusVariables,
+                byStatusRefetch,
+                fetchDoctorsByStatus,
+              },
+            }}
+          />
+        }
+        search={
+          <CompoundSearch
+            queryParams={{ fetchData: fetchDoctors, variables, loading }}
+            setPageInfo={(data) =>
+              setPageInfo(data.doctorProfiles.pageInfo || {})
+            }
+            setProfiles={(data) =>
+              setProfiles(data.doctorProfiles.profile || [])
+            }
+            getSearchPlaceholder={(filterBy) => getSearchPlaceholder(filterBy)}
+            filterOptions={doctorsSearchOptions}
+          />
+        }
       >
-        <DoctorFilters
-          setProfiles={setProfiles}
-          setPageInfo={setPageInfo}
-          queryParams={{
-            doctorsParams: { fetchDoctors, loading, refetch, variables },
-            doctorsByStatusParams: {
-              byStatusLoading,
-              byStatusVariables,
-              byStatusRefetch,
-              fetchDoctorsByStatus,
-            },
-          }}
-        />
-      </Grid>
-      {loading ? (
-        <Loader />
-      ) : byStatusLoading ? (
-        <Loader />
-      ) : networkStatus === NetworkStatus.refetch ? (
-        <Loader />
-      ) : profiles.length > 0 ? (
-        <Grid item container height="100%" direction="column">
-          <EnhancedTable
+        {loading ? (
+          <Loader />
+        ) : byStatusLoading ? (
+          <Loader />
+        ) : networkStatus === NetworkStatus.refetch ? (
+          <Loader />
+        ) : profiles.length > 0 ? (
+          <Grid item container height="100%" direction="column">
+            <EnhancedTable
+              headCells={hcpsHeadCells}
+              rows={profiles}
+              paginationLabel="Doctors per page"
+              hasCheckbox={true}
+              changeLimit={async (e) => {
+                const res = changeTableLimit(fetchDoctors, {
+                  first: e,
+                });
+                await setTableData(res, "Failed to change table limit");
+              }}
+              dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                const res = handlePageChange(fetchDoctors, page, pageInfo, {});
+                await setTableData(res, "Failed to change page.");
+              }}
+            >
+              {profiles.map((row, index) => {
+                const {
+                  _id,
+                  dociId,
+                  firstName,
+                  provider,
+                  status,
+                  specialization,
+                  consultations,
+                  picture,
+                  lastName,
+                } = row;
+                const isItemSelected = isSelected(_id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={_id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() =>
+                          handleSelectedRows(_id, selectedRows, setSelectedRows)
+                        }
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      id={labelId}
+                      scope="row"
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                        minWidth: "10rem",
+                      }}
+                    >
+                      {dociId && dociId.split("-")[1]}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "left",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${firstName}`}
+                            src={picture ? picture : displayPhoto}
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {firstName} {lastName}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {specialization}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {consultations ? consultations : 0}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      {provider ? provider : "No Provider"}
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Chip
+                        label={
+                          status && status === "Active" ? "Active" : "Inactive"
+                        }
+                        className={classes.badge}
+                        style={{
+                          background:
+                            status === "Active"
+                              ? theme.palette.common.lightGreen
+                              : theme.palette.common.lightRed,
+                          color:
+                            status === "Active"
+                              ? theme.palette.common.green
+                              : theme.palette.common.red,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`hcps/${_id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                      >
+                        View Doctor
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </EnhancedTable>
+          </Grid>
+        ) : (
+          <EmptyTable
             headCells={hcpsHeadCells}
-            rows={profiles}
             paginationLabel="Doctors per page"
-            hasCheckbox={true}
-            changeLimit={async (e) => {
-              const res = changeTableLimit(fetchDoctors, {
-                first: e,
-              });
-              await setTableData(res, "Failed to change table limit");
-            }}
-            dataPageInfo={pageInfo}
-            handlePagination={async (page) => {
-              const res = handlePageChange(fetchDoctors, page, pageInfo, {});
-              await setTableData(res, "Failed to change page.");
-            }}
-          >
-            {profiles.map((row, index) => {
-              const {
-                _id,
-                dociId,
-                firstName,
-                provider,
-                status,
-                specialization,
-                consultations,
-                picture,
-                lastName,
-              } = row;
-              const isItemSelected = isSelected(_id, selectedRows);
-              const labelId = `enhanced-table-checkbox-${index}`;
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={_id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell
-                    id={labelId}
-                    scope="row"
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                      minWidth: "10rem",
-                    }}
-                  >
-                    {dociId?.split("-")[1]}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "left",
-                      }}
-                    >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${firstName}`}
-                          src={picture ? picture : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {firstName} {lastName}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {specialization}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {consultations ? consultations : 0}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ color: theme.palette.common.grey }}
-                  >
-                    {provider ? provider : "No Provider"}
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <Chip
-                      label={status === "Active" ? "Active" : "Inactive"}
-                      className={classes.badge}
-                      style={{
-                        background:
-                          status === "Active"
-                            ? theme.palette.common.lightGreen
-                            : theme.palette.common.lightRed,
-                        color:
-                          status === "Active"
-                            ? theme.palette.common.green
-                            : theme.palette.common.red,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`hcps/${_id}`}
-                      endIcon={<ArrowForwardIosIcon />}
-                    >
-                      View Doctor
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </EnhancedTable>
-        </Grid>
-      ) : (
-        <EmptyTable headCells={hcpsHeadCells} paginationLabel="Doctors per page" />
-      )}
+          />
+        )}
+      </TableLayout>
       {/* ADD Doctor MODAL */}
       <Modals
         isOpen={openAddHcp}

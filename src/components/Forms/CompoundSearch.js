@@ -2,36 +2,42 @@ import React, { useState } from "react";
 import t from "prop-types";
 import Filter from "./Filters";
 import useAlert from "hooks/useAlert";
-import { useTheme } from "@mui/material/styles";
+import { Search } from "components/Utilities";
 import { Grid, Typography } from "@mui/material";
 import { deleteVar } from "helpers/filterHelperFunctions";
-import { CustomButton, Search } from "components/Utilities";
 
 const CompoundSearch = ({
   queryParams,
+  searchState,
   setPageInfo,
   setProfiles,
   getSearchPlaceholder,
   filterOptions,
 }) => {
-  const theme = useTheme();
-  const { displayAlert } = useAlert();
-  const { fetchData, variables, loading } = queryParams;
-  const [searchValue, setSearchValue] = useState({
+  const state = searchState || {
     value: "",
     filterBy: "id",
-  });
+  };
+  const { displayAlert } = useAlert();
+  const { fetchData, variables, loading, newVariables } = queryParams;
+  const [searchValue, setSearchValue] = useState(state);
 
   const search = async (searchBy, searchVal) => {
     try {
       deleteVar(variables);
       let value = searchVal;
-      if (searchVal === "") return;
       if (searchBy === "id") value = `HEALA-${searchVal}`;
+      const searchVariables =
+        value === ""
+          ? {
+              ...newVariables,
+            }
+          : {
+              [searchBy]: value,
+              ...newVariables,
+            };
       fetchData({
-        variables: {
-          [searchBy]: value,
-        },
+        variables: searchVariables,
       }).then(({ data }) => {
         if (!data) {
           deleteVar(variables);
@@ -49,11 +55,6 @@ const CompoundSearch = ({
     }
   };
 
-  const buttonType = {
-    background: theme.palette.common.black,
-    hover: theme.palette.primary.main,
-    active: theme.palette.primary.dark,
-  };
   return (
     <Grid container spacing={2} flexWrap="wrap">
       <Grid item>
@@ -70,20 +71,21 @@ const CompoundSearch = ({
       </Grid>
       <Grid item flex={1} width="100%">
         <Search
+          height="48px"
+          hasStartIcon={false}
           onChange={(e) => {
             let value = e.target.value;
             setSearchValue({ ...searchValue, value });
           }}
           placeholder={getSearchPlaceholder(searchValue.filterBy)}
-          height="5rem"
-          startIcon={searchValue.filterBy === "id" ? <Typography>HEALA-</Typography> : null}
-        />
-      </Grid>
-      <Grid item>
-        <CustomButton
-          title="Search"
-          type={buttonType}
-          onClick={() => search(searchValue.filterBy, searchValue.value)}
+          startIcon={
+            searchValue.filterBy === "id" ? (
+              <Typography sx={{ fontSize: "14px" }}>HEALA-</Typography>
+            ) : null
+          }
+          onClickSearchBtn={() =>
+            search(searchValue.filterBy, searchValue.value)
+          }
         />
       </Grid>
     </Grid>
@@ -92,6 +94,7 @@ const CompoundSearch = ({
 
 CompoundSearch.propTypes = {
   queryParams: t.object.isRequired,
+  searchState: t.object,
   setPageInfo: t.func.isRequired,
   setProfiles: t.func.isRequired,
   getSearchPlaceholder: t.func,

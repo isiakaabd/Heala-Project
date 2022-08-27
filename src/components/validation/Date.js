@@ -16,18 +16,37 @@ const useStyles = makeStyles((theme) => ({
       ...theme.typography.FormLabel,
     },
   },
+
+  dateInput: {
+    "&>.MuiOutlinedInput-root": {
+      border: "none",
+    },
+  },
 }));
 
-const Dates = ({ name, value, setFieldValue, onBlur }) => {
+const Dates = ({ name, value, setFieldValue, onBlur, startDate, endDate }) => {
+  const classes = useStyles();
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DesktopDatePicker
+        className={classes.dateInput}
         name={name}
         onChange={(value) => setFieldValue(name, value)}
         value={value}
         onBlur={onBlur}
+        minDate={startDate}
+        maxDate={endDate}
         onError={(err) => console.log(err)}
-        renderInput={(params) => <TextField {...params} sx={{ padding: "-12px" }} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            sx={{
+              padding: "-12px",
+              border: "2px solid #E0E0E0",
+              borderRadius: "12px",
+            }}
+          />
+        )}
       />
     </LocalizationProvider>
   );
@@ -44,7 +63,6 @@ Dates.propTypes = {
 };
 
 const DateComponent = (props) => {
-  console.log(props);
   const { name, label, ...rest } = props;
   const classes = useStyles();
   return (

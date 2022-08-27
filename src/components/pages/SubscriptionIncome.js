@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TableCell,
+  TableRow,
+  Checkbox,
+  Avatar,
+} from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
+import {
+  timeMoment,
+  dateMoment,
+  formatNumber,
+} from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -15,7 +26,11 @@ import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getSubscriptionsIncome } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -78,7 +93,9 @@ const SubscriptionIncome = () => {
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [subIncome, setSubIncome] = useState([]);
-  const [fetchSubIncome, { loading, data, error }] = useLazyQuery(getSubscriptionsIncome);
+  const [fetchSubIncome, { loading, data, error }] = useLazyQuery(
+    getSubscriptionsIncome
+  );
 
   useEffect(() => {
     fetchSubIncome({
@@ -99,7 +116,13 @@ const SubscriptionIncome = () => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid container direction="column" gap={2} height="100%">
+    <Grid
+      container
+      direction="column"
+      gap={2}
+      height="100%"
+      sx={{ margin: "3rem 0rem" }}
+    >
       <>
         <Grid item container gap={1} alignItems="center">
           <Grid item flex={1}>
@@ -111,109 +134,124 @@ const SubscriptionIncome = () => {
             <TrendingDownIcon color="success" className={classes.cardIcon} />
           </Grid>
         </Grid>
-        {subIncome.length > 0 ? (
-          <Grid item container>
-            <EnhancedTable
-              headCells={financeHeader2}
-              rows={subIncome}
-              paginationLabel="finance per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                await changeTableLimit(fetchSubIncome, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                await handlePageChange(fetchSubIncome, page, pageInfo, {});
-              }}
-            >
-              {subIncome.map((row, index) => {
-                const { createdAt, amount, patientData, providerId, planId } = row;
-                const { firstName, image, lastName } = patientData || {};
-                const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
+        <TableLayout>
+          {subIncome.length > 0 ? (
+            <Grid item container>
+              <EnhancedTable
+                headCells={financeHeader2}
+                rows={subIncome}
+                paginationLabel="finance per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  await changeTableLimit(fetchSubIncome, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(fetchSubIncome, page, pageInfo, {});
+                }}
+              >
+                {subIncome.map((row, index) => {
+                  const { createdAt, amount, patientData, providerId, planId } =
+                    row;
+                  const { firstName, image, lastName } = patientData || {};
+                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      {formatNumber(amount.toFixed(2))}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {patientData && patientData !== {} ? (
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
                           }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={firstName ? firstName : "image"}
-                              src={patientData ? image : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {patientData && `${firstName && firstName} ${lastName && lastName}`}
-                          </span>
-                        </div>
-                      ) : (
-                        "No name"
-                      )}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {planId}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {providerId}
-                    </TableCell>
+                        />
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {formatNumber(amount.toFixed(2))}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {patientData && patientData !== {} ? (
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span style={{ marginRight: "1rem" }}>
+                              <Avatar
+                                alt={firstName ? firstName : "image"}
+                                src={patientData ? image : displayPhoto}
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {patientData &&
+                                `${firstName && firstName} ${
+                                  lastName && lastName
+                                }`}
+                            </span>
+                          </div>
+                        ) : (
+                          "No name"
+                        )}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {planId}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {providerId}
+                      </TableCell>
 
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={financeHeader2} paginationLabel="Finance  per page" />
-        )}
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={financeHeader2}
+              paginationLabel="Finance  per page"
+            />
+          )}
+        </TableLayout>
       </>
     </Grid>
   );

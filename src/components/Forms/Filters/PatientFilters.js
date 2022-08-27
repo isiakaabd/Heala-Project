@@ -4,14 +4,14 @@ import { Grid } from "@mui/material";
 
 import Filter from ".";
 import useAlert from "hooks/useAlert";
+import { useLazyQuery } from "@apollo/client";
+import { getPlans, getProviders } from "components/graphQL/useQuery";
+import { deleteVar, filterData } from "helpers/filterHelperFunctions";
 import {
   genderType,
   patientsProfileDefaultFilterByValues,
   /* statusFilterBy, */
 } from "helpers/mockData";
-import { deleteVar, filterData } from "helpers/filterHelperFunctions";
-import { getPlans, getProviders } from "components/graphQL/useQuery";
-import { useLazyQuery } from "@apollo/client";
 
 const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   const { displayAlert } = useAlert();
@@ -22,10 +22,11 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
   const [providerId, setProviderId] = useState(null);
   const [filterPlanValue, setFilterPlanValue] = useState("");
   const [, setStatusFilterValue] = useState("");
-  const { patientsParams, patientsByStatusParams, patientsByPlanParams } = queryParams;
+  const { patientsParams, patientsByStatusParams, patientsByPlanParams } =
+    queryParams;
   const { fetchPatient, loading, refetch, variables } = patientsParams;
   const [profileFilterValues, setProfileFilterValues] = useState(
-    patientsProfileDefaultFilterByValues,
+    patientsProfileDefaultFilterByValues
   );
   const {
     byStatusLoading,
@@ -33,7 +34,8 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
     byStatusRefetch,
     fetchPatientByStatus, */
   } = patientsByStatusParams;
-  const { byPlanLoading, byPlanVaribles, byPlanRefetch, fetchPatientByPlan } = patientsByPlanParams;
+  const { byPlanLoading, byPlanVaribles, byPlanRefetch, fetchPatientByPlan } =
+    patientsByPlanParams;
 
   useEffect(() => {
     fetchProviders()
@@ -169,31 +171,32 @@ const PatientFilters = ({ setProfiles, setPageInfo, queryParams }) => {
       });
   };
   return (
-    <Grid item container flexWrap="wrap" spacing={4} alignItems="flex-end">
+    <Grid item container flexWrap="wrap" spacing={2} alignItems="flex-end">
       {/* FILTER BY GENDER */}
       <Grid item>
         <Filter
-          label="By Gender"
-          onHandleChange={(e) => onFilterProfileChange("gender", e?.target?.value)}
+          onHandleChange={(e) =>
+            onFilterProfileChange("gender", e?.target?.value)
+          }
           onClickClearBtn={() => onFilterProfileChange("gender", "")}
-          options={genderType}
+          options={[{ key: "Gender", value: "" }, ...genderType]}
           name="gender"
-          placeholder="None"
           value={profileFilterValues.gender}
           hasClearBtn={true}
           disable={loading || byStatusLoading || byPlanLoading}
+          variant="small"
         />
       </Grid>
 
       {/* FILTER BY PROVIDER AND PLAN */}
       <Grid item>
         <Filter
-          label="By Provider and Plan"
-          onHandleChange={(e) => onFilterProfileChange("provider", e?.target?.value)}
+          onHandleChange={(e) =>
+            onFilterProfileChange("provider", e?.target?.value)
+          }
           onClickClearBtn={() => onFilterProfileChange("provider", "")}
-          options={providers}
+          options={[{ key: "Provider", value: "" }, ...providers]}
           name="provider"
-          placeholder="Provider"
           value={profileFilterValues.provider}
           hasClearBtn={true}
           disable={loading || byStatusLoading || byPlanLoading}

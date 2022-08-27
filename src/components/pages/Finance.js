@@ -10,7 +10,11 @@ import { Link } from "react-router-dom";
 import { Card } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getFinanceStats } from "components/graphQL/useQuery";
-import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
+import {
+  financialPercent,
+  selectOptions,
+  formatNumber,
+} from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -74,19 +78,10 @@ const useStyles = makeStyles((theme) => ({
   },
   parentGrid: {
     textDecoration: "none",
-    width: "24.7rem",
     color: theme.palette.primary.main,
-    "&.MuiGrid-item": {
-      ...theme.typography.cardParentGrid,
-      minWidth: "20rem",
 
-      "&:hover": {
-        background: "#fcfcfc",
-      },
-
-      "&:active": {
-        background: "#fafafa",
-      },
+    "& > .MuiGrid-root.MuiGrid-container": {
+      backgroundColor: "#ffffff",
     },
   },
 
@@ -179,14 +174,25 @@ const Finance = () => {
                 sm: "space-around",
               }}
             >
-              <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
-                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+              <Grid
+                item
+                spacing={2}
+                sx={{ justifyContent: "center", alignItems: "center" }}
+              >
+                <Grid
+                  container
+                  alignItems="center"
+                  gap={{ md: 2, sm: 2, xs: 4 }}
+                >
                   <Grid
                     className={classes.iconWrapper}
                     sx={{ background: theme.palette.common.lightGreen }}
                   >
                     <Grid item>
-                      <TrendingDownIcon color="success" className={classes.cardIcon} />
+                      <TrendingDownIcon
+                        color="success"
+                        className={classes.cardIcon}
+                      />
                     </Grid>
                   </Grid>
                   <Grid item>
@@ -214,13 +220,20 @@ const Finance = () => {
               </Grid>
               {/* second */}
               <Grid item>
-                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  gap={{ md: 2, sm: 2, xs: 4 }}
+                >
                   <Grid
                     className={classes.iconWrapper}
                     sx={{ background: theme.palette.common.lightRed }}
                   >
                     <Grid item>
-                      <TrendingUpIcon color="error" className={classes.cardIcon} />
+                      <TrendingUpIcon
+                        color="error"
+                        className={classes.cardIcon}
+                      />
                     </Grid>
                   </Grid>
                   <Grid item>
@@ -256,36 +269,66 @@ const Finance = () => {
       <Grid item container spacing={2} justifyContent="space-between">
         {/* 1 */}
         <Grid item container md={4} sm={4} xs={12}>
-          <Grid item container flexDirection="column">
-            <Link to="/finance/payouts" style={{ textDecoration: "none" }}>
-              <Card title="Doctor Payout" background={theme.palette.common.lightRed}>
-                <TrendingUpIcon color="error" className={classes.cardIcon} />
-              </Card>
-            </Link>
+          <Grid
+            item
+            container
+            flexDirection="column"
+            component={Link}
+            to="/finance/payouts"
+            className={classes.parentGrid}
+          >
+            <Card
+              title="Doctor Payout"
+              background={theme.palette.common.lightGreen}
+            >
+              <TrendingUpIcon color="error" className={classes.cardIcon} />
+            </Card>
           </Grid>
         </Grid>
         {/* 2 */}
         <Grid item container md={4} sm={4} xs={12}>
-          <Grid item container flexDirection="column">
-            <Link to="/finance/earnings" style={{ textDecoration: "none" }}>
-              <Card title="Doctor Earnings" background={theme.palette.common.lightGreen}>
-                <Grid className={classes.iconWrapper}>
-                  <TrendingDownIcon color="success" className={classes.cardIcon} />
-                </Grid>
-              </Card>
-            </Link>
+          <Grid
+            item
+            container
+            flexDirection="column"
+            component={Link}
+            to="/finance/earnings"
+            className={classes.parentGrid}
+          >
+            <Card
+              title="Doctor Earnings"
+              background={theme.palette.common.lightGreen}
+            >
+              <Grid className={classes.iconWrapper}>
+                <TrendingDownIcon
+                  color="success"
+                  className={classes.cardIcon}
+                />
+              </Grid>
+            </Card>
           </Grid>
         </Grid>
         {/* 3 */}
         <Grid item container md={4} sm={4} xs={12}>
-          <Grid item container flexDirection="column">
-            <Link to="/finance/sub-income" style={{ textDecoration: "none" }}>
-              <Card title="Subscription Income" background={theme.palette.common.lightGreen}>
-                <Grid className={classes.iconWrapper}>
-                  <TrendingDownIcon color="success" className={classes.cardIcon} />
-                </Grid>
-              </Card>
-            </Link>
+          <Grid
+            item
+            container
+            flexDirection="column"
+            component={Link}
+            to="/finance/sub-income"
+            className={classes.parentGrid}
+          >
+            <Card
+              title="Subscription Income"
+              background={theme.palette.common.lightGreen}
+            >
+              <Grid className={classes.iconWrapper}>
+                <TrendingDownIcon
+                  color="success"
+                  className={classes.cardIcon}
+                />
+              </Grid>
+            </Card>
           </Grid>
         </Grid>
       </Grid>

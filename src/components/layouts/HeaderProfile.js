@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Avatar, IconButton, Typography, Badge } from "@mui/material";
+import { Grid, Avatar, IconButton, Badge } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { Notifications } from "components/layouts";
 import { findAccounts, getNotifications } from "components/graphQL/useQuery";
 import { useLazyQuery, useQuery } from "@apollo/client";
+import BellIcon from "components/Icons/BellIcon";
 
 const useStyles = makeStyles((theme) => ({
   role: {
@@ -40,7 +40,7 @@ const HeaderProfile = () => {
   const email = localStorage.getItem("email");
   const id = localStorage.getItem("_id");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [profileAcc, setProfileAcc] = useState([]);
+  const [, setProfileAcc] = useState([]);
   const [num, setNum] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [profile, { data, loading }] = useLazyQuery(findAccounts, {
@@ -94,32 +94,20 @@ const HeaderProfile = () => {
         justifyContent="space-between"
         flexWrap="nowrap"
         className={classes.head}
+        spacing={1}
       >
-        <Grid item>
-          <Avatar alt="Display avatar" src={displayPhoto} />
-        </Grid>
-        <Grid item container justifyContent="space-between">
-          <Grid item container direction="column" justifyContent="space-evenly">
-            <Typography variant="body1" className={classes.name}>
-              {profileAcc && profileAcc.role}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body2" className={classes.role} style={{ fontWeight: 300 }}>
-              {profileAcc && profileAcc.email}
-            </Typography>
-          </Grid>
-        </Grid>
         <Grid item>
           <IconButton
             aria-label={notificationsLabel(num)}
             onClick={(event) => handleNotification(event)}
+            sx={{
+              borderRadius: "100%",
+              backgroundColor: "#F8F8F8",
+              padding: "1rem",
+            }}
           >
-            <Badge badgeContent={num} color="error">
-              <NotificationsActiveIcon
-                color="primary"
-                sx={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)" }}
-              />
+            <Badge>
+              <BellIcon sx={{ color: "transparent", fontSize: "20px" }} />
             </Badge>
           </IconButton>
           <Notifications
@@ -128,6 +116,9 @@ const HeaderProfile = () => {
             setNotifications={setNotifications}
             setAnchorEl={setAnchorEl}
           />
+        </Grid>
+        <Grid item>
+          <Avatar alt="Display avatar" src={displayPhoto} />
         </Grid>
       </Grid>
     </header>

@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Button, TableCell, TableRow, Checkbox, Avatar } from "@mui/material";
+import {
+  Grid,
+  Button,
+  TableCell,
+  TableRow,
+  Checkbox,
+  Avatar,
+} from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { Link } from "react-router-dom";
-import { timeMoment, dateMoment, formatNumber } from "components/Utilities/Time";
+import {
+  timeMoment,
+  dateMoment,
+  formatNumber,
+} from "components/Utilities/Time";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -17,7 +27,11 @@ import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getEarningData } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -109,7 +123,8 @@ const Financetable = () => {
   const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
-  const [fetchEarningData, { loading, data, error }] = useLazyQuery(getEarningData);
+  const [fetchEarningData, { loading, data, error }] =
+    useLazyQuery(getEarningData);
 
   useEffect(() => {
     fetchEarningData({
@@ -129,9 +144,15 @@ const Financetable = () => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid container direction="column" gap={2} height="100%">
+    <Grid
+      container
+      direction="column"
+      gap={2}
+      height="100%"
+      sx={{ margin: "3rem 0rem" }}
+    >
       <>
-        <Grid item container gap={1} alignItems="center">
+        {/* <Grid item container gap={1} alignItems="center">
           <Grid item flex={1}>
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
               Doctors Earnings table
@@ -140,121 +161,135 @@ const Financetable = () => {
           <Grid item className={classes.iconWrapper}>
             <TrendingDownIcon color="success" className={classes.cardIcon} />
           </Grid>
-        </Grid>
-        {earning.length > 0 ? (
-          <Grid item container>
-            <EnhancedTable
-              headCells={payoutHeaderss1}
-              rows={earning}
-              paginationLabel="finance per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                await changeTableLimit(fetchEarningData, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                await handlePageChange(fetchEarningData, page, pageInfo, {});
-              }}
-            >
-              {earning.map((row, index) => {
-                const { createdAt, providerId, balance, doctorData } = row;
-                const { firstName, picture, lastName } = doctorData[0] || {};
-                const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
+        </Grid> */}
+        <TableLayout>
+          {earning.length > 0 ? (
+            <Grid item container>
+              <EnhancedTable
+                headCells={payoutHeaderss1}
+                rows={earning}
+                paginationLabel="finance per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  await changeTableLimit(fetchEarningData, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(fetchEarningData, page, pageInfo, {});
+                }}
+              >
+                {earning.map((row, index) => {
+                  const { createdAt, providerId, balance, doctorData } = row;
+                  const { firstName, picture, lastName } = doctorData[0] || {};
+                  const isItemSelected = isSelected(row._id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      {formatNumber(balance.toFixed(2))}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {doctorData && doctorData[0] !== {} ? (
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
                           }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={firstName ? firstName : "image"}
-                              src={doctorData ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData && `${firstName && firstName} ${lastName && lastName}`}
-                          </span>
-                        </div>
-                      ) : (
-                        "No name"
-                      )}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {providerId}
-                    </TableCell>
-
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.buttons}
-                        style={{
-                          whiteSpace: "nowrap",
-                          padding: "5% 50%",
-                          marginLeft: "-10%",
-                        }}
-                        component={Link}
-                        endIcon={<ArrowForwardIosIcon />}
-                        to={`/hcps/${doctorData[0]._id}/consultations`}
+                        />
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
                       >
-                        View Consultation
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={payoutHeaderss1} paginationLabel="Finance  per page" />
-        )}
+                        {formatNumber(balance.toFixed(2))}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {doctorData && doctorData[0] !== {} ? (
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span style={{ marginRight: "1rem" }}>
+                              <Avatar
+                                alt={firstName ? firstName : "image"}
+                                src={doctorData ? picture : displayPhoto}
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {doctorData &&
+                                `${firstName && firstName} ${
+                                  lastName && lastName
+                                }`}
+                            </span>
+                          </div>
+                        ) : (
+                          "No name"
+                        )}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {providerId}
+                      </TableCell>
+
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.black }}
+                      >
+                        {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          className={classes.buttons}
+                          style={{
+                            whiteSpace: "nowrap",
+                            padding: "5% 50%",
+                            marginLeft: "-10%",
+                          }}
+                          component={Link}
+                          endIcon={<ArrowForwardIosIcon />}
+                          to={`/hcps/${doctorData[0]._id}/consultations`}
+                        >
+                          View Consultation
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={payoutHeaderss1}
+              paginationLabel="Finance  per page"
+            />
+          )}
+        </TableLayout>
       </>
     </Grid>
   );

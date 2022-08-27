@@ -20,11 +20,17 @@ const Input = (props) => {
   const { label, name, ...rest } = props;
   const classes = useStyles();
   return (
-    <Grid container direction="column" gap={1}>
+    <Grid container direction="column">
       <FormLabel component="legend" className={classes.FormLabel}>
         {label}
       </FormLabel>
-      <Field id={name} name={name} className={classes.input} {...rest} style={{ minHeight: 50 }} />
+      <Field
+        id={name}
+        name={name}
+        className={classes.input}
+        {...rest}
+        style={{ minHeight: 50 }}
+      />
       <ErrorMessage name={name} component={TextError} />
     </Grid>
   );

@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import { Grid, Button, Avatar, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Avatar,
+  Chip,
+  TableRow,
+  TableCell,
+  Checkbox,
+} from "@mui/material";
 import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
@@ -24,6 +32,7 @@ import {
   filterData,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const HCP = () => {
   const classes = useStyles();
@@ -116,157 +125,189 @@ const HCP = () => {
 
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid item container>
           <Grid
             item
             direction={{ sm: "row", xs: "column" }}
             gap={{ md: 4, sm: 4, xs: 2 }}
             container
-          >
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-                onClickClearBtn={() => onFilterStatusChange("")}
-                options={docVerifyStatusFilterBy}
-                name="status"
-                placeholder="By status"
-                value={statusFilterValue}
-                hasClearBtn={true}
-              />
-            </Grid>
-          </Grid>
+          ></Grid>
         </Grid>
-        {respondData.length > 0 ? (
-          <Grid container item height="100%" direction="column">
-            <EnhancedTable
+        <TableLayout
+          filters={
+            <Filter
+              onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
+              onClickClearBtn={() => onFilterStatusChange("")}
+              options={[
+                { key: "Status", value: "" },
+                ...docVerifyStatusFilterBy,
+              ]}
+              name="status"
+              placeholder="By status"
+              value={statusFilterValue}
+              hasClearBtn={true}
+            />
+          }
+        >
+          {respondData.length > 0 ? (
+            <Grid container item height="100%" direction="column">
+              <EnhancedTable
+                headCells={HCPHeader}
+                rows={respondData}
+                paginationLabel="verification per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  changeTableLimit(fetchVerifications, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  handlePageChange(fetchVerifications, page, pageInfo, {});
+                }}
+              >
+                {respondData
+                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const {
+                      createdAt,
+                      status,
+                      qualification,
+                      doctorData,
+                      _id,
+                    } = row;
+                    const isItemSelected = isSelected(_id, selectedRows);
+
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={_id}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onClick={() =>
+                              handleSelectedRows(
+                                _id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.black }}
+                        >
+                          {dateMoment(createdAt)}
+                        </TableCell>
+
+                        <TableCell align="left" className={classes.tableCell}>
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "left",
+                            }}
+                          >
+                            <span style={{ marginRight: "1rem" }}>
+                              <Avatar
+                                alt={`image of ${
+                                  doctorData && doctorData.firstName
+                                }`}
+                                src={
+                                  doctorData ? doctorData.picture : displayPhoto
+                                }
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {doctorData && doctorData.firstName}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.black }}
+                        >
+                          {doctorData && doctorData.lastName}
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          {qualification && qualification.degree}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.red }}
+                        >
+                          <Chip
+                            label={status ? "Verified" : "Not Verified"}
+                            className={classes.badge}
+                            style={{
+                              background:
+                                status === true
+                                  ? theme.palette.common.lightGreen
+                                  : theme.palette.common.lightRed,
+                              color:
+                                status === true
+                                  ? theme.palette.common.green
+                                  : theme.palette.common.red,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          {qualification && dateMoment(qualification.year)}
+                        </TableCell>
+
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            className={classes.button}
+                            style={{
+                              whiteSpace: "nowrap",
+                              padding: "5% 50%",
+                              marginLeft: "-10%",
+                            }}
+                            component={Link}
+                            endIcon={<ArrowForwardIosIcon />}
+                            to={`/verification/view/${_id}`}
+                          >
+                            View Verification{" "}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
               headCells={HCPHeader}
-              rows={respondData}
-              paginationLabel="verification per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                changeTableLimit(fetchVerifications, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                handlePageChange(fetchVerifications, page, pageInfo, {});
-              }}
-            >
-              {respondData
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const { createdAt, status, qualification, doctorData, _id } = row;
-                  const isItemSelected = isSelected(_id, selectedRows);
-
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={_id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {dateMoment(createdAt)}
-                      </TableCell>
-
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "left",
-                          }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`image of ${doctorData?.firstName}`}
-                              src={doctorData ? doctorData.picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{doctorData?.firstName}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {doctorData?.lastName}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {doctorData?.specialization}
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.red }}
-                      >
-                        <Chip
-                          label={status ? "Verified" : "Not Verified"}
-                          className={classes.badge}
-                          style={{
-                            background:
-                              status === true
-                                ? theme.palette.common.lightGreen
-                                : theme.palette.common.lightRed,
-                            color:
-                              status === true
-                                ? theme.palette.common.green
-                                : theme.palette.common.red,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        {dateMoment(qualification?.year)}
-                      </TableCell>
-
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          style={{
-                            whiteSpace: "nowrap",
-                            padding: "5% 50%",
-                            marginLeft: "-10%",
-                          }}
-                          component={Link}
-                          endIcon={<ArrowForwardIosIcon />}
-                          to={`/verification/view/${_id}`}
-                        >
-                          View Verification
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={HCPHeader} paginationLabel="Verification  per page" />
-        )}
+              paginationLabel="Verification  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
     </>
   );

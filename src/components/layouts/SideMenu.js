@@ -1,16 +1,23 @@
-import React, { useState, createElement } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { List, ListItemText, ListItemButton, ListItemIcon, Grid } from "@mui/material";
-import { menus } from "helpers/asideMenus";
 import { makeStyles } from "@mui/styles";
+import {
+  List,
+  ListItemText,
+  ListItemButton,
+  ListItemIcon,
+  Grid,
+} from "@mui/material";
+
 import logo from "assets/images/logo.svg";
-import { HiLogout } from "react-icons/hi";
 import { setSideNav } from "helpers/func";
 import { useMutation } from "@apollo/client";
 import { Link, useLocation } from "react-router-dom";
 import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
+import LogoutIcon from "components/Icons/LogoutIcon";
+import { menus } from "helpers/asideMenus";
 
 const SideMenu = (props) => {
   const { drawerWidth } = props;
@@ -22,10 +29,11 @@ const SideMenu = (props) => {
 
   const useStyles = makeStyles((theme) => ({
     aside: {
-      width: `${drawerWidth}`,
+      /* width: `${drawerWidth}`, */
+      width: "280px",
       background: "#fff",
-      paddingLeft: "2.5em",
-      paddingRight: "2.5em",
+      paddingLeft: "2em",
+      paddingRight: "2em",
       paddingTop: "1em",
       minHeight: "100vh",
       height: "100%",
@@ -38,27 +46,34 @@ const SideMenu = (props) => {
       },
 
       "& .MuiListItemButton-root": {
-        marginBottom: "2em",
+        display: "flex",
+        borderRadius: "10px",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: "1em",
+        padding: "14px",
 
         "&:hover": {
-          background: theme.palette.common.lightRed,
+          background: theme.palette.common.lightBlue,
 
           "& .MuiSvgIcon-root": {
-            color: theme.palette.common.red,
+            color: theme.palette.common.blue,
           },
 
           "& .MuiTypography-root": {
-            color: theme.palette.common.red,
+            color: theme.palette.common.blue,
           },
 
           "& .message-icon": {
-            color: theme.palette.common.red,
+            color: theme.palette.common.blue,
           },
         },
       },
 
       "& .MuiListItemIcon-root": {
-        minWidth: 50,
+        display: "flex",
+        alignItems: "center",
+        minWidth: 22,
       },
 
       "& .MuiSvgIcon-root": {
@@ -70,13 +85,16 @@ const SideMenu = (props) => {
       },
 
       "& .MuiTypography-root": {
-        fontSize: "1.45rem",
+        fontStyle: "normal",
+        fontWeight: 400,
+        fontSize: "14px",
+        lineHeight: "20px",
+        color: theme.palette.common.gray,
       },
 
       "& .MuiListItemButton-root.Mui-selected": {
-        backgroundColor: theme.palette.common.lightRed,
-        color: theme.palette.common.red,
-        borderRadius: ".5rem",
+        backgroundColor: theme.palette.common.lightBlue,
+        color: theme.palette.common.blue,
 
         "&:hover": {
           backgroundColor: theme.palette.common.lightRed,
@@ -88,6 +106,7 @@ const SideMenu = (props) => {
 
         "& .MuiTypography-root": {
           color: theme.palette.common.red,
+          fontWeight: 500,
         },
       },
 
@@ -113,12 +132,8 @@ const SideMenu = (props) => {
       "&.MuiListItemButton-root": {
         marginTop: "2.5rem",
 
-        "& .MuiListItemIcon-root": {
-          color: theme.palette.common.red,
-        },
-
         "& .MuiTypography-root": {
-          color: theme.palette.common.red,
+          color: "#ED3237 !important",
         },
       },
     },
@@ -145,37 +160,42 @@ const SideMenu = (props) => {
 
   return (
     <>
-      <Grid className={classes.aside} boxShadow={{ sm: "5px -5px 7px #eee", xs: "none" }}>
+      <Grid
+        className={classes.aside}
+        sx={{ borderRight: "1px solid rgba(229, 229, 229, 0.5)" }}
+      >
         <div className={classes.logoWrapper}>
           <img src={logo} alt="logo" />
         </div>
         <List>
-          {menus.map((menu) => (
-            <ListItemButton
-              disableRipple
-              key={menu.id}
-              onClick={() => setSelectedMenu(menu.id)}
-              selected={selectedMenu === menu.id}
-              component={Link}
-              to={menu.path}
-            >
-              <ListItemIcon>
-                {createElement(
-                  menu.icon,
-                  menu.id === 5 ? { size: 20, className: "message-icon" } : {},
-                )}
-              </ListItemIcon>
+          {menus.map((menu) => {
+            const { icon } = menu;
+            return (
+              <ListItemButton
+                disableRipple
+                key={menu.id}
+                onClick={() => setSelectedMenu(menu.id)}
+                selected={selectedMenu === menu.id}
+                component={Link}
+                to={menu.path}
+              >
+                <ListItemIcon
+                  sx={{ marginRight: "15px", height: "30px", width: "30px" }}
+                >
+                  {icon}
+                </ListItemIcon>
 
-              <ListItemText>{menu.title}</ListItemText>
-            </ListItemButton>
-          ))}
+                <ListItemText>{menu.title}</ListItemText>
+              </ListItemButton>
+            );
+          })}
           <ListItemButton
             disableRipple
             classes={{ root: classes.logout }}
             onClick={() => setLogout(true)}
           >
-            <ListItemIcon>
-              <HiLogout size={20} />
+            <ListItemIcon sx={{ marginRight: "15px" }}>
+              <LogoutIcon sx={{ height: "25px", width: "25px" }} />
             </ListItemIcon>
 
             <ListItemText>Logout</ListItemText>

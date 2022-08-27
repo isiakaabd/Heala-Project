@@ -11,11 +11,31 @@ export const genderType = [
   { key: "Female", value: "Female" },
 ];
 
-export const patientSearchOptions = [
+export const searchOptions = [
   { key: "By ID", value: "id" },
   { key: "By first name", value: "firstName" },
   { key: "By last name", value: "lastName" },
 ];
+
+export const hmoSearchOptions = [
+  { key: "By HMO ID", value: "hmoId" },
+  { key: "By first name", value: "firstName" },
+  { key: "By last name", value: "lastName" },
+  { key: "By HMO plan", value: "plan" },
+];
+
+export const plansSearchOptions = [{ key: "By name", value: "name" }];
+
+export const hmoSearchFilterOptions = {
+  hmoId: "SDT07657",
+  firstName: "John",
+  lastName: "Doe",
+  plan: "Plan name",
+};
+
+export const plansSearchFilterOptions = {
+  name: "Heala plan",
+};
 
 export const doctorsSearchOptions = [
   { key: "By ID", value: "id" },
@@ -153,6 +173,16 @@ export const payoutFilterBy = [
 
 export const referralFilterBy = [{ key: "diagnostics", value: "diagnostics" }];
 
+export const addHMOInitialValues = {
+  name: "",
+  icon: "",
+  iconAlt: "",
+  userTypeId: "61ed2b68e6091400135e3dba",
+  email: "",
+  phone: "",
+  address: "",
+};
+
 /* ================ FILTER DEFAULT VALUES ==================== */
 
 export const doctorsPageDefaultFilterValues = {
@@ -225,6 +255,19 @@ export const defaultPageInfo = {
   nextPage: 2,
 };
 
+export const addHMOEnrolleInitialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  photo: "",
+  hmoId: "",
+  noc: "",
+  plan: "",
+  planId: "",
+  expiryDate: "",
+};
+
 /* ========= TYPES ============ */
 
 export const paginationActionTypes = Object.freeze({
@@ -233,3 +276,38 @@ export const paginationActionTypes = Object.freeze({
   PREVPAGE: "PREVPAGE",
   LASTPAGE: "LASTPAGE",
 });
+
+/* MOCK */
+
+export const hospitalData = [
+  {
+    _id: 1,
+    name: "Paleon Hospital",
+    plans: 12,
+    email: "johndoe@test.com",
+  },
+  {
+    _id: 2,
+    name: "Evercare Hospital",
+    plans: 5,
+    email: "johndoe@test.com",
+  },
+  {
+    _id: 3,
+    name: "Wella Health Hospital",
+    plans: 7,
+    email: "johndoe@test.com",
+  },
+  {
+    _id: 4,
+    name: "St. Nicohlas Hospital",
+    plans: 2,
+    email: "johndoe@test.com",
+  },
+  {
+    _id: 5,
+    name: "ABC Hospital",
+    plans: 1,
+    email: "johndoe@test.com",
+  },
+];

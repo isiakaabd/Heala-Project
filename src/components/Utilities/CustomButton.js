@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import Loader from "components/Utilities/Loader";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 const CustomButton = ({
   title,
@@ -16,6 +17,7 @@ const CustomButton = ({
   path,
   role,
   fontSize,
+  startIcon,
   type: { background, hover, active, disabled },
   isSubmitting,
   ...rest
@@ -33,7 +35,7 @@ const CustomButton = ({
         justifyContent: "center",
         alignItems: "center",
         fontSize: "clamp(1.2rem,2vw, 1.3rem)",
-        // fontSize ? fontSize : undefined,
+        boxShadow: "none",
 
         "&:hover": {
           backgroundColor: hover,
@@ -72,6 +74,7 @@ const CustomButton = ({
 
   return (
     <Button
+      startIcon={startIcon}
       variant="contained"
       LinkComponent={Link}
       to={path ? path : ""}
@@ -80,7 +83,8 @@ const CustomButton = ({
       className={classes.button}
       {...rest}
     >
-      {!isSubmitting && title} {isSubmitting && <Loader size={35} color="info" />}
+      {!isSubmitting && title}{" "}
+      {isSubmitting && <Loader size={35} color="info" />}
     </Button>
   );
 };
@@ -92,6 +96,7 @@ CustomButton.defaultProps = {
 
 CustomButton.propTypes = {
   endIcon: PropTypes.node,
+  startIcon: PropTypes.node,
   title: PropTypes.string,
   type: PropTypes.object,
   textColor: PropTypes.string,
@@ -103,6 +108,50 @@ CustomButton.propTypes = {
   path: PropTypes.string,
   isSubmitting: PropTypes.bool,
   role: PropTypes.bool,
+};
+
+export const SearchBtn = ({ isSubmitting, handleClick }) => {
+  const useStyles = makeStyles((theme) => ({
+    button: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "#ffffff",
+      border: "none",
+      backgroundColor: theme.palette.common.dark,
+      borderRadius: "100%",
+      padding: "0.75rem",
+      cursor: "pointer",
+
+      "&:hover": {
+        backgroundColor: theme.palette.common.gray,
+      },
+
+      "&:disabled": {
+        backgroundColor: theme.palette.common.disable,
+        boxShadow: "none",
+        cursor: "no-drop",
+      },
+    },
+  }));
+
+  const classes = useStyles();
+
+  return (
+    <button
+      type={"submit"}
+      className={classes.button}
+      onClick={() => handleClick()}
+    >
+      {!isSubmitting && <SearchOutlinedIcon fontSize="large" />}{" "}
+      {isSubmitting && <Loader size={35} color="info" />}
+    </button>
+  );
+};
+
+SearchBtn.propTypes = {
+  isSubmitting: PropTypes.bool,
+  handleClick: PropTypes.func.isRequired,
 };
 
 export default CustomButton;

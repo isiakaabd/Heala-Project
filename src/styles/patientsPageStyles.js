@@ -68,6 +68,26 @@ export const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+
+  redBtn: {
+    color: "#757886",
+    backgroundColor: "#F8F8F8",
+
+    "&:hover": {
+      color: "#ffffff",
+      backgroundColor: "#f21818",
+    },
+  },
+
+  warningBtn: {
+    color: "#757886",
+    backgroundColor: "#F8F8F8",
+
+    "&:hover": {
+      color: "#ffffff",
+      backgroundColor: "rgb(62, 94, 169)",
+    },
+  },
 }));
 
 /*   const buttonType = {

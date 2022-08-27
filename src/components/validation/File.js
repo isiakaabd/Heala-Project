@@ -1,10 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useSnackbar } from "notistack";
 import { makeStyles } from "@mui/styles";
 import { Field, ErrorMessage } from "formik";
 import { TextError } from "components/Utilities/TextError";
-import { FormControl, FormLabel, Grid, Avatar, Button, Typography } from "@mui/material";
+import {
+  FormControl,
+  FormLabel,
+  Grid,
+  Avatar,
+  Button,
+  Typography,
+} from "@mui/material";
 
 import { Loader } from "components/Utilities";
 import { RequiredIcon } from "components/Typography";
@@ -43,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Formiks = ({ name, setFieldValue, onBlur }) => {
+export const Formiks = ({ name, setFieldValue, onBlur, value }) => {
   const fileRef = useRef(null);
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -52,13 +59,20 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
   const [progress, setProgress] = useState();
   const [isCompressing, setIsCompressing] = React.useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (value) {
+      setPreview(value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     isCompleted === "passed" &&
       showSuccessMsg(enqueueSnackbar, Typography, "Image upload complete.");
     if (isCompleted === "failed") {
       showErrorMsg(enqueueSnackbar, "Image upload failed, Try again.");
     }
-    //eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCompleted]);
 
   const onChange = async (e) => {
@@ -72,7 +86,7 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
       setFieldValue,
       setProgress,
       setIsCompressing,
-      setIsCompleted,
+      setIsCompleted
     );
 
     const reader = new FileReader();
@@ -83,7 +97,13 @@ export const Formiks = ({ name, setFieldValue, onBlur }) => {
   return (
     <Grid container spacing={2} alignItems="center">
       {progress < 100 || isCompressing ? (
-        <Grid container item direction="row" justifyContent="center" alignItems="center">
+        <Grid
+          container
+          item
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Typography display={"inline"}>
             {isCompressing ? "Compressing image" : "Uploading image"}
           </Typography>

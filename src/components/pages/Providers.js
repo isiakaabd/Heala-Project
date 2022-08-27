@@ -4,7 +4,15 @@ import FormikControl from "components/validation/FormikControl";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import { NoData, EmptyTable } from "components/layouts";
 import AddIcon from "@mui/icons-material/Add";
-import { Grid, TableRow, TableCell, Checkbox, Alert, Button, Avatar } from "@mui/material";
+import {
+  Grid,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Alert,
+  Button,
+  Avatar,
+} from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
@@ -21,7 +29,12 @@ import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { getProviders /**/ } from "components/graphQL/useQuery";
 import { deletProvider } from "components/graphQL/Mutation";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -133,7 +146,8 @@ const useStyles = makeStyles((theme) => ({
 const Providers = () => {
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchProviders, { error, loading, refetch }] = useLazyQuery(getProviders);
+  const [fetchProviders, { error, loading, refetch }] =
+    useLazyQuery(getProviders);
   const { data: dat, error: err, loading: load } = useQuery(getProviders);
 
   useEffect(() => {
@@ -244,7 +258,13 @@ const Providers = () => {
   if (error || err) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         {alert && Object.keys(alert).length > 0 && (
           <Alert
             variant="filled"
@@ -254,19 +274,14 @@ const Providers = () => {
             {alert.message}
           </Alert>
         )}
-        <Grid item gap={{ sm: 4, xs: 2 }} container direction={{ md: "row", sm: "column" }}>
-          {/* <Grid item flex={1}>
-            <Search
-              value={searchHcp}
-              placeholder="Type to search Providers by Hospital name e.g Lagoon Hospital"
-              onChange={(e) => onChange(e.target.value)}
-              height="5rem"
-            />
-          </Grid> */}
+        <Grid
+          item
+          gap={{ sm: 4, xs: 2 }}
+          container
+          direction={{ md: "row", sm: "column" }}
+        >
           <Grid item container justifyContent="space-between">
-            <Grid item>
-              {/* <FilterList title="Filter partner" onClick={handleDialogOpens1} /> */}
-            </Grid>
+            <Grid item></Grid>
             <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
@@ -277,97 +292,108 @@ const Providers = () => {
             </Grid>
           </Grid>
         </Grid>
-        {providers.length > 0 ? (
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
+        <TableLayout>
+          {providers.length > 0 ? (
+            <Grid item container height="100%" direction="column">
+              <EnhancedTable
+                headCells={partnersHeadCells2}
+                rows={providers}
+                paginationLabel="Providers per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  await changeTableLimit(fetchProviders, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  await handlePageChange(fetchProviders, page, pageInfo, {});
+                }}
+              >
+                {providers.map((row, index) => {
+                  const { _id, name, icon } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
+
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar src={icon} sx={{ width: 24, height: 24 }} />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around",
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            onClick={() => handleEditOpenDialog(_id)}
+                            endIcon={<EditIcon color="success" />}
+                          >
+                            Edit Provider
+                          </Button>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            onClick={() => handleDeleteOpenDialog(_id)}
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Delete Provider
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
               headCells={partnersHeadCells2}
-              rows={providers}
-              paginationLabel="Providers per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                await changeTableLimit(fetchProviders, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                await handlePageChange(fetchProviders, page, pageInfo, {});
-              }}
-            >
-              {providers.map((row, index) => {
-                const { _id, name, icon } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
-
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar src={icon} sx={{ width: 24, height: 24 }} />
-                        </span>
-                        <span style={{ fontSize: "1.25rem" }}>{name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="center" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-around",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.greenBtn}`}
-                          onClick={() => handleEditOpenDialog(_id)}
-                          endIcon={<EditIcon color="success" />}
-                        >
-                          Edit Provider
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          onClick={() => handleDeleteOpenDialog(_id)}
-                          endIcon={<DeleteIcon color="error" />}
-                        >
-                          Delete Provider
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={partnersHeadCells2} paginationLabel="Providers  per page" />
-        )}
+              paginationLabel="Providers  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
 
       <Modals
@@ -412,7 +438,12 @@ const Providers = () => {
         btnValue="Delete"
       />
 
-      <Modals isOpen={isOpens} title="Filter" rowSpacing={5} handleClose={handleDialogCloses}>
+      <Modals
+        isOpen={isOpens}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogCloses}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -433,7 +464,10 @@ const Providers = () => {
                       placeholder="Enter Hospital Name"
                     />
                   </Grid>
-                  <Grid item style={{ marginBottom: "18rem", marginTop: "3rem" }}>
+                  <Grid
+                    item
+                    style={{ marginBottom: "18rem", marginTop: "3rem" }}
+                  >
                     <Grid container>
                       <Grid item container>
                         <FormikControl

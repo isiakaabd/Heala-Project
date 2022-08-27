@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   parentGrid: {
     textDecoration: "none",
     color: theme.palette.primary.main,
+
+    "& > .MuiGrid-root.MuiGrid-container": {
+      backgroundColor: "#ffffff",
+    },
   },
 
   icon: {
@@ -147,14 +151,20 @@ const SingleHCP = () => {
 
   const trasparentButton = {
     background: "transparent",
-    hover: "#fafafa",
+    hover: theme.palette.common.danger,
     active: "#f4f4f4",
   };
 
   if (profile.loading) return <Loader />;
   return (
     <>
-      <Grid container direction="column" gap={2} rowSpacing={2} className={classes.gridContainer}>
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        rowSpacing={2}
+        className={classes.gridContainer}
+      >
         <Grid
           item
           container
@@ -190,7 +200,8 @@ const SingleHCP = () => {
               title="Disable Doctor"
               onClick={() => setOpenDisableDoctor(true)}
               type={trasparentButton}
-              textColor={theme.palette.common.red}
+              textColor={theme.palette.common.danger}
+              textColorOnHover="#ffffff"
             />
           </Grid>
         </Grid>
@@ -218,10 +229,11 @@ const SingleHCP = () => {
                 component={Link}
                 to={`/hcps/${hcpId}/${card.path}`}
               >
-                <Card title={card.title} background={card.background} header="h4">
+                <Card title={card.title} header="h4">
                   {createElement(card.icon, {
                     fill: card.fill,
-                    color: card.id === 4 || card.id === 6 ? "success" : undefined,
+                    color:
+                      card.id === 4 || card.id === 6 ? "success" : undefined,
                     style: { fontSize: "clamp(2.5rem, 3vw,4rem)" },
                   })}
                 </Card>

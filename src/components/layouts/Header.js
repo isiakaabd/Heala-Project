@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "space-around",
       padding: "0px",
       alignItems: "center",
-      paddingInline: "min(2.5rem,4vw)",
+      height: "90px",
+      /* paddingInline: "min(2.5rem,4vw)", */
     },
   },
   toolbarMargin: {
@@ -29,12 +30,15 @@ const Header = (props) => {
     <AppBar
       position="fixed"
       padding="1rem"
+      elevation={0}
       sx={{
         width: { md: `calc(100% - (${drawerWidth}px + 5em))` },
+        borderBottom: "1px solid rgba(229, 229, 229, 0.5)",
+        boxShadow: "none !important",
       }}
     >
       <Toolbar className={classes.appBar}>
-        <Grid item marginInline={2.5}>
+        <Grid item marginLeft="2rem">
           <IconButton
             color="inherit"
             aria-label="open drawer"

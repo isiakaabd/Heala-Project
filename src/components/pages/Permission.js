@@ -5,7 +5,6 @@ import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
 import {
   Grid,
-  Typography,
   Button,
   TableRow,
   TableCell,
@@ -31,7 +30,11 @@ import { useMutation } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
 import { NoData, EmptyTable } from "components/layouts";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 const useStyles = makeStyles((theme) => ({
   flexContainer: {
     justifyContent: "space-between",
@@ -137,9 +140,13 @@ const Permission = () => {
   };
 
   const validationSchema1 = Yup.object({
-    name: Yup.string("Enter your Permission").trim().required("permission is required"),
+    name: Yup.string("Enter your Permission")
+      .trim()
+      .required("permission is required"),
     date: Yup.string("Select Date").required("Date is required"),
-    category: Yup.string("Select Category").trim().required("Category is required"),
+    category: Yup.string("Select Category")
+      .trim()
+      .required("Category is required"),
   });
   const onSubmit1 = (values) => {
     console.log(values);
@@ -147,8 +154,12 @@ const Permission = () => {
 
   const validationSchema = Yup.object({
     // checkbox: Yup.array().min(1, "Add atleast a permission"),
-    name: Yup.string("Enter your Permission").required("permission is required"),
-    description: Yup.string("Enter Description").required("Description is required"),
+    name: Yup.string("Enter your Permission").required(
+      "permission is required"
+    ),
+    description: Yup.string("Enter Description").required(
+      "Description is required"
+    ),
   });
 
   const classes = useStyles();
@@ -208,7 +219,8 @@ const Permission = () => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchPermissions, { loading, data, error }] = useLazyQuery(getPermissions);
+  const [fetchPermissions, { loading, data, error }] =
+    useLazyQuery(getPermissions);
 
   useEffect(() => {
     fetchPermissions({
@@ -243,13 +255,13 @@ const Permission = () => {
         </Alert>
       )}
       <Grid container direction="column">
-        <Grid item sm container>
-          <Grid item flex={1}>
-            <Typography variant="h1" color=" #2D2F39">
-              Permission management
-            </Typography>
-          </Grid>
-
+        <Grid
+          item
+          sm
+          container
+          justifyContent={"flex-end"}
+          sx={{ marginBottom: "2rem" }}
+        >
           <Grid item>
             <CustomButton
               endIcon={<AddIcon />}
@@ -259,25 +271,23 @@ const Permission = () => {
             />
           </Grid>
         </Grid>
-        {/* The Search and Filter ends here */}
-        {Permission.length > 0 ? (
-          <Grid item container>
-            <EnhancedTable
-              headCells={PermissionHeader}
-              rows={Permission}
-              paginationLabel="permission per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                changeTableLimit(fetchPermissions, { first: e });
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                handlePageChange(fetchPermissions, page, pageInfo, {});
-              }}
-            >
-              {permission
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+        <TableLayout>
+          {Permission.length > 0 ? (
+            <Grid item container>
+              <EnhancedTable
+                headCells={PermissionHeader}
+                rows={Permission}
+                paginationLabel="permission per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  changeTableLimit(fetchPermissions, { first: e });
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  handlePageChange(fetchPermissions, page, pageInfo, {});
+                }}
+              >
+                {permission.map((row, index) => {
                   const isItemSelected = isSelected(row._id, selectedRows);
 
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -294,7 +304,13 @@ const Permission = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -378,14 +394,23 @@ const Permission = () => {
                     </TableRow>
                   );
                 })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={PermissionHeader} paginationLabel="Permission  per page" />
-        )}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={PermissionHeader}
+              paginationLabel="Permission  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
 
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues1}
           onSubmit={onSubmit1}
@@ -447,7 +472,11 @@ const Permission = () => {
 
       {/* // modal */}
 
-      <Modals isOpen={isOpen} title="Add new permission" handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Add new permission"
+        handleClose={handleDialogClose}
+      >
         <PermissionModal
           handleDialogClose={handleDialogClose}
           type="add"
@@ -459,7 +488,11 @@ const Permission = () => {
       </Modals>
 
       {/* edit modala */}
-      <Modals isOpen={isEdit} title="Edit permission" handleClose={handleEditCloseDialog}>
+      <Modals
+        isOpen={isEdit}
+        title="Edit permission"
+        handleClose={handleEditCloseDialog}
+      >
         <PermissionModal
           handleDialogClose={handleEditCloseDialog}
           type="edit"

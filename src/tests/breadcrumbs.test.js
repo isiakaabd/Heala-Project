@@ -2,15 +2,46 @@ const {
   predicateBreadcrumbFromUrl,
   patterns,
   replaceWithGenerics,
+  predictHistoryIndex,
   pathParamsRegex,
 } = require("helpers/breadcrumb");
 
 describe("Testing the breadcrumbs function", () => {
+  it("returns expected index for each crumb", () => {
+    expect(
+      predictHistoryIndex([
+        "Patients",
+        "Patient view",
+        "Consultations",
+        "Consultation Details",
+      ])
+    ).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "pageIndex": -3,
+          "pageTitle": "Patients",
+        },
+        Object {
+          "pageIndex": -2,
+          "pageTitle": "Patient view",
+        },
+        Object {
+          "pageIndex": -1,
+          "pageTitle": "Consultations",
+        },
+        Object {
+          "pageIndex": 0,
+          "pageTitle": "Consultation Details",
+        },
+      ]
+    `);
+  });
+
   it("Returns the expected value", () => {
     expect(
       predicateBreadcrumbFromUrl(
         patterns,
-        "patients/626cd83eeb876e0014b8fb69/consultations/case-note/626cdda0b2315100132869a5"
+        "patients/626cd83eeb876e0014b8fb69/consultations/case-notes/626cdda0b2315100132869a5"
       )
     ).toMatchInlineSnapshot(`
       Array [

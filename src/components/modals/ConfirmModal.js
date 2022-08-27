@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
 
       "&:hover": {
-        color: theme.palette.common.lightGreen,
+        color: theme.palette.common.danger,
       },
     },
   },
@@ -49,7 +49,7 @@ const ConfirmModal = ({
 
   const rejectBtn = {
     background: theme.palette.disabled.main,
-    hover: theme.palette.common.errorColor,
+    hover: theme.palette.common.gold,
     active: theme.palette.info.dark,
   };
 
@@ -101,7 +101,7 @@ const ConfirmModal = ({
             >
               <Grid item md>
                 <CustomButton
-                  title="Reject"
+                  title="Cancel"
                   type={rejectBtn}
                   width="100%"
                   onClick={() => setOpen(false)}

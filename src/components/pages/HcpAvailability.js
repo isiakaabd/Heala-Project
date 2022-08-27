@@ -22,10 +22,15 @@ const HcpAvailability = () => {
   if (error) return <NoData error={error} />;
   return (
     <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
-      <Grid item>
-        <Typography variant="h2">HCP Availability</Typography>
-      </Grid>
-      <Grid item container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        item
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+        sx={{ margin: "2.5rem 0rem" }}
+      >
         {availabiltyArray.length > 0 ? (
           availabiltyArray.map((availability, index) => {
             if (availability?.times) {

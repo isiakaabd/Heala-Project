@@ -26,7 +26,9 @@ const Dates = ({ name, value, setFieldValue, onBlur }) => {
         value={value}
         onBlur={onBlur}
         onError={(err) => console.log(err)}
-        renderInput={(params) => <TextField {...params} sx={{ padding: "-12px" }} />}
+        renderInput={(params) => (
+          <TextField {...params} sx={{ padding: "-12px" }} />
+        )}
       />
     </LocalizationProvider>
   );
@@ -43,7 +45,6 @@ Dates.propTypes = {
 };
 
 const DateTimePicker = (props) => {
-  console.log(props);
   const { name, label, ...rest } = props;
   const classes = useStyles();
   return (

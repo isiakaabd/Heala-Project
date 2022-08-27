@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
-import { Loader, /* Search,  */ CustomButton, Modals } from "components/Utilities";
+import {
+  Grid,
+  Button,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Chip,
+} from "@mui/material";
+import {
+  Loader,
+  /* Search,  */ CustomButton,
+  Modals,
+} from "components/Utilities";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -22,6 +33,7 @@ import {
   /* fetchMoreData, */ handlePageChange,
 } from "helpers/filterHelperFunctions";
 import { defaultPageInfo } from "helpers/mockData";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -166,7 +178,8 @@ const Management = () => {
   };
 
   const [rolesManagements, setRolesManagements] = useState([]);
-  const [fetchRoles, { loading, data, error /* refetch */ }] = useLazyQuery(getRoles);
+  const [fetchRoles, { loading, data, error /* refetch */ }] =
+    useLazyQuery(getRoles);
 
   useEffect(() => {
     fetchRoles({
@@ -210,16 +223,8 @@ const Management = () => {
             container
             direction={{ xs: "column", sm: "row" }}
             gap={{ md: 4, sm: 4, xs: 2 }}
+            justifyContent="flex-end"
           >
-            {/* <Grid item flex={1}>
-              <Search
-                value={searchMail}
-                onChange={(e) => onChange(e.target.value)}
-                placeholder="Type to search roles by role..."
-                height="5rem"
-              />
-            </Grid> */}
-
             <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
@@ -229,121 +234,154 @@ const Management = () => {
               />
             </Grid>
           </Grid>
-          {rolesManagements.length > 0 ? (
-            <Grid item container>
-              <EnhancedTable
-                headCells={roleHeader}
-                rows={rolesManagements}
-                paginationLabel="subscription per page"
-                hasCheckbox={true}
-                changeLimit={async (e) => {
-                  await changeTableLimit(fetchRoles, { first: e });
-                }}
-                dataPageInfo={pageInfo}
-                handlePagination={async (page) => {
-                  await handlePageChange(fetchRoles, page, pageInfo, {});
-                }}
-              >
-                {rolesManagements.map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  let newData;
-                  if (row.permissions) {
-                    const data = [...new Set(row.permissions.map((i) => i.split(":")[0]))];
-                    const dataLength = data.length - 5;
-                    newData = [...data.slice(0, 5), dataLength ? `+${dataLength}` : null].filter(
-                      (i) => i !== null,
-                    );
-                  }
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                        style={{
-                          color: theme.palette.common.black,
-                          minWidth: "10rem",
-                        }}
+          <TableLayout>
+            {rolesManagements.length > 0 ? (
+              <Grid item container>
+                <EnhancedTable
+                  headCells={roleHeader}
+                  rows={rolesManagements}
+                  paginationLabel="subscription per page"
+                  hasCheckbox={true}
+                  changeLimit={async (e) => {
+                    await changeTableLimit(fetchRoles, { first: e });
+                  }}
+                  dataPageInfo={pageInfo}
+                  handlePagination={async (page) => {
+                    await handlePageChange(fetchRoles, page, pageInfo, {});
+                  }}
+                >
+                  {rolesManagements.map((row, index) => {
+                    const isItemSelected = isSelected(row._id, selectedRows);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+                    let newData;
+                    if (row.permissions) {
+                      const data = [
+                        ...new Set(row.permissions.map((i) => i.split(":")[0])),
+                      ];
+                      const dataLength = data.length - 5;
+                      newData = [
+                        ...data.slice(0, 5),
+                        dataLength ? `+${dataLength}` : null,
+                      ].filter((i) => i !== null);
+                    }
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row._id}
+                        selected={isItemSelected}
                       >
-                        {row.name}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="center"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        <Grid container justifyContent="flex-start" gap={1} alignItems="center">
-                          {newData &&
-                            newData.map((i) => {
-                              return <Chip label={i} key={i} className={classes.badge} />;
-                            })}
-                        </Grid>
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <div
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onClick={() =>
+                              handleSelectedRows(
+                                row.id,
+                                selectedRows,
+                                setSelectedRows
+                              )
+                            }
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="left"
+                          className={classes.tableCell}
                           style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            minWidth: "25rem",
-                            gap: "1rem",
+                            color: theme.palette.common.black,
+                            minWidth: "10rem",
                           }}
                         >
-                          <Button
-                            variant="contained"
-                            className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            component={Link}
-                            to={`/settings/management/${row._id}`}
-                            endIcon={<EditIcon color="success" />}
+                          {row.name}
+                        </TableCell>
+                        <TableCell
+                          id={labelId}
+                          scope="row"
+                          align="center"
+                          className={classes.tableCell}
+                          style={{ color: theme.palette.common.black }}
+                        >
+                          <Grid
+                            container
+                            justifyContent="flex-start"
+                            gap={1}
+                            alignItems="center"
                           >
-                            Edit role
-                          </Button>
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(row._id)}
-                            endIcon={<DeleteIcon color="error" />}
+                            {newData &&
+                              newData.map((i) => {
+                                return (
+                                  <Chip
+                                    label={i}
+                                    key={i}
+                                    className={classes.badge}
+                                  />
+                                );
+                              })}
+                          </Grid>
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              minWidth: "25rem",
+                              gap: "1rem",
+                            }}
                           >
-                            Delete role
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </EnhancedTable>
-            </Grid>
-          ) : (
-            <EmptyTable headCells={roleHeader} paginationLabel="Admin  per page" />
-          )}
+                            <Button
+                              variant="contained"
+                              className={`${classes.tableBtn} ${classes.greenBtn}`}
+                              component={Link}
+                              to={`/settings/management/${row._id}`}
+                              endIcon={<EditIcon color="success" />}
+                            >
+                              Edit role
+                            </Button>
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              className={`${classes.tableBtn} ${classes.redBtn}`}
+                              onClick={() => handleDeleteOpenDialog(row._id)}
+                              endIcon={<DeleteIcon color="error" />}
+                            >
+                              Delete role
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </EnhancedTable>
+              </Grid>
+            ) : (
+              <EmptyTable
+                headCells={roleHeader}
+                paginationLabel="Admin  per page"
+              />
+            )}
+          </TableLayout>
         </>
       </Grid>
       {/* // modal */}
-      <Modals isOpen={isOpen} title="Add new role" handleClose={handleDialogClose}>
-        <RoleModal handleDialogClose={handleDialogClose} type="add" checkbox={checkbox} />
+      <Modals
+        isOpen={isOpen}
+        title="Add new role"
+        handleClose={handleDialogClose}
+      >
+        <RoleModal
+          handleDialogClose={handleDialogClose}
+          type="add"
+          checkbox={checkbox}
+        />
       </Modals>
 
       {/* Edit */}

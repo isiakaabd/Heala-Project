@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { dateMoment } from "components/Utilities/Time";
 import { Link } from "react-router-dom";
-import { Grid, Typography, TableRow, TableCell, Checkbox, Button, Avatar } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TableRow,
+  TableCell,
+  Checkbox,
+  Button,
+  Avatar,
+} from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
@@ -16,7 +24,11 @@ import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getConsultations } from "components/graphQL/useQuery";
 import { Loader } from "components/Utilities";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
@@ -71,7 +83,8 @@ const Consultations = () => {
   const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
-  const [fetchConsultations, { loading, data, error }] = useLazyQuery(getConsultations);
+  const [fetchConsultations, { loading, data, error }] =
+    useLazyQuery(getConsultations);
 
   useEffect(() => {
     fetchConsultations({
@@ -103,141 +116,156 @@ const Consultations = () => {
         alignItems="center"
         sx={{ margin: "1rem 0rem" }}
       >
-        <Grid item flex={1}>
+        {/* <Grid item flex={1}>
           <Typography variant="h2">Consultations</Typography>
-        </Grid>
+        </Grid> */}
         {/* <Grid item>
           <FilterList options={filterOptions} title="Filter" />
         </Grid> */}
       </Grid>
-      {consultations.length > 0 ? (
-        <Grid item container direction="column" height="100%">
-          <EnhancedTable
-            headCells={consultationsHeadCells4}
-            rows={consultations}
-            paginationLabel="Patients per page"
-            hasCheckbox={true}
-            changeLimit={async (e) => {
-              await changeTableLimit(fetchConsultations, {
-                first: e,
-                id: patientId,
-              });
-            }}
-            dataPageInfo={pageInfo}
-            handlePagination={async (page) => {
-              await handlePageChange(fetchConsultations, page, pageInfo, {
-                id: patientId,
-              });
-            }}
-          >
-            {consultations.map((row, index) => {
-              const { doctorData } = row;
-              const isItemSelected = isSelected(row._id, selectedRows);
-              const labelId = `enhanced-table-checkbox-${index}`;
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row._id}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={() => handleSelectedRows(row._id, selectedRows, setSelectedRows)}
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        "aria-labelledby": labelId,
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    {dateMoment(row.createdAt)}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{ maxWidth: "25rem" }}
+      <TableLayout>
+        {consultations.length > 0 ? (
+          <Grid item container direction="column" height="100%">
+            <EnhancedTable
+              headCells={consultationsHeadCells4}
+              rows={consultations}
+              paginationLabel="Patients per page"
+              hasCheckbox={true}
+              changeLimit={async (e) => {
+                await changeTableLimit(fetchConsultations, {
+                  first: e,
+                  id: patientId,
+                });
+              }}
+              dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                await handlePageChange(fetchConsultations, page, pageInfo, {
+                  id: patientId,
+                });
+              }}
+            >
+              {consultations.map((row, index) => {
+                const { doctorData } = row;
+                const isItemSelected = isSelected(row._id, selectedRows);
+                const labelId = `enhanced-table-checkbox-${index}`;
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row._id}
+                    selected={isItemSelected}
                   >
-                    <div
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={() =>
+                          handleSelectedRows(
+                            row._id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      {dateMoment(row.createdAt)}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ maxWidth: "25rem" }}
+                    >
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span style={{ marginRight: "1rem" }}>
+                          <Avatar
+                            alt={`Display Photo of ${doctorData.firstName}`}
+                            src={
+                              doctorData.picture
+                                ? doctorData.picture
+                                : displayPhoto
+                            }
+                            sx={{ width: 24, height: 24 }}
+                          />
+                        </span>
+                        <span style={{ fontSize: "1.25rem" }}>
+                          {doctorData.firstName
+                            ? `${doctorData.firstName} ${doctorData.lastName}`
+                            : "No Doctor"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Grid container gap={1}>
+                        {row.symptoms
+                          ? row.symptoms.map((i) => {
+                              return <p key={i.name}>{i.name}</p>;
+                            })
+                          : "No Value"}
+                      </Grid>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
                       style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
+                        color: theme.palette.common.grey,
+                        width: "4rem",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${doctorData.firstName}`}
-                          src={doctorData.picture ? doctorData.picture : displayPhoto}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
-                      <span style={{ fontSize: "1.25rem" }}>
-                        {doctorData.firstName
-                          ? `${doctorData.firstName} ${doctorData.lastName}`
-                          : "No Doctor"}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <Grid container gap={1}>
-                      {row.symptoms
-                        ? row.symptoms.map((i) => {
-                            return <p key={i.name}>{i.name}</p>;
-                          })
-                        : "No Value"}
-                    </Grid>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                      width: "4rem",
-                    }}
-                  >
-                    {row.contactMedium ? row.contactMedium : "No Value"}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                    }}
-                  >
-                    {row.type ? row.type : "No Value"}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                    }}
-                  >
-                    {row.status ? row.status : "No Value"}
-                  </TableCell>
-                  <TableCell align="left">
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      component={Link}
-                      to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
-                      endIcon={<ArrowForwardIosIcon />}
+                      {row.contactMedium ? row.contactMedium : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                      }}
                     >
-                      View Details
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </EnhancedTable>
-        </Grid>
-      ) : (
-        <EmptyTable headCells={consultationsHeadCells4} paginationLabel="Patients per page" />
-      )}
+                      {row.type ? row.type : "No Value"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                      }}
+                    >
+                      {row.status ? row.status : "No Value"}
+                    </TableCell>
+                    <TableCell align="left">
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
+                        endIcon={<ArrowForwardIosIcon />}
+                      >
+                        View Details
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </EnhancedTable>
+          </Grid>
+        ) : (
+          <EmptyTable
+            headCells={consultationsHeadCells4}
+            paginationLabel="Patients per page"
+          />
+        )}
+      </TableLayout>
     </Grid>
   );
 };

@@ -23,6 +23,7 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
 import { changeTableLimit } from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 //
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -131,7 +132,8 @@ const Administrator = () => {
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchAdmins, { loading, data, error, refetch }] = useLazyQuery(findAdmin);
+  const [fetchAdmins, { loading, data, error, refetch }] =
+    useLazyQuery(findAdmin);
 
   useEffect(() => {
     fetchAdmins({
@@ -210,7 +212,9 @@ const Administrator = () => {
     password: Yup.string()
       .required("password is required")
       .min(8, "Password is too short - should be 8 chars minimum."),
-    email: Yup.string().email("Enter a valid email").required("Email is required"),
+    email: Yup.string()
+      .email("Enter a valid email")
+      .required("Email is required"),
   });
   const onSubmit1 = async (values, onSubmitProps) => {
     const { email, password } = values;
@@ -243,29 +247,26 @@ const Administrator = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={2} flexWrap="nowrap" height="100%">
+      <Grid
+        container
+        direction="column"
+        gap={2}
+        flexWrap="nowrap"
+        height="100%"
+      >
         <Grid
           item
-          gap={{ md: 4, sm: 3, xs: 2 }}
-          direction={{ md: "row", sm: "row", xs: "column" }}
           container
+          flex={{ md: 1, sm: 1, xs: 1 }}
+          justifyContent="space-between"
         >
-          {/* <Grid item flex={{ md: 1, sm: 2, xs: 1 }}>
-            <Search
-              value={searchMail}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="Type to search referrals by role..."
-              height="5rem"
-            />
-          </Grid> */}
-          <Grid item container flex={{ md: 1, sm: 1, xs: 1 }} justifyContent="space-between">
-            <Grid item>
-              {/* <FilterList
-                onClick={handleDialogOpen}
-                title="Filter"
-                options={optionss}
-              /> */}
-            </Grid>
+          <Grid
+            item
+            container
+            flex={{ md: 1, sm: 1, xs: 1 }}
+            justifyContent="space-between"
+          >
+            <Grid item></Grid>
             <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
@@ -276,21 +277,19 @@ const Administrator = () => {
             </Grid>
           </Grid>
         </Grid>
-        {/* The Search and Filter ends here */}
-        {admins.length > 0 ? (
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
-              headCells={adminHeader}
-              rows={admins}
-              paginationLabel="admin per page"
-              hasCheckbox={true}
-              changeLimit={changeTableLimit}
-              fetchData={fetchAdmins}
-              dataPageInfo={pageInfo}
-            >
-              {admins
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+        <TableLayout>
+          {admins.length > 0 ? (
+            <Grid item container height="100%" direction="column">
+              <EnhancedTable
+                headCells={adminHeader}
+                rows={admins}
+                paginationLabel="admin per page"
+                hasCheckbox={true}
+                changeLimit={changeTableLimit}
+                fetchData={fetchAdmins}
+                dataPageInfo={pageInfo}
+              >
+                {admins.map((row, index) => {
                   const { _id, email, role } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
 
@@ -307,7 +306,13 @@ const Administrator = () => {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -331,13 +336,22 @@ const Administrator = () => {
                     </TableRow>
                   );
                 })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable headCells={adminHeader} paginationLabel="Admin  per page" />
-        )}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={adminHeader}
+              paginationLabel="Admin  per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
-      <Modals isOpen={isOpen} title="Filter" rowSpacing={5} handleClose={handleDialogClose}>
+      <Modals
+        isOpen={isOpen}
+        title="Filter"
+        rowSpacing={5}
+        handleClose={handleDialogClose}
+      >
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}

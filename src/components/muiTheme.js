@@ -2,6 +2,8 @@ import { createTheme } from "@mui/material/styles";
 
 const dark = "#4F4F4F";
 const grey = "#757886";
+const gray300 = "#F8F8F8";
+const gray500 = "#3F3F3F";
 const red = "#3e5ea9";
 const lightRed = "#f7f7f7";
 const lightGrey = "#CCCCCC";
@@ -12,6 +14,8 @@ const gold = "rgb(243, 173, 83)";
 const black = "#2D2F39";
 const disable = "#cccccc";
 const danger = "#f21818";
+const blue = "#3E5EA9";
+const lightBlue = "#F3F5FA";
 
 export const muiTheme = createTheme({
   palette: {
@@ -28,6 +32,10 @@ export const muiTheme = createTheme({
       gold,
       black,
       danger,
+      gray300,
+      gray500,
+      blue,
+      lightBlue,
     },
     primary: {
       main: dark,
@@ -132,19 +140,22 @@ export const muiTheme = createTheme({
       },
     },
     FormLabel: {
-      fontSize: "clamp(1.4rem,2vw,1.6rem)",
-      color: dark,
+      fontSize: "16px" /* "clamp(1.4rem,2vw,1.6rem)" */,
+      fontWeight: 500,
+      lineHeight: "30px",
+      color: grey,
     },
     input: {
       width: "100%",
-      height: "5rem",
+      height: "60px",
       padding: "clamp(0.3rem, 2vw, 1rem)",
       fontSize: "clamp(1.4rem,2vw,1.6rem)",
       color: dark,
       fontWeight: 600,
+      border: "2px solid #E0E0E0 !important",
+      borderRadius: "12px",
       "&::placeholder": {
-        color: lightGrey,
-        // fontSize: "clamp(1.2rem,2vw,1.6rem)",
+        color: black,
         fontWeight: "500 !important",
       },
     },
