@@ -28,10 +28,10 @@ export const useStyles = makeStyles((theme) => ({
   },
   heading: {
     "&.MuiTypography-root": {
-      fontSize: "clamp(1em, 3.4em, 5em)",
+      fontSize: "clamp(1em, 3.2em, 5em)",
       textAlign: "center",
       lineHeight: "28px",
-      fontWeight: "600 !important",
+      fontWeight: "500 !important",
       padding: "23px",
       color: "#333333",
     },

@@ -202,6 +202,10 @@ const Login = () => {
                                   <Checkbox
                                     {...label}
                                     defaultChecked
+                                    style ={{
+                                      paddingLeft: "0",
+                                      paddingRight: "0.5em",
+                                    }}
                                     sx={{
                                       "& .MuiSvgIcon-root": {
                                         fontSize: "min(28, 5vw)",
@@ -216,7 +220,7 @@ const Login = () => {
                                     sx={{
                                       color: "#767676",
                                       fontWeight: 300,
-                                      fontSize: "14px",
+                                      fontSize: "12px",
                                     }}
                                   >
                                     Remember me
@@ -272,7 +276,7 @@ const Login = () => {
           <a
             style={{
               fontSize: "14px",
-              fontWeight: "500",
+              fontWeight: "400",
               color: "#000000",
             }}
             href="https://partners.heala.io"
