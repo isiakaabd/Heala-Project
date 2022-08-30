@@ -10,12 +10,16 @@ import {
   Checkbox,
 } from "@mui/material";
 import { NoData } from "components/layouts";
+import { CustomSelect } from "components/validation/Select";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useSelector } from "react-redux";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { Modals, Loader, FormSelect } from "components/Utilities";
+import { Modals, Loader } from "components/Utilities";
 import { isSelected } from "helpers/isSelected";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
@@ -110,7 +114,8 @@ const AvailabilityTable = () => {
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   //queries
-  const [fetchAvailabilities, { loading: load, data, error }] = useLazyQuery(getAvailabilities);
+  const [fetchAvailabilities, { loading: load, data, error }] =
+    useLazyQuery(getAvailabilities);
   const [fetchAvailabilities1, { loading: load1, data: data1, error: error1 }] =
     useLazyQuery(getAvailabilities1);
 
@@ -132,12 +137,16 @@ const AvailabilityTable = () => {
     }
   }, [da]);
 
-  const [fetchDay, { loading, data: dt }] = useLazyQuery(getDoctorAvailabilityForDate);
+  const [fetchDay, { loading, data: dt }] = useLazyQuery(
+    getDoctorAvailabilityForDate
+  );
 
   const setTableData = async (response, errMsg) => {
     if (response?.data) {
       setPageInfo(response?.data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(response?.data?.getAvailabilities?.availability || defaultPageInfo);
+      setAvailabilities(
+        response?.data?.getAvailabilities?.availability || defaultPageInfo
+      );
     } else {
       console.error(errMsg);
     }
@@ -181,7 +190,9 @@ const AvailabilityTable = () => {
 
     if (data) {
       setPageInfo(data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(data?.getAvailabilities?.availability || defaultPageInfo);
+      setAvailabilities(
+        data?.getAvailabilities?.availability || defaultPageInfo
+      );
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,7 +200,9 @@ const AvailabilityTable = () => {
   useEffect(() => {
     if (data1) {
       setPageInfo(data1?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(data1?.getAvailabilities?.availability || defaultPageInfo);
+      setAvailabilities(
+        data1?.getAvailabilities?.availability || defaultPageInfo
+      );
     }
   }, [select, data1]);
   const [loadings, setLoading] = useState(false);
@@ -228,10 +241,15 @@ const AvailabilityTable = () => {
             <Typography variant="h4">Availability Table</Typography>
           </Grid>
           <Grid item>
-            <FormSelect value={select} onChange={handleSelectChange} options={days} name="select" />
+            <CustomSelect
+              value={select}
+              onChange={handleSelectChange}
+              options={days}
+              name="select"
+            />
           </Grid>
           <Grid item>
-            <FormSelect
+            <CustomSelect
               value={form}
               onChange={onChange}
               options={dropDown}
@@ -262,10 +280,15 @@ const AvailabilityTable = () => {
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchAvailabilities, page, pageInfo, {
-                  providerId: provider,
-                  day: select,
-                });
+                const res = handlePageChange(
+                  fetchAvailabilities,
+                  page,
+                  pageInfo,
+                  {
+                    providerId: provider,
+                    day: select,
+                  }
+                );
                 await setTableData(res, "Failed to change page.");
               }}
             >
@@ -280,7 +303,13 @@ const AvailabilityTable = () => {
                     <TableRow hover tabIndex={-1} key={_id}>
                       <TableCell padding="checkbox">
                         <Checkbox
-                          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -375,7 +404,10 @@ const AvailabilityTable = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={availabilityHeadCells} paginationLabel="Availability  per page" />
+          <EmptyTable
+            headCells={availabilityHeadCells}
+            paginationLabel="Availability  per page"
+          />
         )}
       </Grid>
       <Modals
@@ -390,7 +422,9 @@ const AvailabilityTable = () => {
           <Typography variant="h4">{day}</Typography>
           <div
             style={{
-              background: available ? theme.palette.common.green : theme.palette.common.red,
+              background: available
+                ? theme.palette.common.green
+                : theme.palette.common.red,
               width: "20px",
               height: "20px",
               borderRadius: "50%",
