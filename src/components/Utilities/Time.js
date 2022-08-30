@@ -16,6 +16,7 @@ export const partnersOptions = [
   { key: "Doctors", value: "Doctors" },
   { key: "Consultations", value: "Consultations" },
   { key: "Partners", value: "Partners" },
+  { key: "Finance", value: "Finance" },
 ];
 export const financeOptions = [
   { key: "All Stats", value: "all" },
@@ -118,6 +119,7 @@ export const financialPercent = (a, b) => {
 };
 
 export const selectOptions = [
+  { key: "Months", value: "0" },
   { key: "Jan", value: "1" },
   { key: "Feb", value: "2" },
   { key: "Mar", value: "3" },
