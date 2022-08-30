@@ -98,12 +98,14 @@ export const dashboard = gql`
       patientStats {
         totalActive
         totalInactive
+        chartData
         activeChartData
         inactiveChartData
       }
       doctorStats {
         totalActive
         totalInactive
+        chartData
         activeChartData
         inactiveChartData
       }
@@ -133,6 +135,7 @@ export const dashboard = gql`
         chartData
       }
       consultationStats {
+        chartData
         totalOngoing
         totalAccepted
         totalCompleted
@@ -193,12 +196,14 @@ export const dashboard1 = gql`
       patientStats {
         totalActive
         totalInactive
+        chartData
         activeChartData
         inactiveChartData
       }
       doctorStats {
         totalActive
         totalInactive
+        chartData
         activeChartData
         inactiveChartData
       }
@@ -238,6 +243,7 @@ export const dashboard1 = gql`
         completedChartData
         declinedChartData
         cancelledChartData
+        chartData
       }
       availabilityCalender {
         today

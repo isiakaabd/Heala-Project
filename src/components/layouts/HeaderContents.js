@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import HeaderProfile from "./HeaderProfile";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
+// import { ReactComponent as SearchIcon } from "assets/images/searchIcon.svg";
 import {
   Typography,
   Toolbar,
@@ -11,6 +12,7 @@ import {
   ClickAwayListener,
   Paper,
 } from "@mui/material";
+
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { findAccounts } from "components/graphQL/useQuery";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -23,15 +25,16 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     alignItems: "center",
-    // width: "100%",
     height: "100%",
     flex: 1,
     justifyContent: "space-between",
   },
   text: {
-    color: theme.palette.common.lightGrey,
-    fontSize: "clamp(1rem, 1.2vw, 1.5rem)",
-    fontWeight: 300,
+    fontSize: "clamp(2rem, 1.2vw, 1.6rem)",
+    fontWeight: 500,
+    lineHeight: "2.5rem",
+    color: "#2D2F39",
+    letterSpacing: "-0.01em",
   },
   name: {
     fontSize: "clamp(1.5rem, 1.5vw, 2rem)", //clamp(1.5rem, 1.5vw, 2.25rem)
@@ -301,14 +304,9 @@ const HeaderText = () => {
   switch (pathname) {
     case "/dashboard":
       return (
-        <div>
-          <Typography variant="h5" className={classes.text} gutterBottom>
-            Welcome,
-          </Typography>
-          <Typography variant="h3" color="primary" className={classes.name}>
-            {profileAcc && profileAcc.role}
-          </Typography>
-        </div>
+        <Typography className={classes.text} gutterBottom>
+          Dashboard
+        </Typography>
       );
     default:
       return <Breadcrumb breadcrumbs={breadcrumbs} counts={counts} />;
@@ -324,6 +322,7 @@ const HeaderContent = () => {
   return (
     <Toolbar className={classes.toolbar}>
       <HeaderText />
+
       <HeaderProfile />
     </Toolbar>
   );

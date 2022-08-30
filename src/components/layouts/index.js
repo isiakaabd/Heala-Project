@@ -11,3 +11,4 @@ export { default as SideMenu } from "./SideMenu";
 export { default as WaitingListTable } from "./WaitingListTable";
 export { default as EmptyTable } from "./EmptyTable";
 export { default as DashboardCharts } from "./DashboardChart";
+export { default as CardItem } from "./CardItem";

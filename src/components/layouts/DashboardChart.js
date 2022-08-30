@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Divider } from "@mui/material";
+import { Grid, Card, CardContent, Typography, Divider } from "@mui/material";
 import PropTypes from "prop-types";
 import GroupIcon from "@mui/icons-material/Group";
+import { CustomSelect } from "components/validation/Select";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
 import {
@@ -9,15 +10,20 @@ import {
   returnpercent,
   financeOptions,
   partnerOptions,
+  partnersOptions,
+  roundUp,
   newOptions,
   formatNumber,
 } from "components/Utilities/Time";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-// import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-// import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { LineChart, FormSelect } from "components/Utilities";
+import {
+  LineChart,
+  FormSelect,
+  CircularChart,
+  CircularProgressBar,
+} from "components/Utilities";
+import { CardItem } from "components/layouts";
 import "chartjs-plugin-style";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,16 +63,15 @@ const useStyles = makeStyles((theme) => ({
   },
 
   dottedCircle: {
-    width: 12,
-    height: 12,
-    border: "4px solid",
-    borderRadius: "50%",
+    width: 5,
+    height: 5,
+    borderRadius: "100%",
   },
   red: {
-    borderColor: theme.palette.common.red,
+    background: theme.palette.common.red,
   },
   green: {
-    borderColor: theme.palette.common.green,
+    background: theme.palette.common.green,
   },
   gold: {
     borderColor: theme.palette.common.gold,
@@ -113,6 +118,7 @@ const DashboardCharts = ({ data }) => {
   const [consultationState, setConsultationState] = useState({
     state: "all",
     data: {
+      all: data?.consultationStats.chartData,
       complete: data?.consultationStats.completedChartData,
       ongoing: data?.consultationStats.ongoingChartData,
       accept: data?.consultationStats.acceptedChartData,
@@ -124,6 +130,7 @@ const DashboardCharts = ({ data }) => {
   const [graphState, setGraphState] = useState({
     state: "all",
     data: {
+      all: data?.doctorStats?.chartData,
       active: data?.doctorStats.activeChartData,
       inactive: data?.doctorStats.inactiveChartData,
     },
@@ -131,6 +138,7 @@ const DashboardCharts = ({ data }) => {
   const [subScriptionState, setSubScriptionState] = useState({
     state: "all",
     data: {
+      all: data?.subscriptionStats?.chartData,
       active: data?.subscriptionStats.activeChartData,
       inactive: data?.subscriptionStats.inactiveChartData,
     },
@@ -138,6 +146,7 @@ const DashboardCharts = ({ data }) => {
   const [patientGraphState, setPatientGraphState] = useState({
     state: "all",
     data: {
+      all: data?.patientStats.chartData,
       active: data?.patientStats.activeChartData,
       inactive: data?.patientStats.inactiveChartData,
     },
@@ -152,6 +161,7 @@ const DashboardCharts = ({ data }) => {
   const [partnerGraphState, setPartnerGraphState] = useState({
     state: "all",
     data: {
+      all: data?.partnerStats.chartData,
       hospital: data?.partnerStats.hospitalChartData,
       diagnostic: data?.partnerStats.diagnosticsChartData,
       pharmacy: data?.partnerStats.pharmacyChartData,
@@ -341,906 +351,356 @@ const DashboardCharts = ({ data }) => {
     setPartnersData(partnerStats);
     setTotalEarning(earningStats?.total);
     setTotalPayouts(payoutStats?.total);
-    // setPayoutArray(payoutStats?.chartData);
-    // setEarningArray(earningStats?.chartData);
     setActiveSubsNumber(subscriptionStats?.totalActive);
     setInActiveSubsNumber(subscriptionStats?.totalInactive);
-    setTotalSub(subscriptionStats?.totalActive + subscriptionStats?.totalInactive);
+    setTotalSub(
+      subscriptionStats?.totalActive + subscriptionStats?.totalInactive
+    );
 
     //eslint-disable-next-line
   }, [data]);
 
-  const { totalAccepted, totalCancelled, totalOngoing, totalDeclined, totalCompleted } =
-    totalConsultations;
-  // const financialValue = financialPercent(totalEarning, totalPayouts);
-  const total = totalAccepted + totalCancelled + totalOngoing + totalDeclined + totalCompleted;
-  const { totalActive: activeDoctors, totalInactive: inactiveDoctors } = doctorStats;
-  const { totalActive: activePatients, totalInactive: inactivePatients } = patients;
+  const {
+    totalAccepted,
+    totalCancelled,
+    totalOngoing,
+    totalDeclined,
+    totalCompleted,
+  } = totalConsultations;
+  const total =
+    totalAccepted +
+    totalCancelled +
+    totalOngoing +
+    totalDeclined +
+    totalCompleted;
+  const { totalActive: activeDoctors, totalInactive: inactiveDoctors } =
+    doctorStats;
+  const { totalActive: activePatients, totalInactive: inactivePatients } =
+    patients;
   const totalDoc = activeDoctors + inactiveDoctors;
   const totalPatient = activePatients + inactivePatients;
+  const [partnersState, setPartnersState] = useState("Patients");
   const patientPercentage = returnpercent(activePatients, inactivePatients);
   const doctorPercentage = returnpercent(activeDoctors, inactiveDoctors);
+  const [amount, setAmount] = useState([
+    {
+      name: "Total Earnings",
+      value: 0,
+    },
+    {
+      name: "Total Payouts",
+      value: 0,
+    },
+  ]);
+  const [cardState, setCardState] = useState([
+    {
+      id: 1,
+      name: "Total Doctors",
+      percentageValue: 0,
+      value: 0,
+    },
+    {
+      id: 2,
+      name: "Total Patients",
+      percentageValue: 0,
+      value: 0,
+    },
+    {
+      id: 4,
+      name: "Total Consultations",
+      percentageValue: 0,
+      value: 0,
+    },
+    {
+      id: 3,
+      name: "Total Partners",
+      percentageValue: 0,
+      value: 0,
+    },
+  ]);
+  const [state, setState] = useState(patientGraphState);
+  const [options, setOptions] = useState("all");
+  const handleStateChange = (e) => {
+    const { value } = e.target;
+    console.log(value);
+    switch (value) {
+      case "Patients":
+        setState(patientGraphState);
+        setPartnersState("Patients");
+        break;
+      case "Doctors":
+        setState(graphState);
+        setPartnersState("Doctors");
+        break;
+      case "Consultations":
+        setState(consultationState);
+        setPartnersState("Consultations");
+        break;
+      case "Partners":
+        setState(partnerGraphState);
+        setPartnersState("Partners");
+        break;
+      default:
+        setState(patientGraphState);
+        setPartnersState("Patients");
+    }
+  };
+  useEffect(() => {
+    setCardState([
+      {
+        id: 1,
+        name: "Total Doctors",
+        percentageValue: doctorPercentage,
+        value: totalDoc,
+      },
+      {
+        id: 2,
+        name: "Total Patients",
+        percentageValue: patientPercentage,
+        value: totalPatient,
+      },
+      {
+        id: 4,
+        name: "Total Consultations",
+        percentageValue: 0.5,
+        value: total,
+      },
+      {
+        id: 3,
+        name: "Total Partners",
+        percentageValue: 0.5,
+        value: partnersData?.total,
+      },
+    ]);
 
+    setAmount([
+      {
+        name: "Total Earnings",
+        value: formatNumber(totalEarning),
+        color: "green",
+      },
+      {
+        name: "Total Payouts",
+        value: formatNumber(totalPayouts),
+        color: "red",
+      },
+    ]);
+  }, [
+    totalPatient,
+    total,
+    patientPercentage,
+    doctorPercentage,
+    partnersData?.total,
+    totalDoc,
+    totalEarning,
+    totalPayouts,
+  ]);
+  const handleOptionChange = (e) => {
+    const { value } = e.target;
+    setOptions(value);
+  };
+  const percentageValue = 0.5;
   return (
-    <Grid
-      container
-      justifyContent="space-between"
-      display="grid"
-      padding=".5rem"
-      gridTemplateColumns={{ sm: "repeat(2,1fr)", xs: "1fr" }}
-      gap={2}
-      rowSpacing={3}
-    >
-      {/* doctor */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Doctor Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
-          >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
+    <Grid container gap={2}>
+      {/* Top cards */}
+      <Grid item container gap={2} flexWrap="nowrap">
+        {cardState?.map((item) => {
+          return (
+            <Grid item xs={3}>
+              <CardItem key={item.id} value={item} />
             </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1">{data && totalDoc}</Typography>
-                  <Grid item>
-                    {doctorPercentage < 1 ? (
-                      <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
-                    ) : (
-                      <ArrowUpwardIcon color="success" />
-                    )}
-                  </Grid>
-                  <Typography
-                    style={{
-                      color: doctorPercentage < 1 ? "#f2190a" : theme.palette.success.main,
-                    }}
-                    variant="body2"
-                  >
-                    {doctorPercentage ? `${Math.abs(doctorPercentage.toFixed(0))} %` : 0}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Doctors
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <FormSelect
-              value={graphState?.state}
-              onChange={graphFunc}
-              options={newOptions}
-              name="graph"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={graphState} optionsValue={newOptions} />
-
-          {/* Line */}
-          <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
-            <Grid item>
-              <Grid container direction="column">
-                <Grid item>
-                  <Typography variant="h3" gutterBottom>
-                    {doctorStats?.totalActive}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    <Grid item style={{ marginRight: "1rem" }}>
-                      <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                        Total active Doctors
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container direction="column" justifyContent="center">
-                <Grid item>
-                  <Typography variant="h3" gutterBottom>
-                    {doctorStats?.totalInactive}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    <Grid item style={{ marginRight: "1rem" }}>
-                      <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                        Total inactive Doctors
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/* patients */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Patients Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
-          >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
-            </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1">{data && totalPatient}</Typography>
-                  <Grid item>
-                    {patientPercentage < 1 ? (
-                      <ArrowDownwardOutlined sx={{ color: "#f2190a" }} />
-                    ) : (
-                      <ArrowUpwardIcon color="success" />
-                    )}
-                  </Grid>
-                  <Typography
-                    style={{
-                      color: patientPercentage < 1 ? "#f2190a" : theme.palette.success.main,
-                    }}
-                    variant="body2"
-                  >
-                    {patientPercentage ? `${Math.abs(patientPercentage.toFixed(0))} %` : 0}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Patients
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item display={{ sm: "block", xs: "none" }}>
-            <FormSelect
-              value={patientGraphState?.state}
-              onChange={patientGraphFunc}
-              options={newOptions}
-              name="graph"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={patientGraphState} optionsValue={newOptions} />
-
-          {/* Line */}
-          <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
-            <Grid item>
-              <Grid container direction="column">
-                <Grid item>
-                  <Typography variant="h3" gutterBottom>
-                    {data && patients.totalActive}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    <Grid item style={{ marginRight: "1rem" }}>
-                      <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                        Total active Patients
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container direction="column" justifyContent="center">
-                <Grid item>
-                  <Typography variant="h3" gutterBottom>
-                    {patients?.totalInactive}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    <Grid item style={{ marginRight: "1rem" }}>
-                      <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                        Total inactive Patients
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/* partners */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Partners Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
-          >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
-            </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1">{data && partnersData.total}</Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Partners
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <FormSelect
-              value={partnerGraphState?.state}
-              onChange={partnerFunc}
-              options={partnerOptions}
-              name="partner-select"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={partnerGraphState} optionsValue={partnerOptions} type="partners" />
-        </Grid>
-        <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.partnerStats?.totalHospitals}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Hospitals
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.partnerStats?.totalPharmacies}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Pharmacies
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.partnerStats?.totalDiagnostics}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.gold}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Diagnostics
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+          );
+        })}
       </Grid>
 
-      {/* consultations */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Consultations Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
+      <Grid item container gap={2} flexWrap="nowrap">
+        <Grid item xs={8}>
+          <Card
+            width="100%"
+            variant="outlined"
+            sx={{ p: 2, borderColor: "transparent", borderRadius: "15px" }}
           >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
-            </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1">{data && total}</Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Consultations
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <FormSelect
-              value={consultationState?.state}
-              onChange={consultationFunc}
-              options={consultationsOptions}
-              name="consulation-select"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart
-            graphState={consultationState}
-            optionsValue={consultationsOptions}
-            type="consultation"
-          />
-        </Grid>
-        <Grid item container justifyContent="space-between" paddingTop={{ sm: 3, xs: 2 }}>
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.consultationStats?.totalAccepted}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Accepted
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.consultationStats?.totalCompleted}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Completed
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.consultationStats?.totalCancelled}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.gold}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Cancelled
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.consultationStats?.totalDeclined}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.gold}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Declined
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data?.consultationStats?.totalOngoing}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Ongoing
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/* subscribers */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Subscribers Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
-          >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
-            </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1"> {totalSubs}</Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Subscribers
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <FormSelect
-              value={subScriptionState?.state}
-              onChange={subGraphFunc}
-              options={newOptions}
-              name="partner-select"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={subScriptionState} optionsValue={newOptions} />
-
-          {/* Line */}
-        </Grid>
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          justifyContent="space-between"
-          paddingTop={{ sm: 3, xs: 2 }}
-        >
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data && activeSubsNumber}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Total active Subscribers
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {data && inActiveSubsNumber}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Total inactive Subscribers
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/* finance */}
-      <Grid item container className={classes.chartCard}>
-        <Grid item className={classes.headerGrid}>
-          <Typography variant="h5">Financial Stats</Typography>
-        </Grid>
-        <Divider color={theme.palette.common.lighterGrey} />
-
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          paddingY={{ md: 2, sm: 2, xs: 2 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            gap={{ sm: 3, xs: 2, md: 3 }}
-            alignItems="center"
-            flexWrap={"nowrap"}
-            container
-            flex={3}
-          >
-            <Grid item className={classes.groupIconGrid}>
-              <GroupIcon color="success" className={classes.groupIcon} />
-            </Grid>
-            <Grid item alignItems="center" container flex={1}>
-              <Grid item container direction="column">
-                <Grid item container gap={1}>
-                  <Typography variant="h1"> {formatNumber(totalEarning + totalPayouts)}</Typography>
-                </Grid>
-              </Grid>
-              <Typography
-                variant="body2"
-                style={{ color: theme.palette.common.lightGrey, whiteSpace: "nowrap" }}
-              >
-                Total Finances
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item>
-            <FormSelect
-              value={financialState?.state}
-              onChange={financeFunc}
-              options={financeOptions}
-              name="partner-select"
-            />
-          </Grid>
-        </Grid>
-
-        <Divider color={theme.palette.common.lighterGrey} />
-        <Grid item container marginY={{ sm: 3, md: 3, xs: 2 }} direction="column">
-          <LineChart graphState={financialState} optionsValue={financeOptions} type="finance" />
-
-          {/* Line */}
-        </Grid>
-        <Grid
-          item
-          container
-          flexWrap="nowrap"
-          justifyContent="space-between"
-          paddingTop={{ sm: 3, xs: 2 }}
-        >
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {formatNumber(totalEarning)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.green}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Total Earnings
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="column" justifyContent="center">
-              <Grid item>
-                <Typography variant="h3" gutterBottom>
-                  {formatNumber(totalPayouts)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item style={{ marginRight: "1rem" }}>
-                    <div className={`${classes.dottedCircle} ${classes.red}`}></div>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="body2" style={{ color: theme.palette.common.lightGrey }}>
-                      Total Payouts
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {/* financial */}
-      {/* <Grid item direction="column" className={classes.chartCard}>
-        <Grid
-          item
-          container
-          rowGap={{ sm: 10, xs: 0 }}
-          justifyContent="space-between"
-          flexDirection={{ xs: "column" }}
-        >
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            flex={{ sm: 1 }}
-            flexWrap={"nowrap"}
-          >
-            <Grid item flex={1}>
-              <Typography variant="h5">Financial Stats</Typography>
-            </Grid>
-            <Grid item>
-              <FormSelect
-                placeholder="Select Months"
-                value={forms}
-                onChange={onChange}
-                options={selectOptions}
-                name="finance"
-              />
-            </Grid>
-          </Grid>
-
-          <Grid
-            item
-            container
-            justifySelf={{ xs: "center", sm: "space-between" }}
-            alignSelf="center"
-            sx={{ height: "100%", marginTop: "2rem" }}
-            justifyContent="space-between"
-            flexWrap={{ sm: "nowrap" }}
-            flexDirection={{ xs: "column", sm: "column", md: "column" }}
-            alignItems="center"
-            rowGap={{ xs: "2rem" }}
-            paddingY={{ xs: "1rem" }}
-            className={classes.overviewGrid}
-          >
-            <Grid item marginRight={{ sm: "2rem", md: "2rem" }}>
-              <CircularProgressBar
-                height="20rem"
-                width="20rem"
-                color={theme.palette.common.green}
-                trailColor={theme.palette.common.red}
-                value={finances}
-                strokeWidth={8}
-              />
-            </Grid>
             <Grid
               item
               container
+              justifyContent="space-between"
               flexWrap="nowrap"
-              alignItems="center"
-              flexDirection={{ xs: "row" }}
             >
-              <Grid
-                item
-                container
-                gap={{ sm: 2, xs: 1 }}
-                alignItems="center"
-                justifyContent={{ xs: "center", sm: "center" }}
-              >
-                <Grid item className={`${classes.iconWrapper} ${classes.greenIconBg}`}>
-                  <TrendingDownIcon color="success" />
-                </Grid>
-                <Grid item>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography variat="h3">
-                        <span
-                          style={{
-                            textDecoration: "line-through",
-                            textDecorationStyle: "double",
-                          }}
-                        >
-                          N
-                        </span>
-                        {formatNumber(totalEarning)}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography
-                        variant="body2"
-                        style={{
-                          color: theme.palette.common.lightGrey,
-                        }}
-                      >
-                        Total earnings
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
+              <Grid item xs={1.5}>
+                <CustomSelect
+                  variant="small"
+                  value={partnersState}
+                  onChange={handleStateChange}
+                  options={partnersOptions}
+                  name="partners"
+                />
               </Grid>
-
-              <Grid item container gap={{ sm: 2, xs: 1 }} alignItems="center">
-                <Grid item className={`${classes.iconWrapper} ${classes.redIconBg}`}>
-                  <TrendingUpIcon color="error" />
-                </Grid>
-                <Grid item>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography variat="h3">
-                        <span
-                          style={{
-                            textDecoration: "line-through",
-                            textDecorationStyle: "double",
-                          }}
-                        >
-                          N
-                        </span>
-                        {formatNumber(totalPayouts)}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography
-                        variant="body2"
-                        style={{
-                          color: theme.palette.common.lightGrey,
-                        }}
-                      >
-                        Total payouts
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
+              <Grid item xs={1.5}>
+                <CustomSelect
+                  variant="small"
+                  value={options}
+                  onChange={handleOptionChange}
+                  options={
+                    partnersState === "Partners"
+                      ? partnerOptions
+                      : partnersState === "Consultations"
+                      ? consultationsOptions
+                      : newOptions
+                  }
+                  name="graph"
+                />
               </Grid>
             </Grid>
-          </Grid>
+            <LineChart
+              graphState={state}
+              optionsValue={
+                partnersState === "Partners"
+                  ? partnerOptions
+                  : partnersState === "Consultations"
+                  ? consultationsOptions
+                  : newOptions
+              }
+              type={
+                partnersState === "Partners"
+                  ? "partners"
+                  : partnersState === "Consultations"
+                  ? "consultation"
+                  : ""
+              }
+              opt={options}
+            />
+          </Card>
         </Grid>
-      </Grid> */}
+        <Grid item xs={4} sx={{ height: "100%" }}>
+          <Card
+            variant="outlined"
+            sx={{
+              borderColor: "transparent",
+              height: "100%",
+              borderRadius: "15px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+            }}
+          >
+            {/* <Grid container> */}
+            <Grid item container alignItems="center" sx={{ p: 2.5 }}>
+              <Grid item flex={1}>
+                <Typography
+                  sx={{
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                    lineHeight: "25px",
+                    letterSpacing: "-0.01em",
+                    color: "#010101",
+                  }}
+                >
+                  Financial Stats
+                </Typography>
+              </Grid>
+              <Grid item>
+                <CustomSelect
+                  variant="small"
+                  value={partnersState}
+                  onChange={handleStateChange}
+                  options={partnersOptions}
+                  name="partners"
+                />
+              </Grid>
+            </Grid>
+            <Divider sx={{ paddingBlock: 1 }} />
+            <Grid
+              item
+              alignItems="center"
+              justifyContent="center"
+              container
+              sx={{ p: 3 }}
+            >
+              <CircularProgressBar
+                height="15rem"
+                width="15rem"
+                color={theme.palette.common.green}
+                trailColor={theme.palette.common.red}
+                value={30}
+              />
+            </Grid>
+
+            {amount.map((item) => {
+              const { color, value, name } = item;
+              return (
+                <Grid item container sx={{ p: 2.5 }} flexWrap="nowrap">
+                  <Grid flex={1}>
+                    <Grid container alignItems="center" gap={1}>
+                      <div
+                        className={`${classes.dottedCircle}
+                         ${classes.color}`}
+                      />
+                      <Typography
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: "1.4rem",
+                          lineHeight: "20px",
+                          color: "#606060",
+                        }}
+                      >
+                        {name}
+                      </Typography>
+                      <Grid
+                        item
+                        sx={{
+                          borderRadius: "100px",
+                          color:
+                            percentageValue < 1
+                              ? "#ED3237"
+                              : theme.palette.success.main,
+                          backgroundColor:
+                            percentageValue < 1
+                              ? "rgba(237, 50, 55, 0.1)"
+                              : "rgba(62, 165, 132, 0.1)",
+                          padding: "3px 8px",
+                        }}
+                      >
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Typography
+                            variant="span"
+                            sx={{ fontWeight: 500, fontSize: "1rem" }}
+                          >
+                            {"0.5"}
+                          </Typography>
+                          {percentageValue < 1 ? (
+                            <ArrowDownwardOutlined sx={{ color: "inherit" }} />
+                          ) : (
+                            <ArrowUpwardIcon color="inherit" />
+                          )}
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item justifySelf="center">
+                    <Grid container>
+                      <Typography
+                        sx={{
+                          fontWeight: 500,
+                          fontSize: "1.6rem",
+                          lineHeight: "20px",
+                          color: "#3F3F3F",
+                        }}
+                      >
+                        NGN {value}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              );
+            })}
+            {/* </Grid> */}
+          </Card>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

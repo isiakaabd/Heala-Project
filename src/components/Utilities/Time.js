@@ -11,6 +11,12 @@ export const newOptions = [
   { key: "Active", value: "active" },
   { key: "Inactive", value: "inactive" },
 ];
+export const partnersOptions = [
+  { key: "Patients", value: "Patients" },
+  { key: "Doctors", value: "Doctors" },
+  { key: "Consultations", value: "Consultations" },
+  { key: "Partners", value: "Partners" },
+];
 export const financeOptions = [
   { key: "All Stats", value: "all" },
   { key: "Earnings", value: "Earnings" },
@@ -70,7 +76,15 @@ export const hours = (z) => {
   } else return `${time} Noon`;
 };
 export const today = () => {
-  const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const d = new Date();
   return weekday[d.getDay()];
@@ -78,15 +92,15 @@ export const today = () => {
 
 export const daily = (value) => {
   let result = "";
-  if (value == 1) result = "daily";
+  if (value === 1) result = "daily";
   else result = `${value} days`;
   return result;
 };
 export const duration = (value) => {
   let result = "";
-  if (value == 1) result = "once";
-  if (value == 2) result = "twice";
-  if (value == 3) result = "thrice";
+  if (value === 1) result = "once";
+  if (value === 2) result = "twice";
+  if (value === 3) result = "thrice";
   else if (value > 3) result = `${value} times`;
   return result;
 };
@@ -131,6 +145,9 @@ export const unformat = (amount, locale) => {
   return parseFloat(
     amount
       .replace(new RegExp("\\" + thousandSeparator, "g"), "")
-      .replace(new RegExp("\\" + decimalSeparator), ","),
+      .replace(new RegExp("\\" + decimalSeparator), ",")
   );
+};
+export const roundUp = (num) => {
+  return Math.round(num * 10) / 10;
 };
