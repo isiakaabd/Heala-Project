@@ -459,7 +459,8 @@ export const availabilityHeadCells = [
   { id: 0, label: "Doctor ID" },
   { id: 1, label: "Name" },
   { id: 2, label: "Day" },
-  { id: 3, label: "Available Time" },
+  { id: 3, label: "Start Time" },
+  { id: 300, label: "End Time" },
   { id: 32, label: "" },
 ];
 

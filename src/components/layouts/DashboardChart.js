@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Card, CardContent, Typography, Divider } from "@mui/material";
+import { Grid, Card, Typography, Divider } from "@mui/material";
 import PropTypes from "prop-types";
-import GroupIcon from "@mui/icons-material/Group";
 import { CustomSelect } from "components/validation/Select";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
+import { ReactComponent as ConsultationIcon } from "assets/images/totalC.svg";
+import { ReactComponent as DoctorIcon } from "assets/images/totalD.svg";
+import { ReactComponent as PatientIcon } from "assets/images/totalP.svg";
+import { ReactComponent as PartnerIcon } from "assets/images/totalPartner.svg";
+
 import {
   consultationsOptions,
   returnpercent,
   financeOptions,
   partnerOptions,
   partnersOptions,
-  roundUp,
   newOptions,
   formatNumber,
+  selectOptions,
 } from "components/Utilities/Time";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import {
-  LineChart,
-  FormSelect,
-  CircularChart,
-  CircularProgressBar,
-} from "components/Utilities";
+import { LineChart, CircularProgressBar } from "components/Utilities";
 import { CardItem } from "components/layouts";
 import "chartjs-plugin-style";
 
@@ -108,13 +107,12 @@ const DashboardCharts = ({ data }) => {
   const theme = useTheme();
   const [patients, setPatients] = useState([]);
   const [doctorStats, setDoctorStats] = useState([]);
-  const [totalSubs, setTotalSub] = useState(0);
+
   const [totalConsultations, setTotalConsultations] = useState("");
   const [totalEarning, setTotalEarning] = useState(0);
   const [totalPayouts, setTotalPayouts] = useState(0);
   const [partnersData, setPartnersData] = useState([]);
-  const [activeSubsNumber, setActiveSubsNumber] = useState(0);
-  const [inActiveSubsNumber, setInActiveSubsNumber] = useState(0);
+
   const [consultationState, setConsultationState] = useState({
     state: "all",
     data: {
@@ -143,7 +141,7 @@ const DashboardCharts = ({ data }) => {
       inactive: data?.subscriptionStats.inactiveChartData,
     },
   });
-  const [patientGraphState, setPatientGraphState] = useState({
+  const [patientGraphState] = useState({
     state: "all",
     data: {
       all: data?.patientStats.chartData,
@@ -151,13 +149,18 @@ const DashboardCharts = ({ data }) => {
       inactive: data?.patientStats.inactiveChartData,
     },
   });
-  const [financialState, setFinancialState] = useState({
+  const [financialState] = useState({
     state: "all",
     data: {
       earning: data?.earningStats?.chartData,
       payout: data?.payoutStats?.chartData,
     },
   });
+
+  const [earningArray] = useState(data?.earningStats?.chartData);
+  const [totalPayoutValue, setPayoutValue] = useState(totalPayouts);
+  const [totalEarningsValue, setEarningsValue] = useState(totalEarning);
+  const [payoutArray] = useState(data?.payoutStats?.chartData);
   const [partnerGraphState, setPartnerGraphState] = useState({
     state: "all",
     data: {
@@ -168,173 +171,6 @@ const DashboardCharts = ({ data }) => {
     },
   });
 
-  const consultationFunc = (e) => {
-    const { value } = e.target;
-    switch (value) {
-      case "Cancelled":
-        return setConsultationState({
-          ...consultationState,
-          state: "Cancelled",
-        });
-
-      case "Accepted":
-        return setConsultationState({
-          ...consultationState,
-          state: "Accepted",
-        });
-
-      case "Ongoing":
-        return setConsultationState({
-          ...consultationState,
-          state: "Ongoing",
-        });
-
-      case "Completed":
-        return setConsultationState({
-          ...consultationState,
-          state: "Completed",
-        });
-
-      case "Declined":
-        return setConsultationState({
-          ...consultationState,
-          state: "Declined",
-        });
-      case "all":
-        return setConsultationState({
-          ...consultationState,
-          state: "all",
-        });
-      default:
-        setConsultationState({
-          ...consultationState,
-          state: "all",
-        });
-    }
-  };
-  const graphFunc = (e) => {
-    const { value } = e.target;
-    switch (value) {
-      case "active":
-        return setGraphState({
-          ...graphState,
-          state: "active",
-        });
-
-      case "inactive":
-        return setGraphState({
-          ...graphState,
-          state: "inactive",
-        });
-
-      case "all":
-        return setGraphState({
-          ...graphState,
-          state: "all",
-        });
-    }
-  };
-  const patientGraphFunc = (e) => {
-    const { value } = e.target;
-
-    switch (value) {
-      case "active":
-        return setPatientGraphState({
-          ...patientGraphState,
-          state: "active",
-        });
-      case "inactive":
-        return setPatientGraphState({
-          ...patientGraphState,
-          state: "inactive",
-        });
-      case "all":
-        return setPatientGraphState({
-          ...patientGraphState,
-          state: "all",
-        });
-    }
-  };
-  const subGraphFunc = (e) => {
-    const { value } = e.target;
-    switch (value) {
-      case "active":
-        return setSubScriptionState({
-          ...subScriptionState,
-          state: "active",
-        });
-      case "inactive":
-        return setSubScriptionState({
-          ...subScriptionState,
-          state: "inactive",
-        });
-      case "all":
-        return setSubScriptionState({
-          ...subScriptionState,
-          state: "all",
-        });
-      default:
-        setSubScriptionState({
-          ...subScriptionState,
-          state: "all",
-        });
-    }
-  };
-
-  const financeFunc = async (e) => {
-    const { value } = e.target;
-    switch (value) {
-      case "Earnings":
-        return setFinancialState({
-          ...financialState,
-          state: "Earnings",
-        });
-      case "Payouts":
-        return setFinancialState({
-          ...financialState,
-          state: "Payouts",
-        });
-      case "all":
-        return setFinancialState({
-          ...financialState,
-          state: "all",
-        });
-    }
-  };
-
-  const partnerFunc = (e) => {
-    const { value } = e.target;
-
-    switch (value) {
-      case "hospital":
-        return setPartnerGraphState({
-          ...partnerGraphState,
-          state: "hospital",
-        });
-      case "diagnostic":
-        return setPartnerGraphState({
-          ...partnerGraphState,
-          state: "diagnostic",
-        });
-      case "pharmacy":
-        return setPartnerGraphState({
-          ...partnerGraphState,
-          state: "pharmacy",
-        });
-
-      case "all":
-        return setPartnerGraphState({
-          ...partnerGraphState,
-          state: "all",
-        });
-      default:
-        setPartnerGraphState({
-          ...partnerGraphState,
-          state: "all",
-        });
-    }
-  };
-
   useEffect(() => {
     const {
       patientStats,
@@ -342,7 +178,6 @@ const DashboardCharts = ({ data }) => {
       consultationStats,
       partnerStats,
       earningStats,
-      subscriptionStats,
       payoutStats,
     } = data;
     setPatients(patientStats);
@@ -350,12 +185,8 @@ const DashboardCharts = ({ data }) => {
     setTotalConsultations(consultationStats);
     setPartnersData(partnerStats);
     setTotalEarning(earningStats?.total);
+    setEarningsValue(earningStats?.total);
     setTotalPayouts(payoutStats?.total);
-    setActiveSubsNumber(subscriptionStats?.totalActive);
-    setInActiveSubsNumber(subscriptionStats?.totalInactive);
-    setTotalSub(
-      subscriptionStats?.totalActive + subscriptionStats?.totalInactive
-    );
 
     //eslint-disable-next-line
   }, [data]);
@@ -420,9 +251,10 @@ const DashboardCharts = ({ data }) => {
   ]);
   const [state, setState] = useState(patientGraphState);
   const [options, setOptions] = useState("all");
+
   const handleStateChange = (e) => {
     const { value } = e.target;
-    console.log(value);
+
     switch (value) {
       case "Patients":
         setState(patientGraphState);
@@ -440,6 +272,10 @@ const DashboardCharts = ({ data }) => {
         setState(partnerGraphState);
         setPartnersState("Partners");
         break;
+      case "Finance":
+        setState(financialState);
+        setPartnersState("Finance");
+        break;
       default:
         setState(patientGraphState);
         setPartnersState("Patients");
@@ -452,41 +288,46 @@ const DashboardCharts = ({ data }) => {
         name: "Total Doctors",
         percentageValue: doctorPercentage,
         value: totalDoc,
+        icon: <DoctorIcon />,
       },
       {
         id: 2,
         name: "Total Patients",
         percentageValue: patientPercentage,
         value: totalPatient,
+        icon: <PatientIcon />,
       },
       {
         id: 4,
         name: "Total Consultations",
-        percentageValue: 0.5,
+
         value: total,
+        icon: <ConsultationIcon />,
       },
       {
         id: 3,
         name: "Total Partners",
-        percentageValue: 0.5,
         value: partnersData?.total,
+        icon: <PartnerIcon />,
       },
     ]);
 
     setAmount([
       {
         name: "Total Earnings",
-        value: formatNumber(totalEarning),
+        value: formatNumber(totalEarningsValue),
         color: "green",
       },
       {
         name: "Total Payouts",
-        value: formatNumber(totalPayouts),
+        value: formatNumber(totalPayoutValue),
         color: "red",
       },
     ]);
   }, [
     totalPatient,
+    totalPayoutValue,
+    totalEarningsValue,
     total,
     patientPercentage,
     doctorPercentage,
@@ -500,6 +341,31 @@ const DashboardCharts = ({ data }) => {
     setOptions(value);
   };
   const percentageValue = 0.5;
+  const [financeState, setFinancialStates] = useState(0);
+  const handleFinanceStateChange = (e) => {
+    const { value } = e.target;
+    // eslint-disable-next-line
+    payoutArray?.map((item) => {
+      // eslint-disable-next-line
+      if (value == 0) {
+        setFinancialStates(0);
+        setPayoutValue(totalPayouts);
+        setEarningsValue(totalEarning);
+      }
+      //eslint-disable-next-line
+      if (item.month == value && value > 0) {
+        setFinancialStates(value);
+        setPayoutValue(item.sum);
+      }
+    });
+    earningArray?.map((item) => {
+      // eslint-disable-next-line
+      if (item.month == value) {
+        setEarningsValue(item.sum);
+      }
+    });
+  };
+
   return (
     <Grid container gap={2}>
       {/* Top cards */}
@@ -546,6 +412,8 @@ const DashboardCharts = ({ data }) => {
                       ? partnerOptions
                       : partnersState === "Consultations"
                       ? consultationsOptions
+                      : partnersState === "Finance"
+                      ? financeOptions
                       : newOptions
                   }
                   name="graph"
@@ -559,6 +427,8 @@ const DashboardCharts = ({ data }) => {
                   ? partnerOptions
                   : partnersState === "Consultations"
                   ? consultationsOptions
+                  : partnersState === "Finance"
+                  ? financeOptions
                   : newOptions
               }
               type={
@@ -566,6 +436,8 @@ const DashboardCharts = ({ data }) => {
                   ? "partners"
                   : partnersState === "Consultations"
                   ? "consultation"
+                  : partnersState === "Finance"
+                  ? "finance"
                   : ""
               }
               opt={options}
@@ -602,9 +474,9 @@ const DashboardCharts = ({ data }) => {
               <Grid item>
                 <CustomSelect
                   variant="small"
-                  value={partnersState}
-                  onChange={handleStateChange}
-                  options={partnersOptions}
+                  value={financeState}
+                  onChange={handleFinanceStateChange}
+                  options={selectOptions}
                   name="partners"
                 />
               </Grid>
@@ -629,7 +501,7 @@ const DashboardCharts = ({ data }) => {
             {amount.map((item) => {
               const { color, value, name } = item;
               return (
-                <Grid item container sx={{ p: 2.5 }} flexWrap="nowrap">
+                <Grid item container sx={{ p: 2 }} flexWrap="nowrap">
                   <Grid flex={1}>
                     <Grid container alignItems="center" gap={1}>
                       <div
