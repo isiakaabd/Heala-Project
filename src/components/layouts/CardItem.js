@@ -4,6 +4,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import PropTypes from "prop-types";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
+import { ReactComponent as DoctorIcon } from "assets/images/totalC.svg";
 // import { ReactComponent as Hug } from "assets/images/hug.svg";
 import { useTheme } from "@mui/material/styles";
 import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
@@ -17,9 +18,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 const CardItem = ({ value }) => {
   const theme = useTheme();
-  const { name, value: val, id, percentageValue } = value;
+  const { name, value: val, id, percentageValue, icon } = value;
   const percent = roundUp(percentageValue);
   const classes = useStyles();
+
   return (
     <Card
       variant="outlined"
@@ -48,7 +50,7 @@ const CardItem = ({ value }) => {
             justifyContent: "center",
           }}
         >
-          <ConsulationIcon fill={theme.palette.common.green} />
+          {icon}
         </Grid>
         <Grid item>
           <Grid container flexDirection="column" spacing={1}>

@@ -4,6 +4,7 @@ import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";
 import { monthNames } from "components/Utilities/Time";
+
 const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
@@ -65,7 +66,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
     () => graphState?.data?.ongoing?.map((i) => i?.sum),
     [graphState?.data?.ongoing]
   );
-  console.log(arr);
+
   useEffect(() => {
     if (type === "consultation") {
       setArr([accept, complete, decline, ongoing, cancel]);
@@ -104,13 +105,13 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
       setArr([earning, payout]);
       switch (state) {
         case "all":
-          return setArr(all);
+          return setArr(earning);
         case "Earnings":
           return setArr(earning);
         case "Payouts":
           return setArr(payout);
         default:
-          return setArr(all);
+          return setArr(earning);
       }
     } else {
       switch (state) {
@@ -143,51 +144,57 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
     inactive,
   ]);
 
-  const lx = optionsValue.map((i, index) => {
+  const lx = optionsValue.map((i) => {
+    let x;
     const { value } = i;
-    console.log(value[index]);
-    return {
-      label: value,
-      data: arr,
-      fill: false,
-      borderColor:
-        value === "active" ||
-        value === "Completed" ||
-        value === "hospital" ||
-        value === "Accepted" ||
-        value === "Earnings"
-          ? theme.palette.common.green
-          : value === "inactive" ||
-            value === "pharmacy" ||
-            value === "Ongoing" ||
-            value === "Payouts"
-          ? theme.palette.common.red
-          : gold,
-      pointBackgroundColor:
-        value === "active" ||
-        value === "Completed" ||
-        value === "hospital" ||
-        value === "Accepted" ||
-        value === "Earnings"
-          ? theme.palette.common.green
-          : value === "inactive" ||
-            value === "pharmacy" ||
-            value === "Ongoing" ||
-            value === "Payouts"
-          ? theme.palette.common.red
-          : gold,
-      pointBorderColor: "#fff",
-      pointRadius: 5,
-      pointHoverRadius: 7,
-      pointBorderWidth: 2,
-      tension: 0.5,
-    };
+
+    if (value === opt) {
+      x = {
+        label: value,
+        data: arr,
+        fill: true,
+        color: "#f00",
+        borderColor:
+          value === "active" ||
+          value === "Completed" ||
+          value === "hospital" ||
+          value === "Accepted" ||
+          value === "Earnings"
+            ? theme.palette.common.green
+            : value === "inactive" ||
+              value === "pharmacy" ||
+              value === "Ongoing" ||
+              value === "Payouts"
+            ? theme.palette.common.red
+            : gold,
+        pointBackgroundColor:
+          value === "active" ||
+          value === "Completed" ||
+          value === "hospital" ||
+          value === "Accepted" ||
+          value === "Earnings"
+            ? theme.palette.common.green
+            : value === "inactive" ||
+              value === "pharmacy" ||
+              value === "Ongoing" ||
+              value === "Payouts"
+            ? theme.palette.common.red
+            : gold,
+        pointBorderColor: "#fff",
+        pointRadius: 2,
+        pointHoverRadius: 2,
+        pointBorderWidth: 2,
+        tension: 0.5,
+      };
+    } else return null;
+    return x;
   });
+  const j = lx.filter((n) => n);
 
   const data = {
     labels: monthNames,
     backgroundColor: "#fff",
-    datasets: [...lx],
+    datasets: [...j],
   };
 
   const options = {

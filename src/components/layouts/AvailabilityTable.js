@@ -294,6 +294,8 @@ const AvailabilityTable = () => {
             >
               {availabilities?.map((row, index) => {
                 const { _id, picture, doctorData, day, times, doctor } = row;
+                const startTime = hours(times[0].start);
+                const endTime = hours(times[times.length - 1].stop);
 
                 if (doctorData?.firstName && doctorData?.lastName) {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -324,11 +326,7 @@ const AvailabilityTable = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.grey }}
                       >
-                        {
-                          // doctorData?.dociId ?
-                          doctorData?.dociId?.split("-")[1]
-                          // : "No Value"
-                        }
+                        {doctorData?.dociId?.split("-")[1]}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <div
@@ -341,7 +339,7 @@ const AvailabilityTable = () => {
                         >
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
-                              alt="Remy Sharp"
+                              alt={`${doctorData?.firstName} ${doctorData?.lastName}`}
                               src={picture ? picture : displayPhoto}
                               sx={{ width: 24, height: 24 }}
                             />
@@ -356,41 +354,42 @@ const AvailabilityTable = () => {
                       <TableCell align="left" className={classes.tableCell}>
                         {day}
                       </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
-                        <Grid container gap={1}>
-                          {times
-                            ? times?.map((time, ind) => {
-                                const { start, stop } = time;
-                                return (
-                                  <Chip
-                                    key={ind}
-                                    label={`${hours(start)} - ${hours(stop)} `}
-                                    className={classes.badge}
-                                    style={{
-                                      // background: !!available
-                                      //   ? theme.palette.common.lightGreen
-                                      //   :
-                                      background: theme.palette.common.lightRed,
-                                      color:
-                                        // !!available
-                                        //   ? theme.palette.common.green
-                                        //   :
-                                        theme.palette.common.red,
-                                      // textDecoration: !!available
-                                      //   ? ""
-                                      //   : "line-through",
-                                    }}
-                                  />
-                                );
-                              })
-                            : "No Time"}
-                        </Grid>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{
+                          color: theme.palette.common.red,
+                        }}
+                      >
+                        <Chip
+                          label={startTime}
+                          className={classes.badge}
+                          style={{
+                            background: theme.palette.common.lightRed,
+                            color: theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{
+                          color: theme.palette.common.red,
+                        }}
+                      >
+                        <Chip
+                          label={endTime}
+                          className={classes.badge}
+                          style={{
+                            background: theme.palette.common.lightRed,
+                            color: theme.palette.common.red,
+                          }}
+                        />
                       </TableCell>
                       <TableCell>
                         <Button
                           variant="contained"
                           className={classes.button}
-                          // component={Link}
                           onClick={() => handleCheckDay(day, doctor)}
                           endIcon={<ArrowForwardIosIcon />}
                         >

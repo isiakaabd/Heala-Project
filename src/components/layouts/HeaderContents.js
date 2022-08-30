@@ -308,6 +308,12 @@ const HeaderText = () => {
           Dashboard
         </Typography>
       );
+    case "/":
+      return (
+        <Typography className={classes.text} gutterBottom>
+          Dashboard
+        </Typography>
+      );
     default:
       return <Breadcrumb breadcrumbs={breadcrumbs} counts={counts} />;
   }
