@@ -2,7 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Grid, Box } from "@mui/material";
 import { ReactComponent as Circular } from "assets/images/circular.svg";
-import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const CircularProgressBar = ({
@@ -15,7 +18,13 @@ const CircularProgressBar = ({
   strokeWidth,
 }) => {
   return (
-    <Box sx={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+    <Box
+      sx={{
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+      }}
+    >
       <Grid sx={{ height, width }}>
         <CircularProgressbarWithChildren
           value={value}

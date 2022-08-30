@@ -69,9 +69,7 @@ const SingleHMOFilters = ({ setHmoEnrollees, setPageInfo, queryParams }) => {
   const refresh = async (setFilterValue, defaultVal) => {
     displayAlert("error", `Something went wrong while filtering. Try again.`);
     setFilterValue(defaultVal);
-
     deleteVar(variables);
-
     refetch({ variables: { providerId: hmoId } })
       .then(({ data }) => {
         setHmoEnrollees(data?.getEnrollees?.data || []);

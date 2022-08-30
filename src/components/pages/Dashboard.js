@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { getProviders } from "components/graphQL/useQuery";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { dashboard, dashboard1 } from "components/graphQL/useQuery";
 import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
-import { Loader, FormSelect } from "components/Utilities";
+import { Loader } from "components/Utilities";
 
 const Dashboard = () => {
   const [form, setForm] = useState("");
@@ -13,8 +13,10 @@ const Dashboard = () => {
   const { data: da } = useQuery(getProviders);
 
   const [provider, setProvider] = useState("");
-  const [fetchData, { data: newData, error: err, loading: load }] = useLazyQuery(dashboard);
-  const [fetchData2, { data: newData2, error, loading }] = useLazyQuery(dashboard1);
+  const [fetchData, { data: newData, error: err, loading: load }] =
+    useLazyQuery(dashboard);
+  const [fetchData2, { data: newData2, error, loading }] =
+    useLazyQuery(dashboard1);
 
   useEffect(() => {
     const all = {
@@ -75,7 +77,7 @@ const Dashboard = () => {
 
   return (
     <Grid container direction="column" gap={3}>
-      <Grid item container alignItems="center" flexWrap={"nowrap"}>
+      {/* <Grid item container alignItems="center" flexWrap={"nowrap"}>
         <Grid item sx={{ flexGrow: 1 }}>
           <Typography variant="h1">Dashboard</Typography>
         </Grid>
@@ -83,7 +85,7 @@ const Dashboard = () => {
         <Grid item>
           <FormSelect value={form} onChange={onChange} options={dropDown} name="finance" />
         </Grid>
-      </Grid>
+      </Grid> */}
       {state ? (
         <>
           <DashboardCharts data={state?.getStats} />

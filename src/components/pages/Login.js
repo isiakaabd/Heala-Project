@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
@@ -23,7 +23,7 @@ import { useStyles } from "styles/loginPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { Login_USER } from "components/graphQL/Mutation";
 import LoginInput from "components/validation/LoginInput";
-import { showErrorMsg } from "../../helpers/filterHelperFunctions";
+import { showErrorMsg } from "helpers/filterHelperFunctions";
 
 const Login = () => {
   const classes = useStyles();
@@ -90,7 +90,7 @@ const Login = () => {
     return () => (isMounted = false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     Object.keys(authError).length > 0 &&
       showErrorMsg(enqueueSnackbar, authError?.message);
   }, [authError, enqueueSnackbar]);
@@ -202,7 +202,7 @@ const Login = () => {
                                   <Checkbox
                                     {...label}
                                     defaultChecked
-                                    style ={{
+                                    style={{
                                       paddingLeft: "0",
                                       paddingRight: "0.5em",
                                     }}

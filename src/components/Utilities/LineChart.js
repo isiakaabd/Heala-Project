@@ -4,120 +4,130 @@ import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Line } from "react-chartjs-2";
 import { monthNames } from "components/Utilities/Time";
-const LineChart2 = ({ graphState, optionsValue, type }) => {
+const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
   const gold = theme.palette.common.gold;
   const [arr, setArr] = useState([]);
   useEffect(() => {
-    setState(graphState?.state);
-  }, [graphState?.state]);
+    setState(opt);
+  }, [opt]);
+
   const active = useMemo(
     () => graphState?.data?.active?.map((i) => i?.sum),
-    [graphState?.data?.active],
+    [graphState?.data?.active]
+  );
+  const all = useMemo(
+    () => graphState?.data?.all?.map((i) => i?.sum),
+    [graphState?.data?.all]
   );
   const inactive = useMemo(
     () => graphState?.data?.inactive?.map((i) => i?.sum),
-    [graphState?.data?.inactive],
+    [graphState?.data?.inactive]
   );
   const complete = useMemo(
     () => graphState?.data?.complete?.map((i) => i?.sum),
-    [graphState?.data?.complete],
+    [graphState?.data?.complete]
   );
   const accept = useMemo(
     () => graphState?.data?.accept?.map((i) => i?.sum),
-    [graphState?.data?.accept],
+    [graphState?.data?.accept]
   );
   const cancel = useMemo(
     () => graphState?.data?.cancel?.map((i) => i?.sum),
-    [graphState?.data?.cancel],
+    [graphState?.data?.cancel]
   );
   const decline = useMemo(
     () => graphState?.data?.decline?.map((i) => i?.sum),
-    [graphState?.data?.decline],
+    [graphState?.data?.decline]
   );
   const pharmacy = useMemo(
     () => graphState?.data?.pharmacy?.map((i) => i?.sum),
-    [graphState?.data?.pharmacy],
+    [graphState?.data?.pharmacy]
   );
   const hospital = useMemo(
     () => graphState?.data?.hospital?.map((i) => i?.sum),
-    [graphState?.data?.hospital],
+    [graphState?.data?.hospital]
   );
   const diagnostic = useMemo(
     () => graphState?.data?.diagnostic?.map((i) => i?.sum),
-    [graphState?.data?.diagnostic],
+    [graphState?.data?.diagnostic]
   );
   const earning = useMemo(
     () => graphState?.data?.earning?.map((i) => i?.sum),
-    [graphState?.data?.earning],
+    [graphState?.data?.earning]
   );
   const payout = useMemo(
     () => graphState?.data?.payout?.map((i) => i?.sum),
-    [graphState?.data?.payout],
+    [graphState?.data?.payout]
   );
   const ongoing = useMemo(
     () => graphState?.data?.ongoing?.map((i) => i?.sum),
-    [graphState?.data?.ongoing],
+    [graphState?.data?.ongoing]
   );
-
+  console.log(arr);
   useEffect(() => {
     if (type === "consultation") {
       setArr([accept, complete, decline, ongoing, cancel]);
       switch (state) {
         case "all":
-          return setArr([accept, complete, decline, ongoing, cancel]);
+          return setArr(all);
         case "Accepted":
-          return setArr([accept, [], [], [], []]);
+          return setArr(accept);
         case "Completed":
-          return setArr([[], complete, [], [], []]);
+          return setArr(complete);
         case "Declined":
-          return setArr([[], [], decline, [], []]);
+          return setArr(decline);
         case "Ongoing":
-          return setArr([[], [], [], ongoing, []]);
+          return setArr(ongoing);
         case "Cancelled":
-          return setArr([[], [], [], [], cancel]);
+          return setArr(cancel);
+        default:
+          return setArr(all);
         // setArr([active, inactive]);
       }
     } else if (type === "partners") {
       setArr([hospital, pharmacy, diagnostic]);
       switch (state) {
+        case "all":
+          return setArr(all);
         case "hospital":
-          return setArr([hospital, [], []]);
+          return setArr(hospital);
         case "pharmacy":
-          return setArr([[], pharmacy, []]);
+          return setArr(pharmacy);
         case "diagnostic":
-          return setArr([[], [], diagnostic]);
+          return setArr(diagnostic);
         default:
-          return setArr([hospital, pharmacy, diagnostic]);
+          return setArr(all);
       }
     } else if (type === "finance") {
       setArr([earning, payout]);
       switch (state) {
         case "all":
-          return setArr([earning, payout]);
+          return setArr(all);
         case "Earnings":
-          return setArr([earning, []]);
+          return setArr(earning);
         case "Payouts":
-          return setArr([[], payout]);
+          return setArr(payout);
         default:
-          return setArr([earning, payout]);
+          return setArr(all);
       }
     } else {
       switch (state) {
         case "all":
-          return setArr([active, inactive]);
+          return setArr(all);
         case "active":
-          return setArr([active, []]);
+          return setArr(active);
         case "inactive":
-          return setArr([[], inactive]);
+          return setArr(inactive);
         default:
-          return setArr([active, inactive]);
+          return setArr(all);
       }
     }
   }, [
     graphState,
     state,
+    all,
     diagnostic,
     pharmacy,
     hospital,
@@ -133,11 +143,12 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
     inactive,
   ]);
 
-  const lx = optionsValue.slice(1).map((i, index) => {
+  const lx = optionsValue.map((i, index) => {
     const { value } = i;
+    console.log(value[index]);
     return {
       label: value,
-      data: arr[index],
+      data: arr,
       fill: false,
       borderColor:
         value === "active" ||
@@ -248,7 +259,8 @@ const LineChart2 = ({ graphState, optionsValue, type }) => {
     return x;
   }
   function colorItem(tooltipItem) {
-    const tooltipTitleColor = tooltipItem.tooltip.labelColors[0].backgroundColor;
+    const tooltipTitleColor =
+      tooltipItem.tooltip.labelColors[0].backgroundColor;
 
     return tooltipTitleColor;
   }

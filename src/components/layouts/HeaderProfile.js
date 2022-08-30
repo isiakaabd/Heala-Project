@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Avatar, IconButton, Badge } from "@mui/material";
+import { Grid, Avatar, IconButton, Badge, InputBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import SearchIcon from "@mui/icons-material/Search";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import { Notifications } from "components/layouts";
@@ -13,7 +14,21 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "clamp(1rem, 1vw, 1.5rem)",
     color: theme.palette.common.lightGrey,
   },
-
+  grid: {
+    "&.MuiGrid-item": {
+      padding: "0 4px",
+    },
+  },
+  iconContainer: {
+    height: "inherit",
+    backgroundColor: "#F8F8F8",
+    borderRadius: "100%",
+    display: "flex",
+    width: "4.8rem",
+    padding: "0 !important",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   name: {
     fontWeight: "normal",
     fontSize: "clamp(1.6rem, 2vw, 1.2rem)",
@@ -90,24 +105,43 @@ const HeaderProfile = () => {
       <Grid
         container
         alignItems="center"
-        gap="3px"
+        gap="1rem"
         justifyContent="space-between"
         flexWrap="nowrap"
         className={classes.head}
         spacing={1}
+        sx={{ height: "4.8rem" }}
       >
-        <Grid item>
+        <Grid
+          item
+          className={classes.grid}
+          sx={{
+            height: "inherit",
+            width: "40rem",
+            background: "#F8F8F8",
+            borderRadius: "4rem",
+            display: "flex",
+            alignItems: "center",
+            padding: "1.4rem 1.6rem",
+            paddingTop: 0,
+          }}
+        >
+          <IconButton type="button" aria-label="search">
+            <SearchIcon fontSize="large" />
+          </IconButton>
+          <InputBase
+            sx={{ flex: 1, p: 0 }}
+            size="large"
+            placeholder="Search enrollee,companies.. "
+          />
+        </Grid>
+        <Grid className={classes.iconContainer} item>
           <IconButton
             aria-label={notificationsLabel(num)}
             onClick={(event) => handleNotification(event)}
-            sx={{
-              borderRadius: "100%",
-              backgroundColor: "#F8F8F8",
-              padding: "1rem",
-            }}
           >
             <Badge>
-              <BellIcon sx={{ color: "transparent", fontSize: "20px" }} />
+              <BellIcon sx={{ color: "transparent" }} />
             </Badge>
           </IconButton>
           <Notifications
@@ -117,8 +151,12 @@ const HeaderProfile = () => {
             setAnchorEl={setAnchorEl}
           />
         </Grid>
-        <Grid item>
-          <Avatar alt="Display avatar" src={displayPhoto} />
+        <Grid item className={classes.iconContainer}>
+          <Avatar
+            alt="Display avatar"
+            src={displayPhoto}
+            sx={{ height: "100%", width: "100%" }}
+          />
         </Grid>
       </Grid>
     </header>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
-
 import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
@@ -35,7 +34,7 @@ import {
 import {
   changeTableLimit,
   handlePageChange,
-} from "../../helpers/filterHelperFunctions";
+} from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
 import { getSearchPlaceholder } from "helpers/func";
 
