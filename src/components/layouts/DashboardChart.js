@@ -298,17 +298,17 @@ const DashboardCharts = ({ data }) => {
         icon: <PatientIcon />,
       },
       {
+        id: 3,
+        name: "Total Partners",
+        value: partnersData?.total,
+        icon: <PartnerIcon />,
+      },
+      {
         id: 4,
         name: "Total Consultations",
 
         value: total,
         icon: <ConsultationIcon />,
-      },
-      {
-        id: 3,
-        name: "Total Partners",
-        value: partnersData?.total,
-        icon: <PartnerIcon />,
       },
     ]);
 
