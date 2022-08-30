@@ -526,7 +526,7 @@ const DashboardCharts = ({ data }) => {
               justifyContent="space-between"
               flexWrap="nowrap"
             >
-              <Grid item xs={1.5}>
+              <Grid item xs={2}>
                 <CustomSelect
                   variant="small"
                   value={partnersState}
@@ -535,7 +535,7 @@ const DashboardCharts = ({ data }) => {
                   name="partners"
                 />
               </Grid>
-              <Grid item xs={1.5}>
+              <Grid item xs={2}>
                 <CustomSelect
                   variant="small"
                   value={options}
