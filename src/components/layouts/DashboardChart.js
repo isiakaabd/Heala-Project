@@ -525,8 +525,9 @@ const DashboardCharts = ({ data }) => {
               container
               justifyContent="space-between"
               flexWrap="nowrap"
+              sx={{ mb: 2 }}
             >
-              <Grid item xs={1.5}>
+              <Grid item xs={2}>
                 <CustomSelect
                   variant="small"
                   value={partnersState}
@@ -535,7 +536,7 @@ const DashboardCharts = ({ data }) => {
                   name="partners"
                 />
               </Grid>
-              <Grid item xs={1.5}>
+              <Grid item xs={2}>
                 <CustomSelect
                   variant="small"
                   value={options}
@@ -633,7 +634,7 @@ const DashboardCharts = ({ data }) => {
                     <Grid container alignItems="center" gap={1}>
                       <div
                         className={`${classes.dottedCircle}
-                         ${classes.color}`}
+                         ${classes.red}`}
                       />
                       <Typography
                         sx={{
