@@ -339,13 +339,7 @@ const AvailabilityTable = () => {
                             textAlign: "left",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src={picture ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
+
                           <span style={{ fontSize: "1.25rem" }}>
                             {doctorData?.firstName
                               ? `${doctorData?.firstName} ${doctorData?.lastName}`
@@ -360,29 +354,29 @@ const AvailabilityTable = () => {
                         <Grid container gap={1}>
                           {times
                             ? times?.map((time, ind) => {
-                                const { start, stop } = time;
-                                return (
-                                  <Chip
-                                    key={ind}
-                                    label={`${hours(start)} - ${hours(stop)} `}
-                                    className={classes.badge}
-                                    style={{
-                                      // background: !!available
-                                      //   ? theme.palette.common.lightGreen
+                              const { start, stop } = time;
+                              return (
+                                <Chip
+                                  key={ind}
+                                  label={`${hours(start)} - ${hours(stop)} `}
+                                  className={classes.badge}
+                                  style={{
+                                    // background: !!available
+                                    //   ? theme.palette.common.lightGreen
+                                    //   :
+                                    background: theme.palette.common.lightRed,
+                                    color:
+                                      // !!available
+                                      //   ? theme.palette.common.green
                                       //   :
-                                      background: theme.palette.common.lightRed,
-                                      color:
-                                        // !!available
-                                        //   ? theme.palette.common.green
-                                        //   :
-                                        theme.palette.common.red,
-                                      // textDecoration: !!available
-                                      //   ? ""
-                                      //   : "line-through",
-                                    }}
-                                  />
-                                );
-                              })
+                                      theme.palette.common.red,
+                                    // textDecoration: !!available
+                                    //   ? ""
+                                    //   : "line-through",
+                                  }}
+                                />
+                              );
+                            })
                             : "No Time"}
                         </Grid>
                       </TableCell>
@@ -434,19 +428,19 @@ const AvailabilityTable = () => {
         <Grid item container gap={1}>
           {times
             ? times?.map((time, ind) => {
-                const { start, stop } = time;
-                return (
-                  <Chip
-                    key={ind}
-                    label={`${hours(start)} - ${hours(stop)} `}
-                    className={classes.badge}
-                    style={{
-                      background: theme.palette.common.lightRed,
-                      color: theme.palette.common.red,
-                    }}
-                  />
-                );
-              })
+              const { start, stop } = time;
+              return (
+                <Chip
+                  key={ind}
+                  label={`${hours(start)} - ${hours(stop)} `}
+                  className={classes.badge}
+                  style={{
+                    background: theme.palette.common.lightRed,
+                    color: theme.palette.common.red,
+                  }}
+                />
+              );
+            })
             : "No Time"}
         </Grid>
       </Modals>
