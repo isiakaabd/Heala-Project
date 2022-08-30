@@ -76,7 +76,7 @@ const Dashboard = () => {
   if (error || err) return <NoData error={error} />;
 
   return (
-    <Grid container direction="column" gap={3}>
+    <Grid container direction="column" gap={2}>
       {/* <Grid item container alignItems="center" flexWrap={"nowrap"}>
         <Grid item sx={{ flexGrow: 1 }}>
           <Typography variant="h1">Dashboard</Typography>

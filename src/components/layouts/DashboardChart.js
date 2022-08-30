@@ -367,7 +367,7 @@ const DashboardCharts = ({ data }) => {
   };
 
   return (
-    <Grid container gap={2}>
+    <Grid container gap={2} justifyContent="center">
       {/* Top cards */}
       <Grid item container gap={2} flexWrap="nowrap">
         {cardState?.map((item) => {
@@ -453,11 +453,11 @@ const DashboardCharts = ({ data }) => {
               borderRadius: "15px",
               display: "flex",
               flexDirection: "column",
-              gap: "1rem",
+              gap: "4rem",
             }}
           >
             {/* <Grid container> */}
-            <Grid item container alignItems="center" sx={{ p: 2.5 }}>
+            <Grid item container alignItems="center" sx={{ p: 2.5, pb: 1 }}>
               <Grid item flex={1}>
                 <Typography
                   sx={{
@@ -501,7 +501,12 @@ const DashboardCharts = ({ data }) => {
             {amount.map((item) => {
               const { color, value, name } = item;
               return (
-                <Grid item container sx={{ p: 2 }} flexWrap="nowrap">
+                <Grid
+                  item
+                  container
+                  sx={{ paddingX: 2, paddingY: 0 }}
+                  flexWrap="nowrap"
+                >
                   <Grid flex={1}>
                     <Grid container alignItems="center" gap={1}>
                       <div
@@ -545,9 +550,13 @@ const DashboardCharts = ({ data }) => {
                             {"0.5"}
                           </Typography>
                           {percentageValue < 1 ? (
-                            <ArrowDownwardOutlined sx={{ color: "inherit" }} />
+                            <ArrowDownwardOutlined
+                              sx={{ color: "inherit", fontSize: "1rem" }}
+                            />
                           ) : (
-                            <ArrowUpwardIcon color="inherit" />
+                            <ArrowUpwardIcon
+                              sx={{ color: "inherit", fontSize: "1rem" }}
+                            />
                           )}
                         </Grid>
                       </Grid>
