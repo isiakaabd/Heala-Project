@@ -622,7 +622,7 @@ const DashboardCharts = ({ data }) => {
                 width="15rem"
                 color={theme.palette.common.green}
                 trailColor={theme.palette.common.red}
-                value={30}
+                value={totalEarning}
               />
             </Grid>
 
