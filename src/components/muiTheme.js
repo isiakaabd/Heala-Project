@@ -66,7 +66,7 @@ export const muiTheme = createTheme({
     h1: {
       fontSize: "clamp(2.3rem,3vw,3rem)",
       color: dark,
-      fontWeight: 700,
+      fontWeight: 600,
     },
     h2: {
       fontSize: "clamp(1.5rem, 3vw,2.5rem)",

@@ -32,7 +32,7 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
       "& .MuiDataGrid-root .MuiDataGrid-columnHeaderTitle": {
         fontSize: "1.6rem",
         lineHeight: 1.5,
-        fontWeight: "700 !important",
+        fontWeight: "600 !important",
       },
       "& .MuiTypography-body2": {
         fontSize: "1.6rem",
@@ -88,14 +88,14 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
       },
 
       "& .MuiDataGrid-cell.email.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft,.MuiDataGrid-cell.cellStatus.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft":
-        {
-          justifyContent: "center !important",
-        },
+      {
+        justifyContent: "center !important",
+      },
 
       "& .MuiDataGrid-root.MuiDataGrid-columnHeader--alignCenter.MuiDataGrid-menuIcon, .MuiDataGrid-iconButtonContainer,.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall":
-        {
-          display: "none",
-        },
+      {
+        display: "none",
+      },
 
       "& .MuiDataGrid-cell.CellSpecialization.MuiDataGrid-cell--textRight": {
         textAlign: "center !important",
