@@ -112,9 +112,13 @@ const CardItem = ({ value }) => {
                         {percent}
                       </Typography>
                       {percentageValue < 1 ? (
-                        <ArrowDownwardOutlined sx={{ color: "inherit" }} />
+                        <ArrowDownwardOutlined
+                          sx={{ color: "inherit", fontSize: "1rem" }}
+                        />
                       ) : (
-                        <ArrowUpwardIcon color="inherit" />
+                        <ArrowUpwardIcon
+                          sx={{ color: "inherit", fontSize: "1rem" }}
+                        />
                       )}
                     </Grid>
                   </Grid>

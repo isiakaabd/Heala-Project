@@ -76,16 +76,7 @@ const Dashboard = () => {
   if (error || err) return <NoData error={error} />;
 
   return (
-    <Grid container direction="column" gap={3}>
-      {/* <Grid item container alignItems="center" flexWrap={"nowrap"}>
-        <Grid item sx={{ flexGrow: 1 }}>
-          <Typography variant="h1">Dashboard</Typography>
-        </Grid>
-
-        <Grid item>
-          <FormSelect value={form} onChange={onChange} options={dropDown} name="finance" />
-        </Grid>
-      </Grid> */}
+    <Grid container direction="column" gap={2}>
       {state ? (
         <>
           <DashboardCharts data={state?.getStats} />

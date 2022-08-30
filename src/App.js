@@ -77,7 +77,7 @@ const App = ({ window }) => {
 
                 <Box
                   component="nav"
-                  sx={{ width: { md: "300px" }, flexShrink: { md: 0 } }}
+                  sx={{ width: { md: "280px" }, flexShrink: { md: 0 } }}
                   aria-label="sidebar_menu"
                 >
                   <Drawer
