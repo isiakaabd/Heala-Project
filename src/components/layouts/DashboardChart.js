@@ -525,6 +525,7 @@ const DashboardCharts = ({ data }) => {
               container
               justifyContent="space-between"
               flexWrap="nowrap"
+              sx={{ mb: 2 }}
             >
               <Grid item xs={2}>
                 <CustomSelect
@@ -633,7 +634,7 @@ const DashboardCharts = ({ data }) => {
                     <Grid container alignItems="center" gap={1}>
                       <div
                         className={`${classes.dottedCircle}
-                         ${classes.color}`}
+                         ${classes.red}`}
                       />
                       <Typography
                         sx={{
