@@ -316,12 +316,10 @@ const DashboardCharts = ({ data }) => {
       {
         name: "Total Earnings",
         value: formatNumber(totalEarningsValue),
-        color: "green",
       },
       {
         name: "Total Payouts",
         value: formatNumber(totalPayoutValue),
-        color: "red",
       },
     ]);
   }, [
