@@ -68,14 +68,20 @@ export const timeConverter = (str) => {
 };
 
 export const hours = (z) => {
-  let time = z.split(":")[0];
-  if (time < 1 && time > -1) return "12 AM";
-  if (time < 12) return `${z} AM`;
-  if (time > 12) {
-    let newTime = +time - 12;
-    return `${newTime} PM`;
-  } else return `${time} Noon`;
+  //https://stackoverflow.com/questions/13898423/javascript-convert-24-hour-time-of-day-string-to-12-hour-time-with-am-pm-and-no/54142884#54142884
+
+  const timeString12hr = new Date("1970-01-01T" + z + "Z").toLocaleTimeString(
+    "en-US",
+    {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    }
+  );
+  return timeString12hr;
 };
+
 export const today = () => {
   const weekday = [
     "Sunday",

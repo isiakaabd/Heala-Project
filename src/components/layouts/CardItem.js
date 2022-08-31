@@ -37,13 +37,15 @@ const CardItem = ({ value }) => {
         item
         container
         gap="1rem"
+        flexWrap="nowrap"
         flexDirection={{ xs: "row", sm: "row", md: "row" }}
       >
         <Grid
           item
           sx={{
-            height: "5.4rem",
-            width: "5.4rem",
+            minHeight: "5.4rem",
+            // maxWidth: "5.4rem",
+            maxWidth: "100%",
             borderRadius: "100%",
             display: "flex",
             alignItems: "center",

@@ -8,6 +8,9 @@ import { monthNames } from "components/Utilities/Time";
 const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
+  const lightGold = "rgba(243, 173, 83,.2)";
+  const lightRed = "rgba(62, 94, 169, .2)";
+  const lightGreen = "rgba(45, 211, 158, .2)";
   const gold = theme.palette.common.gold;
   const [arr, setArr] = useState([]);
   useEffect(() => {
@@ -182,6 +185,19 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
             : gold,
         pointBorderColor: "#fff",
         pointRadius: 2,
+        backgroundColor:
+          value === "active" ||
+          value === "Completed" ||
+          value === "hospital" ||
+          value === "Accepted" ||
+          value === "Earnings"
+            ? lightGreen
+            : value === "inactive" ||
+              value === "pharmacy" ||
+              value === "Ongoing" ||
+              value === "Payouts"
+            ? lightRed
+            : lightGold,
         pointHoverRadius: 2,
         pointBorderWidth: 2,
         tension: 0.5,
@@ -200,6 +216,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
+    backgroundColor: "#f3f3f3",
     locale: "fr",
     scales: {
       y: {
@@ -234,6 +251,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
       legend: {
         display: false,
       },
+
       tooltip: {
         backgroundColor: "#fff",
         cursor: "pointer",
@@ -261,7 +279,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
       },
     },
   };
-  function hover(event, chartElement) {
+  function hover(event) {
     const x = (event.target.style.cursor = "pointer");
     return x;
   }
@@ -287,6 +305,7 @@ LineChart2.propTypes = {
   setSelectedTimeframe: PropTypes.func,
   doctorStats: PropTypes.array,
   graphState: PropTypes.object,
+  opt: PropTypes.object,
 };
 
 export default LineChart2;
