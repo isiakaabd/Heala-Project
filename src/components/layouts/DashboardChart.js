@@ -316,12 +316,10 @@ const DashboardCharts = ({ data }) => {
       {
         name: "Total Earnings",
         value: formatNumber(totalEarningsValue),
-        color: "green",
       },
       {
         name: "Total Payouts",
         value: formatNumber(totalPayoutValue),
-        color: "red",
       },
     ]);
   }, [
@@ -369,7 +367,7 @@ const DashboardCharts = ({ data }) => {
   return (
     <Grid container gap={2} justifyContent="center">
       {/* Top cards */}
-      <Grid item container gap={2} flexWrap="nowrap">
+      <Grid item container gap={1.5} flexWrap="nowrap">
         {cardState?.map((item, index) => {
           return (
             <Grid key={`${item.id}-${index}`} item xs={3}>
@@ -380,11 +378,16 @@ const DashboardCharts = ({ data }) => {
       </Grid>
 
       <Grid item container gap={2} flexWrap="nowrap">
-        <Grid item xs={8}>
+        <Grid item xs={8.5} sx={{ height: "100%" }}>
           <Card
             width="100%"
             variant="outlined"
-            sx={{ p: 2, borderColor: "transparent", borderRadius: "15px" }}
+            sx={{
+              p: 2,
+              height: "100%",
+              borderColor: "transparent",
+              borderRadius: "15px",
+            }}
           >
             <Grid
               item
@@ -393,7 +396,7 @@ const DashboardCharts = ({ data }) => {
               flexWrap="nowrap"
               sx={{ mb: 2 }}
             >
-              <Grid item xs={2}>
+              <Grid item>
                 <CustomSelect
                   variant="small"
                   value={partnersState}
@@ -402,7 +405,7 @@ const DashboardCharts = ({ data }) => {
                   name="partners"
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item>
                 <CustomSelect
                   variant="small"
                   value={options}
@@ -444,7 +447,7 @@ const DashboardCharts = ({ data }) => {
             />
           </Card>
         </Grid>
-        <Grid item xs={4} sx={{ height: "100%" }}>
+        <Grid item xs={3.5} sx={{ height: "100%" }}>
           <Card
             variant="outlined"
             sx={{
@@ -453,7 +456,8 @@ const DashboardCharts = ({ data }) => {
               borderRadius: "15px",
               display: "flex",
               flexDirection: "column",
-              gap: "4rem",
+              pb: 2,
+              // gap: "4rem",
             }}
           >
             {/* <Grid container> */}
@@ -461,7 +465,7 @@ const DashboardCharts = ({ data }) => {
               <Grid item flex={1}>
                 <Typography
                   sx={{
-                    fontSize: "2rem",
+                    fontSize: "1.8rem",
                     fontWeight: "500",
                     lineHeight: "25px",
                     letterSpacing: "-0.01em",
@@ -481,13 +485,13 @@ const DashboardCharts = ({ data }) => {
                 />
               </Grid>
             </Grid>
-            <Divider sx={{ paddingBlock: 1 }} />
+            <Divider sx={{ pt: 1 }} />
             <Grid
               item
               alignItems="center"
               justifyContent="center"
               container
-              sx={{ p: 3 }}
+              sx={{ m: "auto" }}
             >
               <CircularProgressBar
                 height="15rem"
@@ -502,12 +506,11 @@ const DashboardCharts = ({ data }) => {
               const { color, value, name } = item;
               return (
                 <Grid
-                  key={`${index}`}
+                  key={index}
                   item
                   container
-                  sx={{ paddingX: 2, paddingY: 0 }}
+                  sx={{ p: 2 }}
                   flexWrap="nowrap"
-                  style={{ marginTop: " -3%" }}
                 >
                   <Grid flex={1}>
                     <Grid container alignItems="center" gap={1}>
@@ -581,7 +584,6 @@ const DashboardCharts = ({ data }) => {
                 </Grid>
               );
             })}
-            {/* </Grid> */}
           </Card>
         </Grid>
       </Grid>

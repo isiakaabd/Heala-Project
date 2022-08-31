@@ -256,7 +256,7 @@ const AvailabilityTable = () => {
                   color: "#010101",
                 }}
               >
-                Availability Table
+                Doctor Availability
               </Typography>
             </Grid>
             <Grid item>
@@ -313,7 +313,7 @@ const AvailabilityTable = () => {
                 }}
               >
                 {availabilities?.map((row, index) => {
-                  const { _id, picture, doctorData, day, times, doctor } = row;
+                  const { _id, doctorData, day, times, doctor } = row;
                   const startTime = hours(times[0].start);
                   const endTime = hours(times[times.length - 1].stop);
 
