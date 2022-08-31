@@ -370,9 +370,9 @@ const DashboardCharts = ({ data }) => {
     <Grid container gap={2} justifyContent="center">
       {/* Top cards */}
       <Grid item container gap={2} flexWrap="nowrap">
-        {cardState?.map((item) => {
+        {cardState?.map((item, index) => {
           return (
-            <Grid item xs={3} >
+            <Grid key={`${item.id}-${index}`} item xs={3}>
               <CardItem key={item.id} value={item} />
             </Grid>
           );
@@ -411,10 +411,10 @@ const DashboardCharts = ({ data }) => {
                     partnersState === "Partners"
                       ? partnerOptions
                       : partnersState === "Consultations"
-                        ? consultationsOptions
-                        : partnersState === "Finance"
-                          ? financeOptions
-                          : newOptions
+                      ? consultationsOptions
+                      : partnersState === "Finance"
+                      ? financeOptions
+                      : newOptions
                   }
                   name="graph"
                 />
@@ -426,19 +426,19 @@ const DashboardCharts = ({ data }) => {
                 partnersState === "Partners"
                   ? partnerOptions
                   : partnersState === "Consultations"
-                    ? consultationsOptions
-                    : partnersState === "Finance"
-                      ? financeOptions
-                      : newOptions
+                  ? consultationsOptions
+                  : partnersState === "Finance"
+                  ? financeOptions
+                  : newOptions
               }
               type={
                 partnersState === "Partners"
                   ? "partners"
                   : partnersState === "Consultations"
-                    ? "consultation"
-                    : partnersState === "Finance"
-                      ? "finance"
-                      : ""
+                  ? "consultation"
+                  : partnersState === "Finance"
+                  ? "finance"
+                  : ""
               }
               opt={options}
             />
@@ -498,15 +498,16 @@ const DashboardCharts = ({ data }) => {
               />
             </Grid>
 
-            {amount.map((item) => {
+            {amount.map((item, index) => {
               const { color, value, name } = item;
               return (
                 <Grid
+                  key={`${index}`}
                   item
                   container
                   sx={{ paddingX: 2, paddingY: 0 }}
                   flexWrap="nowrap"
-                  style={{ marginTop: ' -3%' }}
+                  style={{ marginTop: " -3%" }}
                 >
                   <Grid flex={1}>
                     <Grid container alignItems="center" gap={1}>

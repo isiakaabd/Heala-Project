@@ -29,7 +29,10 @@ export const UploadTestForm = ({ onSuccess }) => {
 
   const onSubmit = async (values) => {
     const throwError = () =>
-      showErrorMsg(enqueueSnackbar, "Something went wrong while uploading file.");
+      showErrorMsg(
+        enqueueSnackbar,
+        "Something went wrong while uploading file."
+      );
     try {
       const { testFile: file } = values;
       const fileUrl = await uploadImage(file, setProgress);
@@ -51,7 +54,11 @@ export const UploadTestForm = ({ onSuccess }) => {
       }
 
       const testAdded = data?.uploadDiagnosticLabTests?.result?.totalInserted;
-      showSuccessMsg(enqueueSnackbar, Typography, `${testAdded && testAdded} Tests Added.`);
+      showSuccessMsg(
+        enqueueSnackbar,
+        Typography,
+        `${testAdded && testAdded} Tests Added.`
+      );
       onSuccess();
     } catch (error) {
       console.log("Error from onSubmit Test JSON file", error);
@@ -78,8 +85,8 @@ export const UploadTestForm = ({ onSuccess }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Alert severity="warning" sx={{ margin: "1rem 0rem" }}>
-              <strong>CAUTION - </strong> Uploading a new test JSON file will overwrite the current
-              file.
+              <strong>CAUTION - </strong> Uploading a new test JSON file will
+              overwrite the current file.
             </Alert>
             <Grid container direction="column" space={2}>
               <Grid item>

@@ -11,7 +11,7 @@ export const handleSelectedRows = (id, selectedRows, setSelectedRows) => {
   } else if (selectedIndex > 0) {
     newSelected = newSelected.concat(
       selectedRows.slice(0, selectedIndex),
-      selectedRows.slice(selectedIndex + 1),
+      selectedRows.slice(selectedIndex + 1)
     );
   }
 

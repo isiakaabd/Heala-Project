@@ -69,14 +69,14 @@ body {
   font-size: 62.5%;
   font-family: "Euclid Circular", sans-serif;
   scroll-behavior: smooth;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 .container {
   width: 100%;
   min-height: 100vh;
   height: 100%;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 }
 
 /* Table pagination menu items */

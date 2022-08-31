@@ -3,7 +3,14 @@ import PropTypes from "prop-types";
 import { MenuItem, Select, Typography, FormControl } from "@mui/material/";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const FormSelect = ({ startAdornment, value, onChange, placeholder, options, ...rest }) => {
+const FormSelect = ({
+  startAdornment,
+  value,
+  onChange,
+  placeholder,
+  options,
+  ...rest
+}) => {
   return (
     <FormControl sx={{ width: "100%" }}>
       <Select
@@ -20,7 +27,11 @@ const FormSelect = ({ startAdornment, value, onChange, placeholder, options, ...
           <Typography>{placeholder}</Typography>
         </MenuItem>
         {options.map((option, index) => (
-          <MenuItem key={option.value} value={option.value} style={{ fontSize: "1.25rem" }}>
+          <MenuItem
+            key={option.value}
+            value={option.value}
+            style={{ fontSize: "1.25rem" }}
+          >
             {option.key}
           </MenuItem>
         ))}

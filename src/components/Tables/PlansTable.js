@@ -172,6 +172,7 @@ const PlansTable = ({ PlansQuery }) => {
                   };
                   return (
                     <PlanListRow
+                      key={`${row?._id}-${index}`}
                       plan={row}
                       isItemSelected={isItemSelected}
                       handleSelectedRows={handleSelectedRows}

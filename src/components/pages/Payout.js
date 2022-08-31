@@ -141,7 +141,7 @@ const Payout = () => {
   };
 
   const refresh = async (setFilterValue, defaultVal) => {
-    displayAlert("error", `Something went wrong while filtering. Try again.`);
+    displayAlert("error", "Something went wrong while filtering. Try again.");
     setFilterValue(defaultVal);
 
     deleteVar(variables);
@@ -153,7 +153,7 @@ const Payout = () => {
       })
       .catch((error) => {
         console.error(error);
-        displayAlert("error", `Failed to get patients data, Try again`);
+        displayAlert("error", "Failed to get patients data, Try again");
       });
   };
 

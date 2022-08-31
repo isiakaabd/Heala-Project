@@ -12,14 +12,18 @@ const NoData = ({ error }) => {
       justifyContent="center"
     >
       <Grid item>
-        {error ? <Typography variant="h1">Something went Wrong...</Typography> : null}
+        {error ? (
+          <Typography variant="h1">Something went Wrong...</Typography>
+        ) : null}
       </Grid>
       <Grid item>
         <Typography variant="h1">No Data Yet</Typography>
       </Grid>
       <Grid item>
         <Typography variant="body2">
-          {!error ? "we have not computed data for this table yet" : "pls refresh page"}
+          {!error
+            ? "we have not computed data for this table yet"
+            : "pls refresh page"}
         </Typography>
       </Grid>
     </Grid>

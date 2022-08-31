@@ -1,6 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Grid, Typography, IconButton, Divider, InputAdornment, Chip } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  IconButton,
+  Divider,
+  InputAdornment,
+  Chip,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import MicIcon from "@mui/icons-material/Mic";
@@ -99,46 +106,75 @@ const ChatMessagesInterface = ({ setChatMediaActive }) => {
                 <Divider />
               </Grid>
               <Grid item>
-                <Chip variant="contained" label="Sunday, April 25 2021" className={classes.badge} />
+                <Chip
+                  variant="contained"
+                  label="Sunday, April 25 2021"
+                  className={classes.badge}
+                />
               </Grid>
               <Grid item flex={1}>
                 <Divider />
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container justifyContent="flex-end" style={{ padding: "0 5rem 3rem" }}>
+          <Grid
+            item
+            container
+            justifyContent="flex-end"
+            style={{ padding: "0 5rem 3rem" }}
+          >
             <Grid item className={classes.chatMessage}>
               <Typography variant="body1">
-                Social money transfers for millenial. Send and receive money with your abeg tag.
-                Social money transfers for millenial. Send and receive money with your abeg tag
+                Social money transfers for millenial. Send and receive money
+                with your abeg tag. Social money transfers for millenial. Send
+                and receive money with your abeg tag
               </Typography>
             </Grid>
           </Grid>
           <Grid item container style={{ padding: "0 5rem 3rem" }}>
-            <Grid item className={`${classes.chatMessage} ${classes.purpleChatBox}`}>
+            <Grid
+              item
+              className={`${classes.chatMessage} ${classes.purpleChatBox}`}
+            >
               <Typography variant="body1">
-                Social money transfers for millenial. Send and receive money with your abeg tag.
-                Social money transfers for millenial. Send and receive money with your abeg tag
+                Social money transfers for millenial. Send and receive money
+                with your abeg tag. Social money transfers for millenial. Send
+                and receive money with your abeg tag
               </Typography>
             </Grid>
           </Grid>
-          <Grid item container justifyContent="flex-end" style={{ padding: "0 5rem 3rem" }}>
+          <Grid
+            item
+            container
+            justifyContent="flex-end"
+            style={{ padding: "0 5rem 3rem" }}
+          >
             <Grid item className={classes.chatMessage}>
               <Typography variant="body1">
-                Social money transfers for millenial. Send and receive money with your abeg tag.
-                Social money transfers for millenial. Send and receive money with your abeg tag
+                Social money transfers for millenial. Send and receive money
+                with your abeg tag. Social money transfers for millenial. Send
+                and receive money with your abeg tag
               </Typography>
             </Grid>
           </Grid>
           <Grid item container style={{ padding: "0 5rem 3rem" }}>
-            <Grid item className={`${classes.chatMessage} ${classes.purpleChatBox}`}>
+            <Grid
+              item
+              className={`${classes.chatMessage} ${classes.purpleChatBox}`}
+            >
               <Typography variant="body1">Thank you. Goodnight...</Typography>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
 
-      <Grid item container alignItems="center" spacing={2} className={classes.chatFieldParent}>
+      <Grid
+        item
+        container
+        alignItems="center"
+        spacing={2}
+        className={classes.chatFieldParent}
+      >
         <Grid item>
           <IconButton className={classes.iconButton}>
             <AddIcon className={classes.chatIcon} />

@@ -1,6 +1,11 @@
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { tablesActions, authActions, hcpConsultation, patientActions } from "store/action-creators";
+import {
+  tablesActions,
+  authActions,
+  hcpConsultation,
+  patientActions,
+} from "store/action-creators";
 
 export const useActions = () => {
   const dispatch = useDispatch();
@@ -9,6 +14,6 @@ export const useActions = () => {
   // It helps prevent the calling of dispatch every time an action is to be invoked.
   return bindActionCreators(
     { ...tablesActions, ...hcpConsultation, ...authActions, ...patientActions },
-    dispatch,
+    dispatch
   );
 };

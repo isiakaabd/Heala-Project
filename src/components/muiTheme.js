@@ -60,7 +60,12 @@ export const muiTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Euclid Circular"', '"Circular Std Medium"', "Roboto", "sans-serif"].join(", "),
+    fontFamily: [
+      "\"Euclid Circular\"",
+      "\"Circular Std Medium\"",
+      "Roboto",
+      "sans-serif",
+    ].join(", "),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {

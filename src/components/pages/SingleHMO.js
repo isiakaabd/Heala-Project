@@ -75,6 +75,7 @@ const SingleHMO = () => {
 
   const lightButton = {
     background: "#fff",
+
     hover: theme.palette.primary.light,
     active: theme.palette.primary.dark,
   };

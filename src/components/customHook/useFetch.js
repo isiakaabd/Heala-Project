@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-const [action, { loading, error }] = useMutation(mutation);
+
 export const useFetch = async (mutation, ...rest) => {
+  const [action, { loading, error }] = useMutation(mutation);
   const [errors, setErrors] = useState(error);
   const [Loading, setLoading] = useState(loading);
   const [Data, setData] = useState(null);

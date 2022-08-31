@@ -6,11 +6,20 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { CircularProgressBar, Card, Loader, FormSelect } from "components/Utilities";
+import {
+  CircularProgressBar,
+  Card,
+  Loader,
+  FormSelect,
+} from "components/Utilities";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { getMyEarnings } from "components/graphQL/useQuery";
-import { financialPercent, selectOptions, formatNumber } from "components/Utilities/Time";
+import {
+  financialPercent,
+  selectOptions,
+  formatNumber,
+} from "components/Utilities/Time";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -191,14 +200,25 @@ const HcpEarnings = () => {
                 sm: "space-around",
               }}
             >
-              <Grid item spacing={2} sx={{ justifyContent: "center", alignItems: "center" }}>
-                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+              <Grid
+                item
+                spacing={2}
+                sx={{ justifyContent: "center", alignItems: "center" }}
+              >
+                <Grid
+                  container
+                  alignItems="center"
+                  gap={{ md: 2, sm: 2, xs: 4 }}
+                >
                   <Grid
                     className={classes.iconWrapper}
                     sx={{ background: theme.palette.common.lightGreen }}
                   >
                     <Grid item>
-                      <TrendingDownIcon color="success" className={classes.cardIcon} />
+                      <TrendingDownIcon
+                        color="success"
+                        className={classes.cardIcon}
+                      />
                     </Grid>
                   </Grid>
                   <Grid item>
@@ -226,13 +246,20 @@ const HcpEarnings = () => {
               </Grid>
               {/* second */}
               <Grid item>
-                <Grid container alignItems="center" gap={{ md: 2, sm: 2, xs: 4 }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  gap={{ md: 2, sm: 2, xs: 4 }}
+                >
                   <Grid
                     className={classes.iconWrapper}
                     sx={{ background: theme.palette.common.lightRed }}
                   >
                     <Grid item>
-                      <TrendingUpIcon color="error" className={classes.cardIcon} />
+                      <TrendingUpIcon
+                        color="error"
+                        className={classes.cardIcon}
+                      />
                     </Grid>
                   </Grid>
                   <Grid item>
@@ -268,8 +295,14 @@ const HcpEarnings = () => {
         {/* 1 */}
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
-            <Link to={`/hcps/${hcpId}/earnings/payout`} style={{ textDecoration: "none" }}>
-              <Card title="Total Payout" background={theme.palette.common.lightRed}>
+            <Link
+              to={`/hcps/${hcpId}/earnings/payout`}
+              style={{ textDecoration: "none" }}
+            >
+              <Card
+                title="Total Payout"
+                background={theme.palette.common.lightRed}
+              >
                 <TrendingUpIcon color="error" className={classes.cardIcon} />
               </Card>
             </Link>
@@ -278,10 +311,19 @@ const HcpEarnings = () => {
         {/* 2 */}
         <Grid item container md={4} sm={4} xs={12}>
           <Grid item container flexDirection="column">
-            <Link to={`/hcps/${hcpId}/earnings/earn`} style={{ textDecoration: "none" }}>
-              <Card title="Total Earnings" background={theme.palette.common.lightGreen}>
+            <Link
+              to={`/hcps/${hcpId}/earnings/earn`}
+              style={{ textDecoration: "none" }}
+            >
+              <Card
+                title="Total Earnings"
+                background={theme.palette.common.lightGreen}
+              >
                 <Grid className={classes.iconWrapper}>
-                  <TrendingDownIcon color="success" className={classes.cardIcon} />
+                  <TrendingDownIcon
+                    color="success"
+                    className={classes.cardIcon}
+                  />
                 </Grid>
               </Card>
             </Link>

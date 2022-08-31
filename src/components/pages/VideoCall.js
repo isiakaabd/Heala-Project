@@ -65,7 +65,7 @@ const VideoCall = ({ chatMediaActive, setChatMediaActive, history }) => {
     } else if (pathname.split("/")[1] === "hcps") {
       return `/hcps/${hcpId}/profile`;
     } else {
-      return `/dashboard`;
+      return "/dashboard";
     }
   };
 
@@ -91,12 +91,20 @@ const VideoCall = ({ chatMediaActive, setChatMediaActive, history }) => {
       className={classes.parentGrid}
     >
       <Grid item container justifyContent="flex-end">
-        <img src={patientImg} alt="Patient portrait" className={classes.patientImg} />
+        <img
+          src={patientImg}
+          alt="Patient portrait"
+          className={classes.patientImg}
+        />
       </Grid>
       <Grid item>
         <Grid container direction="column" justifyContent="center">
           <Grid item marginBottom={1}>
-            <Typography variant="body2" align="center" style={{ fontSize: "1rem" }}>
+            <Typography
+              variant="body2"
+              align="center"
+              style={{ fontSize: "1rem" }}
+            >
               In Call
             </Typography>
           </Grid>
@@ -106,20 +114,35 @@ const VideoCall = ({ chatMediaActive, setChatMediaActive, history }) => {
             </Typography>
           </Grid>
           <Grid item marginBottom={3}>
-            <Typography variant="body2" align="center" style={{ fontSize: "1.15rem" }}>
+            <Typography
+              variant="body2"
+              align="center"
+              style={{ fontSize: "1.15rem" }}
+            >
               15:49
             </Typography>
           </Grid>
           <Grid item>
-            <Grid container alignItems="center" justifyContent="center" spacing={3}>
+            <Grid
+              container
+              alignItems="center"
+              justifyContent="center"
+              spacing={3}
+            >
               <Grid item>
                 <IconButton className={classes.iconButton}>
                   <VideocamOutlinedIcon className={classes.icon} />
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton className={classes.endCallButton} onClick={handleVideoEnded}>
-                  <CallEndIcon className={classes.icon} style={{ color: "#fff" }} />
+                <IconButton
+                  className={classes.endCallButton}
+                  onClick={handleVideoEnded}
+                >
+                  <CallEndIcon
+                    className={classes.icon}
+                    style={{ color: "#fff" }}
+                  />
                 </IconButton>
               </Grid>
               <Grid item>

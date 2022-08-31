@@ -63,7 +63,9 @@ const WaitingListTable = ({ path, onClick }) => {
   const { pathname } = useLocation();
 
   const { setSelectedRows } = useActions();
-  const { page, rowsPerPage, selectedRows } = useSelector((state) => state.tables);
+  const { page, rowsPerPage, selectedRows } = useSelector(
+    (state) => state.tables
+  );
 
   return (
     <Grid item container className={classes.parentGrid}>
@@ -93,7 +95,9 @@ const WaitingListTable = ({ path, onClick }) => {
               >
                 <TableCell padding="checkbox">
                   <Checkbox
-                    onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                    onClick={() =>
+                      handleSelectedRows(row.id, selectedRows, setSelectedRows)
+                    }
                     color="primary"
                     checked={isItemSelected}
                     inputProps={{
@@ -120,7 +124,11 @@ const WaitingListTable = ({ path, onClick }) => {
                     }}
                   >
                     <span style={{ marginRight: "1rem" }}>
-                      <Avatar alt="Remy Sharp" src={displayPhoto} sx={{ width: 24, height: 24 }} />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src={displayPhoto}
+                        sx={{ width: 24, height: 24 }}
+                      />
                     </span>
                     <span style={{ fontSize: "1.25rem" }}>{row.name}</span>
                   </div>

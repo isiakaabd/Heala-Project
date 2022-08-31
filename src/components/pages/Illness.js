@@ -11,7 +11,10 @@ import { defaultPageInfo } from "helpers/mockData";
 import { useStyles } from "styles/partnersPageStyles";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
-import { changeTableLimit, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import EditIcon from "@mui/icons-material/Edit";
 import { illnesssHeadCells } from "components/Utilities/tableHeaders";
@@ -98,7 +101,7 @@ const Illness = () => {
       });
     },
     //eslint-disable-next-line
-    [],
+    []
   );
 
   useEffect(() => {
@@ -122,8 +125,19 @@ const Illness = () => {
   if (error) return <NoData error={error} />;
   return (
     <>
-      <Grid container direction="column" gap={{ sm: 4, xs: 2 }} flexWrap="nowrap" height="100%">
-        <Grid item container gap={2} direction={{ md: "row", sm: "row", xs: "column" }}>
+      <Grid
+        container
+        direction="column"
+        gap={{ sm: 4, xs: 2 }}
+        flexWrap="nowrap"
+        height="100%"
+      >
+        <Grid
+          item
+          container
+          gap={2}
+          direction={{ md: "row", sm: "row", xs: "column" }}
+        >
           <Grid
             item
             container
@@ -176,7 +190,13 @@ const Illness = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(row.id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(
+                            row.id,
+                            selectedRows,
+                            setSelectedRows
+                          )
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -225,7 +245,10 @@ const Illness = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={illnesssHeadCells} paginationLabel="Doctors per page" />
+          <EmptyTable
+            headCells={illnesssHeadCells}
+            paginationLabel="Doctors per page"
+          />
         )}
       </Grid>
       <IllnessModal

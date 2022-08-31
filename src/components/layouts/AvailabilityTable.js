@@ -454,19 +454,19 @@ const AvailabilityTable = () => {
         <Grid item container gap={1}>
           {times
             ? times?.map((time, ind) => {
-              const { start, stop } = time;
-              return (
-                <Chip
-                  key={ind}
-                  label={`${hours(start)} - ${hours(stop)} `}
-                  className={classes.badge}
-                  style={{
-                    background: theme.palette.common.lightRed,
-                    color: theme.palette.common.red,
-                  }}
-                />
-              );
-            })
+                const { start, stop } = time;
+                return (
+                  <Chip
+                    key={ind}
+                    label={`${hours(start)} - ${hours(stop)} `}
+                    className={classes.badge}
+                    style={{
+                      background: theme.palette.common.lightRed,
+                      color: theme.palette.common.red,
+                    }}
+                  />
+                );
+              })
             : "No Time"}
         </Grid>
       </Modals>

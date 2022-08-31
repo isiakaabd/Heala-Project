@@ -5,7 +5,10 @@ import { useTheme } from "@mui/material/styles";
 import { CustomButton } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
-import { CREATE_PERMISSION, UPDATE_PERMISSION } from "components/graphQL/Mutation";
+import {
+  CREATE_PERMISSION,
+  UPDATE_PERMISSION,
+} from "components/graphQL/Mutation";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { getSinglePermissions } from "components/graphQL/useQuery";
@@ -70,7 +73,9 @@ const PermissionModal = ({
       }
     } else if (type === "edit") {
       try {
-        await updatePermission({ variables: { id: editId, description, name } });
+        await updatePermission({
+          variables: { id: editId, description, name },
+        });
         setAlert({
           message: "Permission successfully updated",
           type: "success",

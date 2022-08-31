@@ -58,7 +58,13 @@ const Modals = ({
             className={classes.modal}
             flexDirection="column"
           >
-            <Grid item container justifyContent="space-between" alignItems="center" flex="2">
+            <Grid
+              item
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              flex="2"
+            >
               <Grid item>
                 <Typography variant="h3">{title}</Typography>
               </Grid>

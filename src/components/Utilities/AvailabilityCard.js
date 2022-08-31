@@ -46,13 +46,17 @@ const AvailabilityCard = ({ availability }) => {
                   <Grid item>
                     <Grid item container gap={2}>
                       <Grid item>
-                        <Typography variant="body1">{`${hours(time?.start)}`}</Typography>
+                        <Typography variant="body1">{`${hours(
+                          time?.start
+                        )}`}</Typography>
                       </Grid>
                       <Grid item>
                         <Typography variant="body1">-</Typography>
                       </Grid>
                       <Grid item>
-                        <Typography variant="body1">{`${hours(time?.stop)}`} </Typography>
+                        <Typography variant="body1">
+                          {`${hours(time?.stop)}`}{" "}
+                        </Typography>
                       </Grid>
                     </Grid>
                   </Grid>

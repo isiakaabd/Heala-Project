@@ -3,7 +3,12 @@ import { dateMoment } from "components/Utilities/Time";
 import { NoData } from "components/layouts";
 import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { CustomButton, Loader, DisplayProfile, ProfileCard } from "components/Utilities";
+import {
+  CustomButton,
+  Loader,
+  DisplayProfile,
+  ProfileCard,
+} from "components/Utilities";
 import displayPhoto from "assets/images/avatar.svg";
 import { useTheme } from "@mui/material/styles";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -11,7 +16,11 @@ import { DeleteOrDisable } from "components/modals";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { deleteProfile } from "components/graphQL/Mutation";
-import { getPatients, getProfile, verifiedEmail } from "components/graphQL/useQuery";
+import {
+  getPatients,
+  getProfile,
+  verifiedEmail,
+} from "components/graphQL/useQuery";
 
 const useStyles = makeStyles((theme) => ({
   gridsWrapper: {
@@ -145,10 +154,16 @@ const PatientProfile = () => {
           <ProfileCard text="Created At" value={dateMoment(createdAt)} />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard text="Provider" value={provider ? provider : "No Provider"} />
+          <ProfileCard
+            text="Provider"
+            value={provider ? provider : "No Provider"}
+          />
         </Grid>
         <Grid item container md={6} sm={6} xs={12}>
-          <ProfileCard text="Verified" value={emailStat == "false" ? "Not Verified" : "Verified"} />
+          <ProfileCard
+            text="Verified"
+            value={emailStat == "false" ? "Not Verified" : "Verified"}
+          />
         </Grid>
         <Grid item container md={6} sm={6} xs={12} mx="auto">
           <ProfileCard

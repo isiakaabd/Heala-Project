@@ -61,7 +61,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
         variables: { expiryDate: formatedDate, ...variables },
       });
       if (data) {
-        displayAlert("success", `Enrollee added successfully`);
+        displayAlert("success", "Enrollee added successfully");
         onSuccess();
       }
     } catch (error) {
@@ -82,7 +82,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
         variables: { expiryDate: formatedDate, ...variables },
       });
       if (data) {
-        displayAlert("success", `Enrollee updated successfully`);
+        displayAlert("success", "Enrollee updated successfully");
         onSuccess();
       }
     } catch (error) {

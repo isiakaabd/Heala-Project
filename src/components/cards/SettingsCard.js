@@ -35,7 +35,11 @@ const useStyles = makeStyles((theme) => ({
     }, */
 }));
 
-export const SettingsCard = ({ link, /* setSelectedSubMenu, */ title, icon }) => {
+export const SettingsCard = ({
+  link,
+  /* setSelectedSubMenu, */ title,
+  icon,
+}) => {
   const theme = useTheme();
   const classes = useStyles();
   return (

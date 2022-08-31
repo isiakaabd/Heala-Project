@@ -253,7 +253,7 @@ const Partners = () => {
   };
 
   const refresh = async (setFilterValue, defaultVal) => {
-    displayAlert("error", `Something went wrong while filtering. Try again.`);
+    displayAlert("error", "Something went wrong while filtering. Try again.");
     setFilterValue(defaultVal);
 
     deleteVar(variables);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Avatar, IconButton, Badge, InputBase } from "@mui/material";
+
 import { makeStyles } from "@mui/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import PropTypes from "prop-types";
@@ -139,6 +140,11 @@ const HeaderProfile = () => {
           <IconButton
             aria-label={notificationsLabel(num)}
             onClick={(event) => handleNotification(event)}
+            sx={{
+              borderRadius: "100%",
+              backgroundColor: "#F8F8F8",
+              padding: "1rem",
+            }}
           >
             <Badge>
               <BellIcon sx={{ color: "transparent" }} />
