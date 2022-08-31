@@ -91,7 +91,9 @@ const HCPChat = () => {
   const validationSchema = Yup.object({
     subject: Yup.string("Enter your subject").required("Subject is required"),
     textarea: Yup.string("Enter your message").required("Message is required"),
-    recipient: Yup.string("Enter your recipient").required("recipients is required"),
+    recipient: Yup.string("Enter your recipient").required(
+      "recipients is required"
+    ),
   });
   const onSubmit = async (values, onSubmitProps) => {
     const id = localStorage.getItem("user_id");
@@ -140,9 +142,19 @@ const HCPChat = () => {
                     Create New Message
                   </Typography>
                 </Grid>
-                <Grid item container direction="column" className={classes.gridWrapper}>
+                <Grid
+                  item
+                  container
+                  direction="column"
+                  className={classes.gridWrapper}
+                >
                   <Grid item>
-                    <Grid item container alignItems="center" sx={{ gap: "0!important" }}>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      sx={{ gap: "0!important" }}
+                    >
                       <Grid item>
                         <Typography variant="body2" className={classes.heading}>
                           Recipient:
@@ -199,7 +211,10 @@ const HCPChat = () => {
                     </Grid>
                     {/* <Divider className={classes.divider} /> */}
                   </Grid>
-                  <Grid item style={{ alignSelf: "flex-end", marginTop: "2rem" }}>
+                  <Grid
+                    item
+                    style={{ alignSelf: "flex-end", marginTop: "2rem" }}
+                  >
                     <CustomButton
                       title="Send Message"
                       width="100%"

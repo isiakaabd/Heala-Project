@@ -39,7 +39,12 @@ const ListManagment = () => {
   const classes = useStyles();
   return (
     <>
-      <Grid container justifyContent="space-between" className={classes.containerGrid} gap={2}>
+      <Grid
+        container
+        justifyContent="space-between"
+        className={classes.containerGrid}
+        gap={2}
+      >
         <SettingsCard
           link="/settings/list-management/tests"
           title="Tests"

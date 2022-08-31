@@ -24,23 +24,96 @@ export const waitingListRows = [
 
 // Dashboard Availability Table Dummy Data
 export const availabilityRows = [
-  { id: 0, name: "John Doe", specialization: "Dentistry", time: "7:50am - 2:00pm" },
-  { id: 1, name: "Alan Smith", specialization: "Pediatry", time: "7:50am - 2:00pm" },
-  { id: 2, name: "Sophie Taylor", specialization: "Optometry", time: "7:50am - 2:00pm" },
-  { id: 3, name: "Jane Doe", specialization: "Dermatology", time: "7:50am - 2:00pm" },
-  { id: 4, name: "Jessica Brown", specialization: "Dentistry", time: "7:50am - 2:00pm" },
+  {
+    id: 0,
+    name: "John Doe",
+    specialization: "Dentistry",
+    time: "7:50am - 2:00pm",
+  },
+  {
+    id: 1,
+    name: "Alan Smith",
+    specialization: "Pediatry",
+    time: "7:50am - 2:00pm",
+  },
+  {
+    id: 2,
+    name: "Sophie Taylor",
+    specialization: "Optometry",
+    time: "7:50am - 2:00pm",
+  },
+  {
+    id: 3,
+    name: "Jane Doe",
+    specialization: "Dermatology",
+    time: "7:50am - 2:00pm",
+  },
+  {
+    id: 4,
+    name: "Jessica Brown",
+    specialization: "Dentistry",
+    time: "7:50am - 2:00pm",
+  },
 ];
 
 // Patients Table Dummy Data
 export const patientsRows = [
-  { id: 0, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
-  { id: 1, patientName: "Kazeem Raheem", plan: "Plan 2", consultations: "24", status: "active" },
-  { id: 2, patientName: "Rahmeem Ahmed", plan: "Plan 3", consultations: "12", status: "blocked" },
-  { id: 3, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
-  { id: 4, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
-  { id: 5, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
-  { id: 6, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
-  { id: 7, patientName: "Hameed Jimoh", plan: "Plan 1", consultations: "20", status: "active" },
+  {
+    id: 0,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
+  {
+    id: 1,
+    patientName: "Kazeem Raheem",
+    plan: "Plan 2",
+    consultations: "24",
+    status: "active",
+  },
+  {
+    id: 2,
+    patientName: "Rahmeem Ahmed",
+    plan: "Plan 3",
+    consultations: "12",
+    status: "blocked",
+  },
+  {
+    id: 3,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
+  {
+    id: 4,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
+  {
+    id: 5,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
+  {
+    id: 6,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
+  {
+    id: 7,
+    patientName: "Hameed Jimoh",
+    plan: "Plan 1",
+    consultations: "20",
+    status: "active",
+  },
 ];
 
 // Patients > Consultation Table Dummy Data
@@ -97,12 +170,42 @@ export const consultationsRows = [
 
 // Patients > Prescriptions Table Dummy Data
 export const prescriptionsRows = [
-  { id: 200, date: "07 July 2021", details: "Details regarding the prescription", dosage: 8 },
-  { id: 201, date: "07 July 2021", details: "Details regarding the prescription", dosage: 5 },
-  { id: 202, date: "07 July 2021", details: "Details regarding the prescription", dosage: 7 },
-  { id: 203, date: "07 July 2021", details: "Details regarding the prescription", dosage: 4 },
-  { id: 204, date: "07 July 2021", details: "Details regarding the prescription", dosage: 5 },
-  { id: 205, date: "07 July 2021", details: "Details regarding the prescription", dosage: 6 },
+  {
+    id: 200,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 8,
+  },
+  {
+    id: 201,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 5,
+  },
+  {
+    id: 202,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 7,
+  },
+  {
+    id: 203,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 4,
+  },
+  {
+    id: 204,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 5,
+  },
+  {
+    id: 205,
+    date: "07 July 2021",
+    details: "Details regarding the prescription",
+    dosage: 6,
+  },
 ];
 
 // Patients > Medication Table Dummy Data

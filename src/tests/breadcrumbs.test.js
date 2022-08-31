@@ -87,7 +87,7 @@ describe("Testing the breadcrumbs function", () => {
     };
 
     expect(replaceWithGenerics(generics, "/{id}/{code}")).toMatchInlineSnapshot(
-      `"/(\\\\w|\\\\d)+/ORD"`
+      "\"/(\\\\w|\\\\d)+/ORD\""
     );
   });
 });

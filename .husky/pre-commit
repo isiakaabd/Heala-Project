@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx prettier --config .prettierrc.json --write ./src
+npx eslint --fix ./src 
+#npx lint-staged

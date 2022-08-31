@@ -160,6 +160,10 @@ export const addEditPlansValidationSchema = Yup.object({
   accessType: Yup.string("Enter Duration").trim(),
 });
 export const illnessSchema = Yup.object({
-  name: Yup.string("Enter illness name").trim().required("illness name is required"),
-  description: Yup.string("Enter illness description").required("description is required"),
+  name: Yup.string("Enter illness name")
+    .trim()
+    .required("illness name is required"),
+  description: Yup.string("Enter illness description").required(
+    "description is required"
+  ),
 });

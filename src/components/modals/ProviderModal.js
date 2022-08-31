@@ -6,7 +6,11 @@ import * as Yup from "yup";
 import { Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import { addProvider, editprovider } from "components/graphQL/Mutation";
-import { getProviders, getCategory, getUserTypes } from "components/graphQL/useQuery";
+import {
+  getProviders,
+  getCategory,
+  getUserTypes,
+} from "components/graphQL/useQuery";
 import { useMutation, useQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 
@@ -36,7 +40,7 @@ const ProviderModal = ({
         data &&
           data.map((i) => {
             return { key: i.name, value: i._id, id: i._id };
-          }),
+          })
       );
     }
   }, [userType.data]);
@@ -57,7 +61,9 @@ const ProviderModal = ({
     name: Yup.string("Enter your Name").trim().required("Name is required"),
     type: Yup.string("Select your type").required("Type is required"),
     image: Yup.string("Upload a single Image").required("Image is required"),
-    iconAlt: Yup.string("Upload an alternate Image").required("Alt. image is required"),
+    iconAlt: Yup.string("Upload an alternate Image").required(
+      "Alt. image is required"
+    ),
   });
 
   // const checkbox1 = [{ key: "61ca1a53cebadf0584e38723", value: "61ca1a53cebadf0584e38723" }];

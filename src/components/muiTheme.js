@@ -60,13 +60,18 @@ export const muiTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Euclid Circular"', '"Circular Std Medium"', "Roboto", "sans-serif"].join(", "),
+    fontFamily: [
+      "\"Euclid Circular\"",
+      "\"Circular Std Medium\"",
+      "Roboto",
+      "sans-serif",
+    ].join(", "),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {
       fontSize: "clamp(2.3rem,3vw,3rem)",
       color: dark,
-      fontWeight: 700,
+      fontWeight: 600,
     },
     h2: {
       fontSize: "clamp(1.5rem, 3vw,2.5rem)",

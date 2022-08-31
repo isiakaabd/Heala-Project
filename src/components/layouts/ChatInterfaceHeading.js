@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useParams, useLocation } from "react-router-dom";
-import { Grid, Typography, Menu, MenuItem, Avatar, IconButton } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Menu,
+  MenuItem,
+  Avatar,
+  IconButton,
+} from "@mui/material";
 import { HiOutlineLogout } from "react-icons/hi";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -94,7 +101,7 @@ const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
     } else if (pathname.split("/")[1] === "hcps") {
       return `/hcps/${hcpId}/profile`;
     } else {
-      return `/dashboard`;
+      return "/dashboard";
     }
   };
 
@@ -109,7 +116,11 @@ const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
         <Grid item>
           <Grid container alignItems="center">
             <Grid item style={{ marginRight: "2rem" }}>
-              <Avatar src={avatar} alt="Avatar" style={{ width: 70, height: 70 }} />
+              <Avatar
+                src={avatar}
+                alt="Avatar"
+                style={{ width: 70, height: 70 }}
+              />
             </Grid>
             <Grid item>
               <Grid container direction="column">
@@ -121,7 +132,10 @@ const ChatInterfaceHeading = ({ setChatMediaActive, callPath, videoPath }) => {
                 <Grid item>
                   <Typography
                     variant="body2"
-                    style={{ color: theme.palette.common.green, fontWeight: 400 }}
+                    style={{
+                      color: theme.palette.common.green,
+                      fontWeight: 400,
+                    }}
                   >
                     Online now
                   </Typography>

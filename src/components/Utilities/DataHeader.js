@@ -1,9 +1,9 @@
-import * as React from "react";
+/* import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import displayPhoto from "assets/images/avatar.svg";
+import displayPhoto from "assets/images/avatar.svg"; */
 import Styled from "styled-components";
 
-export const columns = [
+/* export const columns = [
   {
     field: "entryDate",
     headerName: "Entry Date",
@@ -421,7 +421,7 @@ export const FinanceColumns = [
     sortable: false,
     selectable: false,
   },
-];
+]; */
 
 export const rows = [
   {

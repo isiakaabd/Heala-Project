@@ -16,7 +16,9 @@ const validationSchema = Yup.object({
   type: Yup.string("choose a referral").required("Referral is required"),
   note: Yup.string("Enter your message").trim().required("note is required"),
   reason: Yup.string("State a reason").trim().required("reason is required"),
-  specialization: Yup.string("select a specialization").required("specialization is required"),
+  specialization: Yup.string("select a specialization").required(
+    "specialization is required"
+  ),
 });
 
 const ReferPatient = ({ handleDialogClose, initialValues, type }) => {

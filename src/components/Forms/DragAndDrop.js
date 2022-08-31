@@ -79,7 +79,14 @@ const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
   const [isCompleted] = React.useState(null);
   const [isCompressing] = React.useState(false);
   const [file, setFile] = React.useState(null);
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, open } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+    open,
+  } = useDropzone({
     accept: "application/json",
     maxFiles: maxFiles,
     autoFocus: true,
@@ -118,9 +125,15 @@ const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           <Typography>
-            Drag and drop your file(s), or click to select files or Click on the button below
+            Drag and drop your file(s), or click to select files or Click on the
+            button below
           </Typography>
-          <Grid item container justifyContent="center" style={{ marginTop: "15px" }}>
+          <Grid
+            item
+            container
+            justifyContent="center"
+            style={{ marginTop: "15px" }}
+          >
             <CustomButton
               variant="contained"
               title=" Select file(s)"
@@ -139,7 +152,13 @@ const DragAndDrop = ({ name, maxFiles, hasPreview, uploadFunc }) => {
       <aside style={{ marginTop: "1.5rem" }}>
         <Grid item>
           {progress < 100 || isCompressing ? (
-            <Grid container item direction="row" justifyContent="center" alignItems="center">
+            <Grid
+              container
+              item
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Typography display={"inline"}>
                 {isCompressing ? "Compressing file" : "Uploading file"}
               </Typography>

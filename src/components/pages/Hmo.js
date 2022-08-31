@@ -80,7 +80,7 @@ const Hmo = () => {
                 imgUrl={hmo?.icon}
                 imgAlt={hmo?.name}
                 linkTo={`hmo/${hmo?._id}`}
-                subTitle={`15 Enrollees`}
+                subTitle={"15 Enrollees"}
                 title={hmo?.name}
                 onClickEdit={() => {
                   setEditHMOData(editInitialValues);
@@ -95,9 +95,16 @@ const Hmo = () => {
           );
         })}
         <Grid item>
-          <div sx={{ cursor: "pointer" }} onClick={() => setAddModal(true)}>
+          <button
+            sx={{
+              cursor: "pointer",
+              border: "none",
+              background: "transparent",
+            }}
+            onClick={() => setAddModal(true)}
+          >
             <AddHmoCard />
-          </div>
+          </button>
         </Grid>
       </Grid>
       <Grid>

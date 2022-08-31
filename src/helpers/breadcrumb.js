@@ -94,7 +94,7 @@ export function replaceWithGenerics(generics, path) {
 }
 
 export const pathParamsRegex = {
-  id: `(\\w|\\d)+`,
+  id: "(\\w|\\d)+",
 };
 
 export const predictHistoryIndex = (breadcrumbs = []) => {

@@ -39,9 +39,19 @@ const WaitingListDetails = () => {
           statusId={132467}
         />
       </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid
+        item
+        container
+        justifyContent="space-between"
+        style={{ paddingTop: "5rem" }}
+      >
         {/* SYMPTOMS GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          md
+          className={classes.cardGrid}
+          style={{ marginRight: "2rem" }}
+        >
           <Grid
             container
             direction="column"
@@ -56,14 +66,23 @@ const WaitingListDetails = () => {
             <Grid item container justifyContent="space-evenly">
               {symptoms.map((symptom) => (
                 <Grid item key={symptom}>
-                  <Chip variant="outlined" label={symptom} className={classes.infoBadge} />
+                  <Chip
+                    variant="outlined"
+                    label={symptom}
+                    className={classes.infoBadge}
+                  />
                 </Grid>
               ))}
             </Grid>
           </Grid>
         </Grid>
         {/* CONSULTATION TYPE GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+        <Grid
+          item
+          md
+          className={classes.cardGrid}
+          style={{ marginLeft: "2rem" }}
+        >
           <Grid
             container
             direction="column"
@@ -75,14 +94,28 @@ const WaitingListDetails = () => {
               <Typography variant="h4">Consultation Type</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="Type 1" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label="Type 1"
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item container justifyContent="space-between" style={{ paddingTop: "5rem" }}>
+      <Grid
+        item
+        container
+        justifyContent="space-between"
+        style={{ paddingTop: "5rem" }}
+      >
         {/* SCALE OF DISCOMFORT GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginRight: "2rem" }}>
+        <Grid
+          item
+          md
+          className={classes.cardGrid}
+          style={{ marginRight: "2rem" }}
+        >
           <Grid
             container
             direction="column"
@@ -94,12 +127,21 @@ const WaitingListDetails = () => {
               <Typography variant="h4">Scale of discomfort: </Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="Once" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label="Once"
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>
         {/* DATE OF FIRST NOTICE GRID */}
-        <Grid item md className={classes.cardGrid} style={{ marginLeft: "2rem" }}>
+        <Grid
+          item
+          md
+          className={classes.cardGrid}
+          style={{ marginLeft: "2rem" }}
+        >
           <Grid
             container
             direction="column"
@@ -111,7 +153,11 @@ const WaitingListDetails = () => {
               <Typography variant="h4">Date of first notice</Typography>
             </Grid>
             <Grid item>
-              <Chip variant="outlined" label="01-10-2021" className={classes.infoBadge} />
+              <Chip
+                variant="outlined"
+                label="01-10-2021"
+                className={classes.infoBadge}
+              />
             </Grid>
           </Grid>
         </Grid>

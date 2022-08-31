@@ -170,6 +170,7 @@ const HMOPlansTable = ({ PlansQuery }) => {
                   };
                   return (
                     <HMOPlanRow
+                      key={`${_id}-${index}`}
                       plan={row}
                       isItemSelected={isItemSelected}
                       handleSelectedRows={handleSelectedRows}

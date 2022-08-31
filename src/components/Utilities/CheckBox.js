@@ -34,23 +34,48 @@ const CheckboxesGroup = ({ row }) => {
   const classes = useStyles();
   return (
     <Box sx={{ display: "flex" }} className={classes.checkboxContainer}>
-      <FormControl required component="fieldset" sx={{ m: 3 }} variant="standard">
+      <FormControl
+        required
+        component="fieldset"
+        sx={{ m: 3 }}
+        variant="standard"
+      >
         <FormGroup>
           <Grid container>
             <FormControlLabel
-              control={<Checkbox checked={create} onChange={handleChange} name="create" />}
+              control={
+                <Checkbox
+                  checked={create}
+                  onChange={handleChange}
+                  name="create"
+                />
+              }
               label="create"
             />
             <FormControlLabel
-              control={<Checkbox checked={Delete} onChange={handleChange} name="Delete" />}
+              control={
+                <Checkbox
+                  checked={Delete}
+                  onChange={handleChange}
+                  name="Delete"
+                />
+              }
               label="Delete"
             />
             <FormControlLabel
-              control={<Checkbox checked={update} onChange={handleChange} name="update" />}
+              control={
+                <Checkbox
+                  checked={update}
+                  onChange={handleChange}
+                  name="update"
+                />
+              }
               label="update"
             />
             <FormControlLabel
-              control={<Checkbox checked={read} onChange={handleChange} name="read" />}
+              control={
+                <Checkbox checked={read} onChange={handleChange} name="read" />
+              }
               label="read"
             />
           </Grid>

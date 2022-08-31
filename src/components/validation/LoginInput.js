@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
     color: theme.palette.common.dark,
     fontWeight: 400,
-    fontFamily: `"Euclid Circular","Circular Std Medium",Roboto,sans-serif`,
+    fontFamily: "\"Euclid Circular\",\"Circular Std Medium\",Roboto,sans-serif",
     "&::placeholder": {
       color: "#afafaf",
       fontWeight: 400,
@@ -74,6 +74,10 @@ const CustomInput = ({ ...props }) => {
   );
 };
 
+CustomInput.propTypes = {
+  endIcon: PropTypes.node,
+};
+
 const LoginInput = (props) => {
   const { label, name, ...rest } = props;
   const classes = useStyles();
@@ -89,6 +93,7 @@ const LoginInput = (props) => {
     </Grid>
   );
 };
+
 LoginInput.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,

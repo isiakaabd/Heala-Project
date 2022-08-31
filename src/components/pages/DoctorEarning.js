@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Typography, Checkbox, TableRow, TableCell, Avatar } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Checkbox,
+  TableRow,
+  TableCell,
+  Avatar,
+} from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -18,7 +25,11 @@ import { isSelected } from "helpers/isSelected";
 import displayPhoto from "assets/images/avatar.svg";
 import { useParams } from "react-router-dom";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit, fetchMoreData, handlePageChange } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  fetchMoreData,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 
 const useStyles = makeStyles((theme) => ({
   iconWrapper: {
@@ -90,7 +101,9 @@ const DoctorEarning = () => {
   // refetch, variables
   useEffect(() => {
     try {
-      fetchPayout({ variables: { first: pageInfo?.limit, doctor: hcpId } }).then(({ data }) => {
+      fetchPayout({
+        variables: { first: pageInfo?.limit, doctor: hcpId },
+      }).then(({ data }) => {
         if (!data) throw Error("Couldn't fetch doctors payout data");
         setPageInfo(data?.getMyEarnings?.pageInfo);
         setPayout(data?.getMyEarnings?.data);
@@ -157,7 +170,12 @@ const DoctorEarning = () => {
   return (
     <Grid container direction="column" rowSpacing={2}>
       <>
-        <Grid item container justifyContent="space-between" style={{ paddingBottom: "3rem" }}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          style={{ paddingBottom: "3rem" }}
+        >
           <Grid item container spacing={3} alignItems="center">
             <Grid item flex={1}>
               <Typography noWrap variant="h1" color="#2D2F39">
@@ -174,12 +192,20 @@ const DoctorEarning = () => {
               paginationLabel="Earning per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, { first: e, doctor: hcpId });
+                const res = await changeTableLimit(fetchPayout, {
+                  first: e,
+                  doctor: hcpId,
+                });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = await handlePageChange(fetchPayout, page, pageInfo, { doctor: hcpId });
+                const res = await handlePageChange(
+                  fetchPayout,
+                  page,
+                  pageInfo,
+                  { doctor: hcpId }
+                );
                 await setTableData(res, "Failed to change table page.");
               }}
               fetchData={fetchPayout}
@@ -201,7 +227,9 @@ const DoctorEarning = () => {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
+                        onClick={() =>
+                          handleSelectedRows(_id, selectedRows, setSelectedRows)
+                        }
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
@@ -239,7 +267,9 @@ const DoctorEarning = () => {
                           <span style={{ marginRight: "1rem" }}>
                             <Avatar
                               alt={`Display Photo of ${doctorData?.firstName}`}
-                              src={doctorData ? doctorData?.picture : displayPhoto}
+                              src={
+                                doctorData ? doctorData?.picture : displayPhoto
+                              }
                               sx={{ width: 24, height: 24 }}
                             />
                           </span>
@@ -286,7 +316,10 @@ const DoctorEarning = () => {
             </EnhancedTable>
           </Grid>
         ) : (
-          <EmptyTable headCells={payoutHeaders} paginationLabel="Earnings  per page" />
+          <EmptyTable
+            headCells={payoutHeaders}
+            paginationLabel="Earnings  per page"
+          />
         )}
       </>
     </Grid>

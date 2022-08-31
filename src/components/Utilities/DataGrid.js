@@ -32,7 +32,7 @@ const DataTable = ({ rows, columns, rowHeight, headerHeight }) => {
       "& .MuiDataGrid-root .MuiDataGrid-columnHeaderTitle": {
         fontSize: "1.6rem",
         lineHeight: 1.5,
-        fontWeight: "700 !important",
+        fontWeight: "600 !important",
       },
       "& .MuiTypography-body2": {
         fontSize: "1.6rem",

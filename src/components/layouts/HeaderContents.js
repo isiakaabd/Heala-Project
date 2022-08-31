@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import HeaderProfile from "./HeaderProfile";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-// import { ReactComponent as SearchIcon } from "assets/images/searchIcon.svg";
+
 import {
   Typography,
   Toolbar,

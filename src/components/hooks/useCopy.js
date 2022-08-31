@@ -25,7 +25,7 @@ export const useCopy = () => {
             horizontal: "right",
             vertical: "top",
           },
-        },
+        }
       );
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ export const useCopy = () => {
             horizontal: "right",
             vertical: "top",
           },
-        },
+        }
       );
     }
   };

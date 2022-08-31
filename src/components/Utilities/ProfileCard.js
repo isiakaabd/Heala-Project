@@ -45,7 +45,7 @@ const ProfileCard = ({ value, text, type }) => {
         <Typography variant="h4">{text}</Typography>
       </Grid>
 
-      {type === "alergy"
+      {/* {type === "alergy"
         ? value?.map((i, key) => (
             <a
               rel="noreferrer"
@@ -55,14 +55,23 @@ const ProfileCard = ({ value, text, type }) => {
               target="_blank"
             ></a>
           ))
-        : null}
+        : null} */}
       <Grid item>
         {Array.isArray(value) ? (
           value.map((i, key) => (
-            <Chip variant="outlined" key={key} label={i} className={classes.infoBadge} />
+            <Chip
+              variant="outlined"
+              key={key}
+              label={i}
+              className={classes.infoBadge}
+            />
           ))
         ) : (
-          <Chip variant="outlined" label={value} className={classes.infoBadge} />
+          <Chip
+            variant="outlined"
+            label={value}
+            className={classes.infoBadge}
+          />
         )}
       </Grid>
     </Grid>

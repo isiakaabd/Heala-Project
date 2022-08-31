@@ -11,7 +11,7 @@ describe("Testing the getDynamicSearchPlaceholder function", () => {
         hmoId: "Search by HMO ID",
         name: "Search by name",
       })
-    ).toMatchInlineSnapshot(`"Search by HMO ID"`);
+    ).toMatchInlineSnapshot("\"Search by HMO ID\"");
 
     expect(
       getDynamicSearchPlaceholder("name", {
@@ -24,7 +24,7 @@ describe("Testing the getDynamicSearchPlaceholder function", () => {
 
 describe("Test getInitials function", () => {
   it("should get the initials of a double string", () => {
-    expect(getInitials("John Doe")).toMatchInlineSnapshot(`"JD"`);
+    expect(getInitials("John Doe")).toMatchInlineSnapshot("\"JD\"");
   });
 
   it("should get the initials of a thripe string", () => {

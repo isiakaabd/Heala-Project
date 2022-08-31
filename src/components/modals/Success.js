@@ -26,7 +26,13 @@ const Success = ({
   };
 
   return (
-    <Modals isOpen={open} title="" isClose rowSpacing={5} handleClose={handleDialogClose}>
+    <Modals
+      isOpen={open}
+      title=""
+      isClose
+      rowSpacing={5}
+      handleClose={handleDialogClose}
+    >
       <Grid item container direction="column" rowSpacing={5} marginTop={2}>
         <Grid item container justifyContent="center">
           {type !== "fail" ? (

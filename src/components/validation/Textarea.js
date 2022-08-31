@@ -69,13 +69,24 @@ const Textarea = ({ label, name, fLabel, placeholder, ...rest }) => {
 
   return (
     <>
-      <Grid container direction="column" gap={1} sx={{ height: "100% !important" }}>
+      <Grid
+        container
+        direction="column"
+        gap={1}
+        sx={{ height: "100% !important" }}
+      >
         {!fLabel ? (
           <FormLabel component="legend" className={classes.FormLabel}>
             {label}
           </FormLabel>
         ) : null}
-        <Field id={name} name={name} as={EmptyTextarea} placeholder={placeholder} {...rest} />
+        <Field
+          id={name}
+          name={name}
+          as={EmptyTextarea}
+          placeholder={placeholder}
+          {...rest}
+        />
       </Grid>
     </>
   );

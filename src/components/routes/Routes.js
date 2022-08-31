@@ -74,26 +74,54 @@ const Routes = () => {
       {/*  =====  PATENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/patients" component={Patients} />
 
-      <PrivateRoute exact path="/patients/:patientId" component={SinglePatient} />
+      <PrivateRoute
+        exact
+        path="/patients/:patientId"
+        component={SinglePatient}
+      />
 
-      <PrivateRoute exact path="/patients/:patientId/profile" component={PatientProfile} />
+      <PrivateRoute
+        exact
+        path="/patients/:patientId/profile"
+        component={PatientProfile}
+      />
 
-      <PrivateRoute exact path="/patients/:patientId/profile/chat" component={Chat} />
+      <PrivateRoute
+        exact
+        path="/patients/:patientId/profile/chat"
+        component={Chat}
+      />
 
-      <PrivateRoute path="/patients/:patientId/consultations" exact component={Consultations} />
+      <PrivateRoute
+        path="/patients/:patientId/consultations"
+        exact
+        component={Consultations}
+      />
 
-      <PrivateRoute path="/patients/:patientId/prescriptions" component={Prescriptions} />
+      <PrivateRoute
+        path="/patients/:patientId/prescriptions"
+        component={Prescriptions}
+      />
 
-      <PrivateRoute path="/patients/:patientId/appointments" component={PatientAppointment} />
+      <PrivateRoute
+        path="/patients/:patientId/appointments"
+        component={PatientAppointment}
+      />
 
-      <PrivateRoute path="/patients/:patientId/records" component={MedicalRecords} />
+      <PrivateRoute
+        path="/patients/:patientId/records"
+        component={MedicalRecords}
+      />
 
       <PrivateRoute
         path="/patients/:patientId/consultations/case-notes/:rowId"
         component={CaseNotes}
       />
 
-      <PrivateRoute path="/patients/:patientId/medications" component={Medications} />
+      <PrivateRoute
+        path="/patients/:patientId/medications"
+        component={Medications}
+      />
 
       {/*  =====  DOCTORS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hcps" component={Hcps} />
@@ -102,24 +130,64 @@ const Routes = () => {
 
       <PrivateRoute exact path="/hcps/:hcpId/profile" component={HcpProfile} />
 
-      <PrivateRoute exact path="/hcps/:hcpId/profile/chat" component={HCPChat} />
-      <PrivateRoute exact path="/hcps/:hcpId/verification" component={ViewDoctorVerification} />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/profile/chat"
+        component={HCPChat}
+      />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/verification"
+        component={ViewDoctorVerification}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/appointments" component={HcpAppointments} />
+      <PrivateRoute
+        path="/hcps/:hcpId/appointments"
+        component={HcpAppointments}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/availability" component={HcpAvailability} />
+      <PrivateRoute
+        path="/hcps/:hcpId/availability"
+        component={HcpAvailability}
+      />
 
-      <PrivateRoute exact path="/hcps/:hcpId/earnings" component={HcpEarnings} />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/earnings"
+        component={HcpEarnings}
+      />
 
-      <PrivateRoute exact path="/hcps/:hcpId/earnings/payout" component={DoctorPayout} />
-      <PrivateRoute exact path="/hcps/:hcpId/earnings/earn" component={DoctorEarning} />
-      <PrivateRoute exact path="/hcps/:hcpId/earnings" component={HcpEarnings} />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/earnings/payout"
+        component={DoctorPayout}
+      />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/earnings/earn"
+        component={DoctorEarning}
+      />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/earnings"
+        component={HcpEarnings}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/doctor-patients" component={HcpPatients} />
+      <PrivateRoute
+        path="/hcps/:hcpId/doctor-patients"
+        component={HcpPatients}
+      />
 
-      <PrivateRoute exact path="/hcps/:hcpId/consultations" component={HcpConsultations} />
+      <PrivateRoute
+        exact
+        path="/hcps/:hcpId/consultations"
+        component={HcpConsultations}
+      />
 
-      <PrivateRoute path="/hcps/:hcpId/consultations/case-notes/:rowId" component={HcpCaseNote} />
+      <PrivateRoute
+        path="/hcps/:hcpId/consultations/case-notes/:rowId"
+        component={HcpCaseNote}
+      />
       {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
 
@@ -130,11 +198,22 @@ const Routes = () => {
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
 
-      <PrivateRoute exact path="/appointments/waiting-list" component={WaitingList} />
+      <PrivateRoute
+        exact
+        path="/appointments/waiting-list"
+        component={WaitingList}
+      />
 
-      <PrivateRoute path="/appointments/waiting-list/:listId" component={WaitingListDetails} />
+      <PrivateRoute
+        path="/appointments/waiting-list/:listId"
+        component={WaitingListDetails}
+      />
 
-      <PrivateRoute exact path="/appointments/consultation" component={CircularChart} />
+      <PrivateRoute
+        exact
+        path="/appointments/consultation"
+        component={CircularChart}
+      />
 
       {/*  =====  MESSAGES ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/messages" component={Messages} />
@@ -166,7 +245,11 @@ const Routes = () => {
       <PrivateRoute exact path="/finance/payouts" component={Payout} />
 
       <PrivateRoute exact path="/finance/pending" component={PendingPayout} />
-      <PrivateRoute exact path="/finance/sub-income" component={SubscriptionIncome} />
+      <PrivateRoute
+        exact
+        path="/finance/sub-income"
+        component={SubscriptionIncome}
+      />
 
       {/*  =====  REFERRALS ROUTES STARTS HERE ===== */}
       <PrivateRoute path="/referrals/:referralId" component={ViewReferral} />
@@ -185,7 +268,11 @@ const Routes = () => {
       />
 
       {/*  =====  VIEW DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
-      <PrivateRoute path="/verification/view/:viewId" exact component={ViewHCP} />
+      <PrivateRoute
+        path="/verification/view/:viewId"
+        exact
+        component={ViewHCP}
+      />
       <PrivateRoute
         exact
         path="/verification/view/:viewId/doctor/:id"
@@ -200,10 +287,26 @@ const Routes = () => {
       <PrivateRoute path="/settings/permissions" component={Permission} />
 
       <PrivateRoute exact path="/settings/management" component={Management} />
-      <PrivateRoute exact path="/settings/management/:editId" component={EditManagement} />
-      <PrivateRoute exact path="/settings/list-management" component={ListManagment} />
-      <PrivateRoute exact path="/settings/list-management/tests" component={TestList} />
-      <PrivateRoute exact path="/settings/list-management/illness" component={Illness} />
+      <PrivateRoute
+        exact
+        path="/settings/management/:editId"
+        component={EditManagement}
+      />
+      <PrivateRoute
+        exact
+        path="/settings/list-management"
+        component={ListManagment}
+      />
+      <PrivateRoute
+        exact
+        path="/settings/list-management/tests"
+        component={TestList}
+      />
+      <PrivateRoute
+        exact
+        path="/settings/list-management/illness"
+        component={Illness}
+      />
     </Switch>
   );
   // }

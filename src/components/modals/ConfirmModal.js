@@ -73,7 +73,12 @@ const ConfirmModal = ({
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Grid container direction="column" alignItems="center" justifyContent="center">
+          <Grid
+            container
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+          >
             <Grid item alignSelf="flex-end">
               <CloseIcon
                 color="primary"
@@ -83,13 +88,22 @@ const ConfirmModal = ({
               />
             </Grid>
             <Grid item style={{ marginBottom: "3rem" }}>
-              <BsExclamationCircle size="10rem" color={theme.palette.warning.main} />
+              <BsExclamationCircle
+                size="10rem"
+                color={theme.palette.warning.main}
+              />
             </Grid>
             <Grid item style={{ marginBottom: "2rem" }}>
               <Typography variant="h2">{title}</Typography>
             </Grid>
-            <Grid item style={{ marginBottom: "2rem" }} sx={{ textAlign: "center" }}>
-              <Typography variant="body1">{`Are you sure you want to continue?`}</Typography>
+            <Grid
+              item
+              style={{ marginBottom: "2rem" }}
+              sx={{ textAlign: "center" }}
+            >
+              <Typography variant="body1">
+                {"Are you sure you want to continue?"}
+              </Typography>
               <Typography variant="body1">{`${confirmationMsg}`}</Typography>
             </Grid>
             <Grid
@@ -109,7 +123,7 @@ const ConfirmModal = ({
               </Grid>
               <Grid item md>
                 <CustomButton
-                  title={`Confirm`}
+                  title={"Confirm"}
                   type={acceptBtn}
                   width="100%"
                   onClick={() => {

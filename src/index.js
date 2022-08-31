@@ -20,11 +20,12 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 // import dotenv
 import "dotenv/config";
+
 const wsLink = new GraphQLWsLink(
   createClient({
     //eslint-disable-next-line
     url: process.env.REACT_APP_BASE_URL,
-  }),
+  })
 );
 
 const httpLink = new HttpLink({
@@ -35,10 +36,13 @@ const httpLink = new HttpLink({
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
-    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
   },
   wsLink,
-  httpLink,
+  httpLink
 );
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -92,5 +96,5 @@ ReactDOM.render(
       </ApolloProvider>
     </Provider>
   </SnackbarProvider>,
-  document.getElementById("root"),
+  document.getElementById("root")
 );

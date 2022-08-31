@@ -67,9 +67,10 @@ const SingleHMOFilters = ({ setHmoEnrollees, setPageInfo, queryParams }) => {
   };
 
   const refresh = async (setFilterValue, defaultVal) => {
-    displayAlert("error", `Something went wrong while filtering. Try again.`);
+    displayAlert("error", "Something went wrong while filtering. Try again.");
     setFilterValue(defaultVal);
     deleteVar(variables);
+
     refetch({ variables: { providerId: hmoId } })
       .then(({ data }) => {
         setHmoEnrollees(data?.getEnrollees?.data || []);
@@ -77,7 +78,7 @@ const SingleHMOFilters = ({ setHmoEnrollees, setPageInfo, queryParams }) => {
       })
       .catch((error) => {
         console.error(error);
-        displayAlert("error", `Failed to get HMO enrollees data, Try again`);
+        displayAlert("error", "Failed to get HMO enrollees data, Try again");
       });
   };
 
