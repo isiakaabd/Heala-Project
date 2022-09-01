@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
+import LabelIcon from "components/Icons/LabelIcon";
 import {
   List,
   ListItemText,
@@ -8,7 +9,9 @@ import {
   ListItemIcon,
   Grid,
 } from "@mui/material";
-
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
 import logo from "assets/images/logo.svg";
 import { setSideNav } from "helpers/func";
 import { useMutation } from "@apollo/client";
@@ -17,7 +20,8 @@ import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import LogoutIcon from "components/Icons/LogoutIcon";
-import { menus } from "helpers/asideMenus";
+import { firstMenu, menus, subMenu } from "helpers/asideMenus";
+import HMOIcon from "components/Icons/HMOIcon";
 
 const SideMenu = (props) => {
   const { drawerWidth } = props;
@@ -30,7 +34,7 @@ const SideMenu = (props) => {
   const useStyles = makeStyles((theme) => ({
     aside: {
       /* width: `${drawerWidth}`, */
-      width: "280px",
+      width: "300px",
       background: "#fff",
       paddingLeft: "2em",
       paddingRight: "2em",
@@ -150,14 +154,17 @@ const SideMenu = (props) => {
       logout();
       setSelectedMenu(13);
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSideNav(menus, location?.pathname, setSelectedMenu);
   }, [location?.pathname]);
-
+  const [open, setOpen] = useState(true);
+  const handleClick = () => {
+    setOpen(!open);
+  };
   return (
     <>
       <Grid
@@ -189,6 +196,59 @@ const SideMenu = (props) => {
               </ListItemButton>
             );
           })}
+          <ListItemButton onClick={handleClick}>
+            <ListItemIcon
+              sx={{ marginRight: "15px", height: "30px", width: "30px" }}
+            >
+              <LabelIcon sx={{ height: "25px", width: "25px" }} />
+            </ListItemIcon>
+            <ListItemText primary="Provider Services" sx={{ pr: 1 }} />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {subMenu.map((menu) => {
+                const { icon, id, path } = menu;
+                return (
+                  <ListItemButton
+                    disableRipple
+                    key={menu.id}
+                    onClick={() => setSelectedMenu(id)}
+                    selected={selectedMenu === id}
+                    component={Link}
+                    to={path}
+                    sx={{ marginLeft: "45px" }}
+                  >
+                    <ListItemIcon>{icon}</ListItemIcon>
+
+                    <ListItemText>{menu.title}</ListItemText>
+                  </ListItemButton>
+                );
+              })}
+            </List>
+          </Collapse>
+          {firstMenu.map((menu) => {
+            const { icon } = menu;
+            return (
+              <ListItemButton
+                disableRipple
+                key={menu.id}
+                onClick={() => setSelectedMenu(menu.id)}
+                selected={selectedMenu === menu.id}
+                component={Link}
+                to={menu.path}
+              >
+                <ListItemIcon
+                  sx={{ marginRight: "15px", height: "30px", width: "30px" }}
+                >
+                  {icon}
+                </ListItemIcon>
+
+                <ListItemText>{menu.title}</ListItemText>
+              </ListItemButton>
+            );
+          })}
+
           <ListItemButton
             disableRipple
             classes={{ root: classes.logout }}

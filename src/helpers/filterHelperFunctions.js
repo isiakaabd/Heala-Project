@@ -157,7 +157,31 @@ export const changeTableLimit = async (fetchFunc, variables) => {
     console.log("couldn't change table limit", error);
   }
 };
-
+export const banks = [
+  { id: "1", key: "Access Bank", value: "044" },
+  { id: "2", key: "Citibank", value: "023" },
+  { id: "3", key: "Diamond Bank", value: "063" },
+  { id: "4", key: "Dynamic Standard Bank", value: "" },
+  { id: "5", key: "Ecobank Nigeria", value: "050" },
+  { id: "6", key: "Fidelity Bank Nigeria", value: "070" },
+  { id: "7", key: "First Bank of Nigeria", value: "011" },
+  { id: "8", key: "First City Monument Bank", value: "214" },
+  { id: "9", key: "Guaranty Trust Bank", value: "058" },
+  { id: "10", key: "Heritage Bank Plc", value: "030" },
+  { id: "11", key: "Jaiz Bank", value: "301" },
+  { id: "12", key: "Keystone Bank Limited", value: "082" },
+  { id: "13", key: "Providus Bank Plc", value: "101" },
+  { id: "14", key: "Polaris Bank", value: "076" },
+  { id: "15", key: "Stanbic IBTC Bank Nigeria Limited", value: "221" },
+  { id: "16", key: "Standard Chartered Bank", value: "068" },
+  { id: "17", key: "Sterling Bank", value: "232" },
+  { id: "18", key: "Suntrust Bank Nigeria Limited", value: "100" },
+  { id: "19", key: "Union Bank of Nigeria", value: "032" },
+  { id: "20", key: "United Bank for Africa", value: "033" },
+  { id: "21", key: "Unity Bank Plc", value: "215" },
+  { id: "22", key: "Wema Bank", value: "035" },
+  { id: "23", key: "Zenith Bank", value: "057" },
+];
 export const handlePageChange = (fetchDataFN, type, pageInfo, variables) => {
   const getData = (pageNumber) => {
     return fetchDataFN({

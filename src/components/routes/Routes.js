@@ -33,9 +33,11 @@ import {
   HcpCaseNote,
   HcpConsultations,
   ViewMessage,
+  Heala,
   CreateMessage,
   Messages,
   Illness,
+  Hm,
   WaitingListDetails,
   WaitingList,
   Permission,
@@ -123,6 +125,10 @@ const Routes = () => {
         component={Medications}
       />
 
+      {/*  =====  Heala ROUTES STARTS HERE ===== */}
+      <PrivateRoute exact path="/heala" component={Heala} />
+      <PrivateRoute exact path="/hmos" component={Hm} />
+      <PrivateRoute exact path="/user-type" component={UserTypes} />
       {/*  =====  DOCTORS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hcps" component={Hcps} />
 

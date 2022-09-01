@@ -136,12 +136,15 @@ FromikSelect.propTypes = {
 };
 
 const Selects = (props) => {
-  const { name, label, options } = props;
+  const { name, label, options, placeholder } = props;
   const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
       <FormLabel className={classes.FormLabel}>{label}</FormLabel>
       <Field name={name} as={FromikSelect} label={label}>
+        <MenuItem value="">
+          <Typography>{placeholder}</Typography>
+        </MenuItem>
         {options.map((option) => (
           <MenuItem key={option.key} value={option.value}>
             {option.key}

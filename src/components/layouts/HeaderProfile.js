@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Grid, Avatar, IconButton, Badge, InputBase } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
-import SearchIcon from "@mui/icons-material/Search";
+// import SearchIcon from "@mui/icons-material/Search";
 import PropTypes from "prop-types";
 import displayPhoto from "assets/images/avatar.svg";
 import { Notifications } from "components/layouts";
 import { findAccounts, getNotifications } from "components/graphQL/useQuery";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import BellIcon from "components/Icons/BellIcon";
-
+import { ReactComponent as SearchIcon } from "assets/images/search.svg";
 const useStyles = makeStyles((theme) => ({
   role: {
     fontSize: "clamp(1rem, 1vw, 1.5rem)",
@@ -127,8 +127,12 @@ const HeaderProfile = () => {
             paddingTop: 0,
           }}
         >
-          <IconButton type="button" aria-label="search">
-            <SearchIcon fontSize="large" />
+          <IconButton
+            type="button"
+            sx={{ color: "#F8F8F8" }}
+            aria-label="search"
+          >
+            <SearchIcon />
           </IconButton>
           <InputBase
             sx={{ flex: 1, p: 0 }}

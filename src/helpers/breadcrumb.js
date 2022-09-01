@@ -36,9 +36,14 @@ export const patterns = {
   "View verification": "verification/view/{id}",
 
   // WHITE LABEL PATTERNS
-  "White labels": "label",
+  "Provider Services": "label",
   "User types": "label/types",
   Providers: "label/provider",
+
+  Heala: "Heala",
+  Hospital: "Hospital",
+  Hm: "HMO",
+  UserTypes: "UserType",
 
   // FINANCE PATTERS
   Finance: "finance",

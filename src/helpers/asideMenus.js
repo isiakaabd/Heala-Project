@@ -32,6 +32,8 @@ export const menus = [
     icon: <DoctorsIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/hcps",
   },
+];
+export const firstMenu = [
   {
     id: 3,
     title: "Partners",
@@ -64,7 +66,7 @@ export const menus = [
   },
   {
     id: 12,
-    title: "White Label",
+    title: "Provider Services",
     icon: <LabelIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/label",
   },
@@ -91,5 +93,33 @@ export const menus = [
     title: "Settings",
     icon: <SettingsIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/settings",
+  },
+];
+
+//
+export const subMenu = [
+  {
+    id: 100,
+    title: "Heala",
+    icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
+    path: "/heala",
+  },
+  {
+    id: 1100,
+    title: "Hospital",
+    icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
+    path: "/hospital",
+  },
+  {
+    id: 111,
+    title: "HMO",
+    icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
+    path: "/hmos",
+  },
+  {
+    id: 1101,
+    title: "User Types",
+    icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
+    path: "/user-type",
   },
 ];
