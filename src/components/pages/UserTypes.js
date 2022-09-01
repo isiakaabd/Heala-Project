@@ -14,7 +14,6 @@ import {
   Avatar,
   TableCell,
   Checkbox,
-  Alert,
 } from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import { EnhancedTable, EmptyTable } from "components/layouts";
@@ -186,7 +185,7 @@ const UserTypes = () => {
   const [singleData, setSingleData] = useState();
   const [fetchUserTypes, { loading, data, error /*refetch*/ }] =
     useLazyQuery(getUserTypes);
-
+  console.log(data);
   useEffect(() => {
     fetchUserTypes({
       variables: {
@@ -266,15 +265,6 @@ const UserTypes = () => {
         flexWrap="nowrap"
         height="100%"
       >
-        {alert && Object.keys(alert).length > 0 && (
-          <Alert
-            variant="filled"
-            severity={alert.type}
-            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
-          >
-            {alert.message}
-          </Alert>
-        )}
         <Grid
           item
           gap={{ sm: 4, xs: 2 }}
@@ -291,14 +281,14 @@ const UserTypes = () => {
             justifyContent="space-between"
           >
             <Grid item></Grid>
-            <Grid item>
+            {/* <Grid item>
               <CustomButton
                 endIcon={<AddIcon />}
                 onClick={handleDialogOpens1}
                 title="Add new User Types"
                 type={buttonType}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
         <TableLayout>
@@ -368,6 +358,10 @@ const UserTypes = () => {
                             </span>
                           </div>
                         </TableCell>
+                        <TableCell
+                          align="center"
+                          className={classes.tableCell}
+                        ></TableCell>
                         <TableCell align="center" className={classes.tableCell}>
                           <div
                             style={{
@@ -384,9 +378,9 @@ const UserTypes = () => {
                               onClick={() => handleEditOpenDialog(row._id)}
                               endIcon={<EditIcon color="success" />}
                             >
-                              Edit UserType
+                              Edit
                             </Button>
-                            <Button
+                            {/* <Button
                               variant="contained"
                               disableRipple
                               className={`${classes.tableBtn} ${classes.redBtn}`}
@@ -394,7 +388,7 @@ const UserTypes = () => {
                               endIcon={<DeleteIcon color="error" />}
                             >
                               Delete UserType
-                            </Button>
+                            </Button> */}
                           </div>
                         </TableCell>
                       </TableRow>

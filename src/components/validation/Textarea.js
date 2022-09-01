@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "1.5rem",
     // padding: ".5rem 1rem",
     border: "none",
-    color: theme.palette.common.grey,
+    // color: theme.palette.common.grey,
     "&:focus": {
       outline: "none",
     },
@@ -38,22 +38,22 @@ const EmptyTextarea = (props) => {
   const { name, value, minRows, onChange, placeholder, onBlur } = props;
   const classes = useStyles();
   return (
-    <Grid container>
-      <TextField
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        name={name}
-        multiline
-        minRows={minRows ? minRows : 5}
-        placeholder={placeholder}
-        style={{ height: "100%" }}
-        className={`${classes.formInput} ${classes.textArea}`}
-      />
-      <div>
-        <ErrorMessage name={name} component={TextError} />
-      </div>
-    </Grid>
+    <>
+      <Grid container>
+        <TextField
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          name={name}
+          multiline
+          minRows={minRows ? minRows : 5}
+          placeholder={placeholder}
+          style={{ height: "100%", width: "100%" }}
+          className={`${classes.formInput} ${classes.textArea}`}
+        />
+      </Grid>
+      <ErrorMessage name={name} component={TextError} />
+    </>
   );
 };
 EmptyTextarea.propTypes = {

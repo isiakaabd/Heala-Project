@@ -51,3 +51,5 @@ export { default as ViewReferral } from "./ViewReferral";
 export { default as WaitingList } from "./WaitingList";
 export { default as WaitingListDetails } from "./WaitingListDetails";
 export { default as WhiteLabel } from "./WhiteLabel";
+export { default as Heala } from "./Heala";
+export { default as Hm } from "./Hm";

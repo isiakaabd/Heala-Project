@@ -89,16 +89,26 @@ export const addPartnerValidationSchema = Yup.object({
 });
 
 export const addNewPartnerValidationSchema = Yup.object({
-  name: Yup.string("Enter your name").trim().required("name is required"),
-  image: Yup.string("Upload a single Image").required("Image is required"),
+  name: Yup.string("Enter your name").trim().required("Name is required"),
+  image: Yup.string("Upload a single Image")
+    .typeError("Must be an Image ,png,jpg")
+    .required("Image is required"),
   email: Yup.string()
     .email("Enter a valid email")
     .trim()
     .required("Email is required"),
+  account: Yup.number("Enter a valid account number")
+    .typeError("Please enter a valid Account number")
+    .required("Account number is required"),
+  phone: Yup.number("Enter a valid Phone number")
+    .typeError("Please enter a valid phone number")
+    .required("Phone number is required"),
+  address: Yup.string("Enter Address ").required("Address is required"),
   provider: Yup.string("select a provider").trim(),
-  specialization: Yup.string("select your Specialization").required(
-    "Specialization is required"
-  ),
+  bank: Yup.string("select a Bank").required("Select a Bank"),
+  classification: Yup.string("select a classification").trim(),
+  specialization: Yup.string("select a specialization").trim(),
+  category: Yup.string("select your category").required("category is required"),
 });
 
 export const hmoValidationSchema = Yup.object({

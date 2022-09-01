@@ -8,11 +8,11 @@ import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
-  Button,
   Checkbox,
   TableCell,
   Avatar,
   TableRow,
+  Button,
   Grid,
   Typography,
 } from "@mui/material";
@@ -29,7 +29,7 @@ import {
   deleteVar,
   filterData,
   handlePageChange,
-  trucateProfileLink,
+  banks,
 } from "helpers/filterHelperFunctions";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
@@ -51,7 +51,6 @@ import {
   addPartnerValidationSchema,
   filterPartnersValidationSchema,
 } from "helpers/validationSchemas";
-import Copy from "components/Copy";
 import Filter from "components/Forms/Filters";
 import { PageInfo } from "components/graphQL/fragment";
 import TableLayout from "components/layouts/TableLayout";
@@ -91,6 +90,22 @@ const Partners = () => {
     { key: "Pharmacy", value: "Pharmacy" },
     { key: "Hospital", value: "Hospital" },
   ];
+  const categoryOptions = [
+    { key: "Diagnostics", value: "diagnostics" },
+    { key: "Pharmacy", value: "pharmacy" },
+    { key: "Hospital", value: "hospital" },
+  ];
+  const classificationOptions = [
+    { key: "Primary Healthcare", value: "Primary Healthcare" },
+    { key: "Secondary Healthcare", value: "Secondary Healthcare" },
+  ];
+
+  const specializationOptions = [
+    { key: "Dental Care", value: "Dental Care" },
+    { key: "Eye Clinic", value: "Eye Clinic" },
+    { key: "Skin Care", value: "Skin Care" },
+    { key: "Mental Care", value: "Mental Care" },
+  ];
   const specializations5 = [
     { key: "Diagnostics", value: "Diagnostics" },
     { key: "Pharmacy", value: "Pharmacy" },
@@ -119,6 +134,12 @@ const Partners = () => {
     name: "",
     email: "",
     specialization: "",
+    category: "",
+    account: "",
+    address: "",
+    phone: "",
+    classification: "",
+    bank: "",
     image: null,
     provider: "",
   };
@@ -207,7 +228,18 @@ const Partners = () => {
   };
 
   const onSubmit1 = async (values, onSubmitProps) => {
-    let { name, email, specialization, provider, image } = values;
+    console.log(values);
+    let {
+      name,
+      email,
+      category,
+      phone,
+      bank,
+      specialization,
+      provider,
+      image,
+      account,
+    } = values;
     name = name.trim();
 
     try {
@@ -215,7 +247,11 @@ const Partners = () => {
         variables: {
           name,
           email,
-          category: specialization,
+          category,
+          specialization,
+          account,
+          phone,
+          bank,
           logoImageUrl: image,
           providerId: provider,
         },
@@ -333,7 +369,7 @@ const Partners = () => {
           <Grid item>
             <CustomButton
               endIcon={<PersonAddAlt1Icon />}
-              title="Add  Partner"
+              title="Add "
               type={darkButtonType}
               onClick={() => setOpenAddPartner(true)}
             />
@@ -378,7 +414,7 @@ const Partners = () => {
               {partner.map((row, index) => {
                 const isItemSelected = isSelected(row.id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
-                const { _id, logoImageUrl, name, category, profileUrl } = row;
+                const { _id, logoImageUrl, name, email, category } = row;
 
                 return (
                   <TableRow
@@ -431,9 +467,20 @@ const Partners = () => {
                         maxWidth: "20rem",
                       }}
                     >
-                      {category}
+                      {email}
                     </TableCell>
                     <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{
+                        color: theme.palette.common.grey,
+                        maxWidth: "20rem",
+                      }}
+                    >
+                      {category}
+                    </TableCell>
+
+                    {/* <TableCell
                       align="left"
                       className={classes.tableCell}
                       style={{
@@ -467,7 +514,7 @@ const Partners = () => {
                           Generate Link
                         </Button>
                       )}
-                    </TableCell>
+                    </TableCell> 
                     <TableCell align="center" className={classes.tableCell}>
                       {isDeleting[_id] ? (
                         <Loader />
@@ -485,7 +532,7 @@ const Partners = () => {
                           Delete partner
                         </Button>
                       )}
-                    </TableCell>
+                    </TableCell>*/}
                   </TableRow>
                 );
               })}
@@ -588,82 +635,131 @@ const Partners = () => {
           validateOnBlur={false}
         >
           {({ isSubmitting, isValid, dirty, values, setFieldValue }) => {
+            const { classification, category } = values;
             return (
-              <Form style={{ marginTop: "3rem" }}>
-                <Grid container direction="column" gap={4}>
+              <Form style={{ marginTop: "1rem" }}>
+                <Grid container direction="column" gap={1.5}>
                   <Grid item container>
-                    <Grid item container direction="column" gap={1}>
-                      <Grid item container>
-                        <Grid item container>
-                          <FormikControl
-                            control="input"
-                            label="Name"
-                            id="name"
-                            name="name"
-                            placeholder="Enter Partner name"
-                          />
-                        </Grid>
+                    <Grid item container flexWrap="nowrap" gap={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="Name"
+                          id="name"
+                          name="name"
+                          placeholder="Enter Partner name"
+                        />
                       </Grid>
-                      <Grid item container>
-                        <Grid item container>
-                          <FormikControl
-                            control="input"
-                            label="Email"
-                            id="name"
-                            name="email"
-                            placeholder="Enter Email"
-                          />
-                        </Grid>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="Email"
+                          id="name"
+                          name="email"
+                          placeholder="Enter Email"
+                        />
                       </Grid>
+                    </Grid>
+                    <Grid item container flexWrap="nowrap" gap={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          label=" Account Number"
+                          id="account"
+                          name="account"
+                          placeholder="Enter Account Number"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="input"
+                          label="Phone Number"
+                          id="phone"
+                          name="phone"
+                          placeholder="Enter Phone Number"
+                        />
+                      </Grid>
+                    </Grid>
 
-                      <Grid item container>
-                        <Grid item container>
+                    <Grid item container flexWrap="nowrap" gap={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="select"
+                          options={categoryOptions}
+                          name="category"
+                          label="Category"
+                          placeholder="Category"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="select"
+                          options={banks}
+                          name="bank"
+                          label="Bank"
+                          placeholder="Select Bank"
+                        />
+                      </Grid>
+                    </Grid>
+                    {category === "hospital" && (
+                      <Grid item container flexWrap="nowrap" gap={2}>
+                        <Grid item xs={6}>
                           <FormikControl
                             control="select"
-                            options={
-                              [
-                                { key: "Diagnostics", value: "diagnostics" },
-                                { key: "Pharmacy", value: "pharmacy" },
-                                { key: "Hospital", value: "hospital" },
-                              ] || ""
-                            }
-                            name="specialization"
-                            label="Category"
-                            placeholder="Category"
+                            options={dropDown}
+                            name="provider"
+                            label="Provider"
+                            id="provider"
+                            placeholder="Select Provider"
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <FormikControl
+                            control="select"
+                            options={classificationOptions}
+                            name="classification"
+                            label="Classification"
+                            id="classification"
+                            placeholder="select classification"
                           />
                         </Grid>
                       </Grid>
-                      {values.specialization === "hospital" ? (
-                        <Grid item container>
-                          <Grid item container>
-                            <FormikControl
-                              control="select"
-                              options={dropDown || ""}
-                              name="provider"
-                              label="Provider"
-                              id="provider"
-                              placeholder="select Provider"
-                            />
-                          </Grid>
+                    )}
+                    <Grid item container flexWrap="nowrap" gap={2}>
+                      <Grid item xs={6}>
+                        <FormikControl
+                          control="file"
+                          name="image"
+                          label="Company Logo"
+                          setFieldValue={setFieldValue}
+                        />
+                      </Grid>
+                      {classification === "Secondary Healthcare" && (
+                        <Grid item xs={6}>
+                          <FormikControl
+                            control="select"
+                            options={specializationOptions}
+                            name="specialization"
+                            label="Specialization"
+                            id="specialization"
+                            placeholder="Select Specialization"
+                          />
                         </Grid>
-                      ) : null}
-                      <Grid item container direction="column" gap={2}>
-                        <Grid item container>
-                          <Grid container spacing={2}>
-                            <Grid item md>
-                              <FormikControl
-                                control="file"
-                                name="image"
-                                label="Company Logo"
-                                setFieldValue={setFieldValue}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
+                      )}
+                    </Grid>
+                    <Grid item container flexWrap="nowrap">
+                      <Grid item container>
+                        <FormikControl
+                          control="textarea"
+                          name="address"
+                          minRows={3}
+                          label="Address"
+                          placeholder="Enter address"
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item container>
+                  <Grid item container sx={{ mt: 1 }}>
                     <CustomButton
                       title="Add Partner"
                       width="100%"

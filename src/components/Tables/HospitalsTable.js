@@ -6,7 +6,7 @@ import TableLayout from "components/layouts/TableLayout";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import EnhancedTable from "components/layouts/EnhancedTable";
 import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo } from "../../helpers/mockData";
+import { defaultPageInfo } from "helpers/mockData";
 import HospitalRow from "components/Rows/HospitalRow";
 import { useLazyQuery } from "@apollo/client";
 import { getProviders } from "components/graphQL/useQuery";
