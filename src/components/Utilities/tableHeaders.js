@@ -535,3 +535,9 @@ export const hospitalTableHeadCells = [
   { id: 4, label: "Partners" },
   { id: 2, label: "Deep Link" },
 ];
+export const hospitalTableHeadCells5 = [
+  { id: 1, label: "Providers" },
+  { id: 0, label: "Users" },
+  { id: 3, label: "Enrollees" },
+  { id: 4, label: "Partners" },
+];

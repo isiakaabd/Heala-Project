@@ -7,10 +7,20 @@ export const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  title: {
+    fontSize: "clamp(1rem, 2vw, 1.2rem)",
+    color: theme.palette.common.black,
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
   actionBtnGrid: {
     "&.MuiGrid-root": {
       marginRight: "1.5rem",
     },
+  },
+  link: {
+    textDecoration: "none",
   },
   button: {
     "&.MuiButton-root": {
