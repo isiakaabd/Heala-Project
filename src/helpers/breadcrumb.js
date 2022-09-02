@@ -22,12 +22,11 @@ export const patterns = {
 
   // HMO PATTERNS
   HMO: "hmo",
-  "Hmo view": "hmo/{id}",
+  Hmo: "hmo/{id}",
 
   // MESSAGES PATTERNS
   Messages: "messages",
   "View message": "messages/{id}",
-
   // EMAIL PATTERNS
   Email: "email",
 
@@ -37,14 +36,17 @@ export const patterns = {
 
   // WHITE LABEL PATTERNS
   "Provider Services": "label",
-  "User types": "label/types",
-  Providers: "label/provider",
+  // Providers: "label/provider",
 
   Heala: "Heala",
+  UserTypes: "user-type",
+  Provider: "user-type/{id}",
+  "Doctor Provider": "hcps/{id}/filter",
+  "Patient Provider": "patients/{id}/filter",
   Hospital: "Hospital",
-  Hm: "HMO",
-  UserTypes: "UserType",
-
+  Hm: "Patient Provider",
+  // UserTypes: "UserType",
+  Hela: "Doctor Provider",
   // FINANCE PATTERS
   Finance: "finance",
   "Earnings table": "finance/earnings",

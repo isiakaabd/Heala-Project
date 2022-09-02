@@ -35,6 +35,7 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -145,6 +146,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Providers = () => {
   const classes = useStyles();
+  const { id: ids } = useParams();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchProviders, { error, loading, refetch }] =
     useLazyQuery(getProviders);
@@ -154,8 +156,8 @@ const Providers = () => {
     fetchProviders({
       variables: {
         first: pageInfo?.limit || 10,
+        userTypeId: ids,
       },
-      notifyOnNetworkStatusChange: true,
     });
     //eslint-disable-next-line
   }, [fetchProviders]);
@@ -265,15 +267,6 @@ const Providers = () => {
         flexWrap="nowrap"
         height="100%"
       >
-        {alert && Object.keys(alert).length > 0 && (
-          <Alert
-            variant="filled"
-            severity={alert.type}
-            sx={{ justifyContent: "center", width: "70%", margin: "0 auto" }}
-          >
-            {alert.message}
-          </Alert>
-        )}
         <Grid
           item
           gap={{ sm: 4, xs: 2 }}
@@ -301,11 +294,16 @@ const Providers = () => {
                 paginationLabel="Providers per page"
                 hasCheckbox={true}
                 changeLimit={async (e) => {
-                  await changeTableLimit(fetchProviders, { first: e });
+                  await changeTableLimit(fetchProviders, {
+                    first: e,
+                    userTypeId: ids,
+                  });
                 }}
                 dataPageInfo={pageInfo}
                 handlePagination={async (page) => {
-                  await handlePageChange(fetchProviders, page, pageInfo, {});
+                  await handlePageChange(fetchProviders, page, pageInfo, {
+                    userTypeId: ids,
+                  });
                 }}
               >
                 {providers.map((row, index) => {

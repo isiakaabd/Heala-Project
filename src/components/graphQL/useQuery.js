@@ -1450,9 +1450,14 @@ export const getEmailList = gql`
   }
 `;
 export const getPartners = gql`
-  query getPartners($page: Int, $first: Int, $category: String) {
+  query getPartners(
+    $page: Int
+    $first: Int
+    $category: String
+    $provider: String
+  ) {
     getPartners(
-      filterBy: { category: $category }
+      filterBy: { category: $category, provider: $provider }
       orderBy: "-createdAt"
       page: $page
       first: $first

@@ -177,6 +177,7 @@ const SideMenu = (props) => {
         <List>
           {menus.map((menu) => {
             const { icon } = menu;
+
             return (
               <ListItemButton
                 disableRipple
@@ -206,9 +207,9 @@ const SideMenu = (props) => {
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+            <List component="div" disablePadding sx={{ p: 0 }}>
               {subMenu.map((menu) => {
-                const { icon, id, path } = menu;
+                const { id, path } = menu;
                 return (
                   <ListItemButton
                     disableRipple
@@ -219,7 +220,7 @@ const SideMenu = (props) => {
                     to={path}
                     sx={{ marginLeft: "45px" }}
                   >
-                    <ListItemIcon>{icon}</ListItemIcon>
+                    {/* <ListItemIcon>{icon}</ListItemIcon> */}
 
                     <ListItemText>{menu.title}</ListItemText>
                   </ListItemButton>
@@ -228,15 +229,17 @@ const SideMenu = (props) => {
             </List>
           </Collapse>
           {firstMenu.map((menu) => {
-            const { icon } = menu;
+            const { icon, id, path, title } = menu;
+
             return (
               <ListItemButton
                 disableRipple
                 key={menu.id}
+                style={{ display: id === 3 ? "none" : "" }}
                 onClick={() => setSelectedMenu(menu.id)}
                 selected={selectedMenu === menu.id}
                 component={Link}
-                to={menu.path}
+                to={path}
               >
                 <ListItemIcon
                   sx={{ marginRight: "15px", height: "30px", width: "30px" }}
@@ -244,7 +247,7 @@ const SideMenu = (props) => {
                   {icon}
                 </ListItemIcon>
 
-                <ListItemText>{menu.title}</ListItemText>
+                <ListItemText>{title}</ListItemText>
               </ListItemButton>
             );
           })}

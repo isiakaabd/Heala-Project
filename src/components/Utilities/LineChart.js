@@ -8,9 +8,9 @@ import { monthNames } from "components/Utilities/Time";
 const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
-  const lightGold = "rgba(243, 173, 83,.2)";
-  const lightRed = "rgba(62, 94, 169, .2)";
-  const lightGreen = "rgba(45, 211, 158, .2)";
+  const lightGold = "rgba(243, 173, 83,.04)";
+  const lightRed = "rgba(62, 94, 169, .04)";
+  const lightGreen = "rgba(45, 211, 158, .04)";
   const gold = theme.palette.common.gold;
   const [arr, setArr] = useState([]);
   useEffect(() => {
@@ -119,13 +119,13 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
     } else {
       switch (state) {
         case "all":
-          return setArr(all);
+          return setArr(active);
         case "active":
           return setArr(active);
         case "inactive":
           return setArr(inactive);
         default:
-          return setArr(all);
+          return setArr(active);
       }
     }
   }, [

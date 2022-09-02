@@ -12,6 +12,7 @@ import {
   TableRow,
   Button,
   Avatar,
+  Typography,
   TableCell,
   Checkbox,
 } from "@mui/material";
@@ -36,10 +37,21 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
     color: theme.palette.common.dark,
+  },
+  link: {
+    textDecoration: "none",
+  },
+  title: {
+    fontSize: "clamp(1rem, 2vw, 1.2rem)",
+    color: theme.palette.common.black,
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
   btn: {
     "&.MuiButton-root": {
@@ -308,10 +320,10 @@ const UserTypes = () => {
                 }}
               >
                 {userType
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row._id, selectedRows);
-
+                    const { _id, icon, name, providerCount, provider } = row;
+                    const isItemSelected = isSelected(_id, selectedRows);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
@@ -320,14 +332,14 @@ const UserTypes = () => {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row._id}
+                        key={_id}
                         selected={isItemSelected}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
                               handleSelectedRows(
-                                row.id,
+                                _id,
                                 selectedRows,
                                 setSelectedRows
                               )
@@ -339,7 +351,7 @@ const UserTypes = () => {
                             }}
                           />
                         </TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
+                        <TableCell align="left" className={classes.tableCell}>
                           <div
                             style={{
                               height: "100%",
@@ -349,20 +361,27 @@ const UserTypes = () => {
                           >
                             <span style={{ marginRight: "1rem" }}>
                               <Avatar
-                                src={row.icon}
+                                src={icon}
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span>
-                            <span style={{ fontSize: "1.25rem" }}>
-                              {row.name}
-                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>{name}</span>
                           </div>
                         </TableCell>
-                        <TableCell
-                          align="center"
-                          className={classes.tableCell}
-                        ></TableCell>
-                        <TableCell align="center" className={classes.tableCell}>
+                        <TableCell align="left" className={classes.tableCell}>
+                          <Link
+                            to={`/user-type/${_id}`}
+                            className={classes.link}
+                          >
+                            <Typography
+                              variant="h3"
+                              classes={{ root: classes.title }}
+                            >
+                              {providerCount ? providerCount : "NA"}
+                            </Typography>
+                          </Link>
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
                           <div
                             style={{
                               height: "100%",
@@ -375,7 +394,7 @@ const UserTypes = () => {
                               variant="contained"
                               disableRipple
                               className={`${classes.tableBtn} ${classes.greenBtn}`}
-                              onClick={() => handleEditOpenDialog(row._id)}
+                              onClick={() => handleEditOpenDialog(_id)}
                               endIcon={<EditIcon color="success" />}
                             >
                               Edit
@@ -384,7 +403,7 @@ const UserTypes = () => {
                               variant="contained"
                               disableRipple
                               className={`${classes.tableBtn} ${classes.redBtn}`}
-                              onClick={() => handleDeleteOpenDialog(row._id)}
+                              onClick={() => handleDeleteOpenDialog(_id)}
                               endIcon={<DeleteIcon color="error" />}
                             >
                               Delete UserType

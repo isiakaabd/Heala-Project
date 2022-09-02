@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { EmptyTable, NoData } from "components/layouts";
-import { Grid, Button, Typography, TableCell, TableRow } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Avatar,
+  Typography,
+  TableCell,
+  TableRow,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -16,18 +23,17 @@ import { getProviders, getPartners } from "components/graphQL/useQuery";
 import { Loader } from "components/Utilities";
 import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
 
-const HospitalsTable = () => {
+const Heala = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
   const [hospitals, setHospitals] = useState([]);
+  const userTypeId = "61ed2354e6091400135e3d94";
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchHospitals, { loading, error }] = useLazyQuery(getProviders, {
-    variables: { userTypeId: "61ed2354e6091400135e3d94" },
+    variables: { userTypeId },
   });
-  const [Id, setId] = useState("");
-  const [fetchPartners, { error: err, refetch, variables }] =
-    useLazyQuery(getPartners);
+
   useEffect(() => {
     fetchHospitals()
       .then(({ data }) => {
@@ -82,52 +88,80 @@ const HospitalsTable = () => {
               const {
                 _id,
                 profileUrl,
-                firstName,
-                lastName,
-                plans,
-                email,
+                doctorsCount,
+                userCount,
                 icon,
+                partnersCount,
+                name,
               } = row;
-              const labelId = `enhanced-table-checkbox-${index}`;
+              // const labelId = `enhanced-table-checkbox-${index}`;
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={_id}>
                   <TableCell
-                    id={labelId}
-                    scope="row"
                     align="left"
                     className={classes.tableCell}
-                    style={{
-                      color: theme.palette.common.grey,
-                      textAlign: "left",
-                    }}
+                    style={{ maxWidth: "20rem" }}
                   >
-                    {_id ? trucateString(_id, 10, "front") : "NA"}
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "left",
+                      }}
+                    >
+                      <span style={{ marginRight: "1rem" }}>
+                        <Avatar
+                          alt={`Display Photo of ${name}`}
+                          src={icon}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      </span>
+                      <span style={{ fontSize: "1.25rem" }}>{name}</span>
+                    </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <span style={{ fontSize: "1.25rem" }}>NA</span>
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    NA
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
-                    <Link to={`/partners/${_id}`}>{"NA"}</Link>
-                  </TableCell>
-                  {/* <TableCell align="left" className={classes.tableCell}>
-                    <Link to={`/plans/hospitals/${_id}`}>
-                      <Button
-                        className={classes.viewBtn}
-                        endIcon={<ArrowForwardIosIcon />}
+                    <Link
+                      to={`/patients/${_id}/filter`}
+                      className={classes.link}
+                    >
+                      <Typography
+                        variant="h3"
+                        classes={{ root: classes.title }}
                       >
-                        View Plans
-                      </Button>
+                        {userCount ? userCount : "NA"}
+                      </Typography>
                     </Link>
-                  </TableCell> */}
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <Link to={`/hcps/${_id}/filter`} className={classes.link}>
+                      <Typography
+                        variant="h3"
+                        classes={{ root: classes.title }}
+                      >
+                        {doctorsCount ? doctorsCount : "NA"}
+                      </Typography>
+                    </Link>
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    <Link
+                      to={`/partners/${_id}/filter`}
+                      className={classes.link}
+                    >
+                      <Typography
+                        variant="h3"
+                        classes={{ root: classes.title }}
+                      >
+                        {partnersCount ? partnersCount : "NA"}
+                      </Typography>
+                    </Link>
+                  </TableCell>
+
                   <TableCell
                     align="left"
                     className={classes.tableCell}
                     style={{
                       color: theme.palette.common.grey,
-                      maxWidth: "20rem",
+                      maxWidth: "8rem",
                     }}
                   >
                     {profileUrl ? (
@@ -169,4 +203,4 @@ const HospitalsTable = () => {
   );
 };
 
-export default HospitalsTable;
+export default Heala;

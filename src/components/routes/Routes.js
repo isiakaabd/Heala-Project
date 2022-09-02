@@ -8,8 +8,11 @@ import {
   Patients,
   Subscription,
   DoctorPayout,
+  Hospital,
   Hcps,
+  DoctorProvider,
   ViewDoctorVerification,
+  PartnersProvider,
   SingleHCP,
   DoctorVerificationProfile,
   Appointments,
@@ -33,6 +36,7 @@ import {
   HcpCaseNote,
   HcpConsultations,
   ViewMessage,
+  PatientProvider,
   Heala,
   CreateMessage,
   Messages,
@@ -129,6 +133,13 @@ const Routes = () => {
       <PrivateRoute exact path="/heala" component={Heala} />
       <PrivateRoute exact path="/hmos" component={Hm} />
       <PrivateRoute exact path="/user-type" component={UserTypes} />
+      <PrivateRoute
+        exact
+        path="/patients/:id/filter"
+        component={PatientProvider}
+      />
+      <PrivateRoute exact path="/hcps/:id/filter" component={DoctorProvider} />
+      <PrivateRoute exact path="/hospital" component={Hospital} />
       {/*  =====  DOCTORS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hcps" component={Hcps} />
 
@@ -196,10 +207,15 @@ const Routes = () => {
       />
       {/*  =====  PARTNERS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/partners" component={Partners} />
+      <PrivateRoute
+        exact
+        path="/partners/:id/filter"
+        component={PartnersProvider}
+      />
 
       {/*  =====  HMO ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hmo" component={Hmo} />
-      <PrivateRoute exact path="/hmo/:hmoId" component={SingleHMO} />
+      <PrivateRoute exact path="/hmo/:id" component={SingleHMO} />
 
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
@@ -239,9 +255,9 @@ const Routes = () => {
 
       {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/label" component={WhiteLabel} />
-      <PrivateRoute path="/label/provider" component={Providers} />
+      <PrivateRoute path="/user-type/:id" component={Providers} />
 
-      <PrivateRoute path="/label/types" component={UserTypes} />
+      {/* <PrivateRoute path="/label/types" component={UserTypes} /> */}
 
       {/*  =====  FINANCE ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/finance" component={Finance} />

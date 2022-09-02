@@ -18,7 +18,7 @@ import { UploadEnrolleeListForm } from "components/Forms/UploadEnrolleeListForm"
 
 const SingleHMO = () => {
   const theme = useTheme();
-  const { hmoId } = useParams();
+  const { id } = useParams();
   const { displayAlert, getErrorMsg } = useAlert();
   const [hmoEnrollees, setHmoEnrollees] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
@@ -49,7 +49,7 @@ const SingleHMO = () => {
   const fetchData = (fetch) => {
     fetch({
       variables: {
-        providerId: hmoId,
+        providerId: id,
         first: 10,
       },
     })
@@ -65,7 +65,7 @@ const SingleHMO = () => {
   useEffect(() => {
     fetchData(fetchEnrollees);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchEnrollees, hmoId]);
+  }, [fetchEnrollees, id]);
 
   const darkButton = {
     background: theme.palette.primary.main,
@@ -121,7 +121,7 @@ const SingleHMO = () => {
           refetchData={() =>
             refetch({
               variables: {
-                providerId: hmoId,
+                providerId: id,
                 first: 10,
               },
             })
@@ -172,7 +172,7 @@ const SingleHMO = () => {
                   variables: {
                     planId: values?.planId,
                     fileUrl: fileUrl,
-                    providerId: hmoId,
+                    providerId: id,
                   },
                 });
 
