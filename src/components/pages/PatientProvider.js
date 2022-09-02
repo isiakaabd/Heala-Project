@@ -76,7 +76,7 @@ const PatientProvider = () => {
     limit: 10,
     totalDocs: 0,
   });
-  console.log(data);
+
   useEffect(() => {
     try {
       fetchPatient({
@@ -105,8 +105,8 @@ const PatientProvider = () => {
         displayAlert("error", errMsg);
       });
   };
-
-  // if (error) return <NoData error={error} />;
+  if (loading) return <Loader />;
+  if (error) return <NoData error={error} />;
 
   return (
     <Grid item flex={1} container direction="column" rowGap={2}>
@@ -193,7 +193,7 @@ const PatientProvider = () => {
                   lastName,
                   plan,
                   provider,
-                  image,
+
                   consultations,
                   _id,
                   status,
@@ -241,13 +241,6 @@ const PatientProvider = () => {
                           alignItems: "left",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${firstName}`}
-                            src={image ? image : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span
                           style={{ fontSize: "1.25rem" }}
                         >{`${firstName} ${lastName}`}</span>

@@ -36,10 +36,11 @@ export const patterns = {
 
   // WHITE LABEL PATTERNS
   "Provider Services": "label",
+  Partnerss: "partners/{id}/filter",
   // Providers: "label/provider",
 
   Heala: "Heala",
-  UserTypes: "user-type",
+  "Provider Service": "user-type",
   Provider: "user-type/{id}",
   "Doctor Provider": "hcps/{id}/filter",
   "Patient Provider": "patients/{id}/filter",
