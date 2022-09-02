@@ -197,7 +197,7 @@ const SideMenu = (props) => {
               </ListItemButton>
             );
           })}
-          <ListItemButton onClick={handleClick}>
+          {/* <ListItemButton onClick={handleClick}>
             <ListItemIcon
               sx={{ marginRight: "15px", height: "30px", width: "30px" }}
             >
@@ -220,15 +220,15 @@ const SideMenu = (props) => {
                     to={path}
                     sx={{ marginLeft: "45px" }}
                   >
-                    {/* <ListItemIcon>{icon}</ListItemIcon> */}
+                    {/* <ListItemIcon>{icon}</ListItemIcon> 
 
                     <ListItemText>{menu.title}</ListItemText>
                   </ListItemButton>
                 );
               })}
             </List>
-          </Collapse>
-          {firstMenu.map((menu) => {
+          </Collapse> */}
+          {/* {firstMenu.map((menu) => {
             const { icon, id, path, title } = menu;
 
             return (
@@ -250,7 +250,7 @@ const SideMenu = (props) => {
                 <ListItemText>{title}</ListItemText>
               </ListItemButton>
             );
-          })}
+          })} */}
 
           <ListItemButton
             disableRipple

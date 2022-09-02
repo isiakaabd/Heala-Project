@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: "clamp(1rem, 2vw, 1.2rem)",
-    color: theme.palette.common.black,
+    color: theme.palette.common.red,
     "&:hover": {
       textDecoration: "underline",
     },

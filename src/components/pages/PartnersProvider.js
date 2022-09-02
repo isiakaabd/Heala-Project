@@ -485,60 +485,6 @@ const PartnersProvider = () => {
                     >
                       {category}
                     </TableCell>
-
-                    {/* <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{
-                        color: theme.palette.common.grey,
-                        maxWidth: "20rem",
-                      }}
-                    >
-                      {profileUrl || z(_id) !== "" ? (
-                        <Typography
-                          style={{
-                            color: theme.palette.common.grey,
-                            maxWidth: "20rem",
-                          }}
-                          sx={{ display: "flex", alignItems: "center" }}
-                        >
-                          {trucateProfileLink(profileUrl ? profileUrl : z(_id))}
-                          <div style={{ marginLeft: "1rem" }}>
-                            <Copy
-                              name="Profile Link"
-                              text={profileUrl ? profileUrl : z(_id)}
-                            />
-                          </div>
-                        </Typography>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          onClick={() => handleGenerateLink(_id)}
-                        >
-                          Generate Link
-                        </Button>
-                      )}
-                    </TableCell> 
-                    <TableCell align="center" className={classes.tableCell}>
-                      {isDeleting[_id] ? (
-                        <Loader />
-                      ) : (
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          endIcon={<DeleteIcon color="error" />}
-                          onClick={() => {
-                            setPartnerToDelete(_id || "");
-                            setOpenDeletePartner(true);
-                          }}
-                        >
-                          Delete partner
-                        </Button>
-                      )}
-                    </TableCell>*/}
                   </TableRow>
                 );
               })}
