@@ -209,7 +209,7 @@ const Routes = () => {
       <PrivateRoute exact path="/partners" component={Partners} />
       <PrivateRoute
         exact
-        path="/partners/:id/filter"
+        path="/user-type/:id/partners"
         component={PartnersProvider}
       />
 
@@ -249,13 +249,13 @@ const Routes = () => {
       <PrivateRoute path="/email" component={Email} />
 
       {/*  =====  DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
-      <PrivateRoute exact path="/verification" component={HCP} />
+      {/* <PrivateRoute exactProvide path="/verification" component={HCP} /> */}
 
       <PrivateRoute exact path="/verification" component={HCP} />
 
       {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/label" component={WhiteLabel} />
-      <PrivateRoute path="/user-type/:id" component={Providers} />
+      <PrivateRoute path="/user-type/:id" component={Heala} />
 
       {/* <PrivateRoute path="/label/types" component={UserTypes} /> */}
 

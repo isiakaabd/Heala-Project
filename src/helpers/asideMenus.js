@@ -32,31 +32,17 @@ export const menus = [
     icon: <DoctorsIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/hcps",
   },
-];
-export const firstMenu = [
   {
-    id: 3,
-    title: "Partners",
-    icon: <PartnersIcon sx={{ height: "25px", width: "25px" }} />,
-    path: "/partners",
+    id: 12,
+    title: "Provider Services",
+    icon: <LabelIcon sx={{ height: "25px", width: "25px" }} />,
+    path: "/user-type",
   },
   // {
-  //   id: 13,
-  //   title: "HMO",
-  //   icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
-  //   path: "/hmo",
-  // },
-  // {
-  //   id: 5,
-  //   title: "Messages",
-  //   icon: <MessagesIcon sx={{ height: "25px", width: "25px" }} />,
-  //   path: "/messages",
-  // },
-  // {
-  //   id: 6,
-  //   title: "Emails",
-  //   icon: <EmailIcon sx={{ height: "25px", width: "25px" }} />,
-  //   path: "/email",
+  //   id: 3,
+  //   title: "Partners",
+  //   icon: <PartnersIcon sx={{ height: "25px", width: "25px" }} />,
+  //   path: "/partners",
   // },
   {
     id: 7,
@@ -64,12 +50,7 @@ export const firstMenu = [
     icon: <VerifiedIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/verification",
   },
-  // {
-  //   id: 12,
-  //   title: "Provider Services",
-  //   icon: <LabelIcon sx={{ height: "25px", width: "25px" }} />,
-  //   path: "/label",
-  // },
+
   {
     id: 8,
     title: "Finance",
@@ -94,6 +75,26 @@ export const firstMenu = [
     icon: <SettingsIcon sx={{ height: "25px", width: "25px" }} />,
     path: "/settings",
   },
+];
+export const firstMenu = [
+  // {
+  //   id: 13,
+  //   title: "HMO",
+  //   icon: <HMOIcon sx={{ height: "25px", width: "25px" }} />,
+  //   path: "/hmo",
+  // },
+  // {
+  //   id: 5,
+  //   title: "Messages",
+  //   icon: <MessagesIcon sx={{ height: "25px", width: "25px" }} />,
+  //   path: "/messages",
+  // },
+  // {
+  //   id: 6,
+  //   title: "Emails",
+  //   icon: <EmailIcon sx={{ height: "25px", width: "25px" }} />,
+  //   path: "/email",
+  // },
 ];
 
 //

@@ -8,7 +8,7 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable } from "components/layouts";
@@ -26,12 +26,13 @@ import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
 const Heala = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const { id } = useParams();
   const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
   const [hospitals, setHospitals] = useState([]);
   const userTypeId = "61ed2354e6091400135e3d94";
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchHospitals, { loading, error }] = useLazyQuery(getProviders, {
-    variables: { userTypeId },
+    variables: { userTypeId: id },
   });
 
   useEffect(() => {
@@ -46,23 +47,6 @@ const Heala = () => {
         console.error(error);
       });
   }, [fetchHospitals]);
-  //   const handleGenerateLink = async (id) => {
-  //     setId(id);
-  //     await regenerate({
-  //       variables: {
-  //         id,
-  //       },
-  //       refetchQueries: [
-  //         {
-  //           query: getPartners,
-  //           variables: {
-  //             variables: pageInfo.page,
-  //             limit: PageInfo.limit,
-  //           },
-  //         },
-  //       ],
-  //     });
-  //   };
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -94,7 +78,7 @@ const Heala = () => {
                 partnersCount,
                 name,
               } = row;
-              // const labelId = `enhanced-table-checkbox-${index}`;
+
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={_id}>
                   <TableCell
@@ -109,13 +93,6 @@ const Heala = () => {
                         alignItems: "left",
                       }}
                     >
-                      <span style={{ marginRight: "1rem" }}>
-                        <Avatar
-                          alt={`Display Photo of ${name}`}
-                          src={icon}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </span>
                       <span style={{ fontSize: "1.25rem" }}>{name}</span>
                     </div>
                   </TableCell>
@@ -144,7 +121,7 @@ const Heala = () => {
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <Link
-                      to={`/partners/${_id}/filter`}
+                      to={`/user-type/${_id}/partners`}
                       className={classes.link}
                     >
                       <Typography

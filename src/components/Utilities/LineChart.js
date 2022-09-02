@@ -8,10 +8,10 @@ import { monthNames } from "components/Utilities/Time";
 const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
-  const lightGold = "rgba(243, 173, 83,.04)";
+  // const lightGold = "rgba(243, 173, 83,.04)";
   const lightRed = "rgba(62, 94, 169, .04)";
-  const lightGreen = "rgba(45, 211, 158, .04)";
-  const gold = theme.palette.common.gold;
+  // const lightGreen = "rgba(45, 211, 158, .04)";
+  // const gold = theme.palette.common.gold;
   const [arr, setArr] = useState([]);
   useEffect(() => {
     setState(opt);
@@ -75,7 +75,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
       setArr([accept, complete, decline, ongoing, cancel]);
       switch (state) {
         case "all":
-          return setArr(all);
+          return setArr(accept);
         case "Accepted":
           return setArr(accept);
         case "Completed":
@@ -87,7 +87,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
         case "Cancelled":
           return setArr(cancel);
         default:
-          return setArr(all);
+          return setArr(accept);
         // setArr([active, inactive]);
       }
     } else if (type === "partners") {
@@ -157,47 +157,12 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
         data: arr,
         fill: true,
         color: "#f00",
-        borderColor:
-          value === "active" ||
-          value === "Completed" ||
-          value === "hospital" ||
-          value === "Accepted" ||
-          value === "Earnings"
-            ? theme.palette.common.green
-            : value === "inactive" ||
-              value === "pharmacy" ||
-              value === "Ongoing" ||
-              value === "Payouts"
-            ? theme.palette.common.red
-            : gold,
-        pointBackgroundColor:
-          value === "active" ||
-          value === "Completed" ||
-          value === "hospital" ||
-          value === "Accepted" ||
-          value === "Earnings"
-            ? theme.palette.common.green
-            : value === "inactive" ||
-              value === "pharmacy" ||
-              value === "Ongoing" ||
-              value === "Payouts"
-            ? theme.palette.common.red
-            : gold,
+        borderColor: theme.palette.common.red,
+
+        pointBackgroundColor: theme.palette.common.red,
         pointBorderColor: "#fff",
         pointRadius: 2,
-        backgroundColor:
-          value === "active" ||
-          value === "Completed" ||
-          value === "hospital" ||
-          value === "Accepted" ||
-          value === "Earnings"
-            ? lightGreen
-            : value === "inactive" ||
-              value === "pharmacy" ||
-              value === "Ongoing" ||
-              value === "Payouts"
-            ? lightRed
-            : lightGold,
+        backgroundColor: lightRed,
         pointHoverRadius: 2,
         pointBorderWidth: 2,
         tension: 0.5,
