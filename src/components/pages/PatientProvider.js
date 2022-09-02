@@ -100,7 +100,6 @@ const PatientProvider = () => {
         setProfiles(data?.profiles?.data || []);
       })
       .catch((error) => {
-        console.error(error);
         displayAlert("error", errMsg);
       });
   };
