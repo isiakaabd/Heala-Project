@@ -47,10 +47,8 @@ const PatientProvider = () => {
   const [profiles, setProfiles] = useState([]);
   const { id } = useParams();
   const { selectedRows } = useSelector((state) => state.tables);
-  const [
-    fetchPatient,
-    { loading, refetch, data, error, variables, networkStatus },
-  ] = useLazyQuery(getPatients);
+  const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
+    useLazyQuery(getPatients);
   const [
     fetchPatientByStatus,
     {
@@ -78,21 +76,22 @@ const PatientProvider = () => {
   });
 
   useEffect(() => {
-    try {
-      fetchPatient({
-        variables: {
-          first: pageInfo.limit,
-          provider: id,
-        },
+    fetchPatient({
+      variables: {
+        first: pageInfo.limit,
+      },
+    })
+      .then(({ data }) => {
+        if (data) {
+          setPageInfo(data?.profiles?.pageInfo || []);
+          setProfiles(data?.profiles?.data || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-
-      setPageInfo(data?.profiles?.pageInfo || []);
-      setProfiles(data?.profiles?.data || defaultPageInfo);
-    } catch (error) {
-      console.error(error);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, []);
 
   const setTableData = async (response, errMsg) => {
     response
