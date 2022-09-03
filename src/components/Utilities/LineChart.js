@@ -176,6 +176,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
           const gradient = ctx.createLinearGradient(0, 0, 0, 350);
           gradient.addColorStop(0, "rgba(62, 94, 169, .04)");
           gradient.addColorStop(1, "rgba(255,255,255,1)");
+          gradient.opacity = 0.6;
           return gradient;
         },
       };
