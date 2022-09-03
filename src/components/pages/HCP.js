@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import {
-  Grid,
-  Button,
-  Avatar,
-  Chip,
-  TableRow,
-  TableCell,
-  Checkbox,
-} from "@mui/material";
+import { Grid, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 import { useActions } from "components/hooks/useActions";
@@ -23,7 +14,6 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { getVerification } from "components/graphQL/useQuery";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import { useStyles } from "../../styles/docVerificationPageStyles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { docVerifyStatusFilterBy } from "helpers/mockData";
 import {
@@ -35,6 +25,7 @@ import {
 import TableLayout from "components/layouts/TableLayout";
 
 const HCP = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const { displayAlert } = useAlert();
@@ -193,6 +184,11 @@ const HCP = () => {
                         tabIndex={-1}
                         key={_id}
                         selected={isItemSelected}
+                        sx={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          history.push(`/verification/view/${_id}`);
+                        }}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
@@ -215,7 +211,6 @@ const HCP = () => {
                           scope="row"
                           align="left"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
                         >
                           {dateMoment(createdAt)}
                         </TableCell>
@@ -228,7 +223,7 @@ const HCP = () => {
                               alignItems: "left",
                             }}
                           >
-                            <span style={{ marginRight: "1rem" }}>
+                            {/* <span style={{ marginRight: "1rem" }}>
                               <Avatar
                                 alt={`image of ${
                                   doctorData && doctorData.firstName
@@ -238,7 +233,7 @@ const HCP = () => {
                                 }
                                 sx={{ width: 24, height: 24 }}
                               />
-                            </span>
+                            </span> */}
                             <span style={{ fontSize: "1.25rem" }}>
                               {doctorData && doctorData.firstName}
                             </span>
@@ -249,7 +244,6 @@ const HCP = () => {
                           scope="row"
                           align="left"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
                         >
                           {doctorData && doctorData.lastName}
                         </TableCell>
@@ -280,7 +274,7 @@ const HCP = () => {
                           {qualification && dateMoment(qualification.year)}
                         </TableCell>
 
-                        <TableCell>
+                        {/* <TableCell>
                           <Button
                             variant="contained"
                             className={classes.button}
@@ -295,7 +289,7 @@ const HCP = () => {
                           >
                             View Verification{" "}
                           </Button>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}

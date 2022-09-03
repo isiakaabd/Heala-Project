@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable } from "components/layouts";
-import {
-  Grid,
-  Typography,
-  Chip,
-  Checkbox,
-  TableRow,
-  TableCell,
-  Avatar,
-} from "@mui/material";
-import { timeMoment, dateMoment } from "components/Utilities/Time";
-import { Loader } from "components/Utilities";
-import { useLazyQuery } from "@apollo/client";
-import { getPayoutData } from "components/graphQL/useQuery";
-import { EnhancedTable } from "components/layouts";
+import { Grid, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { payoutHeader } from "components/Utilities/tableHeaders";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
 import Filter from "components/Forms/Filters";
-import displayPhoto from "assets/images/avatar.svg";
+import { Loader } from "components/Utilities";
+import { useLazyQuery } from "@apollo/client";
+import { isSelected } from "helpers/isSelected";
+import { useTheme } from "@mui/material/styles";
+import { EnhancedTable } from "components/layouts";
+import { useActions } from "components/hooks/useActions";
+import TableLayout from "components/layouts/TableLayout";
+import { handleSelectedRows } from "helpers/selectedRows";
+import { getPayoutData } from "components/graphQL/useQuery";
+import { payoutHeader } from "components/Utilities/tableHeaders";
 import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
+import { timeMoment, dateMoment } from "components/Utilities/Time";
 import {
   changeTableLimit,
   deleteVar,
@@ -32,7 +24,6 @@ import {
   filterData,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
-import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   iconWrapper: {
@@ -75,14 +66,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
 
   badge: {
     "&.MuiChip-root": {
-      fontSize: "1.6rem !important",
+      fontSize: "1.3rem !important",
       height: "3rem",
       borderRadius: "1.3rem",
     },
@@ -258,7 +251,6 @@ const Payout = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {dateMoment(createdAt)}
                       </TableCell>
@@ -267,7 +259,6 @@ const Payout = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {timeMoment(createdAt)}
                       </TableCell>
@@ -280,13 +271,6 @@ const Payout = () => {
                               alignItems: "left",
                             }}
                           >
-                            <span style={{ marginRight: "1rem" }}>
-                              <Avatar
-                                alt={`Display Photo of ${firstName}`}
-                                src={picture ? picture : displayPhoto}
-                                sx={{ width: 24, height: 24 }}
-                              />
-                            </span>
                             <span style={{ fontSize: "1.25rem" }}>{`${
                               firstName && firstName
                             } ${lastName && lastName}`}</span>

@@ -38,6 +38,7 @@ import {
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
 import { Link } from "react-router-dom";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -91,6 +92,8 @@ const useStyles = makeStyles((theme) => ({
 
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -390,7 +393,21 @@ const UserTypes = () => {
                               justifyContent: "space-around",
                             }}
                           >
-                            <Button
+                            <EditDelBtn
+                              onHandleClick={() =>
+                                handleEditOpenDialog(row._id)
+                              }
+                              type="edit"
+                              text="Edit UserType"
+                            />
+                            <EditDelBtn
+                              onHandleClick={() =>
+                                handleDeleteOpenDialog(row._id)
+                              }
+                              type="delete"
+                              text="Delete UserType"
+                            />
+                            {/* <Button
                               variant="contained"
                               disableRipple
                               className={`${classes.tableBtn} ${classes.greenBtn}`}

@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { Button, Checkbox, TableCell, TableRow, Grid } from "@mui/material";
+import { Checkbox, TableCell, TableRow, Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import { defaultPageInfo } from "helpers/mockData";
@@ -16,7 +15,6 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
-import EditIcon from "@mui/icons-material/Edit";
 import { illnesssHeadCells } from "components/Utilities/tableHeaders";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { getIllness, getIllnesses } from "components/graphQL/useQuery";
@@ -24,6 +22,8 @@ import { deleteIllness } from "components/graphQL/Mutation";
 import { CustomButton, Loader } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
 import { IllnessModal } from "components/modals";
+import TableLayout from "components/layouts/TableLayout";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 
 const Illness = () => {
   const theme = useTheme();
@@ -68,7 +68,7 @@ const Illness = () => {
     description: "",
   };
 
-  const setTableData = async (response, errMsg) => {
+  const setTableData = async (response) => {
     const data = response?.data;
     if (data) {
       setPartners(data?.getIllnesses?.data || []);
@@ -93,7 +93,6 @@ const Illness = () => {
   const handleEdit = useCallback(
     async (id) => {
       setOpenEditFilter(true);
-      console.log(id);
       await getIllnes({
         variables: {
           id,
@@ -155,101 +154,100 @@ const Illness = () => {
             </Grid>
           </Grid>
         </Grid>
-        {partner?.length > 0 ? (
-          <Grid item container height="100%" direction="column">
-            <EnhancedTable
-              headCells={illnesssHeadCells}
-              rows={partner}
-              paginationLabel="Partner per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                const res = changeTableLimit(fetchIllness, {
-                  first: e,
-                });
-                await setTableData(res, "Failed to change table limit.");
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                const res = handlePageChange(fetchIllness, page, pageInfo, {});
-                await setTableData(res, "Failed to change page.");
-              }}
-            >
-              {partner.map((row, index) => {
-                const isItemSelected = isSelected(row.id, selectedRows);
-                const { name, createdAt, _id, description } = row;
-                const labelId = `enhanced-table-checkbox-${index}`;
+        <TableLayout>
+          {partner?.length > 0 ? (
+            <Grid item container height="100%" direction="column">
+              <EnhancedTable
+                headCells={illnesssHeadCells}
+                rows={partner}
+                paginationLabel="Partner per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  const res = changeTableLimit(fetchIllness, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = handlePageChange(
+                    fetchIllness,
+                    page,
+                    pageInfo,
+                    {}
+                  );
+                  await setTableData(res, "Failed to change page.");
+                }}
+              >
+                {partner.map((row, index) => {
+                  const isItemSelected = isSelected(row.id, selectedRows);
+                  const { name, createdAt, _id, description } = row;
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row.id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ minWidth: "15rem" }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row._id}
+                      selected={isItemSelected}
                     >
-                      {dateMoment(createdAt)}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {name}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {description}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        onClick={() => handleEdit(_id)}
-                        className={`${classes.tableBtn} ${classes.greenBtn}`}
-                        endIcon={<EditIcon color="success" />}
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              row.id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ minWidth: "15rem" }}
                       >
-                        Edit
-                      </Button>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Button
-                        variant="contained"
-                        disableRipple
-                        className={`${classes.tableBtn} ${classes.redBtn}`}
-                        onClick={() => handleDeleteIllness(_id)}
-                        endIcon={<DeleteIcon color="error" />}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable
-            headCells={illnesssHeadCells}
-            paginationLabel="Doctors per page"
-          />
-        )}
+                        {dateMoment(createdAt)}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {name}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {description}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <EditDelBtn
+                          onHandleClick={() => handleEdit(_id)}
+                          type="edit"
+                          text="Edit"
+                        />
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <EditDelBtn
+                          onHandleClick={() => () => handleDeleteIllness(_id)}
+                          type="delete"
+                          text="Delete"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={illnesssHeadCells}
+              paginationLabel="Doctors per page"
+            />
+          )}
+        </TableLayout>
       </Grid>
       <IllnessModal
         initialValues={initialValues}

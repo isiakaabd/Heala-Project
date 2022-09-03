@@ -54,6 +54,7 @@ import {
 import Filter from "components/Forms/Filters";
 import { PageInfo } from "components/graphQL/fragment";
 import TableLayout from "components/layouts/TableLayout";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 
 const Partners = () => {
   const theme = useTheme();
@@ -449,13 +450,13 @@ const Partners = () => {
                           alignItems: "left",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
+                        {/* <span style={{ marginRight: "1rem" }}>
                           <Avatar
                             alt={`Display Photo of ${name}`}
                             src={logoImageUrl}
                             sx={{ width: 24, height: 24 }}
                           />
-                        </span>
+                        </span> */}
                         <span style={{ fontSize: "1.25rem" }}>{name}</span>
                       </div>
                     </TableCell>
@@ -463,7 +464,6 @@ const Partners = () => {
                       align="left"
                       className={classes.tableCell}
                       style={{
-                        color: theme.palette.common.grey,
                         maxWidth: "20rem",
                       }}
                     >
@@ -473,7 +473,6 @@ const Partners = () => {
                       align="left"
                       className={classes.tableCell}
                       style={{
-                        color: theme.palette.common.grey,
                         maxWidth: "20rem",
                       }}
                     >
@@ -491,7 +490,9 @@ const Partners = () => {
                       {profileUrl || z(_id) !== "" ? (
                         <Typography
                           style={{
-                            color: theme.palette.common.grey,
+                            color: "rgb(0 0 0)",
+                            fontWeight: 400,
+                            fontSize: "1.25rem",
                             maxWidth: "20rem",
                           }}
                           sx={{ display: "flex", alignItems: "center" }}
@@ -519,18 +520,14 @@ const Partners = () => {
                       {isDeleting[_id] ? (
                         <Loader />
                       ) : (
-                        <Button
-                          variant="contained"
-                          disableRipple
-                          className={`${classes.tableBtn} ${classes.redBtn}`}
-                          endIcon={<DeleteIcon color="error" />}
-                          onClick={() => {
+                        <EditDelBtn
+                          onHandleClick={() => {
                             setPartnerToDelete(_id || "");
                             setOpenDeletePartner(true);
                           }}
-                        >
-                          Delete partner
-                        </Button>
+                          type="delete"
+                          text="Delete partner"
+                        />
                       )}
                     </TableCell>*/}
                   </TableRow>

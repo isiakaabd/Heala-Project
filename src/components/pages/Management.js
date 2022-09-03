@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Button,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Chip,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
 import {
   Loader,
   /* Search,  */ CustomButton,
@@ -21,19 +14,18 @@ import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { DeleteOrDisable, RoleModal } from "components/modals";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { getRoles } from "components/graphQL/useQuery";
 import { deleteRole } from "components/graphQL/Mutation";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   changeTableLimit,
   /* fetchMoreData, */ handlePageChange,
 } from "helpers/filterHelperFunctions";
 import { defaultPageInfo } from "helpers/mockData";
 import TableLayout from "components/layouts/TableLayout";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 
 const useStyles = makeStyles((theme) => ({
   searchGrid: {
@@ -124,16 +116,17 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableCell: {
-    "&.css-1tykg82-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
-      textAlign: "center !important",
-      width: "100%",
     },
   },
 
   badge: {
     "&.MuiChip-root": {
-      fontSize: "1.6rem !important",
+      fontWeight: 400,
+      fontSize: "1.25rem",
       height: "3rem",
       borderRadius: "1.3rem",
     },
@@ -150,6 +143,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Management = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
@@ -294,10 +288,6 @@ const Management = () => {
                           scope="row"
                           align="left"
                           className={classes.tableCell}
-                          style={{
-                            color: theme.palette.common.black,
-                            minWidth: "10rem",
-                          }}
                         >
                           {row.name}
                         </TableCell>
@@ -306,7 +296,6 @@ const Management = () => {
                           scope="row"
                           align="center"
                           className={classes.tableCell}
-                          style={{ color: theme.palette.common.black }}
                         >
                           <Grid
                             container
@@ -337,24 +326,20 @@ const Management = () => {
                               gap: "1rem",
                             }}
                           >
-                            <Button
-                              variant="contained"
-                              className={`${classes.tableBtn} ${classes.greenBtn}`}
-                              component={Link}
-                              to={`/settings/management/${row._id}`}
-                              endIcon={<EditIcon color="success" />}
-                            >
-                              Edit role
-                            </Button>
-                            <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.redBtn}`}
-                              onClick={() => handleDeleteOpenDialog(row._id)}
-                              endIcon={<DeleteIcon color="error" />}
-                            >
-                              Delete role
-                            </Button>
+                            <EditDelBtn
+                              onHandleClick={() => {
+                                history.push(`/settings/management/${row._id}`);
+                              }}
+                              type="edit"
+                              text="Edit role"
+                            />
+                            <EditDelBtn
+                              onHandleClick={() => {
+                                handleDeleteOpenDialog(row._id);
+                              }}
+                              type="delete"
+                              text="Delete role"
+                            />
                           </div>
                         </TableCell>
                       </TableRow>

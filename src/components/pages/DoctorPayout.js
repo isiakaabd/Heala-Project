@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { NoData, EmptyTable } from "components/layouts";
-import {
-  Grid,
-  Typography,
-  Chip,
-  Checkbox,
-  TableRow,
-  TableCell,
-  Avatar,
-} from "@mui/material";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
+import { Grid, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getPayoutData } from "components/graphQL/useQuery";
-import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeader } from "components/Utilities/tableHeaders";
@@ -22,17 +13,14 @@ import { useSelector } from "react-redux";
 import { useActions } from "components/hooks/useActions";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import Filter from "components/Forms/Filters";
 import { useParams } from "react-router-dom";
-import displayPhoto from "assets/images/avatar.svg";
-import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
+import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
-  deleteVar,
   fetchMoreData,
-  filterData,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   iconWrapper: {
@@ -75,7 +63,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -99,8 +89,8 @@ const DoctorPayout = () => {
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
-  const [statusFilterValue, setStatusFilterValue] = useState("");
-  const [fetchPayout, { loading, error, refetch, variables }] =
+  /*   const [statusFilterValue, setStatusFilterValue] = useState(""); */
+  const [fetchPayout, { loading, error /* refetch, variables */ }] =
     useLazyQuery(getPayoutData);
 
   useEffect(() => {
@@ -113,11 +103,12 @@ const DoctorPayout = () => {
         setPayout(data?.getEarningStats?.payoutData?.data);
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }, [fetchPayout, pageInfo?.limit, hcpId]);
 
-  const onFilterStatusChange = async (value) => {
+  /*   const onFilterStatusChange = async (value) => {
     try {
       deleteVar(variables);
       setStatusFilterValue(value);
@@ -156,7 +147,8 @@ const DoctorPayout = () => {
         console.error(error);
         displayAlert("error", "Failed to get patients data, Try again");
       });
-  };
+  }; */
+
   const setTableData = async (response, errMsg) => {
     const data = response?.data;
     try {
@@ -167,8 +159,9 @@ const DoctorPayout = () => {
         setPayout(data?.getEarningStats?.payoutData?.data || []);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
-      displayAlert("error", error.message);
+      displayAlert("error", errMsg);
     }
   };
 
@@ -183,7 +176,7 @@ const DoctorPayout = () => {
           justifyContent="space-between"
           style={{ paddingBottom: "3rem" }}
         >
-          <Grid item container spacing={3} alignItems="center">
+          {/* <Grid item container spacing={3} alignItems="center">
             <Grid item flex={1}>
               <Typography noWrap variant="h1" color="#2D2F39">
                 Doctors Payout Table
@@ -200,143 +193,128 @@ const DoctorPayout = () => {
                 hasClearBtn={true}
               />
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
-        {payout.length > 0 ? (
-          <Grid item container>
-            <EnhancedTable
-              headCells={payoutHeader}
-              rows={payout}
-              paginationLabel="payout per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, {
-                  first: e,
-                  doctor: hcpId,
-                });
-                await setTableData(res, "Failed to change table limit.");
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                const res = await handlePageChange(
-                  fetchPayout,
-                  page,
-                  pageInfo,
-                  { doctor: hcpId }
-                );
-                await setTableData(res, "Failed to change table page.");
-              }}
-              fetchData={fetchPayout}
-              handleChangePage={fetchMoreData}
-            >
-              {payout?.map((row, index) => {
-                const { amount, createdAt, status, _id, doctorData } = row;
-                const data = doctorData || [];
-                const { firstName, lastName, picture } = data[0] || {};
-                const isItemSelected = isSelected(_id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
+        <TableLayout>
+          {payout.length > 0 ? (
+            <Grid item container>
+              <EnhancedTable
+                headCells={payoutHeader}
+                rows={payout}
+                paginationLabel="payout per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  const res = await changeTableLimit(fetchPayout, {
+                    first: e,
+                    doctor: hcpId,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = await handlePageChange(
+                    fetchPayout,
+                    page,
+                    pageInfo,
+                    { doctor: hcpId }
+                  );
+                  await setTableData(res, "Failed to change table page.");
+                }}
+                fetchData={fetchPayout}
+                handleChangePage={fetchMoreData}
+              >
+                {payout?.map((row, index) => {
+                  const { amount, createdAt, status, _id, doctorData } = row;
+                  const data = doctorData || [];
+                  const { firstName, lastName } = data[0] || {};
+                  const isItemSelected = isSelected(_id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
                     >
-                      {dateMoment(createdAt)}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {timeMoment(createdAt)}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {row?.doctorData && row?.doctorData[0] !== {} ? (
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "left",
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
                           }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${firstName}`}
-                              src={picture ? picture : displayPhoto}
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>{`${
-                            firstName && firstName
-                          } ${lastName && lastName}`}</span>
-                        </div>
-                      ) : (
-                        "No Name"
-                      )}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {amount}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={status}
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Success"
-                              ? theme.palette.common.lightGreen
-                              : status === "Failed"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Success"
-                              ? theme.palette.common.green
-                              : status === "Failed"
-                              ? theme.palette.common.danger
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable
-            headCells={payoutHeader}
-            paginationLabel="Payout  per page"
-          />
-        )}
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {dateMoment(createdAt)}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {timeMoment(createdAt)}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {row?.doctorData && row?.doctorData[0] !== {}
+                          ? `${firstName && firstName} ${lastName && lastName}`
+                          : "No Name"}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {amount}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Chip
+                          label={status}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === "Success"
+                                ? theme.palette.common.lightGreen
+                                : status === "Failed"
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === "Success"
+                                ? theme.palette.common.green
+                                : status === "Failed"
+                                ? theme.palette.common.danger
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={payoutHeader}
+              paginationLabel="Payout  per page"
+            />
+          )}
+        </TableLayout>
       </>
     </Grid>
   );

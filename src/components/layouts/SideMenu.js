@@ -54,14 +54,15 @@ const SideMenu = (props) => {
         borderRadius: "10px",
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: "1em",
-        padding: "14px",
+        marginBottom: "0.5em",
+        padding: "10px 14px",
 
         "&:hover": {
           background: theme.palette.common.lightBlue,
 
           "& .MuiSvgIcon-root": {
-            color: theme.palette.common.blue,
+            stroke: "#3E5EA9",
+            fill: "transparent",
           },
 
           "& .MuiTypography-root": {
@@ -82,9 +83,13 @@ const SideMenu = (props) => {
 
       "& .MuiSvgIcon-root": {
         fontSize: "2rem",
+        stroke: "#8D9091",
+        fill: "transparent",
 
         "&:hover": {
-          color: theme.palette.common.red,
+          /* color: "#3E5EA9", */
+          stroke: "#3E5EA9",
+          fill: "transparent",
         },
       },
 
@@ -93,12 +98,17 @@ const SideMenu = (props) => {
         fontWeight: 400,
         fontSize: "14px",
         lineHeight: "20px",
-        color: theme.palette.common.gray,
+        color: "#474951",
       },
 
       "& .MuiListItemButton-root.Mui-selected": {
         backgroundColor: theme.palette.common.lightBlue,
         color: theme.palette.common.blue,
+
+        "& .MuiSvgIcon-root": {
+          stroke: "#3E5EA9",
+          fill: "transparent",
+        },
 
         "&:hover": {
           backgroundColor: theme.palette.common.lightRed,
@@ -128,13 +138,13 @@ const SideMenu = (props) => {
       },
     },
     logoWrapper: {
-      paddingTop: "3em",
-      paddingBottom: "2em",
+      paddingTop: "0.2rem",
+      paddingBottom: "0.5em",
       paddingLeft: "1em",
     },
     logout: {
       "&.MuiListItemButton-root": {
-        marginTop: "2.5rem",
+        marginTop: "5rem",
 
         "& .MuiTypography-root": {
           color: "#ED3237 !important",
@@ -187,11 +197,7 @@ const SideMenu = (props) => {
                 component={Link}
                 to={menu.path}
               >
-                <ListItemIcon
-                  sx={{ marginRight: "15px", height: "30px", width: "30px" }}
-                >
-                  {icon}
-                </ListItemIcon>
+                <ListItemIcon sx={{ marginRight: "15px" }}>{icon}</ListItemIcon>
 
                 <ListItemText>{menu.title}</ListItemText>
               </ListItemButton>
@@ -258,7 +264,7 @@ const SideMenu = (props) => {
             onClick={() => setLogout(true)}
           >
             <ListItemIcon sx={{ marginRight: "15px" }}>
-              <LogoutIcon sx={{ height: "25px", width: "25px" }} />
+              <LogoutIcon />
             </ListItemIcon>
 
             <ListItemText>Logout</ListItemText>

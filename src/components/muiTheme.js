@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 
 const dark = "#4F4F4F";
-const grey = "#757886";
+const grey = "#474951";
 const gray300 = "#F8F8F8";
 const gray500 = "#3F3F3F";
 const red = "#3e5ea9";
@@ -74,9 +74,9 @@ export const muiTheme = createTheme({
       fontWeight: 600,
     },
     h2: {
-      fontSize: "clamp(1.5rem, 3vw,2.5rem)",
+      fontSize: "clamp(1.5rem, 2vw, 2.2rem)",
       color: dark,
-      fontWeight: 600,
+      fontWeight: 500,
     },
     h3: {
       fontSize: "clamp(1.8rem, 2vw,2.25rem)",
@@ -124,6 +124,14 @@ export const muiTheme = createTheme({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+    },
+
+    tableCell: {
+      "&.MuiTableCell-root": {
+        color: "rgb(0 0 0)",
+        fontWeight: 400,
+        fontSize: "1.25rem",
+      },
     },
 
     cardGridWrapper: {

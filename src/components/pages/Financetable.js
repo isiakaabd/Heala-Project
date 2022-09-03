@@ -8,7 +8,7 @@ import {
   Avatar,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   timeMoment,
   dateMoment,
@@ -102,7 +102,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -117,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Financetable = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -152,16 +155,6 @@ const Financetable = () => {
       sx={{ margin: "3rem 0rem" }}
     >
       <>
-        {/* <Grid item container gap={1} alignItems="center">
-          <Grid item flex={1}>
-            <Typography noWrap variant="h1" component="div" color="#2D2F39">
-              Doctors Earnings table
-            </Typography>
-          </Grid>
-          <Grid item className={classes.iconWrapper}>
-            <TrendingDownIcon color="success" className={classes.cardIcon} />
-          </Grid>
-        </Grid> */}
         <TableLayout>
           {earning.length > 0 ? (
             <Grid item container>
@@ -192,6 +185,13 @@ const Financetable = () => {
                       tabIndex={-1}
                       key={row._id}
                       selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        history.push(
+                          `/hcps/${doctorData[0]._id}/consultations`
+                        );
+                      }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -225,13 +225,6 @@ const Financetable = () => {
                               alignItems: "center",
                             }}
                           >
-                            <span style={{ marginRight: "1rem" }}>
-                              <Avatar
-                                alt={firstName ? firstName : "image"}
-                                src={doctorData ? picture : displayPhoto}
-                                sx={{ width: 24, height: 24 }}
-                              />
-                            </span>
                             <span style={{ fontSize: "1.25rem" }}>
                               {doctorData &&
                                 `${firstName && firstName} ${
@@ -248,7 +241,6 @@ const Financetable = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {providerId}
                       </TableCell>
@@ -258,25 +250,8 @@ const Financetable = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          className={classes.buttons}
-                          style={{
-                            whiteSpace: "nowrap",
-                            padding: "5% 50%",
-                            marginLeft: "-10%",
-                          }}
-                          component={Link}
-                          endIcon={<ArrowForwardIosIcon />}
-                          to={`/hcps/${doctorData[0]._id}/consultations`}
-                        >
-                          View Consultation
-                        </Button>
                       </TableCell>
                     </TableRow>
                   );

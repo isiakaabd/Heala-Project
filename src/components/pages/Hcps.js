@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -45,15 +45,13 @@ import {
   docSpecializationsOptions,
   doctorsSearchOptions,
   genderType,
-  /*  providerFilterBy,
-  specializationFilterBy,
-  statusFilterBy, */
 } from "helpers/mockData";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
 import TableLayout from "components/layouts/TableLayout";
 
 const Hcps = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const { displayAlert } = useAlert();
@@ -244,7 +242,6 @@ const Hcps = () => {
                   status,
                   specialization,
                   consultations,
-                  picture,
                   lastName,
                 } = row;
                 const isItemSelected = isSelected(_id, selectedRows);
@@ -257,6 +254,11 @@ const Hcps = () => {
                     tabIndex={-1}
                     key={_id}
                     selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      history.push(`hcps/${_id}`);
+                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -290,13 +292,6 @@ const Hcps = () => {
                           alignItems: "left",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${firstName}`}
-                            src={picture ? picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {firstName} {lastName}
                         </span>
@@ -337,7 +332,7 @@ const Hcps = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <Button
                         variant="contained"
                         className={classes.button}
@@ -347,7 +342,7 @@ const Hcps = () => {
                       >
                         View Doctor
                       </Button>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}

@@ -1,29 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { dateMoment } from "components/Utilities/Time";
-import { Link } from "react-router-dom";
-import {
-  Grid,
-  Typography,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Button,
-  Avatar,
-} from "@mui/material";
-import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import { isSelected } from "helpers/isSelected";
-import { handleSelectedRows } from "helpers/selectedRows";
-import displayPhoto from "assets/images/avatar.svg";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
-import { getConsultations } from "components/graphQL/useQuery";
 import { Loader } from "components/Utilities";
+import { useTheme } from "@mui/material/styles";
+import { isSelected } from "helpers/isSelected";
+import { dateMoment } from "components/Utilities/Time";
+import { useActions } from "components/hooks/useActions";
+import { handleSelectedRows } from "helpers/selectedRows";
+import { getConsultations } from "components/graphQL/useQuery";
+import { Grid, TableRow, TableCell, Checkbox } from "@mui/material";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
+import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import {
   changeTableLimit,
   handlePageChange,
@@ -32,7 +22,9 @@ import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -67,13 +59,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/* const filterOptions = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Date" },
-  { id: 2, value: "Description" },
-]; */
-
 const Consultations = () => {
+  const history = useHistory();
   const [pageInfo, setPageInfo] = useState({});
   const classes = useStyles();
   const theme = useTheme();
@@ -115,14 +102,7 @@ const Consultations = () => {
         justifyContent="space-between"
         alignItems="center"
         sx={{ margin: "1rem 0rem" }}
-      >
-        {/* <Grid item flex={1}>
-          <Typography variant="h2">Consultations</Typography>
-        </Grid> */}
-        {/* <Grid item>
-          <FilterList options={filterOptions} title="Filter" />
-        </Grid> */}
-      </Grid>
+      ></Grid>
       <TableLayout>
         {consultations.length > 0 ? (
           <Grid item container direction="column" height="100%">
@@ -131,6 +111,7 @@ const Consultations = () => {
               rows={consultations}
               paginationLabel="Patients per page"
               hasCheckbox={true}
+              sx={{ cursor: "pointer" }}
               changeLimit={async (e) => {
                 await changeTableLimit(fetchConsultations, {
                   first: e,
@@ -156,6 +137,13 @@ const Consultations = () => {
                     tabIndex={-1}
                     key={row._id}
                     selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      history.push(
+                        `/patients/${patientId}/consultations/case-notes/${row._id}`
+                      );
+                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -188,17 +176,6 @@ const Consultations = () => {
                           alignItems: "center",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${doctorData.firstName}`}
-                            src={
-                              doctorData.picture
-                                ? doctorData.picture
-                                : displayPhoto
-                            }
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {doctorData.firstName
                             ? `${doctorData.firstName} ${doctorData.lastName}`
@@ -209,8 +186,15 @@ const Consultations = () => {
                     <TableCell align="left" className={classes.tableCell}>
                       <Grid container gap={1}>
                         {row.symptoms
-                          ? row.symptoms.map((i) => {
-                              return <p key={i.name}>{i.name}</p>;
+                          ? row.symptoms.map((symptom, index) => {
+                              const isLast = index === row.symptoms.length - 1;
+                              return (
+                                <p key={symptom.name}>
+                                  {isLast
+                                    ? `${symptom.name}.`
+                                    : `${symptom.name},`}
+                                </p>
+                              );
                             })
                           : "No Value"}
                       </Grid>
@@ -242,17 +226,6 @@ const Consultations = () => {
                       }}
                     >
                       {row.status ? row.status : "No Value"}
-                    </TableCell>
-                    <TableCell align="left">
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`/patients/${patientId}/consultations/case-notes/${row._id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Details
-                      </Button>
                     </TableCell>
                   </TableRow>
                 );

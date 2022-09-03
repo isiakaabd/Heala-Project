@@ -1,41 +1,39 @@
 import React from "react";
-import PaymentsIcon from "@mui/icons-material/Payments";
-import LoopIcon from "@mui/icons-material/Loop";
-import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
-import SettingsIcon from "@mui/icons-material/Settings";
-import DashboardIcon from "components/Icons/DashboardIcon";
-import PatientsIcon from "components/Icons/PatientsIcon";
-import DoctorsIcon from "components/Icons/DoctorsIcon";
-import PartnersIcon from "components/Icons/PartnersIcon";
 import HMOIcon from "components/Icons/HMOIcon";
-import MessagesIcon from "components/Icons/MessagesIcon";
-import EmailIcon from "components/Icons/EmailIcon";
-import VerifiedIcon from "components/Icons/VerifiedIcon";
 import LabelIcon from "components/Icons/LabelIcon";
+import DoctorsIcon from "components/Icons/DoctorsIcon";
+import FinanceIcon from "components/Icons/FinanceIcon";
+import PatientsIcon from "components/Icons/PatientsIcon";
+import VerifiedIcon from "components/Icons/VerifiedIcon";
+import PartnersIcon from "components/Icons/PartnersIcon";
+import SettingsIcon from "components/Icons/SettingsIcon";
+import RefferalsIcon from "components/Icons/RefferalsIcon";
+import DashboardIcon from "components/Icons/DashboardIcon";
+import SubscriptionIcon from "components/Icons/SubscriptionIcon";
 
 export const menus = [
   {
     id: 0,
     title: "Dashboard",
-    icon: <DashboardIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <DashboardIcon />,
     path: "/dashboard",
   },
   {
     id: 1,
     title: "Patients",
-    icon: <PatientsIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <PatientsIcon />,
     path: "/patients",
   },
   {
     id: 2,
     title: "Doctors",
-    icon: <DoctorsIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <DoctorsIcon />,
     path: "/hcps",
   },
   {
     id: 12,
     title: "Provider Services",
-    icon: <LabelIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <LabelIcon />,
     path: "/user-type",
   },
   // {
@@ -47,32 +45,31 @@ export const menus = [
   {
     id: 7,
     title: "Doctor Verification",
-    icon: <VerifiedIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <VerifiedIcon />,
     path: "/verification",
   },
-
   {
     id: 8,
     title: "Finance",
-    icon: <PaymentsIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <FinanceIcon />,
     path: "/finance",
   },
   {
     id: 9,
     title: "Referrals",
-    icon: <LoopIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <RefferalsIcon />,
     path: "/referrals",
   },
   {
     id: 10,
     title: "Subscription Plans",
-    icon: <SubscriptionsIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <SubscriptionIcon />,
     path: "/plans",
   },
   {
     id: 11,
     title: "Settings",
-    icon: <SettingsIcon sx={{ height: "25px", width: "25px" }} />,
+    icon: <SettingsIcon />,
     path: "/settings",
   },
 ];

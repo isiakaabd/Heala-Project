@@ -24,10 +24,6 @@ export const patientsHeadCells = [
     id: 4,
     label: "Status",
   },
-  {
-    id: 5,
-    label: "",
-  },
 ];
 export const emailHeader = [
   {
@@ -111,10 +107,6 @@ export const HCPHeader = [
     id: 4,
     label: "Year",
   },
-  {
-    id: 40,
-    label: "",
-  },
 ];
 export const financeHeader = [
   {
@@ -183,10 +175,10 @@ export const payoutHeaderss1 = [
     id: 2,
     label: "Received On",
   },
-  {
+  /* {
     id: 4,
     label: "Consultation",
-  },
+  }, */
 ];
 export const referralHeader = [
   {
@@ -210,10 +202,6 @@ export const referralHeader = [
   {
     id: 8,
     label: "Type",
-  },
-  {
-    id: 6,
-    label: "",
   },
 ];
 
@@ -410,7 +398,6 @@ export const consultationsHeadCells = [
   { id: 105, label: "Contact" },
   { id: 133, label: "Type" },
   { id: 1232, label: "Status" },
-  { id: 103, label: "" },
 ];
 export const consultationsHeadCells4 = [
   { id: 100, label: "Date" },
@@ -419,7 +406,6 @@ export const consultationsHeadCells4 = [
   { id: 105, label: "Contact" },
   { id: 133, label: "Type" },
   { id: 1232, label: "Status" },
-  { id: 103, label: "" },
 ];
 export const consultationsHeadCells2 = [
   { id: 100, label: "Doctor" },
@@ -471,7 +457,6 @@ export const hcpsHeadCells = [
   { id: 3, label: "Consultations" },
   { id: 4, label: "Provider" },
   { id: 5, label: "Status" },
-  { id: 6, label: "" },
 ];
 
 // Partner's HEADCELLS
@@ -485,7 +470,6 @@ export const illnesssHeadCells = [
   { id: 0, label: "Date" },
   { id: 1, label: "Description" },
   { id: 2, label: "Name" },
-  { id: 30, label: "" },
   { id: 3, label: "" },
 ];
 export const partnersHeadCells2 = [
@@ -514,7 +498,6 @@ export const testTableHeadCells = [
   { id: 0, label: "Test Name" },
   { id: 1, label: "Price (Naira)" },
   { id: 2, label: "Turnaround time (TAT)" },
-  { id: 3, label: "" },
   { id: 4, label: "" },
 ];
 

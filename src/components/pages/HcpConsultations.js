@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
 import {
@@ -32,7 +32,9 @@ import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -67,13 +69,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/* const filterOptions = [
-  { id: 0, value: "Name" },
-  { id: 1, value: "Date" },
-  { id: 2, value: "Description" },
-]; */
-
 const HcpConsultations = (props) => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -156,6 +153,13 @@ const HcpConsultations = (props) => {
                     tabIndex={-1}
                     key={_id}
                     selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      history.push(
+                        `/hcps/${hcpId}/consultations/case-notes/${_id}`
+                      );
+                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -247,7 +251,7 @@ const HcpConsultations = (props) => {
                     >
                       {status ? status : "No Value"}
                     </TableCell>
-                    <TableCell align="left">
+                    {/* <TableCell align="left">
                       <Button
                         variant="contained"
                         className={classes.button}
@@ -257,7 +261,7 @@ const HcpConsultations = (props) => {
                       >
                         View Details
                       </Button>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}

@@ -17,6 +17,7 @@ export const useStyles = makeStyles((theme) => ({
       marginRight: "3rem",
     },
   },
+
   button: {
     "&.MuiButton-root": {
       background: "#fff",
@@ -48,6 +49,16 @@ export const useStyles = makeStyles((theme) => ({
       },
     },
   },
+
+  tableCell: {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
+      fontSize: "1.25rem",
+      textAlign: "left",
+    },
+  },
+
   badge: {
     "&.MuiChip-root": {
       fontSize: "1.25rem !important",
@@ -63,6 +74,7 @@ export const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+
   uploadBtn: {
     "&.MuiButton-root": {
       ...theme.typography.btn,
