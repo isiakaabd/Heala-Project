@@ -161,9 +161,9 @@ const Heala = () => {
                         disableRipple
                         sx={{ width: "50%" }}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
-                        // onClick={() => handleGenerateLink(_id)}
+                      // onClick={() => handleGenerateLink(_id)}
                       >
-                        Generate Linkss
+                        Generate Link
                       </Button>
                     )}
                   </TableCell>
