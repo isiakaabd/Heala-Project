@@ -79,6 +79,7 @@ const PatientProvider = () => {
     fetchPatient({
       variables: {
         first: pageInfo.limit,
+        provider: id,
       },
     })
       .then(({ data }) => {

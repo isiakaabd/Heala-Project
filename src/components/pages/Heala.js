@@ -29,7 +29,7 @@ const Heala = () => {
   const { id } = useParams();
   const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
   const [hospitals, setHospitals] = useState([]);
-  const userTypeId = "61ed2354e6091400135e3d94";
+
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchHospitals, { loading, error }] = useLazyQuery(getProviders, {
     variables: { userTypeId: id },
@@ -138,14 +138,15 @@ const Heala = () => {
                     className={classes.tableCell}
                     style={{
                       color: theme.palette.common.grey,
-                      maxWidth: "8rem",
+                      // maxWidth: "2rem",
+                      width: "15%",
                     }}
                   >
                     {profileUrl ? (
                       <Typography
                         style={{
                           color: theme.palette.common.grey,
-                          maxWidth: "20rem",
+                          maxWidth: "3rem",
                         }}
                         sx={{ display: "flex", alignItems: "center" }}
                       >
@@ -158,10 +159,11 @@ const Heala = () => {
                       <Button
                         variant="contained"
                         disableRipple
+                        sx={{ width: "50%" }}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         // onClick={() => handleGenerateLink(_id)}
                       >
-                        Generate Link
+                        Generate Linkss
                       </Button>
                     )}
                   </TableCell>
