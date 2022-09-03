@@ -9,7 +9,7 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
   const theme = useTheme();
   const [state, setState] = useState("");
   // const lightGold = "rgba(243, 173, 83,.04)";
-  const lightRed = "rgba(62, 94, 169, .04)";
+  const lightRed = "linear-gradient(to bottom, #3E5EA9 4%, #FFFFFF 88%)";
   // const lightGreen = "rgba(45, 211, 158, .04)";
   // const gold = theme.palette.common.gold;
   const [arr, setArr] = useState([]);
@@ -162,10 +162,22 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
         pointBackgroundColor: theme.palette.common.red,
         pointBorderColor: "#fff",
         pointRadius: 2,
-        backgroundColor: lightRed,
+        // backgroundColor:
+
+        //   lightRed,
+        // background: "rgb(255,255,255)";
+        // background:
+        //   "linear-gradient(356deg, rgba(255,255,255,1) 38%, rgba(252,242,219,1) 38%)",
         pointHoverRadius: 2,
         pointBorderWidth: 2,
         tension: 0.5,
+        backgroundColor: (context) => {
+          const ctx = context.chart.ctx;
+          const gradient = ctx.createLinearGradient(50, 0, 0, 300);
+          gradient.addColorStop(0, "rgba(62, 94, 169, .04)");
+          gradient.addColorStop(1, "rgba(255,255,255,1)");
+          return gradient;
+        },
       };
     } else return null;
     return x;
