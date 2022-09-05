@@ -1,14 +1,14 @@
 import * as actionTypes from "store/action-types";
 const initialState = {
-  consultation: null,
+  provider: "",
 };
 
 const patientReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GET_PATIENT_CONSULTATION:
+    case actionTypes.ADD_PROVIDER:
+      localStorage.setItem("provider", action.payload);
       return {
-        ...state,
-        consultation: action.payload,
+        provider: action.payload,
       };
 
     default:

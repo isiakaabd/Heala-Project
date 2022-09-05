@@ -45,6 +45,7 @@ const Modals = ({
         open={isOpen}
         onClose={handleClose}
         aria-labelledby="modal-title"
+        closeAfterTransition
         aria-describedby="modal-description"
       >
         <Box

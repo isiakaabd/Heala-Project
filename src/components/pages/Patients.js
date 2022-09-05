@@ -9,7 +9,7 @@ import CompoundSearch from "components/Forms/CompoundSearch";
 import { EnhancedTable } from "components/layouts";
 import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo, searchOptions } from "../../helpers/mockData";
+import { defaultPageInfo, searchOptions } from "helpers/mockData";
 import {
   getPatients,
   getPatientsByPlan,
@@ -20,6 +20,7 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 
+import { useSelector } from "react-redux";
 import TableLayout from "components/layouts/TableLayout";
 import { getSearchPlaceholder } from "helpers/func";
 import PatientsRow from "components/Rows/PatientsRow";
@@ -30,6 +31,7 @@ const Patients = () => {
   const [profiles, setProfiles] = useState([]);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
     useLazyQuery(getPatients);
+  const { provider } = useSelector((state) => state.patient);
   const [
     fetchPatientByStatus,
     {
@@ -55,11 +57,28 @@ const Patients = () => {
     limit: 10,
     totalDocs: 0,
   });
-
   useEffect(() => {
     fetchPatient({
       variables: {
         first: pageInfo.limit,
+      },
+    })
+      .then(({ data }) => {
+        if (data && provider === "") {
+          setPageInfo(data?.profiles?.pageInfo || []);
+          setProfiles(data?.profiles?.data || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    fetchPatient({
+      variables: {
+        first: pageInfo.limit,
+        provider,
       },
     })
       .then(({ data }) => {
@@ -72,7 +91,7 @@ const Patients = () => {
         console.error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [provider]);
 
   const setTableData = async (response, errMsg) => {
     response
@@ -156,12 +175,15 @@ const Patients = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPatient, {
                   first: e,
+                  provider,
                 });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchPatient, page, pageInfo, {});
+                const res = handlePageChange(fetchPatient, page, pageInfo, {
+                  provider,
+                });
                 await setTableData(res, "Failed to change page.");
               }}
             >
@@ -169,7 +191,7 @@ const Patients = () => {
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <PatientsRow
-                    key={`${index}`}
+                    key={index}
                     patientData={row}
                     labelId={labelId}
                   />

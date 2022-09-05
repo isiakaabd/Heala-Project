@@ -390,7 +390,7 @@ const UserTypes = () => {
                               height: "100%",
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "space-around",
+                              justifyContent: "flex-end",
                             }}
                           >
                             <EditDelBtn
@@ -398,33 +398,8 @@ const UserTypes = () => {
                                 handleEditOpenDialog(row._id)
                               }
                               type="edit"
-                              text="Edit UserType"
+                              text="Edit"
                             />
-                            <EditDelBtn
-                              onHandleClick={() =>
-                                handleDeleteOpenDialog(row._id)
-                              }
-                              type="delete"
-                              text="Delete UserType"
-                            />
-                            {/* <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.greenBtn}`}
-                              onClick={() => handleEditOpenDialog(_id)}
-                              endIcon={<EditIcon color="success" />}
-                            >
-                              Edit
-                            </Button>
-                            {/* <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.redBtn}`}
-                              onClick={() => handleDeleteOpenDialog(_id)}
-                              endIcon={<DeleteIcon color="error" />}
-                            >
-                              Delete UserType
-                            </Button> */}
                           </div>
                         </TableCell>
                       </TableRow>

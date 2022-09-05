@@ -171,10 +171,7 @@ const SideMenu = (props) => {
   useEffect(() => {
     setSideNav(menus, location?.pathname, setSelectedMenu);
   }, [location?.pathname]);
-  const [open, setOpen] = useState(true);
-  const handleClick = () => {
-    setOpen(!open);
-  };
+
   return (
     <>
       <Grid
@@ -203,60 +200,6 @@ const SideMenu = (props) => {
               </ListItemButton>
             );
           })}
-          {/* <ListItemButton onClick={handleClick}>
-            <ListItemIcon
-              sx={{ marginRight: "15px", height: "30px", width: "30px" }}
-            >
-              <LabelIcon sx={{ height: "25px", width: "25px" }} />
-            </ListItemIcon>
-            <ListItemText primary="Provider Services" sx={{ pr: 1 }} />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding sx={{ p: 0 }}>
-              {subMenu.map((menu) => {
-                const { id, path } = menu;
-                return (
-                  <ListItemButton
-                    disableRipple
-                    key={menu.id}
-                    onClick={() => setSelectedMenu(id)}
-                    selected={selectedMenu === id}
-                    component={Link}
-                    to={path}
-                    sx={{ marginLeft: "45px" }}
-                  >
-                    {/* <ListItemIcon>{icon}</ListItemIcon> 
-
-                    <ListItemText>{menu.title}</ListItemText>
-                  </ListItemButton>
-                );
-              })}
-            </List>
-          </Collapse> */}
-          {/* {firstMenu.map((menu) => {
-            const { icon, id, path, title } = menu;
-
-            return (
-              <ListItemButton
-                disableRipple
-                key={menu.id}
-                style={{ display: id === 3 ? "none" : "" }}
-                onClick={() => setSelectedMenu(menu.id)}
-                selected={selectedMenu === menu.id}
-                component={Link}
-                to={path}
-              >
-                <ListItemIcon
-                  sx={{ marginRight: "15px", height: "30px", width: "30px" }}
-                >
-                  {icon}
-                </ListItemIcon>
-
-                <ListItemText>{title}</ListItemText>
-              </ListItemButton>
-            );
-          })} */}
 
           <ListItemButton
             disableRipple

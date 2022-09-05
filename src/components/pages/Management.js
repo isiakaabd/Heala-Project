@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
-import {
-  Loader,
-  /* Search,  */ CustomButton,
-  Modals,
-} from "components/Utilities";
+import { Loader, CustomButton, Modals } from "components/Utilities";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";

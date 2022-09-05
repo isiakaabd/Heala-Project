@@ -4,19 +4,13 @@ import { useSelector } from "react-redux";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
+
+import PatientsRow from "components/Rows/PatientsRow";
+import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
+// import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { useStyles } from "styles/patientsPageStyles";
 import { useActions } from "components/hooks/useActions";
@@ -44,6 +38,7 @@ const PatientProvider = () => {
   const classes = useStyles();
   const { displayAlert } = useAlert();
   const { setSelectedRows } = useActions();
+  const { provider } = useSelector((state) => state.patient);
   const [profiles, setProfiles] = useState([]);
   const { id } = useParams();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -93,7 +88,7 @@ const PatientProvider = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  console.log(provider);
   const setTableData = async (response, errMsg) => {
     response
       .then(({ data }) => {
@@ -200,91 +195,99 @@ const PatientProvider = () => {
                 const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{
-                        color: theme.palette.common.grey,
-                        textAlign: "left",
-                      }}
-                    >
-                      {dociId?.split("-")[1]}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
-                      >
-                        <span
-                          style={{ fontSize: "1.25rem" }}
-                        >{`${firstName} ${lastName}`}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {plan ? plan : "No Plan"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {provider ? provider : "No Provider"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {consultations ? consultations : 0}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={
-                          status && status === "Active" ? "Active" : "Inactive"
-                        }
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Active"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Active"
-                              ? theme.palette.common.green
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`patients/${_id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  <PatientsRow
+                    key={index}
+                    patientData={row}
+                    labelId={labelId}
+                  />
                 );
+                // return (
+                //   <TableRow
+                //     hover
+                //     role="checkbox"
+                //     aria-checked={isItemSelected}
+                //     tabIndex={-1}
+                //     key={_id}
+                //     style={{cursor: "pointer"}}
+                //     selected={isItemSelected}
+                //   >
+                //     <TableCell padding="checkbox">
+                //       <Checkbox
+                //         onClick={() =>
+                //           handleSelectedRows(_id, selectedRows, setSelectedRows)
+                //         }
+                //         color="primary"
+                //         checked={isItemSelected}
+                //         inputProps={{
+                //           "aria-labelledby": labelId,
+                //         }}
+                //       />
+                //     </TableCell>
+                //     <TableCell
+                //       id={labelId}
+                //       scope="row"
+                //       align="left"
+                //       className={classes.tableCell}
+                //       style={{
+                //         color: theme.palette.common.grey,
+                //         textAlign: "left",
+                //       }}
+                //     >
+                //       {dociId?.split("-")[1]}
+                //     </TableCell>
+                //     <TableCell align="left" className={classes.tableCell}>
+                //       <div
+                //         style={{
+                //           height: "100%",
+                //           display: "flex",
+                //           alignItems: "left",
+                //         }}
+                //       >
+                //         <span
+                //           style={{ fontSize: "1.25rem" }}
+                //         >{`${firstName} ${lastName}`}</span>
+                //       </div>
+                //     </TableCell>
+                //     <TableCell align="left" className={classes.tableCell}>
+                //       {plan ? plan : "No Plan"}
+                //     </TableCell>
+                //     <TableCell align="left" className={classes.tableCell}>
+                //       {provider ? provider : "No Provider"}
+                //     </TableCell>
+                //     <TableCell align="left" className={classes.tableCell}>
+                //       {consultations ? consultations : 0}
+                //     </TableCell>
+                //     <TableCell align="left" className={classes.tableCell}>
+                //       <Chip
+                //         label={
+                //           status && status === "Active" ? "Active" : "Inactive"
+                //         }
+                //         className={classes.badge}
+                //         style={{
+                //           background:
+                //             status === "Active"
+                //               ? theme.palette.common.lightGreen
+                //               : theme.palette.common.lightRed,
+                //           color:
+                //             status === "Active"
+                //               ? theme.palette.common.green
+                //               : theme.palette.common.red,
+                //         }}
+                //       />
+                //     </TableCell>
+                //     <TableCell>
+                //       <Button
+                //         variant="contained"
+                //         className={classes.button}
+                //         component={Link}
+                //         to={`patients/${_id}`}
+                //         endIcon={<ArrowForwardIosIcon />}
+                //       >
+                //         View Profile
+                //       </Button>
+                //     </TableCell>
+                //   </TableRow>
+                // );
               })}
             </EnhancedTable>
           </Grid>

@@ -61,7 +61,7 @@ const PatientsRow = ({ patientData, labelId }) => {
           textAlign: "left",
         }}
       >
-        {dociId && dociId.split("-")[1]}
+        {dociId?.split("-")[1]}
       </TableCell>
       <TableCell align="left" className={classes.tableCell}>
         <div
