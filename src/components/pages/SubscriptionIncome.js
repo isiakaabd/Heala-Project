@@ -72,7 +72,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -124,7 +126,7 @@ const SubscriptionIncome = () => {
       sx={{ margin: "3rem 0rem" }}
     >
       <>
-        <Grid item container gap={1} alignItems="center">
+        {/* <Grid item container gap={1} alignItems="center">
           <Grid item flex={1}>
             <Typography noWrap variant="h1" component="div" color="#2D2F39">
               Subscription Earnings table
@@ -133,7 +135,7 @@ const SubscriptionIncome = () => {
           <Grid item className={classes.iconWrapper}>
             <TrendingDownIcon color="success" className={classes.cardIcon} />
           </Grid>
-        </Grid>
+        </Grid> */}
         <TableLayout>
           {subIncome.length > 0 ? (
             <Grid item container>
@@ -153,7 +155,7 @@ const SubscriptionIncome = () => {
                 {subIncome.map((row, index) => {
                   const { createdAt, amount, patientData, providerId, planId } =
                     row;
-                  const { firstName, image, lastName } = patientData || {};
+                  const { firstName, lastName } = patientData || {};
                   const isItemSelected = isSelected(row._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -198,13 +200,6 @@ const SubscriptionIncome = () => {
                               alignItems: "center",
                             }}
                           >
-                            <span style={{ marginRight: "1rem" }}>
-                              <Avatar
-                                alt={firstName ? firstName : "image"}
-                                src={patientData ? image : displayPhoto}
-                                sx={{ width: 24, height: 24 }}
-                              />
-                            </span>
                             <span style={{ fontSize: "1.25rem" }}>
                               {patientData &&
                                 `${firstName && firstName} ${

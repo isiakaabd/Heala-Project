@@ -16,7 +16,7 @@ import { useActions } from "components/hooks/useActions";
 import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { handleSelectedRows } from "helpers/selectedRows";
 import { Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
@@ -30,6 +30,8 @@ import TableLayout from "components/layouts/TableLayout";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -63,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HcpPatients = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
@@ -135,6 +138,10 @@ const HcpPatients = () => {
                     tabIndex={-1}
                     key={_id}
                     selected={isItemSelected}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      history.push(`/patients/${patientData?._id}/profile`);
+                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -183,17 +190,6 @@ const HcpPatients = () => {
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       {patientData?.gender && patientData?.gender}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`/patients/${patientData?._id}/profile`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Patient Profile
-                      </Button>
                     </TableCell>
                   </TableRow>
                 );

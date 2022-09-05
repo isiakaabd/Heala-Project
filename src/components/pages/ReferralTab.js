@@ -20,7 +20,7 @@ import { isSelected } from "helpers/isSelected";
 import { useLazyQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import Filter from "components/Forms/Filters";
 import {
@@ -69,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
 
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -83,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReferralTab = () => {
+  const history = useHistory();
   const classes = useStyles();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const theme = useTheme();
@@ -190,6 +193,11 @@ const ReferralTab = () => {
                       tabIndex={-1}
                       key={_id}
                       selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        history.push(`referrals/${_id}`);
+                      }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -212,7 +220,6 @@ const ReferralTab = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {dateMoment(createdAt)}
                       </TableCell>
@@ -221,7 +228,6 @@ const ReferralTab = () => {
                         scope="row"
                         align="left"
                         className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
                       >
                         {/* {new Date(updatedAt)} */}
                         {_id ? _id : "No Value"}
@@ -234,21 +240,6 @@ const ReferralTab = () => {
                             alignItems: "center",
                           }}
                         >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`image of ${
-                                doctorData?.firstName
-                                  ? doctorData.firstName
-                                  : "placeholder Display Image"
-                              }`}
-                              src={
-                                doctorData?.picture
-                                  ? doctorData?.picture
-                                  : displayPhoto
-                              }
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
                           <span style={{ fontSize: "1.25rem" }}>
                             {doctorData?.firstName
                               ? `${doctorData?.firstName} ${doctorData?.lastName}`
@@ -293,28 +284,6 @@ const ReferralTab = () => {
                         style={{ color: theme.palette.common.black }}
                       >
                         {type}
-                      </TableCell>
-                      {/* <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ color: theme.palette.common.black }}
-                      >
-                        {type == "hcp" ? specialization : testType}
-                      </TableCell> */}
-
-                      <TableCell align="left" className={classes.tableCell}>
-                        <Button
-                          variant="contained"
-                          className={classes.button}
-                          component={Link}
-                          to={`referrals/${_id}`}
-                          endIcon={<ArrowForwardIosIcon />}
-                          /* onClick={() => {
-                            setSelectedSubMenu(10);
-                          }} */
-                        >
-                          View Referral
-                        </Button>
                       </TableCell>
                     </TableRow>
                   );

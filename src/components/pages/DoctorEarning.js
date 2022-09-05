@@ -30,6 +30,7 @@ import {
   fetchMoreData,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
+import TableLayout from "components/layouts/TableLayout";
 
 const useStyles = makeStyles((theme) => ({
   iconWrapper: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "1rem",
     background: theme.palette.common.lightGreen,
   },
+
   button: {
     "&.css-1zf5oc-MuiButtonBase-root-MuiButton-root": {
       background: "#fff",
@@ -72,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   tableCell: {
-    "&.css-1jilxo7-MuiTableCell-root": {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -177,120 +181,114 @@ const DoctorEarning = () => {
           style={{ paddingBottom: "3rem" }}
         >
           <Grid item container spacing={3} alignItems="center">
-            <Grid item flex={1}>
+            {/* <Grid item flex={1}>
               <Typography noWrap variant="h1" color="#2D2F39">
                 Doctors Earnings Table
               </Typography>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
-        {payout.length > 0 ? (
-          <Grid item container>
-            <EnhancedTable
-              headCells={payoutHeaders}
-              rows={payout}
-              paginationLabel="Earning per page"
-              hasCheckbox={true}
-              changeLimit={async (e) => {
-                const res = await changeTableLimit(fetchPayout, {
-                  first: e,
-                  doctor: hcpId,
-                });
-                await setTableData(res, "Failed to change table limit.");
-              }}
-              dataPageInfo={pageInfo}
-              handlePagination={async (page) => {
-                const res = await handlePageChange(
-                  fetchPayout,
-                  page,
-                  pageInfo,
-                  { doctor: hcpId }
-                );
-                await setTableData(res, "Failed to change table page.");
-              }}
-              fetchData={fetchPayout}
-              handleChangePage={fetchMoreData}
-            >
-              {payout.map((row, index) => {
-                const { balance, createdAt, _id, doctorData } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
+        <TableLayout>
+          {payout.length > 0 ? (
+            <Grid item container>
+              <EnhancedTable
+                headCells={payoutHeaders}
+                rows={payout}
+                paginationLabel="Earning per page"
+                hasCheckbox={true}
+                changeLimit={async (e) => {
+                  const res = await changeTableLimit(fetchPayout, {
+                    first: e,
+                    doctor: hcpId,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
+                dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = await handlePageChange(
+                    fetchPayout,
+                    page,
+                    pageInfo,
+                    { doctor: hcpId }
+                  );
+                  await setTableData(res, "Failed to change table page.");
+                }}
+                fetchData={fetchPayout}
+                handleChangePage={fetchMoreData}
+              >
+                {payout.map((row, index) => {
+                  const { balance, createdAt, _id, doctorData } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
                     >
-                      {dateMoment(createdAt)}
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.black }}
-                    >
-                      {timeMoment(createdAt)}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {doctorData ? (
-                        <div
-                          style={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "left",
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
                           }}
-                        >
-                          <span style={{ marginRight: "1rem" }}>
-                            <Avatar
-                              alt={`Display Photo of ${doctorData?.firstName}`}
-                              src={
-                                doctorData ? doctorData?.picture : displayPhoto
-                              }
-                              sx={{ width: 24, height: 24 }}
-                            />
-                          </span>
-                          <span style={{ fontSize: "1.25rem" }}>
-                            {doctorData
-                              ? `${doctorData?.lastName} ${doctorData?.lastName}`
-                              : "No Value"}
-                          </span>
-                        </div>
-                      ) : (
-                        "No Name"
-                      )}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.red }}
-                    >
-                      {balance}
-                    </TableCell>
-                    {/* <TableCell align="left" className={classes.tableCell}>
+                        />
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {dateMoment(createdAt)}
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {timeMoment(createdAt)}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {doctorData ? (
+                          <div
+                            style={{
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "left",
+                            }}
+                          >
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {doctorData
+                                ? `${doctorData?.lastName} ${doctorData?.lastName}`
+                                : "No Value"}
+                            </span>
+                          </div>
+                        ) : (
+                          "No Name"
+                        )}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        {balance}
+                      </TableCell>
+                      {/* <TableCell align="left" className={classes.tableCell}>
                       <Chip
                         label={status ? status : "No Value"}
                         className={classes.badge}
@@ -310,17 +308,18 @@ const DoctorEarning = () => {
                         }}
                       />
                     </TableCell> */}
-                  </TableRow>
-                );
-              })}
-            </EnhancedTable>
-          </Grid>
-        ) : (
-          <EmptyTable
-            headCells={payoutHeaders}
-            paginationLabel="Earnings  per page"
-          />
-        )}
+                    </TableRow>
+                  );
+                })}
+              </EnhancedTable>
+            </Grid>
+          ) : (
+            <EmptyTable
+              headCells={payoutHeaders}
+              paginationLabel="Earnings  per page"
+            />
+          )}
+        </TableLayout>
       </>
     </Grid>
   );

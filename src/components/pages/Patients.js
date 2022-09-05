@@ -1,31 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
 import { NoData, EmptyTable } from "components/layouts";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-  Button,
-  Avatar,
-  Chip,
-  Checkbox,
-  TableCell,
-  TableRow,
-  Grid,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
-import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { Loader } from "components/Utilities";
 import { useStyles } from "styles/patientsPageStyles";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import { EnhancedTable } from "components/layouts";
 import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo, searchOptions } from "../../helpers/mockData";
+import { defaultPageInfo, searchOptions } from "helpers/mockData";
 import {
   getPatients,
   getPatientsByPlan,
@@ -36,18 +20,18 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 
+import { useSelector } from "react-redux";
 import TableLayout from "components/layouts/TableLayout";
 import { getSearchPlaceholder } from "helpers/func";
+import PatientsRow from "components/Rows/PatientsRow";
 
 const Patients = () => {
-  const theme = useTheme();
   const classes = useStyles();
   const { displayAlert } = useAlert();
-  const { setSelectedRows } = useActions();
   const [profiles, setProfiles] = useState([]);
-  const { selectedRows } = useSelector((state) => state.tables);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
     useLazyQuery(getPatients);
+  const { provider } = useSelector((state) => state.patient);
   const [
     fetchPatientByStatus,
     {
@@ -73,11 +57,28 @@ const Patients = () => {
     limit: 10,
     totalDocs: 0,
   });
-
   useEffect(() => {
     fetchPatient({
       variables: {
         first: pageInfo.limit,
+      },
+    })
+      .then(({ data }) => {
+        if (data && provider === "") {
+          setPageInfo(data?.profiles?.pageInfo || []);
+          setProfiles(data?.profiles?.data || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    fetchPatient({
+      variables: {
+        first: pageInfo.limit,
+        provider,
       },
     })
       .then(({ data }) => {
@@ -90,7 +91,7 @@ const Patients = () => {
         console.error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [provider]);
 
   const setTableData = async (response, errMsg) => {
     response
@@ -174,121 +175,26 @@ const Patients = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPatient, {
                   first: e,
+                  provider,
                 });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchPatient, page, pageInfo, {});
+                const res = handlePageChange(fetchPatient, page, pageInfo, {
+                  provider,
+                });
                 await setTableData(res, "Failed to change page.");
               }}
             >
               {profiles.map((row, index) => {
-                const {
-                  dociId,
-                  firstName,
-                  lastName,
-                  plan,
-                  provider,
-                  image,
-                  consultations,
-                  _id,
-                  status,
-                } = row;
-                const isItemSelected = isSelected(_id, selectedRows);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={_id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      id={labelId}
-                      scope="row"
-                      align="left"
-                      className={classes.tableCell}
-                      style={{
-                        color: theme.palette.common.grey,
-                        textAlign: "left",
-                      }}
-                    >
-                      {dociId && dociId.split("-")[1]}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
-                      >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${firstName}`}
-                            src={image ? image : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
-                        <span
-                          style={{ fontSize: "1.25rem" }}
-                        >{`${firstName} ${lastName}`}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {plan ? plan : "No Plan"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {provider ? provider : "No Provider"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {consultations ? consultations : 0}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={
-                          status && status === "Active" ? "Active" : "Inactive"
-                        }
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Active"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Active"
-                              ? theme.palette.common.green
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component={Link}
-                        to={`patients/${_id}`}
-                        endIcon={<ArrowForwardIosIcon />}
-                      >
-                        View Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  <PatientsRow
+                    key={index}
+                    patientData={row}
+                    labelId={labelId}
+                  />
                 );
               })}
             </EnhancedTable>

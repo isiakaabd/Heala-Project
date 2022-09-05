@@ -390,7 +390,9 @@ const Crumb = ({ breadcrumbs }) => {
             const borderRadius =
               index === breadcrumbs.length - 2
                 ? "0px 0px 8px 8px"
-                : "8px 8px 0px 0px";
+                : index === 0
+                ? "8px 8px 0px 0px"
+                : "";
             if (isLast) {
               return null;
             } else {

@@ -90,6 +90,8 @@ const useStyles = makeStyles((theme) => ({
 
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -175,21 +177,6 @@ const Administrator = () => {
       setPageInfo(data.accounts.pageInfo);
     }
   }, [data]);
-
-  /*   const optionss = [
-    {
-      label: "option 1",
-      value: "option 1",
-    },
-    {
-      label: "option 2",
-      value: "option 2",
-    },
-    {
-      label: "option 3",
-      value: "three",
-    },
-  ]; */
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Enter a valid email").trim(),

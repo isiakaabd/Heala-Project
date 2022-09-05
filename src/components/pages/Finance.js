@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     background: "white",
     borderRadius: "2rem",
-    boxShadow: "-1px 0px 10px -2px rgba(0,0,0,0.15)",
+    boxShadow: "-1px 11px 30px 0px #e0e0e03b",
   },
   parentGrid: {
     textDecoration: "none",

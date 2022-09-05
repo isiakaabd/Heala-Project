@@ -18,7 +18,7 @@ export const patterns = {
   "Send message": "hcps/{id}/profile/chat",
 
   // PARTNERS PATTERNS
-  Partners: "partners",
+  // Partners: "partners",
 
   // HMO PATTERNS
   HMO: "hmo",
@@ -39,10 +39,10 @@ export const patterns = {
   // Providers: "label/provider",
 
   Heala: "Heala",
-  "Provider Services": "user-type",
-  Provider: "user-type/{id}",
-  "Doctor Provider": "hcps/{id}/filter",
-  "Patient Provider": "patients/{id}/filter",
+  Partners: "user-type",
+  Partner: "user-type/{id}",
+  Doctor: "hcps/{id}/filter",
+  Patient: "patients/{id}/filter",
   Hospital: "Hospital",
   Hm: "Patient Provider",
   // UserTypes: "UserType",
@@ -89,6 +89,8 @@ const isRootPath = (path) =>
   String(path)
     .split("/")
     .filter((e) => e).length === 1;
+
+console.log(isRootPath());
 
 export function replaceWithGenerics(generics, path) {
   let str = path;

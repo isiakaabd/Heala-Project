@@ -173,10 +173,10 @@ const LineChart2 = ({ graphState, optionsValue, type, opt }) => {
         tension: 0.5,
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
-          const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-          gradient.addColorStop(0, "rgba(62, 94, 169, .04)");
-          gradient.addColorStop(1, "rgba(255,255,255,1)");
-          gradient.opacity = 0.6;
+
+          const gradient = ctx.createLinearGradient(0, 0, 0, 330);
+          gradient.addColorStop(0, "rgba(62, 94, 209, .05)");
+          gradient.addColorStop(1, "rgba(255,255,255,0.3)");
           return gradient;
         },
       };

@@ -26,6 +26,7 @@ const Card = ({ title, background, children, header = "h2", padding }) => {
       justifyContent="space-between"
       className={classes.gridWrapper}
       rowGap={3}
+      sx={{ backgroundColor: "#fff" }}
     >
       <Grid item className={classes.iconWrapper} style={{ background }}>
         {children}

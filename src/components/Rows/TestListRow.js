@@ -22,9 +22,13 @@ export const TestListRow = ({
     <TableRow
       hover
       role="checkbox"
-      /* aria-checked={isItemSelected} */
       tabIndex={-1}
-      /* selected={isItemSelected} */
+      sx={{ cursor: "pointer" }}
+      onClick={(e) => {
+        e.stopPropagation();
+        setEditData(data);
+        openEditModal();
+      }}
     >
       <TableCell align="left" className={classes.tableCell}>
         {name && name}
@@ -35,7 +39,7 @@ export const TestListRow = ({
       <TableCell align="left" className={classes.tableCell}>
         {tat && tat}
       </TableCell>
-      <TableCell align="center" className={classes.tableCell}>
+      {/* <TableCell align="center" className={classes.tableCell}>
         <EditDelBtn
           onHandleClick={() => {
             setEditData(data);
@@ -44,7 +48,7 @@ export const TestListRow = ({
           text="Edit"
           type="edit"
         />
-      </TableCell>
+      </TableCell> */}
       <TableCell align="center" className={classes.tableCell}>
         {isDeleting ? (
           <Loader />

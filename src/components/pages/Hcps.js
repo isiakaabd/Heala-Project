@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus } from "@apollo/client";
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -45,28 +45,26 @@ import {
   docSpecializationsOptions,
   doctorsSearchOptions,
   genderType,
-  /*  providerFilterBy,
-  specializationFilterBy,
-  statusFilterBy, */
 } from "helpers/mockData";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
 import TableLayout from "components/layouts/TableLayout";
 
 const Hcps = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const { displayAlert } = useAlert();
   const [profiles, setProfiles] = useState("");
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const { provider } = useSelector((state) => state.patient);
+  console.log(provider);
   const [openAddHcp, setOpenAddHcp] = useState(false);
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
   const [fetchDoctors, { error, loading, refetch, variables, networkStatus }] =
-    useLazyQuery(getDoctorsProfile, {
-      notifyOnNetworkStatusChange: true,
-    });
+    useLazyQuery(getDoctorsProfile);
   const [
     fetchDoctorsByStatus,
     {
@@ -83,7 +81,7 @@ const Hcps = () => {
       },
     })
       .then(({ data }) => {
-        if (data) {
+        if (data && provider === "") {
           setPageInfo(data.doctorProfiles.pageInfo || []);
           setProfiles(data.doctorProfiles.profile || defaultPageInfo);
         }
@@ -93,6 +91,24 @@ const Hcps = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    fetchDoctors({
+      variables: {
+        first: pageInfo.limit,
+        providerId: provider,
+      },
+    })
+      .then(({ data }) => {
+        if (data && provider !== "") {
+          setPageInfo(data.doctorProfiles.pageInfo || []);
+          setProfiles(data.doctorProfiles.profile || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider]);
 
   const onSubmit = async (values) => {
     const {
@@ -226,12 +242,15 @@ const Hcps = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchDoctors, {
                   first: e,
+                  providerId: provider,
                 });
                 await setTableData(res, "Failed to change table limit");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchDoctors, page, pageInfo, {});
+                const res = handlePageChange(fetchDoctors, page, pageInfo, {
+                  providerId: provider,
+                });
                 await setTableData(res, "Failed to change page.");
               }}
             >
@@ -244,7 +263,6 @@ const Hcps = () => {
                   status,
                   specialization,
                   consultations,
-                  picture,
                   lastName,
                 } = row;
                 const isItemSelected = isSelected(_id, selectedRows);
@@ -257,6 +275,11 @@ const Hcps = () => {
                     tabIndex={-1}
                     key={_id}
                     selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      history.push(`hcps/${_id}`);
+                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -280,7 +303,7 @@ const Hcps = () => {
                         minWidth: "10rem",
                       }}
                     >
-                      {dociId && dociId.split("-")[1]}
+                      {dociId?.split("-")[1]}
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <div
@@ -290,13 +313,6 @@ const Hcps = () => {
                           alignItems: "left",
                         }}
                       >
-                        <span style={{ marginRight: "1rem" }}>
-                          <Avatar
-                            alt={`Display Photo of ${firstName}`}
-                            src={picture ? picture : displayPhoto}
-                            sx={{ width: 24, height: 24 }}
-                          />
-                        </span>
                         <span style={{ fontSize: "1.25rem" }}>
                           {firstName} {lastName}
                         </span>
@@ -337,7 +353,7 @@ const Hcps = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <Button
                         variant="contained"
                         className={classes.button}
@@ -347,7 +363,7 @@ const Hcps = () => {
                       >
                         View Doctor
                       </Button>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}

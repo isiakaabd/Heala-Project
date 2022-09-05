@@ -30,6 +30,8 @@ export const useStyles = makeStyles((theme) => ({
 
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
       textAlign: "left",
       padding: "16px",

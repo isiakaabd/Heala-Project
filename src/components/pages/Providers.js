@@ -36,6 +36,7 @@ import {
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
 import { useParams } from "react-router-dom";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -142,6 +143,14 @@ const useStyles = makeStyles((theme) => ({
       color: "green !important",
     },
   },
+
+  tableCell: {
+    "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
+      fontSize: "1.25rem",
+    },
+  },
 }));
 
 const Providers = () => {
@@ -222,7 +231,7 @@ const Providers = () => {
   const handleEditCloseDialog = () => {
     setEdit(false);
   };
-  const [alert, setAlert] = useState(null);
+  const [, setAlert] = useState(null);
   const [edit, setEdit] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const handleDialogClose = async () => {
@@ -360,24 +369,16 @@ const Providers = () => {
                             justifyContent: "space-around",
                           }}
                         >
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.greenBtn}`}
-                            onClick={() => handleEditOpenDialog(_id)}
-                            endIcon={<EditIcon color="success" />}
-                          >
-                            Edit Provider
-                          </Button>
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleDeleteOpenDialog(_id)}
-                            endIcon={<DeleteIcon color="error" />}
-                          >
-                            Delete Provider
-                          </Button>
+                          <EditDelBtn
+                            onHandleClick={() => handleEditOpenDialog(_id)}
+                            type="edit"
+                            text="Edit Provider"
+                          />
+                          <EditDelBtn
+                            onHandleClick={() => handleDeleteOpenDialog(_id)}
+                            type="delete"
+                            text="Delete Provider"
+                          />
                         </div>
                       </TableCell>
                     </TableRow>

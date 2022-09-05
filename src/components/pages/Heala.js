@@ -22,11 +22,13 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { getProviders, getPartners } from "components/graphQL/useQuery";
 import { Loader } from "components/Utilities";
 import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
+import { useActions } from "components/hooks/useActions";
 
 const Heala = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { id } = useParams();
+  const { patientConsultation } = useActions();
   const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
   const [hospitals, setHospitals] = useState([]);
 
@@ -68,19 +70,25 @@ const Heala = () => {
             hasCheckbox={false}
             dataPageInfo={pageInfo}
           >
-            {hospitals.map((row, index) => {
+            {hospitals.map((row) => {
               const {
                 _id,
                 profileUrl,
                 doctorsCount,
                 userCount,
-                icon,
                 partnersCount,
                 name,
               } = row;
 
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={_id}>
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={_id}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => patientConsultation(_id)}
+                >
                   <TableCell
                     align="left"
                     className={classes.tableCell}
@@ -97,10 +105,7 @@ const Heala = () => {
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Link
-                      to={`/patients/${_id}/filter`}
-                      className={classes.link}
-                    >
+                    <Link to={`/patients`} className={classes.link}>
                       <Typography
                         variant="h3"
                         classes={{ root: classes.title }}
@@ -110,7 +115,7 @@ const Heala = () => {
                     </Link>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Link to={`/hcps/${_id}/filter`} className={classes.link}>
+                    <Link to={`/hcps`} className={classes.link}>
                       <Typography
                         variant="h3"
                         classes={{ root: classes.title }}
@@ -163,7 +168,7 @@ const Heala = () => {
                         className={`${classes.tableBtn} ${classes.redBtn}`}
                         // onClick={() => handleGenerateLink(_id)}
                       >
-                        Generate Linkss
+                        Generate Link
                       </Button>
                     )}
                   </TableCell>

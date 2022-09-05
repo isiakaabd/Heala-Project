@@ -38,6 +38,7 @@ import {
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
 import { Link } from "react-router-dom";
+import { EditDelBtn } from "components/Buttons/EditDelBtn";
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
     fontSize: "1.6rem",
@@ -91,6 +92,8 @@ const useStyles = makeStyles((theme) => ({
 
   tableCell: {
     "&.MuiTableCell-root": {
+      color: "rgb(0 0 0)",
+      fontWeight: 400,
       fontSize: "1.25rem",
     },
   },
@@ -387,27 +390,16 @@ const UserTypes = () => {
                               height: "100%",
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "space-around",
+                              justifyContent: "flex-end",
                             }}
                           >
-                            <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.greenBtn}`}
-                              onClick={() => handleEditOpenDialog(_id)}
-                              endIcon={<EditIcon color="success" />}
-                            >
-                              Edit
-                            </Button>
-                            {/* <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.redBtn}`}
-                              onClick={() => handleDeleteOpenDialog(_id)}
-                              endIcon={<DeleteIcon color="error" />}
-                            >
-                              Delete UserType
-                            </Button> */}
+                            <EditDelBtn
+                              onHandleClick={() =>
+                                handleEditOpenDialog(row._id)
+                              }
+                              type="edit"
+                              text="Edit"
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
