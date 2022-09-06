@@ -516,6 +516,13 @@ export const hospitalTableHeadCells = [
   { id: 0, label: "Users" },
   { id: 3, label: "Doctors" },
   { id: 4, label: "Partners" },
+  { id: 20, label: "" },
+];
+export const hospitalTableHeadCells2 = [
+  { id: 1, label: "Providers" },
+  { id: 0, label: "Users" },
+  { id: 3, label: "Doctors" },
+  { id: 4, label: "Partners" },
   { id: 2, label: "Enrolees" },
   { id: 20, label: "" },
 ];
