@@ -40,6 +40,7 @@ const Heala = () => {
   useEffect(() => {
     fetchHospitals()
       .then(({ data }) => {
+        console.log(data);
         if (data) {
           setHospitals(data?.getProviders?.provider || []);
           setPageInfo(data?.getProviders?.pageInfo || {});
@@ -78,6 +79,7 @@ const Heala = () => {
                 userCount,
                 partnersCount,
                 name,
+                enrolleCount,
               } = row;
 
               return (
@@ -136,6 +138,18 @@ const Heala = () => {
                         {partnersCount ? partnersCount : "NA"}
                       </Typography>
                     </Link>
+                  </TableCell>
+                  <TableCell align="left" className={classes.tableCell}>
+                    {name === "Heala HMO" && (
+                      <Link to={`/hmo/${_id}`} className={classes.link}>
+                        <Typography
+                          variant="h3"
+                          classes={{ root: classes.title }}
+                        >
+                          {enrolleCount ? enrolleCount : "NA"}
+                        </Typography>
+                      </Link>
+                    )}
                   </TableCell>
 
                   <TableCell
