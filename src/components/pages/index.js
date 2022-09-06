@@ -57,3 +57,4 @@ export { default as Hm } from "./Hm";
 export { default as Hospital } from "./Hospital";
 export { default as DoctorProvider } from "./DoctorProvider";
 export { default as PartnersProvider } from "./PartnersProvider";
+export { default as Healas } from "./Healas";

@@ -21,6 +21,7 @@ import {
   HcpAvailability,
   HcpPatients,
   HcpAppointments,
+  Healas,
   HcpProfile,
   Medications,
   SinglePatient,
@@ -256,6 +257,7 @@ const Routes = () => {
       {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/label" component={WhiteLabel} />
       <PrivateRoute path="/user-type/:id" component={Heala} />
+      <PrivateRoute path="/user-types/:id" component={Healas} />
 
       {/* <PrivateRoute path="/label/types" component={UserTypes} /> */}
 

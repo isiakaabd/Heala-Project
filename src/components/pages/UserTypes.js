@@ -373,7 +373,11 @@ const UserTypes = () => {
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
                           <Link
-                            to={`/user-type/${_id}`}
+                            to={
+                              name === "HMO Enrollee"
+                                ? `/user-types/${_id}`
+                                : `/user-type/${_id}`
+                            }
                             className={classes.link}
                           >
                             <Typography
