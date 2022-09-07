@@ -176,6 +176,7 @@ export const CustomSelect = (props) => {
     onClickClearBtn,
     hasClearBtn,
     disabled = false,
+    defaultValue,
     variant = "small",
   } = props;
 
@@ -211,6 +212,7 @@ export const CustomSelect = (props) => {
             value={value}
             onChange={onChange}
             className={classes.select}
+            defaultValue={defaultValue}
             IconComponent={() => (
               <ChervonDownIcon
                 sx={{ color: "transparent", marginRight: "0.8rem" }}
@@ -238,6 +240,7 @@ CustomSelect.propTypes = {
   name: PropTypes.func,
   children: PropTypes.node,
   placeholder: PropTypes.string,
+  defaultValue: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onClickClearBtn: PropTypes.func,

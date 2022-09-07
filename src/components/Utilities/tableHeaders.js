@@ -447,7 +447,6 @@ export const availabilityHeadCells = [
   { id: 2, label: "Day" },
   { id: 3, label: "Start Time" },
   { id: 300, label: "End Time" },
-  { id: 32, label: "" },
 ];
 
 export const hcpsHeadCells = [
@@ -517,6 +516,12 @@ export const hospitalTableHeadCells = [
   { id: 3, label: "Doctors" },
   { id: 4, label: "Partners" },
   { id: 20, label: "" },
+];
+export const hospitalTableHeadCells10 = [
+  { id: 1, label: "Providers" },
+  { id: 0, label: "Users" },
+  { id: 20, label: "Enrolles" },
+  { id: 3, label: "Partners" },
 ];
 export const hospitalTableHeadCells2 = [
   { id: 1, label: "Providers" },

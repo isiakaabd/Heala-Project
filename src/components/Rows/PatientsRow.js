@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { isSelected } from "helpers/isSelected";
+import { useHistory } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useStyles } from "styles/patientsPageStyles";
 import { useActions } from "components/hooks/useActions";

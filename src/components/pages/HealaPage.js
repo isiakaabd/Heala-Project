@@ -33,7 +33,7 @@ import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
-const Heala = () => {
+const HealaPage = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { id } = useParams();
@@ -57,7 +57,6 @@ const Heala = () => {
       variables: { userTypeId: id },
     }
   );
-  const onSubmit = () => console.log("onSubmit");
   const [openAddHcp, setOpenAddHcp] = useState(false);
   useEffect(() => {
     fetchHospitals()
@@ -156,7 +155,10 @@ const Heala = () => {
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/patients`} className={classes.link}>
+                        <Link
+                          to={`/user-type/heala/${id}/${_id}`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -166,7 +168,10 @@ const Heala = () => {
                         </Link>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/hcps`} className={classes.link}>
+                        <Link
+                          to={`/user-type/heala/doctor/${id}/${_id}`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -177,7 +182,7 @@ const Heala = () => {
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
-                          to={`/user-type/${_id}/partners`}
+                          to={`/user-type/heala/partner/${id}/${_id}`}
                           className={classes.link}
                         >
                           <Typography
@@ -242,9 +247,10 @@ const Heala = () => {
         handleClose={() => setOpenAddHcp(false)}
         buttonType={buttonType}
         id={id}
+        pushTo={`/user-type/heala/${id}`}
       />
     </>
   );
 };
 
-export default Heala;
+export default HealaPage;

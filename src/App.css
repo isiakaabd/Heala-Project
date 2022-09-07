@@ -87,6 +87,9 @@ body {
 .MuiSelect-select {
   padding: 0 26px 0 10px !important;
 }
+a {
+  color: #474951 !important;
+}
 
 .kpNhUO {
   display: inline-block;
