@@ -7,6 +7,10 @@ export const useStyles = makeStyles((theme) => ({
       marginRight: "5rem",
     },
   },
+  link: {
+    textDecoration: "none",
+    width: "100%",
+  },
 
   searchFilterContainer: {
     "&.MuiGrid-root": {},

@@ -22,7 +22,7 @@ import { EnhancedTable } from "components/layouts";
 import { useStyles } from "styles/partnersPageStyles";
 import Copy from "components/Copy";
 import { trucateProfileLink } from "helpers/filterHelperFunctions";
-import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
+import { hospitalTableHeadCells10 } from "components/Utilities/tableHeaders";
 import { defaultPageInfo } from "helpers/mockData";
 import { trucateString } from "helpers/filterHelperFunctions";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -33,7 +33,7 @@ import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
-const Heala = () => {
+const HMOEnrolle = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { id } = useParams();
@@ -115,7 +115,7 @@ const Heala = () => {
               maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
             >
               <EnhancedTable
-                headCells={hospitalTableHeadCells}
+                headCells={hospitalTableHeadCells10}
                 rows={hospitals}
                 paginationLabel="Hospitals per page"
                 hasCheckbox={false}
@@ -138,7 +138,7 @@ const Heala = () => {
                       tabIndex={-1}
                       key={_id}
                       style={{ cursor: "pointer" }}
-                      onClick={() => patientConsultation(_id)}
+                      //   onClick={() => patientConsultation(_id)}
                     >
                       <TableCell
                         align="left"
@@ -156,7 +156,10 @@ const Heala = () => {
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/patients`} className={classes.link}>
+                        <Link
+                          to={`/user-type/hmo/${id}/${_id}/users`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -166,7 +169,7 @@ const Heala = () => {
                         </Link>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/hcps`} className={classes.link}>
+                        <Link to={`/hmo/${_id}`} className={classes.link}>
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -177,7 +180,7 @@ const Heala = () => {
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
-                          to={`/user-type/${_id}/partners`}
+                          to={`/user-type/hmo/${id}/${_id}/partners`}
                           className={classes.link}
                         >
                           <Typography
@@ -188,7 +191,7 @@ const Heala = () => {
                           </Typography>
                         </Link>
                       </TableCell>
-
+                      {/* 
                       <TableCell
                         align="left"
                         className={classes.tableCell}
@@ -222,7 +225,7 @@ const Heala = () => {
                             Generate Link
                           </Button>
                         )}
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}
@@ -230,8 +233,8 @@ const Heala = () => {
             </Grid>
           ) : (
             <EmptyTable
-              headCells={hospitalTableHeadCells}
-              paginationLabel="Hospitals per page"
+              headCells={hospitalTableHeadCells10}
+              paginationLabel="Hmo Enrollee per page"
             />
           )}
         </TableLayout>
@@ -242,9 +245,10 @@ const Heala = () => {
         handleClose={() => setOpenAddHcp(false)}
         buttonType={buttonType}
         id={id}
+        pushTo={`/user-type/hmo/${id}`}
       />
     </>
   );
 };
 
-export default Heala;
+export default HMOEnrolle;

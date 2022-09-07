@@ -1407,11 +1407,16 @@ export const getProviders = gql`
   query getProviders(
     $name: String
     $userTypeId: String
+    $providerId: String
     $page: Int
     $first: Int
   ) {
     getProviders(
-      filterBy: { name: $name, userTypeId: $userTypeId }
+      filterBy: {
+        name: $name
+        providerId: $providerId
+        userTypeId: $userTypeId
+      }
       page: $page
       orderBy: "-createdAt"
       first: $first
@@ -1457,7 +1462,7 @@ export const getPartners = gql`
     $provider: String
   ) {
     getPartners(
-      filterBy: { category: $category, provider: $provider }
+      filterBy: { category: $category, providerId: $provider }
       orderBy: "-createdAt"
       page: $page
       first: $first
@@ -1485,6 +1490,7 @@ export const getPartners = gql`
     }
   }
 `;
+
 export const getAllergies = gql`
   query findAllergies {
     findAllergies {

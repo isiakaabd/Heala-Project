@@ -40,6 +40,11 @@ export const addTestValidation = Yup.object({
     .typeError(" Enter a number a Turnaround time in minutes")
     .required("TAT is required"),
 });
+export const addProviderValidation = Yup.object({
+  name: Yup.string("Enter Provider name")
+    .trim()
+    .required("Test name is required"),
+});
 
 export const editTestValidation = Yup.object({
   id: Yup.string().trim().required(),

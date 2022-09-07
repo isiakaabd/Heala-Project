@@ -8,8 +8,14 @@ import {
   Patients,
   Subscription,
   DoctorPayout,
+  HospitalUsers,
+  HealaPage,
+  HMODoctorPage,
   Hospital,
   Hcps,
+  HealerPartner,
+  HealaFilterDoctorPage,
+  HealaFilterPartnerPage,
   DoctorProvider,
   ViewDoctorVerification,
   PartnersProvider,
@@ -20,15 +26,20 @@ import {
   HcpEarnings,
   HcpAvailability,
   HcpPatients,
+  HospitalPage,
   HcpAppointments,
   Healas,
   HcpProfile,
   Medications,
   SinglePatient,
+  HMOEnrolle,
   CaseNotes,
+  HMOUsers,
+  HMOPartners,
   MedicalRecords,
   Prescriptions,
   PatientAppointment,
+  HealaFilterPage,
   Email,
   HCP,
   Consultations,
@@ -134,6 +145,47 @@ const Routes = () => {
       <PrivateRoute exact path="/heala" component={Heala} />
       <PrivateRoute exact path="/hmos" component={Hm} />
       <PrivateRoute exact path="/user-type" component={UserTypes} />
+      <PrivateRoute exact path="/user-type/hmo/:id" component={HMOEnrolle} />
+      <PrivateRoute
+        exact
+        path="/user-type/hmo/:id/:ids/users"
+        component={HMOUsers}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/hmo/:id/:ids/partners"
+        component={HMOPartners}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/heala/:id/:ids"
+        component={HealaFilterPage}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/hospital/:id/:ids"
+        component={HealaFilterDoctorPage}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/hospital/:id/partners/:ids"
+        component={HealaFilterPartnerPage}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/heala/partner/:id/:ids"
+        component={HealerPartner}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/hospital/:id/patients/:ids"
+        component={HospitalUsers}
+      />
+      <PrivateRoute
+        exact
+        path="/user-type/hospital/:id/hcps/:ids"
+        component={HMODoctorPage}
+      />
       <PrivateRoute
         exact
         path="/patients/:id/filter"
@@ -256,7 +308,13 @@ const Routes = () => {
 
       {/*  =====  WHITE LABEL ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/label" component={WhiteLabel} />
-      <PrivateRoute path="/user-type/:id" component={Heala} />
+      <PrivateRoute exact path="/user-type/:id" component={Heala} />
+      <PrivateRoute exact path="/user-type/heala/:id" component={HealaPage} />
+      <PrivateRoute
+        exact
+        path="/user-type/hospital/:id"
+        component={HospitalPage}
+      />
       <PrivateRoute path="/user-types/:id" component={Healas} />
 
       {/* <PrivateRoute path="/label/types" component={UserTypes} /> */}

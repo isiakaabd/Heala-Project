@@ -38,13 +38,15 @@ export const patterns = {
   Partnerss: "partners/{id}/filter",
   // Providers: "label/provider",
 
-  Heala: "Heala",
-  Partners: "user-type",
-  Partner: "user-type/{id}",
+  "Provider Services": "user-type",
   Doctor: "hcps/{id}/filter",
   Patient: "patients/{id}/filter",
+  "Hospital Enrollee": "user-type/hospital/{id}",
+  Heala: "user-type/heala/{id}",
+  "HMO Enrollee": "user-type/hmo/{id}",
   Hospital: "Hospital",
   Hm: "Patient Provider",
+  "Heala Patients": "user-type/heala/{id}/{id}",
   // UserTypes: "UserType",
   Hela: "Doctor Provider",
   // FINANCE PATTERS
