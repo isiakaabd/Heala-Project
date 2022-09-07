@@ -322,7 +322,13 @@ const AvailabilityTable = () => {
                     const isItemSelected = isSelected(_id, selectedRows);
 
                     return (
-                      <TableRow hover tabIndex={-1} key={_id}>
+                      <TableRow
+                        hover
+                        tabIndex={-1}
+                        key={_id}
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => handleCheckDay(day, doctor)}
+                      >
                         <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
@@ -405,16 +411,6 @@ const AvailabilityTable = () => {
                               color: theme.palette.common.red,
                             }}
                           />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            onClick={() => handleCheckDay(day, doctor)}
-                            endIcon={<ArrowForwardIosIcon />}
-                          >
-                            View Time
-                          </Button>
                         </TableCell>
                       </TableRow>
                     );

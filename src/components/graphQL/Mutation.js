@@ -36,6 +36,25 @@ export const updateDoctorProvider = gql`
     }
   }
 `;
+export const createProvider = gql`
+  mutation createProvider($name: String!, $userTypeId: String!) {
+    createProvider(data: { name: $name, userTypeId: $userTypeId }) {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        createdAt
+        updatedAt
+      }
+      message
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const editUserType = gql`
   mutation updateUserType(
     $id: String!

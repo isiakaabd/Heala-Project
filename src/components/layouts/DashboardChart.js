@@ -259,26 +259,32 @@ const DashboardCharts = ({ data }) => {
       case "Patients":
         setState(patientGraphState);
         setPartnersState("Patients");
+        setOptions("all");
         break;
       case "Doctors":
         setState(graphState);
         setPartnersState("Doctors");
+        setOptions("all");
         break;
       case "Consultations":
         setState(consultationState);
         setPartnersState("Consultations");
+        setOptions("all");
         break;
       case "Partners":
         setState(partnerGraphState);
         setPartnersState("Partners");
+        setOptions("all");
         break;
       case "Finance":
         setState(financialState);
         setPartnersState("Finance");
+        setOptions("all");
         break;
       default:
         setState(patientGraphState);
         setPartnersState("Patients");
+        setOptions("all");
     }
   };
   useEffect(() => {

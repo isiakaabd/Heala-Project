@@ -33,7 +33,7 @@ import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
-const Heala = () => {
+const HospitalPage = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { id } = useParams();
@@ -156,7 +156,10 @@ const Heala = () => {
                         </div>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/patients`} className={classes.link}>
+                        <Link
+                          to={`/user-type/hospital/${id}/patients/${_id}`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -166,7 +169,10 @@ const Heala = () => {
                         </Link>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/hcps`} className={classes.link}>
+                        <Link
+                          to={`/user-type/hospital/${id}/${_id}`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
@@ -177,7 +183,7 @@ const Heala = () => {
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
-                          to={`/user-type/${_id}/partners`}
+                          to={`/user-type/hospital/${id}/partners/${_id}`}
                           className={classes.link}
                         >
                           <Typography
@@ -242,9 +248,10 @@ const Heala = () => {
         handleClose={() => setOpenAddHcp(false)}
         buttonType={buttonType}
         id={id}
+        pushTo={`/user-type/hospital/${id}`}
       />
     </>
   );
 };
 
-export default Heala;
+export default HospitalPage;

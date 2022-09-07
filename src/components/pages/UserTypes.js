@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
-
+import CompoundSearch from "components/Forms/CompoundSearch";
 import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
 import AddIcon from "@mui/icons-material/Add";
+import { searchOptions } from "helpers/mockData";
+import { getSearchPlaceholder } from "helpers/func";
 import {
   Grid,
   TableRow,
@@ -198,9 +200,8 @@ const UserTypes = () => {
   const [id, setId] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error /*refetch*/ }] =
+  const [fetchUserTypes, { loading, data, error, variables /*refetch*/ }] =
     useLazyQuery(getUserTypes);
-  console.log(data);
   useEffect(() => {
     fetchUserTypes({
       variables: {
@@ -306,7 +307,26 @@ const UserTypes = () => {
             </Grid> */}
           </Grid>
         </Grid>
-        <TableLayout>
+        <TableLayout
+          search={
+            <CompoundSearch
+              queryParams={{
+                fetchData: fetchUserTypes,
+                variables,
+                loading,
+                newVariables: {},
+              }}
+              setPageInfo={(data) =>
+                setPageInfo(data?.profiles?.pageInfo || {})
+              }
+              setProfiles={(data) => setUsertypes(data?.profiles?.data || [])}
+              getSearchPlaceholder={(filterBy) =>
+                getSearchPlaceholder(filterBy)
+              }
+              filterOptions={searchOptions}
+            />
+          }
+        >
           {userType.length > 0 ? (
             <Grid item container height="100%" direction="column">
               <EnhancedTable
@@ -374,8 +394,12 @@ const UserTypes = () => {
                         <TableCell align="left" className={classes.tableCell}>
                           <Link
                             to={
-                              name === "HMO Enrollee"
-                                ? `/user-types/${_id}`
+                              name === "Heala User"
+                                ? `/user-type/heala/${_id}`
+                                : name === "Hospital Enrollee"
+                                ? `/user-type/hospital/${_id}`
+                                : name === "HMO Enrollee"
+                                ? `/user-type/hmo/${_id}`
                                 : `/user-type/${_id}`
                             }
                             className={classes.link}
