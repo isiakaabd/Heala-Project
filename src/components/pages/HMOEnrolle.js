@@ -80,7 +80,7 @@ const HMOEnrolle = () => {
         <Grid item container justifyContent="flex-end">
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
-            title="Add "
+            title="Add Provider"
             type={darkButtonType}
             onClick={() => setOpenAddHcp(true)}
           />

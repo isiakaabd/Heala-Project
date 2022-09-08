@@ -13,6 +13,7 @@ const CompoundSearch = ({
   setProfiles,
   getSearchPlaceholder,
   filterOptions,
+  showHeala,
 }) => {
   const state = searchState || {
     value: "",
@@ -26,7 +27,9 @@ const CompoundSearch = ({
     try {
       deleteVar(variables);
       let value = searchVal;
-      if (searchBy === "id") value = `HEALA-${searchVal}`;
+      // if (searchBy === "id") value = `HEALA-${searchVal}`;
+      if (searchBy === "ids") value = searchVal;
+
       const searchVariables =
         value === ""
           ? {
@@ -79,7 +82,7 @@ const CompoundSearch = ({
           }}
           placeholder={getSearchPlaceholder(searchValue.filterBy)}
           startIcon={
-            searchValue.filterBy === "id" ? (
+            searchValue.filterBy === "id" && !showHeala ? (
               <Typography sx={{ fontSize: "14px" }}>HEALA-</Typography>
             ) : null
           }
