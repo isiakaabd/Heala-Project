@@ -56,6 +56,7 @@ import { PageInfo } from "components/graphQL/fragment";
 import TableLayout from "components/layouts/TableLayout";
 import { useParams } from "react-router-dom";
 import { EditDelBtn } from "components/Buttons/EditDelBtn";
+import AddPartner from "components/Forms/AddPartner";
 
 const HMOPartners = () => {
   const theme = useTheme();
@@ -64,9 +65,9 @@ const HMOPartners = () => {
   const { displayAlert } = useAlert();
   /* const [setCategoryDatas] = useState([]); */
   const { setSelectedRows } = useActions();
-  const { enqueueSnackbar } = useSnackbar();
   const [partner, setPartners] = useState([]);
   const [dropDown, setDropDown] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
   const [addPartners] = useMutation(addPartner);
   const categoryData = useQuery(getSingleProvider);
   const [delete_partner] = useLazyQuery(DELETE_PARTNER);
@@ -155,6 +156,7 @@ const HMOPartners = () => {
     response
       .then((res) => {
         const { data } = res;
+        console.log(data);
         if (data) {
           setPartners(data?.getPartners?.data || []);
           setPageInfo(data?.getPartners?.pageInfo || defaultPageInfo);
@@ -174,7 +176,7 @@ const HMOPartners = () => {
     const res = fetchPartners({
       variables: {
         first: pageInfo.limit,
-        provider: ids,
+        providerId: ids,
       },
     });
     setTableData(res, "Couldn't fetch Partners data");
@@ -318,7 +320,7 @@ const HMOPartners = () => {
           variables: {
             variables: pageInfo.page,
             limit: PageInfo.limit,
-            provider: ids,
+            providerId: ids,
           },
         },
       ],
@@ -373,7 +375,7 @@ const HMOPartners = () => {
           <Grid item>
             <CustomButton
               endIcon={<PersonAddAlt1Icon />}
-              title="Add "
+              title="Add Partner"
               type={darkButtonType}
               onClick={() => setOpenAddPartner(true)}
             />
@@ -623,160 +625,12 @@ const HMOPartners = () => {
       </Modals>
 
       {/* ADD NEW PARTER MODAL */}
-      <Modals
-        isOpen={openAddPartner}
-        title="Add Partners"
-        rowSpacing={5}
+      <AddPartner
+        category={false}
+        id={ids}
+        open={openAddPartner}
         handleClose={() => setOpenAddPartner(false)}
-      >
-        <Formik
-          initialValues={initialValues1}
-          onSubmit={onSubmit1}
-          validationSchema={addNewPartnerValidationSchema}
-          validateOnChange={false}
-          validateOnMount={false}
-          validateOnBlur={false}
-        >
-          {({ isSubmitting, isValid, dirty, values, setFieldValue }) => {
-            const { classification, category } = values;
-            return (
-              <Form style={{ marginTop: "1rem" }}>
-                <Grid container direction="column" gap={1.5}>
-                  <Grid item container>
-                    <Grid item container flexWrap="nowrap" gap={2}>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="input"
-                          label="Name"
-                          id="name"
-                          name="name"
-                          placeholder="Enter Partner name"
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="input"
-                          label="Email"
-                          id="name"
-                          name="email"
-                          placeholder="Enter Email"
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid item container flexWrap="nowrap" gap={2}>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="input"
-                          label=" Account Number"
-                          id="account"
-                          name="account"
-                          placeholder="Enter Account Number"
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="input"
-                          label="Phone Number"
-                          id="phone"
-                          name="phone"
-                          placeholder="Enter Phone Number"
-                        />
-                      </Grid>
-                    </Grid>
-
-                    <Grid item container flexWrap="nowrap" gap={2}>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="select"
-                          options={categoryOptions}
-                          name="category"
-                          label="Category"
-                          placeholder="Category"
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="select"
-                          options={banks}
-                          name="bank"
-                          label="Bank"
-                          placeholder="Select Bank"
-                        />
-                      </Grid>
-                    </Grid>
-                    {category === "hospital" && (
-                      <Grid item container flexWrap="nowrap" gap={2}>
-                        <Grid item xs={6}>
-                          <FormikControl
-                            control="select"
-                            options={dropDown}
-                            name="provider"
-                            label="Provider"
-                            id="provider"
-                            placeholder="Select Provider"
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <FormikControl
-                            control="select"
-                            options={classificationOptions}
-                            name="classification"
-                            label="Classification"
-                            id="classification"
-                            placeholder="select classification"
-                          />
-                        </Grid>
-                      </Grid>
-                    )}
-                    <Grid item container flexWrap="nowrap" gap={2}>
-                      <Grid item xs={6}>
-                        <FormikControl
-                          control="file"
-                          name="image"
-                          label="Company Logo"
-                          setFieldValue={setFieldValue}
-                        />
-                      </Grid>
-                      {classification === "Secondary Healthcare" && (
-                        <Grid item xs={6}>
-                          <FormikControl
-                            control="select"
-                            options={specializationOptions}
-                            name="specialization"
-                            label="Specialization"
-                            id="specialization"
-                            placeholder="Select Specialization"
-                          />
-                        </Grid>
-                      )}
-                    </Grid>
-                    <Grid item container flexWrap="nowrap">
-                      <Grid item container>
-                        <FormikControl
-                          control="textarea"
-                          name="address"
-                          minRows={3}
-                          label="Address"
-                          placeholder="Enter address"
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item container sx={{ mt: 1 }}>
-                    <CustomButton
-                      title="Add Partner"
-                      width="100%"
-                      type={buttonType}
-                      isSubmitting={isSubmitting}
-                      disabled={!(dirty || isValid)}
-                    />
-                  </Grid>
-                </Grid>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Modals>
+      />
 
       {/* Add Partner Category */}
       <Modals

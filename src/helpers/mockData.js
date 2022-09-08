@@ -16,6 +16,7 @@ export const searchOptions = [
   { key: "By first name", value: "firstName" },
   { key: "By last name", value: "lastName" },
 ];
+export const HealaSearchOptions = [{ key: "By ID", value: "id" }];
 
 export const hmoSearchOptions = [
   { key: "By HMO ID", value: "hmoId" },
