@@ -109,11 +109,9 @@ export const addNewPartnerValidationSchema = Yup.object({
     .typeError("Please enter a valid phone number")
     .required("Phone number is required"),
   address: Yup.string("Enter Address ").required("Address is required"),
-  provider: Yup.string("select a provider").trim(),
   bank: Yup.string("select a Bank").required("Select a Bank"),
   classification: Yup.string("select a classification").trim(),
   specialization: Yup.string("select a specialization").trim(),
-  category: Yup.string("select your category").required("category is required"),
 });
 
 export const hmoValidationSchema = Yup.object({

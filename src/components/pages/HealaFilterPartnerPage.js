@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import AddPartner from "components/Forms/AddPartner";
 import {
   Checkbox,
   TableCell,
@@ -372,7 +373,7 @@ const HealaFilterPartnerPage = () => {
           <Grid item>
             <CustomButton
               endIcon={<PersonAddAlt1Icon />}
-              title="Add "
+              title="Add Partner"
               type={darkButtonType}
               onClick={() => setOpenAddPartner(true)}
             />
@@ -622,7 +623,13 @@ const HealaFilterPartnerPage = () => {
       </Modals>
 
       {/* ADD NEW PARTER MODAL */}
-      <Modals
+      <AddPartner
+        id={ids}
+        open={openAddPartner}
+        handleClose={() => setOpenAddPartner(false)}
+        category={true}
+      />
+      {/* <Modals
         isOpen={openAddPartner}
         title="Add Partners"
         rowSpacing={5}
@@ -775,7 +782,7 @@ const HealaFilterPartnerPage = () => {
             );
           }}
         </Formik>
-      </Modals>
+      </Modals> */}
 
       {/* Add Partner Category */}
       <Modals

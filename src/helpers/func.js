@@ -79,6 +79,9 @@ export const getSearchPlaceholder = (filterBy) => {
     ? "Search by last name e.g Doe"
     : "";
 };
+export const HealGgetSearchPlaceholder = (filterBy) => {
+  return filterBy === "id" ? "Search by UserTypesId " : "";
+};
 
 export const getDynamicSearchPlaceholder = (
   filterBy,

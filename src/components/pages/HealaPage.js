@@ -29,8 +29,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { getProviders, getPartners } from "components/graphQL/useQuery";
 import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
 import { useActions } from "components/hooks/useActions";
-import { searchOptions } from "helpers/mockData";
-import { getSearchPlaceholder } from "helpers/func";
+import { HealaSearchOptions } from "helpers/mockData";
+import { HealGgetSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
 const HealaPage = () => {
@@ -79,7 +79,7 @@ const HealaPage = () => {
         <Grid item container justifyContent="flex-end">
           <CustomButton
             endIcon={<PersonAddAlt1Icon />}
-            title="Add "
+            title="Add Provider"
             type={darkButtonType}
             onClick={() => setOpenAddHcp(true)}
           />
@@ -98,9 +98,10 @@ const HealaPage = () => {
               }
               setProfiles={(data) => setHospitals(data?.profiles?.data || [])}
               getSearchPlaceholder={(filterBy) =>
-                getSearchPlaceholder(filterBy)
+                HealGgetSearchPlaceholder(filterBy)
               }
-              filterOptions={searchOptions}
+              filterOptions={HealaSearchOptions}
+              showHeala={true}
             />
           }
         >
