@@ -64,7 +64,7 @@ const Patients = () => {
       },
     })
       .then(({ data }) => {
-        if (data && provider === "") {
+        if (data) {
           setPageInfo(data?.profiles?.pageInfo || []);
           setProfiles(data?.profiles?.data || defaultPageInfo);
         }
@@ -74,24 +74,6 @@ const Patients = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // useEffect(() => {
-  //   fetchPatient({
-  //     variables: {
-  //       first: pageInfo.limit,
-  //       provider,
-  //     },
-  //   })
-  //     .then(({ data }) => {
-  //       if (data) {
-  //         setPageInfo(data?.profiles?.pageInfo || []);
-  //         setProfiles(data?.profiles?.data || defaultPageInfo);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [provider]);
 
   const setTableData = async (response, errMsg) => {
     response
