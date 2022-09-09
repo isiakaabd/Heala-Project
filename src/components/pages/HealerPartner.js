@@ -175,7 +175,7 @@ const HealerPartner = () => {
     const res = fetchPartners({
       variables: {
         first: pageInfo.limit,
-        providerId: ids,
+        provider: ids,
       },
     });
     setTableData(res, "Couldn't fetch Partners data");
