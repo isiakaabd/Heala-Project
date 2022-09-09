@@ -157,15 +157,12 @@ const Patients = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPatient, {
                   first: e,
-                  provider,
                 });
                 await setTableData(res, "Failed to change table limit.");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchPatient, page, pageInfo, {
-                  provider,
-                });
+                const res = handlePageChange(fetchPatient, page, pageInfo, {});
                 await setTableData(res, "Failed to change page.");
               }}
             >

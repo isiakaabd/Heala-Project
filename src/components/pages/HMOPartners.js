@@ -156,7 +156,7 @@ const HMOPartners = () => {
     response
       .then((res) => {
         const { data } = res;
-        console.log(data);
+
         if (data) {
           setPartners(data?.getPartners?.data || []);
           setPageInfo(data?.getPartners?.pageInfo || defaultPageInfo);
