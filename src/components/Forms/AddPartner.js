@@ -179,7 +179,7 @@ const AddPartner = ({ open, handleClose, category, CategoryValue, id }) => {
       >
         {({ isSubmitting, isValid, dirty, values, errors, setFieldValue }) => {
           console.log(errors);
-          const { classification } = values;
+          const { classification, category: cat } = values;
           return (
             <Form style={{ marginTop: "1rem" }}>
               <Grid container direction="column" gap={1.5}>
@@ -255,7 +255,7 @@ const AddPartner = ({ open, handleClose, category, CategoryValue, id }) => {
                         setFieldValue={setFieldValue}
                       />
                     </Grid>
-                    {category && (
+                    {cat === "hospital" && (
                       <Grid item xs={6}>
                         <FormikControl
                           control="select"
@@ -267,15 +267,6 @@ const AddPartner = ({ open, handleClose, category, CategoryValue, id }) => {
                         />
                       </Grid>
                     )}
-                  </Grid>
-                  <Grid item container>
-                    <FormikControl
-                      control="textarea"
-                      name="address"
-                      minRows={3}
-                      label="Address"
-                      placeholder="Enter address"
-                    />
                   </Grid>
                   <Grid item container>
                     {classification === "Secondary Healthcare" && (
@@ -290,6 +281,15 @@ const AddPartner = ({ open, handleClose, category, CategoryValue, id }) => {
                         />
                       </Grid>
                     )}
+                  </Grid>
+                  <Grid item container>
+                    <FormikControl
+                      control="textarea"
+                      name="address"
+                      minRows={3}
+                      label="Address"
+                      placeholder="Enter address"
+                    />
                   </Grid>
                 </Grid>
                 <Grid item container sx={{ mt: 1 }}>

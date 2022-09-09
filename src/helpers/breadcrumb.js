@@ -16,13 +16,14 @@ export const patterns = {
   Availibility: "hcps/{id}/availability",
   "Doctor patients": "hcps/{id}/doctor-patients",
   "Send message": "hcps/{id}/profile/chat",
+  // "HMO Providers": "user-type/hmo/{id}/{ids}/enrollee",
 
   // PARTNERS PATTERNS
   // Partners: "partners",
 
   // HMO PATTERNS
   HMO: "hmo",
-  Hmo: "hmo/{id}",
+  // Hmo: "hmo/{id}",
 
   // MESSAGES PATTERNS
   Messages: "messages",
@@ -41,12 +42,23 @@ export const patterns = {
   "Provider Services": "user-type",
   Doctor: "hcps/{id}/filter",
   Patient: "patients/{id}/filter",
-  "Hospital Providers": "user-type/hospital/{id}",
-  "Heala Providers": "user-type/heala/{id}",
-  "HMO Providers": "user-type/hmo/{id}",
+
+  // "Heala Providers": "user-type/heala/{id}",
+  // "HMO Providers": "user-type/hmo/{id}/{id}",
   Hospital: "Hospital",
   Hm: "Patient Provider",
-  "Heala Patients": "user-type/heala/{id}/{id}",
+  "Enrollee Providers": "user-type/hmo/{id}",
+  "Enrollee Providers Table": "user-type/hmo/{id}/",
+
+  "Hospital Providers": "user-type/hospital/{id}",
+  "Hospital Providers Table": "user-type/hospital/{id}/",
+  "Hospital Providers Doctors": "user-type/hospital/{id}/doctors/",
+  "Hospital Providers Patients": "user-type/hospital/{id}/patients/",
+  "Hospital Providers Partners": "user-type/hospital/{id}/partners/",
+  "Heala Providers ": "user-type/heala/{id}",
+  "Heala Providers Patients": "user-type/heala/{id}/",
+  "Heala Providers Doctors": "user-type/heala/doctor/{id}/",
+  "Heala Providers Partners": "user-type/heala/partner/{id}/",
   // UserTypes: "UserType",
   Hela: "Doctor Provider",
   // FINANCE PATTERS
@@ -91,8 +103,6 @@ const isRootPath = (path) =>
   String(path)
     .split("/")
     .filter((e) => e).length === 1;
-
-console.log(isRootPath());
 
 export function replaceWithGenerics(generics, path) {
   let str = path;

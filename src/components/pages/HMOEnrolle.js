@@ -169,7 +169,10 @@ const HMOEnrolle = () => {
                         </Link>
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
-                        <Link to={`/hmo/${_id}`} className={classes.link}>
+                        <Link
+                          to={`/user-type/hmo/${id}/${_id}/enrollee`}
+                          className={classes.link}
+                        >
                           <Typography
                             variant="h3"
                             classes={{ root: classes.title }}
