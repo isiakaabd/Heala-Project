@@ -18,7 +18,7 @@ import { UploadEnrolleeListForm } from "components/Forms/UploadEnrolleeListForm"
 
 const SingleHMO = () => {
   const theme = useTheme();
-  const { id } = useParams();
+  const { ids: id } = useParams();
   const { displayAlert, getErrorMsg } = useAlert();
   const [hmoEnrollees, setHmoEnrollees] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
@@ -29,9 +29,7 @@ const SingleHMO = () => {
   const [
     fetchEnrollees,
     { error, loading, refetch, variables, networkStatus },
-  ] = useLazyQuery(getEnrolles, {
-    notifyOnNetworkStatusChange: true,
-  });
+  ] = useLazyQuery(getEnrolles);
 
   const enrolleesParams = {
     hmoEnrollees,

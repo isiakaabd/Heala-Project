@@ -20,6 +20,7 @@ import {
   ViewDoctorVerification,
   PartnersProvider,
   SingleHCP,
+  HealaDoctor,
   DoctorVerificationProfile,
   Appointments,
   DoctorEarning,
@@ -163,7 +164,7 @@ const Routes = () => {
       />
       <PrivateRoute
         exact
-        path="/user-type/hospital/:id/:ids"
+        path="/user-type/hospital/:id/doctors/:ids"
         component={HealaFilterDoctorPage}
       />
       <PrivateRoute
@@ -268,7 +269,11 @@ const Routes = () => {
 
       {/*  =====  HMO ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/hmo" component={Hmo} />
-      <PrivateRoute exact path="/hmo/:id" component={SingleHMO} />
+      <PrivateRoute
+        exact
+        path="/user-type/hmo/:id/:ids/enrollee"
+        component={SingleHMO}
+      />
 
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
@@ -310,6 +315,11 @@ const Routes = () => {
       <PrivateRoute exact path="/label" component={WhiteLabel} />
       <PrivateRoute exact path="/user-type/:id" component={Heala} />
       <PrivateRoute exact path="/user-type/heala/:id" component={HealaPage} />
+      <PrivateRoute
+        exact
+        path="/user-type/heala/doctor/:id/:ids"
+        component={HealaDoctor}
+      />
       <PrivateRoute
         exact
         path="/user-type/hospital/:id"

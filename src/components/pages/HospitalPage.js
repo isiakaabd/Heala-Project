@@ -170,7 +170,7 @@ const HospitalPage = () => {
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
-                          to={`/user-type/hospital/${id}/${_id}`}
+                          to={`/user-type/hospital/${id}/doctors/${_id}`}
                           className={classes.link}
                         >
                           <Typography

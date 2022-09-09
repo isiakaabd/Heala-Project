@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { NetworkStatus, useMutation, useLazyQuery } from "@apollo/client";
+import { NetworkStatus } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   Grid,
   TableRow,
@@ -49,7 +50,7 @@ import CompoundSearch from "components/Forms/CompoundSearch";
 import DoctorFilters from "components/Forms/Filters/DoctorsFilters";
 import TableLayout from "components/layouts/TableLayout";
 
-const Hcps = () => {
+const HealaDoctor = () => {
   const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
@@ -57,6 +58,7 @@ const Hcps = () => {
   const [profiles, setProfiles] = useState("");
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const { provider } = useSelector((state) => state.patient);
+  const { id, ids } = useParams();
   const [openAddHcp, setOpenAddHcp] = useState(false);
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
@@ -76,10 +78,11 @@ const Hcps = () => {
     fetchDoctors({
       variables: {
         first: pageInfo.limit,
+        providerId: ids,
       },
     })
       .then(({ data }) => {
-        if (data) {
+        if (data && provider === "") {
           setPageInfo(data.doctorProfiles.pageInfo || []);
           setProfiles(data.doctorProfiles.profile || defaultPageInfo);
         }
@@ -89,6 +92,24 @@ const Hcps = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    fetchDoctors({
+      variables: {
+        first: pageInfo.limit,
+        providerId: ids,
+      },
+    })
+      .then(({ data }) => {
+        if (data && provider !== "") {
+          setPageInfo(data.doctorProfiles.pageInfo || []);
+          setProfiles(data.doctorProfiles.profile || defaultPageInfo);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider]);
 
   const onSubmit = async (values) => {
     const {
@@ -222,14 +243,14 @@ const Hcps = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchDoctors, {
                   first: e,
-                  providerId: provider,
+                  providerId: ids,
                 });
                 await setTableData(res, "Failed to change table limit");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
                 const res = handlePageChange(fetchDoctors, page, pageInfo, {
-                  providerId: provider,
+                  providerId: ids,
                 });
                 await setTableData(res, "Failed to change page.");
               }}
@@ -256,22 +277,24 @@ const Hcps = () => {
                     key={_id}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      history.push(`hcps/${_id}`);
-                    }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
+                      <Link to={`/hcps/${_id}}`} className={classes.link}>
+                        <Checkbox
+                          onClick={() =>
+                            handleSelectedRows(
+                              _id,
+                              selectedRows,
+                              setSelectedRows
+                            )
+                          }
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </Link>
                     </TableCell>
                     <TableCell
                       id={labelId}
@@ -283,56 +306,81 @@ const Hcps = () => {
                         minWidth: "10rem",
                       }}
                     >
-                      {dociId?.split("-")[1]}
+                      <Link to={`/hcps/${_id}}`} className={classes.link}>
+                        {dociId?.split("-")[1]}
+                      </Link>
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
-                      <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "left",
-                        }}
+                      <Link to={`/hcps/${_id}`} className={classes.link}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                          }}
+                        >
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {firstName} {lastName}
+                          </span>
+                        </div>
+                      </Link>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      <Link to={`/hcps/${_id}`} className={classes.link}>
+                        {specialization}{" "}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Link to={`/hcps/${_id}}`} className={classes.link}>
+                        {consultations ? consultations : 0}
+                      </Link>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.tableCell}
+                      style={{ color: theme.palette.common.grey }}
+                    >
+                      <Link to={`/hcps/${_id}}`} className={classes.link}>
+                        {provider ? provider : "No Provider"}{" "}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="left" className={classes.tableCell}>
+                      <Link to={`/hcps/${_id}}`} className={classes.link}>
+                        <Chip
+                          label={
+                            status && status === "Active"
+                              ? "Active"
+                              : "Inactive"
+                          }
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === "Active"
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === "Active"
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </Link>
+                    </TableCell>
+                    {/* <TableCell>
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component={Link}
+                        to={`hcps/${_id}`}
+                        endIcon={<ArrowForwardIosIcon />}
                       >
-                        <span style={{ fontSize: "1.25rem" }}>
-                          {firstName} {lastName}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
-                    >
-                      {specialization}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      {consultations ? consultations : 0}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.tableCell}
-                      style={{ color: theme.palette.common.grey }}
-                    >
-                      {provider ? provider : "No Provider"}
-                    </TableCell>
-                    <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={
-                          status && status === "Active" ? "Active" : "Inactive"
-                        }
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Active"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Active"
-                              ? theme.palette.common.green
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell>
+                        View Doctor
+                      </Button>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}
@@ -496,4 +544,4 @@ const Hcps = () => {
   );
 };
 
-export default Hcps;
+export default HealaDoctor;
