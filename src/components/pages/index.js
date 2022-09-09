@@ -10,6 +10,7 @@ export { default as DoctorVerificationProfile } from "./DoctorVerificationProfil
 export { default as Email } from "./Email";
 export { default as Finance } from "./Finance";
 export { default as Financetable } from "./Financetable";
+export { default as HealaDoctor } from "./HealaDoctor";
 export { default as HealaPage } from "./HealaPage";
 export { default as HCP } from "./HCP";
 export { default as HcpAppointments } from "./HcpAppointments";
