@@ -222,15 +222,12 @@ const Hcps = () => {
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchDoctors, {
                   first: e,
-                  providerId: provider,
                 });
                 await setTableData(res, "Failed to change table limit");
               }}
               dataPageInfo={pageInfo}
               handlePagination={async (page) => {
-                const res = handlePageChange(fetchDoctors, page, pageInfo, {
-                  providerId: provider,
-                });
+                const res = handlePageChange(fetchDoctors, page, pageInfo, {});
                 await setTableData(res, "Failed to change page.");
               }}
             >
