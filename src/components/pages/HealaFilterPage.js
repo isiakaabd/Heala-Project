@@ -40,8 +40,7 @@ const HealaFilterPage = () => {
   const theme = useTheme();
   const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
-  // const navigate = useNavigate();
-  console.log(ids);
+
   const { displayAlert } = useAlert();
   const [profiles, setProfiles] = useState([]);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
