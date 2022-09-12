@@ -287,6 +287,10 @@ const DashboardCharts = ({ data }) => {
         setOptions("all");
     }
   };
+  const handleOptionChange = (e) => {
+    const { value } = e.target;
+    setOptions(value);
+  };
   useEffect(() => {
     setCardState([
       {
@@ -340,10 +344,7 @@ const DashboardCharts = ({ data }) => {
     totalEarning,
     totalPayouts,
   ]);
-  const handleOptionChange = (e) => {
-    const { value } = e.target;
-    setOptions(value);
-  };
+
   const percentageValue = 0.5;
   const [financeState, setFinancialStates] = useState(0);
   const handleFinanceStateChange = (e) => {

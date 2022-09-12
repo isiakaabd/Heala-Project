@@ -15,7 +15,7 @@ const HospitalRow = ({ index, rowData }) => {
   const labelId = `enhanced-table-checkbox-${index}`;
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={_id}>
-      <TableCell
+      {/* <TableCell
         id={labelId}
         scope="row"
         align="left"
@@ -26,7 +26,7 @@ const HospitalRow = ({ index, rowData }) => {
         }}
       >
         {_id ? trucateString(_id, 10, "front") : "No ID"}
-      </TableCell>
+      </TableCell> */}
       <TableCell align="left" className={classes.tableCell}>
         <ProfileInfo
           imgUrl={icon && icon}
@@ -34,9 +34,9 @@ const HospitalRow = ({ index, rowData }) => {
           lastName=""
         />
       </TableCell>
-      <TableCell align="left" className={classes.tableCell}>
+      {/* <TableCell align="left" className={classes.tableCell}>
         {email ? email : "No email"}
-      </TableCell>
+      </TableCell> */}
       <TableCell align="left" className={classes.tableCell}>
         {plans ? plans : "Null"}
       </TableCell>
