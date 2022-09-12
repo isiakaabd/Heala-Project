@@ -14,18 +14,18 @@ import { CustomSelect } from "components/validation/Select";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useSelector } from "react-redux";
 import { handleSelectedRows } from "helpers/selectedRows";
+import { isSelected } from "helpers/isSelected";
 import {
   changeTableLimit,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { Modals, Loader } from "components/Utilities";
-import { isSelected } from "helpers/isSelected";
 import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import displayPhoto from "assets/images/avatar.svg";
 import { hours, days, today } from "components/Utilities/Time";
+import { Modals, Loader } from "components/Utilities";
 import { EmptyTable } from "components/layouts";
 import { useActions } from "components/hooks/useActions";
 import { useLazyQuery, useQuery } from "@apollo/client";
@@ -93,7 +93,6 @@ const AvailabilityTable = () => {
     totalDocs: 0,
   });
 
-  const { data: da } = useQuery(getProviders);
   const [availabilities, setAvailabilities] = useState([]);
   const [provider, setProvider] = useState("");
   const [modal, setModal] = useState(false);
@@ -109,7 +108,7 @@ const AvailabilityTable = () => {
 
   const classes = useStyles();
   const theme = useTheme();
-
+  console.log(availabilities);
   // redux
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
@@ -120,27 +119,15 @@ const AvailabilityTable = () => {
     useLazyQuery(getAvailabilities1);
 
   // providers drop down
-  useEffect(() => {
-    const x = {
-      key: "All Stats",
-      value: "",
-    };
-    if (da) {
-      const data = da.getProviders.provider;
-      const options = data?.map((i) => {
-        return {
-          key: i.name,
-          value: i._id,
-        };
-      });
-      setDropDown([x, ...options]);
-    }
-  }, [da]);
 
   const [fetchDay, { loading, data: dt }] = useLazyQuery(
     getDoctorAvailabilityForDate
   );
-
+  useEffect(() => {
+    if (data) {
+      setAvailabilities(data?.getAvailabilities?.availability);
+    }
+  }, [data]);
   const setTableData = async (response, errMsg) => {
     if (response?.data) {
       setPageInfo(response?.data?.getAvailabilities?.pageInfo || []);
@@ -169,43 +156,42 @@ const AvailabilityTable = () => {
     }
   }, [dt]);
 
-  useEffect(() => {
-    if (provider === "") {
-      fetchAvailabilities1({
-        variables: {
-          pageInfo: pageInfo,
-          first: 5,
-          day: select,
-        },
-      });
-    } else {
-      fetchAvailabilities({
-        variables: {
-          first: 5,
-          providerId: provider,
-          day: select,
-        },
-      });
-    }
+  // useEffect(() => {
+  //   if (provider === "") {
+  //     fetchAvailabilities1({
+  //       variables: {
+  //         pageInfo: pageInfo,
+  //         first: 5,
+  //         day: select,
+  //       },
+  //     });
+  //   } else {
+  //     fetchAvailabilities({
+  //       variables: {
+  //         first: 5,
+  //         providerId: provider,
+  //         day: select,
+  //       },
+  //     });
+  //   }
 
+  //   if (data) {
+  //     setPageInfo(data?.getAvailabilities?.pageInfo || []);
+  //     setAvailabilities(
+  //       data?.getAvailabilities?.availability || defaultPageInfo
+  //     );
+  //   }
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data, provider, select]);
+  useEffect(() => {
     if (data) {
       setPageInfo(data?.getAvailabilities?.pageInfo || []);
       setAvailabilities(
         data?.getAvailabilities?.availability || defaultPageInfo
       );
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, provider, select]);
-  useEffect(() => {
-    if (data1) {
-      setPageInfo(data1?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        data1?.getAvailabilities?.availability || defaultPageInfo
-      );
-    }
-  }, [select, data1]);
-  const [loadings, setLoading] = useState(false);
+  }, [select, data]);
   const handleSelectChange = async (e) => {
     const { value } = e.target;
     setLoading(true);
@@ -219,6 +205,7 @@ const AvailabilityTable = () => {
     setLoading(false);
     setSelect(value);
   };
+  const [loadings, setLoading] = useState(false);
 
   const handleCheckDay = useCallback((day, doctor) => {
     setModal(true);
@@ -233,6 +220,7 @@ const AvailabilityTable = () => {
   if (load || loadings || load1) return <Loader />;
   if (error || error1) return <NoData />;
   const { day, available, times } = avail;
+
   return (
     <>
       <Grid item container direction="column" height="100%">
@@ -265,14 +253,6 @@ const AvailabilityTable = () => {
                 onChange={handleSelectChange}
                 options={days}
                 name="select"
-              />
-            </Grid>
-            <Grid item>
-              <CustomSelect
-                value={form}
-                onChange={onChange}
-                options={dropDown}
-                name="availability-dropdown"
               />
             </Grid>
           </Grid>
@@ -313,11 +293,12 @@ const AvailabilityTable = () => {
                 }}
               >
                 {availabilities?.map((row, index) => {
+                  console.log(row);
                   const { _id, doctorData, day, times, doctor } = row;
                   const startTime = hours(times[0].start);
                   const endTime = hours(times[times.length - 1].stop);
 
-                  if (doctorData?.firstName && doctorData?.lastName) {
+                  if (doctorData?.firstName) {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     const isItemSelected = isSelected(_id, selectedRows);
 

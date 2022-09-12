@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
-import LabelIcon from "components/Icons/LabelIcon";
 import {
   List,
   ListItemText,
@@ -9,9 +8,6 @@ import {
   ListItemIcon,
   Grid,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import Collapse from "@mui/material/Collapse";
 import logo from "assets/images/logo.svg";
 import { setSideNav } from "helpers/func";
 import { useMutation } from "@apollo/client";
@@ -20,8 +16,7 @@ import { useActions } from "components/hooks/useActions";
 import { LOGOUT_USER } from "components/graphQL/Mutation";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import LogoutIcon from "components/Icons/LogoutIcon";
-import { firstMenu, menus, subMenu } from "helpers/asideMenus";
-import HMOIcon from "components/Icons/HMOIcon";
+import { menus } from "helpers/asideMenus";
 
 const SideMenu = (props) => {
   const { drawerWidth } = props;
@@ -29,7 +24,7 @@ const SideMenu = (props) => {
   const { logout } = useActions();
   const [Logout, setLogout] = useState(false);
   const [logout_user] = useMutation(LOGOUT_USER);
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
+  const [selectedMenu, setSelectedMenu] = useState(0);
 
   const useStyles = makeStyles((theme) => ({
     aside: {
