@@ -5,7 +5,7 @@ import { useStyles } from "styles/hmoPageStyles";
 import TableLayout from "components/layouts/TableLayout";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import EnhancedTable from "components/layouts/EnhancedTable";
-import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
+import { hospitalTableHeadCells20 } from "components/Utilities/tableHeaders";
 import { defaultPageInfo } from "helpers/mockData";
 import HospitalRow from "components/Rows/HospitalRow";
 import { useLazyQuery } from "@apollo/client";
@@ -88,7 +88,7 @@ const HospitalsTable = () => {
             maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
           >
             <EnhancedTable
-              headCells={hospitalTableHeadCells}
+              headCells={hospitalTableHeadCells20}
               rows={hospitals}
               paginationLabel="Hospitals per page"
               hasCheckbox={false}
@@ -101,7 +101,7 @@ const HospitalsTable = () => {
           </Grid>
         ) : (
           <EmptyTable
-            headCells={hospitalTableHeadCells}
+            headCells={hospitalTableHeadCells20}
             paginationLabel="Hospitals per page"
           />
         )}

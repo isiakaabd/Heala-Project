@@ -66,7 +66,7 @@ const HeaderProfile = () => {
     variables: { user: id },
   });
   useEffect(() => {
-    setNum(notifications && notifications.length);
+    setNum(notifications?.length);
 
     // eslint-disable-next-line
   }, []);

@@ -926,10 +926,11 @@ export const getAvailabilities = gql`
     $providerId: String
     $day: String
     $page: Int
+    $date: String
     $first: Int
   ) {
     getAvailabilities(
-      filterBy: { doctor: $id, providerId: $providerId, day: $day }
+      filterBy: { doctor: $id, date: $date, providerId: $providerId, day: $day }
       page: $page
       first: $first
     ) {
@@ -1230,6 +1231,7 @@ export const getProfile = gql`
       gender
       phoneNumber
       provider
+      email
       plan
       status
       dociId
@@ -1351,11 +1353,14 @@ export const getMedications = gql`
   }
 `;
 export const getAvailability = gql`
-  query getAvailabilities($id: String!) {
-    getAvailabilities(filterBy: { doctor: $id }) {
+  ${PageInfo}
+  query getAvailabilities($id: String!, $day: String) {
+    getAvailabilities(filterBy: { doctor: $id, day: $day }) {
       availability {
         _id
         createdAt
+        doctor
+        doctorData
         updatedAt
         day
         available
@@ -1364,6 +1369,9 @@ export const getAvailability = gql`
           stop
         }
       }
+      pageInfo {
+        ...pageDetails
+      }
       errors {
         field
         message
@@ -1371,7 +1379,51 @@ export const getAvailability = gql`
     }
   }
 `;
+export const getDoctorAvailabilityForDates = gql`
+  query getDoctorAvailabilityForDate(
+    $hcpId: String!
+    $day: String
+    $date: String
+  ) {
+    getDoctorAvailabilityForDate(doctorId: $hcpId, date: $date, day: $day) {
+      day
+      available
 
+      times {
+        start
+        stop
+        available
+      }
+    }
+  }
+`;
+export const getDoctorAvailability = gql`
+  ${PageInfo}
+  query getDoctorAvailability($hcpId: String, $day: String, $date: String) {
+    getDoctorAvailability(doctorId: $hcpId, day: $day, date: $date) {
+      availability {
+        _id
+        doctor
+        doctorData
+        createdAt
+        updatedAt
+        providerId
+        day
+        available
+        times {
+          start
+          stop
+        }
+      }
+      bookedTimes {
+        day
+      }
+      pageInfo {
+        ...pageDetails
+      }
+    }
+  }
+`;
 export const getMyConsultation = gql`
   query getMyConsultations {
     getMyConsultations {
