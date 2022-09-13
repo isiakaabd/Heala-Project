@@ -176,10 +176,7 @@ const HCP = () => {
               <Filter
                 onHandleChange={(e) => onFilterStatusChanges(e?.target?.value)}
                 onClickClearBtn={() => onFilterStatusChanges("")}
-                options={[
-                  { key: "Specialization", value: "" },
-                  ...specializationOptions,
-                ]}
+                options={[...specializationOptions]}
                 name="status"
                 placeholder="Specialization"
                 value={s}
@@ -211,8 +208,10 @@ const HCP = () => {
                       status,
                       qualification,
                       doctorData,
+                      specialization,
                       _id,
                     } = row;
+                    console.log(row);
                     const isItemSelected = isSelected(_id, selectedRows);
 
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -286,10 +285,10 @@ const HCP = () => {
                           align="left"
                           className={classes.tableCell}
                         >
-                          {doctorData && doctorData.lastName}
+                          {doctorData?.lastName}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
-                          {qualification && qualification.degree}
+                          {specialization}
                         </TableCell>
                         <TableCell
                           align="left"
