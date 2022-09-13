@@ -117,7 +117,7 @@ const HealaPage = () => {
               <EnhancedTable
                 headCells={hospitalTableHeadCells}
                 rows={hospitals}
-                paginationLabel="Hospitals per page"
+                paginationLabel="Providers per page"
                 hasCheckbox={false}
                 dataPageInfo={pageInfo}
               >
@@ -237,7 +237,7 @@ const HealaPage = () => {
           ) : (
             <EmptyTable
               headCells={hospitalTableHeadCells}
-              paginationLabel="Hospitals per page"
+              paginationLabel="Providers per page"
             />
           )}
         </TableLayout>
