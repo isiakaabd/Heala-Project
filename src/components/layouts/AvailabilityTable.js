@@ -231,9 +231,10 @@ const AvailabilityTable = () => {
             borderRadius: "1.5rem",
             borderColor: "transparent",
             p: 2,
+            mt: 2,
           }}
         >
-          <Grid item container alignItems="center" gap={2}>
+          <Grid item container alignItems="center" gap={2} sx={{ mb: 2 }}>
             <Grid item flex={1}>
               <Typography
                 sx={{
