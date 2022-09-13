@@ -15,7 +15,10 @@ import { getVerification } from "components/graphQL/useQuery";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import { useStyles } from "../../styles/docVerificationPageStyles";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
-import { docVerifyStatusFilterBy } from "helpers/mockData";
+import {
+  docVerifyStatusFilterBy,
+  specializationOptions,
+} from "helpers/mockData";
 import {
   changeTableLimit,
   deleteVar,
@@ -39,6 +42,7 @@ const HCP = () => {
   });
 
   const [statusFilterValue, setStatusFilterValue] = useState("");
+  const [s, setS] = useState("");
   const [fetchVerifications, { loading, data, error, variables, refetch }] =
     useLazyQuery(getVerification);
 
@@ -93,6 +97,29 @@ const HCP = () => {
       refresh(setStatusFilterValue, "");
     }
   };
+  const onFilterStatusChanges = async (value) => {
+    try {
+      deleteVar(variables);
+      setS(value);
+      const filterVariables = { specialization: value };
+
+      filterData(filterVariables, {
+        fetchData: fetchVerifications,
+        refetch: refetch,
+        variables: variables,
+      })
+        .then((data) => {
+          setRespondData(data.getVerifications.verification || []);
+          setPageInfo(data.getVerifications.pageInfo || {});
+        })
+        .catch(() => {
+          refresh(setS, "");
+        });
+    } catch (error) {
+      console.error(error);
+      refresh(setS, "");
+    }
+  };
 
   const refresh = async (setFilterValue, defaultVal) => {
     displayAlert("error", "Something went wrong while filtering. Try again.");
@@ -133,18 +160,32 @@ const HCP = () => {
         </Grid>
         <TableLayout
           filters={
-            <Filter
-              onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-              onClickClearBtn={() => onFilterStatusChange("")}
-              options={[
-                { key: "Status", value: "" },
-                ...docVerifyStatusFilterBy,
-              ]}
-              name="status"
-              placeholder="By status"
-              value={statusFilterValue}
-              hasClearBtn={true}
-            />
+            <Grid container item gap={4} justifyContent="space-between">
+              <Filter
+                onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
+                onClickClearBtn={() => onFilterStatusChange("")}
+                options={[
+                  { key: "Status", value: "" },
+                  ...docVerifyStatusFilterBy,
+                ]}
+                name="status"
+                placeholder="By status"
+                value={statusFilterValue}
+                hasClearBtn={true}
+              />
+              <Filter
+                onHandleChange={(e) => onFilterStatusChanges(e?.target?.value)}
+                onClickClearBtn={() => onFilterStatusChanges("")}
+                options={[
+                  { key: "Specialization", value: "" },
+                  ...specializationOptions,
+                ]}
+                name="status"
+                placeholder="Specialization"
+                value={s}
+                hasClearBtn={true}
+              />
+            </Grid>
           }
         >
           {respondData.length > 0 ? (
