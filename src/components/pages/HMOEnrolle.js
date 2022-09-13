@@ -117,7 +117,7 @@ const HMOEnrolle = () => {
               <EnhancedTable
                 headCells={hospitalTableHeadCells10}
                 rows={hospitals}
-                paginationLabel="Hospitals per page"
+                paginationLabel="Providers per page"
                 hasCheckbox={false}
                 dataPageInfo={pageInfo}
               >
@@ -237,7 +237,7 @@ const HMOEnrolle = () => {
           ) : (
             <EmptyTable
               headCells={hospitalTableHeadCells10}
-              paginationLabel="Hmo Enrollee per page"
+              paginationLabel="Providers per page"
             />
           )}
         </TableLayout>

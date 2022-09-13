@@ -332,7 +332,7 @@ const UserTypes = () => {
               <EnhancedTable
                 headCells={partnersHeadCells2}
                 rows={userType}
-                paginationLabel="Patients per page"
+                paginationLabel="Provider Services per page"
                 hasCheckbox={true}
                 changeLimit={async (e) => {
                   changeTableLimit(fetchUserTypes, { first: e });
@@ -438,7 +438,7 @@ const UserTypes = () => {
           ) : (
             <EmptyTable
               headCells={partnersHeadCells2}
-              paginationLabel="Providers  per page"
+              paginationLabel="Provider Services  per page"
             />
           )}
         </TableLayout>

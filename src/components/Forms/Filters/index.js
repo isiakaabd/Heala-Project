@@ -37,6 +37,7 @@ const Filter = ({
     </div>
   );
 };
+//
 
 Filter.propTypes = {
   onHandleChange: t.func,
