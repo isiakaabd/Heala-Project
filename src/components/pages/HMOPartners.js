@@ -403,7 +403,7 @@ const HMOPartners = () => {
             <EnhancedTable
               headCells={partnersHeadCells}
               rows={partner}
-              paginationLabel="Partner per page"
+              paginationLabel="Partners per page"
               hasCheckbox={true}
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPartners, {
@@ -546,7 +546,7 @@ const HMOPartners = () => {
         ) : (
           <EmptyTable
             headCells={partnersHeadCells}
-            paginationLabel="Doctors per page"
+            paginationLabel="Partners per page"
           />
         )}
       </TableLayout>
