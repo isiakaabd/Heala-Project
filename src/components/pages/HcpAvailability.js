@@ -206,7 +206,7 @@ const HcpAvailability = () => {
             p: 2,
           }}
         >
-          <Grid item container alignItems="center" gap={2}>
+          <Grid item container alignItems="center" sx={{ mb: 2 }}>
             <Grid item flex={1}>
               <Typography
                 sx={{

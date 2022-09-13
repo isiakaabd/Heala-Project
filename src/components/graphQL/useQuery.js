@@ -861,12 +861,17 @@ export const getConsultation = gql`
 `;
 export const getVerification = gql`
   ${PageInfo}
-  query getVerifications($page: Int, $first: Int, $status: Boolean) {
+  query getVerifications(
+    $page: Int
+    $first: Int
+    $status: Boolean
+    $specialization: String
+  ) {
     getVerifications(
       page: $page
       orderBy: "-createdAt"
       first: $first
-      filterBy: { status: $status }
+      filterBy: { status: $status, specialization: $specialization }
     ) {
       verification {
         _id
@@ -1055,6 +1060,7 @@ export const getPatients = gql`
         provider
         plan
         status
+        email
         consultations
         createdAt
         image
