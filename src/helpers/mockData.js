@@ -255,6 +255,24 @@ export const defaultPageInfo = {
   prevPage: null,
   nextPage: 2,
 };
+export const QualificationOptions = [
+  {
+    key: "MBBS Qualification",
+    value: "MBBS Qualification",
+  },
+  {
+    key: "Primary Certificate",
+    value: "Primary Certificate",
+  },
+  {
+    key: "Member Certificate",
+    value: "Member Certificate",
+  },
+  {
+    key: "Fellow Certificate",
+    value: "Fellow Certificate",
+  },
+];
 
 export const addHMOEnrolleInitialValues = {
   firstName: "",
