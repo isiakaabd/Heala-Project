@@ -243,6 +243,15 @@ export const docCadreOptions = [
   { key: "5", value: "5" },
 ];
 
+export const durationOptions = [
+  { key: "hourly", value: "hourly" },
+  { key: "daily", value: "daily" },
+  { key: "weekly", value: "weekly" },
+  { key: "monthly", value: "monthly" },
+  { key: "quarterly", value: "quarterly" },
+  { key: "annually", value: "annually" },
+];
+
 export const defaultPageInfo = {
   totalDocs: 0,
   limit: 10,

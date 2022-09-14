@@ -125,9 +125,9 @@ const HealaPage = () => {
                   const {
                     _id,
                     profileUrl,
-                    doctorsCount,
+                    doctorCount,
                     userCount,
-                    partnersCount,
+                    partnerCount,
                     name,
                   } = row;
 
@@ -164,7 +164,11 @@ const HealaPage = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {userCount ? userCount : "NA"}
+                            {userCount === 0
+                              ? userCount
+                              : userCount > 0
+                              ? userCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -177,7 +181,11 @@ const HealaPage = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {doctorsCount ? doctorsCount : "NA"}
+                            {doctorCount === 0
+                              ? doctorCount
+                              : doctorCount > 0
+                              ? doctorCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -190,7 +198,11 @@ const HealaPage = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {partnersCount ? partnersCount : "NA"}
+                            {partnerCount === 0
+                              ? partnerCount
+                              : partnerCount > 0
+                              ? partnerCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>

@@ -146,7 +146,11 @@ const Selects = (props) => {
           <Typography>{placeholder}</Typography>
         </MenuItem>
         {options.map((option) => (
-          <MenuItem key={option.key} value={option.value}>
+          <MenuItem
+            key={option.key}
+            value={option.value}
+            style={{ fontSize: "1.4rem", fontWeight: "400" }}
+          >
             {option.key}
           </MenuItem>
         ))}
@@ -223,7 +227,11 @@ export const CustomSelect = (props) => {
               <Typography>{placeholder}</Typography>
             </MenuItem>
             {options.map((option) => (
-              <MenuItem key={option.key} value={option.value}>
+              <MenuItem
+                key={option.key}
+                value={option.value}
+                style={{ fontSize: "1.4rem", fontWeight: "400" }}
+              >
                 {option.key}
               </MenuItem>
             ))}

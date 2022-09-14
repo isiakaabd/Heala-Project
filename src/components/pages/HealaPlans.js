@@ -6,9 +6,10 @@ import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
 import { CustomButton } from "components/Utilities";
 import MainModal from "components/modals/MainModal";
-import PlansTable from "components/Tables/PlansTable";
 import { getPlans } from "components/graphQL/useQuery";
 import CreateEditPlans from "components/Forms/CreateEditPlans";
+import HealaPlansTable from "components/Tables/HealaPlansTable";
+import CreateEditHealaPlans from "components/Forms/CreateEditHealaPlans";
 
 const HealaPlans = () => {
   const theme = useTheme();
@@ -28,9 +29,10 @@ const HealaPlans = () => {
     name: "",
     amount: "",
     description: "",
-    duration: "",
+    duration: "one-off",
     provider: "61db6f8968b248001aec4fcb",
     type: "heala",
+    consultation: "1",
   };
 
   if (error) return <NoData error={error} />;
@@ -59,7 +61,7 @@ const HealaPlans = () => {
             />
           </Grid>
         </Grid>
-        <PlansTable
+        <HealaPlansTable
           PlansQuery={{
             fetchPlans,
             loading,
@@ -76,7 +78,7 @@ const HealaPlans = () => {
         isOpen={isOpen}
         headerText="Create new plan"
         rowSpacing={5}
-        setIsOpen={() => setIsOpen(false)}
+        setIsOpen={setIsOpen}
       >
         <CreateEditPlans
           initialValues={initialValues}

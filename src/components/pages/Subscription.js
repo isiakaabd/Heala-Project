@@ -30,9 +30,10 @@ const Subscription = () => {
     name: "",
     amount: "",
     description: "",
-    duration: "",
+    duration: "one-off",
     provider: id,
     type: "hospital",
+    consultation: "1",
   };
 
   if (error) return <NoData error={error} />;
@@ -78,7 +79,7 @@ const Subscription = () => {
         isOpen={isOpen}
         headerText="Create new plan"
         rowSpacing={5}
-        handleClose={() => setIsOpen(false)}
+        setIsOpen={setIsOpen}
       >
         <CreateEditPlans
           initialValues={initialValues}

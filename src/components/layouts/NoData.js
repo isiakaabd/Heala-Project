@@ -13,14 +13,18 @@ const NoData = ({ error }) => {
     >
       <Grid item>
         {error ? (
-          <Typography variant="h1">Something went Wrong...</Typography>
+          <Typography variant="h1" sx={{ fontWeight: "500" }}>
+            Something went wrong...
+          </Typography>
         ) : null}
       </Grid>
       <Grid item>
-        <Typography variant="h1">No Data Yet</Typography>
+        <Typography variant="h1" sx={{ fontWeight: "500" }}>
+          No results found
+        </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{ fontWeight: "400" }}>
           {!error
             ? "we have not computed data for this table yet"
             : "pls refresh page"}

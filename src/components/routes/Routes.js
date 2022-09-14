@@ -240,6 +240,11 @@ const Routes = () => {
       />
       <PrivateRoute
         exact
+        path="/hcps/:hcpId/earnings/earn/:rowId"
+        component={HcpCaseNote}
+      />
+      <PrivateRoute
+        exact
         path="/hcps/:hcpId/earnings"
         component={HcpEarnings}
       />

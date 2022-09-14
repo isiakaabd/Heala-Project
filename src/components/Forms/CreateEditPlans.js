@@ -103,26 +103,18 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
                 <Grid item container>
                   <FormikControl
                     control="input"
-                    name="amount"
-                    placeholder="Enter Amount"
-                    label="Amount"
+                    placeholder="Enter your Description"
+                    name="description"
+                    label="Description"
                   />
                 </Grid>
 
                 <Grid item container>
                   <FormikControl
                     control="input"
-                    placeholder="Enter Duration"
-                    name="duration"
-                    label="Duration"
-                  />
-                </Grid>
-                <Grid item container>
-                  <FormikControl
-                    control="input"
-                    placeholder="Enter your Description"
-                    name="description"
-                    label="Description"
+                    name="amount"
+                    placeholder="Enter Amount"
+                    label="Amount"
                   />
                 </Grid>
 

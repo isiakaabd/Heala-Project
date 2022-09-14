@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import {
@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   Grid,
 } from "@mui/material";
+
 import logo from "assets/images/logo.svg";
 import { setSideNav } from "helpers/func";
 import { useMutation } from "@apollo/client";
@@ -24,12 +25,12 @@ const SideMenu = (props) => {
   const { logout } = useActions();
   const [Logout, setLogout] = useState(false);
   const [logout_user] = useMutation(LOGOUT_USER);
-  const [selectedMenu, setSelectedMenu] = useState(0);
+  const [selectedMenu, setSelectedMenu] = React.useState(0);
 
   const useStyles = makeStyles((theme) => ({
     aside: {
       /* width: `${drawerWidth}`, */
-      width: "300px",
+      width: "280px",
       background: "#fff",
       paddingLeft: "2em",
       paddingRight: "2em",
@@ -159,11 +160,11 @@ const SideMenu = (props) => {
       logout();
       setSelectedMenu(13);
     } catch (err) {
-      console.error(err.message);
+      console.log(err.message);
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     setSideNav(menus, location?.pathname, setSelectedMenu);
   }, [location?.pathname]);
 
@@ -179,7 +180,6 @@ const SideMenu = (props) => {
         <List>
           {menus.map((menu) => {
             const { icon } = menu;
-
             return (
               <ListItemButton
                 disableRipple
@@ -195,7 +195,6 @@ const SideMenu = (props) => {
               </ListItemButton>
             );
           })}
-
           <ListItemButton
             disableRipple
             classes={{ root: classes.logout }}

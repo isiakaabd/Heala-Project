@@ -325,7 +325,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">Doctor Name</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData
                     ? `${doctorData.firstName} ${doctorData.lastName}`
                     : "No Doctor"}
@@ -337,7 +337,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">Hospital</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData && doctorData.hospital !== ""
                     ? doctorData.hospital
                     : "No Hospital"}
@@ -349,7 +349,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">Gender:</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData ? `${doctorData.gender} ` : "Not Specified"}
                 </Typography>
               </Grid>
@@ -359,7 +359,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">Medical ID:</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData ? `${doctorData.dociId.split("-")[1]}` : "No ID "}{" "}
                 </Typography>
               </Grid>
@@ -369,7 +369,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">Specialization:</Typography>
               </Grid>
               <Grid item width="100%">
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData
                     ? `${doctorData.specialization}`
                     : "No specialization "}
@@ -381,7 +381,7 @@ const ViewHCP = () => {
                 <Typography variant="body1">DOB:</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "400" }}>
                   {doctorData ? `${dateMoment(doctorData.dob)}` : "No DOB"}
                 </Typography>
               </Grid>
@@ -393,6 +393,7 @@ const ViewHCP = () => {
               <Grid item>
                 <Typography
                   variant="h4"
+                  sx={{ fontWeight: "400" }}
                   style={{
                     color:
                       status === true
@@ -411,7 +412,10 @@ const ViewHCP = () => {
               className="btn"
               alignItems="center"
               gridColumnStart={{ sm: 2, xs: 2, md: 3 }}
-              sx={{ justifyContent: "center !important" }}
+              sx={{
+                justifyContent: "center !important",
+                alignItems: "flex-start",
+              }}
             >
               <CustomButton
                 title="View Doctor Profile"
@@ -689,7 +693,7 @@ const ViewHCP = () => {
                   <CustomButton
                     title={
                       doctorData?.providerId === reference?.reference_code ||
-                      updateState === "Updated"
+                        updateState === "Updated"
                         ? "Updated"
                         : "Update Provider"
                     }

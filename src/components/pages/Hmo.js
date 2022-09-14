@@ -33,6 +33,7 @@ const Hmo = () => {
         setHmos(data?.getProviders?.provider);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   };
@@ -43,6 +44,7 @@ const Hmo = () => {
         setHmos(data?.getProviders?.provider);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   }, [fetchAllHMO]);
@@ -96,7 +98,7 @@ const Hmo = () => {
         })}
         <Grid item>
           <button
-            sx={{
+            style={{
               cursor: "pointer",
               border: "none",
               background: "transparent",
@@ -128,6 +130,7 @@ const Hmo = () => {
                 }
               })
               .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
                 const errMsg = getErrorMsg(error);
                 displayAlert("error", errMsg);

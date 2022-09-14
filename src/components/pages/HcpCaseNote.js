@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { trucateString } from "helpers/filterHelperFunctions";
 import Copy from "components/Copy";
 import { daily } from "components/Utilities/Time";
+import { formatDuration, secondsToMinutes } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   parentGridWrapper: {
@@ -181,9 +182,9 @@ const HcpCaseNotes = () => {
                   {_id ? (
                     <Grid item container gap={2}>
                       <Typography variant="h5">
-                        {trucateString(referralId, 10, "front")}
+                        {trucateString(_id, 10, "front")}
                       </Typography>
-                      <Copy text={referralId} name="Consultation ID" />
+                      <Copy text={_id} name="Consultation ID" />
                     </Grid>
                   ) : (
                     <Typography variant="h5"> No value</Typography>
@@ -324,9 +325,10 @@ const HcpCaseNotes = () => {
                 <Grid container gap={1}>
                   {symptoms ? (
                     symptoms.map((symptom, index) => {
+                      const isLast = index === symptoms.length - 1;
                       return (
                         <Typography key={index} variant="body1">
-                          {`${symptom.name},`}
+                          {isLast ? `${symptom.name}` : `${symptom.name},`}
                         </Typography>
                       );
                     })
@@ -448,7 +450,15 @@ const HcpCaseNotes = () => {
               </Grid>
               <Grid item>
                 <Typography variant="body1" style={{ lineHeight: 1.85 }}>
-                  {consultationDuration ? consultationDuration : "No Value"}
+                  {consultationDuration
+                    ? `${
+                        Number(consultationDuration) > 60
+                          ? `${secondsToMinutes(
+                              Number(consultationDuration)
+                            )} mins`
+                          : `${consultationDuration} secs`
+                      } `
+                    : "No Value"}
                 </Typography>
               </Grid>
             </Grid>
@@ -606,25 +616,25 @@ const HcpCaseNotes = () => {
                   >
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {i.drugName}
+                        {i?.drugName}
                       </Typography>
                     </Grid>
 
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {`${i.dosageQuantity} ${i.dosage}`}
+                        {`${i?.dosageQuantity} ${i?.dosage}`}
                       </Typography>
                     </Grid>
 
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {duration(i.dosageFrequency.duration)}{" "}
-                        {daily(i.dosageFrequency.day)}
+                        {duration(i?.dosageFrequency.duration)}{" "}
+                        {daily(i?.dosageFrequency.day)}
                       </Typography>
                     </Grid>
                     <Grid item>
                       <Typography variant="body1" className={classes.title}>
-                        {i.mode}
+                        {i?.mode}
                       </Typography>
                     </Grid>
                   </Grid>

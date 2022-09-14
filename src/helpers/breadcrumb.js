@@ -9,8 +9,9 @@ export const patterns = {
   Doctors: "hcps",
   "Doctor view": "hcps/{id}",
   "Doctor profile": "hcps/{id}/profile",
-  " Earnings": "hcps/{id}/earnings",
-  " Data": "hcps/{id}/earnings/earn",
+  " Earnings overview": "hcps/{id}/earnings",
+  "Doctor Earnings table": "hcps/{id}/earnings/earn",
+  Consultation: "hcps/{id}/earnings/earn/{id}",
   " Payout": "hcps/{id}/earnings/payout",
 
   Availibility: "hcps/{id}/availability",

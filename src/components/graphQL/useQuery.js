@@ -533,14 +533,22 @@ export const getConsult = gql`
       }
       doctorNote
       prescription {
-        drugName
-        dosageQuantity
-        dosage
-        dosageFrequency {
-          day
-          duration
+        _id
+        drugs {
+          priceListId
+          drugName
+          drugPrice
+          unitPrice
+          dosageQuantity
+          dosageUnit
+          route
+          amount
+          instructions
+          dosageFrequency {
+            timing
+            duration
+          }
         }
-        mode
       }
       createdAt
       updatedAt
@@ -1014,6 +1022,7 @@ export const getMyEarnings = gql`
         doctorData
         createdAt
         updatedAt
+        consultationData
       }
       totalEarnings
       totalPayouts
@@ -1493,6 +1502,10 @@ export const getProviders = gql`
         phone
         email
         userTypeId
+        userCount
+        doctorCount
+        enrolleeCount
+        partnerCount
         createdAt
         updatedAt
       }
@@ -1679,6 +1692,7 @@ export const getUserTypes = gql`
         icon
         createdAt
         updatedAt
+        providerCount
       }
       pageInfo {
         totalDocs

@@ -36,6 +36,12 @@ export const menus = [
     icon: <LabelIcon />,
     path: "/user-type",
   },
+  {
+    id: 13,
+    title: "HMO",
+    icon: <HMOIcon />,
+    path: "/hmo",
+  },
   // {
   //   id: 3,
   //   title: "Partners",

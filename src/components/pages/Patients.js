@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
-import { NoData, EmptyTable } from "components/layouts";
 import { Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { Loader } from "components/Utilities";
 import { useStyles } from "styles/patientsPageStyles";
 import CompoundSearch from "components/Forms/CompoundSearch";
-import { EnhancedTable } from "components/layouts";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
 import { defaultPageInfo, searchOptions } from "helpers/mockData";
@@ -70,6 +69,7 @@ const Patients = () => {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,6 +82,7 @@ const Patients = () => {
         setProfiles(data?.profiles?.data || []);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });

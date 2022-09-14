@@ -281,14 +281,10 @@ export const payoutHeader = [
   },
 ];
 export const payoutHeaders = [
-  {
-    id: 0,
-    label: "Date",
-  },
-  {
+  /* {
     id: 1,
     label: "Time",
-  },
+  }, */
   {
     id: 2,
     label: "Name",
@@ -296,6 +292,10 @@ export const payoutHeaders = [
   {
     id: 4,
     label: "Amount",
+  },
+  {
+    id: 0,
+    label: "Earned on",
   },
 ];
 export const pendingHeader = [

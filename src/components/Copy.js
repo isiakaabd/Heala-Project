@@ -9,7 +9,11 @@ const Copy = ({ text, name, ...props }) => {
   return (
     <button
       {...props}
-      style={{ cursor: "pointer" }}
+      style={{
+        backgroundColor: "transparent",
+        border: "none",
+        cursor: "pointer",
+      }}
       onClick={() => copyToClipBoard(text, name)}
     >
       <ContentCopyIcon />

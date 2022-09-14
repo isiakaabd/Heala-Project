@@ -23,7 +23,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 // import Filter from "components/Forms/Filters";
 import displayPhoto from "assets/images/avatar.svg";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
 const DoctorEarning = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
   const { hcpId } = useParams();
   const { displayAlert } = useAlert();
   const { selectedRows } = useSelector((state) => state.tables);
@@ -100,9 +101,8 @@ const DoctorEarning = () => {
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
-  // const [statusFilterValue, setStatusFilterValue] = useState("");
   const [fetchPayout, { loading, error }] = useLazyQuery(getMyEarnings);
-  // refetch, variables
+
   useEffect(() => {
     try {
       fetchPayout({
@@ -113,48 +113,10 @@ const DoctorEarning = () => {
         setPayout(data?.getMyEarnings?.data);
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }, [fetchPayout, pageInfo?.limit, hcpId]);
-
-  // const onFilterStatusChange = async (value) => {
-  //   try {
-  //     deleteVar(variables);
-  //     setStatusFilterValue(value);
-  //     const filterVariables = { status: value };
-
-  //     filterData(filterVariables, {
-  //       fetchData: fetchPayout,
-  //       refetch: refetch,
-  //       variables: variables,
-  //     })
-  //       .then((data) => {
-  //         setPayout(data?.getMyEarnings?.data || []);
-  //         setPageInfo(data?.getMyEarnings?.pageInfo || {});
-  //       })
-  //       .catch(() => {
-  //         refresh(setStatusFilterValue, "");
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //     refresh(setStatusFilterValue, "");
-  //   }
-  // };
-
-  // const refresh = async (setFilterValue, defaultVal) => {
-  //   displayAlert("error", `Something went wrong while filtering. Try again.`);
-  //   setFilterValue(defaultVal);
-  //   deleteVar(variables);
-  //   refetch()
-  //     .then(({ data }) => {
-  //       setPayout(data?.getMyEarnings?.data || []);
-  //       setPageInfo(data?.getMyEarnings?.pageInfo || {});
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       displayAlert("error", `Failed to get patients data, Try again`);
-  //     });
-  // };
 
   const setTableData = async (response, errMsg) => {
     const data = response?.data;
@@ -164,6 +126,7 @@ const DoctorEarning = () => {
         setPayout(data?.getMyEarnings?.data || []);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       displayAlert("error", errMsg);
     }
@@ -180,13 +143,7 @@ const DoctorEarning = () => {
           justifyContent="space-between"
           style={{ paddingBottom: "3rem" }}
         >
-          <Grid item container spacing={3} alignItems="center">
-            {/* <Grid item flex={1}>
-              <Typography noWrap variant="h1" color="#2D2F39">
-                Doctors Earnings Table
-              </Typography>
-            </Grid> */}
-          </Grid>
+          <Grid item container spacing={3} alignItems="center"></Grid>
         </Grid>
         <TableLayout>
           {payout.length > 0 ? (
@@ -217,9 +174,16 @@ const DoctorEarning = () => {
                 handleChangePage={fetchMoreData}
               >
                 {payout.map((row, index) => {
-                  const { balance, createdAt, _id, doctorData } = row;
+                  const {
+                    balance,
+                    createdAt,
+                    _id,
+                    doctorData,
+                    consultationData,
+                  } = row;
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const rowId = consultationData._id;
 
                   return (
                     <TableRow
@@ -229,6 +193,11 @@ const DoctorEarning = () => {
                       tabIndex={-1}
                       key={_id}
                       selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        history.push(`/hcps/${hcpId}/earnings/earn/${rowId}`);
+                      }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -246,22 +215,7 @@ const DoctorEarning = () => {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                      >
-                        {dateMoment(createdAt)}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                      >
-                        {timeMoment(createdAt)}
-                      </TableCell>
+
                       <TableCell align="left" className={classes.tableCell}>
                         {doctorData ? (
                           <div
@@ -288,26 +242,15 @@ const DoctorEarning = () => {
                       >
                         {balance}
                       </TableCell>
-                      {/* <TableCell align="left" className={classes.tableCell}>
-                      <Chip
-                        label={status ? status : "No Value"}
-                        className={classes.badge}
-                        style={{
-                          background:
-                            status === "Success"
-                              ? theme.palette.common.lightGreen
-                              : status === "Failed"
-                              ? theme.palette.common.lightGreen
-                              : theme.palette.common.lightRed,
-                          color:
-                            status === "Success"
-                              ? theme.palette.common.green
-                              : status === "Failed"
-                              ? theme.palette.common.danger
-                              : theme.palette.common.red,
-                        }}
-                      />
-                    </TableCell> */}
+
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
