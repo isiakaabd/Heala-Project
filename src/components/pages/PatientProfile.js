@@ -74,7 +74,6 @@ const PatientProfile = () => {
       profileId: patientId,
     },
   });
-  console.log(data);
   const { data: emailStatus, loading: emailLoading } = useQuery(verifiedEmail, {
     variables: {
       dociId: doci,
