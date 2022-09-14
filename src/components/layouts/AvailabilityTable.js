@@ -92,6 +92,7 @@ const AvailabilityTable = () => {
     limit: 10,
     totalDocs: 0,
   });
+  const { data: da } = useQuery(getProviders);
 
   const [availabilities, setAvailabilities] = useState([]);
   const [provider, setProvider] = useState("");
@@ -117,7 +118,7 @@ const AvailabilityTable = () => {
     useLazyQuery(getAvailabilities);
   const [fetchAvailabilities1, { loading: load1, data: data1, error: error1 }] =
     useLazyQuery(getAvailabilities1);
-
+  const [loadings, setLoading] = useState(false);
   // providers drop down
 
   const [fetchDay, { loading, data: dt }] = useLazyQuery(
@@ -155,7 +156,23 @@ const AvailabilityTable = () => {
       });
     }
   }, [dt]);
-
+  // providers drop down
+  useEffect(() => {
+    const x = {
+      key: "All Stats",
+      value: "",
+    };
+    if (da) {
+      const data = da.getProviders.provider;
+      const options = data?.map((i) => {
+        return {
+          key: i.name,
+          value: i._id,
+        };
+      });
+      setDropDown([x, ...options]);
+    }
+  }, [da]);
   // useEffect(() => {
   //   if (provider === "") {
   //     fetchAvailabilities1({
@@ -185,6 +202,43 @@ const AvailabilityTable = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [data, provider, select]);
   useEffect(() => {
+    if (provider === "") {
+      fetchAvailabilities1({
+        variables: {
+          pageInfo: pageInfo,
+          first: 5,
+          day: select,
+        },
+      });
+    } else {
+      fetchAvailabilities({
+        variables: {
+          first: 5,
+          providerId: provider,
+          day: select,
+        },
+      });
+    }
+
+    if (data) {
+      setPageInfo(data?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(
+        data?.getAvailabilities?.availability || defaultPageInfo
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, provider, select]);
+  useEffect(() => {
+    if (data1) {
+      setPageInfo(data1?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(
+        data1?.getAvailabilities?.availability || defaultPageInfo
+      );
+    }
+  }, [select, data1]);
+
+  useEffect(() => {
     if (data) {
       setPageInfo(data?.getAvailabilities?.pageInfo || []);
       setAvailabilities(
@@ -205,7 +259,6 @@ const AvailabilityTable = () => {
     setLoading(false);
     setSelect(value);
   };
-  const [loadings, setLoading] = useState(false);
 
   const handleCheckDay = useCallback((day, doctor) => {
     setModal(true);
@@ -247,6 +300,14 @@ const AvailabilityTable = () => {
               >
                 Doctor Availability
               </Typography>
+            </Grid>
+            <Grid item>
+              <CustomSelect
+                value={form}
+                onChange={onChange}
+                options={dropDown}
+                name="availability-dropdown"
+              />
             </Grid>
             <Grid item>
               <CustomSelect
@@ -294,7 +355,6 @@ const AvailabilityTable = () => {
                 }}
               >
                 {availabilities?.map((row, index) => {
-                  console.log(row);
                   const { _id, doctorData, day, times, doctor } = row;
                   const startTime = hours(times[0].start);
                   const endTime = hours(times[times.length - 1].stop);

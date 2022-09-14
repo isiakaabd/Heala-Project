@@ -12,13 +12,15 @@ const ProfileInfo = ({ imgUrl, firstName, lastName }) => {
         alignItems: "center",
       }}
     >
-      <span style={{ marginRight: "1rem" }}>
-        <Avatar
-          alt={`Display Photo of ${firstName}`}
-          src={imgUrl ? imgUrl : displayPhoto}
-          sx={{ width: 24, height: 24 }}
-        />
-      </span>
+      {imgUrl && (
+        <span style={{ marginRight: "1rem" }}>
+          <Avatar
+            alt={`Display Photo of ${firstName}`}
+            src={imgUrl ? imgUrl : displayPhoto}
+            sx={{ width: 24, height: 24 }}
+          />
+        </span>
+      )}
       <span style={{ fontSize: "1.25rem" }}>{`${firstName} ${lastName}`}</span>
     </div>
   );
