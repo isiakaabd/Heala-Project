@@ -17,6 +17,7 @@ import { useStyles } from "../../styles/docVerificationPageStyles";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import {
   docVerifyStatusFilterBy,
+  QualificationOptions,
   specializationOptions,
 } from "helpers/mockData";
 import {
@@ -101,7 +102,7 @@ const HCP = () => {
     try {
       deleteVar(variables);
       setS(value);
-      const filterVariables = { specialization: value };
+      const filterVariables = { qualification: value };
 
       filterData(filterVariables, {
         fetchData: fetchVerifications,
@@ -169,7 +170,7 @@ const HCP = () => {
                   ...docVerifyStatusFilterBy,
                 ]}
                 name="status"
-                placeholder="By status"
+                // placeholder="By status"
                 value={statusFilterValue}
                 hasClearBtn={true}
               />
@@ -177,10 +178,10 @@ const HCP = () => {
                 onHandleChange={(e) => onFilterStatusChanges(e?.target?.value)}
                 onClickClearBtn={() => onFilterStatusChanges("")}
                 options={[
-                  { key: "Specialization", value: "" },
-                  ...specializationOptions,
+                  { key: "Qualification", value: "" },
+                  ...QualificationOptions,
                 ]}
-                name="status"
+                name="qualification"
                 // placeholder="Specialization"
                 value={s}
                 hasClearBtn={true}
@@ -276,7 +277,7 @@ const HCP = () => {
                               />
                             </span> */}
                             <span style={{ fontSize: "1.25rem" }}>
-                              {doctorData && doctorData.firstName}
+                              {doctorData?.firstName}
                             </span>
                           </div>
                         </TableCell>
@@ -312,7 +313,7 @@ const HCP = () => {
                           />
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
-                          {qualification && dateMoment(qualification.year)}
+                          {dateMoment(qualification?.year)}
                         </TableCell>
 
                         {/* <TableCell>

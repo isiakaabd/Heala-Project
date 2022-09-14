@@ -866,12 +866,17 @@ export const getVerification = gql`
     $first: Int
     $status: Boolean
     $specialization: String
+    $qualification: String
   ) {
     getVerifications(
       page: $page
       orderBy: "-createdAt"
       first: $first
-      filterBy: { status: $status, specialization: $specialization }
+      filterBy: {
+        status: $status
+        specialization: $specialization
+        qualification: $qualification
+      }
     ) {
       verification {
         _id
