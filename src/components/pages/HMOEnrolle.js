@@ -125,12 +125,13 @@ const HMOEnrolle = () => {
                   const {
                     _id,
                     profileUrl,
-                    doctorsCount,
+
                     userCount,
-                    partnersCount,
+                    partnerCount,
+                    enrolleeCount,
                     name,
                   } = row;
-
+                  console.log(partnerCount);
                   return (
                     <TableRow
                       hover
@@ -177,7 +178,7 @@ const HMOEnrolle = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {doctorsCount ? doctorsCount : "NA"}
+                            {enrolleeCount ? enrolleeCount : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -190,7 +191,11 @@ const HMOEnrolle = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {partnersCount ? partnersCount : "NA"}
+                            {partnerCount === 0
+                              ? partnerCount
+                              : partnerCount > 0
+                              ? partnerCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>

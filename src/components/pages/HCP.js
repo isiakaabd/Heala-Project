@@ -18,7 +18,6 @@ import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import {
   docVerifyStatusFilterBy,
   QualificationOptions,
-  specializationOptions,
 } from "helpers/mockData";
 import {
   changeTableLimit,

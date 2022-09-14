@@ -1493,6 +1493,10 @@ export const getProviders = gql`
         phone
         email
         userTypeId
+        userCount
+        doctorCount
+        enrolleeCount
+        partnerCount
         createdAt
         updatedAt
       }
@@ -1679,6 +1683,7 @@ export const getUserTypes = gql`
         icon
         createdAt
         updatedAt
+        providerCount
       }
       pageInfo {
         totalDocs
