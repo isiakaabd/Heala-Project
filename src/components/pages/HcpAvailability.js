@@ -102,25 +102,24 @@ const HcpAvailability = () => {
   const [fetchAvailabilities, { data, error, loading }] =
     useLazyQuery(getAvailabilities);
 
-  // useEffect(() => {
-  //   fetchAvailabilities({
-  //     variables: {
-  //       first: pageInfo.limit,
-  //       id: hcpId,
-  //       day: today(),
-  //     },
-  //   });
+  useEffect(() => {
+    fetchAvailabilities({
+      variables: {
+        first: pageInfo.limit,
+        id: hcpId,
+        day: today(),
+      },
+    });
 
-  //   if (data) {
-  //     console.log(data);
-  //     setPageInfo(data?.getAvailabilities?.pageInfo || []);
-  //     setAvailabilities(
-  //       data?.getAvailabilities?.availability || defaultPageInfo
-  //     );
-  //   }
+    if (data) {
+      setPageInfo(data?.getAvailabilities?.pageInfo || []);
+      setAvailabilities(
+        data?.getAvailabilities?.availability || defaultPageInfo
+      );
+    }
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [select, setSelect] = useState(today());
   const [modal, setModal] = useState(false);
