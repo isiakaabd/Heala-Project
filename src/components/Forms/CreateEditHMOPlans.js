@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import t from "prop-types";
 import { Formik, Form } from "formik";
 import { Grid } from "@mui/material";
@@ -10,12 +10,20 @@ import { CustomButton } from "components/Utilities";
 import { FormikControl } from "components/validation";
 import { CREATE_PLAN, UPDATE_PLAN } from "components/graphQL/Mutation";
 import { addEditPlansValidationSchema } from "helpers/validationSchemas";
+import { CustomCheckbox } from "components/validation/Checkboxs";
 
 const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
   const theme = useTheme();
   const [createPlan] = useMutation(CREATE_PLAN);
   const [updatePlan] = useMutation(UPDATE_PLAN);
+  const [checkboxValue, setCheckboxValue] = useState(true);
   const { displayAlert, getErrorMsg, watchFunction } = useAlert();
+
+  useEffect(() => {
+    if (initialValues?.consultation !== "unlimited") {
+      setCheckboxValue(false);
+    }
+  }, [initialValues?.consultation]);
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -41,6 +49,7 @@ const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
         onSuccess();
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -65,6 +74,7 @@ const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
         onSuccess();
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -77,8 +87,8 @@ const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
       onSubmit={(values) =>
         type === "edit"
           ? onUpdateSubmit({
-              ...values,
-            })
+            ...values,
+          })
           : onAddSubmit({ ...values })
       }
       validationSchema={addEditPlansValidationSchema}
@@ -86,7 +96,7 @@ const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
       validateOnMount={false}
       validateOnBlur={true}
     >
-      {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
+      {({ isSubmitting, setFieldValue }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Grid item container direction="column" gap={1}>
@@ -116,6 +126,34 @@ const CreateEditHMOPlans = ({ type, initialValues, onSuccess }) => {
                     label="Access type"
                   />
                 </Grid>
+                <Grid item container>
+                  <CustomCheckbox
+                    label="Consultations"
+                    name="consultation"
+                    checked={checkboxValue}
+                    checkboxTitle="Unlimited"
+                    onChange={() => {
+                      const newValue = !checkboxValue;
+                      setCheckboxValue(newValue);
+                      if (newValue) {
+                        setFieldValue("consultation", "unlimited");
+                      } else {
+                        setFieldValue("consultation", "");
+                      }
+                    }}
+                  >
+                    {!checkboxValue && (
+                      <Grid item container>
+                        <FormikControl
+                          control="input"
+                          name="consultation"
+                          placeholder="Enter number of consultations"
+                        />
+                      </Grid>
+                    )}
+                  </CustomCheckbox>
+                </Grid>
+
                 <Grid item container>
                   <FormikControl
                     control="input"

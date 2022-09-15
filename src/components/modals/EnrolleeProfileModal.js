@@ -157,7 +157,7 @@ const EnrolleeProfileModal = ({ isOpen, setIsOpen, profileData, ...rest }) => {
       <Fade in={isOpen}>
         <Box
           sx={style}
-          width={{ md: "70vw", sm: "90vw", lg: "40vw", xs: "40vw" }}
+          width={{ md: "70vw", sm: "90vw", lg: "35vw", xs: "35vw" }}
         >
           <Grid
             container

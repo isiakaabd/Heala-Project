@@ -71,9 +71,8 @@ const PatientsRow = ({ patientData, labelId }) => {
             alignItems: "left",
           }}
         >
-          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${
-            lastName && lastName
-          }`}</span>
+          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${lastName && lastName
+            }`}</span>
         </div>
       </TableCell>
       <TableCell align="left" className={classes.tableCell}>

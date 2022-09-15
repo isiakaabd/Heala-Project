@@ -344,7 +344,6 @@ const DashboardCharts = ({ data }) => {
     totalEarning,
     totalPayouts,
   ]);
-
   const percentageValue = 0.5;
   const [financeState, setFinancialStates] = useState(0);
   const handleFinanceStateChange = (e) => {
@@ -421,10 +420,10 @@ const DashboardCharts = ({ data }) => {
                     partnersState === "Partners"
                       ? partnerOptions
                       : partnersState === "Consultations"
-                      ? consultationsOptions
-                      : partnersState === "Finance"
-                      ? financeOptions
-                      : newOptions
+                        ? consultationsOptions
+                        : partnersState === "Finance"
+                          ? financeOptions
+                          : newOptions
                   }
                   name="graph"
                 />
@@ -436,19 +435,19 @@ const DashboardCharts = ({ data }) => {
                 partnersState === "Partners"
                   ? partnerOptions
                   : partnersState === "Consultations"
-                  ? consultationsOptions
-                  : partnersState === "Finance"
-                  ? financeOptions
-                  : newOptions
+                    ? consultationsOptions
+                    : partnersState === "Finance"
+                      ? financeOptions
+                      : newOptions
               }
               type={
                 partnersState === "Partners"
                   ? "partners"
                   : partnersState === "Consultations"
-                  ? "consultation"
-                  : partnersState === "Finance"
-                  ? "finance"
-                  : ""
+                    ? "consultation"
+                    : partnersState === "Finance"
+                      ? "finance"
+                      : ""
               }
               opt={options}
             />

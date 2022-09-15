@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#FAFAFA",
       height: ({ height }) => `${height}`,
       fontSize: "14px !important",
-      borderRadius: "12px",
+      borderRadius: "8px",
       border: "1px solid #E0E0E0 !important",
 
       "&:disabled": {
@@ -53,7 +53,7 @@ export const Formiks = ({
   children,
   variant = "small",
 }) => {
-  const height = variant === "small" ? "40px" : "60px";
+  const height = variant === "small" ? "40px" : "50px";
   const props = {
     height: height,
   };
@@ -98,7 +98,7 @@ export const FromikSelect = ({
   children,
   variant = "medium",
 }) => {
-  const height = variant === "small" ? "40px" : "60px";
+  const height = variant === "small" ? "40px" : "50px";
   const props = {
     height: height,
   };
@@ -136,15 +136,12 @@ FromikSelect.propTypes = {
 };
 
 const Selects = (props) => {
-  const { name, label, options, placeholder } = props;
+  const { name, label, options } = props;
   const classes = useStyles();
   return (
     <Grid container direction="column" gap={1}>
       <FormLabel className={classes.FormLabel}>{label}</FormLabel>
       <Field name={name} as={FromikSelect} label={label}>
-        <MenuItem value="">
-          <Typography>{placeholder}</Typography>
-        </MenuItem>
         {options.map((option) => (
           <MenuItem
             key={option.key}

@@ -187,9 +187,9 @@ const Partners = () => {
       const datas = da.getProviders.provider;
       setDropDown(
         datas &&
-          datas.map((i) => {
-            return { key: i.name, value: i._id };
-          })
+        datas.map((i) => {
+          return { key: i.name, value: i._id };
+        })
       );
     }
   }, [da]);

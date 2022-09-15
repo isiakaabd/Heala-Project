@@ -26,7 +26,7 @@ const NoData = ({ error }) => {
       <Grid item>
         <Typography variant="body2" sx={{ fontWeight: "400" }}>
           {!error
-            ? "we have not computed data for this table yet"
+            ? "There are no records to display for this table"
             : "pls refresh page"}
         </Typography>
       </Grid>

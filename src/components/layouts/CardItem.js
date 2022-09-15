@@ -4,8 +4,10 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import PropTypes from "prop-types";
 import { ArrowDownwardOutlined } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
-
+import { ReactComponent as DoctorIcon } from "assets/images/totalC.svg";
+// import { ReactComponent as Hug } from "assets/images/hug.svg";
 import { useTheme } from "@mui/material/styles";
+import { ReactComponent as ConsulationIcon } from "assets/images/consultation.svg";
 import { roundUp } from "components/Utilities/Time";
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -35,15 +37,13 @@ const CardItem = ({ value }) => {
         item
         container
         gap="1rem"
-        flexWrap="nowrap"
         flexDirection={{ xs: "row", sm: "row", md: "row" }}
       >
         <Grid
           item
           sx={{
-            minHeight: "5.4rem",
-            // maxWidth: "5.4rem",
-            maxWidth: "100%",
+            height: "5.4rem",
+            width: "5.4rem",
             borderRadius: "100%",
             display: "flex",
             alignItems: "center",

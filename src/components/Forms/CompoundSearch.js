@@ -33,12 +33,12 @@ const CompoundSearch = ({
       const searchVariables =
         value === ""
           ? {
-              ...newVariables,
-            }
+            ...newVariables,
+          }
           : {
-              [searchBy]: value,
-              ...newVariables,
-            };
+            [searchBy]: value,
+            ...newVariables,
+          };
       fetchData({
         variables: searchVariables,
       }).then(({ data }) => {
@@ -53,6 +53,7 @@ const CompoundSearch = ({
       });
     } catch (error) {
       deleteVar(variables);
+      // eslint-disable-next-line no-console
       console.error(error);
       displayAlert("error", `Couldn't search for ${searchVal}`);
     }
@@ -78,7 +79,11 @@ const CompoundSearch = ({
           hasStartIcon={false}
           onChange={(e) => {
             let value = e.target.value;
-            setSearchValue({ ...searchValue, value });
+            if (value === "") {
+              search(searchValue.filterBy, "");
+            } else {
+              setSearchValue({ ...searchValue, value });
+            }
           }}
           placeholder={getSearchPlaceholder(searchValue.filterBy)}
           startIcon={

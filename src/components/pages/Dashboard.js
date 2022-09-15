@@ -83,7 +83,7 @@ const Dashboard = () => {
           <AvailabilityTable />
         </>
       ) : (
-        <NoData />
+        <Loader />
       )}
     </Grid>
   );

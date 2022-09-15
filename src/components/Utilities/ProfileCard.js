@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "1rem",
     // padding: "4rem 5rem",
     height: "16.1rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+    //boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
   link: {
     display: "flex",

@@ -139,7 +139,7 @@ const HMOEnrolle = () => {
                       tabIndex={-1}
                       key={_id}
                       style={{ cursor: "pointer" }}
-                      //   onClick={() => patientConsultation(_id)}
+                    //   onClick={() => patientConsultation(_id)}
                     >
                       <TableCell
                         align="left"
@@ -194,8 +194,8 @@ const HMOEnrolle = () => {
                             {partnerCount === 0
                               ? partnerCount
                               : partnerCount > 0
-                              ? partnerCount
-                              : "NA"}
+                                ? partnerCount
+                                : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>

@@ -38,6 +38,7 @@ export const UploadEnrolleeListForm = ({ onSubmit }) => {
         setPlanOptions(options);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   }, [fetchPlans]);
@@ -51,7 +52,7 @@ export const UploadEnrolleeListForm = ({ onSubmit }) => {
       validateOnMount={false}
       validateOnBlur={true}
     >
-      {({ isSubmitting, dirty, isValid, setFieldValue, setErrors }) => {
+      {({ isSubmitting, setFieldValue, setErrors }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Alert severity="warning" sx={{ margin: "1rem 0rem" }}>

@@ -21,11 +21,13 @@ const AddProviderModal = ({
   const { displayAlert } = useAlert();
   const history = useHistory();
   const onSubmit = async (values) => {
-    const { name } = values;
+    const { name, image, iconAlt } = values;
     try {
       await add({
         variables: {
           name,
+          icon: image,
+          iconAlt,
           userTypeId: id,
         },
         refetchQueries: [
@@ -61,7 +63,7 @@ const AddProviderModal = ({
         validateOnMount={false}
         validateOnBlur={false}
       >
-        {({ isSubmitting, dirty, isValid }) => {
+        {({ isSubmitting, dirty, isValid, setFieldValue }) => {
           return (
             <Form style={{ marginTop: "1rem" }}>
               <Grid container direction="column" gap={2}>
@@ -73,6 +75,26 @@ const AddProviderModal = ({
                       id="name"
                       name="name"
                       placeholder="Enter Provider's Name"
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item container>
+                  <Grid item container md>
+                    <FormikControl
+                      control="file"
+                      name="image"
+                      label="Upload Your Logo"
+                      setFieldValue={setFieldValue}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item container>
+                  <Grid item container md>
+                    <FormikControl
+                      control="file"
+                      name="iconAlt"
+                      label="Upload Alternate Logo"
+                      setFieldValue={setFieldValue}
                     />
                   </Grid>
                 </Grid>

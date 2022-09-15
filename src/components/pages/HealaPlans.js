@@ -7,7 +7,6 @@ import { useTheme } from "@mui/material/styles";
 import { CustomButton } from "components/Utilities";
 import MainModal from "components/modals/MainModal";
 import { getPlans } from "components/graphQL/useQuery";
-import CreateEditPlans from "components/Forms/CreateEditPlans";
 import HealaPlansTable from "components/Tables/HealaPlansTable";
 import CreateEditHealaPlans from "components/Forms/CreateEditHealaPlans";
 
@@ -80,7 +79,7 @@ const HealaPlans = () => {
         rowSpacing={5}
         setIsOpen={setIsOpen}
       >
-        <CreateEditPlans
+        <CreateEditHealaPlans
           initialValues={initialValues}
           type="add"
           onSuccess={() => {

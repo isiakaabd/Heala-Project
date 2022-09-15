@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
@@ -96,6 +97,7 @@ const HMOPlansTable = ({ PlansQuery }) => {
       });
     } catch (error) {
       stopDeleting();
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -124,8 +126,8 @@ const HMOPlansTable = ({ PlansQuery }) => {
                 value: "",
                 filterBy: "name",
               }}
-              setPageInfo={(data) => null}
-              setProfiles={(data) => null}
+              setPageInfo={() => null}
+              setProfiles={() => null}
               getSearchPlaceholder={(filterBy) =>
                 getDynamicSearchPlaceholder(filterBy, plansSearchFilterOptions)
               }
@@ -160,13 +162,15 @@ const HMOPlansTable = ({ PlansQuery }) => {
                 {plans.map((row, index) => {
                   const isItemSelected = isSelected(row?._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const { _id, name, amount, description } = row;
+                  const { _id, name, amount, description, allowedFeatures } =
+                    row;
                   const editFormValues = {
                     id: _id,
                     name,
                     amount,
                     description,
                     accessType: "",
+                    consultation: allowedFeatures?.consultation || "",
                   };
                   return (
                     <HMOPlanRow
@@ -229,6 +233,10 @@ const HMOPlansTable = ({ PlansQuery }) => {
       </Grid>
     </Grid>
   );
+};
+
+HMOPlansTable.propTypes = {
+  PlansQuery: PropTypes.object.isRequired,
 };
 
 export default HMOPlansTable;

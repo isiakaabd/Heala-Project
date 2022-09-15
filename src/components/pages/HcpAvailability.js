@@ -102,24 +102,25 @@ const HcpAvailability = () => {
   const [fetchAvailabilities, { data, error, loading }] =
     useLazyQuery(getAvailabilities);
 
-  useEffect(() => {
-    fetchAvailabilities({
-      variables: {
-        first: pageInfo.limit,
-        id: hcpId,
-        day: today(),
-      },
-    });
+  // useEffect(() => {
+  //   fetchAvailabilities({
+  //     variables: {
+  //       first: pageInfo.limit,
+  //       id: hcpId,
+  //       day: today(),
+  //     },
+  //   });
 
-    if (data) {
-      setPageInfo(data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        data?.getAvailabilities?.availability || defaultPageInfo
-      );
-    }
+  //   if (data) {
+  //     console.log(data);
+  //     setPageInfo(data?.getAvailabilities?.pageInfo || []);
+  //     setAvailabilities(
+  //       data?.getAvailabilities?.availability || defaultPageInfo
+  //     );
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data]);
 
   const [select, setSelect] = useState(today());
   const [modal, setModal] = useState(false);
@@ -409,19 +410,19 @@ const HcpAvailability = () => {
         <Grid item container gap={1}>
           {times
             ? times?.map((time, ind) => {
-                const { start, stop } = time;
-                return (
-                  <Chip
-                    key={ind}
-                    label={`${hours(start)} - ${hours(stop)} `}
-                    className={classes.badge}
-                    style={{
-                      background: theme.palette.common.lightRed,
-                      color: theme.palette.common.red,
-                    }}
-                  />
-                );
-              })
+              const { start, stop } = time;
+              return (
+                <Chip
+                  key={ind}
+                  label={`${hours(start)} - ${hours(stop)} `}
+                  className={classes.badge}
+                  style={{
+                    background: theme.palette.common.lightRed,
+                    color: theme.palette.common.red,
+                  }}
+                />
+              );
+            })
             : "No Time"}
         </Grid>
       </Modals>

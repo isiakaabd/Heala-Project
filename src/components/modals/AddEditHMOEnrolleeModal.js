@@ -53,7 +53,7 @@ const AddEditHMOEnrolleeModal = ({
       <Fade in={isOpen}>
         <Box
           sx={style}
-          width={{ md: "70vw", sm: "90vw", lg: "40vw", xs: "40vw" }}
+          width={{ md: "70vw", sm: "90vw", lg: "35vw", xs: "35vw" }}
           padding={{ sm: 2, xs: 2, md: 4 }}
         >
           <Grid
@@ -104,6 +104,7 @@ AddEditHMOEnrolleeModal.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
   refetchData: PropTypes.func,
   type: PropTypes.string,
+  initialValues: PropTypes.object,
 };
 
 export default AddEditHMOEnrolleeModal;

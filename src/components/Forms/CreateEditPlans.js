@@ -41,6 +41,7 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
         onSuccess();
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -65,6 +66,7 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
         onSuccess();
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -77,8 +79,8 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
       onSubmit={(values) =>
         type === "edit"
           ? onUpdateSubmit({
-              ...values,
-            })
+            ...values,
+          })
           : onAddSubmit({ ...values })
       }
       validationSchema={addEditPlansValidationSchema}
@@ -86,7 +88,7 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
       validateOnMount={false}
       validateOnBlur={true}
     >
-      {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
+      {({ isSubmitting }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Grid item container direction="column" gap={1}>

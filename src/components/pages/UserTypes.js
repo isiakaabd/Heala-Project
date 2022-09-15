@@ -397,10 +397,10 @@ const UserTypes = () => {
                               name === "Heala User"
                                 ? `/user-type/heala/${_id}`
                                 : name === "Hospital Enrollee"
-                                ? `/user-type/hospital/${_id}`
-                                : name === "HMO Enrollee"
-                                ? `/user-type/hmo/${_id}`
-                                : `/user-type/${_id}`
+                                  ? `/user-type/hospital/${_id}`
+                                  : name === "HMO Enrollee"
+                                    ? `/user-type/hmo/${_id}`
+                                    : `/user-type/${_id}`
                             }
                             className={classes.link}
                           >

@@ -69,9 +69,10 @@ const useStyles = makeStyles((theme) => ({
 
   cardGrid: {
     borderRadius: "1rem",
+    background: "#ffffff",
     minHeight: "14.1rem",
     paddingInline: "1rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+    //boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
   infoBadge: {
@@ -322,7 +323,7 @@ const ViewHCP = () => {
           >
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">Doctor Name</Typography>
+                <Typography variant="body3">Doctor Name</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -334,7 +335,7 @@ const ViewHCP = () => {
             </Grid>
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">Hospital</Typography>
+                <Typography variant="body3">Hospital</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -346,7 +347,7 @@ const ViewHCP = () => {
             </Grid>
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">Gender:</Typography>
+                <Typography variant="body3">Gender:</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -356,7 +357,7 @@ const ViewHCP = () => {
             </Grid>
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">Medical ID:</Typography>
+                <Typography variant="body3">Medical ID:</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -366,7 +367,7 @@ const ViewHCP = () => {
             </Grid>
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">Specialization:</Typography>
+                <Typography variant="body3">Specialization:</Typography>
               </Grid>
               <Grid item width="100%">
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -378,7 +379,7 @@ const ViewHCP = () => {
             </Grid>
             <Grid item container>
               <Grid item>
-                <Typography variant="body1">DOB:</Typography>
+                <Typography variant="body3">DOB:</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="h4" sx={{ fontWeight: "400" }}>
@@ -420,7 +421,7 @@ const ViewHCP = () => {
               <CustomButton
                 title="View Doctor Profile"
                 type={trasparentButton}
-                width="100%"
+                width="auto"
                 component={Link}
                 to={`/hcps/${doctorData && doctorData._id}`}
               />
@@ -448,7 +449,7 @@ const ViewHCP = () => {
               className={classes.cardGrid}
             >
               <Grid item>
-                <Typography variant="h4">Qualification</Typography>
+                <Typography variant="h5">Qualification</Typography>
               </Grid>
               {qualification?.degree !== "" && qualification?.image !== "" ? (
                 <Grid
@@ -555,7 +556,7 @@ const ViewHCP = () => {
             className={classes.cardGrid}
           >
             <Grid item>
-              <Typography variant="h4">Year Book</Typography>
+              <Typography variant="h5">Year Book</Typography>
             </Grid>
             {yearbook && Object.keys(yearbook).length > 0 && yearbook.image ? (
               <Grid
@@ -614,7 +615,7 @@ const ViewHCP = () => {
             className={classes.cardGrid}
           >
             <Grid item>
-              <Typography variant="h4">Alumni</Typography>
+              <Typography variant="h5">Alumni</Typography>
             </Grid>
             {alumni_association?.facebook_group_name ? (
               <Grid
@@ -665,7 +666,7 @@ const ViewHCP = () => {
             className={classes.cardGrid}
           >
             <Grid item>
-              <Typography variant="h4">Reference ID</Typography>
+              <Typography variant="h5">Reference ID</Typography>
             </Grid>
             <Grid
               item

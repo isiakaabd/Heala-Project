@@ -65,7 +65,7 @@ const IllnessModal = ({
       isOpen={open}
       title={type === "add" ? "Add Illness" : "Update Illness"}
       rowSpacing={5}
-      width={{ sm: "40vw", xs: "90vw", md: "40vw" }}
+      width={{ sm: "35vw", xs: "90vw", md: "35vw" }}
       handleClose={handleClose}
     >
       <Formik

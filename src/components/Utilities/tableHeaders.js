@@ -85,7 +85,7 @@ export const roleHeader = [
 export const HCPHeader = [
   {
     id: 0,
-    label: " Date",
+    label: "Entry Date",
   },
   {
     id: 8,
@@ -97,7 +97,7 @@ export const HCPHeader = [
   },
   {
     id: 2,
-    label: "Qualification",
+    label: "Specialization",
   },
   {
     id: 10,
@@ -251,7 +251,7 @@ export const hmoPlansTableHeader = [
   }, */
   {
     id: 6,
-    label: "Duration",
+    label: "Access",
   },
   {
     id: 8,
@@ -524,7 +524,9 @@ export const hospitalTableHeadCells = [
 ];
 export const hospitalTableHeadCells20 = [
   // { id: 1, label: "Providers" },
-  { id: 0, label: "Hospitals" },
+  { id: 0, label: "Users" },
+  // { id: 3, label: "Doctors" },
+  { id: 4, label: "Partners" },
   { id: 20, label: "" },
 ];
 export const hospitalTableHeadCells10 = [

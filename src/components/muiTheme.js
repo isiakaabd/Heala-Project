@@ -102,6 +102,11 @@ export const muiTheme = createTheme({
       fontWeight: 500,
       lineHeight: 1.85,
     },
+    body3: {
+      fontSize: "clamp(1.2rem,2vw, 1.3rem)",
+      fontWeight: 600,
+      lineHeight: 0.7,
+    },
     btn: {
       fontSize: "1.5rem",
       textTransform: "none",
@@ -160,17 +165,27 @@ export const muiTheme = createTheme({
     },
     input: {
       width: "100%",
-      height: "60px",
+      height: "50px",
       padding: "clamp(0.3rem, 2vw, 1rem)",
-      fontSize: "clamp(1.4rem,2vw,1.6rem)",
+      fontSize: "clamp(1.4rem,2vw,1.5rem)",
       color: dark,
-      fontWeight: 600,
-      border: "2px solid #E0E0E0 !important",
-      borderRadius: "12px",
+      fontWeight: 400,
+      border: "1px solid #E0E0E0 !important",
+      borderRadius: "8px",
       "&::placeholder": {
-        color: black,
-        fontWeight: "500 !important",
+        fontWeight: "400 !important",
+        fontSize: "clamp(1.4rem,2vw,1rem)",
+        color: "#afafaf",
+        fontFamily: [
+          "\"Euclid Circular\"",
+          "\"Circular Std Medium\"",
+          "Roboto",
+          "sans-serif",
+        ].join(", "),
       },
+    },
+    select: {
+      height: "50px !important",
     },
   },
   components: {

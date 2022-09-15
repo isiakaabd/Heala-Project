@@ -167,8 +167,8 @@ const HealaPage = () => {
                             {userCount === 0
                               ? userCount
                               : userCount > 0
-                              ? userCount
-                              : "NA"}
+                                ? userCount
+                                : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -184,8 +184,8 @@ const HealaPage = () => {
                             {doctorCount === 0
                               ? doctorCount
                               : doctorCount > 0
-                              ? doctorCount
-                              : "NA"}
+                                ? doctorCount
+                                : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -201,8 +201,8 @@ const HealaPage = () => {
                             {partnerCount === 0
                               ? partnerCount
                               : partnerCount > 0
-                              ? partnerCount
-                              : "NA"}
+                                ? partnerCount
+                                : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -235,7 +235,7 @@ const HealaPage = () => {
                             disableRipple
                             sx={{ width: "50%" }}
                             className={`${classes.tableBtn} ${classes.redBtn}`}
-                            // onClick={() => handleGenerateLink(_id)}
+                          // onClick={() => handleGenerateLink(_id)}
                           >
                             Generate Link
                           </Button>

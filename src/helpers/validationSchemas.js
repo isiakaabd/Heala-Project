@@ -72,9 +72,11 @@ export const uploadEnrolleeFileValidationSchema = Yup.object({
   planId: Yup.string("Please select a plan").required("Plan is required."),
   file: Yup.mixed()
     .required("Select a .CSV file to proceed.")
-    .test("type", "Only .CSV files are supported", (value) => {
+    .test("type", "Only .CSV and .JSON files are supported", (value) => {
       const isCSVFile = isFile(value, "csv");
-      return isCSVFile;
+      const isJSONFile = isFile(value, "json");
+      const passed = isCSVFile || isJSONFile;
+      return passed;
     }),
 });
 
@@ -148,9 +150,6 @@ export const addHMOEnrolleeValidationSchema = Yup.object({
     .typeError(" Enter a valid phone number")
     .min(11, "min value is  11 digits")
     .required("Phone number is required"),
-  photo: Yup.string("provide photo")
-    .typeError("Please provider a photo")
-    .trim(),
   hmoId: Yup.string("Enter HMO ID").trim().required("HMO ID is required"),
   noc: Yup.string("Enter NOC").trim(),
   plan: Yup.string("Enter HMO plan").trim().required("HMO Plan is required"),
@@ -171,7 +170,9 @@ export const addEditPlansValidationSchema = Yup.object({
     .required("Description is required"),
   provider: Yup.string("Enter Provider").trim(),
   accessType: Yup.string("Enter Duration").trim(),
+  consultation: Yup.string().required(),
 });
+
 export const illnessSchema = Yup.object({
   name: Yup.string("Enter illness name")
     .trim()

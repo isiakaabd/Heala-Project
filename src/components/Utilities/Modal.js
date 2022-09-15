@@ -50,7 +50,7 @@ const Modals = ({
       >
         <Box
           sx={style}
-          width={{ sm: "40vw", xs: "90vw", md: "40vw" }}
+          width={{ sm: "35vw", xs: "90vw", md: "35vw" }}
           padding={{ sm: 4, xs: 3, md: 4 }}
         >
           <Grid

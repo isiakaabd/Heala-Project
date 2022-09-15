@@ -32,6 +32,7 @@ const HmoPlans = () => {
     provider: "",
     type: "hmo",
     accessType: "",
+    consultation: "unlimited",
   };
 
   if (error) return <NoData error={error} />;

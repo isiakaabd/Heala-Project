@@ -3,12 +3,11 @@ import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { useParams } from "react-router-dom";
-import { useMutation } from "@apollo/client";
 import { Loader } from "components/Utilities";
-import { NetworkStatus } from "@apollo/client";
 import { useStyles } from "styles/hmoPageStyles";
 import { EmptyTable, NoData } from "components/layouts";
 import SingleHMORow from "components/Rows/SingleHMORow";
+import { useMutation, NetworkStatus } from "@apollo/client";
 
 import { getDynamicSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
@@ -79,6 +78,7 @@ const SingleHMOTable = ({ enrolleesParams }) => {
         setPageInfo(data?.getEnrollees?.pageInfo || {});
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   };
@@ -90,6 +90,7 @@ const SingleHMOTable = ({ enrolleesParams }) => {
         setPageInfo(data?.getEnrollees?.pageInfo || defaultPageInfo);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });
@@ -239,6 +240,7 @@ const SingleHMOTable = ({ enrolleesParams }) => {
             newIsDeleting[enrolleeToDelete] = false;
             setIsDeleting({ ...newIsDeleting });
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(error);
             const errMsg = getErrorMsg(error);
             displayAlert("error", errMsg);

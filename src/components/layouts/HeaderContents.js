@@ -259,7 +259,7 @@ const HeaderText = () => {
   const classes = useStyles();
   const { pathname } = useLocation();
   const email = localStorage.getItem("email");
-  const [profileAcc, setProfileAcc] = useState([]);
+  const [, setProfileAcc] = useState([]);
   const [docCount, setDocCount] = useState([]);
   const [patientCount, setPatientCount] = useState([]);
 
@@ -391,8 +391,8 @@ const Crumb = ({ breadcrumbs }) => {
               index === breadcrumbs.length - 2
                 ? "0px 0px 8px 8px"
                 : index === 0
-                ? "8px 8px 0px 0px"
-                : "";
+                  ? "8px 8px 0px 0px"
+                  : "";
             if (isLast) {
               return null;
             } else {

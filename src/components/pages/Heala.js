@@ -125,9 +125,9 @@ const Heala = () => {
                   const {
                     _id,
                     profileUrl,
-                    doctorCount,
+                    doctorsCount,
                     userCount,
-                    partnerCount,
+                    partnersCount,
                     name,
                   } = row;
 
@@ -171,7 +171,7 @@ const Heala = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {doctorCount ? doctorCount : "NA"}
+                            {doctorsCount ? doctorsCount : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -184,7 +184,7 @@ const Heala = () => {
                             variant="h3"
                             classes={{ root: classes.title }}
                           >
-                            {partnerCount ? partnerCount : "NA"}
+                            {partnersCount ? partnersCount : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>

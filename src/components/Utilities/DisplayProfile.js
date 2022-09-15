@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     borderRadius: "1rem",
     padding: "2rem",
-    boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
+    //boxShadow: "0px 0px 5px -1px rgba(0,0,0,0.2)",
   },
 
   badge: {

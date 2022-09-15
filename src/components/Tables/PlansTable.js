@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
@@ -27,8 +28,8 @@ import {
 } from "helpers/filterHelperFunctions";
 import { subscriptionHeader } from "components/Utilities/tableHeaders";
 import MainModal from "components/modals/MainModal";
-import CreateEditPlans from "components/Forms/CreateEditPlans";
 import { getDynamicSearchPlaceholder } from "helpers/func";
+import CreateEditPlans from "components/Forms/CreateEditPlans";
 
 const PlansTable = ({ PlansQuery }) => {
   /* const theme = useTheme(); */
@@ -96,6 +97,7 @@ const PlansTable = ({ PlansQuery }) => {
       });
     } catch (error) {
       stopDeleting();
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -124,8 +126,8 @@ const PlansTable = ({ PlansQuery }) => {
                 value: "",
                 filterBy: "name",
               }}
-              setPageInfo={(data) => null}
-              setProfiles={(data) => null}
+              setPageInfo={() => null}
+              setProfiles={() => null}
               getSearchPlaceholder={(filterBy) =>
                 getDynamicSearchPlaceholder(filterBy, plansSearchFilterOptions)
               }
@@ -160,8 +162,15 @@ const PlansTable = ({ PlansQuery }) => {
                 {plans.map((row, index) => {
                   const isItemSelected = isSelected(row?._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const { _id, name, provider, duration, amount, description } =
-                    row;
+                  const {
+                    _id,
+                    name,
+                    provider,
+                    duration,
+                    amount,
+                    description,
+                    allowedFeatures,
+                  } = row;
                   const editFormValues = {
                     id: _id,
                     name,
@@ -169,6 +178,7 @@ const PlansTable = ({ PlansQuery }) => {
                     duration,
                     amount,
                     description,
+                    consultation: allowedFeatures?.consultation || "",
                   };
                   return (
                     <PlanListRow
@@ -231,6 +241,10 @@ const PlansTable = ({ PlansQuery }) => {
       </Grid>
     </Grid>
   );
+};
+
+PlansTable.propTypes = {
+  PlansQuery: PropTypes.object.isRequired,
 };
 
 export default PlansTable;

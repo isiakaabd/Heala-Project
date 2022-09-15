@@ -100,7 +100,6 @@ const SingleHMORow = ({
     planId,
     email,
     phone,
-    photo,
   } = rowData;
   const editEnrolleeData = {
     id: _id,
@@ -113,7 +112,6 @@ const SingleHMORow = ({
     expiryDate: expiryDate || "",
     email: email || "",
     phone: phone || "",
-    photo: photo || "",
   };
   const labelId = `enhanced-table-checkbox-${index}`;
   return (
@@ -233,6 +231,11 @@ SingleHMORow.propTypes = {
   index: PropTypes.number.isRequired,
   rowData: PropTypes.object.isRequired,
   openProfileDetailsModal: PropTypes.func.isRequired,
+  setEditData: PropTypes.func.isRequired,
+  isDeleting: PropTypes.bool.isRequired,
+  setEnrolleeIdToDelete: PropTypes.func.isRequired,
+  openEditModal: PropTypes.func.isRequired,
+  openConfirmModal: PropTypes.func.isRequired,
 };
 
 export default SingleHMORow;

@@ -22,9 +22,11 @@ export const patterns = {
   // PARTNERS PATTERNS
   // Partners: "partners",
 
+  // Hmo: "hmo/{id}",
+
   // HMO PATTERNS
   HMO: "hmo",
-  // Hmo: "hmo/{id}",
+  "Hmo view": "hmo/{id}",
 
   // MESSAGES PATTERNS
   Messages: "messages",

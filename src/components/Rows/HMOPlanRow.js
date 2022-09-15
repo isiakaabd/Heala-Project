@@ -1,9 +1,10 @@
 import React from "react";
-import { useTheme } from "@mui/styles";
-import { makeStyles } from "@mui/styles";
+import PropTypes from "prop-types";
 import { Loader } from "components/Utilities";
+import { useTheme, makeStyles } from "@mui/styles";
 import { EditDelBtn } from "components/Buttons/EditDelBtn";
 import { Checkbox, TableCell, TableRow } from "@mui/material";
+import StatusPill from "components/Utilities/StatusPill";
 
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -142,7 +143,8 @@ export const HMOPlanRow = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { _id, name, duration, description } = plan;
+  const { _id, name, allowedFeatures, description } = plan;
+  const planFeaturesArray = allowedFeatures ? Object.keys(allowedFeatures) : [];
   return (
     <TableRow
       hover
@@ -192,7 +194,17 @@ export const HMOPlanRow = ({
           maxWidth: "20rem",
         }}
       >
-        {duration}
+        {planFeaturesArray.length > 0
+          ? planFeaturesArray.map((feature, idx) => {
+            return (
+              <StatusPill
+                key={`${feature}-${idx}`}
+                type="success"
+                label={feature}
+              />
+            );
+          })
+          : "No access"}
       </TableCell>
 
       <TableCell align="left" className={classes.tableCell}>
@@ -204,13 +216,6 @@ export const HMOPlanRow = ({
             justifyContent: "space-around",
           }}
         >
-          {/* <div style={{ marginRight: "1rem" }}>
-            <EditDelBtn
-              type="edit"
-              text="Edit plan"
-              onHandleClick={() => handleEditOpenDialog()}
-            />
-          </div> */}
           {deleting ? (
             <Loader />
           ) : (
@@ -224,4 +229,16 @@ export const HMOPlanRow = ({
       </TableCell>
     </TableRow>
   );
+};
+
+HMOPlanRow.propTypes = {
+  plan: PropTypes.object.isRequired,
+  isItemSelected: PropTypes.bool,
+  handleSelectedRows: PropTypes.func,
+  selectedRows: PropTypes.any,
+  setSelectedRows: PropTypes.func,
+  labelId: PropTypes.string,
+  handleDeleteOpenDialog: PropTypes.func,
+  handleEditOpenDialog: PropTypes.func,
+  deleting: PropTypes.bool.isRequired,
 };

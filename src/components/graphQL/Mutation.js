@@ -233,6 +233,7 @@ export const CREATE_PLAN = gql`
     $duration: String
     $provider: String
     $type: String
+    $consultation: String
   ) {
     createPlan(
       data: {
@@ -242,6 +243,7 @@ export const CREATE_PLAN = gql`
         duration: $duration
         provider: $provider
         type: $type
+        allowedFeatures: { consultation: $consultation }
       }
     ) {
       plan {
@@ -280,6 +282,7 @@ export const UPDATE_PLAN = gql`
     $provider: String
     $duration: String
     $description: String
+    $consultation: String
   ) {
     updatePlan(
       data: {
@@ -289,6 +292,7 @@ export const UPDATE_PLAN = gql`
         provider: $provider
         duration: $duration
         description: $description
+        allowedFeatures: { consultation: $consultation }
       }
     ) {
       plan {

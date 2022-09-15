@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import {
@@ -8,7 +8,6 @@ import {
   ListItemIcon,
   Grid,
 } from "@mui/material";
-
 import logo from "assets/images/logo.svg";
 import { setSideNav } from "helpers/func";
 import { useMutation } from "@apollo/client";
@@ -25,7 +24,7 @@ const SideMenu = (props) => {
   const { logout } = useActions();
   const [Logout, setLogout] = useState(false);
   const [logout_user] = useMutation(LOGOUT_USER);
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
+  const [selectedMenu, setSelectedMenu] = useState(0);
 
   const useStyles = makeStyles((theme) => ({
     aside: {
@@ -160,11 +159,11 @@ const SideMenu = (props) => {
       logout();
       setSelectedMenu(13);
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSideNav(menus, location?.pathname, setSelectedMenu);
   }, [location?.pathname]);
 

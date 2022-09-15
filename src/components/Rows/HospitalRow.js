@@ -1,17 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { Link, useHistory } from "react-router-dom";
 import { useStyles } from "styles/hospitalPageStyles";
 import { Button, TableCell, TableRow } from "@mui/material";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ProfileInfo from "components/Utilities/ProfileInfo";
 import { trucateString } from "helpers/filterHelperFunctions";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const HospitalRow = ({ index, rowData }) => {
   const theme = useTheme();
   const classes = useStyles();
-  const history = useHistory();
   const { _id, name, plans, email, icon } = rowData;
   const labelId = `enhanced-table-checkbox-${index}`;
   return (
@@ -30,7 +29,7 @@ const HospitalRow = ({ index, rowData }) => {
       </TableCell> */}
       <TableCell align="left" className={classes.tableCell}>
         <ProfileInfo
-          // imgUrl={icon && icon}
+          imgUrl={icon && icon}
           firstName={name ? name : "No name"}
           lastName=""
         />
@@ -38,9 +37,9 @@ const HospitalRow = ({ index, rowData }) => {
       {/* <TableCell align="left" className={classes.tableCell}>
         {email ? email : "No email"}
       </TableCell> */}
-      {/* <TableCell align="left" className={classes.tableCell}>
+      <TableCell align="left" className={classes.tableCell}>
         {plans ? plans : "Null"}
-      </TableCell> */}
+      </TableCell>
       <TableCell align="left" className={classes.tableCell}>
         <Link to={`/plans/hospitals/${_id}`}>
           <Button className={classes.viewBtn} endIcon={<ArrowForwardIosIcon />}>

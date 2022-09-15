@@ -42,6 +42,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
         setPlanOptions(options);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   }, [fetchPlans]);
@@ -65,6 +66,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
         onSuccess();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -86,6 +88,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
         onSuccess();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       const errMsg = getErrorMsg(error);
       displayAlert("error", errMsg);
@@ -100,10 +103,10 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
       onSubmit={(values) =>
         type === "edit"
           ? onUpdateSubmit({
-              id: editInitialValues._id,
-              providerId: hmoId,
-              ...values,
-            })
+            id: editInitialValues._id,
+            providerId: hmoId,
+            ...values,
+          })
           : onAddSubmit({ providerId: hmoId, ...values })
       }
       validationSchema={addHMOEnrolleeValidationSchema}
@@ -111,7 +114,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
       validateOnMount={false}
       validateOnBlur={true}
     >
-      {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
+      {({ isSubmitting, setFieldValue, setValues }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Grid container direction="column" gap={2}>
@@ -187,23 +190,13 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
                   options={[{ key: "Plan", value: "" }, ...planOptions]}
                   placeholder="Select Plan"
                   name="planId"
-                  label="Access Heala Plan"
-                />
-              </Grid>
-
-              <Grid item container direction="column" gap={1}>
-                <FormikControl
-                  control="file"
-                  label="Upload photo"
-                  id="photo"
-                  name="photo"
-                  setFieldValue={setFieldValue}
+                  label="Heala Access Plan"
                 />
               </Grid>
 
               <Grid item container>
                 <CustomButton
-                  title={type === "edit" ? "Update HMO" : "Add HMO"}
+                  title={type === "edit" ? "Update Enrollee" : "Add Enrollee"}
                   width="100%"
                   type={buttonType}
                   isSubmitting={isSubmitting}
@@ -221,6 +214,7 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
 AddEditHMOEnrolleeForm.propTypes = {
   onSuccess: t.func.isRequired,
   editInitialValues: t.object,
+  type: t.string.isRequired,
 };
 
 export default AddEditHMOEnrolleeForm;

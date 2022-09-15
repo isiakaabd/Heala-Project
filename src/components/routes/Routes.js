@@ -79,6 +79,7 @@ import TestList from "components/pages/TestList";
 import ListManagment from "components/pages/ListManagment";
 import SubscriptionIncome from "components/pages/SubscriptionIncome";
 import SingleHMO from "components/pages/SingleHMO";
+import SingleHMO1 from "components/pages/SingleHMO1";
 import SubscriptionPlans from "components/pages/SubscriptionPlans";
 import Hospitals from "components/pages/Hospitals";
 import HealaPlans from "components/pages/HealaPlans";
@@ -279,6 +280,10 @@ const Routes = () => {
         path="/user-type/hmo/:id/:ids/enrollee"
         component={SingleHMO}
       />
+
+      {/*  =====  HMO ROUTES STARTS HERE ===== */}
+      <PrivateRoute exact path="/hmo" component={Hmo} />
+      <PrivateRoute exact path="/hmo/:hmoId" component={SingleHMO1} />
 
       {/*  =====  APPOINTMENTS ROUTES STARTS HERE ===== */}
       <PrivateRoute exact path="/appointments" component={Appointments} />
