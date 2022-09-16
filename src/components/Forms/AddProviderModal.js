@@ -22,11 +22,12 @@ const AddProviderModal = ({
   const history = useHistory();
   const onSubmit = async (values) => {
     const { name, image, iconAlt } = values;
+
     try {
       await add({
         variables: {
           name,
-          icon: image,
+          image,
           iconAlt,
           userTypeId: id,
         },
@@ -56,7 +57,7 @@ const AddProviderModal = ({
       handleClose={handleClose}
     >
       <Formik
-        initialValues={{ name: "" }}
+        initialValues={{ name: "", image: "", iconAlt: "" }}
         onSubmit={onSubmit}
         validationSchema={addProviderValidation}
         validateOnChange={false}
