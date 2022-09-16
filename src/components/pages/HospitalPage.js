@@ -9,6 +9,10 @@ import {
   TableRow,
 } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 import FormikControl from "components/validation/FormikControl";
 import { Formik, Form } from "formik";
 import { addDoctorValidationSchema } from "helpers/validationSchemas";
@@ -53,6 +57,7 @@ const HospitalPage = () => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+
   const [ids, setIds] = useState("");
   const [fetchHospitals, { loading, error, data, variables }] = useLazyQuery(
     getProviders,
@@ -78,6 +83,7 @@ const HospitalPage = () => {
   };
 
   const [openAddHcp, setOpenAddHcp] = useState(false);
+
   useEffect(() => {
     fetchHospitals();
     try {
@@ -89,6 +95,20 @@ const HospitalPage = () => {
       console.error(error);
     }
   }, [data]);
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setHospitals(data?.getProviders?.provider || []);
+        setPageInfo(data?.getProviders?.pageInfo || {});
+        setPageInfo(data?.profiles?.pageInfo || defaultPageInfo);
+        // setProfiles(data?.profiles?.data || []);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        // displayAlert("error", errMsg);
+      });
+  };
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -138,6 +158,21 @@ const HospitalPage = () => {
                 paginationLabel="Hospitals per page"
                 hasCheckbox={false}
                 dataPageInfo={pageInfo}
+                changeLimit={async (e) => {
+                  const res = changeTableLimit(fetchHospitals, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
+                handlePagination={async (page) => {
+                  const res = handlePageChange(
+                    fetchHospitals,
+                    page,
+                    pageInfo,
+                    {}
+                  );
+                  await setTableData(res, "Failed to change page.");
+                }}
               >
                 {hospitals.map((row) => {
                   const {
@@ -231,35 +266,40 @@ const HospitalPage = () => {
                         style={{
                           color: theme.palette.common.grey,
 
-                          width: "15%",
+                          width: "30rem",
                         }}
                       >
                         {profileUrl ? (
-                          <Typography
+                          <div
                             style={{
-                              color: theme.palette.common.grey,
-                              maxWidth: "3rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "1rem",
                             }}
-                            sx={{ display: "flex", alignItems: "center" }}
                           >
-                            {trucateProfileLink(profileUrl)}
-                            <div style={{ marginLeft: "1rem" }}>
-                              <Copy name="Profile Link" text={profileUrl} />
-                            </div>
-                          </Typography>
+                            <Typography
+                              variant="h3"
+                              classes={{ root: classes.title }}
+                            >
+                              {trucateProfileLink(profileUrl, 20)}
+                            </Typography>
+                            <Copy name="Profile Link" text={profileUrl} />
+                          </div>
                         ) : (load && ids === _id) ||
                           (loading && ids === _id) ? (
                           <Loader />
                         ) : (
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            sx={{ width: "50%" }}
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            onClick={() => handleGenerateLink(_id)}
-                          >
-                            Generate Link
-                          </Button>
+                          <div style={{ width: "50%" }}>
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              // sx={{ width: "30%" }}
+                              className={`${classes.tableBtn} ${classes.redBtn}`}
+                              onClick={() => handleGenerateLink(_id)}
+                            >
+                              Generate Link
+                            </Button>
+                          </div>
                         )}
                       </TableCell>
                     </TableRow>

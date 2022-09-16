@@ -243,10 +243,10 @@ trucateString.PropTypes = {
   length: t.number.isRequired,
 };
 
-export const trucateProfileLink = (word) => {
+export const trucateProfileLink = (word, length) => {
   try {
     const wordArr = word.split("");
-    const start = `${wordArr.slice(0, 8).join("")}`;
+    const start = `${wordArr.slice(0, length ? length : 8).join("")}`;
     const end = `${wordArr
       .slice(wordArr.length - 7, wordArr.length - 1)
       .join("")}`;

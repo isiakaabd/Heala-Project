@@ -9,9 +9,6 @@ import {
   TableRow,
 } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
-import FormikControl from "components/validation/FormikControl";
-import { Formik, Form } from "formik";
-import { addDoctorValidationSchema } from "helpers/validationSchemas";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import { Link, useParams } from "react-router-dom";
 import { CustomButton, Loader, Modals } from "components/Utilities";
@@ -51,26 +48,25 @@ const HMOEnrolle = () => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchHospitals, { loading, error, variables }] = useLazyQuery(
+  const [fetchHospitals, { loading, data, error, variables }] = useLazyQuery(
     getProviders,
     {
       variables: { userTypeId: id },
     }
   );
-  const onSubmit = () => console.log("onSubmit");
+
   const [openAddHcp, setOpenAddHcp] = useState(false);
   useEffect(() => {
-    fetchHospitals()
-      .then(({ data }) => {
-        if (data) {
-          setHospitals(data?.getProviders?.provider || []);
-          setPageInfo(data?.getProviders?.pageInfo || {});
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [fetchHospitals]);
+    fetchHospitals();
+    try {
+      if (data) {
+        setHospitals(data?.getProviders?.provider || []);
+        setPageInfo(data?.getProviders?.pageInfo || {});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fetchHospitals, data]);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -122,16 +118,9 @@ const HMOEnrolle = () => {
                 dataPageInfo={pageInfo}
               >
                 {hospitals.map((row) => {
-                  const {
-                    _id,
-                    profileUrl,
+                  const { _id, userCount, partnerCount, enrolleeCount, name } =
+                    row;
 
-                    userCount,
-                    partnerCount,
-                    enrolleeCount,
-                    name,
-                  } = row;
-                  console.log(partnerCount);
                   return (
                     <TableRow
                       hover
@@ -139,7 +128,7 @@ const HMOEnrolle = () => {
                       tabIndex={-1}
                       key={_id}
                       style={{ cursor: "pointer" }}
-                    //   onClick={() => patientConsultation(_id)}
+                      //   onClick={() => patientConsultation(_id)}
                     >
                       <TableCell
                         align="left"
@@ -194,8 +183,8 @@ const HMOEnrolle = () => {
                             {partnerCount === 0
                               ? partnerCount
                               : partnerCount > 0
-                                ? partnerCount
-                                : "NA"}
+                              ? partnerCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
