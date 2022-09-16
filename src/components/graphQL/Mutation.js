@@ -116,6 +116,25 @@ export const regeneratePartnerProfileUrl = gql`
     }
   }
 `;
+export const regenerateProviderProfileUrl = gql`
+  mutation regenerateProviderProfileUrl($id: String!) {
+    regenerateProviderProfileUrl(data: { id: $id }) {
+      provider {
+        _id
+        name
+        icon
+        userTypeId
+        profileUrl
+        createdAt
+        updatedAt
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 export const deleteIllness = gql`
   mutation deleteIllness($id: String!) {
     deleteIllness(data: { id: $id }) {

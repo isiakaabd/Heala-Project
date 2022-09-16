@@ -27,7 +27,7 @@ import { defaultPageInfo } from "helpers/mockData";
 import { trucateString } from "helpers/filterHelperFunctions";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { getProviders, getPartners } from "components/graphQL/useQuery";
-import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
+import { regenerateProviderProfileUrl } from "components/graphQL/Mutation";
 import { useActions } from "components/hooks/useActions";
 import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
@@ -38,7 +38,9 @@ const HospitalPage = () => {
   const theme = useTheme();
   const { id } = useParams();
   const { patientConsultation } = useActions();
-  const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
+  const [regenerate, { loading: load }] = useMutation(
+    regenerateProviderProfileUrl
+  );
   const [hospitals, setHospitals] = useState([]);
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -51,26 +53,42 @@ const HospitalPage = () => {
     active: theme.palette.primary.dark,
   };
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [fetchHospitals, { loading, error, variables }] = useLazyQuery(
+  const [ids, setIds] = useState("");
+  const [fetchHospitals, { loading, error, data, variables }] = useLazyQuery(
     getProviders,
     {
       variables: { userTypeId: id },
     }
   );
-  const onSubmit = () => console.log("onSubmit");
+  const handleGenerateLink = (id) => {
+    setIds(id);
+    regenerate({
+      variables: {
+        id,
+      },
+      refetchQueries: [
+        getProviders,
+        {
+          variables: {
+            userTypeId: id,
+          },
+        },
+      ],
+    });
+  };
+
   const [openAddHcp, setOpenAddHcp] = useState(false);
   useEffect(() => {
-    fetchHospitals()
-      .then(({ data }) => {
-        if (data) {
-          setHospitals(data?.getProviders?.provider || []);
-          setPageInfo(data?.getProviders?.pageInfo || {});
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [fetchHospitals]);
+    fetchHospitals();
+    try {
+      if (data) {
+        setHospitals(data?.getProviders?.provider || []);
+        setPageInfo(data?.getProviders?.pageInfo || {});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [data]);
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -167,8 +185,8 @@ const HospitalPage = () => {
                             {userCount === 0
                               ? userCount
                               : userCount > 0
-                                ? userCount
-                                : "NA"}
+                              ? userCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -184,8 +202,8 @@ const HospitalPage = () => {
                             {doctorCount === 0
                               ? doctorCount
                               : doctorCount > 0
-                                ? doctorCount
-                                : "NA"}
+                              ? doctorCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -201,8 +219,8 @@ const HospitalPage = () => {
                             {partnerCount === 0
                               ? partnerCount
                               : partnerCount > 0
-                                ? partnerCount
-                                : "NA"}
+                              ? partnerCount
+                              : "NA"}
                           </Typography>
                         </Link>
                       </TableCell>
@@ -229,13 +247,16 @@ const HospitalPage = () => {
                               <Copy name="Profile Link" text={profileUrl} />
                             </div>
                           </Typography>
+                        ) : (load && ids === _id) ||
+                          (loading && ids === _id) ? (
+                          <Loader />
                         ) : (
                           <Button
                             variant="contained"
                             disableRipple
                             sx={{ width: "50%" }}
                             className={`${classes.tableBtn} ${classes.redBtn}`}
-                          // onClick={() => handleGenerateLink(_id)}
+                            onClick={() => handleGenerateLink(_id)}
                           >
                             Generate Link
                           </Button>

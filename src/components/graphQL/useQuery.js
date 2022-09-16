@@ -1507,6 +1507,7 @@ export const getProviders = gql`
         enrolleeCount
         partnerCount
         createdAt
+        profileUrl
         updatedAt
       }
       pageInfo {

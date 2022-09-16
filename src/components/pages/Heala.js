@@ -130,7 +130,6 @@ const Heala = () => {
                     partnersCount,
                     name,
                   } = row;
-
                   return (
                     <TableRow
                       hover
