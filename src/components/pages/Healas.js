@@ -40,7 +40,6 @@ const Healas = () => {
   useEffect(() => {
     fetchHospitals()
       .then(({ data }) => {
-        console.log(data);
         if (data) {
           setHospitals(data?.getProviders?.provider || []);
           setPageInfo(data?.getProviders?.pageInfo || {});
@@ -179,7 +178,7 @@ const Healas = () => {
                         disableRipple
                         sx={{ width: "50%" }}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
-                        // onClick={() => handleGenerateLink(_id)}
+                      // onClick={() => handleGenerateLink(_id)}
                       >
                         Generate Link
                       </Button>
