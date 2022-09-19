@@ -37,9 +37,9 @@ const HospitalRow = ({ index, rowData }) => {
       {/* <TableCell align="left" className={classes.tableCell}>
         {email ? email : "No email"}
       </TableCell> */}
-      <TableCell align="left" className={classes.tableCell}>
+      {/* <TableCell align="left" className={classes.tableCell}>
         {plans ? plans : "Null"}
-      </TableCell>
+      </TableCell> */}
       <TableCell align="left" className={classes.tableCell}>
         <Link to={`/plans/hospitals/${_id}`}>
           <Button className={classes.viewBtn} endIcon={<ArrowForwardIosIcon />}>

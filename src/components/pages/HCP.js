@@ -18,6 +18,7 @@ import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import {
   docVerifyStatusFilterBy,
   QualificationOptions,
+  specializationOptions,
 } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -101,7 +102,7 @@ const HCP = () => {
     try {
       deleteVar(variables);
       setS(value);
-      const filterVariables = { qualification: value };
+      const filterVariables = { specialization: value };
 
       filterData(filterVariables, {
         fetchData: fetchVerifications,
@@ -177,10 +178,10 @@ const HCP = () => {
                 onHandleChange={(e) => onFilterStatusChanges(e?.target?.value)}
                 onClickClearBtn={() => onFilterStatusChanges("")}
                 options={[
-                  { key: "Qualification", value: "" },
-                  ...QualificationOptions,
+                  { key: "Specialization", value: "" },
+                  ...specializationOptions,
                 ]}
-                name="qualification"
+                name="specialization"
                 // placeholder="Specialization"
                 value={s}
                 hasClearBtn={true}
@@ -211,6 +212,7 @@ const HCP = () => {
                       status,
                       qualification,
                       doctorData,
+                      specialization,
                       _id,
                     } = row;
                     const isItemSelected = isSelected(_id, selectedRows);
@@ -289,7 +291,7 @@ const HCP = () => {
                           {doctorData?.lastName}
                         </TableCell>
                         <TableCell align="left" className={classes.tableCell}>
-                          {qualification?.degree}
+                          {doctorData?.specialization}
                         </TableCell>
                         <TableCell
                           align="left"
@@ -314,23 +316,6 @@ const HCP = () => {
                         <TableCell align="left" className={classes.tableCell}>
                           {dateMoment(qualification?.year)}
                         </TableCell>
-
-                        {/* <TableCell>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            style={{
-                              whiteSpace: "nowrap",
-                              padding: "5% 50%",
-                              marginLeft: "-10%",
-                            }}
-                            component={Link}
-                            endIcon={<ArrowForwardIosIcon />}
-                            to={`/verification/view/${_id}`}
-                          >
-                            View Verification{" "}
-                          </Button>
-                        </TableCell> */}
                       </TableRow>
                     );
                   })}

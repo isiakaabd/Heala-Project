@@ -3,7 +3,6 @@ import t from "prop-types";
 import { Formik, Form } from "formik";
 import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import useAlert from "hooks/useAlert";
 import { useMutation } from "@apollo/client";
 import { CustomButton } from "components/Utilities";
@@ -69,7 +68,7 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
       validateOnMount={false}
       validateOnBlur={true}
     >
-      {({ isSubmitting, dirty, isValid, setFieldValue, setValues }) => {
+      {({ isSubmitting, setFieldValue }) => {
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Grid container direction="column" gap={2}>
@@ -95,7 +94,7 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
                   placeholder="Enter email address"
                 />
               </Grid>
-              <Grid item container direction="column" gap={1}>
+              {/* <Grid item container direction="column" gap={1}>
                 <FormikControl
                   control="input"
                   label="Phone number"
@@ -103,8 +102,8 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
                   name="phone"
                   placeholder="Enter phone number"
                 />
-              </Grid>
-              <Grid item container direction="column" gap={1}>
+              </Grid> */}
+              {/* <Grid item container direction="column" gap={1}>
                 <FormikControl
                   control="input"
                   label="Address"
@@ -112,7 +111,7 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
                   name="address"
                   placeholder="Address"
                 />
-              </Grid>
+              </Grid> */}
 
               {/* <Grid item container direction="column" gap={1}>
                 <FormikControl
@@ -141,7 +140,7 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
                   setFieldValue={setFieldValue}
                 />
               </Grid>
-              <Grid item container>
+              <Grid item container sx={{ mt: 4 }}>
                 <CustomButton
                   title={type === "edit" ? "Update HMO" : "Add HMO"}
                   width="100%"
