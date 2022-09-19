@@ -423,7 +423,7 @@ const ViewHCP = () => {
                 type={trasparentButton}
                 width="auto"
                 component={Link}
-                to={`/hcps/${doctorData && doctorData._id}`}
+                to={`/hcps/${doctorData?._id}`}
               />
             </Grid>
           </Grid>
@@ -501,7 +501,7 @@ const ViewHCP = () => {
               <Grid item>
                 <Typography variant="h5">License</Typography>
               </Grid>
-              {license && license.number ? (
+              {license?.number ? (
                 <Grid
                   item
                   container
@@ -514,28 +514,24 @@ const ViewHCP = () => {
                   }}
                   gap={2}
                 >
-                  {license.number && (
-                    <Grid item className={classes.link}>
-                      {license.number}
-                    </Grid>
-                  )}
-                  {license.type && (
-                    <Grid item className={classes.link}>
-                      {license.type}
-                    </Grid>
-                  )}
-                  {license.image && (
-                    <Grid item>
-                      <a
-                        href={license.image}
-                        rel="noreferrer"
-                        className={classes.link}
-                        target="_blank"
-                      >
-                        <span>IMG</span>
-                      </a>
-                    </Grid>
-                  )}
+                  <Grid item className={classes.link}>
+                    {license?.number}
+                  </Grid>
+
+                  <Grid item className={classes.link}>
+                    {license?.type}
+                  </Grid>
+
+                  <Grid item>
+                    <a
+                      href={license?.image}
+                      rel="noreferrer"
+                      className={classes.link}
+                      target="_blank"
+                    >
+                      <span>IMG</span>
+                    </a>
+                  </Grid>
                 </Grid>
               ) : (
                 <Grid item className={classes.link}>
@@ -694,7 +690,7 @@ const ViewHCP = () => {
                   <CustomButton
                     title={
                       doctorData?.providerId === reference?.reference_code ||
-                        updateState === "Updated"
+                      updateState === "Updated"
                         ? "Updated"
                         : "Update Provider"
                     }

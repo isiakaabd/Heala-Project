@@ -28,7 +28,7 @@ const AddEditHMOModal = ({
   const classes = useStyles();
 
   const style = {
-    height: "95vh",
+    height: "auto",
     position: "absolute",
     top: "50%",
     left: "50%",
