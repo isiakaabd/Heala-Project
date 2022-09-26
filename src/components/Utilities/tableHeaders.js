@@ -161,24 +161,20 @@ export const financeHeader2 = [
 export const payoutHeaderss1 = [
   {
     id: 234,
-    label: "Amount",
+    label: "Doctor",
   },
   {
     id: 235,
-    label: "Customer",
+    label: "Provider",
   },
   {
     id: 2350,
-    label: "Provider",
+    label: "Amount",
   },
   {
     id: 2,
     label: "Received On",
   },
-  /* {
-    id: 4,
-    label: "Consultation",
-  }, */
 ];
 export const referralHeader = [
   {
@@ -261,23 +257,20 @@ export const hmoPlansTableHeader = [
 export const payoutHeader = [
   {
     id: 0,
-    label: "Date",
+    label: "Doctor",
   },
   {
     id: 1,
-    label: "Time",
+    label: "Amount Paid",
   },
   {
     id: 2,
-    label: "Name",
+    label: "Status",
   },
-  {
-    id: 4,
-    label: "Amount Paid out",
-  },
+
   {
     id: 5,
-    label: "Payout status",
+    label: "Paid On",
   },
 ];
 export const payoutHeaders = [
