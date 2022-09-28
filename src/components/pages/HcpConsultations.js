@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import {
-  Avatar,
-  Typography,
-  TableRow,
-  Button,
-  TableCell,
-  Checkbox,
-  Grid,
-} from "@mui/material";
+import { Avatar, TableRow, TableCell, Checkbox, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { NoData, EnhancedTable, EmptyTable } from "components/layouts";

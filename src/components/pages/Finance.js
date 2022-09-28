@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { NoData } from "components/layouts";
-import { Loader, CircularProgressBar, FormSelect } from "components/Utilities";
+import { Loader, CircularProgressBar, Card } from "components/Utilities";
 import { Grid, Typography } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
-import { Card } from "components/Utilities";
-import { useLazyQuery } from "@apollo/client";
-import { getFinanceStats } from "components/graphQL/useQuery";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import {
+  getFinanceStats,
+  getProviders,
+  getFinanceStat,
+} from "components/graphQL/useQuery";
 import {
   financialPercent,
-  selectOptions,
+  finance,
   formatNumber,
 } from "components/Utilities/Time";
+import { CustomSelect } from "components/validation/Select";
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -94,30 +98,72 @@ const useStyles = makeStyles((theme) => ({
 const Finance = () => {
   const theme = useTheme();
   const classes = useStyles();
-  const [range, setRange] = useState("365");
+  const [range, setRange] = useState("7");
   const [totalIncome, setTotalIncome] = useState(0);
+  const [provider, setProvider] = useState("");
+  const [form, setForm] = useState("");
+  const [dropDown, setDropDown] = useState([]);
   const [totalExpenditure, setTotalExpenditure] = useState(0);
   const financialValue = financialPercent(totalIncome, totalExpenditure);
   const [finances, setFinances] = useState(financialValue);
-  const [fetchFinanceStats, { error, loading }] = useLazyQuery(getFinanceStats);
-
+  const [fetchFinanceStats, { error, loading, data: dat }] =
+    useLazyQuery(getFinanceStats);
+  const [fetchFinanceStat, { error: err, loading: load, data }] =
+    useLazyQuery(getFinanceStat);
+  const { data: da } = useQuery(getProviders);
   useEffect(() => {
-    try {
-      fetchFinanceStats({ variables: { q: range } }).then(({ data }) => {
-        if (!data) throw Error("couldn't fetch data");
-        const { subscriptionIncome, totalPayout } = data.getEarningStats;
-        setTotalIncome(subscriptionIncome);
-        setTotalExpenditure(totalPayout);
-        const value = financialPercent(subscriptionIncome, totalPayout);
-        setFinances(value);
+    const x = {
+      key: "All Stats",
+      value: "",
+    };
+    if (da) {
+      const data = da.getProviders.provider;
+      const options = data?.map((i) => {
+        return {
+          key: i.name,
+          value: i._id,
+        };
       });
-    } catch (error) {
-      console.error(error);
+      setDropDown([x, ...options]);
     }
-  }, [range, fetchFinanceStats]);
+  }, [da]);
+  const onChange = async (e) => {
+    setProvider(e.target.value);
+    setForm(e.target.value);
+  };
+  useEffect(() => {
+    if (provider === "") {
+      fetchFinanceStats({ variables: { q: range } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [range, provider]);
+  useEffect(() => {
+    if (dat) {
+      const { subscriptionIncome, totalPayout } = dat.getEarningStats;
+      setTotalIncome(subscriptionIncome);
+      setTotalExpenditure(totalPayout);
+      const value = financialPercent(subscriptionIncome, totalPayout);
+      setFinances(value);
+    }
+  }, [dat]);
+  useEffect(() => {
+    if (provider !== "" && range !== "") {
+      fetchFinanceStat({ variables: { q: range, providerId: provider } });
+    }
+    //eslint-disable-next-line
+  }, [range, provider]);
+  useEffect(() => {
+    if (data) {
+      const { subscriptionIncome, totalPayout } = data?.getEarningStats;
+      setTotalIncome(subscriptionIncome);
+      setTotalExpenditure(totalPayout);
+      const value = financialPercent(subscriptionIncome, totalPayout);
+      setFinances(value);
+    }
+  }, [data]);
 
-  if (loading) return <Loader />;
-  if (error) return <NoData error={error} />;
+  if (loading || load) return <Loader />;
+  if (error || err) return <NoData error={error} />;
 
   return (
     <Grid container gap={3}>
@@ -130,20 +176,38 @@ const Finance = () => {
         flexDirection={{ md: "row", sm: "row", xs: "column" }}
         sx={{ alignItems: "center", justifyContent: "space-between" }}
       >
-        <Grid item container className={classes.flexContainer}>
-          <Grid item>
+        <Grid
+          item
+          container
+          alignItems="center"
+          className={classes.flexContainer}
+          flexWrap="nowrap"
+        >
+          <Grid item flex={1}>
             <Typography variant="h1" color="#2D2F39">
               Earning
             </Typography>
           </Grid>
-          <Grid item>
-            <FormSelect
-              placeholder="Select days"
-              value={range}
-              onChange={(e) => setRange(e?.target?.value)}
-              options={selectOptions}
-              name="finance"
-            />
+          <Grid item sx={{ mb: 2 }}>
+            <Grid container gap={2}>
+              <Grid item>
+                <CustomSelect
+                  value={form}
+                  onChange={onChange}
+                  options={dropDown}
+                  name="availability-dropdown"
+                />
+              </Grid>
+              <Grid item>
+                <CustomSelect
+                  placeholder="Select days"
+                  value={range}
+                  onChange={(e) => setRange(e?.target?.value)}
+                  options={finance}
+                  name="finance"
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Grid

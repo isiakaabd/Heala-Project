@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Grid,
   Button,
@@ -25,7 +25,7 @@ import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
-import { getEarningData } from "components/graphQL/useQuery";
+import { getEarningData, getProviders } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -124,25 +124,40 @@ const Financetable = () => {
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
+  const [fetch, { data: d }] = useLazyQuery(getProviders);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
   const [fetchEarningData, { loading, data, error }] =
     useLazyQuery(getEarningData);
 
+  const fetchProvider = useCallback(async (id) => {
+    // const { data } = await fetch({
+    //   variables: {
+    //     providerId: id,
+    //   },
+    // });
+    console.log(data);
+    return id;
+  }, []);
+  // useEffect(() => {
+  //   fetch({
+  //     variables: {
+  //       providerId,
+  //     },
+  //   });
+  // }, []);
   useEffect(() => {
     fetchEarningData({
       variables: {
-        first: pageInfo.limit,
+        first: 10,
       },
       notifyOnNetworkStatusChange: true,
     });
   }, [fetchEarningData, pageInfo]);
 
   useEffect(() => {
-    if (data) {
-      setEarning(data.getEarningStats.earningData.data);
-      setPageInfo(data.getEarningStats.earningData.PageInfo);
-    }
+    setEarning(data?.getEarningStats?.earningData?.data);
+    setPageInfo(data?.getEarningStats?.earningData?.PageInfo);
   }, [earning, data]);
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -156,7 +171,7 @@ const Financetable = () => {
     >
       <>
         <TableLayout>
-          {earning.length > 0 ? (
+          {earning?.length > 0 ? (
             <Grid item container>
               <EnhancedTable
                 headCells={payoutHeaderss1}
@@ -172,11 +187,18 @@ const Financetable = () => {
                 }}
               >
                 {earning.map((row, index) => {
-                  const { createdAt, providerId, balance, doctorData } = row;
-                  const { firstName, picture, lastName } = doctorData[0] || {};
+                  const {
+                    createdAt,
+                    consultationId,
+                    providerId,
+                    balance,
+                    doctorData,
+                  } = row;
+
+                  const { firstName, lastName } = doctorData[0] || {};
                   const isItemSelected = isSelected(row._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  // const x = fetchProvider(providerId);
                   return (
                     <TableRow
                       hover
@@ -214,27 +236,24 @@ const Financetable = () => {
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
-                        {formatNumber(balance.toFixed(2))}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
                         {doctorData && doctorData[0] !== {} ? (
                           <div
                             style={{
                               height: "100%",
                               display: "flex",
-                              alignItems: "center",
+                              alignItems: "left",
                             }}
                           >
-                            <span style={{ fontSize: "1.25rem" }}>
-                              {doctorData &&
-                                `${firstName && firstName} ${
-                                  lastName && lastName
-                                }`}
-                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>{`${
+                              firstName && firstName
+                            } ${lastName}`}</span>
                           </div>
                         ) : (
-                          "No name"
+                          "No Name"
                         )}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {providerId}
                       </TableCell>
                       <TableCell
                         id={labelId}
@@ -242,7 +261,7 @@ const Financetable = () => {
                         align="left"
                         className={classes.tableCell}
                       >
-                        {providerId}
+                        {formatNumber(balance.toFixed(2))}
                       </TableCell>
 
                       <TableCell

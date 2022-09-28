@@ -252,17 +252,6 @@ const Payout = () => {
                         align="left"
                         className={classes.tableCell}
                       >
-                        {dateMoment(createdAt)}
-                      </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                      >
-                        {timeMoment(createdAt)}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
                         {row?.doctorData && row?.doctorData[0] !== {} ? (
                           <div
                             style={{
@@ -273,20 +262,26 @@ const Payout = () => {
                           >
                             <span style={{ fontSize: "1.25rem" }}>{`${
                               firstName && firstName
-                            } ${lastName && lastName}`}</span>
+                            } ${lastName}`}</span>
                           </div>
                         ) : (
                           "No Name"
                         )}
                       </TableCell>
                       <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {amount}
+                      </TableCell>
+
+                      <TableCell
                         align="left"
                         className={classes.tableCell}
                         style={{ color: theme.palette.common.red }}
                       >
-                        {amount}
-                      </TableCell>
-                      <TableCell align="left" className={classes.tableCell}>
                         <Chip
                           label={status}
                           className={classes.badge}
@@ -305,6 +300,9 @@ const Payout = () => {
                                 : theme.palette.common.red,
                           }}
                         />
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
                       </TableCell>
                     </TableRow>
                   );

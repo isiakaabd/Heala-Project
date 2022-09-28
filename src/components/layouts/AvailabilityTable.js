@@ -356,8 +356,9 @@ const AvailabilityTable = () => {
               >
                 {availabilities?.map((row, index) => {
                   const { _id, doctorData, day, times, doctor } = row;
-                  const startTime = hours(times[0].start);
-                  const endTime = hours(times[times.length - 1].stop);
+
+                  const startTime = hours(times && times[0]?.start);
+                  const endTime = hours(times && times[times?.length - 1].stop);
 
                   if (doctorData?.firstName) {
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -492,19 +493,19 @@ const AvailabilityTable = () => {
         <Grid item container gap={1}>
           {times
             ? times?.map((time, ind) => {
-              const { start, stop } = time;
-              return (
-                <Chip
-                  key={ind}
-                  label={`${hours(start)} - ${hours(stop)} `}
-                  className={classes.badge}
-                  style={{
-                    background: theme.palette.common.lightRed,
-                    color: theme.palette.common.red,
-                  }}
-                />
-              );
-            })
+                const { start, stop } = time;
+                return (
+                  <Chip
+                    key={ind}
+                    label={`${hours(start)} - ${hours(stop)} `}
+                    className={classes.badge}
+                    style={{
+                      background: theme.palette.common.lightRed,
+                      color: theme.palette.common.red,
+                    }}
+                  />
+                );
+              })
             : "No Time"}
         </Grid>
       </Modals>
