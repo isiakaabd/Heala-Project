@@ -131,7 +131,6 @@ const Finance = () => {
     setProvider(e.target.value);
     setForm(e.target.value);
   };
-  console.log(provider);
   useEffect(() => {
     if (provider === "") {
       fetchFinanceStats({ variables: { q: range } });
