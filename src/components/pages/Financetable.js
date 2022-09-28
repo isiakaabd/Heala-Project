@@ -139,13 +139,7 @@ const Financetable = () => {
     console.log(data);
     return id;
   }, []);
-  // useEffect(() => {
-  //   fetch({
-  //     variables: {
-  //       providerId,
-  //     },
-  //   });
-  // }, []);
+
   useEffect(() => {
     fetchEarningData({
       variables: {
@@ -187,13 +181,7 @@ const Financetable = () => {
                 }}
               >
                 {earning.map((row, index) => {
-                  const {
-                    createdAt,
-                    consultationId,
-                    providerId,
-                    balance,
-                    doctorData,
-                  } = row;
+                  const { createdAt, providerId, balance, doctorData } = row;
 
                   const { firstName, lastName } = doctorData[0] || {};
                   const isItemSelected = isSelected(row._id, selectedRows);

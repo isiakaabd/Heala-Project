@@ -136,7 +136,7 @@ const Finance = () => {
       fetchFinanceStats({ variables: { q: range } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [range, provider]);
+  }, [range, provider, fetchFinanceStats]);
   useEffect(() => {
     if (dat) {
       const { subscriptionIncome, totalPayout } = dat.getEarningStats;
@@ -145,7 +145,7 @@ const Finance = () => {
       const value = financialPercent(subscriptionIncome, totalPayout);
       setFinances(value);
     }
-  }, [dat]);
+  }, [dat, provider]);
   useEffect(() => {
     if (provider !== "" && range !== "") {
       fetchFinanceStat({ variables: { q: range, providerId: provider } });
