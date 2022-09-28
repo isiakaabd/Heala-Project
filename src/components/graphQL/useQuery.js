@@ -275,6 +275,14 @@ export const getFinanceStats = gql`
     }
   }
 `;
+export const getFinanceStat = gql`
+  query getEarningStats($q: String, $page: Int, $providerId: String) {
+    getEarningStats(q: $q, page: $page, filterBy: { providerId: $providerId }) {
+      subscriptionIncome
+      totalPayout
+    }
+  }
+`;
 // pageInfo {
 //   ...pageDetails
 // }
@@ -436,29 +444,19 @@ export const getConsultations = gql`
         discomfortLevel
         firstNotice
         doctor
-        type
-        status
-        contactMedium
-        doctorData
-        patientData
+        consultationDuration
         diagnosis {
           ailment
           severity
         }
         doctorNote
-        prescription {
-          drugName
-          dosageQuantity
-          dosage
-          dosageFrequency {
-            day
-            duration
-          }
-          mode
-        }
+        declineReason
         createdAt
-        referralId
         updatedAt
+        patientData
+        doctorData
+        referralId
+        providerId
       }
       pageInfo {
         ...pageDetails
@@ -474,7 +472,6 @@ export const getDocConsult = gql`
         _id
         patient
         consultationOwner
-        contactMedium
         symptoms {
           name
         }
@@ -482,26 +479,19 @@ export const getDocConsult = gql`
         discomfortLevel
         firstNotice
         doctor
+        consultationDuration
         diagnosis {
           ailment
           severity
         }
         doctorNote
-        prescription {
-          drugName
-          dosageQuantity
-          dosage
-          dosageFrequency {
-            day
-            duration
-          }
-          mode
-        }
+        declineReason
         createdAt
-        patientData
         updatedAt
+        patientData
+        doctorData
         referralId
-        status
+        providerId
       }
       pageInfo {
         ...pageDetails

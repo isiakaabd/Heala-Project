@@ -5,7 +5,7 @@ import DoctorsIcon from "components/Icons/DoctorsIcon";
 import FinanceIcon from "components/Icons/FinanceIcon";
 import PatientsIcon from "components/Icons/PatientsIcon";
 import VerifiedIcon from "components/Icons/VerifiedIcon";
-import PartnersIcon from "components/Icons/PartnersIcon";
+import TabIcon from "components/Icons/TabIcon";
 import SettingsIcon from "components/Icons/SettingsIcon";
 import RefferalsIcon from "components/Icons/RefferalsIcon";
 import DashboardIcon from "components/Icons/DashboardIcon";
@@ -31,6 +31,12 @@ export const menus = [
     path: "/hcps",
   },
   {
+    id: 7,
+    title: "Doctor Verification",
+    icon: <TabIcon />,
+    path: "/verification",
+  },
+  {
     id: 12,
     title: "Provider Services",
     icon: <LabelIcon />,
@@ -48,12 +54,7 @@ export const menus = [
   //   icon: <PartnersIcon sx={{ height: "25px", width: "25px" }} />,
   //   path: "/partners",
   // },
-  {
-    id: 7,
-    title: "Doctor Verification",
-    icon: <VerifiedIcon />,
-    path: "/verification",
-  },
+
   {
     id: 8,
     title: "Finance",

@@ -139,6 +139,12 @@ export const selectOptions = [
   { key: "Nov", value: "11" },
   { key: "Dec", value: "12" },
 ];
+export const finance = [
+  { key: "Last 7 days", value: "7" },
+  { key: "Last 30 days", value: "30" },
+  { key: "Last 90 days", value: "90" },
+  { key: "Last 365 days", value: "365" },
+];
 export const formatNumber = (num) => {
   return new Intl.NumberFormat().format(num);
 };
