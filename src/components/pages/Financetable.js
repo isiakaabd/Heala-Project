@@ -181,7 +181,13 @@ const Financetable = () => {
                 }}
               >
                 {earning.map((row, index) => {
-                  const { createdAt, providerId, balance, doctorData } = row;
+                  const {
+                    createdAt,
+                    consultationId,
+                    providerId,
+                    balance,
+                    doctorData,
+                  } = row;
 
                   const { firstName, lastName } = doctorData[0] || {};
                   const isItemSelected = isSelected(row._id, selectedRows);
@@ -199,7 +205,7 @@ const Financetable = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         history.push(
-                          `/hcps/${doctorData[0]._id}/consultations`
+                          `/hcps/${doctorData[0]._id}/consultations/case-notes/${consultationId}`
                         );
                       }}
                     >
