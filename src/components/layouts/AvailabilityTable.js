@@ -109,7 +109,6 @@ const AvailabilityTable = () => {
 
   const classes = useStyles();
   const theme = useTheme();
-  console.log(availabilities);
   // redux
   const { selectedRows } = useSelector((state) => state.tables);
   const { setSelectedRows } = useActions();
