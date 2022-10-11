@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { EmptyTable, NoData } from "components/layouts";
-import {
-  Grid,
-  Button,
-  Avatar,
-  Typography,
-  TableCell,
-  TableRow,
-} from "@mui/material";
+import { Grid, Typography, Button, TableCell, TableRow } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import { Link, useParams } from "react-router-dom";
-import { CustomButton, Loader, Modals } from "components/Utilities";
+import { CustomButton, Loader } from "components/Utilities";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useTheme } from "@mui/material/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable } from "components/layouts";
 import { useStyles } from "styles/partnersPageStyles";
 import Copy from "components/Copy";
@@ -24,7 +16,7 @@ import { defaultPageInfo } from "helpers/mockData";
 import { trucateString } from "helpers/filterHelperFunctions";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { getProviders, getPartners } from "components/graphQL/useQuery";
-import { regeneratePartnerProfileUrl } from "components/graphQL/Mutation";
+import { regenerateProviderProfileUrl } from "components/graphQL/Mutation";
 import { useActions } from "components/hooks/useActions";
 import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
@@ -35,7 +27,9 @@ const HMOEnrolle = () => {
   const theme = useTheme();
   const { id } = useParams();
   const { patientConsultation } = useActions();
-  const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
+  const [regenerate, { loading: load }] = useMutation(
+    regenerateProviderProfileUrl
+  );
   const [hospitals, setHospitals] = useState([]);
   const darkButtonType = {
     background: theme.palette.primary.main,
@@ -56,6 +50,7 @@ const HMOEnrolle = () => {
   );
 
   const [openAddHcp, setOpenAddHcp] = useState(false);
+  const [ids, setIds] = useState("");
   useEffect(() => {
     fetchHospitals();
     try {
@@ -67,6 +62,22 @@ const HMOEnrolle = () => {
       console.error(error);
     }
   }, [fetchHospitals, data]);
+  const handleGenerateLink = (id) => {
+    setIds(id);
+    regenerate({
+      variables: {
+        id,
+      },
+      refetchQueries: [
+        getProviders,
+        {
+          variables: {
+            userTypeId: id,
+          },
+        },
+      ],
+    });
+  };
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -118,8 +129,14 @@ const HMOEnrolle = () => {
                 dataPageInfo={pageInfo}
               >
                 {hospitals.map((row) => {
-                  const { _id, userCount, partnerCount, enrolleeCount, name } =
-                    row;
+                  const {
+                    _id,
+                    userCount,
+                    profileUrl,
+                    partnerCount,
+                    enrolleeCount,
+                    name,
+                  } = row;
 
                   return (
                     <TableRow
@@ -128,7 +145,6 @@ const HMOEnrolle = () => {
                       tabIndex={-1}
                       key={_id}
                       style={{ cursor: "pointer" }}
-                      //   onClick={() => patientConsultation(_id)}
                     >
                       <TableCell
                         align="left"
@@ -144,6 +160,45 @@ const HMOEnrolle = () => {
                         >
                           <span style={{ fontSize: "1.25rem" }}>{name}</span>
                         </div>
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ maxWidth: "20rem" }}
+                      >
+                        {profileUrl ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "1rem",
+                            }}
+                          >
+                            <Typography
+                              variant="h3"
+                              classes={{ root: classes.title }}
+                            >
+                              {trucateProfileLink(profileUrl, 20)}
+                            </Typography>
+                            <Copy name="Profile Link" text={profileUrl} />
+                          </div>
+                        ) : (load && ids === _id) || loading ? (
+                          <Grid item container justifyContent="left">
+                            <Loader />
+                          </Grid>
+                        ) : (
+                          <div style={{ width: "50%" }}>
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              sx={{ width: "50%" }}
+                              className={`${classes.tableBtn} ${classes.redBtn}`}
+                              onClick={() => handleGenerateLink(_id)}
+                            >
+                              Generate Link
+                            </Button>
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
