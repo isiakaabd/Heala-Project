@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { EmptyTable, NoData } from "components/layouts";
-import {
-  Grid,
-  Button,
-  Avatar,
-  Typography,
-  TableCell,
-  TableRow,
-} from "@mui/material";
+import { Grid, Button, Typography, TableCell, TableRow } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
-import FormikControl from "components/validation/FormikControl";
-import { Formik, Form } from "formik";
-import { addDoctorValidationSchema } from "helpers/validationSchemas";
 import CompoundSearch from "components/Forms/CompoundSearch";
 import { Link, useParams } from "react-router-dom";
-import { CustomButton, Loader, Modals } from "components/Utilities";
+import { CustomButton, Loader } from "components/Utilities";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useTheme } from "@mui/material/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { EnhancedTable } from "components/layouts";
 import { useStyles } from "styles/partnersPageStyles";
 import Copy from "components/Copy";
 import { trucateProfileLink } from "helpers/filterHelperFunctions";
 import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo } from "helpers/mockData";
-import { trucateString } from "helpers/filterHelperFunctions";
+import { defaultPageInfo, HealaSearchOptions } from "helpers/mockData";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { getProviders, getPartners } from "components/graphQL/useQuery";
+import { getProviders } from "components/graphQL/useQuery";
 import { regenerateProviderProfileUrl } from "components/graphQL/Mutation";
 import { useActions } from "components/hooks/useActions";
-import { HealaSearchOptions } from "helpers/mockData";
 import { HealGgetSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
@@ -88,6 +75,7 @@ const HealaPage = () => {
     } catch (error) {
       console.error(error);
     }
+    //eslint-disable-next-line
   }, [data]);
 
   if (error) return <NoData error={error} />;
