@@ -422,18 +422,7 @@ const HcpCaseNotes = () => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container justifyContent="flex-end">
-            {prescription && (
-              <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
-                <CustomButton
-                  title="View Prescription"
-                  width="100%"
-                  type={buttonType}
-                  onClick={handleDialogOpen}
-                />
-              </Grid>
-            )}
-          </Grid>
+
           <Grid
             item
             container
@@ -451,18 +440,35 @@ const HcpCaseNotes = () => {
               <Grid item>
                 <Typography variant="body1" style={{ lineHeight: 1.85 }}>
                   {consultationDuration
-                    ? `${Number(consultationDuration) > 60
-                      ? `${secondsToMinutes(
-                        Number(consultationDuration)
-                      )} mins`
-                      : `${consultationDuration} secs`
-                    } `
+                    ? `${
+                        Number(consultationDuration) > 60
+                          ? `${secondsToMinutes(
+                              Number(consultationDuration)
+                            )} mins`
+                          : `${consultationDuration} secs`
+                      } `
                     : "No Value"}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container direction="column" gap={1}></Grid>
-            <Grid item container direction="column" gap={1}></Grid>
+            <Grid item container justifyContent="flex-end" alignItems="center">
+              {prescription && (
+                <Grid
+                  item
+                  container
+                  width={{ md: "50%", xs: "100%", sm: "50%" }}
+                >
+                  <CustomButton
+                    title="View Prescription"
+                    width="100%"
+                    type={buttonType}
+                    onClick={handleDialogOpen}
+                  />
+                </Grid>
+              )}
+            </Grid>
+            {/* <Grid item container direction="column" gap={1}></Grid>
+            <Grid item container direction="column" gap={1}></Grid> */}
           </Grid>
         </Grid>
       </Grid>
