@@ -127,11 +127,11 @@ export const hmoValidationSchema = Yup.object({
     .email("Enter a valid email")
     .trim()
     .required("Email is required"),
-  phone: Yup.number("Enter your Phone Number")
-    .typeError(" Enter a valid phone number")
-    .min(11, "min value is  11 digits")
-    .required("Phone number is required"),
-  address: Yup.string("Enter HMO address").required(" Address is required"),
+  // phone: Yup.number("Enter your Phone Number")
+  //   .typeError(" Enter a valid phone number")
+  //   .min(11, "min value is  11 digits")
+  //   .required("Phone number is required"),
+  // address: Yup.string("Enter HMO address").required(" Address is required"),
 });
 
 export const addHMOEnrolleeValidationSchema = Yup.object({
