@@ -178,7 +178,6 @@ const AddPartner = ({ open, handleClose, category, CategoryValue, id }) => {
         validateOnBlur={false}
       >
         {({ isSubmitting, isValid, dirty, values, errors, setFieldValue }) => {
-          console.log(errors);
           const { classification, category: cat } = values;
           return (
             <Form style={{ marginTop: "1rem" }}>

@@ -69,7 +69,6 @@ const AddEditHMOForm = ({ type, initialValues, onSuccess }) => {
       validateOnBlur={true}
     >
       {({ isSubmitting, setFieldValue, errors }) => {
-        console.log(errors);
         return (
           <Form style={{ marginTop: "1rem" }}>
             <Grid container direction="column" gap={2}>

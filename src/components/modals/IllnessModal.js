@@ -78,7 +78,6 @@ const IllnessModal = ({
         enableReinitialize
       >
         {({ isSubmitting, isValid, dirty, errors }) => {
-          console.log(errors);
           return (
             <Form style={{ marginTop: "3rem" }}>
               <Grid item container direction="column" gap={3}>
