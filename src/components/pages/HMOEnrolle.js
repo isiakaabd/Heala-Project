@@ -161,45 +161,7 @@ const HMOEnrolle = () => {
                           <span style={{ fontSize: "1.25rem" }}>{name}</span>
                         </div>
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        className={classes.tableCell}
-                        style={{ maxWidth: "20rem" }}
-                      >
-                        {profileUrl ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "1rem",
-                            }}
-                          >
-                            <Typography
-                              variant="h3"
-                              classes={{ root: classes.title }}
-                            >
-                              {trucateProfileLink(profileUrl, 20)}
-                            </Typography>
-                            <Copy name="Profile Link" text={profileUrl} />
-                          </div>
-                        ) : (load && ids === _id) || loading ? (
-                          <Grid item container justifyContent="left">
-                            <Loader />
-                          </Grid>
-                        ) : (
-                          <div style={{ width: "50%" }}>
-                            <Button
-                              variant="contained"
-                              disableRipple
-                              sx={{ width: "50%" }}
-                              className={`${classes.tableBtn} ${classes.redBtn}`}
-                              onClick={() => handleGenerateLink(_id)}
-                            >
-                              Generate Link
-                            </Button>
-                          </div>
-                        )}
-                      </TableCell>
+
                       <TableCell align="left" className={classes.tableCell}>
                         <Link
                           to={`/user-type/hmo/${id}/${_id}/users`}
@@ -243,41 +205,46 @@ const HMOEnrolle = () => {
                           </Typography>
                         </Link>
                       </TableCell>
-                      {/* 
+
                       <TableCell
                         align="left"
                         className={classes.tableCell}
-                        style={{
-                          color: theme.palette.common.grey,
-
-                          width: "15%",
-                        }}
+                        style={{ maxWidth: "20rem" }}
                       >
                         {profileUrl ? (
-                          <Typography
+                          <div
                             style={{
-                              color: theme.palette.common.grey,
-                              maxWidth: "3rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "1rem",
                             }}
-                            sx={{ display: "flex", alignItems: "center" }}
                           >
-                            {trucateProfileLink(profileUrl)}
-                            <div style={{ marginLeft: "1rem" }}>
-                              <Copy name="Profile Link" text={profileUrl} />
-                            </div>
-                          </Typography>
+                            <Typography
+                              variant="h3"
+                              classes={{ root: classes.title }}
+                            >
+                              {trucateProfileLink(profileUrl, 20)}
+                            </Typography>
+                            <Copy name="Profile Link" text={profileUrl} />
+                          </div>
+                        ) : (load && ids === _id) || loading ? (
+                          <Grid item container justifyContent="left">
+                            <Loader />
+                          </Grid>
                         ) : (
-                          <Button
-                            variant="contained"
-                            disableRipple
-                            sx={{ width: "50%" }}
-                            className={`${classes.tableBtn} ${classes.redBtn}`}
-                            // onClick={() => handleGenerateLink(_id)}
-                          >
-                            Generate Link
-                          </Button>
+                          <div style={{ width: "50%" }}>
+                            <Button
+                              variant="contained"
+                              disableRipple
+                              sx={{ width: "50%" }}
+                              className={`${classes.tableBtn} ${classes.redBtn}`}
+                              onClick={() => handleGenerateLink(_id)}
+                            >
+                              Generate Link
+                            </Button>
+                          </div>
                         )}
-                      </TableCell> */}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
