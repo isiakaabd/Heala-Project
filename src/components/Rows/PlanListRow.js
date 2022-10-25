@@ -155,16 +155,6 @@ export const PlanListRow = ({
       sx={{ cursor: "pointer" }}
       onClick={() => handleEditOpenDialog()}
     >
-      <TableCell padding="checkbox">
-        <Checkbox
-          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-          color="primary"
-          checked={isItemSelected}
-          inputProps={{
-            "aria-labelledby": labelId,
-          }}
-        />
-      </TableCell>
       <TableCell
         id={labelId}
         scope="row"

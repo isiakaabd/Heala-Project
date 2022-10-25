@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
+import { Grid, TableRow, TableCell, Chip } from "@mui/material";
 import {
   Loader,
   /* Search,  */ CustomButton,
@@ -10,8 +10,6 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { roleHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import AddIcon from "@mui/icons-material/Add";
 import { DeleteOrDisable, RoleModal } from "components/modals";
@@ -165,7 +163,6 @@ const Management = () => {
     setId(id);
   };
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
 
   const onConfirm = async () => {
     deleteRoles({ variables: { id }, refetchQueries: [{ query: getRoles }] });
@@ -235,7 +232,7 @@ const Management = () => {
                   headCells={roleHeader}
                   rows={rolesManagements}
                   paginationLabel="subscription per page"
-                  hasCheckbox={true}
+                  hasCheckbox={false}
                   changeLimit={async (e) => {
                     await changeTableLimit(fetchRoles, { first: e });
                   }}
@@ -267,22 +264,6 @@ const Management = () => {
                         key={row._id}
                         selected={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                row.id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
                         <TableCell
                           id={labelId}
                           scope="row"

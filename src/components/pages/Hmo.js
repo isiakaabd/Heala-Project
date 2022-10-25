@@ -23,7 +23,7 @@ const Hmo = () => {
   const [fetchAllHMO, { error, loading, refetch }] = useLazyQuery(
     getProviders,
     {
-      variables: { userTypeId: "61ed2b68e6091400135e3dba" },
+      variables: { userTypeId: "61ed2b68e6091400135e3dba", page: -1 },
     }
   );
 
@@ -64,7 +64,12 @@ const Hmo = () => {
             email,
             iconAlt,
             userTypeId,
+            enrolleeCount,
           } = hmo;
+          const count =
+            (enrolleeCount || 0) < 2
+              ? `${enrolleeCount} member`
+              : `${enrolleeCount} members`;
 
           const editInitialValues = {
             id: _id,
@@ -82,7 +87,7 @@ const Hmo = () => {
                 imgUrl={hmo?.icon}
                 imgAlt={hmo?.name}
                 linkTo={`hmo/${hmo?._id}`}
-                subTitle={"15 Enrollees"}
+                subTitle={`${count}` || "N/A members"}
                 title={hmo?.name}
                 onClickEdit={() => {
                   setEditHMOData(editInitialValues);

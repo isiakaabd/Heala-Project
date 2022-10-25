@@ -71,7 +71,6 @@ import {
   PendingPayout,
   WhiteLabel,
   UserTypes,
-  Providers,
   Financetable,
 } from "components/pages";
 import Hmo from "components/pages/Hmo";
@@ -317,7 +316,6 @@ const Routes = () => {
       <PrivateRoute path="/email" component={Email} />
 
       {/*  =====  DOCTORS VERIFICATION ROUTES STARTS HERE ===== */}
-      {/* <PrivateRoute exactProvide path="/verification" component={HCP} /> */}
 
       <PrivateRoute exact path="/verification" component={HCP} />
 

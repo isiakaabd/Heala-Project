@@ -79,8 +79,8 @@ const CreateEditPlans = ({ type, initialValues, onSuccess }) => {
       onSubmit={(values) =>
         type === "edit"
           ? onUpdateSubmit({
-            ...values,
-          })
+              ...values,
+            })
           : onAddSubmit({ ...values })
       }
       validationSchema={addEditPlansValidationSchema}

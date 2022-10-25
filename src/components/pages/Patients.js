@@ -19,7 +19,6 @@ import {
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 
-import { useSelector } from "react-redux";
 import TableLayout from "components/layouts/TableLayout";
 import { getSearchPlaceholder } from "helpers/func";
 import PatientsRow from "components/Rows/PatientsRow";
@@ -30,7 +29,6 @@ const Patients = () => {
   const [profiles, setProfiles] = useState([]);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
     useLazyQuery(getPatients);
-  const { provider } = useSelector((state) => state.patient);
   const [
     fetchPatientByStatus,
     {
@@ -154,7 +152,7 @@ const Patients = () => {
               headCells={patientsHeadCells}
               rows={profiles}
               paginationLabel="Patients per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPatient, {
                   first: e,

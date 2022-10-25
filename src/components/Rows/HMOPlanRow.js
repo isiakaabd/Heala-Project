@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Loader } from "components/Utilities";
 import { useTheme, makeStyles } from "@mui/styles";
 import { EditDelBtn } from "components/Buttons/EditDelBtn";
-import { Checkbox, TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import StatusPill from "components/Utilities/StatusPill";
 
 const useStyles = makeStyles((theme) => ({
@@ -133,9 +133,6 @@ const useStyles = makeStyles((theme) => ({
 export const HMOPlanRow = ({
   plan,
   isItemSelected,
-  handleSelectedRows,
-  selectedRows,
-  setSelectedRows,
   labelId,
   handleDeleteOpenDialog,
   handleEditOpenDialog,
@@ -156,16 +153,6 @@ export const HMOPlanRow = ({
       sx={{ cursor: "pointer" }}
       onClick={() => handleEditOpenDialog()}
     >
-      <TableCell padding="checkbox">
-        <Checkbox
-          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-          color="primary"
-          checked={isItemSelected}
-          inputProps={{
-            "aria-labelledby": labelId,
-          }}
-        />
-      </TableCell>
       <TableCell
         id={labelId}
         scope="row"
@@ -196,14 +183,14 @@ export const HMOPlanRow = ({
       >
         {planFeaturesArray.length > 0
           ? planFeaturesArray.map((feature, idx) => {
-            return (
-              <StatusPill
-                key={`${feature}-${idx}`}
-                type="success"
-                label={feature}
-              />
-            );
-          })
+              return (
+                <StatusPill
+                  key={`${feature}-${idx}`}
+                  type="success"
+                  label={feature}
+                />
+              );
+            })
           : "No access"}
       </TableCell>
 

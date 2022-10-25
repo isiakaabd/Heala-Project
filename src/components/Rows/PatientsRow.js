@@ -5,15 +5,12 @@ import { isSelected } from "helpers/isSelected";
 import { useHistory } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useStyles } from "styles/patientsPageStyles";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { Checkbox, Chip, TableCell, TableRow } from "@mui/material";
+import { Chip, TableCell, TableRow } from "@mui/material";
 
 const PatientsRow = ({ patientData, labelId }) => {
   const history = useHistory();
   const theme = useTheme();
   const classes = useStyles();
-  const { setSelectedRows } = useActions();
   const {
     _id,
     dociId,
@@ -41,16 +38,6 @@ const PatientsRow = ({ patientData, labelId }) => {
         history.push(`patients/${_id}`);
       }}
     >
-      <TableCell padding="checkbox">
-        <Checkbox
-          onClick={() => handleSelectedRows(_id, selectedRows, setSelectedRows)}
-          color="primary"
-          checked={isItemSelected}
-          inputProps={{
-            "aria-labelledby": labelId,
-          }}
-        />
-      </TableCell>
       <TableCell
         id={labelId}
         scope="row"
@@ -71,8 +58,9 @@ const PatientsRow = ({ patientData, labelId }) => {
             alignItems: "left",
           }}
         >
-          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${lastName && lastName
-            }`}</span>
+          <span style={{ fontSize: "1.25rem" }}>{`${firstName && firstName} ${
+            lastName && lastName
+          }`}</span>
         </div>
       </TableCell>
       <TableCell align="left" className={classes.tableCell}>

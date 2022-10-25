@@ -3,13 +3,11 @@ import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { Checkbox, TableCell, TableRow, Grid } from "@mui/material";
+import { TableCell, TableRow, Grid } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import { defaultPageInfo } from "helpers/mockData";
 import { useStyles } from "styles/partnersPageStyles";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import {
   changeTableLimit,
   handlePageChange,
@@ -29,7 +27,6 @@ const Illness = () => {
   const theme = useTheme();
   const classes = useStyles();
   const { displayAlert } = useAlert();
-  const { setSelectedRows } = useActions();
   const [partner, setPartners] = useState([]);
   const [deleteId, setDeleteId] = useState("");
   const [illness, setIllness] = useState("");
@@ -161,7 +158,7 @@ const Illness = () => {
                 headCells={illnesssHeadCells}
                 rows={partner}
                 paginationLabel="Partner per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   const res = changeTableLimit(fetchIllness, {
                     first: e,
@@ -179,10 +176,9 @@ const Illness = () => {
                   await setTableData(res, "Failed to change page.");
                 }}
               >
-                {partner.map((row, index) => {
+                {partner.map((row) => {
                   const isItemSelected = isSelected(row.id, selectedRows);
                   const { name, createdAt, _id, description } = row;
-                  const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
@@ -193,22 +189,6 @@ const Illness = () => {
                       key={row._id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}

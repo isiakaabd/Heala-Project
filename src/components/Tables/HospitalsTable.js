@@ -12,9 +12,15 @@ import { useLazyQuery } from "@apollo/client";
 import { getProviders } from "components/graphQL/useQuery";
 import { getDynamicSearchPlaceholder } from "helpers/func";
 import { Loader } from "components/Utilities";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
+import useAlert from "hooks/useAlert";
 
 const HospitalsTable = () => {
   const classes = useStyles();
+  const { displayAlert } = useAlert();
   const [hospitals, setHospitals] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [fetchHospitals, { loading, error, variables }] = useLazyQuery(
@@ -29,13 +35,27 @@ const HospitalsTable = () => {
       .then(({ data }) => {
         if (data) {
           setHospitals(data?.getProviders?.provider || []);
-          setPageInfo(data?.getProviders?.pageInfo || {});
+          setPageInfo(data?.getProviders?.pageInfo || defaultPageInfo);
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   }, [fetchHospitals]);
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setHospitals(data?.getProviders?.provider || []);
+        setPageInfo(data?.getProviders?.pageInfo || defaultPageInfo);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
 
   if (error) return <NoData error={error} />;
   return (
@@ -92,7 +112,22 @@ const HospitalsTable = () => {
               rows={hospitals}
               paginationLabel="Hospitals per page"
               hasCheckbox={false}
+              changeLimit={async (e) => {
+                const res = changeTableLimit(fetchHospitals, {
+                  first: e,
+                });
+                await setTableData(res, "Failed to change table limit.");
+              }}
               dataPageInfo={pageInfo}
+              handlePagination={async (page) => {
+                const res = handlePageChange(
+                  fetchHospitals,
+                  page,
+                  pageInfo,
+                  {}
+                );
+                await setTableData(res, "Failed to change page.");
+              }}
             >
               {hospitals.map((row, index) => {
                 return <HospitalRow key={index} index={index} rowData={row} />;

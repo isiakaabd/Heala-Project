@@ -273,6 +273,26 @@ export const payoutHeader = [
     label: "Paid On",
   },
 ];
+
+export const doctorPayoutHeader = [
+  {
+    id: 0,
+    label: "Paid On",
+  },
+  {
+    id: 2,
+    label: " Doctor",
+  },
+
+  {
+    id: 5,
+    label: "Amount",
+  },
+  {
+    id: 6,
+    label: "Status",
+  },
+];
 export const payoutHeaders = [
   /* {
     id: 1,
@@ -488,7 +508,6 @@ export const hcpPatientsHeadCells = [
   { id: 0, label: "Patient ID" },
   { id: 1, label: "Patient Name" },
   { id: 2, label: "Gender" },
-  { id: 2, label: "" },
 ];
 
 export const testTableHeadCells = [

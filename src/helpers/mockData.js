@@ -18,9 +18,6 @@ export const searchOptions = [
 ];
 export const HealaSearchOptions = [{ key: "By ID", value: "id" }];
 
-
-
-
 export const hmoSearchOptions = [
   { key: "By HMO ID", value: "hmoId" },
   { key: "By first name", value: "firstName" },
@@ -323,7 +320,6 @@ export const hospitalData = [
     email: "johndoe@test.com",
   },
 ];
-
 
 export const QualificationOptions = [
   {

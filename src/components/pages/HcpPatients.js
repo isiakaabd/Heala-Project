@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  Avatar,
-  TableRow,
-  Checkbox,
-  TableCell,
-  Button,
-} from "@mui/material";
+import { Grid, Avatar, TableRow, TableCell } from "@mui/material";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { hcpPatientsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
 import { isSelected } from "helpers/isSelected";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { handleSelectedRows } from "helpers/selectedRows";
+import { useHistory, useParams } from "react-router-dom";
 import { Loader } from "components/Utilities";
 import { getDoctorPatients } from "components/graphQL/useQuery";
 import { useLazyQuery } from "@apollo/client";
@@ -69,10 +58,7 @@ const HcpPatients = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
-
   const { hcpId } = useParams();
-
-  const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
 
   const [fetchDoctorsPatients, { loading, error, data }] =
@@ -111,7 +97,7 @@ const HcpPatients = () => {
               headCells={hcpPatientsHeadCells}
               rows={profiles}
               paginationLabel="List Per Page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 await changeTableLimit(fetchDoctorsPatients, {
                   first: e,
@@ -143,18 +129,6 @@ const HcpPatients = () => {
                       history.push(`/patients/${patientData?._id}/profile`);
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell
                       id={labelId}
                       scope="row"

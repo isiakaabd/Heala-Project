@@ -9,21 +9,23 @@ import {
   CustomButton,
 } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
-import { Grid, Checkbox, TableRow, TableCell } from "@mui/material";
+import { Grid, TableRow, TableCell } from "@mui/material";
 import { signup } from "components/graphQL/Mutation";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { adminHeader } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import AddIcon from "@mui/icons-material/Add";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { findAdmin } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
-import { changeTableLimit } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+} from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
+import useAlert from "hooks/useAlert";
 //
 const useStyles = makeStyles((theme) => ({
   FormLabel: {
@@ -130,6 +132,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Administrator = () => {
+  const { displayAlert } = useAlert();
   const classes = useStyles();
   const theme = useTheme();
   const [addAdminUser] = useMutation(signup);
@@ -163,7 +166,6 @@ const Administrator = () => {
     { key: "Super-admin", value: "super-admin" },
   ];
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
 
   const initialValues = {
     email: "",
@@ -173,8 +175,8 @@ const Administrator = () => {
 
   useEffect(() => {
     if (data) {
-      setAdmins(data.accounts.data);
-      setPageInfo(data.accounts.pageInfo);
+      setAdmins(data.accounts.data || []);
+      setPageInfo(data.accounts.pageInfo || defaultPageInfo);
     }
   }, [data]);
 
@@ -216,6 +218,7 @@ const Administrator = () => {
         refetchQueries: [{ query: findAdmin }],
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
     handleAdminClose();
@@ -229,6 +232,19 @@ const Administrator = () => {
   /*   const handleDialogOpen = () => setIsOpen(true); */
   const handleAdminOpen = () => setIsAdmin(true);
   const handleDialogClose = () => setIsOpen(false);
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setAdmins(data.accounts.data || []);
+        setPageInfo(data.accounts.pageInfo || defaultPageInfo);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
+  };
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -271,10 +287,18 @@ const Administrator = () => {
                 headCells={adminHeader}
                 rows={admins}
                 paginationLabel="admin per page"
-                hasCheckbox={true}
-                changeLimit={changeTableLimit}
-                fetchData={fetchAdmins}
+                hasCheckbox={false}
+                changeLimit={async (e) => {
+                  const res = changeTableLimit(fetchAdmins, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
                 dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = handlePageChange(fetchAdmins, page, pageInfo, {});
+                  await setTableData(res, "Failed to change page.");
+                }}
               >
                 {admins.map((row, index) => {
                   const { _id, email, role } = row;
@@ -291,23 +315,6 @@ const Administrator = () => {
                       key={_id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-
                       <TableCell align="left" className={classes.tableCell}>
                         {email}
                       </TableCell>

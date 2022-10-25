@@ -103,10 +103,10 @@ const AddEditHMOEnrolleeForm = ({ type, editInitialValues, onSuccess }) => {
       onSubmit={(values) =>
         type === "edit"
           ? onUpdateSubmit({
-            id: editInitialValues._id,
-            providerId: hmoId,
-            ...values,
-          })
+              id: editInitialValues._id,
+              providerId: hmoId,
+              ...values,
+            })
           : onAddSubmit({ providerId: hmoId, ...values })
       }
       validationSchema={addHMOEnrolleeValidationSchema}

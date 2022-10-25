@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  TableCell,
-  TableRow,
-  Checkbox,
-  Avatar,
-} from "@mui/material";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import { Grid, TableCell, TableRow } from "@mui/material";
 import {
   timeMoment,
   dateMoment,
@@ -17,10 +9,7 @@ import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { financeHeader2 } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
@@ -92,7 +81,6 @@ const SubscriptionIncome = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [subIncome, setSubIncome] = useState([]);
   const [fetchSubIncome, { loading, data, error }] = useLazyQuery(
@@ -143,7 +131,7 @@ const SubscriptionIncome = () => {
                 headCells={financeHeader2}
                 rows={subIncome}
                 paginationLabel="finance per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   await changeTableLimit(fetchSubIncome, { first: e });
                 }}
@@ -168,22 +156,6 @@ const SubscriptionIncome = () => {
                       key={row._id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}

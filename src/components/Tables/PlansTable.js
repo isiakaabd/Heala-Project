@@ -150,7 +150,7 @@ const PlansTable = ({ PlansQuery }) => {
                 headCells={subscriptionHeader}
                 rows={plans}
                 paginationLabel="subscription per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   await changeTableLimit(fetchPlans, { first: e });
                 }}

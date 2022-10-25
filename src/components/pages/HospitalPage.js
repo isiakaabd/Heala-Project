@@ -1,39 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { EmptyTable, NoData } from "components/layouts";
-import {
-  Grid,
-  Button,
-  Avatar,
-  Typography,
-  TableCell,
-  TableRow,
-} from "@mui/material";
+import { Grid, Button, Typography, TableCell, TableRow } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
+import CompoundSearch from "components/Forms/CompoundSearch";
+import { Link, useParams } from "react-router-dom";
+import { CustomButton, Loader } from "components/Utilities";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { useTheme } from "@mui/material/styles";
+import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
+import { useStyles } from "styles/partnersPageStyles";
+import Copy from "components/Copy";
+import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
 import {
+  trucateProfileLink,
   changeTableLimit,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
-import FormikControl from "components/validation/FormikControl";
-import { Formik, Form } from "formik";
-import { addDoctorValidationSchema } from "helpers/validationSchemas";
-import CompoundSearch from "components/Forms/CompoundSearch";
-import { Link, useParams } from "react-router-dom";
-import { CustomButton, Loader, Modals } from "components/Utilities";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { useTheme } from "@mui/material/styles";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { EnhancedTable } from "components/layouts";
-import { useStyles } from "styles/partnersPageStyles";
-import Copy from "components/Copy";
-import { trucateProfileLink } from "helpers/filterHelperFunctions";
-import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
-import { defaultPageInfo } from "helpers/mockData";
-import { trucateString } from "helpers/filterHelperFunctions";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { getProviders, getPartners } from "components/graphQL/useQuery";
+import { getProviders } from "components/graphQL/useQuery";
 import { regenerateProviderProfileUrl } from "components/graphQL/Mutation";
 import { useActions } from "components/hooks/useActions";
-import { searchOptions } from "helpers/mockData";
+import { searchOptions, defaultPageInfo } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
@@ -92,16 +78,15 @@ const HospitalPage = () => {
         setPageInfo(data?.getProviders?.pageInfo || {});
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
-  }, [data]);
-  const setTableData = async (response, errMsg) => {
+  }, [data, fetchHospitals]);
+  const setTableData = async (response) => {
     response
       .then(({ data }) => {
         setHospitals(data?.getProviders?.provider || []);
-        setPageInfo(data?.getProviders?.pageInfo || {});
-        setPageInfo(data?.profiles?.pageInfo || defaultPageInfo);
-        // setProfiles(data?.profiles?.data || []);
+        setPageInfo(data?.getProviders?.pageInfo || defaultPageInfo);
       })
       .catch((error) => {
         // eslint-disable-next-line no-console

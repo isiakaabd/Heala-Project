@@ -6,36 +6,29 @@ import {
   TableCell,
   Card,
   Chip,
-  Button,
-  Checkbox,
 } from "@mui/material";
-import { NoData } from "components/layouts";
 import { CustomSelect } from "components/validation/Select";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useSelector } from "react-redux";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
+
 import {
   changeTableLimit,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
-import EnhancedTable from "components/layouts/EnhancedTable";
-import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import displayPhoto from "assets/images/avatar.svg";
-import { hours, days, today } from "components/Utilities/Time";
-import { Modals, Loader } from "components/Utilities";
-import { EmptyTable } from "components/layouts";
-import { useActions } from "components/hooks/useActions";
-import { useLazyQuery, useQuery } from "@apollo/client";
 import { defaultPageInfo } from "helpers/mockData";
+import { Modals, Loader } from "components/Utilities";
+import { EmptyTable, NoData } from "components/layouts";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import EnhancedTable from "components/layouts/EnhancedTable";
+import { hours, days, today } from "components/Utilities/Time";
+import { availabilityHeadCells } from "components/Utilities/tableHeaders";
 import {
   getAvailabilities,
   getDoctorAvailabilityForDate,
   getProviders,
   getAvailabilities1,
 } from "components/graphQL/useQuery";
+import useAlert from "hooks/useAlert";
 const useStyles = makeStyles((theme) => ({
   tableCell: {
     "&.MuiTableCell-root": {
@@ -84,14 +77,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AvailabilityTable = () => {
-  const [pageInfo, setPageInfo] = useState({
-    page: 0,
-    totalPages: 1,
-    hasNextPage: false,
-    hasPrevPage: false,
-    limit: 10,
-    totalDocs: 0,
-  });
+  const { displayAlert } = useAlert();
+  const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const { data: da } = useQuery(getProviders);
 
   const [availabilities, setAvailabilities] = useState([]);
@@ -110,12 +97,12 @@ const AvailabilityTable = () => {
   const classes = useStyles();
   const theme = useTheme();
   // redux
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
+  /*   const { selectedRows } = useSelector((state) => state.tables);
+  const { setSelectedRows } = useActions(); */
   //queries
-  const [fetchAvailabilities, { loading: load, data, error }] =
+  const [fetchAvailabilities, { loading: load, error }] =
     useLazyQuery(getAvailabilities);
-  const [fetchAvailabilities1, { loading: load1, data: data1, error: error1 }] =
+  const [fetchAvailabilities1, { loading: load1, error: error1 }] =
     useLazyQuery(getAvailabilities1);
   const [loadings, setLoading] = useState(false);
   // providers drop down
@@ -123,20 +110,20 @@ const AvailabilityTable = () => {
   const [fetchDay, { loading, data: dt }] = useLazyQuery(
     getDoctorAvailabilityForDate
   );
-  useEffect(() => {
-    if (data) {
-      setAvailabilities(data?.getAvailabilities?.availability);
-    }
-  }, [data]);
+
   const setTableData = async (response, errMsg) => {
-    if (response?.data) {
-      setPageInfo(response?.data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        response?.data?.getAvailabilities?.availability || defaultPageInfo
-      );
-    } else {
-      console.error(errMsg);
-    }
+    response
+      .then(({ data }) => {
+        setPageInfo(data?.getAvailabilities?.pageInfo || []);
+        setAvailabilities(
+          data?.getAvailabilities?.availability || defaultPageInfo
+        );
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        displayAlert("error", errMsg);
+      });
   };
 
   useEffect(() => {
@@ -155,6 +142,7 @@ const AvailabilityTable = () => {
       });
     }
   }, [dt]);
+
   // providers drop down
   useEffect(() => {
     const x = {
@@ -172,43 +160,27 @@ const AvailabilityTable = () => {
       setDropDown([x, ...options]);
     }
   }, [da]);
-  // useEffect(() => {
-  //   if (provider === "") {
-  //     fetchAvailabilities1({
-  //       variables: {
-  //         pageInfo: pageInfo,
-  //         first: 5,
-  //         day: select,
-  //       },
-  //     });
-  //   } else {
-  //     fetchAvailabilities({
-  //       variables: {
-  //         first: 5,
-  //         providerId: provider,
-  //         day: select,
-  //       },
-  //     });
-  //   }
 
-  //   if (data) {
-  //     setPageInfo(data?.getAvailabilities?.pageInfo || []);
-  //     setAvailabilities(
-  //       data?.getAvailabilities?.availability || defaultPageInfo
-  //     );
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data, provider, select]);
   useEffect(() => {
     if (provider === "") {
       fetchAvailabilities1({
         variables: {
-          pageInfo: pageInfo,
           first: 5,
           day: select,
         },
-      });
+      })
+        .then(({ data }) => {
+          if (data) {
+            setPageInfo(data?.getAvailabilities?.pageInfo || []);
+            setAvailabilities(
+              data?.getAvailabilities?.availability || defaultPageInfo
+            );
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
     } else {
       fetchAvailabilities({
         variables: {
@@ -216,47 +188,55 @@ const AvailabilityTable = () => {
           providerId: provider,
           day: select,
         },
-      });
-    }
-
-    if (data) {
-      setPageInfo(data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        data?.getAvailabilities?.availability || defaultPageInfo
-      );
+      })
+        .then(({ data }) => {
+          if (data) {
+            setPageInfo(data?.getAvailabilities?.pageInfo || []);
+            setAvailabilities(
+              data?.getAvailabilities?.availability || defaultPageInfo
+            );
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, provider, select]);
-  useEffect(() => {
-    if (data1) {
-      setPageInfo(data1?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        data1?.getAvailabilities?.availability || defaultPageInfo
-      );
-    }
-  }, [select, data1]);
+  }, []);
 
-  useEffect(() => {
-    if (data) {
-      setPageInfo(data?.getAvailabilities?.pageInfo || []);
-      setAvailabilities(
-        data?.getAvailabilities?.availability || defaultPageInfo
-      );
-    }
-  }, [select, data]);
   const handleSelectChange = async (e) => {
     const { value } = e.target;
-    setLoading(true);
-    await fetchAvailabilities({
-      variables: {
-        first: 5,
-        providerId: provider,
-        day: value,
-      },
-    });
-    setLoading(false);
     setSelect(value);
+    setLoading(true);
+    const variables =
+      provider && provider !== ""
+        ? {
+            first: 5,
+            providerId: provider,
+            day: value,
+          }
+        : {
+            first: 5,
+            day: value,
+          };
+    fetchAvailabilities({
+      variables: variables,
+    })
+      .then(({ data }) => {
+        if (data) {
+          setPageInfo(data?.getAvailabilities?.pageInfo || []);
+          setAvailabilities(
+            data?.getAvailabilities?.availability || defaultPageInfo
+          );
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+    setLoading(false);
   };
 
   const handleCheckDay = useCallback((day, doctor) => {
@@ -269,6 +249,7 @@ const AvailabilityTable = () => {
     });
     //eslint-disable-next-line
   }, []);
+
   if (load || loadings || load1) return <Loader />;
   if (error || error1) return <NoData />;
   const { day, available, times } = avail;
@@ -330,25 +311,39 @@ const AvailabilityTable = () => {
                 headCells={availabilityHeadCells}
                 rows={availabilities}
                 paginationLabel="Availabilities per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
-                  const res = await changeTableLimit(fetchAvailabilities, {
-                    first: e,
-                    providerId: provider,
-                  });
+                  const variables =
+                    provider && provider !== ""
+                      ? {
+                          first: e,
+                          day: select,
+                          providerId: provider,
+                        }
+                      : {
+                          first: e,
+                          day: select,
+                        };
+                  const res = changeTableLimit(fetchAvailabilities, variables);
 
                   await setTableData(res, "Failed to change table limit.");
                 }}
                 dataPageInfo={pageInfo}
                 handlePagination={async (page) => {
+                  const variables =
+                    provider && provider !== ""
+                      ? {
+                          providerId: provider,
+                          day: select,
+                        }
+                      : {
+                          day: select,
+                        };
                   const res = handlePageChange(
                     fetchAvailabilities,
                     page,
                     pageInfo,
-                    {
-                      providerId: provider,
-                      day: select,
-                    }
+                    variables
                   );
                   await setTableData(res, "Failed to change page.");
                 }}
@@ -361,7 +356,7 @@ const AvailabilityTable = () => {
 
                   if (doctorData?.firstName) {
                     const labelId = `enhanced-table-checkbox-${index}`;
-                    const isItemSelected = isSelected(_id, selectedRows);
+                    /* const isItemSelected = isSelected(_id, selectedRows); */
 
                     return (
                       <TableRow
@@ -371,7 +366,7 @@ const AvailabilityTable = () => {
                         sx={{ cursor: "pointer" }}
                         onClick={() => handleCheckDay(day, doctor)}
                       >
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox
                             onClick={() =>
                               handleSelectedRows(
@@ -386,7 +381,7 @@ const AvailabilityTable = () => {
                               "aria-labelledby": labelId,
                             }}
                           />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell
                           id={labelId}
                           scope="row"

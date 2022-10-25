@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { EmptyTable, NoData } from "components/layouts";
 import { Grid, Typography, Button, TableCell, TableRow } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
 import CompoundSearch from "components/Forms/CompoundSearch";
@@ -7,18 +6,19 @@ import { Link, useParams } from "react-router-dom";
 import { CustomButton, Loader } from "components/Utilities";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useTheme } from "@mui/material/styles";
-import { EnhancedTable } from "components/layouts";
+import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { useStyles } from "styles/partnersPageStyles";
 import Copy from "components/Copy";
-import { trucateProfileLink } from "helpers/filterHelperFunctions";
 import { hospitalTableHeadCells10 } from "components/Utilities/tableHeaders";
-import { defaultPageInfo } from "helpers/mockData";
-import { trucateString } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+  trucateProfileLink,
+} from "helpers/filterHelperFunctions";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { getProviders, getPartners } from "components/graphQL/useQuery";
+import { getProviders } from "components/graphQL/useQuery";
 import { regenerateProviderProfileUrl } from "components/graphQL/Mutation";
-import { useActions } from "components/hooks/useActions";
-import { searchOptions } from "helpers/mockData";
+import { searchOptions, defaultPageInfo } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
 import TableLayout from "components/layouts/TableLayout";
 
@@ -26,7 +26,6 @@ const HMOEnrolle = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { id } = useParams();
-  const { patientConsultation } = useActions();
   const [regenerate, { loading: load }] = useMutation(
     regenerateProviderProfileUrl
   );
@@ -59,6 +58,7 @@ const HMOEnrolle = () => {
         setPageInfo(data?.getProviders?.pageInfo || {});
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }, [fetchHospitals, data]);
@@ -77,6 +77,19 @@ const HMOEnrolle = () => {
         },
       ],
     });
+  };
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setPageInfo(data?.getProviders?.pageInfo || defaultPageInfo);
+        setHospitals(data?.getProviders?.provider || []);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        setHospitals("error", errMsg);
+      });
   };
 
   if (error) return <NoData error={error} />;
@@ -126,7 +139,22 @@ const HMOEnrolle = () => {
                 rows={hospitals}
                 paginationLabel="Providers per page"
                 hasCheckbox={false}
+                changeLimit={async (e) => {
+                  const res = changeTableLimit(fetchHospitals, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
                 dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = handlePageChange(
+                    fetchHospitals,
+                    page,
+                    pageInfo,
+                    {}
+                  );
+                  await setTableData(res, "Failed to change page.");
+                }}
               >
                 {hospitals.map((row) => {
                   const {

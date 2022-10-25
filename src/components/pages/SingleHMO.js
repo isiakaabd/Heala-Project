@@ -56,6 +56,7 @@ const SingleHMO = () => {
         setPageInfo(data?.getEnrollees?.pageInfo || {});
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
   };
@@ -128,6 +129,7 @@ const SingleHMO = () => {
                 setPageInfo(data?.getEnrollees?.pageInfo || {});
               })
               .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.error(error);
               })
           }
@@ -189,6 +191,7 @@ const SingleHMO = () => {
                 fetchData(refetch);
                 setUploadListModal(false);
               } catch (error) {
+                // eslint-disable-next-line no-console
                 console.error("Error from onSubmit Test JSON file", error);
                 const errMsg = getErrorMsg(error);
                 displayAlert("error", errMsg);

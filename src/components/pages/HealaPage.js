@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { EmptyTable, NoData } from "components/layouts";
 import { Grid, Button, Typography, TableCell, TableRow } from "@mui/material";
 import AddProviderModal from "components/Forms/AddProviderModal";
 import CompoundSearch from "components/Forms/CompoundSearch";
@@ -7,10 +6,14 @@ import { Link, useParams } from "react-router-dom";
 import { CustomButton, Loader } from "components/Utilities";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useTheme } from "@mui/material/styles";
-import { EnhancedTable } from "components/layouts";
+import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { useStyles } from "styles/partnersPageStyles";
 import Copy from "components/Copy";
-import { trucateProfileLink } from "helpers/filterHelperFunctions";
+import {
+  changeTableLimit,
+  handlePageChange,
+  trucateProfileLink,
+} from "helpers/filterHelperFunctions";
 import { hospitalTableHeadCells } from "components/Utilities/tableHeaders";
 import { defaultPageInfo, HealaSearchOptions } from "helpers/mockData";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -73,10 +76,24 @@ const HealaPage = () => {
         setPageInfo(data?.getProviders?.pageInfo || {});
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
     //eslint-disable-next-line
   }, [data]);
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setPageInfo(data?.getProviders?.pageInfo || defaultPageInfo);
+        setHospitals(data?.getProviders?.provider || []);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        setHospitals("error", errMsg);
+      });
+  };
 
   if (error) return <NoData error={error} />;
   if (loading) return <Loader />;
@@ -126,7 +143,22 @@ const HealaPage = () => {
                 rows={hospitals}
                 paginationLabel="Providers per page"
                 hasCheckbox={false}
+                changeLimit={async (e) => {
+                  const res = changeTableLimit(fetchHospitals, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
+                }}
                 dataPageInfo={pageInfo}
+                handlePagination={async (page) => {
+                  const res = handlePageChange(
+                    fetchHospitals,
+                    page,
+                    pageInfo,
+                    {}
+                  );
+                  await setTableData(res, "Failed to change page.");
+                }}
               >
                 {hospitals.map((row) => {
                   const {

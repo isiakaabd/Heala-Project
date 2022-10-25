@@ -2,38 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { partnersHeadCells2 } from "components/Utilities/tableHeaders";
 import CompoundSearch from "components/Forms/CompoundSearch";
-import { NoData } from "components/layouts";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import AddIcon from "@mui/icons-material/Add";
-import { searchOptions } from "helpers/mockData";
 import { getSearchPlaceholder } from "helpers/func";
-import {
-  Grid,
-  TableRow,
-  Button,
-  Avatar,
-  Typography,
-  TableCell,
-  Checkbox,
-} from "@mui/material";
+import { Grid, TableRow, Avatar, Typography, TableCell } from "@mui/material";
 import { CustomButton, Loader, Modals } from "components/Utilities";
-import { EnhancedTable, EmptyTable } from "components/layouts";
+import { EnhancedTable, EmptyTable, NoData } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-import EditIcon from "@mui/icons-material/Edit";
-// import AddIcon from "@mui/icons-material/Add";
 import { UserTypeModal } from "components/modals/UserTypeModal";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOrDisable from "components/modals/DeleteOrDisable";
 import { getUserTypes } from "components/graphQL/useQuery";
 import { deleteUserType } from "components/graphQL/Mutation";
-import { defaultPageInfo } from "helpers/mockData";
+import { defaultPageInfo, searchOptions } from "helpers/mockData";
 import {
   changeTableLimit,
   handlePageChange,
@@ -178,13 +162,7 @@ const UserTypes = () => {
     disabled: theme.palette.common.black,
   };
   const [deleteUser] = useMutation(deleteUserType);
-  // const handleDialogOpen = () => {
-  //   setIsOpen(true);
-  // };
-  const handleDeleteOpenDialog = (id) => {
-    setId(id);
-    setdeleteModal(true);
-  };
+
   const onConfirm = async () => {
     try {
       await deleteUser({
@@ -192,15 +170,16 @@ const UserTypes = () => {
         refetchQueries: [{ query: getUserTypes }],
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error.message);
     }
   };
 
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const [id, setId] = useState(null);
+  const [id] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
   const [singleData, setSingleData] = useState();
-  const [fetchUserTypes, { loading, data, error, variables /*refetch*/ }] =
+  const [fetchUserTypes, { loading, data, error, variables }] =
     useLazyQuery(getUserTypes);
   useEffect(() => {
     fetchUserTypes({
@@ -210,12 +189,6 @@ const UserTypes = () => {
     });
   }, [fetchUserTypes, pageInfo]);
 
-  // const onChange = async (e) => {
-  //   setSearchHcp(e);
-  //   if (e == "") {
-  //     refetch();
-  //   } else refetch({ recipient: e });
-  // };
   const [userType, setUsertypes] = useState([]);
 
   useEffect(() => {
@@ -224,17 +197,13 @@ const UserTypes = () => {
       setUsertypes(data.getUserTypes.userType);
     }
   }, [data]);
-  const { rowsPerPage, selectedRows, page } = useSelector(
-    (state) => state.tables
-  );
-  const { setSelectedRows } = useActions();
+  const { selectedRows } = useSelector((state) => state.tables);
   const initialValues = {
     name: "",
     type: "",
     description: "",
   };
 
-  // const [searchHcp, setSearchHcp] = useState("");
   const [isOpens, setIsOpens] = useState(false);
   const handleDialogCloses = () => setIsOpens(false);
   const [editId, setEditId] = useState(null);
@@ -242,13 +211,12 @@ const UserTypes = () => {
   const handleEditCloseDialog = () => {
     setEdit(false);
   };
-  const [alert, setAlert] = useState(null);
-  const handleDialogOpens1 = () => setIsOpens(true);
+  const [setAlert] = useState(null);
   const initialValues1 = {
     name: "",
     userTypeId: "",
   };
-  const onSubmit1 = async (values) => {
+  const onSubmit1 = async () => {
     // const { name, userTypeId } = values;
     // await provider.refetch({
     //   name,
@@ -333,7 +301,7 @@ const UserTypes = () => {
                 headCells={partnersHeadCells2}
                 rows={userType}
                 paginationLabel="Provider Services per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   changeTableLimit(fetchUserTypes, { first: e });
                 }}
@@ -342,97 +310,73 @@ const UserTypes = () => {
                   await handlePageChange(fetchUserTypes, page, pageInfo, {});
                 }}
               >
-                {userType
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const { _id, icon, name, providerCount, provider } = row;
-                    const isItemSelected = isSelected(_id, selectedRows);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                {userType.map((row) => {
+                  const { _id, icon, name, providerCount } = row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={_id}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                _id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
+                    >
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "1rem" }}>
+                            <Avatar src={icon} sx={{ width: 24, height: 24 }} />
+                          </span>
+                          <span style={{ fontSize: "1.25rem" }}>{name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <Link
+                          to={
+                            name === "Heala User"
+                              ? `/user-type/heala/${_id}`
+                              : name === "Hospital Enrollee"
+                              ? `/user-type/hospital/${_id}`
+                              : name === "HMO Enrollee"
+                              ? `/user-type/hmo/${_id}`
+                              : `/user-type/${_id}`
+                          }
+                          className={classes.link}
+                        >
+                          <Typography
+                            variant="h3"
+                            classes={{ root: classes.title }}
+                          >
+                            {providerCount ? providerCount : "NA"}
+                          </Typography>
+                        </Link>
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <EditDelBtn
+                            onHandleClick={() => handleEditOpenDialog(row._id)}
+                            type="edit"
+                            text="Edit"
                           />
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          <div
-                            style={{
-                              height: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <span style={{ marginRight: "1rem" }}>
-                              <Avatar
-                                src={icon}
-                                sx={{ width: 24, height: 24 }}
-                              />
-                            </span>
-                            <span style={{ fontSize: "1.25rem" }}>{name}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          <Link
-                            to={
-                              name === "Heala User"
-                                ? `/user-type/heala/${_id}`
-                                : name === "Hospital Enrollee"
-                                  ? `/user-type/hospital/${_id}`
-                                  : name === "HMO Enrollee"
-                                    ? `/user-type/hmo/${_id}`
-                                    : `/user-type/${_id}`
-                            }
-                            className={classes.link}
-                          >
-                            <Typography
-                              variant="h3"
-                              classes={{ root: classes.title }}
-                            >
-                              {providerCount ? providerCount : "NA"}
-                            </Typography>
-                          </Link>
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          <div
-                            style={{
-                              height: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "flex-end",
-                            }}
-                          >
-                            <EditDelBtn
-                              onHandleClick={() =>
-                                handleEditOpenDialog(row._id)
-                              }
-                              type="edit"
-                              text="Edit"
-                            />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </EnhancedTable>
             </Grid>
           ) : (

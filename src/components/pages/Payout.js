@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { NoData, EmptyTable } from "components/layouts";
-import { Grid, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
+import { Grid, Chip, TableRow, TableCell } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
@@ -9,10 +9,7 @@ import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { isSelected } from "helpers/isSelected";
 import { useTheme } from "@mui/material/styles";
-import { EnhancedTable } from "components/layouts";
-import { useActions } from "components/hooks/useActions";
 import TableLayout from "components/layouts/TableLayout";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { getPayoutData } from "components/graphQL/useQuery";
 import { payoutHeader } from "components/Utilities/tableHeaders";
 import { defaultPageInfo, payoutFilterBy } from "helpers/mockData";
@@ -87,7 +84,6 @@ const Payout = () => {
   const theme = useTheme();
   const { displayAlert } = useAlert();
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
@@ -105,9 +101,11 @@ const Payout = () => {
         }
       );
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
-  }, [fetchPayout, pageInfo?.limit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onFilterStatusChange = async (value) => {
     try {
@@ -128,6 +126,7 @@ const Payout = () => {
           refresh(setStatusFilterValue, "");
         });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       refresh(setStatusFilterValue, "");
     }
@@ -145,6 +144,7 @@ const Payout = () => {
         setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || {});
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", "Failed to get patients data, Try again");
       });
@@ -159,6 +159,7 @@ const Payout = () => {
         setPayout(data?.getEarningStats?.payoutData?.data || []);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });
@@ -196,19 +197,14 @@ const Payout = () => {
                 headCells={payoutHeader}
                 rows={payout}
                 paginationLabel="payout per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
-                  const res = await changeTableLimit(fetchPayout, { first: e });
+                  const res = changeTableLimit(fetchPayout, { first: e });
                   await setTableData(res, "Failed to change table limit.");
                 }}
                 dataPageInfo={pageInfo}
                 handlePagination={async (page) => {
-                  const res = await handlePageChange(
-                    fetchPayout,
-                    page,
-                    pageInfo,
-                    {}
-                  );
+                  const res = handlePageChange(fetchPayout, page, pageInfo, {});
                   await setTableData(res, "Failed to change table page.");
                 }}
                 fetchData={fetchPayout}
@@ -217,7 +213,7 @@ const Payout = () => {
                 {payout.map((row, index) => {
                   const { amount, createdAt, status, _id, doctorData } = row;
                   const data = doctorData || [];
-                  const { firstName, lastName, picture } = data[0] || {};
+                  const { firstName, lastName } = data[0] || {};
                   const isItemSelected = isSelected(_id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -230,22 +226,6 @@ const Payout = () => {
                       key={_id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         id={labelId}
                         scope="row"

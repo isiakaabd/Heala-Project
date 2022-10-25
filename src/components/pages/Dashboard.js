@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { getProviders } from "components/graphQL/useQuery";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { dashboard, dashboard1 } from "components/graphQL/useQuery";
-import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
 import { Loader } from "components/Utilities";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { NoData, AvailabilityTable, DashboardCharts } from "components/layouts";
+import {
+  dashboard,
+  dashboard1,
+  getProviders,
+} from "components/graphQL/useQuery";
 
 const Dashboard = () => {
-  const [form, setForm] = useState("");
-  const [dropDown, setDropDown] = useState([]);
+  const [form] = useState("");
+  const [, setDropDown] = useState([]);
   const [state, setState] = useState("");
   const { data: da } = useQuery(getProviders);
 
-  const [provider, setProvider] = useState("");
+  const [provider] = useState("");
   const [fetchData, { data: newData, error: err, loading: load }] =
     useLazyQuery(dashboard);
   const [fetchData2, { data: newData2, error, loading }] =
@@ -42,10 +45,10 @@ const Dashboard = () => {
     }
     //eslint-disable-next-line
   }, []);
-  const onChange = async (e) => {
+  /*   const onChange = async (e) => {
     setProvider(e.target.value);
     setForm(e.target.value);
-  };
+  }; */
 
   useEffect(() => {
     if (provider === "") {

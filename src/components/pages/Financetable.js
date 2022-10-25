@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  Grid,
-  Button,
-  TableCell,
-  TableRow,
-  Checkbox,
-  Avatar,
-} from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Grid, TableCell, TableRow } from "@mui/material";
+import { useHistory } from "react-router-dom";
 import {
   timeMoment,
   dateMoment,
@@ -18,14 +10,11 @@ import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeaderss1 } from "components/Utilities/tableHeaders";
-import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
-import { getEarningData, getProviders } from "components/graphQL/useQuery";
+import { getEarningData } from "components/graphQL/useQuery";
 import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -123,14 +112,12 @@ const Financetable = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
-  const [fetch, { data: d }] = useLazyQuery(getProviders);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
   const [earning, setEarning] = useState([]);
   const [fetchEarningData, { loading, data, error }] =
     useLazyQuery(getEarningData);
 
-  const fetchProvider = useCallback(async (id) => {
+  /*   const fetchProvider = useCallback(async (id) => {
     // const { data } = await fetch({
     //   variables: {
     //     providerId: id,
@@ -138,7 +125,7 @@ const Financetable = () => {
     // });
     console.log(data);
     return id;
-  }, []);
+  }, []); */
 
   useEffect(() => {
     fetchEarningData({
@@ -147,12 +134,30 @@ const Financetable = () => {
       },
       notifyOnNetworkStatusChange: true,
     });
-  }, [fetchEarningData, pageInfo]);
+  }, [fetchEarningData]);
 
   useEffect(() => {
-    setEarning(data?.getEarningStats?.earningData?.data);
-    setPageInfo(data?.getEarningStats?.earningData?.PageInfo);
+    setEarning(data?.getEarningStats?.earningData?.data || []);
+    setPageInfo(
+      data?.getEarningStats?.earningData?.PageInfo || defaultPageInfo
+    );
   }, [earning, data]);
+
+  const setTableData = async (response, errMsg) => {
+    response
+      .then(({ data }) => {
+        setEarning(data?.getEarningStats?.earningData?.data || []);
+        setPageInfo(
+          data?.getEarningStats?.earningData?.PageInfo || defaultPageInfo
+        );
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        setEarning("error", errMsg);
+      });
+  };
+
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
@@ -171,13 +176,22 @@ const Financetable = () => {
                 headCells={payoutHeaderss1}
                 rows={earning}
                 paginationLabel="finance per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
-                  await changeTableLimit(fetchEarningData, { first: e });
+                  const res = changeTableLimit(fetchEarningData, {
+                    first: e,
+                  });
+                  await setTableData(res, "Failed to change table limit.");
                 }}
                 dataPageInfo={pageInfo}
                 handlePagination={async (page) => {
-                  await handlePageChange(fetchEarningData, page, pageInfo, {});
+                  const res = handlePageChange(
+                    fetchEarningData,
+                    page,
+                    pageInfo,
+                    {}
+                  );
+                  await setTableData(res, "Failed to change page.");
                 }}
               >
                 {earning.map((row, index) => {
@@ -189,7 +203,6 @@ const Financetable = () => {
                     doctorData,
                   } = row;
 
-                  const { firstName, lastName } = doctorData[0] || {};
                   const isItemSelected = isSelected(row._id, selectedRows);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   // const x = fetchProvider(providerId);
@@ -205,26 +218,10 @@ const Financetable = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         history.push(
-                          `/hcps/${doctorData[0]._id}/consultations/case-notes/${consultationId}`
+                          `/hcps/${doctorData[0]?._id}/consultations/case-notes/${consultationId}`
                         );
                       }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         align="left"
                         className={classes.tableCell}
@@ -239,8 +236,8 @@ const Financetable = () => {
                             }}
                           >
                             <span style={{ fontSize: "1.25rem" }}>{`${
-                              firstName && firstName
-                            } ${lastName}`}</span>
+                              doctorData[0] && doctorData[0]?.firstName
+                            } ${doctorData[0]?.lastName}`}</span>
                           </div>
                         ) : (
                           "No Name"

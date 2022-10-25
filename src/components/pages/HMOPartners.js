@@ -3,39 +3,26 @@ import { Formik, Form } from "formik";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import DeleteIcon from "@mui/icons-material/Delete";
 import FormikControl from "components/validation/FormikControl";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Checkbox,
-  TableCell,
-  Avatar,
-  TableRow,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { TableCell, TableRow, Grid, Typography } from "@mui/material";
 
 import useAlert from "hooks/useAlert";
 import { isSelected } from "helpers/isSelected";
 import { categoryFilterOptions, defaultPageInfo } from "helpers/mockData";
 import { useStyles } from "styles/partnersPageStyles";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import {
   changeTableLimit,
   deleteItem,
   deleteVar,
   filterData,
   handlePageChange,
-  banks,
 } from "helpers/filterHelperFunctions";
 import DeletePartner from "components/modals/DeleteOrDisable";
 import { partnersHeadCells } from "components/Utilities/tableHeaders";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import {
-  addPartner,
   addPartnerCategory,
   regeneratePartnerProfileUrl,
 } from "components/graphQL/Mutation";
@@ -47,28 +34,22 @@ import {
 } from "components/graphQL/useQuery";
 import { CustomButton, Loader, Modals } from "components/Utilities";
 import {
-  addNewPartnerValidationSchema,
   addPartnerValidationSchema,
   filterPartnersValidationSchema,
 } from "helpers/validationSchemas";
 import Filter from "components/Forms/Filters";
-import { PageInfo } from "components/graphQL/fragment";
 import TableLayout from "components/layouts/TableLayout";
 import { useParams } from "react-router-dom";
-import { EditDelBtn } from "components/Buttons/EditDelBtn";
 import AddPartner from "components/Forms/AddPartner";
 
 const HMOPartners = () => {
   const theme = useTheme();
   const classes = useStyles();
-  const { id, ids } = useParams();
+  const { ids } = useParams();
   const { displayAlert } = useAlert();
-  /* const [setCategoryDatas] = useState([]); */
-  const { setSelectedRows } = useActions();
   const [partner, setPartners] = useState([]);
-  const [dropDown, setDropDown] = useState([]);
+  const [, setDropDown] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [addPartners] = useMutation(addPartner);
   const categoryData = useQuery(getSingleProvider);
   const [delete_partner] = useLazyQuery(DELETE_PARTNER);
   /*   const [searchPartner, setSearchPartner] = useState(""); */
@@ -87,14 +68,14 @@ const HMOPartners = () => {
   const [openAddPartnerCategory, setAddPartnerCategory] = useState(false);
   const [fetchPartners, { loading, error, refetch, variables }] =
     useLazyQuery(getPartners);
-  const [regenerate, { data: daa }] = useMutation(regeneratePartnerProfileUrl);
+  const [{ data: daa }] = useMutation(regeneratePartnerProfileUrl);
 
   const specializations = [
     { key: "Diagnostics", value: "Diagnostics" },
     { key: "Pharmacy", value: "Pharmacy" },
     { key: "Hospital", value: "Hospital" },
   ];
-  const categoryOptions = [
+  /*   const categoryOptions = [
     { key: "Diagnostics", value: "diagnostics" },
     { key: "Pharmacy", value: "pharmacy" },
     { key: "Hospital", value: "hospital" },
@@ -109,7 +90,7 @@ const HMOPartners = () => {
     { key: "Eye Clinic", value: "Eye Clinic" },
     { key: "Skin Care", value: "Skin Care" },
     { key: "Mental Care", value: "Mental Care" },
-  ];
+  ]; */
   const specializations5 = [
     { key: "Diagnostics", value: "Diagnostics" },
     { key: "Pharmacy", value: "Pharmacy" },
@@ -134,7 +115,7 @@ const HMOPartners = () => {
     category: "",
   };
 
-  const initialValues1 = {
+  /*   const initialValues1 = {
     name: "",
     email: "",
     specialization: "",
@@ -146,7 +127,7 @@ const HMOPartners = () => {
     bank: "",
     image: null,
     provider: "",
-  };
+  }; */
 
   const initialValues2 = {
     category: "",
@@ -167,6 +148,7 @@ const HMOPartners = () => {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });
@@ -208,6 +190,7 @@ const HMOPartners = () => {
   }, [partner]);
 
   const onSubmit = (values) => {
+    // eslint-disable-next-line no-console
     console.log(values);
   };
 
@@ -228,11 +211,12 @@ const HMOPartners = () => {
         setTableData(res, "Couldn't fetch partners.");
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
 
-  const onSubmit1 = async (values, onSubmitProps) => {
+  /*   const onSubmit1 = async (values, onSubmitProps) => {
     console.log(values);
     let {
       name,
@@ -273,7 +257,7 @@ const HMOPartners = () => {
         variant: "error",
       });
     }
-  };
+  }; */
 
   const onFilterCategoryChange = async (value) => {
     try {
@@ -288,6 +272,7 @@ const HMOPartners = () => {
       });
       await setTableData(res, "couldn't filter table.");
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       refresh(setPartnerFilterValues, "");
     }
@@ -307,8 +292,8 @@ const HMOPartners = () => {
   useEffect(() => {
     setNewProfileUrl(daa?.regeneratePartnerProfileUrl?.partner?.profileUrl);
   }, [daa]);
-  const [Id, setId] = useState("");
-  const handleGenerateLink = async (id) => {
+  const [Id] = useState("");
+  /* const handleGenerateLink = async (id) => {
     setId(id);
     await regenerate({
       variables: {
@@ -325,9 +310,9 @@ const HMOPartners = () => {
         },
       ],
     });
-  };
+  }; */
 
-  const z = (id) => {
+  /*   const z = (id) => {
     let b = "";
     const m = daa?.regeneratePartnerProfileUrl?.partner?._id;
     if (id === m) {
@@ -336,7 +321,7 @@ const HMOPartners = () => {
       b = "";
     }
     return b;
-  };
+  }; */
   useEffect(() => {
     partner.map((item) => {
       if (item._id === Id) {
@@ -404,7 +389,7 @@ const HMOPartners = () => {
               headCells={partnersHeadCells}
               rows={partner}
               paginationLabel="Partners per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPartners, {
                   first: e,
@@ -420,10 +405,9 @@ const HMOPartners = () => {
                 await setTableData(res, "Failed to change page.");
               }}
             >
-              {partner.map((row, index) => {
+              {partner.map((row) => {
                 const isItemSelected = isSelected(row.id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                const { _id, logoImageUrl, name, email, category } = row;
+                const { _id, name, email, category } = row;
 
                 return (
                   <TableRow
@@ -434,18 +418,6 @@ const HMOPartners = () => {
                     key={_id}
                     selected={isItemSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell
                       align="left"
                       className={classes.tableCell}

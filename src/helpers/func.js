@@ -74,10 +74,10 @@ export const getSearchPlaceholder = (filterBy) => {
   return filterBy === "id"
     ? "Search by ID e.g 7NE6ELLO"
     : filterBy === "firstName"
-      ? "Search by first name e.g John"
-      : filterBy === "lastName"
-        ? "Search by last name e.g Doe"
-        : "";
+    ? "Search by first name e.g John"
+    : filterBy === "lastName"
+    ? "Search by last name e.g Doe"
+    : "";
 };
 export const HealGgetSearchPlaceholder = (filterBy) => {
   return filterBy === "id" ? "Search by UserTypesId " : "";

@@ -3,21 +3,18 @@ import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLazyQuery } from "@apollo/client";
 import { useTheme } from "@mui/material/styles";
-import { Grid, Chip, TableRow, TableCell, Checkbox } from "@mui/material";
+import { Grid, Chip, TableRow, TableCell } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import Filter from "components/Forms/Filters";
 import { isSelected } from "helpers/isSelected";
 import { Loader } from "components/Utilities";
 import { dateMoment } from "components/Utilities/Time";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { getVerification } from "components/graphQL/useQuery";
 import { HCPHeader } from "components/Utilities/tableHeaders";
 import { useStyles } from "../../styles/docVerificationPageStyles";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import {
   docVerifyStatusFilterBy,
-  QualificationOptions,
   specializationOptions,
 } from "helpers/mockData";
 import {
@@ -56,11 +53,7 @@ const HCP = () => {
     });
   }, [fetchVerifications, pageInfo]);
 
-  /* const [response, setResponse] = useState(""); */
-
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
-  /*   const [searchMail, setSearchMail] = useState(""); */
 
   const [respondData, setRespondData] = useState([]); //setRespondData
 
@@ -71,6 +64,7 @@ const HCP = () => {
         setPageInfo(data.getVerifications.pageInfo);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   }, [data]);
@@ -94,6 +88,7 @@ const HCP = () => {
           refresh(setStatusFilterValue, "");
         });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       refresh(setStatusFilterValue, "");
     }
@@ -117,6 +112,7 @@ const HCP = () => {
           refresh(setS, "");
         });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       refresh(setS, "");
     }
@@ -134,6 +130,7 @@ const HCP = () => {
         setPageInfo(data.getVerifications.pageInfo || {});
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", "Failed to get patients data, Try again");
       });
@@ -195,7 +192,7 @@ const HCP = () => {
                 headCells={HCPHeader}
                 rows={respondData}
                 paginationLabel="verification per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   changeTableLimit(fetchVerifications, { first: e });
                 }}
@@ -204,69 +201,45 @@ const HCP = () => {
                   handlePageChange(fetchVerifications, page, pageInfo, {});
                 }}
               >
-                {respondData
-                  // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const {
-                      createdAt,
-                      status,
-                      qualification,
-                      doctorData,
-                      specialization,
-                      _id,
-                    } = row;
-                    const isItemSelected = isSelected(_id, selectedRows);
+                {respondData.map((row, index) => {
+                  const { createdAt, status, qualification, doctorData, _id } =
+                    row;
+                  const isItemSelected = isSelected(_id, selectedRows);
 
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={_id}
-                        selected={isItemSelected}
-                        sx={{ cursor: "pointer" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          history.push(`/verification/view/${_id}`);
-                        }}
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={_id}
+                      selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        history.push(`/verification/view/${_id}`);
+                      }}
+                    >
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            onClick={() =>
-                              handleSelectedRows(
-                                _id,
-                                selectedRows,
-                                setSelectedRows
-                              )
-                            }
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="left"
-                          className={classes.tableCell}
-                        >
-                          {dateMoment(createdAt)}
-                        </TableCell>
+                        {dateMoment(createdAt)}
+                      </TableCell>
 
-                        <TableCell align="left" className={classes.tableCell}>
-                          <div
-                            style={{
-                              height: "100%",
-                              display: "flex",
-                              alignItems: "left",
-                            }}
-                          >
-                            {/* <span style={{ marginRight: "1rem" }}>
+                      <TableCell align="left" className={classes.tableCell}>
+                        <div
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "left",
+                          }}
+                        >
+                          {/* <span style={{ marginRight: "1rem" }}>
                               <Avatar
                                 alt={`image of ${
                                   doctorData && doctorData.firstName
@@ -277,48 +250,48 @@ const HCP = () => {
                                 sx={{ width: 24, height: 24 }}
                               />
                             </span> */}
-                            <span style={{ fontSize: "1.25rem" }}>
-                              {doctorData?.firstName}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell
-                          id={labelId}
-                          scope="row"
-                          align="left"
-                          className={classes.tableCell}
-                        >
-                          {doctorData?.lastName}
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          {doctorData?.specialization}
-                        </TableCell>
-                        <TableCell
-                          align="left"
-                          className={classes.tableCell}
-                          style={{ color: theme.palette.common.red }}
-                        >
-                          <Chip
-                            label={status ? "Verified" : "Not Verified"}
-                            className={classes.badge}
-                            style={{
-                              background:
-                                status === true
-                                  ? theme.palette.common.lightGreen
-                                  : theme.palette.common.lightRed,
-                              color:
-                                status === true
-                                  ? theme.palette.common.green
-                                  : theme.palette.common.red,
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell align="left" className={classes.tableCell}>
-                          {dateMoment(qualification?.year)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <span style={{ fontSize: "1.25rem" }}>
+                            {doctorData?.firstName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        id={labelId}
+                        scope="row"
+                        align="left"
+                        className={classes.tableCell}
+                      >
+                        {doctorData?.lastName}
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {doctorData?.specialization}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.tableCell}
+                        style={{ color: theme.palette.common.red }}
+                      >
+                        <Chip
+                          label={status ? "Verified" : "Not Verified"}
+                          className={classes.badge}
+                          style={{
+                            background:
+                              status === true
+                                ? theme.palette.common.lightGreen
+                                : theme.palette.common.lightRed,
+                            color:
+                              status === true
+                                ? theme.palette.common.green
+                                : theme.palette.common.red,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align="left" className={classes.tableCell}>
+                        {dateMoment(qualification?.year)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </EnhancedTable>
             </Grid>
           ) : (

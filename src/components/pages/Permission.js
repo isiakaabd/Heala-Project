@@ -3,32 +3,18 @@ import { Loader, CustomButton, Modals } from "components/Utilities";
 import { Formik, Form } from "formik";
 import FormikControl from "components/validation/FormikControl";
 import * as Yup from "yup";
-import {
-  Grid,
-  Button,
-  TableRow,
-  TableCell,
-  Checkbox,
-  Alert,
-  Chip,
-} from "@mui/material";
+import { Grid, Button, TableRow, TableCell, Alert, Chip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { EnhancedTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { PermissionHeader } from "components/Utilities/tableHeaders";
-import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { isSelected } from "helpers/isSelected";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { PermissionModal, DeleteOrDisable } from "components/modals";
-import { useLazyQuery } from "@apollo/client";
 import { getPermissions } from "components/graphQL/useQuery";
-import { useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { DELETE_PERMISSION } from "components/graphQL/Mutation";
-import { NoData, EmptyTable } from "components/layouts";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { defaultPageInfo } from "helpers/mockData";
 import {
   changeTableLimit,
@@ -149,6 +135,7 @@ const Permission = () => {
       .required("Category is required"),
   });
   const onSubmit1 = (values) => {
+    // eslint-disable-next-line no-console
     console.log(values);
   };
 
@@ -164,9 +151,6 @@ const Permission = () => {
 
   const classes = useStyles();
   const theme = useTheme();
-
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [deleteModal, setdeleteModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -236,10 +220,10 @@ const Permission = () => {
 
   useEffect(() => {
     if (data) {
-      setPermission(data.getPermissions.permission);
+      setPermission(data?.getPermissions?.permission);
       setPageInfo(data.getPermissions.pageInfo);
     }
-  }, [permission, data]);
+  }, [data]);
 
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
@@ -272,13 +256,13 @@ const Permission = () => {
           </Grid>
         </Grid>
         <TableLayout>
-          {Permission.length > 0 ? (
+          {permission.length > 0 ? (
             <Grid item container>
               <EnhancedTable
                 headCells={PermissionHeader}
                 rows={Permission}
                 paginationLabel="permission per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   changeTableLimit(fetchPermissions, { first: e });
                 }}
@@ -288,36 +272,11 @@ const Permission = () => {
                 }}
               >
                 {permission.map((row, index) => {
-                  const isItemSelected = isSelected(row._id, selectedRows);
-
                   const labelId = `enhanced-table-checkbox-${index}`;
                   const data = row.name.split(":")[0];
                   const newPerm = row.description.split(":")[1];
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              row.id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
+                    <TableRow hover tabIndex={-1} key={row._id}>
                       <TableCell
                         id={labelId}
                         scope="row"

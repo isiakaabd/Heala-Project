@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { NetworkStatus, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  Grid,
-  TableRow,
-  TableCell,
-  Button,
-  Checkbox,
-  Chip,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
 import useAlert from "hooks/useAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
-import displayPhoto from "assets/images/avatar.svg";
 import { useActions } from "components/hooks/useActions";
 import { timeConverter } from "components/Utilities/Time";
 import { handleSelectedRows } from "helpers/selectedRows";
@@ -28,7 +19,6 @@ import {
 } from "components/graphQL/useQuery";
 import { hcpsHeadCells } from "components/Utilities/tableHeaders";
 import { createDOctorProfile } from "components/graphQL/Mutation";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import { addDoctorValidationSchema } from "helpers/validationSchemas";
 import { Loader, Modals, CustomButton } from "components/Utilities";
@@ -56,7 +46,6 @@ const Hcps = () => {
   const { displayAlert } = useAlert();
   const [profiles, setProfiles] = useState("");
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
-  const { provider } = useSelector((state) => state.patient);
   const [openAddHcp, setOpenAddHcp] = useState(false);
   const [createDoc] = useMutation(createDOctorProfile);
   const { selectedRows } = useSelector((state) => state.tables);
@@ -85,6 +74,7 @@ const Hcps = () => {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,10 +127,10 @@ const Hcps = () => {
     return filterBy === "id"
       ? "Search by ID e.g 7NE6ELLO"
       : filterBy === "firstName"
-        ? "Search by first name e.g John"
-        : filterBy === "lastName"
-          ? "Search by last name e.g Doe"
-          : "";
+      ? "Search by first name e.g John"
+      : filterBy === "lastName"
+      ? "Search by last name e.g Doe"
+      : "";
   };
 
   const setTableData = async (response, errMsg) => {
@@ -150,6 +140,7 @@ const Hcps = () => {
         setProfiles(data.doctorProfiles.profile || []);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });
@@ -218,7 +209,7 @@ const Hcps = () => {
               headCells={hcpsHeadCells}
               rows={profiles}
               paginationLabel="Doctors per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchDoctors, {
                   first: e,
@@ -258,18 +249,6 @@ const Hcps = () => {
                       history.push(`hcps/${_id}`);
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell
                       id={labelId}
                       scope="row"

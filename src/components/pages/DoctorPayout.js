@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
-import { Grid, Chip, Checkbox, TableRow, TableCell } from "@mui/material";
+import { Grid, Chip, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getPayoutData } from "components/graphQL/useQuery";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { payoutHeader } from "components/Utilities/tableHeaders";
+import { doctorPayoutHeader } from "components/Utilities/tableHeaders";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useParams } from "react-router-dom";
 import { defaultPageInfo } from "helpers/mockData";
@@ -84,14 +82,11 @@ const DoctorPayout = () => {
   const theme = useTheme();
   const { displayAlert } = useAlert();
   const { hcpId } = useParams();
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
+  const { selectedRows } = useSelector((state) => state.tables);
 
-  /*   const [statusFilterValue, setStatusFilterValue] = useState(""); */
-  const [fetchPayout, { loading, error /* refetch, variables */ }] =
-    useLazyQuery(getPayoutData);
+  const [fetchPayout, { loading, error }] = useLazyQuery(getPayoutData);
 
   useEffect(() => {
     try {
@@ -107,47 +102,6 @@ const DoctorPayout = () => {
       console.error(error);
     }
   }, [fetchPayout, pageInfo?.limit, hcpId]);
-
-  /*   const onFilterStatusChange = async (value) => {
-    try {
-      deleteVar(variables);
-      setStatusFilterValue(value);
-      const filterVariables = { status: value };
-
-      filterData(filterVariables, {
-        fetchData: fetchPayout,
-        refetch: refetch,
-        variables: variables,
-      })
-        .then((data) => {
-          setPayout(data?.getEarningStats?.payoutData?.data || []);
-          setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || {});
-        })
-        .catch(() => {
-          refresh(setStatusFilterValue, "");
-        });
-    } catch (error) {
-      console.error(error);
-      refresh(setStatusFilterValue, "");
-    }
-  };
-
-  const refresh = async (setFilterValue, defaultVal) => {
-    displayAlert("error", "Something went wrong while filtering. Try again.");
-    setFilterValue(defaultVal);
-
-    deleteVar(variables);
-
-    refetch()
-      .then(({ data }) => {
-        setPayout(data?.getEarningStats?.payoutData?.data || []);
-        setPageInfo(data?.getEarningStats?.payoutData?.PageInfo || {});
-      })
-      .catch((error) => {
-        console.error(error);
-        displayAlert("error", "Failed to get patients data, Try again");
-      });
-  }; */
 
   const setTableData = async (response, errMsg) => {
     const data = response?.data;
@@ -175,34 +129,15 @@ const DoctorPayout = () => {
           container
           justifyContent="space-between"
           style={{ paddingBottom: "3rem" }}
-        >
-          {/* <Grid item container spacing={3} alignItems="center">
-            <Grid item flex={1}>
-              <Typography noWrap variant="h1" color="#2D2F39">
-                Doctors Payout Table
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Filter
-                onHandleChange={(e) => onFilterStatusChange(e?.target?.value)}
-                onClickClearBtn={() => onFilterStatusChange("")}
-                options={payoutFilterBy}
-                name="status"
-                placeholder="None"
-                value={statusFilterValue}
-                hasClearBtn={true}
-              />
-            </Grid>
-          </Grid> */}
-        </Grid>
+        ></Grid>
         <TableLayout>
           {payout.length > 0 ? (
             <Grid item container>
               <EnhancedTable
-                headCells={payoutHeader}
+                headCells={doctorPayoutHeader}
                 rows={payout}
                 paginationLabel="payout per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   const res = await changeTableLimit(fetchPayout, {
                     first: e,
@@ -239,38 +174,15 @@ const DoctorPayout = () => {
                       key={_id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         id={labelId}
                         scope="row"
                         align="left"
                         className={classes.tableCell}
                       >
-                        {dateMoment(createdAt)}
+                        {`${dateMoment(createdAt)} - ${timeMoment(createdAt)}`}
                       </TableCell>
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        align="left"
-                        className={classes.tableCell}
-                      >
-                        {timeMoment(createdAt)}
-                      </TableCell>
+
                       <TableCell align="left" className={classes.tableCell}>
                         {row?.doctorData && row?.doctorData[0] !== {}
                           ? `${firstName && firstName} ${lastName && lastName}`
@@ -310,7 +222,7 @@ const DoctorPayout = () => {
             </Grid>
           ) : (
             <EmptyTable
-              headCells={payoutHeader}
+              headCells={doctorPayoutHeader}
               paginationLabel="Payout  per page"
             />
           )}

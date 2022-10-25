@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
-import { useParams } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { Loader } from "components/Utilities";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
 import { dateMoment } from "components/Utilities/Time";
+import { useParams, useHistory } from "react-router-dom";
 import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
+import { Grid, TableRow, TableCell } from "@mui/material";
 import { getConsultations } from "components/graphQL/useQuery";
-import { Grid, TableRow, TableCell, Checkbox } from "@mui/material";
 import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { consultationsHeadCells4 } from "components/Utilities/tableHeaders";
 import {
@@ -67,7 +65,6 @@ const Consultations = () => {
   const { patientConsultation } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
   const [consultations, setConsultations] = useState([]);
-  const { setSelectedRows } = useActions();
   const { patientId } = useParams();
 
   const [fetchConsultations, { loading, data, error }] =
@@ -110,7 +107,7 @@ const Consultations = () => {
               headCells={consultationsHeadCells4}
               rows={consultations}
               paginationLabel="Patients per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               sx={{ cursor: "pointer" }}
               changeLimit={async (e) => {
                 await changeTableLimit(fetchConsultations, {
@@ -125,10 +122,9 @@ const Consultations = () => {
                 });
               }}
             >
-              {consultations.map((row, index) => {
+              {consultations.map((row) => {
                 const { doctorData } = row;
                 const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
                     hover
@@ -145,22 +141,6 @@ const Consultations = () => {
                       );
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(
-                            row._id,
-                            selectedRows,
-                            setSelectedRows
-                          )
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       {dateMoment(row.createdAt)}
                     </TableCell>

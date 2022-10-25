@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { getDocConsult } from "components/graphQL/useQuery";
-import { Avatar, TableRow, TableCell, Checkbox, Grid } from "@mui/material";
+import { Avatar, TableRow, TableCell, Grid } from "@mui/material";
 import { consultationsHeadCells } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
 import { NoData, EnhancedTable, EmptyTable } from "components/layouts";
-import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
-import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Loader } from "components/Utilities";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { dateMoment } from "components/Utilities/Time";
 import {
   changeTableLimit,
@@ -61,15 +57,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HcpConsultations = (props) => {
+const HcpConsultations = () => {
   const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const [pageInfo, setPageInfo] = useState([]);
   const { hcpId } = useParams();
-  const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [consultations, setConsultations] = useState([]);
+  const { selectedRows } = useSelector((state) => state.tables);
 
   const [fetchDocConsultations, { loading, data, error }] =
     useLazyQuery(getDocConsult);
@@ -108,7 +103,7 @@ const HcpConsultations = (props) => {
               headCells={consultationsHeadCells}
               rows={consultations}
               paginationLabel="Consultations per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 await changeTableLimit(fetchDocConsultations, {
                   first: e,
@@ -122,7 +117,7 @@ const HcpConsultations = (props) => {
                 });
               }}
             >
-              {consultations.map((row, index) => {
+              {consultations.map((row) => {
                 // eslint-disable-next-line
                 const {
                   _id,
@@ -136,7 +131,6 @@ const HcpConsultations = (props) => {
                   // eslint-disable-next-line
                 } = row;
                 const isItemSelected = isSelected(row._id, selectedRows);
-                const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
                     hover
@@ -153,19 +147,6 @@ const HcpConsultations = (props) => {
                       );
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        onClick={() =>
-                          handleSelectedRows(_id, selectedRows, setSelectedRows)
-                        }
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-
                     <TableCell align="left" className={classes.tableCell}>
                       {dateMoment(createdAt)}
                     </TableCell>

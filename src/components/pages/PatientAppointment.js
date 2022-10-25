@@ -10,34 +10,31 @@ import FormikControl from "components/validation/FormikControl";
 import {
   Grid,
   Alert,
-  Typography,
   TableRow,
   TableCell,
-  Checkbox,
   Button,
   Avatar,
 } from "@mui/material";
-import { deleteAppointment } from "components/graphQL/Mutation";
+import * as Yup from "yup";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { getAppoint, getDOCAppoint } from "components/graphQL/useQuery";
 import { DeleteOrDisable } from "components/modals";
 import { consultationsHeadCells2 } from "components/Utilities/tableHeaders";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { isSelected } from "helpers/isSelected";
-import { handleSelectedRows } from "helpers/selectedRows";
 import displayPhoto from "assets/images/avatar.svg";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useParams } from "react-router-dom";
 import { timeConverter, timeMoment } from "components/Utilities/Time";
-import * as Yup from "yup";
-import { updateAppointment } from "components/graphQL/Mutation";
+import {
+  updateAppointment,
+  deleteAppointment,
+} from "components/graphQL/Mutation";
 import {
   changeTableLimit,
-  fetchMoreData,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
 import TableLayout from "components/layouts/TableLayout";
@@ -155,6 +152,7 @@ const PatientAppointment = () => {
       setTimeout(() => {
         setAlert(null);
       }, 5000);
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
@@ -221,6 +219,7 @@ const PatientAppointment = () => {
     handlePatientCloses();
   };
   const onSubmit = (values) => {
+    // eslint-disable-next-line no-console
     console.log(values);
   };
 
@@ -245,7 +244,6 @@ const PatientAppointment = () => {
   }, [data, patientId]);
 
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
 
   const buttonType = {
     background: theme.palette.common.black,
@@ -323,7 +321,7 @@ const PatientAppointment = () => {
                   headCells={consultationsHeadCells2}
                   rows={patientAppointment}
                   paginationLabel="Patients per page"
-                  hasCheckbox={true}
+                  hasCheckbox={false}
                   changeLimit={async (e) => {
                     await changeTableLimit(getPatientsAppointment, {
                       first: e,
@@ -338,105 +336,84 @@ const PatientAppointment = () => {
                     );
                   }}
                 >
-                  {patientAppointment
-                    // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row._id, selectedRows);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row._id}
-                          selected={isItemSelected}
+                  {patientAppointment.map((row) => {
+                    const isItemSelected = isSelected(row._id, selectedRows);
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row._id}
+                        selected={isItemSelected}
+                      >
+                        <TableCell
+                          align="left"
+                          className={classes.tableCell}
+                          style={{ maxWidth: "20rem" }}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              onClick={() =>
-                                handleSelectedRows(
-                                  row.id,
-                                  selectedRows,
-                                  setSelectedRows
-                                )
-                              }
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            className={classes.tableCell}
-                            style={{ maxWidth: "20rem" }}
-                          >
-                            <div
-                              style={{
-                                height: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <span style={{ marginRight: "1rem" }}>
-                                <Avatar
-                                  alt={`Display Photo of ${row.doctorData.firstName}`}
-                                  src={
-                                    row.doctorData.picture
-                                      ? row.doctorData.picture
-                                      : displayPhoto
-                                  }
-                                  sx={{ width: 24, height: 24 }}
-                                />
-                              </span>
-                              <span style={{ fontSize: "1.25rem" }}>
-                                {`${row.doctorData.firstName} 
-                             ${row.doctorData.lastName}`}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell align="left" className={classes.tableCell}>
-                            {row.date}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            className={classes.tableCell}
+                          <div
                             style={{
-                              color: theme.palette.common.grey,
-                              maxWidth: "20rem",
+                              height: "100%",
+                              display: "flex",
+                              alignItems: "center",
                             }}
                           >
-                            {/* {hours(}row.time) */} {row.time}
-                          </TableCell>
-                          <TableCell align="left" className={classes.tableCell}>
-                            <Button
-                              variant="contained"
-                              disableRipple
-                              className={`${classes.tableBtn} ${classes.greenBtn}`}
-                              endIcon={<AssignmentIcon color="success" />}
-                              onClick={() =>
-                                handleSchedule(row._id, row.doctor)
-                              }
-                            >
-                              Reschedule
-                            </Button>
-                          </TableCell>
-                          <TableCell align="left" className={classes.tableCell}>
-                            <Button
-                              variant="contained"
-                              disableRipple
-                              onClick={() => handleDelete(row._id)}
-                              className={`${classes.tableBtn} ${classes.redBtn}`}
-                              endIcon={<DeleteIcon color="error" />}
-                            >
-                              Cancel
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                            <span style={{ marginRight: "1rem" }}>
+                              <Avatar
+                                alt={`Display Photo of ${row.doctorData.firstName}`}
+                                src={
+                                  row.doctorData.picture
+                                    ? row.doctorData.picture
+                                    : displayPhoto
+                                }
+                                sx={{ width: 24, height: 24 }}
+                              />
+                            </span>
+                            <span style={{ fontSize: "1.25rem" }}>
+                              {`${row.doctorData.firstName} 
+                             ${row.doctorData.lastName}`}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          {row.date}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className={classes.tableCell}
+                          style={{
+                            color: theme.palette.common.grey,
+                            maxWidth: "20rem",
+                          }}
+                        >
+                          {/* {hours(}row.time) */} {row.time}
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            className={`${classes.tableBtn} ${classes.greenBtn}`}
+                            endIcon={<AssignmentIcon color="success" />}
+                            onClick={() => handleSchedule(row._id, row.doctor)}
+                          >
+                            Reschedule
+                          </Button>
+                        </TableCell>
+                        <TableCell align="left" className={classes.tableCell}>
+                          <Button
+                            variant="contained"
+                            disableRipple
+                            onClick={() => handleDelete(row._id)}
+                            className={`${classes.tableBtn} ${classes.redBtn}`}
+                            endIcon={<DeleteIcon color="error" />}
+                          >
+                            Cancel
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </EnhancedTable>
               </Grid>
             ) : (
@@ -590,6 +567,7 @@ const PatientAppointment = () => {
       {/* delete modal */}
       <DeleteOrDisable
         open={deleteModal}
+        // eslint-disable-next-line no-console
         onConfirm={() => console.log("confrimed")}
         setOpen={setdeleteModal}
         title="Cancel Consultation"

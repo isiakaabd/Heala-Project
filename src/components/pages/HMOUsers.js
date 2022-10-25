@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useLazyQuery, NetworkStatus } from "@apollo/client";
-import { NoData, EmptyTable } from "components/layouts";
-import { Grid } from "@mui/material";
+import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import useAlert from "hooks/useAlert";
 import { Loader } from "components/Utilities";
 import { useStyles } from "styles/patientsPageStyles";
 import CompoundSearch from "components/Forms/CompoundSearch";
-import { EnhancedTable } from "components/layouts";
 import PatientFilters from "components/Forms/Filters/PatientFilters";
 import { patientsHeadCells } from "components/Utilities/tableHeaders";
 import { defaultPageInfo, searchOptions } from "helpers/mockData";
@@ -19,29 +17,21 @@ import {
   changeTableLimit,
   handlePageChange,
 } from "helpers/filterHelperFunctions";
-import { useParams, Link, NavLink, Redirect } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { isSelected } from "helpers/isSelected";
 import TableLayout from "components/layouts/TableLayout";
 import { getSearchPlaceholder } from "helpers/func";
 
-import PropTypes from "prop-types";
-
-import { useHistory } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
-import { Checkbox, Chip, TableCell, TableRow } from "@mui/material";
+import { Chip, TableCell, TableRow, Grid } from "@mui/material";
 
 const HMOUsers = () => {
   const classes = useStyles();
-  const { id, ids } = useParams();
-  const history = useHistory();
+  const { ids } = useParams();
   const theme = useTheme();
-  const { setSelectedRows } = useActions();
   const { selectedRows } = useSelector((state) => state.tables);
-  // const navigate = useNavigate();
-  console.log(ids);
+  // eslint-disable-next-line no-console
   const { displayAlert } = useAlert();
   const [profiles, setProfiles] = useState([]);
   const [fetchPatient, { loading, refetch, error, variables, networkStatus }] =
@@ -86,6 +76,7 @@ const HMOUsers = () => {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,12 +89,13 @@ const HMOUsers = () => {
         setProfiles(data?.profiles?.data || []);
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
         displayAlert("error", errMsg);
       });
   };
 
-  // if (error) return <NoData error={error} />;
+  if (error) return <NoData error={error} />;
 
   return (
     <Grid item flex={1} container direction="column" rowGap={2}>
@@ -169,7 +161,7 @@ const HMOUsers = () => {
               headCells={patientsHeadCells}
               rows={profiles}
               paginationLabel="Patients per page"
-              hasCheckbox={true}
+              hasCheckbox={false}
               changeLimit={async (e) => {
                 const res = changeTableLimit(fetchPatient, {
                   first: e,
@@ -217,30 +209,6 @@ const HMOUsers = () => {
                     //   />;
                     // }}
                   >
-                    <TableCell padding="checkbox">
-                      <NavLink
-                        to={`/user-type/hmo/${id}/${_id}`}
-                        clasName={classes.link}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </NavLink>
-                    </TableCell>
-                    {/* </NavLink> */}
-
                     <TableCell
                       id={labelId}
                       scope="row"

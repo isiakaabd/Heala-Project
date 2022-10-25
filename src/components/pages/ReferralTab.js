@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableRow,
-  Grid,
-  Checkbox,
-  TableCell,
-  Avatar,
-  Button,
-} from "@mui/material";
+import { TableRow, Grid, TableCell, Avatar } from "@mui/material";
 import { dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { makeStyles } from "@mui/styles";
@@ -14,13 +7,10 @@ import { useTheme } from "@mui/material/styles";
 import { referralHeader } from "components/Utilities/tableHeaders";
 import displayPhoto from "assets/images/avatar.svg";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
 import { useLazyQuery } from "@apollo/client";
 import { getRefferals } from "components/graphQL/useQuery";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { NoData, EmptyTable, EnhancedTable } from "components/layouts";
 import Filter from "components/Forms/Filters";
 import {
@@ -98,7 +88,6 @@ const ReferralTab = () => {
   }; */
 
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   /*   const [searchMail, setSearchMail] = useState(""); */
   const [fetchRefferals, { loading, error, data, refetch, variables }] =
     useLazyQuery(getRefferals);
@@ -170,7 +159,7 @@ const ReferralTab = () => {
                 headCells={referralHeader}
                 rows={referral}
                 paginationLabel="referral per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   changeTableLimit(fetchRefferals, { first: e });
                 }}
@@ -199,22 +188,6 @@ const ReferralTab = () => {
                         history.push(`referrals/${_id}`);
                       }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
                       <TableCell
                         id={labelId}
                         scope="row"

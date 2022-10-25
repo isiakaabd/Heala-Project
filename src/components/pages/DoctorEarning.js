@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { NoData, EmptyTable } from "components/layouts";
-import {
-  Grid,
-  Typography,
-  Checkbox,
-  TableRow,
-  TableCell,
-  Avatar,
-} from "@mui/material";
+import { Grid, TableRow, TableCell } from "@mui/material";
 import { timeMoment, dateMoment } from "components/Utilities/Time";
 import { Loader } from "components/Utilities";
 import { useLazyQuery } from "@apollo/client";
 import { getMyEarnings } from "components/graphQL/useQuery";
-import { EnhancedTable } from "components/layouts";
+import { EnhancedTable, NoData, EmptyTable } from "components/layouts";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import { payoutHeaders } from "components/Utilities/tableHeaders";
 import useAlert from "hooks/useAlert";
 import { useSelector } from "react-redux";
-import { useActions } from "components/hooks/useActions";
-import { handleSelectedRows } from "helpers/selectedRows";
 import { isSelected } from "helpers/isSelected";
-// import Filter from "components/Forms/Filters";
-import displayPhoto from "assets/images/avatar.svg";
 import { useHistory, useParams } from "react-router-dom";
 import { defaultPageInfo } from "helpers/mockData";
 import {
@@ -97,7 +85,6 @@ const DoctorEarning = () => {
   const { hcpId } = useParams();
   const { displayAlert } = useAlert();
   const { selectedRows } = useSelector((state) => state.tables);
-  const { setSelectedRows } = useActions();
   const [payout, setPayout] = useState([]);
   const [pageInfo, setPageInfo] = useState(defaultPageInfo);
 
@@ -152,7 +139,7 @@ const DoctorEarning = () => {
                 headCells={payoutHeaders}
                 rows={payout}
                 paginationLabel="Earning per page"
-                hasCheckbox={true}
+                hasCheckbox={false}
                 changeLimit={async (e) => {
                   const res = await changeTableLimit(fetchPayout, {
                     first: e,
@@ -199,23 +186,6 @@ const DoctorEarning = () => {
                         history.push(`/hcps/${hcpId}/earnings/earn/${rowId}`);
                       }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          onClick={() =>
-                            handleSelectedRows(
-                              _id,
-                              selectedRows,
-                              setSelectedRows
-                            )
-                          }
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-
                       <TableCell align="left" className={classes.tableCell}>
                         {doctorData ? (
                           <div

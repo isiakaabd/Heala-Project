@@ -33,12 +33,12 @@ const CompoundSearch = ({
       const searchVariables =
         value === ""
           ? {
-            ...newVariables,
-          }
+              ...newVariables,
+            }
           : {
-            [searchBy]: value,
-            ...newVariables,
-          };
+              [searchBy]: value,
+              ...newVariables,
+            };
       fetchData({
         variables: searchVariables,
       }).then(({ data }) => {

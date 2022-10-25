@@ -106,7 +106,7 @@ const Healas = () => {
                     </div>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Link to={`/patients`} className={classes.link}>
+                    <Link to={"/patients"} className={classes.link}>
                       <Typography
                         variant="h3"
                         classes={{ root: classes.title }}
@@ -116,7 +116,7 @@ const Healas = () => {
                     </Link>
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Link to={`/hcps`} className={classes.link}>
+                    <Link to={"/hcps"} className={classes.link}>
                       <Typography
                         variant="h3"
                         classes={{ root: classes.title }}
@@ -178,7 +178,7 @@ const Healas = () => {
                         disableRipple
                         sx={{ width: "50%" }}
                         className={`${classes.tableBtn} ${classes.redBtn}`}
-                      // onClick={() => handleGenerateLink(_id)}
+                        // onClick={() => handleGenerateLink(_id)}
                       >
                         Generate Link
                       </Button>

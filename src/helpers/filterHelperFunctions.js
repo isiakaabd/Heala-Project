@@ -48,6 +48,7 @@ export const getErrorMsg = (error) => {
       return error.message;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("error from get error func.", error);
     return "Something went wrong. Try again!!!";
   }
@@ -67,6 +68,7 @@ export const handleError = (error, enqueueSnackbar) => {
         )
       );
     } else if (error?.message) {
+      // eslint-disable-next-line no-console
       console.log(error?.message);
       showErrorMsg(enqueueSnackbar, error.message);
     }
@@ -81,6 +83,7 @@ export const deleteVar = (variable) => {
       delete variable[key];
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("couldn't delete variables", error);
   }
 };
@@ -106,6 +109,7 @@ export const filterData = async (filterVaribles, queryParams) => {
 
     return data;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     throw error;
   }
@@ -154,6 +158,7 @@ export const changeTableLimit = async (fetchFunc, variables) => {
       variables: variables,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log("couldn't change table limit", error);
   }
 };
@@ -233,6 +238,7 @@ export const trucateString = (word, length, startFrom = "front") => {
       return newWord;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error from trucateString FN", error);
     return word;
   }
@@ -252,6 +258,7 @@ export const trucateProfileLink = (word, length) => {
       .join("")}`;
     return `${start}...${end}`;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error from trucateString FN", error);
     return word;
   }
@@ -281,6 +288,7 @@ export const compressAndUploadImage = async (
       }, 1500);
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log("Error while trying to upload image", error);
     setProgress(100);
     setIsCompleted("failed");
@@ -309,6 +317,7 @@ export const uploadImage = async (file, setProgress) => {
     });
     return data.data.data.mediaUrl; //data.data.mediaUrl
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     setProgress(100);
   }
@@ -316,11 +325,14 @@ export const uploadImage = async (file, setProgress) => {
 
 export const uploadFile = async (file) => {
   try {
+    const uploadUrl = process.env.REACT_APP_BASE_UPLOAD_URL;
+    // eslint-disable-next-line no-console
+    if (!uploadUrl) console.warn("envirnoment varible missing");
     const form = new FormData();
     form.append("file", file);
     const data = await axios({
       method: "post",
-      url: "https://api.heala.io/rest/media/upload/",
+      url: uploadUrl,
       headers: {
         "Content-Type": `multipart/form-data; boundary=${form._boundary}`,
       },
@@ -328,6 +340,7 @@ export const uploadFile = async (file) => {
     });
     return data.data.data.mediaUrl;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
   }
 };
@@ -374,6 +387,7 @@ export const deleteItem = async (
     resetId(null);
     newIsDeleting[id] = false;
     setIsDeleting({ ...newIsDeleting });
+    // eslint-disable-next-line no-console
     console.log("couldn't delete partner from deletePartner FN", error);
     handleError(error, enqueueSnackbar);
   }
@@ -392,6 +406,7 @@ export const IsImg = (file) => {
       return false;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log("couldn't check if file is an image", error);
     return false;
   }
@@ -407,6 +422,7 @@ export const isFile = (file, fileType) => {
       return false;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log("couldn't check file type", error);
     return false;
   }
