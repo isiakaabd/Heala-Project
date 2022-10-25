@@ -123,26 +123,34 @@ const Consultations = () => {
               }}
             >
               {consultations.map((row) => {
-                const { doctorData } = row;
-                const isItemSelected = isSelected(row._id, selectedRows);
+                const {
+                  doctorData,
+                  _id,
+                  createdAt,
+                  symptoms,
+                  type,
+                  contactMedium,
+                } = row;
+                console.log(row);
+                const isItemSelected = isSelected(_id, selectedRows);
                 return (
                   <TableRow
                     hover
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row._id}
+                    key={_id}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                     onClick={(e) => {
                       e.stopPropagation();
                       history.push(
-                        `/patients/${patientId}/consultations/case-notes/${row._id}`
+                        `/patients/${patientId}/consultations/case-notes/${_id}`
                       );
                     }}
                   >
                     <TableCell align="left" className={classes.tableCell}>
-                      {dateMoment(row.createdAt)}
+                      {dateMoment(createdAt)}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -165,8 +173,8 @@ const Consultations = () => {
                     </TableCell>
                     <TableCell align="left" className={classes.tableCell}>
                       <Grid container gap={1}>
-                        {row.symptoms
-                          ? row.symptoms.map((symptom, index) => {
+                        {symptoms
+                          ? symptoms.map((symptom, index) => {
                               const isLast = index === row.symptoms.length - 1;
                               return (
                                 <p key={symptom.name}>
@@ -187,7 +195,7 @@ const Consultations = () => {
                         width: "4rem",
                       }}
                     >
-                      {row.contactMedium ? row.contactMedium : "No Value"}
+                      {contactMedium ? contactMedium : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -196,7 +204,7 @@ const Consultations = () => {
                         color: theme.palette.common.grey,
                       }}
                     >
-                      {row.type ? row.type : "No Value"}
+                      {type ? type : "No Value"}
                     </TableCell>
                     <TableCell
                       align="left"
@@ -205,7 +213,7 @@ const Consultations = () => {
                         color: theme.palette.common.grey,
                       }}
                     >
-                      {row.status ? row.status : "No Value"}
+                      {status ? status : "No Value"}
                     </TableCell>
                   </TableRow>
                 );

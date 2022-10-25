@@ -188,9 +188,7 @@ const HcpConsultations = () => {
                     >
                       <Grid container gap={1}>
                         {symptoms
-                          ? symptoms.map((i) => {
-                              return <p key={i.name}>{i.name}</p>;
-                            })
+                          ? symptoms.map((i) => <p key={i.name}>{i.name}</p>)
                           : "No Value"}
                       </Grid>
                     </TableCell>

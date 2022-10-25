@@ -415,18 +415,7 @@ const CaseNotes = () => {
             </Grid>
           </Grid>
           <Divider color={theme.palette.common.lighterGrey} />
-          <Grid item container justifyContent="flex-end">
-            {prescription && (
-              <Grid item container width={{ md: "20%", xs: "100%", sm: "50%" }}>
-                <CustomButton
-                  title="View Prescription"
-                  width="100%"
-                  type={buttonType}
-                  onClick={handleDialogOpen}
-                />
-              </Grid>
-            )}
-          </Grid>
+
           <Grid
             item
             container
@@ -448,8 +437,23 @@ const CaseNotes = () => {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container direction="column" gap={1}></Grid>
-            <Grid item container direction="column" gap={1}></Grid>
+
+            <Grid item container justifyContent="flex-end">
+              {prescription && (
+                <Grid
+                  item
+                  container
+                  width={{ md: "40%", xs: "100%", sm: "50%" }}
+                >
+                  <CustomButton
+                    title="View Prescription"
+                    width="100%"
+                    type={buttonType}
+                    onClick={handleDialogOpen}
+                  />
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

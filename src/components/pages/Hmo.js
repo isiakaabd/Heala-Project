@@ -52,8 +52,33 @@ const Hmo = () => {
   if (loading) return <Loader />;
   if (error) return <NoData error={error} />;
   return (
-    <Grid>
-      <Grid container spacing={2} flexWrap="wrap">
+    <Grid container gap={4}>
+      <Grid
+        item
+        container
+        gap={2}
+        spacing={2}
+        sx={{ justifyContent: "flex-end", pt: 3 }}
+      >
+        <button
+          style={{
+            cursor: "pointer",
+            border: "none",
+            background: "transparent",
+          }}
+          onClick={() => setAddModal(true)}
+        >
+          <AddHmoCard />
+        </button>
+      </Grid>
+      <Grid
+        item
+        container
+        gap={2}
+        spacing={2}
+        justifyContent="space-between"
+        flexWrap="wrap"
+      >
         {hmos.map((hmo, idx) => {
           const {
             _id,
@@ -101,18 +126,6 @@ const Hmo = () => {
             </Grid>
           );
         })}
-        <Grid item>
-          <button
-            style={{
-              cursor: "pointer",
-              border: "none",
-              background: "transparent",
-            }}
-            onClick={() => setAddModal(true)}
-          >
-            <AddHmoCard />
-          </button>
-        </Grid>
       </Grid>
       <Grid>
         {/* CONFIRM DELETE MODAL */}

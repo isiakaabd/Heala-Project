@@ -451,6 +451,8 @@ export const getConsultations = gql`
         }
         doctorNote
         declineReason
+        contactMedium
+        type
         createdAt
         updatedAt
         patientData
@@ -479,6 +481,9 @@ export const getDocConsult = gql`
         discomfortLevel
         firstNotice
         doctor
+        contactMedium
+        type
+        status
         consultationDuration
         diagnosis {
           ailment
