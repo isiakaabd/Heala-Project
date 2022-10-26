@@ -453,6 +453,7 @@ export const getConsultations = gql`
         declineReason
         contactMedium
         type
+        status
         createdAt
         updatedAt
         patientData

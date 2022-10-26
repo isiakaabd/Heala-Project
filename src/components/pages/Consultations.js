@@ -129,9 +129,10 @@ const Consultations = () => {
                   createdAt,
                   symptoms,
                   type,
+                  status,
                   contactMedium,
                 } = row;
-                console.log(row);
+
                 const isItemSelected = isSelected(_id, selectedRows);
                 return (
                   <TableRow
